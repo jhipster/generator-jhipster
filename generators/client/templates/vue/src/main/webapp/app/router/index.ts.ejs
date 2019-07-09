@@ -8,7 +8,7 @@ Component.registerHooks([
 import Router from 'vue-router';
 const Home = () => import('../core/home/home.vue');
 const Error = () => import('../core/error/error.vue');
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
 const Register = () => import('../account/register/register.vue');
 const Activate = () => import('../account/activate/activate.vue');
 const ResetPasswordInit = () => import('../account/reset-password/init/reset-password-init.vue');
@@ -19,14 +19,16 @@ const <%= jhiPrefixCapitalized %>UserManagementComponent = () => import('../admi
 const <%= jhiPrefixCapitalized %>UserManagementViewComponent = () => import('../admin/user-management/user-management-view.vue');
 const <%= jhiPrefixCapitalized %>UserManagementEditComponent = () => import('../admin/user-management/user-management-edit.vue');
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
 const Sessions = () => import('../account/sessions/sessions.vue');
 <%_ } _%>
 const <%= jhiPrefixCapitalized %>ConfigurationComponent = () => import('../admin/configuration/configuration.vue');
 const <%= jhiPrefixCapitalized %>DocsComponent = () => import('../admin/docs/docs.vue');
 const <%= jhiPrefixCapitalized %>HealthComponent = () => import('../admin/health/health.vue');
 const <%= jhiPrefixCapitalized %>LogsComponent = () => import('../admin/logs/logs.vue');
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
 const <%= jhiPrefixCapitalized %>AuditsComponent = () => import('../admin/audits/audits.vue');
+<%_ } _%>
 const <%= jhiPrefixCapitalized %>MetricsComponent = () => import('../admin/metrics/metrics.vue');
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
 const <%= jhiPrefixCapitalized %>GatewayComponent = () => import('../admin/gateway/gateway.vue');
@@ -59,7 +61,7 @@ export default new Router({
       name: 'NotFound',
       component: Error,
       meta: { error404: true }
-    }<% if (authenticationType !== 'oauth2') { %>,
+    }<%_ if (!skipUserManagement) { _%>,
     {
       path: '/register',
       name: 'Register',
@@ -130,12 +132,13 @@ export default new Router({
       component: <%= jhiPrefixCapitalized %>DocsComponent,
       meta: { authorities: ['ROLE_ADMIN'] }
     },
+    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     {
       path: '/admin/audits',
       name: '<%= jhiPrefixCapitalized %>AuditsComponent',
       component: <%= jhiPrefixCapitalized %>AuditsComponent,
       meta: { authorities: ['ROLE_ADMIN'] }
-    },
+    },<% } %>
     {
       path: '/admin/<%= jhiPrefixDashed %>-health',
       name: '<%= jhiPrefixCapitalized %>HealthComponent',

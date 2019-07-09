@@ -68,7 +68,7 @@
                         <font-awesome-icon icon="list" />
                         <span v-text="$t('global.menu.admin.configuration')">Configuration</span>
                     </b-dropdown-item>
-                    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                     <b-dropdown-item  to="/admin/audits">
                         <font-awesome-icon icon="bell" />
                         <span v-text="$t('global.menu.admin.audits')">Audits</span>
@@ -114,7 +114,7 @@
                             Account
                         </span>
                     </span>
-                    <%_ if (authenticationType !== 'oauth2') { _%>
+                    <%_ if (!skipUserManagement) { _%>
                     <b-dropdown-item to="/account/settings" tag="b-dropdown-item" v-if="authenticated">
                         <font-awesome-icon icon="wrench" />
                         <span v-text="$t('global.menu.account.settings')">Settings</span>
@@ -124,7 +124,7 @@
                         <span v-text="$t('global.menu.account.password')">Password</span>
                     </b-dropdown-item>
                     <%_ } _%>
-                    <%_ if (authenticationType === 'session') { _%>
+                    <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
                     <b-dropdown-item to="/account/sessions" tag="b-dropdown-item" v-if="authenticated">
                         <font-awesome-icon icon="cloud" />
                         <span v-text="$t('global.menu.account.sessions')">Sessions</span>
@@ -138,7 +138,7 @@
                         <font-awesome-icon icon="sign-in-alt" />
                         <span v-text="$t('global.menu.account.login')">Sign in</span>
                     </b-dropdown-item>
-                    <%_ if (authenticationType !== 'oauth2') { _%>
+                    <%_ if (!skipUserManagement) { _%>
                     <b-dropdown-item to="/register" tag="b-dropdown-item" id="register" v-if="!authenticated">
                         <font-awesome-icon icon="user-plus" />
                         <span v-text="$t('global.menu.account.register')">Register</span>
