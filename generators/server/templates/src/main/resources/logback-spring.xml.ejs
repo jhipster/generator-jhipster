@@ -65,6 +65,9 @@
     <logger name="com.google.code.ssm" level="WARN"/>
     <logger name="com.google.code.yanf4j" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { _%>
+    <logger name="org.redisson" level="WARN" />
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || serviceDiscoveryType === 'eureka') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
