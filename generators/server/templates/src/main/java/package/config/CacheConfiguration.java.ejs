@@ -137,7 +137,6 @@ import io.github.jhipster.config.JHipsterProperties;
 <%_ if (cacheProvider === 'redis') { _%>
 import org.redisson.Redisson;
 import org.redisson.config.Config;
-import org.redisson.config.SslProvider;
 import org.redisson.jcache.configuration.RedissonConfiguration;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -734,31 +733,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         Config config = new Config();
-        config.useSingleServer()
-            .setAddress(jHipsterProperties.getCache().getRedis().getServer())
-            .setSubscriptionConnectionMinimumIdleSize(1)
-            .setSubscriptionConnectionPoolSize(50)
-            .setConnectionMinimumIdleSize(24)
-            .setConnectionPoolSize(64)
-            .setDnsMonitoringInterval(5000)
-            .setIdleConnectionTimeout(10000)
-            .setConnectTimeout(10000)
-            .setTimeout(3000)
-            .setRetryAttempts(3)
-            .setRetryInterval(1500)
-            .setDatabase(0)
-            .setPassword(null)
-            .setSubscriptionsPerConnection(5)
-            .setClientName(null)
-            .setSslEnableEndpointIdentification(true)
-            .setSslProvider(SslProvider.JDK)
-            .setSslTruststore(null)
-            .setSslTruststorePassword(null)
-            .setSslKeystore(null)
-            .setSslKeystorePassword(null)
-            .setPingConnectionInterval(0)
-            .setKeepAlive(false)
-            .setTcpNoDelay(false);
+        config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer());
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
         jcacheConfiguration = RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
