@@ -23,6 +23,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { LANGUAGES } from 'app/core/language/language.constants';
+import * as moment from 'moment';
 <%_ if (enableI18nRTL) { _%>
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
@@ -46,12 +47,12 @@ export class JhiLanguageHelper {
         this.init();
     }
 
-    getAll(): Promise<any> {
-        return Promise.resolve(LANGUAGES);
+    getAll() {
+        return LANGUAGES;
     }
 
-    get language(): Observable<string> {
-        return this._language.asObservable();
+    getAllNames(): string[] {
+        return this.getAll().map(lang => lang.value);
     }
 
     /**
@@ -73,6 +74,14 @@ export class JhiLanguageHelper {
 
     private init() {
         this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+            const language = this.getAll().find(lang => lang.value === event.lang);
+
+            // English is already bundled, no need to lazy-load
+            if (event.lang === 'en') {
+                moment.locale('en');
+            } else {
+                import(`moment/locale/${language.momentLocaleId}`).then(() => moment.locale(language.momentLocaleId));
+            }
             this._language.next(this.translateService.currentLang);
             this.renderer.setAttribute(document.querySelector('html'), 'lang', this.translateService.currentLang);
             this.updateTitle();

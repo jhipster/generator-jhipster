@@ -65,9 +65,7 @@ export class UserMgmtUpdateComponent implements OnInit {
             this.authorities = authorities;
         });
         <%_ if (enableTranslation) { _%>
-        this.languageHelper.getAll().then((languages) => {
-            this.languages = languages;
-        });
+        this.languages = this.languageHelper.getAllNames();
         <%_ } _%>
     }
 

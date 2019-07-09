@@ -170,41 +170,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Update Languages In Language Constant
-     *
-     * @param languages
-     */
-    updateLanguagesInLanguageConstant(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
-        try {
-            let content = ".constant('LANGUAGES', [\n";
-            languages.forEach((language, i) => {
-                content += `            '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content +=
-                '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n        ]';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
      * Update Languages In Language Constant NG2
      *
      * @param languages
@@ -215,9 +180,10 @@ module.exports = class extends Generator {
         }
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
-            let content = 'export const LANGUAGES: string[] = [\n';
+            let content = 'export const LANGUAGES = [\n';
             languages.forEach((language, i) => {
-                content += `    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
+                const momentLocaleId = this.getMomentLocaleId(language);
+                content += `    {value:'${language}', momentLocaleId:'${momentLocaleId}'}${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n];';
 
@@ -334,42 +300,6 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Update Moment Locales to keep in webpack prod build
-     *
-     * @param languages
-     */
-    updateLanguagesInMomentWebpackNgx(languages) {
-        const fullPath = 'webpack/webpack.prod.js';
-        try {
-            let content = 'localesToKeep: [\n';
-            languages.forEach((language, i) => {
-                content += `                    '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content +=
-                '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
-                '                ]';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
                     content
                 },
                 this

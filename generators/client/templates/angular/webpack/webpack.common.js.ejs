@@ -21,6 +21,7 @@ const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const rxPaths = require('rxjs/_esm5/path-mapping');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 <%_ } if (buildTool === undefined) { _%>
@@ -120,6 +121,9 @@ module.exports = (options) => ({
             chunksSortMode: 'manual',
             inject: 'body'
         }),
-        new BaseHrefWebpackPlugin({ baseHref: '/' })
+        new BaseHrefWebpackPlugin({ baseHref: '/' }),
+        new MomentLocalesPlugin({
+            localesToKeep: []
+        })
     ]
 });
