@@ -70,6 +70,9 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const [paginationState, setPaginationState] = useState(getSortState(props.location, ITEMS_PER_PAGE));
     <%_ } _%>
   <%_ } _%>
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  const [sorting, setSorting] = useState(false);
+  <%_ } _%>
 
   useEffect(() => {
     <%_ if (pagination !== 'no') { _%>
@@ -160,18 +163,32 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ if (pagination !== 'no') { _%>
   useEffect(() => {
     <% if (pagination === 'infinite-scroll') { %>
-    resetAll(); 
+    if (sorting) {
+      getAllEntities();
+      setSorting(false);
+    }
     <% } else { %>
     sortEntities();
     <% } %>
-  }, [<% if (pagination !== 'infinite-scroll') { %>paginationState.activePage, <% } %>paginationState.order, paginationState.sort]);
+  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %>]);
 
   const sort = p => () => {
+    <% if (pagination === 'infinite-scroll') { %>
+    props.reset();
+    setPaginationState({
+      ...paginationState,
+      activePage: 1,
+      order: paginationState.order === 'asc' ? 'desc' : 'asc',
+      sort: p
+    });
+    setSorting(true);
+    <% } else { %>
     setPaginationState({
       ...paginationState,
       order: paginationState.order === 'asc' ? 'desc' : 'asc',
       sort: p
     });
+    <% } %>
   };
 
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
