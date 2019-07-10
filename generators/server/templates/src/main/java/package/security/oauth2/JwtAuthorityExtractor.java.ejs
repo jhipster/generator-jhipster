@@ -34,6 +34,9 @@ public class JwtAuthorityExtractor extends JwtAuthenticationConverter {
 
     @Override
     protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
-        return SecurityUtils.extractAuthorityFromClaims(jwt.getClaims());
+        Collection<GrantedAuthority> grantedAuthorities = super.extractAuthorities(jwt);
+        Collection<GrantedAuthority> groupOrRolesGrantedAuthorities = SecurityUtils.extractAuthorityFromClaims(jwt.getClaims());
+        grantedAuthorities.addAll(groupOrRolesGrantedAuthorities);
+        return grantedAuthorities;
     }
 }
