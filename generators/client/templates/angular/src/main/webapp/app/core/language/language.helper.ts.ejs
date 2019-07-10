@@ -55,6 +55,10 @@ export class JhiLanguageHelper {
         return this.getAll().map(lang => lang.value);
     }
 
+    get language(): Observable<string> {
+        return this._language.asObservable();
+    }
+
     /**
      * Update the window title using params in the following
      * order:
