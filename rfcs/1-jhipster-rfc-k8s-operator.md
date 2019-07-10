@@ -48,6 +48,7 @@ Main objectives:
   - Versioning
   - Advanced Dynamic Traffic Routing
   - The use of Functions as part of applications
+  - Manage centralized configuration
 - Provide an integration point for other CRD Based Kubernetes Extensions
   - Can provide (or configure) hierarchical routing (Integration with Istio/Ingress)
   - Can understand about KNative Functions and integrate with them
