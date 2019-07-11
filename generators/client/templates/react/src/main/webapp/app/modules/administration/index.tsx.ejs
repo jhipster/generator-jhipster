@@ -26,7 +26,7 @@ import Logs from './logs/logs';
 import Health from './health/health';
 import Metrics from './metrics/metrics';
 import Configuration from './configuration/configuration';
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
 import Audits from './audits/audits';
 <%_ } _%>
 import Docs from './docs/docs';
@@ -52,7 +52,7 @@ const Routes = ({ match }) => (
     <ErrorBoundaryRoute exact path={`${match.url}/metrics`} component={Metrics} />
     <ErrorBoundaryRoute exact path={`${match.url}/docs`} component={Docs} />
     <ErrorBoundaryRoute exact path={`${match.url}/configuration`} component={Configuration} />
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     <ErrorBoundaryRoute exact path={`${match.url}/audits`} component={Audits} />
 <%_ } _%>
     <ErrorBoundaryRoute exact path={`${match.url}/logs`} component={Logs} />

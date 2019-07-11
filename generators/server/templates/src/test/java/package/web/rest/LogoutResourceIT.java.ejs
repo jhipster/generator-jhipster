@@ -26,6 +26,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+<%_ if (messageBroker === 'kafka') { _%>
+import org.springframework.kafka.test.context.EmbeddedKafka;
+<%_ } _%>
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,6 +54,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link LogoutResource} REST controller.
  */
+<%_ if (messageBroker === 'kafka') { _%>
+@EmbeddedKafka
+<%_ } _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 public class LogoutResourceIT {
 

@@ -234,6 +234,17 @@
             ]
         },
         {
+            "fieldName": "uuidTom",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredTom",
+            "fieldType": "UUID",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "byteImageTom",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image"
@@ -307,24 +318,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "byteTextMinbytesTom",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
-            "fieldValidateRulesMinbytes": 0
-        },
-        {
-            "fieldName": "byteTextMaxbytesTom",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
-            "fieldValidateRulesMaxbytes": 10000
         }
     ],
     "changelogDate": "20160208184031",

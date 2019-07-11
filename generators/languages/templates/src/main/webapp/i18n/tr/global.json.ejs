@@ -47,7 +47,7 @@
                 "health": "Sağlık",
                 "configuration": "Yapılandırma",
                 "logs": "Kayıtlar",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Denetim",
                 <%_ } _%>
                 "apidocs": "API",

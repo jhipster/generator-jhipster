@@ -569,12 +569,21 @@ const expectedFiles = {
 
     oauth2: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/JwtAuthorityExtractor.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/AudienceValidator.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuthIdpTokenResponseDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
         `${DOCKER_DIR}keycloak.yml`
     ],
 
-    messageBroker: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/MessagingConfiguration.java`, `${DOCKER_DIR}kafka.yml`],
+    messageBroker: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResource.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/JhipsterKafkaConsumer.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/JhipsterKafkaProducer.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResourceIT.java`,
+        `${DOCKER_DIR}kafka.yml`
+    ],
 
     swaggerCodegen: [`${SERVER_MAIN_RES_DIR}swagger/api.yml`],
 
@@ -595,7 +604,6 @@ const expectedFiles = {
         `${SERVER_TEST_RES_DIR}config/bootstrap.yml`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/GatewayConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/apidoc/GatewaySwaggerResourcesProvider.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/accesscontrol/AccessControlFilter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilter.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java`,
@@ -606,6 +614,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`
     ],
+
+    rateLimitingFilesForGateways: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java`],
 
     gatewayWithUaa: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,

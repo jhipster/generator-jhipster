@@ -39,14 +39,14 @@ spec:
       - name: kafka
         image: <%= DOCKER_KAFKA %>
         env:
-        - name: KAFKA_ADVERTISED_HOST_NAME
-          value: jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local
-        - name: KAFKA_ADVERTISED_PORT
-          value: '9092'
+        - name: KAFKA_ADVERTISED_LISTENERS
+          value: 'PLAINTEXT://jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
         - name: KAFKA_ZOOKEEPER_CONNECT
-          value: jhipster-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local:2181
-        - name: KAFKA_CREATE_TOPICS
-          value: 'topic-jhipster:1:1'
+          value: 'jhipster-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local:2181'
+        - name: KAFKA_BROKER_ID
+          value: '2'
+        - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+          value: '1'
         ports:
         - containerPort: 9092
 ---
@@ -83,6 +83,13 @@ spec:
       containers:
       - name: zookeeper
         image: <%= DOCKER_ZOOKEEPER %>
+        env:
+        - name: ZOOKEEPER_CLIENT_PORT
+          value: '2181'
+        - name: ZOOKEEPER_TICK_TIME
+          value: '2000'
+        - name: ZOOKEEPER_SYNC_LIMIT
+          value: '2'
         ports:
         - containerPort: 2181
 ---

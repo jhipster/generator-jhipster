@@ -123,7 +123,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("submit", "Login")
         .check(headerRegex("Set-Cookie", "XSRF-TOKEN=(.*);[\\s]").saveAs("xsrf_token"))).exitHereIfFailed
 <%_ } else if (authenticationType === 'oauth2') { _%>
-        .get("/login")
+        .get("/oauth2/authorization/oidc")
         .check(status.is(302))
         .check(header("Location").saveAs("loginUrl"))).exitHereIfFailed
         .pause(2)
@@ -178,12 +178,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .pause(10)
         .repeat(2) {
             exec(http("Get all <%= entityInstancePlural %>")
-            .get("<% if (applicationType === 'microservice') {%>/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
+            .get("<% if (applicationType === 'microservice') {%>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
             .exec(http("Create new <%= entityInstance %>")
-            .post("<% if (applicationType === 'microservice') {%>/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
+            .post("<% if (applicationType === 'microservice') {%>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
@@ -196,12 +196,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
             .pause(10)
             .repeat(5) {
                 exec(http("Get created <%= entityInstance %>")
-                .get("<% if (applicationType === 'microservice') {%>/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
+                .get("<% if (applicationType === 'microservice') {%>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
             .exec(http("Delete created <%= entityInstance %>")
-            .delete("<% if (applicationType === 'microservice') {%>/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
+            .delete("<% if (applicationType === 'microservice') {%>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

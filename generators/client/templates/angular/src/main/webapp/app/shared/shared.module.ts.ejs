@@ -18,7 +18,6 @@
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
-    <%=angularXAppName%>SharedLibsModule,
     <%=angularXAppName%>SharedCommonModule,
     <%_ if (authenticationType !== 'oauth2') { _%>
     <%=jhiPrefixCapitalized%>LoginModalComponent,
@@ -28,7 +27,6 @@ import {
 
 @NgModule({
     imports: [
-        <%=angularXAppName%>SharedLibsModule,
         <%=angularXAppName%>SharedCommonModule
     ],
     declarations: [

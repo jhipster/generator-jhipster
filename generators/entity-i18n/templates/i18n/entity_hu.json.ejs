@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPlural %>",
                 "createLabel": "Egy új <%= entityClassHumanized %> létrehozása",
                 "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClassHumanized %>t"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "<%= entityClassHumanized %> keresése"<% } %>
+                "search": "<%= entityClassHumanized %> keresése"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "Egy új <%= entityClassHumanized %> lett létrehozva {{ param }} azonosítóval",
             "updated": "A <%= entityClassHumanized %> módosítva lett {{ param }} azonosítóval",

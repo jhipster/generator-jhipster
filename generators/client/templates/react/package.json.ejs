@@ -31,10 +31,10 @@ limitations under the License.
     "@fortawesome/free-solid-svg-icons": "5.8.1",
     "@fortawesome/react-fontawesome": "0.1.4",
     "availity-reactstrap-validation": "2.5.1",
-    "axios": "0.18.0",
+    "axios": "0.19.0",
     "bootstrap": "4.3.1",
     <%_ if (clientTheme !== 'none') { _%>
-    "bootswatch": "4.2.1",
+    "bootswatch": "4.3.1",
     <%_ } _%>
     "loaders.css": "0.1.2",
     "lodash": "4.17.11",
@@ -42,7 +42,7 @@ limitations under the License.
     "react": "16.8.5",
     "react-dom": "16.8.5",
     "react-hot-loader": "4.8.0",
-    "react-jhipster": "0.7.0",
+    "react-jhipster": "0.9.0",
     "react-loadable": "5.5.0",
     "react-redux": "6.0.1",
     "react-redux-loading-bar": "4.2.0",
@@ -172,8 +172,7 @@ limitations under the License.
     "webpack-merge": "4.2.1",
     "webpack-notifier": "1.7.0",
     "workbox-webpack-plugin": "4.1.1",
-    "write-file-webpack-plugin": "4.5.0"<% if (buildTool === 'maven') { %>,
-    "xml2js": "0.4.19"<% } %>
+    "write-file-webpack-plugin": "4.5.0"
   },
 <%_ if (clientPackageManager === 'yarn') { _%>
   "resolutions": {
@@ -199,7 +198,7 @@ limitations under the License.
     "cleanup": "rimraf <%= DIST_DIR %>",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "node node_modules/webdriver-manager/bin/webdriver-manager update --gecko false",
+    "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",

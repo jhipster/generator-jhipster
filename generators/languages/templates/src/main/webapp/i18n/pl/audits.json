@@ -22,6 +22,7 @@
             "data": {
                 "remoteAddress": "Zdalny adres:"
             }
-        }
+        },
+        "notFound": "No audit found"
     }
 }

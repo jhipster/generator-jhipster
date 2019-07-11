@@ -33,6 +33,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+<%_ if (messageBroker === 'kafka') { _%>
+import org.springframework.kafka.test.context.EmbeddedKafka;
+<%_ } _%>
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
@@ -44,6 +47,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for the UTC Hibernate configuration.
  */
+<%_ if (messageBroker === 'kafka') { _%>
+@EmbeddedKafka
+<%_ } _%>
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
 <%_ } else if (authenticationType === 'oauth2') { _%>

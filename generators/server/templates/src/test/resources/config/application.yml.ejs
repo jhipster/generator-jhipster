@@ -43,21 +43,10 @@ eureka:
 spring:
     application:
         name: <%= baseName %>
-    <%_ if (messageBroker === 'kafka') { _%>
-    cloud:
-        stream:
-            kafka:
-                binder:
-                    brokers: localhost
-                    zk-nodes: localhost
-            bindings:
-                output:
-                    destination: topic-jhipster
-    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MULTI_THREADED=FALSE
         name:
         username:
         password:
@@ -110,6 +99,10 @@ spring:
         bucket:
             name: jhipster
             password: password
+    <%_ } _%>
+    <%_ if (messageBroker === 'kafka') { _%>
+    kafka:
+        bootstrap-servers: ${spring.embedded.kafka.brokers}
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:

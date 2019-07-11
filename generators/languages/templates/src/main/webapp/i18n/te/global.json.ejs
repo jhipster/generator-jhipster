@@ -47,7 +47,7 @@
                 "health": "పరిస్థితి",
                 "configuration": "ఆకృతీకరణ",
                 "logs": "లాగ్స్",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "తనిఖీలు",
                 <%_ } _%>
                 "apidocs": "API",
@@ -59,9 +59,9 @@
         "form": {
             "username": "వాడుకరిపేరు",
             "username.placeholder": "మీ వాడుకరిపేరు",
-            "currentpassword": "ప్రస్తుత రహస్య సంకేతపదం",
+            "currentpassword.label": "ప్రస్తుత రహస్య సంకేతపదం",
             "currentpassword.placeholder": "ప్రస్తుత రహస్య సంకేతపదం",
-            "newpassword": "కొత్త రహస్య సంకేతపదం",
+            "newpassword.label": "కొత్త రహస్య సంకేతపదం",
             "newpassword.placeholder": "కొత్త రహస్య సంకేతపదం",
             "confirmpassword": "రహస్య సంకేతపదం ధ్రువీకరణ",
             "confirmpassword.placeholder": "రహస్య సంకేతపదం ధ్రువీకరణ",

@@ -502,6 +502,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a new load column to a Liquibase changelog file for entity.
+     *
+     * @param {string} filePath - The full path of the changelog file.
+     * @param {string} content - The content to be added as column, can have multiple columns as well
+     */
+    addLoadColumnToLiquibaseEntityChangeSet(filePath, content) {
+        this.needleApi.serverLiquibase.addLoadColumnToEntityChangeSet(filePath, content);
+    }
+
+    /**
      * Add a new changeset to a Liquibase changelog file for entity.
      *
      * @param {string} filePath - The full path of the changelog file.
@@ -682,6 +692,17 @@ module.exports = class extends PrivateBase {
      */
     addMavenPlugin(groupId, artifactId, version, other) {
         this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
+    }
+
+    /**
+     * Add a new annotation processor path to Maven compiler configuration.
+     *
+     * @param {string} groupId - plugin groupId
+     * @param {string} artifactId - plugin artifactId
+     * @param {string} version - explicit plugin version number
+     */
+    addMavenAnnotationProcessor(groupId, artifactId, version) {
+        this.needleApi.serverMaven.addAnnotationProcessor(groupId, artifactId, version);
     }
 
     /**
@@ -1137,7 +1158,7 @@ module.exports = class extends PrivateBase {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
             context.entityTableName = this.getTableName(context.name);
         }
-        if (jhiCore.isReservedTableName(context.entityTableName, context.prodDatabaseType)) {
+        if (jhiCore.isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiPrefix) {
             context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
         }
         context.fields.forEach(field => {
@@ -1758,13 +1779,22 @@ module.exports = class extends PrivateBase {
      *
      * @param {String} buildTool - maven | gradle
      * @param {String} profile - dev | prod
+     * @param {Boolean} buildWar - build a war instead of a jar
      * @param {Function} cb - callback when build is complete
      */
-    buildApplication(buildTool, profile, cb) {
+    buildApplication(buildTool, profile, buildWar, cb) {
         let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew bootJar -x test';
+            buildCmd = 'gradlew -x test';
+            if (buildWar) {
+                buildCmd += ' bootWar';
+            } else {
+                buildCmd += ' bootJar';
+            }
+        }
+        if (buildWar) {
+            buildCmd += ' -Pwar';
         }
 
         if (os.platform() !== 'win32') {
@@ -1896,14 +1926,12 @@ module.exports = class extends PrivateBase {
             generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
             context.configOptions.databaseType ||
             context.config.get('databaseType');
-        if (dest.authenticationType === 'oauth2' || dest.databaseType === 'no') {
+        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
             dest.skipUserManagement = true;
         }
         dest.searchEngine = context.config.get('searchEngine');
         dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        dest.enableHibernateCache =
-            context.config.get('enableHibernateCache') ||
-            (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
+        dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
         dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
@@ -1974,7 +2002,12 @@ module.exports = class extends PrivateBase {
      * @param {boolean} force force getting direct from file
      */
     getAllJhipsterConfig(generator = this, force) {
-        return jhipsterUtils.getAllJhipsterConfig(generator, force);
+        const configRootPath =
+            generator.configRootPath ||
+            (generator.options && generator.options.configRootPath) ||
+            (generator.configOptions && generator.configOptions.configRootPath) ||
+            '';
+        return jhipsterUtils.getAllJhipsterConfig(generator, force, configRootPath);
     }
 
     /**

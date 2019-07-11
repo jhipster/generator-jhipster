@@ -47,7 +47,7 @@
                 "health": "Salud",
                 "configuration": "Configuració",
                 "logs": "Registres",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Auditories",
                 <%_ } _%>
                 "apidocs": "API",

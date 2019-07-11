@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Kirjaudu sisään",
+        "form": {
+            "password": "Salasana",
+            "password.placeholder": "Salasanasi",
+            "rememberme": "Muista minut",
+            "button": "Kirjaudu sisään"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Kirjautuminen epäonnistui!</strong> Tarkista tunnuksesi ja yritä uudelleen."
+            }
+        },
+        "password": {
+            "forgot": "Unohditko salasanasi?"
+        }
+    }
+}

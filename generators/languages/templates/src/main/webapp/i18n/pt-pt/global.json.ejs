@@ -47,7 +47,7 @@
                 "health": "Estado do Sistema",
                 "configuration": "Configuração",
                 "logs": "Logs",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Auditorias",
                 <%_ } _%>
                 "apidocs": "API",

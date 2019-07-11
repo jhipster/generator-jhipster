@@ -38,6 +38,7 @@ jobs:
           JHI_DISABLE_WEBPACK_LOGS: true
           JHI_E2E_HEADLESS: true
           JHI_SCRIPTS: $(Build.Repository.LocalPath)/test-integration/scripts
+          NG_CLI_ANALYTICS: false
 
       strategy:
           matrix:
@@ -89,7 +90,7 @@ jobs:
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '10.15.3'
+                versionSpec: '10.16.0'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then

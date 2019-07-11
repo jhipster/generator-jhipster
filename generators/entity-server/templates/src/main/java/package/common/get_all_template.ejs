@@ -23,14 +23,14 @@
     const entityListToDtoListReference = mapper + '.' + 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     if (jpaMetamodelFiltering) {  %>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder<% } %>) {
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(<%= entityClass %>Criteria criteria<% if (pagination != 'no') { %>, Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
         log.debug("REST request to get <%= entityClassPlural %> by criteria: {}", criteria);
     <%_ if (pagination === 'no') { _%>
         List<<%= instanceType %>> entityList = <%= entityInstance %>QueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
     <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>QueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
     }
@@ -55,7 +55,7 @@
         return <%= entityListToDtoListReference %>(<%= entityInstancePlural %>);<% } else { %>
         return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();<% } %>
     <%_ } if (pagination !== 'no') { _%>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable, @RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany) { %>, @RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany) { %>, @RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get a page of <%= entityClassPlural %>");
     <%_ if (viaService) { _%>
         <%_ if (fieldsContainOwnerManyToMany) { _%>
@@ -65,10 +65,10 @@
         } else {
             page = <%= entityInstance %>Service.findAll(pageable);
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Service.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         <%_ } _%>
     <%_ } else { _%>
         <%_ if (fieldsContainOwnerManyToMany) { _%>
@@ -78,10 +78,10 @@
         } else {
             page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
         }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         <%_ } else { _%>
         Page<<%= instanceType %>> page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
         <%_ } _%>
     <%_ } _%>
         return ResponseEntity.ok().headers(headers).body(page.getContent());

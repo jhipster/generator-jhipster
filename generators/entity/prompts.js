@@ -534,6 +534,10 @@ function askForField(done) {
                     name: 'Enumeration (Java enum type)'
                 },
                 {
+                    value: 'UUID',
+                    name: 'UUID'
+                },
+                {
                     value: 'byte[]',
                     name: '[BETA] Blob'
                 }

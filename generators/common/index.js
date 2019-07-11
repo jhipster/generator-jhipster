@@ -22,7 +22,7 @@ const writeFiles = require('./files').writeFiles;
 const prettierConfigFiles = require('./files').prettierConfigFiles;
 const constants = require('../generator-constants');
 
-let useBlueprint;
+let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -38,17 +38,8 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupServerOptions(this);
         this.setupClientOptions(this);
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'common', {
-                ...this.options,
-                'client-hook': !this.skipClient,
-                configOptions: this.configOptions
-            });
-        } else {
-            useBlueprint = false;
-        }
+
+        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('common', { 'client-hook': !this.skipClient });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -76,7 +67,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -100,7 +91,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get default() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._default();
     }
 
@@ -110,7 +101,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 };

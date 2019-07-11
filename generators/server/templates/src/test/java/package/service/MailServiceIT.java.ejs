@@ -33,6 +33,9 @@ import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
+<%_ if (messageBroker === 'kafka') { _%>
+import org.springframework.kafka.test.context.EmbeddedKafka;
+<%_ } _%>
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -61,6 +64,9 @@ import static org.mockito.Mockito.*;
 /**
  * Integration tests for {@link MailService}.
  */
+<%_ if (messageBroker === 'kafka') { _%>
+@EmbeddedKafka
+<%_ } _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -101,7 +107,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("testSubject");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo("john.doe@example.com");
-        assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent()).isInstanceOf(String.class);
         assertThat(message.getContent().toString()).isEqualTo("testContent");
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/plain; charset=UTF-8");
@@ -114,7 +120,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("testSubject");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo("john.doe@example.com");
-        assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent()).isInstanceOf(String.class);
         assertThat(message.getContent().toString()).isEqualTo("testContent");
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
@@ -131,7 +137,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         part.writeTo(aos);
         assertThat(message.getSubject()).isEqualTo("testSubject");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo("john.doe@example.com");
-        assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent()).isInstanceOf(Multipart.class);
         assertThat(aos.toString()).isEqualTo("\r\ntestContent");
         assertThat(part.getDataHandler().getContentType()).isEqualTo("text/plain; charset=UTF-8");
@@ -148,7 +154,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         part.writeTo(aos);
         assertThat(message.getSubject()).isEqualTo("testSubject");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo("john.doe@example.com");
-        assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent()).isInstanceOf(Multipart.class);
         assertThat(aos.toString()).isEqualTo("\r\ntestContent");
         assertThat(part.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
@@ -165,7 +171,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getSubject()).isEqualTo("test title");
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
-        assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent().toString()).isEqualToNormalizingNewlines("<html>test title, http://127.0.0.1:8080, john</html>\n");
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
@@ -181,7 +187,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
-        assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent().toString()).isNotEmpty();
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
@@ -196,7 +202,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
-        assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent().toString()).isNotEmpty();
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }
@@ -211,7 +217,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
         assertThat(message.getAllRecipients()[0].toString()).isEqualTo(user.getEmail());
-        assertThat(message.getFrom()[0].toString()).isEqualTo("test@localhost");
+        assertThat(message.getFrom()[0].toString()).isEqualTo(jHipsterProperties.getMail().getFrom());
         assertThat(message.getContent().toString()).isNotEmpty();
         assertThat(message.getDataHandler().getContentType()).isEqualTo("text/html;charset=UTF-8");
     }

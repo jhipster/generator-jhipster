@@ -16,8 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
 dependencies {
-    runtimeOnly "org.springframework.boot:spring-boot-devtools"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     implementation "com.h2database:h2"
     <%_ } _%>
@@ -64,10 +71,13 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
     dependsOn <%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>
 
     args = ["run", "webpack:build"]
+    environment = [APP_VERSION: project.version]
 }
 <%_ } _%>
 
 processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', profiles)
     filesMatching("**/application.yml") {
         filter {
             it.replace("#project.version#", version)

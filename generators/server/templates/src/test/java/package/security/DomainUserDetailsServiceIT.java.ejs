@@ -30,6 +30,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (messageBroker === 'kafka') { _%>
+import org.springframework.kafka.test.context.EmbeddedKafka;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 <%_ } _%>
@@ -58,6 +61,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
  */
+<%_ if (messageBroker === 'kafka') { _%>
+@EmbeddedKafka
+<%_ } _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ if (databaseType === 'sql') { _%>
 @Transactional
@@ -163,9 +169,10 @@ public class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %
     <%_ if (databaseType === 'sql') { _%>
     @Test
     @Transactional
-    public void assertThatUserCanNotBeFoundByEmailIgnoreCase() {
-        assertThatExceptionOfType(UsernameNotFoundException.class).isThrownBy(
-            () -> domainUserDetailsService.loadUserByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH)));
+    public void assertThatUserCanBeFoundByEmailIgnoreCase() {
+        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
+        assertThat(userDetails).isNotNull();
+        assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
     <%_ } else { // MongoDB and Cassandra _%>
     @Test
