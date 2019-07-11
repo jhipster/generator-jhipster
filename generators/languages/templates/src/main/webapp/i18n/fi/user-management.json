@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Käyttäjät",
+            "createLabel": "Luo uusi käyttäjä",
+            "createOrEditLabel": "Luo tai muokkaa käyttäjää"
+        },
+        "created": "Uusi käyttäjä on luotu tunnuksella {{ param }}",
+        "updated": "Käyttäjä on päivitetty. Tunnus {{ param }}",
+        "deleted": "Käyttäjä on poistettu. Tunnus {{ param }}",
+        "delete": {
+            "question": "Oletko varma, että haluat poistaa käyttäjän {{ login }}?"
+        },
+        "detail": {
+            "title": "Käyttäjä"
+        },
+        "login": "Kirjaudu",
+        "firstName": "Etunimi",
+        "lastName": "Sukunimi",
+        "email": "Sähköposti",
+        "activated": "Aktivoitu",
+        "deactivated": "Deaktivoitu",
+        "profiles": "Profiilit",
+        "langKey": "Kieli",
+        "createdBy": "Luoja",
+        "createdDate": "Luotu pvm",
+        "lastModifiedBy": "Muokkaaja",
+        "lastModifiedDate": "Muokkaus pvm"
+    }
+}

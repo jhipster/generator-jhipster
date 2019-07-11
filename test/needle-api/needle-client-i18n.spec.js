@@ -59,59 +59,53 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
 };
 
 describe('needle API i18n: JHipster language generator with blueprint', () => {
-    const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
+    before(done => {
+        helpers
+            .run(path.join(__dirname, '../../generators/languages'))
+            .inTmpDir(dir => {
+                fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
+            })
+            .withOptions({
+                'from-cli': true,
+                build: 'maven',
+                auth: 'jwt',
+                db: 'mysql',
+                skipInstall: true,
+                blueprint: 'myblueprint',
+                skipChecks: true
+            })
+            .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
+            .withPrompts({
+                baseName: 'jhipster',
+                clientFramework: 'angularX',
+                enableTranslation: true,
+                nativeLanguage: 'en',
+                languages: ['en', 'fr']
+            })
+            .on('end', done);
+    });
 
-    blueprintNames.forEach(blueprintName => {
-        describe(`generate client with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/languages'))
-                    .inTmpDir(dir => {
-                        fse.copySync(path.join(__dirname, '../../test/templates/ngx-blueprint'), dir);
-                    })
-                    .withOptions({
-                        'from-cli': true,
-                        build: 'maven',
-                        auth: 'jwt',
-                        db: 'mysql',
-                        skipInstall: true,
-                        blueprint: blueprintName,
-                        skipChecks: true
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        clientFramework: 'angularX',
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['en', 'fr']
-                    })
-                    .on('end', done);
-            });
+    it('Assert english global.json contain the new key', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_key": "My Value",');
+    });
 
-            it('Assert english global.json contain the new key', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_key": "My Value",');
-            });
+    it('Assert french global.json contain the new key', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle": "Ma Valeur",');
+    });
 
-            it('Assert french global.json contain the new key', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle": "Ma Valeur",');
-            });
+    it('Assert english admin global.json contain the new key', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_admin_key": "My Admin Value",');
+    });
 
-            it('Assert english admin global.json contain the new key', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_admin_key": "My Admin Value",');
-            });
+    it('Assert french admin global.json contain the new key', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle_admin": "Ma Valeur Admin",');
+    });
 
-            it('Assert french admin global.json contain the new key', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle_admin": "Ma Valeur Admin",');
-            });
+    it('Assert english entity global.json contain the new key', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_entity_key": "My Entity Value",');
+    });
 
-            it('Assert english entity global.json contain the new key', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`, '"my_entity_key": "My Entity Value",');
-            });
-
-            it('Assert french entity global.json contain the new key', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle_entite": "Ma Valeur Entite",');
-            });
-        });
+    it('Assert french entity global.json contain the new key', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`, '"ma_cle_entite": "Ma Valeur Entite",');
     });
 });

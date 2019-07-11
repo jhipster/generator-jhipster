@@ -29,8 +29,14 @@ for (idx in fields) {
     }
 }
 for (idx in relationships) {
-    if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
-        header.push(getColumnName(relationships[idx].relationshipName) + '_id');
+    const relationshipType = relationships[idx].relationshipType
+    if (
+        (relationshipType === "many-to-one"
+            || (relationshipType === "one-to-one" && relationships[idx].ownerSide === true
+               && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
+        ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
+    ) {
+        header.push(getColumnName(relationships[idx].relationshipName) + "_id");
     }
 }
 table.push(header);
@@ -76,9 +82,13 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
                 max: fields[idx].fieldValidateRulesMax ? parseFloat(fields[idx].fieldValidateRulesMax) : undefined,
                 min: fields[idx].fieldValidateRulesMin ? parseFloat(fields[idx].fieldValidateRulesMin) : undefined
             });
+        } else if (columnType === '${uuidType}') {
+            data = this.faker.random.uuid();
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
-        } else if (columnType === 'date' || columnType === 'datetime') {
+        } else if (columnType === 'date') {
+            data = this.faker.date.recent().toISOString().split('T')[0];
+        } else if (columnType === 'datetime') {
             // Write the date without milliseconds so Java can parse it
             // See https://stackoverflow.com/a/34053802/150868
             data = this.faker.date.recent().toISOString().split('.')[0];
@@ -135,9 +145,9 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             }
         }
         if (columnType === 'blob' || columnType === 'longblob') {
-            data = '../data/blob/hipster.png'
+            data = '../fake-data/blob/hipster.png'
         } else if (columnType === '${clobType}'){
-            data = '../data/blob/hipster.txt'
+            data = '../fake-data/blob/hipster.txt'
         }
 
         // Validation rules
@@ -189,7 +199,13 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
     }
 
     for (idx in relationships) {
-        if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
+        const relationshipType = relationships[idx].relationshipType;
+        if (
+            (relationshipType === "many-to-one"
+                || (relationshipType === "one-to-one" && relationships[idx].ownerSide === true
+                   && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
+            ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
+        ) {
             if (relationships[idx].otherEntityNameCapitalized === 'User') {
                 line.push(this.faker.random.number({min: 1, max: 2}));
             } else {
@@ -197,8 +213,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             }
         }
     }
-
-    if (line.length === (1 + fields.length + relationships.length)) {
+    if (line.length === header.length) {
         table.push(line);
     }
 }

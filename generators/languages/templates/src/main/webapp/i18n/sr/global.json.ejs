@@ -47,7 +47,7 @@
                 "health": "Ispravnost sistema",
                 "configuration": "Konfiguracija",
                 "logs": "Logovi",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Revizije",
                 <%_ } _%>
                 "apidocs": "API",

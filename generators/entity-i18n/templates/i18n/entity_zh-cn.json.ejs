@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized  %>",
                 "createLabel": "创建新 <%= entityClassHumanized %>",
                 "createOrEditLabel": "创建或编辑 <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "查找 <%= entityClassHumanized %>"<% } %>
+                "search": "查找 <%= entityClassHumanized %>"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "<%= entityClassHumanized %> {{ param }} 创建成功",
             "updated": "<%= entityClassHumanized %> {{ param }} 更新成功",

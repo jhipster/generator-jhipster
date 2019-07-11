@@ -22,6 +22,7 @@
 			"data": {
 				"remoteAddress": "Vzdálená adresa:"
 			}
-		}
-	}
+		},
+        "notFound": "No audit found"
+    }
 }

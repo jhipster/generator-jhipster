@@ -58,25 +58,26 @@ spring:
             enabled: false
         livereload:
             enabled: false
-    <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
+    <%_ if (messageBroker === 'kafka') { _%>
+    kafka:
+        consumer:
+            bootstrap-servers: localhost:9092
+            group-id: group_id
+            auto-offset-reset: earliest
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        producer:
+            bootstrap-servers: localhost:9092
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
-        <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             discovery:
                prefer-ip-address: true
             host: localhost
             port: 8500
-        <%_ } _%>
-        <%_ if (messageBroker === 'kafka') { _%>
-        stream:
-            kafka:
-                binder:
-                    brokers: localhost
-                    zk-nodes: localhost
-            bindings:
-                output:
-                    destination: topic-jhipster
-        <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     datasource:
@@ -338,7 +339,6 @@ jhipster:
             key: <%= rememberMeKey %>
 <%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: <%= baseName %>@localhost
         base-url: http://my-server-url-to-change # Modify according to your server's URL
     metrics:
         logs: # Reports metrics in the logs

@@ -47,7 +47,7 @@
                 "health": "Shëndeti",
                 "configuration": "Konfigurimi",
                 "logs": "Logs",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Auditet",
                 <%_ } _%>
                 "apidocs": "API",

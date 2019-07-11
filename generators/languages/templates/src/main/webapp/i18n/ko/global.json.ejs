@@ -46,7 +46,7 @@
                 "health": "상태 확인",
                 "configuration": "설정",
                 "logs": "로그",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Audit",
                 <%_ } _%>
                 "apidocs": "API",

@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized  %>",
                 "createLabel": "Yangi <%= entityClassHumanized %> qo`shish",
                 "createOrEditLabel": "<%= entityClassHumanized %>ni tahrirlash"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "<%= entityClassHumanized %>ni izlash"<% } %>
+                "search": "<%= entityClassHumanized %>ni izlash"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "<%= entityClassHumanized %> {{ param }} bilan qo`shildi",
             "updated": "{{ param }}- <%= entityClassHumanized %> saqlandi",

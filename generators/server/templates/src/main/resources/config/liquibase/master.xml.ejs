@@ -20,13 +20,17 @@
 
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
     <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
-    <%_ if (prodDatabaseType === 'postgresql' || devDatabaseType === 'postgresql') { _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     <property name="clobType" value="longvarchar" dbms="h2"/>
     <%_ } else { _%>
     <property name="clobType" value="clob" dbms="h2"/>
     <%_ } _%>
-    
     <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
+    <%_ } else { _%>
+    <property name="uuidType" value="uuid" dbms="h2, <%= prodDatabaseType %>"/>
+    <%_ } _%>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->

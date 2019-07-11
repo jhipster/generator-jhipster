@@ -47,7 +47,7 @@
                 "health": "Tervis",
                 "configuration": "Konfiguratsioon",
                 "logs": "Logid",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Audit",
                 <%_ } _%>
                 "apidocs": "API",

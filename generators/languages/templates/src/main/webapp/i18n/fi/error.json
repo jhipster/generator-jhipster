@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "Virhe!",
+        "http": {
+            "400": "Virheellinen pyyntö.",
+            "403": "Sinulla ei ole oikeuksia tähän sivuun.",
+            "404": "Pyytämääsi sivua ei ole.",
+            "405": "Käyttämäsi toiminto ei sovellu pyytämääsi URL-osoitteeseen.",
+            "500": "Palvelimella tapahtui virhe."
+        },
+        "concurrencyFailure": "Toinen käyttäjä muokkasi samaa sivua samaan aikaan. Tekemäsi muutokset hylättiin.",
+        "validation": "Palvelimella tapahtui tarkistusvirhe."
+    }
+}

@@ -138,6 +138,22 @@ module.exports = class extends needleServer {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
+    addAnnotationProcessor(groupId, artifactId, version) {
+        const errorMessage = `${chalk.yellow(
+            ' Reference to '
+        )}maven annotation processor (groupId: ${groupId}, artifactId:${artifactId}, version:${version})
+            ${chalk.yellow(' not added.\n')}`;
+        // prettier-ignore
+        const annotationProcessorPath = `${'<path>\n'
+            + '            <groupId>'}${groupId}</groupId>\n`
+            + `            <artifactId>${artifactId}</artifactId>\n`
+            + `            <version>${version}</version>\n`
+            + '        </path>';
+        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-add-annotation-processor', annotationProcessorPath);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
     addProfile(profileId, other) {
         const errorMessage = `${chalk.yellow('Reference to maven profile ')}
             (id: ${profileId})${chalk.yellow(' not added.\n')}`;

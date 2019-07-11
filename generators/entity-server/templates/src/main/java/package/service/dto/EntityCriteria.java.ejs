@@ -1,9 +1,6 @@
 package <%= packageName %>.service.dto;
 
 import java.io.Serializable;
-<%_ if (fieldsContainDuration === true) { _%>
-import java.time.Duration;
-<%_ } _%>
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>
@@ -19,14 +16,17 @@ import io.github.jhipster.service.filter.StringFilter;
 <%_ if (fieldsContainBigDecimal === true) { _%>
 import io.github.jhipster.service.filter.BigDecimalFilter;
 <%_ } _%>
+<%_ if (fieldsContainDuration === true) { _%>
+import io.github.jhipster.service.filter.DurationFilter;
+<%_ } _%>
 <%_ if (fieldsContainInstant === true) { _%>
 import io.github.jhipster.service.filter.InstantFilter;
 <%_ } _%>
 <%_ if (fieldsContainLocalDate === true) { _%>
 import io.github.jhipster.service.filter.LocalDateFilter;
 <%_ } _%>
-<%_ if (fieldsContainDuration === true) { _%>
-import io.github.jhipster.service.filter.RangeFilter;
+<%_ if (fieldsContainUUID === true) { _%>
+import io.github.jhipster.service.filter.UUIDFilter;
 <%_ } _%>
 <%_ if (fieldsContainZonedDateTime === true) { _%>
 import io.github.jhipster.service.filter.ZonedDateTimeFilter;
@@ -42,8 +42,8 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;
       var filterType;
       if (field.fieldIsEnum == true) {
         filterType = fieldType + 'Filter';
-        extraFilters[fieldType] = {type : filterType, superType: 'Filter<' + fieldType + '>', fieldType:fieldType};
-      } else if (['Duration', 'LocalDate', 'ZonedDateTime', 'Instant', 'String', 'Long', 'Integer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType)) {
+        extraFilters[fieldType] = {type: filterType, superType: 'Filter<' + fieldType + '>', fieldType: fieldType};
+      } else if (['Duration', 'UUID', 'LocalDate', 'ZonedDateTime', 'Instant', 'String', 'Long', 'Integer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType)) {
         filterType = fieldType + 'Filter';
       } else {
         filterType = 'Filter<' + fieldType + '>';
@@ -54,9 +54,6 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;
             fieldInJavaBeanMethod: field.fieldInJavaBeanMethod });
     }
   });
-  if (fieldsContainDuration === true) {
-    extraFilters['java.time.Duration'] = {type : 'DurationFilter', superType: 'RangeFilter<Duration>', fieldType: 'Duration'};
-  }
   relationships.forEach((relationship) => {
     const relationshipType = relationship.relationshipType;
     // user has a String PK when using OAuth, so change relationships accordingly

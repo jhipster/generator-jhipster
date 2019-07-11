@@ -820,18 +820,13 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "web_app",
       "redirectUris": [
-        "http://localhost:<%= serverPort %>/*",
-        "https://localhost:<%= serverPort %>/*",
-        "http://localhost:8100/*",
-        "http://127.0.0.1:8761/*",
-        "http://localhost:9000/*"
+        "http://localhost:*",
+        "https://localhost:*",
+        "http://127.0.0.1:*",
+        "https://127.0.0.1:*",
+        "dev.localhost.ionic:*"
       ],
-      "webOrigins": [
-        "http://localhost:<%= serverPort %>/*",
-        "http://localhost:8100/*",
-        "http://127.0.0.1:8761/*",
-        "http://localhost:9000/*"
-      ],
+      "webOrigins": ["*"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -990,6 +985,7 @@
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
           "consentRequired": false,
           "config": {
+            "access.token.claim": "true",
             "claim.name": "roles",
             "jsonType.label": "String",
             "multivalued": "true",

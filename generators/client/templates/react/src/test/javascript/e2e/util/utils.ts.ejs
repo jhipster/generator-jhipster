@@ -30,6 +30,18 @@ export const waitUntilDisplayed = async (selector: ElementFinder, classname = ''
   );
 };
 
+/**
+ * Wait until element is clickable
+ */
+export const waitUntilClickable = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
+  if (!checkSelectorExist(selector)) return;
+
+  await browser.wait(
+    ExpectedConditions.elementToBeClickable(selector),
+    timeout,
+    `Failed while waiting for "${selector.locator()}" of Page Object Class '${classname}' to be clickable.`
+  );
+};
 
 export const waitUntilHidden = async (selector: ElementFinder, classname = '', timeout = waitUntilDisplayedTimeout) => {
   if (!checkSelectorExist(selector)) return;

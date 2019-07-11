@@ -67,9 +67,7 @@ module.exports = class extends BaseGenerator {
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
         this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-        this.enableHibernateCache =
-            this.config.get('enableHibernateCache') ||
-            (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
+        this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
         this.databaseType = this.config.get('databaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.searchEngine = this.config.get('searchEngine');
@@ -501,7 +499,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nBuilding application'));
 
-                const child = this.buildApplication(this.buildTool, 'prod', err => {
+                const child = this.buildApplication(this.buildTool, 'prod', false, err => {
                     if (err) {
                         this.abort = true;
                         this.log.error(err);

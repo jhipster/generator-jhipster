@@ -7,6 +7,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "JHipster Mocha Tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "--timeout",
+                "999999",
+                "--reporter",
+                "spec",
+                "${workspaceFolder}/test"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "jhipster generate sample-dev blueprint",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "timeout": 100000,

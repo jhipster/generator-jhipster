@@ -39,6 +39,7 @@ rules:
   - alertmanagers
   - prometheuses
   - servicemonitors
+  - prometheusrules
   verbs:
   - "*"
 - apiGroups:
@@ -67,7 +68,7 @@ rules:
 - apiGroups: [""]
   resources:
   - namespaces
-  verbs: ["list"]
+  verbs: ["list", "watch"]
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ServiceAccount

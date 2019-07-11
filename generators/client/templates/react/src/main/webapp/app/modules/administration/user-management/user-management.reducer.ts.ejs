@@ -92,7 +92,9 @@ export default (state: UserManagementState = initialState, action): UserManageme
         ...state,
         loading: false,
         users: action.payload.data,
-        totalItems: action.payload.headers['x-total-count']
+        <%_ if (databaseType !== 'cassandra') { _%>
+          totalItems: parseInt(action.payload.headers['x-total-count'], 10)
+        <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.FETCH_USER):
       return {

@@ -72,7 +72,7 @@ describe('Administration', () => {
     expect(await element(by.id('configuration-page-heading')).getText()).to.eq('Configuration');
   });
 
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
   it('should load audits', async () => {
     await navBarPage.clickOnAdminMenuItem('audits');
     expect(await element(by.id('audits-page-heading')).getText()).to.eq('Audits');

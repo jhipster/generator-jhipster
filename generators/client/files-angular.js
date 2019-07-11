@@ -257,7 +257,8 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.databaseType !== 'no' && generator.databaseType !== 'cassandra',
+            condition: generator =>
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/audits/audits.route.ts', method: 'processJs' },
@@ -437,7 +438,8 @@ const files = {
             templates: ['spec/app/shared/login/login.component.spec.ts', 'spec/app/shared/alert/alert-error.component.spec.ts']
         },
         {
-            condition: generator => generator.databaseType !== 'no' && generator.databaseType !== 'cassandra',
+            condition: generator =>
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: TEST_SRC_DIR,
             templates: ['spec/app/admin/audits/audits.component.spec.ts', 'spec/app/admin/audits/audits.service.spec.ts']
         },
@@ -477,6 +479,10 @@ const files = {
                 'e2e/page-objects/jhi-page-objects.ts',
                 'protractor.conf.js'
             ]
+        },
+        {
+            condition: generator => generator.protractorTests,
+            templates: ['tsconfig.e2e.json']
         },
         {
             condition: generator => generator.authenticationType === 'oauth2',

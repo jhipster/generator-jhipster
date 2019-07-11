@@ -47,6 +47,8 @@ module.exports = {
     getBase64Secret,
     getRandomHex,
     checkStringInFile,
+    loadBlueprintsFromConfiguration,
+    parseBluePrints,
     normalizeBlueprintName
 };
 
@@ -414,15 +416,29 @@ function decodeBase64(string, encoding = 'utf-8') {
  * Get all the generator configuration from the .yo-rc.json file
  * @param {Generator} generator the generator instance to use
  * @param {boolean} force force getting direct from file
+ * @param {String} base path where the .yo-rc.json file is located. Default is cwd.
  */
-function getAllJhipsterConfig(generator, force) {
+function getAllJhipsterConfig(generator, force, basePath = '') {
     let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
-    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
-        const yoRc = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+    const filePath = path.join(basePath || '', '.yo-rc.json');
+    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
+        const yoRc = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
         configuration = yoRc['generator-jhipster'];
-        // merge the blueprint config if available
-        if (configuration.blueprint) {
-            configuration = { ...configuration, ...yoRc[configuration.blueprint] };
+
+        // merge the blueprint configs if available
+        const oldBlueprintName = configuration.blueprint;
+        const blueprints = configuration.blueprints || [];
+        if (oldBlueprintName && blueprints.indexOf(oldBlueprintName) === -1) {
+            const oldBlueprintVersion = configuration.blueprintVersion || 'latest';
+            blueprints.push({
+                name: oldBlueprintName,
+                version: oldBlueprintVersion
+            });
+        }
+        const blueprintConfigs = blueprints.map(bp => yoRc[bp.name]).filter(el => el !== null && el !== undefined);
+        if (blueprintConfigs.length > 0) {
+            const mergedConfigs = Object.assign(...blueprintConfigs);
+            configuration = { ...configuration, ...mergedConfigs };
         }
     }
     if (!configuration.get || typeof configuration.get !== 'function') {
@@ -471,8 +487,62 @@ function checkStringInFile(path, search, generator) {
 }
 
 /**
+ * Loads the blueprint information from the configuration of the specified generator.
+ * @param config - the generator's configuration object.
+ * @returns {Array} an array that contains the info for each blueprint
+ */
+function loadBlueprintsFromConfiguration(generator) {
+    // load blueprints from config file
+    const blueprints = generator.config.get('blueprints') || [];
+
+    const oldBlueprintName = generator.config.get('blueprint');
+    if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
+        const version = generator.config.get('blueprintVersion') || 'latest';
+        blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
+    }
+    return blueprints;
+}
+
+/**
+ * Splits and normalizes a comma separated list of blueprint names with optional versions.
+ * @param {string} blueprints - comma separated list of blueprint names, e.g kotlin,vuewjs@1.0.1. If an array then
+ * no processing is performed and it is returned as is.
+ * @returns {Array} an array that contains the info for each blueprint
+ */
+function parseBluePrints(blueprints) {
+    if (blueprints && !Array.isArray(blueprints)) {
+        return blueprints
+            .split(',')
+            .filter(el => el != null && el.length > 0)
+            .map(blueprint => parseBlueprintInfo(blueprint));
+    }
+    return blueprints;
+}
+
+/**
+ * Normalize blueprint name if needed and also extracts version if defined. If no version is defined then `latest`
+ * is used by default.
+ * @param {string} blueprint - name of the blueprint and optionally a version, e.g kotlin[@0.8.1]
+ * @returns {object} containing the name and version of the blueprint
+ */
+function parseBlueprintInfo(blueprint) {
+    let bpName = normalizeBlueprintName(blueprint);
+    let version = 'latest';
+    const idx = bpName.lastIndexOf('@');
+    if (idx > 0) {
+        version = bpName.slice(idx + 1);
+        bpName = bpName.slice(0, idx);
+    }
+    return {
+        name: bpName,
+        version
+    };
+}
+
+/**
  * Normalize blueprint name: prepend 'generator-jhipster-' if needed
  * @param {string} blueprint - name of the blueprint
+ * @returns {string} the normalized blueprint name
  */
 function normalizeBlueprintName(blueprint) {
     if (blueprint && blueprint.startsWith('@')) {
