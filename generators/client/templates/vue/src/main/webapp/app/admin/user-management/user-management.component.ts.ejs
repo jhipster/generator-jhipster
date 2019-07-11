@@ -90,6 +90,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vu
   public changeOrder(propOrder: string): void {
     this.propOrder = propOrder;
     this.reverse = !this.reverse;
+    this.transition();
   }
   <%_ } _%>
 

@@ -148,6 +148,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   public changeOrder(propOrder) : void {
     this.propOrder = propOrder;
     this.reverse = !this.reverse;
+    this.transition();
   }
 
   <%_ } _%>
