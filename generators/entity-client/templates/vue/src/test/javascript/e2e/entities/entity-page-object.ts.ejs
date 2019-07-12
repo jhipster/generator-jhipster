@@ -16,86 +16,37 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by, ElementFinder } from 'protractor';
+import {by, element, ElementArrayFinder, ElementFinder} from 'protractor';
 
-import { waitUntilCount, waitUntilDisplayed } from '<% if (clientRootFolder && !skipUiGrouping) { %>../<% } %>../../util/utils';
+import AlertPage from '<% if (clientRootFolder && !skipUiGrouping) { %>../<% } %>../../page-objects/alert-page';
 
-export default class <%= entityClass %>ComponentsPage {
-  async isSaveButtonPresent() {
-    return await element(by.id('save-entity')).isPresent();
+export default class <%= entityClass %>ComponentsPage extends AlertPage {
+
+  title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
+
+  footer: ElementFinder = element(by.id('footer'));
+  createButton: ElementFinder = element(by.id('jh-create-entity'));
+
+  noRecords: ElementFinder = element(by.css('#page-heading ~ div.alert.alert-warning'));
+  table: ElementFinder = element(by.css('#page-heading ~ div.table-responsive > table'));
+
+  records: ElementArrayFinder= this.table.all(by.css('tbody tr'));
+
+  getDetailsButton(record: ElementFinder) {
+    return record.element(by.css('.btn-info.details'));
   }
 
-  async save() {
-    await element(by.id('save-entity')).click();
+  getEditButton(record: ElementFinder) {
+    return record.element(by.css('.btn-primary.edit'));
   }
 
-  async cancel() {
-    await element(by.id('cancel-save')).click();
-  }
-
-  getCreateButton() {
-    return element(by.id('jh-create-entity'));
-  }
-
-  async clickOnCreateButton() {
-    await this.getCreateButton().click();
-  }
-
-  getDetailButtons() {
-    return element.all(by.css('.btn-info.details'));
-  }
-
-  async clickOnLastDetailsButton() {
-    await this.getDetailButtons().last().click();
-  }
-
-  getEditButtons() {
-    return element.all(by.css('.btn-primary.edit'));
-  }
-
-  async clickOnLastEditButton() {
-    await this.getEditButtons().last().click();
-  }
-
-  getDeleteButtons() {
-    return element.all(by.css('div table .btn-danger'));
-  }
-
-  async clickOnLastDeleteButton() {
-    await this.getDeleteButtons().last().click();
-  }
-
-  async count<%= entityClass %>() {
-    return await element.all(by.css('div table .btn-danger')).count();
-  }
-
-  getTitle() {
-    return element(by.id('<%= entityFileName %>-heading'));
-  }
-
-  getFooter() {
-    return element(by.id('footer'));
-  }
-
-  async waitUntilLoaded() {
-    await waitUntilDisplayed(element.all(by.css('div table .btn-danger')).first());
-  }
-
-  async waitUntil<%= entityClass %>CountIs(length) {
-    await waitUntilCount(element.all(by.css('div table .btn-danger')), length);
+  getDeleteButton(record: ElementFinder) {
+    return record.element(by.css('div table .btn-danger'));
   }
 }
 
 export class <%= entityClass %>DeleteDialog {
   dialog: ElementFinder = element(by.id('removeEntity'));
-  private dialogTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
-  private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
-
-  getDialogTitle() {
-    return this.dialogTitle;
-  }
-
-  async clickOnConfirmButton() {
-    await this.confirmButton.click();
-  }
+  title: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
+  confirmButton: ElementFinder = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
 }

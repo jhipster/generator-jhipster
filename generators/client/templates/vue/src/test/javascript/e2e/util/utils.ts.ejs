@@ -1,41 +1,43 @@
-import {
-browser,
-by,
-element,
-ElementArrayFinder,
-ElementFinder,
-ExpectedConditions as EC,
-protractor
-} from 'protractor';
+import { browser, by, ElementArrayFinder, ElementFinder, ExpectedConditions as EC, protractor } from 'protractor';
 
 const waitTimeoutInMillis = browser.params.waitTimeoutInMillis || 30000;
 const logWaitErrors = browser.params.logWaitErrors || false;
 
-export const checkSelectorExist = (selector: ElementFinder) => selector !== undefined;
-
 /**
- * @returns Function which resolves to boolean
- */
-export const isDisplayed = (selector: ElementFinder) => {
-  if (!checkSelectorExist(selector)) return;
-  return EC.visibilityOf(selector);
-};
-
-export const isHidden = (selector: ElementFinder) => {
-  if (!checkSelectorExist(selector)) return;
-  return EC.invisibilityOf(selector);
-};
-
-/**
- * Returns a promise for an element to be visible. If an element is not visible
+ * Returns a void promise on an element to be visible. If an element is not visible
  * within threshold time, promise will be rejected.
  */
-export const waitUntilDisplayed = async (selector: ElementFinder, classname = '', timeout = waitTimeoutInMillis) => {
+export const waitUntilDisplayed = async (selector: ElementFinder, timeout = waitTimeoutInMillis) : Promise<void> => {
   await browser.wait(
     EC.visibilityOf(selector),
     timeout,
-    classname === '' ? `"${selector.locator()}" is not visible.`
-      : `"${selector.locator()}" of Page Object class '${classname}' is not visible.`
+    `"${selector.locator()}" is not visible.`
+  );
+};
+
+/**
+ * Returns a void promise on any element present inside an array to become
+ * visible. If no element is visible within threshold time, promise will
+ * be rejected.
+ */
+export const waitUntilAnyDisplayed = async (selectors: ElementFinder[], timeout = waitTimeoutInMillis) : Promise<void> => {
+  await browser.wait(
+    EC.or(...selectors.map(selector => EC.visibilityOf(selector))),
+    timeout,
+    `"${selectors.map(selector => selector.locator())}" are not visible.`
+  );
+};
+
+/**
+ * Returns a void promise on all elements present inside an array to become
+ * visible. If all elements are not visible within threshold time, promise
+ * will be rejected.
+ */
+export const waitUntilAllDisplayed = async (selectors: ElementFinder[], timeout = waitTimeoutInMillis) : Promise<void> => {
+  await browser.wait(
+    EC.and(...selectors.map(selector => EC.visibilityOf(selector))),
+    timeout,
+    `"${selectors.map(selector => selector.locator())}" are not visible.`
   );
 };
 
@@ -43,44 +45,27 @@ export const waitUntilDisplayed = async (selector: ElementFinder, classname = ''
  * Returns a boolean if an element is visible on screen. It's a wrapper on
  * isDisplayed() to gracefully handle the scenario when an element is not
  * present in the DOM.
-*/
+ */
 export const isVisible = async (selector: ElementFinder) => {
   try {
     return await selector.isDisplayed();
-  }  catch(e) {
+  } catch (e) {
     if (logWaitErrors) {
-      console.warn(e.message)
+      console.warn(e.message);
     }
   }
   return false;
 };
 
 /**
- * Returns a promise for an element to be visible. If an element is not visible
- * within threshold time, it will catch promise rejection and continue test
- * execution
- */
-export const waitUntilDisplayedAndContinue = async (selector: ElementFinder, classname = '', timeout = waitTimeoutInMillis) => {
-
-  await browser.wait(
-    EC.visibilityOf(selector),
-    timeout,
-    classname === '' ? `"${selector.locator()}" is not visible.`
-      : `"${selector.locator()}" of Page Object class '${classname}' is not visible.`
-  ).catch(e => logWaitErrors ? console.error(e.message) : undefined);
-};
-
-/**
- * Returns a promise for an element to be clickable. If an element is not clickable
+ * Returns a void promise for an element to be clickable. If an element is not clickable
  * within threshold time, promise will be rejected.
  */
-export const waitUntilClickable = async (selector: ElementFinder, classname = '', timeout = waitTimeoutInMillis) => {
-
+export const waitUntilClickable = async (selector: ElementFinder, timeout = waitTimeoutInMillis) => {
   await browser.wait(
     EC.elementToBeClickable(selector),
     timeout,
-    classname === '' ? `"${selector.locator()}" is not clickable.`
-      : `"${selector.locator()}" of Page Object class '${classname}' is not clickable.`
+      `"${selector.locator()}" is not clickable.`
   );
 };
 
@@ -90,7 +75,6 @@ export const waitUntilClickable = async (selector: ElementFinder, classname = ''
  * @param selector
  */
 export const click = async (selector: ElementFinder) => {
-
   await waitUntilClickable(selector);
   await selector.click();
 };
@@ -99,25 +83,31 @@ export const click = async (selector: ElementFinder) => {
  * Returns a promise for an element to be hidden. If an element is visible
  * after threshold time, promise will be rejected.
  */
-export const waitUntilHidden = async (selector: ElementFinder, classname = '', timeout = waitTimeoutInMillis) => {
-
+export const waitUntilHidden = async (selector: ElementFinder, timeout = waitTimeoutInMillis) => {
   await browser.wait(
     EC.invisibilityOf(selector),
     timeout,
-    classname === '' ? `"${selector.locator()}" is not hidden.`
-      : `"${selector.locator()}" of Page Object class '${classname}' is not hidden.`
+    `"${selector.locator()}" is not hidden.`
   );
 };
 
-export const waitForCount = async (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
+/**
+ * Returns a promise that evaluates to the number of rows inside table body.
+ */
+export const getRecordsCount = async (table: ElementFinder): Promise<number> => {
+  return await table.all(by.css('tbody tr')).count();
+};
+
+const waitForCount = async (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
   return elementArrayFinder.count().then(actualCount => expectedCount === actualCount);
 };
 
-export const waitUntilCount = async (
-  elementArrayFinder: ElementArrayFinder,
-  expectedCount: number,
-  timeout = waitTimeoutInMillis
-) => {
+/**
+ * Returns a void promise for an element array count to be equal to expected count.
+ * If the actual count doesn't become equal to an expected count, then, the
+ * promise will be rejected.
+ */
+export const waitUntilCount = async (elementArrayFinder: ElementArrayFinder, expectedCount: number, timeout = waitTimeoutInMillis) => {
   await browser.wait(
     await waitForCount(elementArrayFinder, expectedCount),
     timeout,
@@ -125,21 +115,18 @@ export const waitUntilCount = async (
   );
 };
 
+/**
+ * Returns a void promise to select the last drop down option value.
+ */
+export const selectLastOption = async (dropdown: ElementFinder) => {
+  await dropdown.all(by.tagName('option')).last().click();
+};
 
-export const getSuccessToast = (): ElementFinder =>
-  element(by.css('div[role=alert].alert.alert-success'));
-
-export const getInfoToast = (): ElementFinder =>
-  element(by.css('div[role=alert].alert.alert-info'));
-
-export const getDangerToast = (): ElementFinder =>
-  element(by.css('div[role=alert].alert.alert-danger'));
-
-export const clearElement = (elem, length) => {
-  length = length || 100;
-  var backspaceSeries = '';
-  for (var i = 0; i < length; i++) {
-    backspaceSeries += protractor.Key.BACK_SPACE;
-  }
-  elem.sendKeys(backspaceSeries);
-}
+/**
+ * Returns a void promise for an element value to be cleared. It's useful to
+ * clear numeric field values.
+ */
+export const clear = async (input: ElementFinder) => {
+  await input.sendKeys(protractor.Key.chord(protractor.Key.CONTROL, 'a'));
+  await input.sendKeys(protractor.Key.DELETE);
+};

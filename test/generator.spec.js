@@ -197,7 +197,7 @@ const expectedFiles = {
     protractor: [
         `${CLIENT_TEST_SRC_DIR}e2e/modules/account/account.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}e2e/modules/administration/administration.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}e2e/page-objects/base-component.ts`,
+        `${CLIENT_TEST_SRC_DIR}e2e/page-objects/alert-page.ts`,
         `${CLIENT_TEST_SRC_DIR}e2e/page-objects/navbar-page.ts`,
         `${CLIENT_TEST_SRC_DIR}e2e/page-objects/password-page.ts`,
         `${CLIENT_TEST_SRC_DIR}e2e/page-objects/register-page.ts`,
