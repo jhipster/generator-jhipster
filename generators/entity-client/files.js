@@ -226,6 +226,26 @@ module.exports = {
     reactFiles
 };
 
+function addEnumerationFiles(generator, templateDir, clientFolder) {
+    generator.fields.forEach(field => {
+        if (field.fieldIsEnum === true) {
+            const enumFileName = _.kebabCase(field.fieldType);
+            const enumInfo = utils.buildEnumInfo(field, generator.angularAppName, generator.packageName, generator.clientRootFolder);
+            if (!generator.skipClient) {
+                generator.template(
+                    `${generator.fetchFromInstalledJHipster(
+                        `entity-client/templates/${templateDir}`
+                    )}/${clientFolder}entities/enumerations/enum.model.ts.ejs`,
+                    `${clientFolder}shared/model/enumerations/${enumFileName}.model.ts`,
+                    generator,
+                    {},
+                    enumInfo
+                );
+            }
+        }
+    });
+}
+
 function writeFiles() {
     return {
         writeClientFiles() {
@@ -250,23 +270,7 @@ function writeFiles() {
                     this.microserviceName
                 );
 
-                this.fields.forEach(field => {
-                    if (field.fieldIsEnum === true) {
-                        const enumFileName = _.kebabCase(field.fieldType);
-                        const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
-                        if (!this.skipClient) {
-                            this.template(
-                                `${this.fetchFromInstalledJHipster(
-                                    `entity-client/templates/${CLIENT_NG2_TEMPLATES_DIR}`
-                                )}/${ANGULAR_DIR}entities/enumerations/enum.model.ts.ejs`,
-                                `${ANGULAR_DIR}shared/model/enumerations/${enumFileName}.model.ts`,
-                                this,
-                                {},
-                                enumInfo
-                            );
-                        }
-                    }
-                });
+                addEnumerationFiles(this, CLIENT_NG2_TEMPLATES_DIR, ANGULAR_DIR);
             } else if (this.clientFramework === 'react') {
                 // write client side files for react
                 this.writeFilesToDisk(
@@ -285,23 +289,7 @@ function writeFiles() {
                     this.clientFramework
                 );
 
-                this.fields.forEach(field => {
-                    if (field.fieldIsEnum === true) {
-                        const enumFileName = _.kebabCase(field.fieldType);
-                        const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
-                        if (!this.skipClient) {
-                            this.template(
-                                `${this.fetchFromInstalledJHipster(
-                                    `entity-client/templates/${CLIENT_REACT_TEMPLATES_DIR}`
-                                )}/${REACT_DIR}entities/enumerations/enum.model.ts.ejs`,
-                                `${REACT_DIR}shared/model/enumerations/${enumFileName}.model.ts`,
-                                this,
-                                {},
-                                enumInfo
-                            );
-                        }
-                    }
-                });
+                addEnumerationFiles(this, CLIENT_REACT_TEMPLATES_DIR, REACT_DIR);
             }
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
