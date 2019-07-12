@@ -5,7 +5,7 @@ import buildPaginationQueryOpts from '@/shared/sort/sorts';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 
 <%_
-const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? microserviceName.toLowerCase() + '/api/' : 'api/';
+const baseApi = (applicationType === 'gateway' && locals.microserviceName) ? 'services/' + microserviceName.toLowerCase() + '/api/' : 'api/';
 _%>
 
 const baseApiUrl = '<%= baseApi + entityApiUrl %>';
