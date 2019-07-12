@@ -1318,6 +1318,21 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Decide the primary key type based on authentication type, DB and given association
+     *
+     * @param {string} authenticationType - the auth type
+     * @param {string} databaseType - the database type
+     * @param {any} relationships - relationships
+     */
+    getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
+        const isUsingMapsIdWithOAuth = relationships.every(
+            relationship =>
+                relationship.useJPADerivedIdentifier === true && relationship.otherEntityName === 'user' && authenticationType === 'oauth2'
+        );
+        return isUsingMapsIdWithOAuth ? 'String' : this.getPkType(databaseType);
+    }
+
+    /**
      * Get a root folder name for entity
      * @param {string} clientRootFolder
      * @param {string} entityFileName

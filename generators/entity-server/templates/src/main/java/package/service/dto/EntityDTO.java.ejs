@@ -22,13 +22,7 @@ let importJsonIgnore = false;
 let importJsonIgnoreProperties = false;
 let importSet = false;
 const uniqueEnums = {};
-let primaryKeyType = pkType;
-for (idx in relationships) {
-    if ( relationships[idx].useJPADerivedIdentifier === true) {
-        primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
-        break;
-    }
-}
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 %><%- include ../../domain/imports -%>
 <%_ if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;

@@ -17,15 +17,9 @@
  limitations under the License.
 -%>
 <%_
-    let entityActionName = entityInstance.toUpperCase();
-    let entityActionNamePlural = entityInstancePlural.toUpperCase();
-    let primaryKeyType = pkType;
-    for (idx in relationships) {
-        if ( relationships[idx].useJPADerivedIdentifier === true) {
-            primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : pkType;
-            break;
-        }
-    }
+let entityActionName = entityInstance.toUpperCase();
+let entityActionNamePlural = entityInstancePlural.toUpperCase();
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 _%>
 import axios from 'axios';
 

@@ -17,13 +17,7 @@
  limitations under the License.
 -%>
 <%_
-let primaryKeyType = pkType;
-for (idx in relationships) {
-    if ( relationships[idx].useJPADerivedIdentifier === true) {
-        primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : pkType;
-        break;
-    }
-}
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 _%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';

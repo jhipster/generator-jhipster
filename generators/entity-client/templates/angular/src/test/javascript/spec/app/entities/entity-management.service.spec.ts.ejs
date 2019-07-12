@@ -17,13 +17,7 @@
  limitations under the License.
 -%>
 <%_
-let primaryKeyType = pkType;
-for (idx in relationships) {
-    if ( relationships[idx].useJPADerivedIdentifier === true) {
-        primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : pkType;
-        break;
-    }
-}
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const tsKeyId = generateTestEntityId(primaryKeyType, prodDatabaseType);
 const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
 _%>
