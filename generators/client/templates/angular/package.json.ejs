@@ -27,136 +27,140 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "7.2.12",
-    "@angular/compiler": "7.2.12",
-    "@angular/core": "7.2.12",
-    "@angular/forms": "7.2.12",
-    "@angular/platform-browser": "7.2.12",
-    "@angular/platform-browser-dynamic": "7.2.12",
-    "@angular/router": "7.2.12",
-    "@fortawesome/angular-fontawesome": "0.3.0",
-    "@fortawesome/fontawesome-svg-core": "1.2.17",
-    "@fortawesome/free-solid-svg-icons": "5.8.1",
-    "@ng-bootstrap/ng-bootstrap": "4.1.1",
+    "@angular/common": "8.0.0",
+    "@angular/compiler": "8.0.0",
+    "@angular/core": "8.0.0",
+    "@angular/forms": "8.0.0",
+    "@angular/platform-browser": "8.0.0",
+    "@angular/platform-browser-dynamic": "8.0.0",
+    "@angular/router": "8.0.0",
+    "@fortawesome/angular-fontawesome": "0.4.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.19",
+    "@fortawesome/free-solid-svg-icons": "5.9.0",
+    "@ng-bootstrap/ng-bootstrap": "4.2.1",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
     "bootstrap": "4.3.1",
     <%_ if (clientTheme !== 'none') { _%>
-    "bootswatch": "4.2.1",
+    "bootswatch": "4.3.1",
     <%_ } _%>
-    "core-js": "2.6.5",
+    "core-js": "3.1.3",
     "moment": "2.24.0",
-    "ng-jhipster": "0.9.3",
+    "ng-jhipster": "0.10.1",
     "ngx-cookie": "4.0.2",
-    "ngx-infinite-scroll": "7.1.0",
-    "ngx-webstorage": "3.0.2",
-    "rxjs": "6.4.0",
+    "ngx-infinite-scroll": "7.2.0",
+    "ngx-webstorage": "4.0.1",
+    "rxjs": "6.5.2",
     "swagger-ui": "2.2.10",
     <%_ if (websocket === 'spring-websocket') { _%>
     "sockjs-client": "1.3.0",
     "webstomp-client": "1.2.6",
     <%_ } _%>
-    "tslib": "1.9.3",
-    "zone.js": "0.8.29"
+    "tslib": "1.10.0",
+    "zone.js": "0.9.1"
   },
   "devDependencies": {
-    "@angular/cli": "7.3.8",
-    "@angular/compiler-cli": "7.2.12",
-    "@ngtools/webpack": "7.3.8",
+    "@angular/cli": "8.0.2",
+    "@angular/compiler-cli": "8.0.0",
+    "@ngtools/webpack": "8.0.2",
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.1.7",
     "@types/chai-string": "1.4.1",
     <%_ } _%>
-    "@types/jest": "24.0.11",
+    "@types/jest": "24.0.14",
     <%_ if (protractorTests) { _%>
-    "@types/mocha": "5.2.6",
+    "@types/mocha": "5.2.7",
     <%_ } _%>
     "@types/node": "10.12.27",
     <%_ if (protractorTests) { _%>
-    "@types/selenium-webdriver": "3.0.15",
+    "@types/selenium-webdriver": "4.0.0",
     <%_ } _%>
+<%#
+The acorn dependency is added in order to fix a webpack/NPM issue:
+Please see: https://github.com/webpack/webpack/issues/8656
+Remove it once the issue is closed
+-%>
+    "acorn": "6.1.1",
     "angular-router-loader": "0.8.5",
     "angular2-template-loader": "0.6.2",
-    "autoprefixer": "9.5.0",
+    "autoprefixer": "9.6.0",
     "base-href-webpack-plugin": "2.0.0",
-    "browser-sync": "2.26.5",
+    "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
-    "cache-loader": "2.0.1",
+    "cache-loader": "4.0.0",
     <%_ if (protractorTests) { _%>
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
     "chai-string": "1.5.0",
     <%_ } _%>
-    "codelyzer": "5.0.0",
-    "copy-webpack-plugin": "5.0.2",
-    "css-loader": "2.1.1",
-    "file-loader": "3.0.1",
-    "fork-ts-checker-webpack-plugin": "1.0.1",
+    "codelyzer": "5.1.0",
+    "copy-webpack-plugin": "5.0.3",
+    "css-loader": "3.0.0",
+    "file-loader": "4.0.0",
+    "fork-ts-checker-webpack-plugin": "1.3.6",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
     <%_ if (!skipCommitHook) { _%>
-    "husky": "1.3.1",
+    "husky": "2.4.1",
     <%_ } _%>
-    "jest": "24.7.1",
-    "jest-junit": "6.3.0",
-    "jest-preset-angular": "7.0.1",
+    "jest": "24.8.0",
+    "jest-junit": "6.4.0",
+    "jest-preset-angular": "7.1.1",
     "jest-sonar-reporter": "2.0.0",
     <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "8.1.5",
+    "lint-staged": "8.2.0",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.18",
+    "merge-jsons-webpack-plugin": "1.0.19",
     <%_ } _%>
-    "mini-css-extract-plugin": "0.5.0",
+    "mini-css-extract-plugin": "0.7.0",
     <%_ if (protractorTests) { _%>
     "mocha": "6.1.4",
     <%_ } _%>
     "moment-locales-webpack-plugin": "1.0.7",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "postcss-loader": "3.0.0",
-    "prettier": "1.16.4",
+    "prettier": "1.18.2",
     <%_ if (protractorTests) { _%>
     "protractor": "5.4.2",
     <%_ } _%>
     "reflect-metadata": "0.1.13",
     "rimraf": "2.6.3",
-    "sass": "1.17.4",
+    "sass": "1.21.0",
     "sass-loader": "7.1.0",
     "simple-progress-webpack-plugin": "1.1.2",
     "style-loader": "0.23.1",
-    "terser-webpack-plugin": "1.2.3",
+    "terser-webpack-plugin": "1.3.0",
     "thread-loader": "2.1.2",
     "to-string-loader": "1.1.5",
-    "ts-loader": "5.3.3",
+    "ts-loader": "6.0.2",
     <%_ if (protractorTests) { _%>
-    "ts-node": "8.0.3",
+    "ts-node": "8.2.0",
     <%_ } _%>
-    "tslint": "5.15.0",
+    "tslint": "5.17.0",
     "tslint-config-prettier": "1.18.0",
     "tslint-loader": "3.5.4",
-    "typescript": "3.2.4",
+    "typescript": "3.4.5",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     <%_ if (protractorTests) { _%>
-    "webdriver-manager": "12.1.4",
+    "webdriver-manager": "12.1.5",
     <%_ } _%>
-    "webpack": "4.29.6",
-    "webpack-cli": "3.3.0",
-    "webpack-dev-server": "3.2.1",
+    "webpack": "4.34.0",
+    "webpack-cli": "3.3.4",
+    "webpack-dev-server": "3.7.1",
     "webpack-merge": "4.2.1",
     "webpack-notifier": "1.7.0",
     "webpack-visualizer-plugin": "0.1.11",
-    "workbox-webpack-plugin": "3.6.3",
-    "write-file-webpack-plugin": "4.5.0"<% if (buildTool === 'maven') { %>,
-    "xml2js": "0.4.19"
-    <%_ } _%>
+    "workbox-webpack-plugin": "4.3.1",
+    "write-file-webpack-plugin": "4.5.0"
   },
   "engines": {
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
-    "yarn": ">=1.3.2"<% } %>
+    "yarn": ">=1.16.0"<% } %>
   },
   <%_ if (!skipCommitHook) { _%>
   "lint-staged": {
@@ -175,7 +179,7 @@
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
-    "postinstall": "node node_modules/webdriver-manager/bin/webdriver-manager update --gecko false",
+    "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",

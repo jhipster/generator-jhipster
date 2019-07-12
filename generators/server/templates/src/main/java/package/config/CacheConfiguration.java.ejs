@@ -474,17 +474,17 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 .clustering().cacheMode(CacheMode.LOCAL)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
-                .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
+                .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             manager.defineConfiguration("dist-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(cacheInfo.getDistributed().getInstanceCount())
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration()
-                .lifespan(cacheInfo.getDistributed().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
+                .lifespan(cacheInfo.getDistributed().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             manager.defineConfiguration("repl-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.REPL_SYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
                 .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getReplicated().getMaxEntries()).expiration()
-                .lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.MINUTES).build());
+                .lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
 
             // initialize Hibernate L2 cache
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)

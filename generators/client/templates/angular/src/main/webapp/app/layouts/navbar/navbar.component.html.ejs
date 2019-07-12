@@ -35,7 +35,7 @@
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <fa-icon icon="th-list"></fa-icon>
@@ -48,7 +48,7 @@
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
-            <li *<%=jhiPrefix%>HasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *<%=jhiPrefix%>HasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
                         <fa-icon icon="user-plus"></fa-icon>
@@ -98,7 +98,7 @@
                             <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
                         </a>
                     </li>
-                    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                     <li>
                         <a class="dropdown-item" routerLink="admin/audits" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="bell" fixedWidth="true"></fa-icon>
@@ -130,7 +130,7 @@
                 </ul>
             </li>
             <%_ if (enableTranslation) { _%>
-            <li ngbDropdown class="nav-item dropdown pointer" *ngIf="languages && languages.length > 1">
+            <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" *ngIf="languages && languages.length > 1">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
                     <span>
                         <fa-icon icon="flag"></fa-icon>
@@ -144,7 +144,7 @@
                 </ul>
             </li>
             <%_ } _%>
-            <li ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
                   <span *ngIf="!getImageUrl()">
                     <fa-icon icon="user"></fa-icon>

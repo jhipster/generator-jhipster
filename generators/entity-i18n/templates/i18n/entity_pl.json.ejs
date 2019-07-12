@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassHumanized %>",
                 "createLabel": "Dodaj <%= entityClassHumanized %>",
                 "createOrEditLabel": "Dodaj lub edytuj: <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "Szukaj <%= entityClassHumanized %>"<% } %>
+                "search": "Szukaj <%= entityClassHumanized %>"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "Utworzono nowy obiekt typu <%= entityClassHumanized %> z identyfikatorem {{ param }}",
             "updated": "Uaktualniono obiekt typu <%= entityClassHumanized %> z identyfikatorem {{ param }}",

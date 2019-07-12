@@ -28,9 +28,6 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
         classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
-        <%_ if (enableSwaggerCodegen) { _%>
-        classpath "org.openapitools:openapi-generator-gradle-plugin:3.3.4"
-        <%_ } _%>
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -42,8 +39,11 @@ plugins {
     id "jacoco"
     id "com.google.cloud.tools.jib" version "<%= JIB_VERSION %>"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
+    <%_ if (enableSwaggerCodegen) { _%>
+    id "org.openapi.generator" version "4.0.2"
+    <%_ } _%>
     <%_ if (!skipClient) { _%>
-    id "com.github.node-gradle.node" version "1.3.0"
+    id "com.github.node-gradle.node" version "1.5.1"
     <%_ } _%>
     id "net.ltgt.apt-eclipse" version "0.21"
     id "net.ltgt.apt-idea" version "0.21"
@@ -54,6 +54,11 @@ plugins {
     id "org.sonarqube" version "2.7.1"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
+
+group = "<%= packageName %>"
+version = "0.0.1-SNAPSHOT"
+
+description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
@@ -95,7 +100,7 @@ eclipse {
     sourceSets {
         main {
             java {
-                srcDirs += ["build/generated/source/apt/main"]
+                srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
             }
         }
     }
@@ -122,11 +127,6 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 defaultTasks "bootRun"
-
-group = "<%= packageName %>"
-version = "0.0.1-SNAPSHOT"
-
-description = ""
 
 springBoot {
     mainClassName = "<%= packageName %>.<%= mainClass %>"
@@ -288,13 +288,11 @@ dependencies {
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
     implementation "com.hazelcast:hazelcast"
-    <%_ if (enableHibernateCache) { _%>
+    <%_ } _%>
+    <%_ if (cacheProvider === 'hazelcast' && enableHibernateCache) { _%>
     implementation "com.hazelcast:hazelcast-hibernate53"
     <%_ } _%>
-    implementation "com.hazelcast:hazelcast-spring"
-    <%_ } _%>
-    <%_ if ((applicationType === 'gateway') && cacheProvider !== 'hazelcast') { _%>
-    implementation "com.hazelcast:hazelcast"
+    <%_ if (cacheProvider === 'hazelcast') { _%>
     implementation "com.hazelcast:hazelcast-spring"
     <%_ } _%>
     <%_ if (cacheProvider === 'infinispan') { _%>
@@ -320,6 +318,9 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
     implementation "commons-codec:commons-codec"
+    <%_ } _%>
+    <%_ if (enableSwaggerCodegen) { _%>
+    implementation "org.openapitools:jackson-databind-nullable:0.1.0"
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io"
@@ -364,8 +365,6 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
-    implementation "org.springframework.cloud:spring-cloud-stream"
-    implementation "org.springframework.cloud:spring-cloud-stream-binder-kafka"
     implementation "org.springframework.kafka:spring-kafka"
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
@@ -470,9 +469,7 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
-        <%_ if (authenticationType !== 'uaa') { _%>
     annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
-        <%_ } _%>
     <%_ } _%>
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}") {
         exclude group: "com.vaadin.external.google", module: "android-json"
@@ -505,7 +502,7 @@ dependencies {
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
-    testImplementation "com.github.differentway:couchbase-testcontainer"
+    testImplementation "org.testcontainers:couchbase"
     <%_ } _%>
     testImplementation "org.hamcrest:hamcrest-library"
     <%_ if (databaseType === 'sql') { _%>
@@ -519,7 +516,7 @@ dependencies {
     liquibaseRuntime "com.oracle.jdbc:ojdbc8"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
-    testImplementation "org.springframework.cloud:spring-cloud-stream-test-support"
+    testImplementation "org.springframework.kafka:spring-kafka-test"
     <%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }

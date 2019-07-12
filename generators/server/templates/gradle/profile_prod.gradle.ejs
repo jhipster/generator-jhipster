@@ -49,10 +49,13 @@ task webpack_test(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn
 
 task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task, dependsOn: "<%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>") {
     args = ["run", "webpack:prod"]
+    environment = [APP_VERSION: project.version]
 }
 <%_ } _%>
 
 processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', profiles)
     filesMatching("**/application.yml") {
         filter {
             it.replace("#project.version#", version)

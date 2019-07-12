@@ -190,4 +190,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFolder(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus`);
         generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/menus`);
     }
+    if (generator.isJhipsterVersionLessThan('6.1.0')) {
+        generator.config.delete('blueprint');
+        generator.config.delete('blueprintVersion');
+    }
 }

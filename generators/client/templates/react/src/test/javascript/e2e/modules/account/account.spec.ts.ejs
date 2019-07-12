@@ -34,6 +34,9 @@ import {
   getModifiedDateSortButton,
 <%_ } _%>
   waitUntilDisplayed,
+<%_ if (!skipUserManagement) { _%>
+  waitUntilClickable,
+<%_ } _%>
   waitUntilHidden
 } from '../../util/utils';
 <%_ } else { _%>
@@ -164,12 +167,12 @@ describe('Account', () => {
 <%_ if (databaseType !== 'cassandra') { _%>
 
     const modifiedDateSortButton = getModifiedDateSortButton();
-    await waitUntilDisplayed(modifiedDateSortButton);
+    await waitUntilClickable(modifiedDateSortButton);
     await modifiedDateSortButton.click();
 <%_ } _%>
 
     const deactivatedButton = getUserDeactivatedButtonByLogin('user_test');
-    await waitUntilDisplayed(deactivatedButton);
+    await waitUntilClickable(deactivatedButton);
     await deactivatedButton.click();
     await waitUntilHidden(deactivatedButton);
 

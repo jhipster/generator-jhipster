@@ -18,7 +18,7 @@
  */
 const fs = require('fs');
 
-const FILE_EXTENSION = '.original';
+const FILE_EXTENSION = '.war';
 const S3_STANDARD_REGION = 'us-east-1';
 
 let Progressbar;
@@ -69,7 +69,7 @@ S3.prototype.createBucket = function createBucket(params, callback) {
     });
 };
 
-S3.prototype.uploadJar = function uploadJar(params, callback) {
+S3.prototype.uploadWar = function uploadWar(params, callback) {
     const bucket = params.bucket;
     const buildTool = params.buildTool;
     let buildFolder;
@@ -80,43 +80,41 @@ S3.prototype.uploadJar = function uploadJar(params, callback) {
         buildFolder = 'target/';
     }
 
-    findJarFilename(buildFolder, (err, jarFilename) => {
+    findWarFilename(buildFolder, (err, warKey) => {
         if (err) {
             error(err, callback);
         } else {
-            const jarKey = jarFilename.slice(0, -FILE_EXTENSION.length);
-
             const s3 = new this.Aws.S3({
                 params: {
                     Bucket: bucket,
-                    Key: jarKey
+                    Key: warKey
                 },
                 signatureVersion: 'v4',
                 httpOptions: { timeout: 600000 }
             });
 
-            const filePath = buildFolder + jarFilename;
+            const filePath = buildFolder + warKey;
             const body = fs.createReadStream(filePath);
 
             uploadToS3(s3, body, (err, message) => {
                 if (err) {
                     error(err.message, callback);
                 } else {
-                    callback(null, { message, jarKey });
+                    callback(null, { message, warKey });
                 }
             });
         }
     });
 };
 
-function findJarFilename(buildFolder, callback) {
-    let jarFilename = '';
+function findWarFilename(buildFolder, callback) {
+    let warFilename = '';
     fs.readdir(buildFolder, (err, files) => {
         if (err) {
             error(err, callback);
         }
-        files.filter(file => file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION).forEach(file => (jarFilename = file)); // eslint-disable-line
-        callback(null, jarFilename);
+        files.filter(file => file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION).forEach(file => (warFilename = file)); // eslint-disable-line
+        callback(null, warFilename);
     });
 }
 
@@ -147,7 +145,7 @@ function uploadToS3(s3, body, callback) {
                     if (err) {
                         callback(err, null);
                     } else {
-                        callback(null, 'Jar uploaded successful');
+                        callback(null, 'War uploaded successful');
                     }
                 });
         }

@@ -69,6 +69,9 @@ import org.springframework.data.domain.Page;
     <%_ } _%>
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
+<%_ if (messageBroker === 'kafka') { _%>
+import org.springframework.kafka.test.context.EmbeddedKafka;
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -116,6 +119,7 @@ import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
@@ -125,6 +129,9 @@ import static org.mockito.Mockito.when;
 /**
  * Integration tests for {@link UserService}.
  */
+<%_ if (messageBroker === 'kafka') { _%>
+@EmbeddedKafka
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
@@ -341,7 +348,35 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
-    public void testFindNotActivatedUsersByCreationDateBefore() {
+    public void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
+        Instant now = Instant.now();
+        <%_ if (databaseType === 'sql') { _%>
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
+        <%_ } _%>
+        user.setActivated(false);
+        user.setActivationKey(RandomStringUtils.random(20));
+        <%= asEntity('User') %> dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
+            .collectList().block()<% } %>;
+        assertThat(users).isNotEmpty();
+        userService.removeNotActivatedUsers();
+        users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
+            .collectList().block()<% } %>;
+        assertThat(users).isEmpty();
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+        // Verify Elasticsearch mock
+        verify(mockUserSearchRepository, times(1)).delete(user);
+        <%_ } _%>
+    }
+
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
         Instant now = Instant.now();
         <%_ if (databaseType === 'sql') { _%>
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
@@ -350,17 +385,16 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%= asEntity('User') %> dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(users).isNotEmpty();
-        userService.removeNotActivatedUsers();
-        users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
+        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isEmpty();
+        userService.removeNotActivatedUsers();
+        Optional<<%= asEntity('User') %>> maybeDbUser = userRepository.findById(dbUser.getId())<% if (reactive) { %>.blockOptional()<% } %>;
+        assertThat(maybeDbUser).contains(dbUser);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, times(1)).delete(user);
+        verify(mockUserSearchRepository, never()).delete(user);
         <%_ } _%>
     }
     <%_ } _%>
@@ -406,37 +440,6 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     }
     <%_ } _%>
 
-    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
-
-    @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
-    public void testRemoveNotActivatedUsers() {
-        <%_ if (databaseType === 'sql') { _%>
-        // custom "now" for audit to use as creation date
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(Instant.now().minus(30, ChronoUnit.DAYS)));
-        <%_ } _%>
-
-        user.setActivated(false);
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (databaseType !== 'sql') { _%>
-        // Let the audit first set the creation date but then update it
-        user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ } _%>
-
-        assertThat(userRepository.findOneByLogin(DEFAULT_LOGIN)<% if (reactive) { %>.blockOptional()<% } %>).isPresent();
-        userService.removeNotActivatedUsers();
-        assertThat(userRepository.findOneByLogin(DEFAULT_LOGIN)<% if (reactive) { %>.blockOptional()<% } %>).isNotPresent();
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-
-        // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, times(1)).delete(user);
-        <%_ } _%>
-    }
-    <%_ } _%>
-
     <%_ if (authenticationType === 'oauth2') { _%>
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -474,13 +477,13 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     @Transactional
     <%_ } _%>
     public void testUserDetailsWithLangKey() {
-        userDetails.put("langKey", "DEFAULT_LANGKEY");
+        userDetails.put("langKey", DEFAULT_LANGKEY);
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLangKey()).isEqualTo("DEFAULT_LANGKEY");
+        assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
 
     @Test
@@ -493,7 +496,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLangKey()).isEqualTo("it-it");
+        assertThat(userDTO.getLangKey()).isEqualTo("it");
     }
 
     @Test

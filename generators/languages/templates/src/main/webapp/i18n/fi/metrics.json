@@ -1,0 +1,102 @@
+{
+    "metrics": {
+        "title": "Sovellusmetriikka",
+        "refresh.button": "Päivitä",
+        "updating": "Päivitetään...",
+        "jvm": {
+            "title": "JVM metriikka",
+            "memory": {
+                "title": "Muisti",
+                "total": "Total Memory",
+                "heap": "Heap Memory",
+                "nonheap": "Non-Heap Memory"
+            },
+            "threads": {
+                "title": "Säikeet",
+                "all": "Kaikki",
+                "runnable": "Runnable",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Show Stacktrace",
+                    "hide": "Hide Stacktrace"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP pyynnöt (ajat millisekunteina)",
+                "active": "Aktiiviset pyynnöt:",
+                "total": "Kaikki pyynnöt:",
+                "table": {
+                    "code": "Koodi",
+                    "count": "Kpl",
+                    "mean": "Mediaani",
+                    "average": "Keskiarvo",
+                    "max": "Suurin"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Not found",
+                    "servererror": "Server Error"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Palvelut statistiikka (ajat millisekunteina)",
+            "table": {
+                "name": "Palvelun nimi",
+                "count": "Kpl",
+                "mean": "Mediaani",
+                "min": "Pienin",
+                "max": "Suurin",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Cache tilasto",
+            "cachename": "Cache nimi",
+            "hits": "Cache osumat",
+            "misses": "Cache hutit",
+            "gets": "Cache luvut",
+            "puts": "Cache kirjoitukset",
+            "removals": "Cache poistot",
+            "evictions": "Cache häädöt",
+            "hitPercent": "Cache Osuma %",
+            "missPercent": "Cache Huti %",
+            "averageGetTime": "Keskimääräinen lukuaika (µs)",
+            "averagePutTime": "Keskimääräinen kirjoitusaika (µs)",
+            "averageRemoveTime": "Keskimääräinen poistoaika (µs)"
+        },
+        "datasource": {
+            "usage": "Yhteys Pool Käyttö",
+            "title": "Tietokantayhteyden statistiikka (ajat millisekunteina)",
+            "name": "Poolin käyttö",
+            "count": "Kpl",
+            "mean": "Mediaani",
+            "min": "Pienin",
+            "max": "Suurin",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

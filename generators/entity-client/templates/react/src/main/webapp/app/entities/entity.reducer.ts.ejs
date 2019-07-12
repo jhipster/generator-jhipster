@@ -119,19 +119,22 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       <%_ if (pagination === 'infinite-scroll') { _%>
       const links = parseHeaderForLinks(action.payload.headers.link);
       <%_ } _%>
+
       return {
         ...state,
-        <%_ if (pagination === 'infinite-scroll') { _%>
-        links,
-        <%_ } _%>
         loading: false,
-        <%_ if (pagination !== 'no') { _%>
-        totalItems: action.payload.headers['x-total-count'],
-        <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
-        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links)
+          <%_ if (databaseType !== 'cassandra') { _%>
+        links,
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links),
+          <%_ } _%>
         <%_ } else { _%>
-        entities: action.payload.data
+        entities: action.payload.data,
+        <%_ } _%>
+        <%_ if (pagination !== 'no') { _%>
+          <%_ if (databaseType !== 'cassandra') { _%>
+        totalItems: parseInt(action.payload.headers['x-total-count'], 10)
+          <%_ } _%>
         <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):

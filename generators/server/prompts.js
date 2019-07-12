@@ -323,7 +323,9 @@ function askForServerSideOpts(meta) {
             this.devDatabaseType = 'no';
             this.prodDatabaseType = 'no';
             this.enableHibernateCache = false;
-            this.skipUserManagement = true;
+            if (this.authenticationType !== 'uaa') {
+                this.skipUserManagement = true;
+            }
         } else if (this.databaseType === 'mongodb') {
             this.devDatabaseType = 'mongodb';
             this.prodDatabaseType = 'mongodb';

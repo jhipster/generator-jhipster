@@ -44,7 +44,7 @@
                 "health": "Ҳолат",
                 "configuration": "Созламалар",
                 "logs": "Логлар",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Аудит",
                 <%_ } _%>
                 "apidocs": "API",
@@ -56,9 +56,9 @@
         "form": {
             "username": "Логин",
             "username.placeholder": "Сизнинг логинингиз",
-            "currentpassword": "Ҳозирги паролингиз",
+            "currentpassword.label": "Ҳозирги паролингиз",
             "currentpassword.placeholder": "Ҳозирги паролингиз",
-            "newpassword": "Янги парол",
+            "newpassword.label": "Янги парол",
             "newpassword.placeholder": "Янги парол",
             "confirmpassword": "Янги паролнинг тасдиғи",
             "confirmpassword.placeholder": "Янги паролнинг тасдиғи",

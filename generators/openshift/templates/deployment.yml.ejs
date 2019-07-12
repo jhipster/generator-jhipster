@@ -233,10 +233,10 @@ objects:
               value: http://${APPLICATION_NAME}-elasticsearch:9200
             <%_ } _%>
             <%_ if (app.messageBroker === 'kafka') { _%>
-            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-              value: jhipster-kafka
-            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
-              value: jhipster-zookeeper
+            - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+              value: jhipster-kafka:9092
+            - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+              value: jhipster-kafka:9092
             <%_ } _%>
             <%_ if (monitoring === 'elk') { _%>
             - name: JHIPSTER_METRICS_LOGS_ENABLED

@@ -112,8 +112,10 @@ public class <%= serviceClassName %> extends QueryService<<%= asEntity(entityCla
     }
 
     /**
-     * Function to convert <%= criteria %> to a {@link Specification}.
-     */
+     * Function to convert ConsumerCriteria to a {@link Specification}
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching {@link Specification} of the entity.
+     */    
     private Specification<<%= asEntity(entityClass) %>> createSpecification(<%= criteria %> criteria) {
         Specification<<%= asEntity(entityClass) %>> specification = Specification.where(null);
         if (criteria != null) {

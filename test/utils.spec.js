@@ -1,4 +1,5 @@
 const assert = require('yeoman-assert');
+const helpers = require('yeoman-test');
 const utils = require('../generators/utils');
 
 describe('JHipster Utils', () => {
@@ -74,6 +75,37 @@ describe('JHipster Utils', () => {
             });
         });
     });
+    describe('::parseBluePrints', () => {
+        it('does nothing if an array', () => {
+            const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];
+            const actual = utils.parseBluePrints(expected);
+            assert.deepStrictEqual(actual, expected);
+        });
+        it('adds generator-jhipster prefix if it is absent', () => {
+            const expected = [{ name: 'generator-jhipster-foo', version: 'latest' }];
+            const actual = utils.parseBluePrints('foo');
+            assert.deepStrictEqual(actual, expected);
+        });
+        it('keeps generator-jhipster prefix if it is present', () => {
+            const expected = [{ name: 'generator-jhipster-foo', version: '1.0.1' }];
+            const actual = utils.parseBluePrints('generator-jhipster-foo@1.0.1');
+            assert.deepStrictEqual(actual, expected);
+        });
+        it("doesn't modify scoped package and extracts version", () => {
+            const expected = [{ name: '@corp/foo', version: '1.0.1' }];
+            const actual = utils.parseBluePrints('@corp/foo@1.0.1');
+            assert.deepStrictEqual(actual, expected);
+        });
+        it('parses comma separated list', () => {
+            const expected = [
+                { name: 'generator-jhipster-foo', version: 'latest' },
+                { name: 'generator-jhipster-bar', version: '1.0.1' },
+                { name: '@corp/foo', version: 'latest' }
+            ];
+            const actual = utils.parseBluePrints('foo,bar@1.0.1,@corp/foo');
+            assert.deepStrictEqual(actual, expected);
+        });
+    });
     describe('::normalizeBlueprintName', () => {
         it('adds generator-jhipster prefix if it is absent', () => {
             const generatorName = utils.normalizeBlueprintName('foo');
@@ -86,6 +118,42 @@ describe('JHipster Utils', () => {
         it("doesn't  do anything for scoped package", () => {
             const generatorName = utils.normalizeBlueprintName('@corp/foo');
             assert.textEqual(generatorName, '@corp/foo');
+        });
+    });
+    describe('::getAllJhipsterConfig', () => {
+        const cwd = process.cwd();
+        const configRootDir = './test/templates/default';
+        const expectedConfig = {
+            applicationType: 'monolith',
+            baseName: 'sampleMysql',
+            packageName: 'com.mycompany.myapp',
+            packageFolder: 'com/mycompany/myapp',
+            authenticationType: 'session',
+            cacheProvider: 'ehcache',
+            websocket: 'no',
+            databaseType: 'sql',
+            devDatabaseType: 'h2Disk',
+            prodDatabaseType: 'mysql',
+            searchEngine: 'no',
+            buildTool: 'maven',
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['en', 'fr'],
+            rememberMeKey: '2bb60a80889aa6e6767e9ccd8714982681152aa5',
+            testFrameworks: ['gatling']
+        };
+
+        it('load config from alternate directory', () => {
+            const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true, configRootDir);
+            assert.objectContent(loadedConfig, expectedConfig);
+        });
+        it('load config from current working directory', () => {
+            process.chdir(configRootDir);
+            const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true);
+            assert.objectContent(loadedConfig, expectedConfig);
+        });
+        after(() => {
+            process.chdir(cwd);
         });
     });
 });

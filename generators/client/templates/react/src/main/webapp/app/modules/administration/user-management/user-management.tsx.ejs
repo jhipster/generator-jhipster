@@ -26,7 +26,7 @@ import {
   ICrudPutAction,
   TextFormat,
   JhiPagination,
-  getPaginationItemsNumber,
+  JhiItemCount,
   getSortState,
   IPaginationBaseState
 } from 'react-jhipster';
@@ -177,14 +177,22 @@ export class UserManagement extends React.Component<IUserManagementProps, IPagin
           }
           </tbody>
         </Table>
-        <Row className="justify-content-center">
-          <JhiPagination
-            items={getPaginationItemsNumber(totalItems, this.state.itemsPerPage)}
-            activePage={this.state.activePage}
-            onSelect={this.handlePagination}
-            maxButtons={5}
-          />
-        </Row>
+        <%_ if (databaseType !== 'cassandra') { _%>
+          <div className={ users && users.length > 0 ? '' : 'd-none' }>
+            <Row className="justify-content-center">
+              <JhiItemCount page={this.state.activePage} total={totalItems} itemsPerPage={this.state.itemsPerPage} i18nEnabled />
+            </Row>
+            <Row className="justify-content-center">
+              <JhiPagination
+                activePage={this.state.activePage}
+                onSelect={this.handlePagination}
+                maxButtons={5}
+                itemsPerPage={this.state.itemsPerPage}
+                totalItems={this.props.totalItems}
+              />
+            </Row>
+          </div>
+        <%_ } _%>
       </div>
     );
   }

@@ -151,10 +151,10 @@ spec:
           value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
         <%_ } _%>
         <%_ if (app.messageBroker === 'kafka') { _%>
-        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-          value: jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local
-        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
-          value: jhipster-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local
+        - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+          value: 'jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
+        - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+          value: 'jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
         <%_ } _%>
         <%_ if (monitoring === 'elk') { _%>
         - name: JHIPSTER_METRICS_LOGS_ENABLED

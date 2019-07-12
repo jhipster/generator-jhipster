@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized  %>",
                 "createLabel": "Создать новый <%= entityClassHumanized %>",
                 "createOrEditLabel": "Создать или отредактировать <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "Найти <%= entityClassHumanized %>"<% } %>
+                "search": "Найти <%= entityClassHumanized %>"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "Новый <%= entityClassHumanized %> создан с идентификатором {{ param }}",
             "updated": "<%= entityClassHumanized %> обновлен с идентификатором {{ param }}",

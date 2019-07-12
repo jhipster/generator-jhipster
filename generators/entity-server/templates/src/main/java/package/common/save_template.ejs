@@ -30,7 +30,7 @@ let dataTypeName = (isUsingMapsId === true && mapsIdAssoc.otherEntityName === 'u
 
 if (isUsingMapsId === true) {
     mapsIdEntityInstance = mapsIdAssoc.otherEntityNameCapitalized.charAt(0).toLowerCase() + mapsIdAssoc.otherEntityNameCapitalized.slice(1);
-    mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`; 
+    mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
     otherEntityName = mapsIdAssoc.otherEntityName;
     if (isController === true) { _%>
         if (Objects.isNull(<%= instanceName%>.get<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ if (dto === 'mapstruct') { _%> Id <%_ } _%>())) {

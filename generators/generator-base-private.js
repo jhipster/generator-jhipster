@@ -67,7 +67,7 @@ module.exports = class extends Generator {
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
+        if ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
         if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
@@ -830,7 +830,11 @@ module.exports = class extends Generator {
             done();
             return;
         }
-        shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
+
+        // Path to the yo cli script in generator-jhipster's node_modules
+        const yoInternalCliPath = `${__dirname}/../node_modules/yo/lib/cli.js`;
+
+        shelljs.exec(`${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
             if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
                 this.error(
                     `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
@@ -948,9 +952,11 @@ module.exports = class extends Generator {
                 if (variableName === entityInstance) {
                     variableName += 'Collection';
                 }
-                const relationshipFieldName = `this.${entityInstance}.${relationship.relationshipFieldName}`;
+                const relationshipFieldName = `${relationship.relationshipFieldName}`;
                 const relationshipFieldNameIdCheck =
-                    dto === 'no' ? `!${relationshipFieldName} || !${relationshipFieldName}.id` : `!${relationshipFieldName}Id`;
+                    dto === 'no'
+                        ? `!this.editForm.get('${relationshipFieldName}').value || !this.editForm.get('${relationshipFieldName}').value.id`
+                        : `!!this.editForm.get('${relationshipFieldName}Id').value`;
 
                 filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
                 if (this.jpaMetamodelFiltering) {
@@ -967,7 +973,9 @@ module.exports = class extends Generator {
                     this.${variableName} = res;
                 } else {
                     this.${relationship.otherEntityName}Service
-                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'}).pipe(
+                        .find(this.editForm.get('${relationshipFieldName}${dto !== 'no' ? 'Id' : ''}').value${
+                    dto === 'no' ? '.id' : ''
+                }).pipe(
                             filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
                             map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
                         )
