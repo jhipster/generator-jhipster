@@ -33,6 +33,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.util.StringUtils;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
@@ -45,6 +46,8 @@ import java.util.Collection;
 <%_ } _%>
 import java.util.List;
 <%_ if (authenticationType === 'oauth2') { _%>
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 <%_ } _%>
 <%_ if (!reactive) { _%>
@@ -55,6 +58,10 @@ import java.util.Optional;
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
+
+<%_ if (authenticationType === 'oauth2') { _%>
+    private static final Collection<String> WELL_KNOWN_SCOPE_ATTRIBUTE_NAMES = Arrays.asList("scope", "scp");
+<%_ } _%>
 
     private SecurityUtils() {
     }
@@ -177,10 +184,17 @@ public final class SecurityUtils {
             })<% if (!reactive) { %>
             .orElse(false)<% } %>;
     }
+    
 <%_ if (authenticationType === 'oauth2') { _%>
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
-        return mapRolesToGrantedAuthorities(
-            getRolesFromClaims(claims));
+        List<GrantedAuthority> rolesGrantedAuthorities = mapRolesToGrantedAuthorities(getRolesFromClaims(claims));
+        List<GrantedAuthority> scopesGrantedAuthorities = mapScopesToGrantedAuthorities(getScopesFromClaims(claims));
+
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.addAll(rolesGrantedAuthorities);
+        grantedAuthorities.addAll(scopesGrantedAuthorities);
+
+        return grantedAuthorities;
     }
 
     @SuppressWarnings("unchecked")
@@ -189,9 +203,32 @@ public final class SecurityUtils {
             claims.getOrDefault("roles", new ArrayList<>()));
     }
 
+    @SuppressWarnings("unchecked")
+    private static Collection<String> getScopesFromClaims(Map<String, Object> claims) {
+        for ( String attributeName : WELL_KNOWN_SCOPE_ATTRIBUTE_NAMES ) {
+            Object scopes = claims.get(attributeName);
+            if (scopes instanceof String) {
+                if (StringUtils.hasText((String) scopes)) {
+                    return Arrays.asList(((String) scopes).split(" "));
+                } else {
+                    return Collections.emptyList();
+                }
+            } else if (scopes instanceof Collection) {
+                return (Collection<String>) scopes;
+            }
+        }
+        return Collections.emptyList();
+    }
+
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
         return roles.stream()
             .filter(role -> role.startsWith("ROLE_"))
+            .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
+
+    private static List<GrantedAuthority> mapScopesToGrantedAuthorities(Collection<String> scopes) {
+        return scopes.stream()
+            .filter(scope -> scope.startsWith("SCOPE_"))
             .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 <%_ } _%>
