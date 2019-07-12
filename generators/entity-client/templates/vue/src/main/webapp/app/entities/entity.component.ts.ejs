@@ -21,7 +21,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   public itemsPerPage = 20;
   public queryCount: number = null;
   public page = 1;
-  public previousPage: number = null;
+  public previousPage = 1;
   public propOrder = 'id';
   public reverse = <%_ if (pagination === 'infinite-scroll') { _%>true<%_ } else { _%>false<%_ } _%>;
   public totalItems = 0;

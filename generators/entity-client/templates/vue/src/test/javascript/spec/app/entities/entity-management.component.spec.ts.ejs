@@ -96,9 +96,10 @@ describe('Component Tests', () => {
     it('should load a page', async () => {
       // GIVEN
       <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ id: <%- tsKeyId %> }] });
+      comp.previousPage = 1;
 
       // WHEN
-      comp.loadPage(1);
+      comp.loadPage(2);
       await comp.$nextTick();
 
       // THEN
