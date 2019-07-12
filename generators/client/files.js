@@ -248,7 +248,7 @@ const vueFiles = {
             ]
         },
         {
-            condition: generator => ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra'),
+            condition: generator => (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: VUE_DIR,
             templates: [
                 'admin/audits/audits.vue',

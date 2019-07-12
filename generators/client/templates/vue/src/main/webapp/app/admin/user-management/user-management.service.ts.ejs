@@ -20,15 +20,15 @@ export default class UserManagementService {
     return axios.delete(`api/users/${userId}`);
   }
 
-  public retrieve(req?: any): Promise<any> {
-    return axios.get(`api/users?${buildPaginationQueryOpts(req)}`);
+  public retrieve(<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>req?: any <%_ } _%>): Promise<any> {
+    return axios.get(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?${buildPaginationQueryOpts(req)}<%_ } _%>`);
   }
 
   public retrieveAuthorities(): Promise<any> {
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     return axios.get('<%- apiUaaPath %>api/users/authorities');
     <%_ } else { _%>
-    return of(['ROLE_USER', 'ROLE_ADMIN']);
+    return Promise.resolve(['ROLE_USER', 'ROLE_ADMIN']);
     <%_ } _%>
   }
 }

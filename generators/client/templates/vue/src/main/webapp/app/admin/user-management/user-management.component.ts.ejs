@@ -16,7 +16,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends Vu
   public propOrder = 'id';
   public reverse = false;
   public totalItems = 0;
-  public removeId: number = null;
+  public removeId: <% if (pkType === 'String') { %>string<% } else { %>number<% } %> = null;
 
   public dismissCountDown: number = this.$store.getters.dismissCountDown;
   public dismissSecs: number = this.$store.getters.dismissSecs;

@@ -76,7 +76,7 @@ describe('UserManagement Component', () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users?sort=id,desc&page=0&size=20`);
+      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?sort=id,desc&page=0&size=20<%_ } _%>`);
     });
   });
 
@@ -91,7 +91,7 @@ describe('UserManagement Component', () => {
 
       // THEN
       expect(mockedAxios.put).toHaveBeenCalledWith(`api/users`, { id: <%- tsKeyId %>, activated: true });
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users?sort=id,desc&page=0&size=20`);
+      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?sort=id,desc&page=0&size=20<%_ } _%>`);
     });
   });
 
@@ -106,10 +106,11 @@ describe('UserManagement Component', () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(mockedAxios.delete).toHaveBeenCalledWith(`api/users/<%- tsKeyId %>`);
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users?sort=id,desc&page=0&size=20`);
+      expect(mockedAxios.delete).toHaveBeenCalledWith('api/users/' + <%- tsKeyId %>);
+      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?sort=id,desc&page=0&size=20<%_ } _%>`);
     });
   });
+<%_ if (databaseType !== 'cassandra') { _%>
 
   describe('change order', () => {
     it('should change order and invert reverse', () => {
@@ -121,4 +122,5 @@ describe('UserManagement Component', () => {
       expect(userManagement.reverse).toBe(true);
     });
   });
+<%_ } _%>
 });

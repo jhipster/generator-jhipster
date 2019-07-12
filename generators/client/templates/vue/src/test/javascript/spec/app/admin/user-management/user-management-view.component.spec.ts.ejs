@@ -65,7 +65,7 @@ describe('UserManagementView Component', () => {
       await userManagementView.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users/<%- tsKeyId %>`);
+      expect(mockedAxios.get).toHaveBeenCalledWith('api/users/' + <%- tsKeyId %>);
       expect(userManagementView.user).toEqual(userData);
     });
   });

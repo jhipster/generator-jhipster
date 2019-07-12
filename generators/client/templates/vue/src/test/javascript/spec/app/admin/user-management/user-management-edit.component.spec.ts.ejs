@@ -65,10 +65,11 @@ describe('UserManagementEdit Component', () => {
       await userManagementEdit.$nextTick();
 
       // THEN
-      expect(mockedAxios.get).toHaveBeenCalledWith(`api/users/<%- tsKeyId %>`);
+      expect(mockedAxios.get).toHaveBeenCalledWith('api/users/' + <%- tsKeyId %>);
     });
   });
 
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
   describe('initAuthorities', () => {
     it('Should load authorities', async () => {
       // GIVEN
@@ -83,6 +84,7 @@ describe('UserManagementEdit Component', () => {
     });
   });
 
+<%_ } _%>
   describe('save', () => {
     it('Should call update service on save for existing user', async () => {
       // GIVEN
