@@ -1293,9 +1293,8 @@ module.exports = class extends Generator {
      * Generate a primary key, according to the type
      *
      * @param {any} pkType - the type of the primary key
-     * @param {any} prodDatabaseType - the database type
      */
-    generateTestEntityId(pkType, prodDatabaseType) {
+    generateTestEntityId(pkType) {
         if (pkType === 'String') {
             return "'123'";
         }
