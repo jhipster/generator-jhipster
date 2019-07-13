@@ -1013,18 +1013,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             } else {
                                 relationship.otherEntityClientRootFolder = `${otherEntityData.clientRootFolder}/`;
                             }
-                            if (otherEntityData !== undefined && otherEntityData.clientRootFolder) {
-                                if (context.clientRootFolder === otherEntityData.clientRootFolder) {
+                            if (otherEntityData !== undefined && relationship.otherEntityClientRootFolder) {
+                                if (context.clientRootFolder === relationship.otherEntityClientRootFolder) {
                                     relationship.otherEntityModulePath = relationship.otherEntityFileName;
                                 } else {
                                     relationship.otherEntityModulePath = `${
                                         context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                    }${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                                    }${relationship.otherEntityClientRootFolder}/${relationship.otherEntityFileName}`;
                                 }
-                                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${
+                                relationship.otherEntityModelName = `${relationship.otherEntityClientRootFolder}/${
                                     relationship.otherEntityFileName
                                 }`;
-                                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                                relationship.otherEntityPath = `${relationship.otherEntityClientRootFolder}/${
+                                    relationship.otherEntityFileName
+                                }`;
                             } else {
                                 relationship.otherEntityModulePath = `${
                                     context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
