@@ -1325,11 +1325,15 @@ module.exports = class extends Generator {
      * @param {any} relationships - relationships
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
-        const isUsingMapsIdWithOAuth = relationships.every(
-            relationship =>
-                relationship.useJPADerivedIdentifier === true && relationship.otherEntityName === 'user' && authenticationType === 'oauth2'
-        );
-        return isUsingMapsIdWithOAuth ? 'String' : this.getPkType(databaseType);
+        let hasFound = false;
+        let primaryKeyType = this.getPkType(databaseType);
+        relationships.forEach(relationship => {
+            if (relationship.useJPADerivedIdentifier === true && !hasFound) {
+                primaryKeyType = relationship.otherEntityName === 'user' && authenticationType === 'oauth2' ? 'String' : primaryKeyType;
+                hasFound = true;
+            }
+        });
+        return primaryKeyType;
     }
 
     /**
