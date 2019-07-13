@@ -1043,7 +1043,7 @@ module.exports = class extends Generator {
     generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
         const variablesWithTypes = [];
         let tsKeyType;
-        if (pkType === 'String') {
+        if (pkType === 'String' || pkType === 'UUID') {
             tsKeyType = 'string';
         } else {
             tsKeyType = 'number';
@@ -1297,10 +1297,10 @@ module.exports = class extends Generator {
      */
     generateTestEntityId(pkType, prodDatabaseType) {
         if (pkType === 'String') {
-            if (prodDatabaseType === 'cassandra') {
-                return "'9fec3727-3421-4967-b213-ba36557ca194'";
-            }
             return "'123'";
+        }
+        if (pkType === 'UUID') {
+            return "'9fec3727-3421-4967-b213-ba36557ca194'";
         }
         return 123;
     }
@@ -1311,10 +1311,20 @@ module.exports = class extends Generator {
      * @param {any} databaseType - the database type
      */
     getPkType(databaseType) {
-        if (['cassandra', 'mongodb', 'couchbase'].includes(databaseType)) {
-            return 'String';
+        let pk = '';
+        switch (databaseType) {
+            case 'mongodb':
+            case 'couchbase':
+                pk = 'String';
+                break;
+            case 'cassandra':
+                pk = 'UUID';
+                break;
+            default:
+                pk = 'Long';
+                break;
         }
-        return 'Long';
+        return pk;
     }
 
     /**
