@@ -57,7 +57,7 @@
   "dependencies": {
     "chevrotain": "4.4.0",
     "fs-extra": "8.1.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "winston": "3.2.1"
   },
   "devDependencies": {
