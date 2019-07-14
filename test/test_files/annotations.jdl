@@ -1,14 +1,18 @@
 @service(serviceClass)
 @dto(mapstruct)
 @skipClient
+@myCustomUnaryOption
+@myCustomBinaryOption(customValue)
 entity A
 
 @paginate(pager)
 @dto(mapstruct)
 @service(serviceClass)
+@myCustomUnaryOption
 entity B
 
 @skipClient
 @filter
 @paginate(pager)
+@myCustomBinaryOption(customValue2)
 entity C

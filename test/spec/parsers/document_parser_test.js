@@ -858,6 +858,9 @@ describe('DocumentParser', () => {
         let paginationOption = null;
         let serviceOption = null;
         let skipClientOption = null;
+        let customUnaryOption = null;
+        let customBinaryOption = null;
+        let customBinaryOption2 = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/annotations.jdl']);
@@ -870,6 +873,9 @@ describe('DocumentParser', () => {
           paginationOption = jdlObject.getOptionsForName(BinaryOptions.PAGINATION)[0];
           serviceOption = jdlObject.getOptionsForName(BinaryOptions.SERVICE)[0];
           skipClientOption = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)[0];
+          customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
+          customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
+          customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
         });
 
         it('sets the annotations as options', () => {
@@ -878,6 +884,11 @@ describe('DocumentParser', () => {
           expect(paginationOption.entityNames).to.deep.equal(new Set(['B', 'C']));
           expect(serviceOption.entityNames).to.deep.equal(new Set(['A', 'B']));
           expect(skipClientOption.entityNames).to.deep.equal(new Set(['A', 'C']));
+          expect(customUnaryOption.entityNames).to.deep.equal(new Set(['A', 'B']));
+          expect(customBinaryOption.entityNames).to.deep.equal(new Set(['A']));
+          expect(customBinaryOption2.entityNames).to.deep.equal(new Set(['C']));
+          expect(customBinaryOption.value).to.deep.equal('customValue');
+          expect(customBinaryOption2.value).to.deep.equal('customValue2');
         });
       });
       context('when parsing a mix between annotations and regular options', () => {
