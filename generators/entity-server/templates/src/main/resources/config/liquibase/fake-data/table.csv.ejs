@@ -209,7 +209,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             if (relationships[idx].otherEntityNameCapitalized === 'User') {
                 line.push(this.faker.random.number({min: 1, max: 2}));
             } else {
-                line.push(this.faker.random.number({min: 1, max: 10}));
+                line.push(lineNb);
             }
         }
     }
