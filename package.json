@@ -10,11 +10,10 @@
   ],
   "scripts": {
     "bundle": "node ./scripts/bundle.js && webpack",
-    "coverage": "nyc --reporter=text-summary report",
     "diagrams": "node ./scripts/serialize_grammar.js && eslint lib/dsl/gen/generated_serialized_grammar.js --fix",
     "lint": "eslint .",
     "lint-fix": "npm run lint -- --fix",
-    "posttest": "npm run coverage",
+    "posttest": "nyc --reporter=text-summary report",
     "prepare": "npm run test && npm run diagrams && npm run bundle",
     "release": "git push && git push --tags && npm publish",
     "commit-dist": "git add dist && git add lib/dsl/gen && git commit --allow-empty -m \"Update dist\"",
