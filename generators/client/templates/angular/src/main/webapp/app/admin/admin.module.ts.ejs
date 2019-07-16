@@ -27,7 +27,7 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared';
 
 import {
     adminState,
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     AuditsComponent,
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
@@ -53,11 +53,11 @@ import {
 @NgModule({
     imports: [
         <%=angularXAppName%>SharedModule,
-        RouterModule.forChild(adminState),
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
+        RouterModule.forChild(adminState)
     ],
     declarations: [
-        <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+        <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
         AuditsComponent,
         <%_ } _%>
         <%_ if (!skipUserManagement) { _%>

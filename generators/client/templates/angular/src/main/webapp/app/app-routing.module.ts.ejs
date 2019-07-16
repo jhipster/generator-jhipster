@@ -32,7 +32,7 @@ const LAYOUT_ROUTES = [
             [
                 {
                     path: 'admin',
-                    loadChildren: './admin/admin.module#<%=angularXAppName%>AdminModule'
+                    loadChildren: () => import('./admin/admin.module').then(m => m.<%=angularXAppName%>AdminModule)
                 },
                 ...LAYOUT_ROUTES
             ],

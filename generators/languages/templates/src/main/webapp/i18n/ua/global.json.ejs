@@ -47,7 +47,7 @@
                 "health": "Стан",
                 "configuration": "Налаштування",
                 "logs": "Логи",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Аудит",
                 <%_ } _%>
                 "apidocs": "API",
@@ -57,13 +57,13 @@
             "language": "Мова"
         },
         "form": {
-            "username": "Логін",
+            "username.label": "Логін",
             "username.placeholder": "Ваш логін",
-            "newpassword": "Новий пароль",
+            "newpassword.label": "Новий пароль",
             "newpassword.placeholder": "Новий пароль",
-            "confirmpassword": "Підтвердження нового пароля",
+            "confirmpassword.label": "Підтвердження нового пароля",
             "confirmpassword.placeholder": "Підтвердіть новий пароль",
-            "email": "Електронна пошта",
+            "email.label": "Електронна пошта",
             "email.placeholder": "Ваша електронна пошта"
         },
         "messages": {

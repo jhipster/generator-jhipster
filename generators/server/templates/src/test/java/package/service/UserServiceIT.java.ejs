@@ -23,21 +23,28 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%= packageName %>.config.TestSecurityConfiguration;
+<%_ } _%>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
+<%_ if (databaseType !== 'no') { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
+<%_ } _%>
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
+<%_ if (databaseType !== 'no') { _%>
 import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
-import <%= packageName %>.service.dto.<%= asDto('User') %>;
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 <%_ } _%>
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import <%= packageName %>.service.util.RandomUtil;
 <%_ } _%>
@@ -45,15 +52,14 @@ import <%= packageName %>.service.util.RandomUtil;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-<%_ if (databaseType === 'sql') { _%>
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+<%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
 import org.mockito.Mock;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
 import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.auditing.DateTimeProvider;
 <%_ } _%>
@@ -63,17 +69,20 @@ import org.springframework.data.domain.Page;
     <%_ } _%>
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
+<%_ if (messageBroker === 'kafka') { _%>
+import org.springframework.kafka.test.context.EmbeddedKafka;
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.OAuth2Request;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.security.test.context.support.WithAnonymousUser;
 <%_ } _%>
-import org.springframework.test.context.junit4.SpringRunner;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
@@ -85,7 +94,7 @@ import java.time.temporal.ChronoUnit;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 import java.time.LocalDate;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
 import java.time.LocalDateTime;
 import java.util.Optional;
 <%_ } _%>
@@ -93,12 +102,10 @@ import java.util.Optional;
 import java.util.List;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.util.Optional;
@@ -112,28 +119,53 @@ import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
 import static org.mockito.Mockito.when;
 <%_ } _%>
 
 /**
  * Integration tests for {@link UserService}.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = <%= mainClass %>.class)<% if (databaseType === 'sql') { %>
-@Transactional<% } %>
+<%_ if (messageBroker === 'kafka') { _%>
+@EmbeddedKafka
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
+@SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+@Transactional
+<%_ } _%>
 public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+
+    private static final String DEFAULT_LOGIN = "johndoe";
+
+    private static final String DEFAULT_EMAIL = "johndoe@localhost";
+
+    private static final String DEFAULT_FIRSTNAME = "john";
+
+    private static final String DEFAULT_LASTNAME = "doe";
+
+    <%_ if (databaseType !== 'cassandra') { _%>
+    private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
+
+    <%_ } _%>
+    private static final String DEFAULT_LANGKEY = "dummy";
 
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 
     <%_ } _%>
+    <%_ if (databaseType !== 'no') { _%>
     @Autowired
     private UserRepository userRepository;
 
+    <%_ } _%>
     @Autowired
     private UserService userService;
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -146,7 +178,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
 
     @Autowired
     private AuditingHandler auditingHandler;
@@ -154,10 +186,16 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     @Mock
     private DateTimeProvider dateTimeProvider;
     <%_ } _%>
+    <%_ if (databaseType !== 'no') { _%>
 
     private <%= asEntity('User') %> user;
+    <%_ } _%>
 
-    @Before
+    <%_ if (authenticationType === 'oauth2' ) { _%>
+    private Map<String, Object> userDetails;
+
+    <%_ } _%>
+    @BeforeEach
     public void init() {
         <%_ if (databaseType === 'couchbase') { _%>
         mockAuthentication();
@@ -165,26 +203,39 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
         persistentTokenRepository.deleteAll();
         <%_ } _%>
-        <%_ if (databaseType !== 'sql') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         <%_ } _%>
+        <%_ if (databaseType !== 'no') { _%>
         user = new <%= asEntity('User') %>();
-        <%_ if (databaseType === 'cassandra') { _%>
+            <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
-        <%_ } _%>
-        user.setLogin("johndoe");
-        <%_ if (authenticationType !== 'oauth2') { _%>
+            <%_ } _%>
+        user.setLogin(DEFAULT_LOGIN);
+            <%_ if (authenticationType !== 'oauth2') { _%>
         user.setPassword(RandomStringUtils.random(60));
-        <%_ } _%>
+            <%_ } _%>
         user.setActivated(true);
-        user.setEmail("johndoe@localhost");
-        user.setFirstName("john");
-        user.setLastName("doe");
-        <%_ if (databaseType !== 'cassandra') { _%>
-        user.setImageUrl("http://placehold.it/50x50");
+        user.setEmail(DEFAULT_EMAIL);
+        user.setFirstName(DEFAULT_FIRSTNAME);
+        user.setLastName(DEFAULT_LASTNAME);
+            <%_ if (databaseType !== 'cassandra') { _%>
+        user.setImageUrl(DEFAULT_IMAGEURL);
+            <%_ } _%>
+        user.setLangKey(DEFAULT_LANGKEY);
         <%_ } _%>
-        user.setLangKey("en");
-        <%_ if (databaseType === 'sql') { _%>
+        <%_ if (authenticationType === 'oauth2' ) { _%>
+
+        userDetails = new HashMap<>();
+        userDetails.put("sub", DEFAULT_LOGIN);
+        userDetails.put("email", DEFAULT_EMAIL);
+        userDetails.put("given_name", DEFAULT_FIRSTNAME);
+        userDetails.put("family_name", DEFAULT_LASTNAME);
+            <%_ if (databaseType !== 'cassandra') { _%>
+        userDetails.put("picture", DEFAULT_IMAGEURL);
+            <%_ } _%>
+        <%_ } _%>
+        <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2' ) { _%>
 
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(LocalDateTime.now()));
         auditingHandler.setDateTimeProvider(dateTimeProvider);
@@ -297,7 +348,35 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
-    public void testFindNotActivatedUsersByCreationDateBefore() {
+    public void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
+        Instant now = Instant.now();
+        <%_ if (databaseType === 'sql') { _%>
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
+        <%_ } _%>
+        user.setActivated(false);
+        user.setActivationKey(RandomStringUtils.random(20));
+        <%= asEntity('User') %> dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
+            .collectList().block()<% } %>;
+        assertThat(users).isNotEmpty();
+        userService.removeNotActivatedUsers();
+        users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
+            .collectList().block()<% } %>;
+        assertThat(users).isEmpty();
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+
+        // Verify Elasticsearch mock
+        verify(mockUserSearchRepository, times(1)).delete(user);
+        <%_ } _%>
+    }
+
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
         Instant now = Instant.now();
         <%_ if (databaseType === 'sql') { _%>
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
@@ -306,17 +385,16 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%= asEntity('User') %> dbUser = userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
-            .collectList().block()<% } %>;
-        assertThat(users).isNotEmpty();
-        userService.removeNotActivatedUsers();
-        users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
+        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS))<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isEmpty();
+        userService.removeNotActivatedUsers();
+        Optional<<%= asEntity('User') %>> maybeDbUser = userRepository.findById(dbUser.getId())<% if (reactive) { %>.blockOptional()<% } %>;
+        assertThat(maybeDbUser).contains(dbUser);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, times(1)).delete(user);
+        verify(mockUserSearchRepository, never()).delete(user);
         <%_ } _%>
     }
     <%_ } _%>
@@ -334,6 +412,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         persistentTokenRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(token);
     }
     <%_ } _%>
+    <%_ if (databaseType !== 'no') { _%>
 
     @Test
     <%_ if (databaseType === 'sql') { _%>
@@ -353,40 +432,11 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         final <% if (reactive) { %>List<% } else { %>Page<% } %><<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers(pageable)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(allManagedUsers<% if (!reactive) { %>.getContent()<% } %>.stream()<% } %><% if (databaseType === 'cassandra') { %>
-        final List<<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers();
+        final List<<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers()<% if (reactive) { %>
+            .collectList().block()<% } %>;
         assertThat(allManagedUsers.stream()<% } %>
             .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
             .isTrue();
-    }
-
-    <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
-
-    @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
-    public void testRemoveNotActivatedUsers() {
-        <%_ if (databaseType === 'sql') { _%>
-        // custom "now" for audit to use as creation date
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(Instant.now().minus(30, ChronoUnit.DAYS)));
-        <%_ } _%>
-
-        user.setActivated(false);
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (databaseType !== 'sql') { _%>
-        // Let the audit first set the creation date but then update it
-        user.setCreatedDate(Instant.now().minus(30, ChronoUnit.DAYS));
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ } _%>
-
-        assertThat(userRepository.findOneByLogin("johndoe")<% if (reactive) { %>.blockOptional()<% } %>).isPresent();
-        userService.removeNotActivatedUsers();
-        assertThat(userRepository.findOneByLogin("johndoe")<% if (reactive) { %>.blockOptional()<% } %>).isNotPresent();
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-
-        // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, times(1)).delete(user);
-        <%_ } _%>
     }
     <%_ } _%>
 
@@ -395,44 +445,93 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
-    public void assertThatUserLocaleIsCorrectlySetFromAuthenticationDetails() {
-        user.setId(Constants.ANONYMOUS_USER);
-        user.setLogin(Constants.ANONYMOUS_USER);
+    public void testDefaultUserDetails() {
+        OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
 
-        Map<String, Object> userDetails = new HashMap<>();
-        userDetails.put("sub", user.getId());
-        userDetails.put("preferred_username", user.getLogin());
-        userDetails.put("given_name", user.getFirstName());
-        userDetails.put("family_name", user.getLastName());
-        userDetails.put("email", user.getEmail());
-        userDetails.put("picture", user.getImageUrl());
+        assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(userDTO.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(userDTO.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(userDTO.isActivated()).isTrue();
+        assertThat(userDTO.getLangKey()).isEqualTo(Constants.DEFAULT_LANGUAGE);
+        assertThat(userDTO.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        assertThat(userDTO.getAuthorities()).contains(AuthoritiesConstants.ANONYMOUS);
+    }
+
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void testUserDetailsWithUsername() {
+        userDetails.put("preferred_username", "TEST");
+
+        OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+
+        assertThat(userDTO.getLogin()).isEqualTo("test");
+    }
+
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void testUserDetailsWithLangKey() {
+        userDetails.put("langKey", DEFAULT_LANGKEY);
+        userDetails.put("locale", "en-US");
+
+        OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+
+        assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+    }
+
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void testUserDetailsWithLocale() {
+        userDetails.put("locale", "it-IT");
+
+        OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+
+        assertThat(userDTO.getLangKey()).isEqualTo("it");
+    }
+
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void testUserDetailsWithUSLocale() {
         userDetails.put("locale", "en_US");
 
-        OAuth2Authentication authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
-
+        OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
 
         assertThat(userDTO.getLangKey()).isEqualTo("en");
-
-        userDetails.put("locale", "it-IT");
-        authentication = createMockOAuth2AuthenticationWithDetails(userDetails);
-
-        userDTO = userService.getUserFromAuthentication(authentication);
-
-        assertThat(userDTO.getLangKey()).isEqualTo("it-it");
     }
 
-    private OAuth2Authentication createMockOAuth2AuthenticationWithDetails(Map<String, Object> userDetails) {
-        Set<String> scopes = new HashSet<String>();
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void testUserDetailsWithUSLocale2() {
+        userDetails.put("locale", "en-US");
 
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+
+        assertThat(userDTO.getLangKey()).isEqualTo("en");
+    }
+
+    private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
+        Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(Constants.ANONYMOUS_USER, Constants.ANONYMOUS_USER, authorities);
         usernamePasswordAuthenticationToken.setDetails(userDetails);
+        OAuth2User user = new DefaultOAuth2User(authorities, userDetails, "sub");
 
-        OAuth2Request authRequest = new OAuth2Request(null, "testClient", null, true, scopes, null, null, null, null);
-
-        return new OAuth2Authentication(authRequest, usernamePasswordAuthenticationToken);
+        return new OAuth2AuthenticationToken(user, authorities, "oidc");
     }
     <%_ } _%>
 }

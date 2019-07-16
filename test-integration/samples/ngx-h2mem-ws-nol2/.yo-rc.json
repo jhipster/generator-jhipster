@@ -12,7 +12,6 @@
         "devDatabaseType": "h2Memory",
         "prodDatabaseType": "mysql",
         "searchEngine": false,
-        "useSass": false,
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",

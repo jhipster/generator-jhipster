@@ -23,6 +23,10 @@
             ]
         },
         {
+            "fieldName": "guid",
+            "fieldType": "UUID"
+        },
+        {
             "fieldName": "bankNumber",
             "fieldType": "Integer"
         },
@@ -37,6 +41,10 @@
         {
             "fieldName": "meanOperationDuration",
             "fieldType": "Double"
+        },
+        {
+            "fieldName": "meanQueueDuration",
+            "fieldType": "Duration"
         },
         {
             "fieldName": "balance",

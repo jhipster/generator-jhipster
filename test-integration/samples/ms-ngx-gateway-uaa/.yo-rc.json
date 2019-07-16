@@ -16,7 +16,6 @@
         "messageBroker": false,
         "serviceDiscoveryType": "eureka",
         "buildTool": "maven",
-        "useSass": false,
         "applicationType": "gateway",
         "testFrameworks": ["gatling"],
         "jhiPrefix": "jhi",

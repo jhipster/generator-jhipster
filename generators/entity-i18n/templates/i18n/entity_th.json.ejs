@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "สร้าง <%= entityClassHumanized %>",
                 "createOrEditLabel": "สร้างหรือแก้ไข <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "ค้นหา <%= entityClassHumanized %>"<% } %>
+                "search": "ค้นหา <%= entityClassHumanized %>"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "<%= entityClassHumanized %> ถูกสร้างด้วย {{ param }}",
             "updated": "<%= entityClassHumanized %> ถูกแก้ไขด้วย {{ param }}",

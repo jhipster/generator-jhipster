@@ -22,6 +22,7 @@
             "data": {
                 "remoteAddress": "Απομακρυσμένη Διεύθυνση:"
             }
-        }
+        },
+        "notFound": "No audit found"
     }
 }

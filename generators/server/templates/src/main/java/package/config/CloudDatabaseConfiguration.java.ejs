@@ -109,6 +109,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
         List<Converter<?, ?>> converterList = new ArrayList<>();
         converterList.add(DateToZonedDateTimeConverter.INSTANCE);
         converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
+        converterList.add(DurationToLongConverter.INSTANCE);
         return new MongoCustomConversions(converterList);
     }
 

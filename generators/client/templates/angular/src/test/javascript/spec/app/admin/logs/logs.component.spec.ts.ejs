@@ -61,7 +61,13 @@ describe('Component Tests', () => {
                 spyOn(service, 'findAll').and.returnValue(
                     of(
                         new HttpResponse({
-                            body: [log],
+                            body: {
+                                loggers: {
+                                    main: {
+                                        effectiveLevel: 'WARN'
+                                    }
+                                }
+                            },
                             headers
                         })
                     )
@@ -80,7 +86,17 @@ describe('Component Tests', () => {
                 // GIVEN
                 const log = new Log('main', 'ERROR');
                 spyOn(service, 'changeLevel').and.returnValue(of(new HttpResponse()));
-                spyOn(service, 'findAll').and.returnValue(of(new HttpResponse({ body: [log] })));
+                spyOn(service, 'findAll').and.returnValue(of(
+                    new HttpResponse({
+                        body: {
+                            loggers: {
+                                main: {
+                                    effectiveLevel: 'ERROR'
+                                }
+                            }
+                        }
+                    })
+                ));
 
                 // WHEN
                 comp.changeLevel('main', 'ERROR');

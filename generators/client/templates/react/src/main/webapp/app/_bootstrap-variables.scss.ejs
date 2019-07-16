@@ -23,6 +23,7 @@
 * Make sure not to add !default to values here
 */
 
+<%_ if (clientTheme === 'none') { _%>
 // Options:
 // Quickly modify global styling by enabling or disabling optional features.
 $enable-rounded:            true;
@@ -44,3 +45,4 @@ $border-radius-sm:       .1rem;
 // Settings for the `<body>` element.
 
 $body-bg:                   #e4e5e6;
+<%_ } _%>

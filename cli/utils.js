@@ -42,7 +42,7 @@ const log = function(msg) {
 };
 
 const error = function(msg, trace) {
-    console.error(`${chalk.red.bold('ERROR!')} ${chalk.red(msg)}`);
+    console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
     }
@@ -88,12 +88,14 @@ const initHelp = (program, cliName) => {
     });
 
     program.on('command:*', name => {
-        logger.error(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`);
+        console.error(chalk.red(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`));
 
-        const d = didYouMean(name.toString(), program.commands, '_name');
+        const cmd = Object.values(name).join('');
+        const availableCommands = program.commands.map(c => c._name);
 
-        if (d) {
-            logger.info(`Did you mean: ${chalk.yellow(d)}?`);
+        const suggestion = didYouMean(cmd, availableCommands);
+        if (suggestion) {
+            logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
         }
 
         process.exit(1);
@@ -178,16 +180,27 @@ const getCommandOptions = (pkg, argv) => {
     return { 'from-cli': true };
 };
 
-const done = () => {
-    logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+const done = errorMsg => {
+    if (errorMsg) {
+        logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+    } else {
+        logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+    }
 };
 
 const createYeomanEnv = () => {
     const env = yeoman.createEnv();
     /* Register yeoman generators */
-    Object.keys(SUB_GENERATORS).forEach(generator => {
-        env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
-    });
+    Object.keys(SUB_GENERATORS)
+        .filter(command => !SUB_GENERATORS[command].cliOnly)
+        .forEach(generator => {
+            if (SUB_GENERATORS[generator].blueprint) {
+                /* eslint-disable prettier/prettier */
+                env.register(require.resolve(`${SUB_GENERATORS[generator].blueprint}/generators/${generator}`), `${CLI_NAME}:${generator}`);
+            } else {
+                env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
+            }
+        });
     return env;
 };
 

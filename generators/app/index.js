@@ -23,6 +23,7 @@ const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
+const jhipsterUtils = require('../utils');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -155,9 +156,15 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        // This adds support for a `--blueprint` flag which can be used to specify a blueprint to use for generation
+        // NOTE: Deprecated!!! Use --blueprints instead
         this.option('blueprint', {
-            desc: '[BETA] Specify a generator blueprint to use for the sub generators',
+            desc: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
+            type: String
+        });
+        // This adds support for a `--blueprints` flag which can be used to specify one or more blueprints to use for generation
+        this.option('blueprints', {
+            desc:
+                'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
             type: String
         });
 
@@ -188,8 +195,24 @@ module.exports = class extends BaseGenerator {
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        const blueprint = this.normalizeBlueprintName(this.options.blueprint || this.config.get('blueprint'));
-        this.blueprint = this.configOptions.blueprint = blueprint;
+
+        let blueprints = this.options.blueprints || '';
+        // check for old single blueprint declaration
+        const blueprint = this.options.blueprint;
+        if (blueprint) {
+            this.warning('--blueprint option is deprecated. Please use --blueprints instead');
+            if (!blueprints.split(',').includes(blueprint)) {
+                blueprints = `${blueprint},${blueprints}`;
+            }
+        }
+        if (blueprints) {
+            blueprints = jhipsterUtils.parseBluePrints(blueprints);
+        } else {
+            blueprints = jhipsterUtils.loadBlueprintsFromConfiguration(this);
+        }
+
+        this.blueprints = this.configOptions.blueprints = blueprints;
+
         this.useNpm = this.configOptions.useNpm = !this.options.yarn;
         this.useYarn = !this.useNpm;
 
@@ -209,8 +232,8 @@ module.exports = class extends BaseGenerator {
             },
 
             validateBlueprint() {
-                if (this.blueprint && !this.skipChecks) {
-                    this.checkBlueprint(this.blueprint);
+                if (this.blueprints && !this.skipChecks) {
+                    this.blueprints.forEach(e => this.checkBlueprint(e.name));
                 }
             },
 
@@ -238,9 +261,7 @@ module.exports = class extends BaseGenerator {
 
             validate() {
                 if (this.skipServer && this.skipClient) {
-                    this.error(
-                        chalk.red(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`)
-                    );
+                    this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
                 }
             },
 
@@ -255,11 +276,14 @@ module.exports = class extends BaseGenerator {
                     this.jhipsterVersion = this.config.get('jhipsterVersion');
                 }
                 this.otherModules = this.config.get('otherModules') || [];
-                if (this.blueprint) {
-                    this.blueprintVersion = this.findBlueprintVersion(this.blueprint);
+                if (this.blueprints && this.blueprints.length > 0) {
+                    this.blueprints.forEach(blueprint => {
+                        blueprint.version = this.findBlueprintVersion(blueprint.name) || 'latest';
+                    });
+
                     // Remove potential previous value to avoid duplicates
-                    this.otherModules = this.otherModules.filter(module => module.name !== this.blueprint);
-                    this.otherModules.push({ name: this.blueprint, version: this.blueprintVersion || 'latest' });
+                    this.otherModules = this.otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
+                    this.otherModules.push(...this.blueprints);
                 }
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.enableTranslation = this.config.get('enableTranslation');
@@ -288,8 +312,6 @@ module.exports = class extends BaseGenerator {
     get prompting() {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
-            // TODO : enable this. It's a bit messy for now, it need better sync.
-            // askForAccountLinking: prompts.askForAccountLinking,
             askForApplicationType: prompts.askForApplicationType,
             askForModuleName: prompts.askForModuleName
         };
@@ -333,12 +355,6 @@ module.exports = class extends BaseGenerator {
                 }
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
-
-            // composeAccountLinking() {
-            //     if (!this.linkAccount) return;
-
-            //     this.composeWith(require.resolve('../link-account'));
-            // },
 
             composeServer() {
                 if (this.skipServer) return;
@@ -418,7 +434,7 @@ module.exports = class extends BaseGenerator {
                     config.nativeLanguage = this.nativeLanguage;
                     config.languages = this.languages;
                 }
-                this.blueprint && (config.blueprint = this.blueprint);
+                this.blueprints && (config.blueprints = this.blueprints);
                 this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
                 this.reactive && (config.reactive = this.reactive);
                 this.skipClient && (config.skipClient = true);
@@ -501,11 +517,11 @@ module.exports = class extends BaseGenerator {
                         if (code === 0 && this.gitInitialized) {
                             this.gitExec('add -A', { trace: false }, () => {
                                 let commitMsg = `Initial application generated by JHipster-${this.jhipsterVersion}`;
-                                if (this.blueprint) {
-                                    commitMsg += ` with blueprint: ${this.blueprint.replace('generator-jhipster-', '')}`;
-                                    if (this.blueprintVersion) {
-                                        commitMsg += `-${this.blueprintVersion}`;
-                                    }
+                                if (this.blueprints && this.blueprints.length > 0) {
+                                    const bpInfo = this.blueprints
+                                        .map(bp => `${bp.name.replace('generator-jhipster-', '')}-${bp.version}`)
+                                        .join(', ');
+                                    commitMsg += ` with blueprints: ${bpInfo}`;
                                 }
                                 this.gitExec(`commit -am "${commitMsg}"`, { trace: false }, () => {
                                     this.log(chalk.green.bold('Application successfully committed to Git.'));

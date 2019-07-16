@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Audit",
+        "filter": {
+            "title": "Sana bo`yicha filtr",
+            "from": "dan",
+            "to": "gacha",
+            "button": {
+                "weeks": "Hafta",
+                "today": "bugun",
+                "clear": "tozala",
+                "close": "yop"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Foydalanuvchi",
+                "date": "Sana",
+                "status": "Holat",
+                "data": "Qo`shimcha ma`lumot"
+            },
+            "data": {
+                "remoteAddress": "Ip adres:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

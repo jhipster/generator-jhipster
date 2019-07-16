@@ -225,7 +225,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
             command,
             {
                 ...options,
-                force: !options.interactive,
+                force: options.force || !options.interactive,
                 'skip-install': !shouldTriggerInstall
             },
             done
@@ -269,6 +269,10 @@ class JDLProcessor {
         if (jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
             logger.info('Found .yo-rc.json on path. This is an existing app');
             const configuration = jhipsterUtils.getAllJhipsterConfig(null, true);
+            if (_.isUndefined(this.options.interactive)) {
+                logger.debug('Setting interactive true for existing apps');
+                this.options.interactive = true;
+            }
             this.applicationType = configuration.applicationType;
             this.baseName = configuration.baseName;
             this.databaseType = configuration.databaseType || jhipsterUtils.getDBTypeFromDBValue(this.options.db);

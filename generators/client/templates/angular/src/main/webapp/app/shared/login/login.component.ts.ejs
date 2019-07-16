@@ -35,7 +35,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
     loginForm = this.fb.group({
         username: [''],
         password: [''],
-        rememberMe: [true]
+        rememberMe: [false]
     });
 
     constructor(
@@ -86,7 +86,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
             const redirect = this.stateStorageService.getUrl();
             if (redirect) {
                 this.stateStorageService.storeUrl(null);
-                this.router.navigate([redirect]);
+                this.router.navigateByUrl(redirect);
             }
         }).catch(() => {
             this.authenticationError = true;

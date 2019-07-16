@@ -41,14 +41,9 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             addAppCssStep() {
-                if (this.useSass) {
-                    // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
-                    this.needleApi.clientReact.addAppSCSSStyle('@import without-comment');
-                    this.needleApi.clientReact.addAppSCSSStyle('@import with-comment', 'my comment');
-                } else {
-                    this.needleApi.clientReact.addAppCSSStyle('without-comment { color:red; }');
-                    this.needleApi.clientReact.addAppCSSStyle('with-comment { color:red; }', 'my comment');
-                }
+                // please change this to public API when it will be available see https://github.com/jhipster/generator-jhipster/issues/9234
+                this.addAppSCSSStyle('@import without-comment');
+                this.addAppSCSSStyle('@import with-comment', 'my comment');
             },
             addEntityToMenuStep() {
                 this.addEntityToMenu('routerName', false, 'react', false);
@@ -71,114 +66,62 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 };
 
 describe('needle API React: JHipster client generator with blueprint', () => {
-    const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
-
-    blueprintNames.forEach(blueprintName => {
-        describe(`generate client with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/client'))
-                    .withOptions({
-                        'from-cli': true,
-                        build: 'maven',
-                        auth: 'jwt',
-                        db: 'mysql',
-                        skipInstall: true,
-                        blueprint: blueprintName,
-                        skipChecks: true
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        clientFramework: 'react',
-                        useSass: false,
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['en', 'fr']
-                    })
-                    .on('end', done);
-            });
-
-            it('Assert app.css is updated', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.css`, 'without-comment { color:red; }');
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.css`, 'with-comment { color:red; }');
-                assert.fileContent(
-                    `${CLIENT_MAIN_SRC_DIR}app/app.css`,
-                    '* ==========================================================================\n' +
-                        'my comment\n' +
-                        '========================================================================== */\n'
-                );
-            });
-
-            it('Assert entity is added to menu', () => {
-                assert.fileContent(
-                    `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`,
-                    '<DropdownItem tag={Link} to="/entity/routerName">\n' +
-                        '      <FontAwesomeIcon icon="asterisk" fixedWidth />&nbsp;Router Name\n' +
-                        '    </DropdownItem>'
-                );
-            });
-
-            it('Assert entity is added to module', () => {
-                const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
-                const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
-
-                assert.fileContent(indexModulePath, "import entityName from './entityFolderName';");
-                assert.fileContent(indexModulePath, '<ErrorBoundaryRoute path={`${match.url}/entityFileName`} component={entityName} />'); // eslint-disable-line
-
-                assert.fileContent(
-                    indexReducerPath,
-                    '// prettier-ignore\n' +
-                        'import entityInstance, {\n' +
-                        '  entityNameState\n' +
-                        "} from 'app/entities/entityFolderName/entityFileName.reducer';"
-                );
-                assert.fileContent(indexReducerPath, 'readonly entityInstance: entityNameState;');
-                assert.fileContent(indexReducerPath, 'entityInstance,');
-            });
-        });
+    before(done => {
+        helpers
+            .run(path.join(__dirname, '../../generators/client'))
+            .withOptions({
+                'from-cli': true,
+                build: 'maven',
+                auth: 'jwt',
+                db: 'mysql',
+                skipInstall: true,
+                blueprint: 'myblueprint',
+                skipChecks: true
+            })
+            .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+            .withPrompts({
+                baseName: 'jhipster',
+                clientFramework: 'react',
+                enableTranslation: true,
+                nativeLanguage: 'en',
+                languages: ['en', 'fr']
+            })
+            .on('end', done);
     });
-});
 
-describe('needle API React: JHipster client generator with blueprint', () => {
-    const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
+    it('Assert entity is added to menu', () => {
+        assert.fileContent(
+            `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`,
+            '<MenuItem icon="asterisk" to="/entity/routerName">\n      Router Name\n    </MenuItem>'
+        );
+    });
 
-    blueprintNames.forEach(blueprintName => {
-        describe(`generate client with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/client'))
-                    .withOptions({
-                        'from-cli': true,
-                        build: 'maven',
-                        auth: 'jwt',
-                        db: 'mysql',
-                        skipInstall: true,
-                        blueprint: blueprintName,
-                        skipChecks: true
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        clientFramework: 'react',
-                        useSass: true,
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['en', 'fr']
-                    })
-                    .on('end', done);
-            });
+    it('Assert entity is added to module', () => {
+        const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
+        const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
 
-            it('Assert app.scss is updated', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.scss`, '@import without-comment');
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.scss`, '@import with-comment');
-                assert.fileContent(
-                    `${CLIENT_MAIN_SRC_DIR}app/app.scss`,
-                    '* ==========================================================================\n' +
-                        'my comment\n' +
-                        '========================================================================== */\n'
-                );
-            });
-        });
+        assert.fileContent(indexModulePath, "import entityName from './entityFolderName';");
+        assert.fileContent(indexModulePath, '<ErrorBoundaryRoute path={`${match.url}/entityFileName`} component={entityName} />'); // eslint-disable-line
+
+        assert.fileContent(
+            indexReducerPath,
+            '// prettier-ignore\n' +
+                'import entityInstance, {\n' +
+                '  entityNameState\n' +
+                "} from 'app/entities/entityFolderName/entityFileName.reducer';"
+        );
+        assert.fileContent(indexReducerPath, 'readonly entityInstance: entityNameState;');
+        assert.fileContent(indexReducerPath, 'entityInstance,');
+    });
+
+    it('Assert app.scss is updated', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.scss`, '@import without-comment');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/app.scss`, '@import with-comment');
+        assert.fileContent(
+            `${CLIENT_MAIN_SRC_DIR}app/app.scss`,
+            '* ==========================================================================\n' +
+                'my comment\n' +
+                '========================================================================== */\n'
+        );
     });
 });

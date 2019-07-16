@@ -22,7 +22,7 @@
 # saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls note wherever
 # displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: jhipster-kafka-template
@@ -68,7 +68,7 @@ parameters:
 objects:
 <%_ if (storageType === 'persistent') { _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${APPLICATION_NAME}
@@ -81,7 +81,7 @@ objects:
 <%_ } _%>
 <%_ if (storageType === 'persistent') { _%>
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: PersistentVolumeClaim
     metadata:
       name: ${ZK_APPLICATION_NAME}
@@ -94,7 +94,7 @@ objects:
 <%_ } _%>
 # Zookeeper objects. This can be later replaced with StatefulSet
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${ZK_APPLICATION_NAME}
@@ -134,6 +134,13 @@ objects:
           containers:
           - name: ${ZK_APPLICATION_NAME}
             image: <%= DOCKER_ZOOKEEPER %>
+            env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: 2181
+            - name: ZOOKEEPER_TICK_TIME
+              value: 2000
+            - name: ZOOKEEPER_SYNC_LIMIT
+              value: 2
             ports:
             - containerPort: 2181
             volumeMounts:
@@ -146,7 +153,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${ZK_APPLICATION_NAME}
@@ -162,7 +169,7 @@ objects:
         app: ${ZK_APPLICATION_NAME}
 # Kafka objects
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${APPLICATION_NAME}
@@ -203,14 +210,14 @@ objects:
           - name: ${APPLICATION_NAME}
             image: <%= DOCKER_KAFKA %>
             env:
-            - name: KAFKA_ADVERTISED_HOST_NAME
-              value: ${APPLICATION_NAME}
-            - name: KAFKA_ADVERTISED_PORT
-              value: '9092'
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: PLAINTEXT://${APPLICATION_NAME}:9092
             - name: KAFKA_ZOOKEEPER_CONNECT
-              value: ${ZK_APPLICATION_NAME}
-            - name: KAFKA_CREATE_TOPICS
-              value: 'topic-jhipster:1:1'
+              value: ${ZK_APPLICATION_NAME}:2181
+            - name: KAFKA_BROKER_ID
+              value: 2
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: 1
             ports:
             - containerPort: 9092
             volumeMounts:
@@ -223,7 +230,7 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${APPLICATION_NAME}

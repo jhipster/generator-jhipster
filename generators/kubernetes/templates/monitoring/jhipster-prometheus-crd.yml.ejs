@@ -39,6 +39,7 @@ rules:
   - alertmanagers
   - prometheuses
   - servicemonitors
+  - prometheusrules
   verbs:
   - "*"
 - apiGroups:
@@ -67,15 +68,15 @@ rules:
 - apiGroups: [""]
   resources:
   - namespaces
-  verbs: ["list"]
+  verbs: ["list", "watch"]
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ServiceAccount
 metadata:
   name: jhipster-prometheus-operator-sa
   namespace: <%= kubernetesNamespace %>
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: <%= KUBERNETES_RBAC_API_VERSION %>
 kind: ClusterRoleBinding
 metadata:
   name: jhipster-prometheus-operator-rb
@@ -89,7 +90,7 @@ subjects:
   name: jhipster-prometheus-operator-sa
   namespace: <%= kubernetesNamespace %>
 ---
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   labels:
@@ -98,10 +99,17 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: prometheus-operator
   template:
     metadata:
       labels:
         k8s-app: prometheus-operator
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
     spec:
       containers:
       - args:

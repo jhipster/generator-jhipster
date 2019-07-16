@@ -196,7 +196,7 @@ function askForRelationships() {
     if (context.useConfigurationFile && context.updateEntity !== 'add') {
         return;
     }
-    if (['cassandra', 'couchbase'].includes(context.databaseType)) {
+    if (context.databaseType === 'cassandra') {
         return;
     }
 
@@ -211,7 +211,7 @@ function askForRelationsToRemove() {
     if (!context.useConfigurationFile || context.updateEntity !== 'remove' || context.relNameChoices.length === 0) {
         return;
     }
-    if (['cassandra', 'couchbase'].includes(context.databaseType)) {
+    if (context.databaseType === 'cassandra') {
         return;
     }
 
@@ -522,12 +522,20 @@ function askForField(done) {
                     name: 'ZonedDateTime'
                 },
                 {
+                    value: 'Duration',
+                    name: 'Duration'
+                },
+                {
                     value: 'Boolean',
                     name: 'Boolean'
                 },
                 {
                     value: 'enum',
                     name: 'Enumeration (Java enum type)'
+                },
+                {
+                    value: 'UUID',
+                    name: 'UUID'
                 },
                 {
                     value: 'byte[]',
@@ -713,7 +721,7 @@ function askForField(done) {
             message: 'Which validation rules do you want to add?',
             choices: response => {
                 // Default rules applicable for fieldType 'LocalDate', 'Instant',
-                // 'ZonedDateTime', 'UUID', 'Boolean', 'ByteBuffer' and 'Enum'
+                // 'ZonedDateTime', 'Duration', 'UUID', 'Boolean', 'ByteBuffer' and 'Enum'
                 const opts = [
                     {
                         name: 'Required',

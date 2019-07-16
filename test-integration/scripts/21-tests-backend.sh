@@ -8,7 +8,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw enforcer:display-info
+    ./mvnw -ntp enforcer:display-info
 elif [ -f "gradlew" ]; then
     ./gradlew -v
 fi
@@ -17,7 +17,7 @@ fi
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
 if [ -f "mvnw" ]; then
-    ./mvnw javadoc:javadoc
+    ./mvnw -ntp javadoc:javadoc
 elif [ -f "gradlew" ]; then
     ./gradlew javadoc
 fi
@@ -27,7 +27,7 @@ fi
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
     cd "$JHI_FOLDER_UAA"
-    ./mvnw test integration-test
+    ./mvnw -ntp verify
 fi
 
 #-------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ fi
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw test integration-test \
+    ./mvnw -ntp verify \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \

@@ -17,7 +17,6 @@
         "buildTool": "maven",
         "enableSwaggerCodegen": false,
         "clientFramework": "angularX",
-        "useSass": false,
         "clientPackageManager": "npm",
         "applicationType": "monolith",
         "testFrameworks": ["gatling", "protractor"],

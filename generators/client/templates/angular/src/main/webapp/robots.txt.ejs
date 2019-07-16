@@ -20,11 +20,11 @@
 
 User-agent: *
 Disallow: /api/account
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
 Disallow: /api/account/change-password
 Disallow: /api/account/sessions
 <%_ } _%>
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
 Disallow: /api/audits/
 <%_ } _%>
 Disallow: /api/logs/

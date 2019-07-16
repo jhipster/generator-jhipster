@@ -39,7 +39,6 @@ describe('JHipster application generator with blueprint', () => {
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
                     prodDatabaseType: 'mysql',
-                    useSass: false,
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr']
@@ -52,7 +51,6 @@ describe('JHipster application generator with blueprint', () => {
             assert.file(expectedFiles.server);
             assert.file(
                 getFilesForOptions(angularFiles, {
-                    useSass: false,
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
@@ -62,7 +60,9 @@ describe('JHipster application generator with blueprint', () => {
         });
 
         it('blueprint version is saved in .yo-rc.json', () => {
-            assert.fileContent('.yo-rc.json', /"blueprintVersion": "9.9.9"/);
+            assert.JSONFileContent('.yo-rc.json', {
+                'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-myblueprint', version: '9.9.9' }] }
+            });
         });
         it('blueprint module and version are in package.json', () => {
             assert.fileContent('package.json', /"generator-jhipster-myblueprint": "9.9.9"/);

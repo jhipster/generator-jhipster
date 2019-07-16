@@ -51,28 +51,13 @@ const files = {
             templates: ['.huskyrc']
         }
     ],
-    css: [
-        // this css file will be overwritten by the sass generated css if sass is enabled
-        // but this will avoid errors when running app without running sass task first
-        {
-            condition: generator => !generator.useSass,
-            path: MAIN_SRC_DIR,
-            templates: ['content/css/global.css', 'content/css/vendor.css', 'content/css/documentation.css']
-        },
-        {
-            condition: generator => !generator.useSass && generator.enableI18nRTL,
-            path: MAIN_SRC_DIR,
-            templates: ['content/css/rtl.css']
-        }
-    ],
     sass: [
         {
-            condition: generator => generator.useSass,
             path: MAIN_SRC_DIR,
             templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss']
         },
         {
-            condition: generator => generator.useSass && generator.enableI18nRTL,
+            condition: generator => generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
             templates: ['content/scss/rtl.scss']
         }
@@ -184,20 +169,14 @@ const files = {
             templates: ['layouts/navbar/active-menu.directive.ts']
         },
         {
-            condition: generator => generator.useSass,
             path: ANGULAR_DIR,
             templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss']
-        },
-        {
-            condition: generator => !generator.useSass,
-            path: ANGULAR_DIR,
-            templates: ['layouts/profiles/page-ribbon.css', 'layouts/navbar/navbar.css', 'home/home.css']
         }
     ],
     angularAccountModule: [
         {
             path: ANGULAR_DIR,
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             templates: [
                 'account/index.ts',
                 { file: 'account/account.route.ts', method: 'processJs' },
@@ -229,7 +208,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: ANGULAR_DIR,
             templates: [
                 { file: 'account/sessions/sessions.route.ts', method: 'processJs' },
@@ -240,14 +219,9 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.useSass && generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             path: ANGULAR_DIR,
             templates: ['account/password/password-strength-bar.scss']
-        },
-        {
-            condition: generator => !generator.useSass && generator.authenticationType !== 'oauth2',
-            path: ANGULAR_DIR,
-            templates: ['account/password/password-strength-bar.css']
         }
     ],
     angularAdminModule: [
@@ -283,7 +257,8 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.databaseType !== 'no' && generator.databaseType !== 'cassandra',
+            condition: generator =>
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/audits/audits.route.ts', method: 'processJs' },
@@ -301,8 +276,7 @@ const files = {
                 { file: 'admin/tracker/tracker.route.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.html', method: 'processHtml' },
-                'core/tracker/tracker.service.ts',
-                'core/tracker/window.service.ts'
+                'core/tracker/tracker.service.ts'
             ]
         },
         {
@@ -446,7 +420,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: [
                 'spec/app/account/activate/activate.component.spec.ts',
@@ -455,14 +429,17 @@ const files = {
                 'spec/app/account/password-reset/init/password-reset-init.component.spec.ts',
                 'spec/app/account/password-reset/finish/password-reset-finish.component.spec.ts',
                 'spec/app/account/register/register.component.spec.ts',
-                'spec/app/account/settings/settings.component.spec.ts',
-                // login component tests
-                'spec/app/shared/login/login.component.spec.ts',
-                'spec/app/shared/alert/alert-error.component.spec.ts'
+                'spec/app/account/settings/settings.component.spec.ts'
             ]
         },
         {
-            condition: generator => generator.databaseType !== 'no' && generator.databaseType !== 'cassandra',
+            condition: generator => generator.authenticationType !== 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['spec/app/shared/login/login.component.spec.ts', 'spec/app/shared/alert/alert-error.component.spec.ts']
+        },
+        {
+            condition: generator =>
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: TEST_SRC_DIR,
             templates: ['spec/app/admin/audits/audits.component.spec.ts', 'spec/app/admin/audits/audits.service.spec.ts']
         },
@@ -479,7 +456,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: ['spec/app/account/sessions/sessions.component.spec.ts']
         },
@@ -502,6 +479,15 @@ const files = {
                 'e2e/page-objects/jhi-page-objects.ts',
                 'protractor.conf.js'
             ]
+        },
+        {
+            condition: generator => generator.protractorTests,
+            templates: ['tsconfig.e2e.json']
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2',
+            path: TEST_SRC_DIR,
+            templates: ['spec/app/layouts/main/main.component.spec.ts']
         }
     ]
 };

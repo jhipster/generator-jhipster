@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { of } from 'rxjs';
+
 import { SpyObject } from './spyobject';
 import { AccountService } from 'app/core/auth/account.service';
 import Spy = jasmine.Spy;
@@ -26,6 +28,7 @@ export class MockAccountService extends SpyObject {
     saveSpy: Spy;
     fakeResponse: any;
     identitySpy: Spy;
+    getAuthenticationStateSpy: Spy;
 
     constructor() {
         super(AccountService);
@@ -50,5 +53,6 @@ export class MockAccountService extends SpyObject {
 
     setIdentityResponse(json: any): void {
         this.setIdentitySpy(json);
+        this.getAuthenticationStateSpy = this.spy('getAuthenticationState').andReturn(of(json));
     }
 }

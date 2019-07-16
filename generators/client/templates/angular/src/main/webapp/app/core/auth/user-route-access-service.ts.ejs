@@ -19,11 +19,11 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
-import { AccountService } from '../';
+import { AccountService } from 'app/core/';
 <%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalService } from '../login/login-modal.service';
+import { LoginModalService } from 'app/core/login/login-modal.service';
 <%_ } else { _%>
-import { LoginService } from '../login/login.service';
+import { LoginService } from 'app/core/login/login.service';
 <%_ } _%>
 import { StateStorageService } from './state-storage.service';
 
@@ -64,20 +64,16 @@ export class UserRouteAccessService implements CanActivate {
                 if (isDevMode()) {
                     console.error('User has not any of required authorities: ', authorities);
                 }
+                this.router.navigate(['accessdenied']);
                 return false;
             }
 
             this.stateStorageService.storeUrl(url);
-            this.router.navigate(['accessdenied']).then(() => {
-                // only show the login dialog, if the user hasn't logged in yet
-                if (!account) {
-                    <%_ if (authenticationType !== 'oauth2') { _%>
-                    this.loginModalService.open();
-                    <%_ } else { _%>
-                    this.loginService.login();
-                    <%_ } _%>
-                }
-            });
+            <%_ if (authenticationType !== 'oauth2') { _%>
+            this.loginModalService.open();
+            <%_ } else { _%>
+            this.loginService.login();
+            <%_ } _%>
             return false;
         });
     }

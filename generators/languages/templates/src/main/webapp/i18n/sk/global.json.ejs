@@ -47,7 +47,7 @@
                 "health": "Stav systému",
                 "configuration": "Konfigurácia",
                 "logs": "Logy",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Audity",
                 <%_ } _%>
                 "apidocs": "API",
@@ -57,13 +57,13 @@
             "language": "Jazyk"
         },
         "form": {
-            "username": "Používateľské meno",
+            "username.label": "Používateľské meno",
             "username.placeholder": "Vaše používateľské meno",
-            "newpassword": "Nové heslo",
+            "newpassword.label": "Nové heslo",
             "newpassword.placeholder": "Nové heslo",
-            "confirmpassword": "Potvrdenie nového hesla",
+            "confirmpassword.label": "Potvrdenie nového hesla",
             "confirmpassword.placeholder": "Potvrdenie nového hesla",
-            "email": "Email",
+            "email.label": "Email",
             "email.placeholder": "Váš email"
         },
         "messages": {

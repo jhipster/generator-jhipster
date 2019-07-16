@@ -44,7 +44,7 @@ module.exports = class extends needleServer {
 
         if (cacheProvider === 'ehcache') {
             const needle = 'jhipster-needle-ehcache-add-entry';
-            const content = `cm.createCache(${entry}, jcacheConfiguration);`;
+            const content = `createCache(cm, ${entry});`;
 
             this._doAddBlockContentToFile(cachePath, needle, content, errorMessage);
         } else if (cacheProvider === 'infinispan') {

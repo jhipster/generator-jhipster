@@ -7,8 +7,8 @@ source $(dirname $0)/00-init-env.sh
 # Start docker container
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
-if [ -a src/main/docker/jhipster-registry.yml ]; then
-    docker-compose -f src/main/docker/jhipster-registry.yml up -d
+if [ -a src/main/docker/keycloak.yml ]; then
+    docker-compose -f src/main/docker/keycloak.yml up -d
 fi
 if [ -a src/main/docker/elasticsearch.yml ]; then
     docker-compose -f src/main/docker/elasticsearch.yml up -d
@@ -39,11 +39,10 @@ fi
 if [ -a src/main/docker/mariadb.yml ]; then
     docker-compose -f src/main/docker/mariadb.yml up -d
 fi
-if [ -a src/main/docker/keycloak.yml ]; then
-    docker-compose -f src/main/docker/keycloak.yml up -d
+if [ -a src/main/docker/jhipster-registry.yml ]; then
+    docker-compose -f src/main/docker/jhipster-registry.yml up -d
 fi
 if [ "$JHI_SONAR" = 1 ]; then
     docker-compose -f src/main/docker/sonar.yml up -d
 fi
-
 docker ps -a

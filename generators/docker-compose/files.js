@@ -74,7 +74,7 @@ function writeFiles() {
             // Generate a list of target apps to monitor for the prometheus config
             const appsToMonitor = [];
             for (let i = 0; i < this.appConfigs.length; i++) {
-                appsToMonitor.push(`             - ${this.appConfigs[i].baseName}-app:${this.appConfigs[i].serverPort}`);
+                appsToMonitor.push(`        - ${this.appConfigs[i].baseName}-app:${this.appConfigs[i].serverPort}`);
             }
 
             // Format the application target list as a YAML array
@@ -82,7 +82,7 @@ function writeFiles() {
 
             this.template('prometheus.yml.ejs', 'prometheus.yml');
             this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
-            this.template('prometheus-conf/alert.rules.ejs', 'prometheus-conf/alert.rules');
+            this.template('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
             this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
         }
     };

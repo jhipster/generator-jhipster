@@ -18,11 +18,7 @@
 -%>
 /* after changing this file run '<%= clientPackageManager %> run webpack:build' */
 /* tslint:disable */
-<%_ if (useSass) { _%>
 import '../content/scss/vendor.scss';
-<%_} else { _%>
-import '../content/css/vendor.css';
-<%_ } _%>
 
 // Imports all fontawesome core and solid icons
 
@@ -52,7 +48,7 @@ import {
     faHdd,
     faFlag,
     faWrench,
-    faClock,
+    faLock,
     faCloud,
     faSignOutAlt,
     faSignInAlt,
@@ -91,7 +87,7 @@ library.add(faBook);
 library.add(faHdd);
 library.add(faFlag);
 library.add(faWrench);
-library.add(faClock);
+library.add(faLock);
 library.add(faCloud);
 library.add(faSignOutAlt);
 library.add(faSignInAlt);

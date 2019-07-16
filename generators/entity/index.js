@@ -29,7 +29,7 @@ const statistics = require('../statistics');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
-let useBlueprint;
+let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -124,17 +124,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
         this.setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'entity', {
-                ...this.options,
-                configOptions: this.configOptions,
-                arguments: [this.context.name]
-            });
-        } else {
-            useBlueprint = false;
-        }
+
+        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('entity', { arguments: [this.context.name] });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -159,8 +150,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.authenticationType = configuration.get('authenticationType');
                 context.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
                 context.enableHibernateCache =
-                    configuration.get('enableHibernateCache') ||
-                    (configuration.get('hibernateCache') !== undefined && configuration.get('hibernateCache') !== 'no');
+                    configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(context.cacheProvider);
                 context.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
                 context.databaseType = configuration.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
                 context.prodDatabaseType = configuration.get('prodDatabaseType') || this.options.db;
@@ -230,7 +220,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
 
                 if (context.entitySuffix === context.dtoSuffix) {
-                    this.error(chalk.red('The entity cannot be generated as the entity suffix and DTO suffix are equals !'));
+                    this.error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
                 }
 
                 context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
@@ -253,7 +243,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             )
                         );
                     } else {
-                        this.error(chalk.red('The entity cannot be generated as the application does not have a database configured!'));
+                        this.error('The entity cannot be generated as the application does not have a database configured!');
                     }
                 }
             },
@@ -261,15 +251,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
             validateEntityName() {
                 const entityName = this.context.name;
                 if (!/^([a-zA-Z0-9_]*)$/.test(entityName)) {
-                    this.error(chalk.red('The entity name cannot contain special characters'));
+                    this.error('The entity name cannot contain special characters');
                 } else if (/^[0-9].*$/.test(entityName)) {
-                    this.error(chalk.red('The entity name cannot start with a number'));
+                    this.error('The entity name cannot start with a number');
                 } else if (entityName === '') {
-                    this.error(chalk.red('The entity name cannot be empty'));
+                    this.error('The entity name cannot be empty');
                 } else if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
-                    this.error(chalk.red("The entity name cannot end with 'Detail'"));
+                    this.error("The entity name cannot end with 'Detail'");
                 } else if (!this.context.skipServer && jhiCore.isReservedClassName(entityName)) {
-                    this.error(chalk.red('The entity name cannot contain a Java or JHipster reserved keyword'));
+                    this.error('The entity name cannot contain a Java or JHipster reserved keyword');
                 }
             },
 
@@ -306,18 +296,26 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }.json file and then run again 'jhipster entity ${context.name}.'`;
 
                 if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
-                    this.error(chalk.red(`The table name cannot contain special characters.\n${instructions}`));
+                    this.error(`The table name cannot contain special characters.\n${instructions}`);
                 } else if (entityTableName === '') {
-                    this.error(chalk.red('The table name cannot be empty'));
+                    this.error('The table name cannot be empty');
                 } else if (jhiCore.isReservedTableName(entityTableName, prodDatabaseType)) {
-                    this.warning(
-                        chalk.red(
-                            `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
-                        )
-                    );
-                    context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+                    if (jhiTablePrefix) {
+                        this.warning(
+                            chalk.red(
+                                `The table name cannot contain the '${entityTableName.toUpperCase()}' reserved keyword, so it will be prefixed with '${jhiTablePrefix}_'.\n${instructions}`
+                            )
+                        );
+                        context.entityTableName = `${jhiTablePrefix}_${entityTableName}`;
+                    } else {
+                        this.warning(
+                            chalk.red(
+                                `The table name contain the '${entityTableName.toUpperCase()}' reserved keyword but you have defined an empty jhiPrefix so it won't be prefixed and thus the generated application might not work'.\n${instructions}`
+                            )
+                        );
+                    }
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 26 && !skipCheckLengthOfIdentifier) {
-                    this.error(chalk.red(`The table name is too long for Oracle, try a shorter name.\n${instructions}`));
+                    this.error(`The table name is too long for Oracle, try a shorter name.\n${instructions}`);
                 } else if (prodDatabaseType === 'oracle' && entityTableName.length > 14 && !skipCheckLengthOfIdentifier) {
                     this.warning(
                         `The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names.\n${instructions}`
@@ -328,7 +326,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -352,7 +350,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get prompting() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._prompting();
     }
 
@@ -521,10 +519,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             )
                         );
                     }
-                    relationship.otherEntityRelationshipNameUndefined = _.isUndefined(relationship.otherEntityRelationshipName);
 
                     if (
-                        relationship.otherEntityRelationshipNameUndefined &&
+                        _.isUndefined(relationship.otherEntityRelationshipName) &&
                         _.isUndefined(relationship.relationshipType) === false &&
                         relationship.relationshipType !== ''
                     ) {
@@ -686,11 +683,14 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
+                context.fieldsContainUUID = false;
                 context.fieldsContainZonedDateTime = false;
+                context.fieldsContainDuration = false;
                 context.fieldsContainLocalDate = false;
                 context.fieldsContainBigDecimal = false;
                 context.fieldsContainBlob = false;
                 context.fieldsContainImageBlob = false;
+                context.fieldsContainTextBlob = false;
                 context.fieldsContainBlobOrImage = false;
                 context.validation = false;
                 context.fieldsContainOwnerManyToMany = false;
@@ -730,6 +730,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'LocalDate',
                         'Instant',
                         'ZonedDateTime',
+                        'Duration',
+                        'UUID',
                         'Boolean',
                         'byte[]',
                         'ByteBuffer'
@@ -755,8 +757,17 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
                         const fieldNameUnderscored = _.snakeCase(field.fieldName);
                         const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
-                        if (jhiCore.isReservedTableName(fieldNameUnderscored, context.databaseType)) {
-                            field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
+                        if (jhiCore.isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
+                            if (!jhiFieldNamePrefix) {
+                                this.warning(
+                                    chalk.red(
+                                        `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
+                                    )
+                                );
+                                field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
+                            } else {
+                                field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
+                            }
                         } else {
                             field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                         }
@@ -808,11 +819,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     } else if (fieldType === 'Instant') {
                         context.fieldsContainInstant = true;
                         context.fieldsContainDate = true;
+                    } else if (fieldType === 'Duration') {
+                        context.fieldsContainDuration = true;
                     } else if (fieldType === 'LocalDate') {
                         context.fieldsContainLocalDate = true;
                         context.fieldsContainDate = true;
                     } else if (fieldType === 'BigDecimal') {
                         context.fieldsContainBigDecimal = true;
+                    } else if (fieldType === 'UUID') {
+                        context.fieldsContainUUID = true;
                     } else if (fieldType === 'byte[]' || fieldType === 'ByteBuffer') {
                         context.blobFields.push(field);
                         context.fieldsContainBlob = true;
@@ -821,6 +836,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                         if (field.fieldTypeBlobContent !== 'text') {
                             context.fieldsContainBlobOrImage = true;
+                        } else {
+                            context.fieldsContainTextBlob = true;
                         }
                     }
 
@@ -905,7 +922,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         if (!relationship.otherEntityTableName) {
                             relationship.otherEntityTableName = this.getTableName(otherEntityName);
                         }
-                        if (jhiCore.isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType)) {
+                        if (jhiCore.isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
                             const otherEntityTableName = relationship.otherEntityTableName;
                             relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                         }
@@ -924,10 +941,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.otherEntityNameCapitalized = _.upperFirst(relationship.otherEntityName);
                     }
 
-                    if (
-                        _.isUndefined(relationship.otherEntityRelationshipNamePlural) ||
-                        relationship.otherEntityRelationshipNameUndefined
-                    ) {
+                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
                         if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
                             if (otherEntityData && otherEntityData.relationships) {
                                 otherEntityData.relationships.forEach(otherRelationship => {
@@ -1064,7 +1078,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get configuring() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._configuring();
     }
 
@@ -1122,7 +1136,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 
@@ -1161,7 +1175,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
     }
 
     get install() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._install();
     }
 }

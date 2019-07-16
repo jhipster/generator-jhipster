@@ -17,7 +17,9 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-
+<%_ if (authenticationType === 'oauth2') { _%>
+import { Location } from '@angular/common';
+<%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
@@ -36,13 +38,17 @@ export class LoginService {
         <%_ if (websocket === 'spring-websocket') { _%>
         private trackerService: <%=jhiPrefixCapitalized%>TrackerService,
         <%_ } _%>
+        <%_ if (authenticationType === 'oauth2') { _%>
+        private location: Location,
+        <%_ } _%>
         private authServerProvider: AuthServerProvider
     ) {}
 
     <%_ if (authenticationType === 'oauth2') { _%>
     login() {
-        const port = (location.port ? ':' + location.port : '');
-        location.href = '//' + location.hostname + port + location.pathname + 'login';
+        // If you have configured multiple OIDC providers, then, you can update this URL to /login.
+        // It will show a Spring Security generated login page with links to configured OIDC providers.
+        location.href = `${location.origin}${this.location.prepareExternalUrl('oauth2/authorization/oidc')}`;
     }
     <%_ } else { _%>
     login(credentials, callback?) {
@@ -71,8 +77,8 @@ export class LoginService {
         return this.authServerProvider.loginWithToken(jwt, rememberMe);
     }
     <%_ } _%>
-    <%_ if (enableTranslation && authenticationType === 'uaa') { _%>
-    
+    <%_ if (authenticationType === 'uaa') { _%>
+
     isAuthenticated() {
         return this.accountService.isAuthenticated();
     }
