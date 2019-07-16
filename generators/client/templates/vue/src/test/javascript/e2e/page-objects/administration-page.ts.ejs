@@ -85,7 +85,7 @@ export class UserManagementDetailsPage extends  AlertPage {
 
 export class UserManagementDeletePage {
   modal: ElementFinder = element(by.id('removeUser'));
-  okButton : ElementFinder = element(by.buttonText('OK'));
+  okButton: ElementFinder = element(by.id('confirm-delete-user'));
 }
 
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>

@@ -393,11 +393,12 @@ describe('Account', () => {
         userManagementPage = await navBarPage.getUserManagementPage();
 
         const deletePage: UserManagementDeletePage = await userManagementPage.getDeletePage('user_test');
+
         await deletePage.okButton.click();
 
         await waitUntilHidden(deletePage.modal);
 
-        expect(await deletePage.modal.isDisplayed()).to.be.false;
+        expect(await isVisible(deletePage.modal)).to.be.false;
 
         await waitUntilDisplayed(userManagementPage.dangerAlert);
         expect(await userManagementPage.dangerAlert.isDisplayed()).to.be.true;

@@ -1,9 +1,11 @@
 import format from 'date-fns/format';
 import AuditsService from './audits.service';
-import { Component, Inject, Vue } from 'vue-property-decorator';
+import { Component, Inject} from 'vue-property-decorator';
+import { mixins } from 'vue-class-component';
+import Vue2Filters from 'vue2-filters'
 
 @Component
-export default class <%=jhiPrefixCapitalized%>Audits extends Vue {
+export default class <%=jhiPrefixCapitalized%>Audits extends mixins(Vue2Filters.mixin) {
   public audits: any = [];
   public fromDate: any = null;
   public itemsPerPage = 20;

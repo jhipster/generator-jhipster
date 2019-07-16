@@ -1,7 +1,7 @@
-<% if (fieldsContainBlob) { %>
 import { mixins } from 'vue-class-component';
-<% } %>
-import { Component, Inject<% if (!fieldsContainBlob) { %>, Vue<% } %> } from 'vue-property-decorator';
+
+import { Component, Inject } from 'vue-property-decorator';
+import Vue2Filters from 'vue2-filters'
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import AlertService from '@/shared/alert/alert.service';
 <% if (fieldsContainBlob) { %>
@@ -10,7 +10,7 @@ import JhiDataUtils from '@/shared/data/data-utils.service';
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
 @Component
-export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %> Vue<% } %> {
+export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils, Vue2Filters.mixin)<% } else { %> mixins(Vue2Filters.mixin)<% } %> {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
   <%_ if (searchEngine === 'elasticsearch') { _%>
