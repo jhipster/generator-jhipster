@@ -279,9 +279,9 @@ describe('JSONToJDLEntityConverter', () => {
         context('such as jpaDerivedIdentifier', () => {
           it('accepts it', () => {
             expect(
-              jdlObject.relationships
-                .getOneToOne('OneToOne_Country{region}_Region{country}')
-                .options.has(JPA_DERIVED_IDENTIFIER)
+              jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}').options[
+                JPA_DERIVED_IDENTIFIER
+              ]
             ).to.be.true;
           });
         });

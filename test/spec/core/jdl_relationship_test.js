@@ -68,27 +68,6 @@ describe('JDLRelationship', () => {
         expect(relationship.type).to.eq(RelationshipTypes.ONE_TO_ONE);
       });
     });
-    context('when passing duplicated options', () => {
-      let relationship;
-
-      before(() => {
-        relationship = new JDLRelationship({
-          from: 'A',
-          to: 'B',
-          injectedFieldInTo: 'a',
-          type: RelationshipTypes.ONE_TO_ONE,
-          options: [JPA_DERIVED_IDENTIFIER, JPA_DERIVED_IDENTIFIER]
-        });
-      });
-
-      it('only keeps distinct ones', () => {
-        let count = 0;
-        relationship.forEachOption(option => {
-          count++;
-        });
-        expect(count).to.equal(1);
-      });
-    });
   });
   describe('::isValid', () => {
     context('when checking the validity of an invalid object', () => {
@@ -279,7 +258,7 @@ describe('JDLRelationship', () => {
         to: 'B',
         injectedFieldInTo: 'a',
         type: RelationshipTypes.ONE_TO_ONE,
-        options: [JPA_DERIVED_IDENTIFIER]
+        options: { [JPA_DERIVED_IDENTIFIER]: true }
       });
     });
 
@@ -303,7 +282,7 @@ describe('JDLRelationship', () => {
         to: 'B',
         injectedFieldInTo: 'a',
         type: RelationshipTypes.ONE_TO_ONE,
-        options: [1, 2, 3]
+        options: { 1: 1, 2: 2, 3: 3 }
       });
     });
 
@@ -465,7 +444,7 @@ describe('JDLRelationship', () => {
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'b',
           injectedFieldInTo: 'a',
-          options: new Set([JPA_DERIVED_IDENTIFIER])
+          options: { [JPA_DERIVED_IDENTIFIER]: true }
         });
       });
 

@@ -365,13 +365,15 @@ describe('DocumentParser', () => {
               name: 'A',
               tableName: 'A',
               fields: {},
-              comment: undefined
+              comment: undefined,
+              options: []
             });
             expect(jdlObject.entities.B).to.deep.eq({
               name: 'B',
               tableName: 'B',
               fields: {},
-              comment: undefined
+              comment: undefined,
+              options: []
             });
             expect(jdlObject.entities.C).to.deep.eq({
               name: 'C',
@@ -386,10 +388,12 @@ describe('DocumentParser', () => {
                       name: 'required',
                       value: ''
                     }
-                  }
+                  },
+                  options: {}
                 }
               },
-              comment: undefined
+              comment: undefined,
+              options: []
             });
             expect(jdlObject.entities.D).to.deep.eq({
               name: 'D',
@@ -412,22 +416,26 @@ describe('DocumentParser', () => {
                       name: 'maxlength',
                       value: 42
                     }
-                  }
+                  },
+                  options: {}
                 },
                 count: {
                   comment: undefined,
                   name: 'count',
                   type: 'Integer',
-                  validations: {}
+                  validations: {},
+                  options: {}
                 }
               },
-              comment: undefined
+              comment: undefined,
+              options: []
             });
             expect(jdlObject.entities.E).to.deep.eq({
               name: 'E',
               tableName: 'E',
               fields: {},
-              comment: undefined
+              comment: undefined,
+              options: []
             });
             expect(jdlObject.entities.F).to.deep.eq({
               name: 'F',
@@ -437,13 +445,15 @@ describe('DocumentParser', () => {
                   comment: 'My comment for name of F.',
                   name: 'name',
                   type: 'String',
-                  validations: {}
+                  validations: {},
+                  options: {}
                 },
                 count: {
                   comment: undefined,
                   name: 'count',
                   type: 'Integer',
-                  validations: {}
+                  validations: {},
+                  options: {}
                 },
                 flag: {
                   comment: 'My comment for flag of F.',
@@ -454,10 +464,12 @@ describe('DocumentParser', () => {
                       name: 'required',
                       value: ''
                     }
-                  }
+                  },
+                  options: {}
                 }
               },
-              comment: 'My comment for F.'
+              comment: 'My comment for F.',
+              options: []
             });
             expect(jdlObject.entities.G).to.deep.eq({
               name: 'G',
@@ -472,16 +484,19 @@ describe('DocumentParser', () => {
                       name: 'required',
                       value: ''
                     }
-                  }
+                  },
+                  options: {}
                 },
                 count: {
                   comment: 'def',
                   name: 'count',
                   type: 'Integer',
-                  validations: {}
+                  validations: {},
+                  options: {}
                 }
               },
-              comment: undefined
+              comment: undefined,
+              options: []
             });
           });
         });
@@ -519,25 +534,29 @@ describe('DocumentParser', () => {
               name: 'first',
               comment: 'first comment',
               type: 'String',
-              validations: {}
+              validations: {},
+              options: {}
             },
             second: {
               name: 'second',
               comment: 'second comment',
               type: 'String',
-              validations: {}
+              validations: {},
+              options: {}
             },
             third: {
               name: 'third',
               comment: undefined,
               type: 'Integer',
-              validations: {}
+              validations: {},
+              options: {}
             },
             fourth: {
               name: 'fourth',
               comment: undefined,
               type: 'String',
-              validations: {}
+              validations: {},
+              options: {}
             }
           });
           expect(jdlObject.entities.TestEntity2.fields).to.deep.eq({
@@ -550,13 +569,15 @@ describe('DocumentParser', () => {
                   name: 'required',
                   value: ''
                 }
-              }
+              },
+              options: {}
             },
             second: {
               name: 'second',
               comment: 'second comment',
               type: 'String',
-              validations: {}
+              validations: {},
+              options: {}
             }
           });
         });
@@ -586,7 +607,8 @@ describe('DocumentParser', () => {
                   name: 'maxlength',
                   value: 42
                 }
-              }
+              },
+              options: {}
             },
             content: {
               name: 'content',
@@ -601,7 +623,8 @@ describe('DocumentParser', () => {
                   name: 'maxbytes',
                   value: 40
                 }
-              }
+              },
+              options: {}
             },
             count: {
               name: 'count',
@@ -616,7 +639,8 @@ describe('DocumentParser', () => {
                   name: 'max',
                   value: 41
                 }
-              }
+              },
+              options: {}
             }
           });
         });
@@ -861,6 +885,8 @@ describe('DocumentParser', () => {
         let customUnaryOption = null;
         let customBinaryOption = null;
         let customBinaryOption2 = null;
+        let fieldAnnotation = null;
+        let relationshipAnnotation = null;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/annotations.jdl']);
@@ -876,6 +902,8 @@ describe('DocumentParser', () => {
           customUnaryOption = jdlObject.getOptionsForName('myCustomUnaryOption')[0];
           customBinaryOption = jdlObject.getOptionsForName('myCustomBinaryOption')[0];
           customBinaryOption2 = jdlObject.getOptionsForName('myCustomBinaryOption')[1];
+          fieldAnnotation = jdlObject.entities.A.fields.name.options.id;
+          relationshipAnnotation = jdlObject.relationships.getOneToMany('OneToMany_A{b}_B{a}').options.id;
         });
 
         it('sets the annotations as options', () => {
@@ -889,6 +917,8 @@ describe('DocumentParser', () => {
           expect(customBinaryOption2.entityNames).to.deep.equal(new Set(['C']));
           expect(customBinaryOption.value).to.deep.equal('customValue');
           expect(customBinaryOption2.value).to.deep.equal('customValue2');
+          expect(fieldAnnotation).to.deep.equal(true);
+          expect(relationshipAnnotation).to.deep.equal(true);
         });
       });
       context('when parsing a mix between annotations and regular options', () => {
@@ -978,7 +1008,7 @@ describe('DocumentParser', () => {
         });
 
         it('sets it', () => {
-          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.has('jpaDerivedIdentifier')).to.be.true;
+          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.useJPADerivedIdentifier).to.be.true;
         });
       });
     });

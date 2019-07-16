@@ -28,7 +28,7 @@ describe('JDL DSL API', () => {
       let ast;
 
       before(() => {
-        ast = parse('@service(serviceClass) entity A {field String}');
+        ast = parse('@service(serviceClass) entity A {@Id field String}');
       });
 
       it('returns an AST', () => {
@@ -42,7 +42,8 @@ describe('JDL DSL API', () => {
               name: 'field',
               type: 'String',
               validations: [],
-              javadoc: null
+              javadoc: null,
+              annotations: [{ option: 'Id', type: 'UNARY' }]
             }
           ],
           javadoc: null
@@ -179,7 +180,7 @@ describe('JDL DSL API', () => {
       });
 
       it('provides suggestions', () => {
-        expect(result).to.have.lengthOf(8);
+        expect(result).to.have.lengthOf(9);
         expect(result).to.have.members([
           tokens.REQUIRED,
           tokens.UNIQUE,
@@ -189,6 +190,7 @@ describe('JDL DSL API', () => {
           tokens.COMMA,
           tokens.RCURLY,
           tokens.JAVADOC,
+          tokens.AT,
           tokens.NAME
         ]);
       });

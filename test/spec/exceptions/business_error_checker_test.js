@@ -734,7 +734,7 @@ describe('BusinessErrorChecker', () => {
           to: 'B',
           injectedFieldInTo: 'a',
           type: RelationshipTypes.MANY_TO_ONE,
-          options: [RelationshipOptions.JPA_DERIVED_IDENTIFIER]
+          options: { [RelationshipOptions.JPA_DERIVED_IDENTIFIER]: true }
         });
         const jdlObject = new JDLObject();
 
@@ -745,31 +745,6 @@ describe('BusinessErrorChecker', () => {
       it('fails', () => {
         expect(() => checker.checkForRelationshipErrors()).to.throw(
           "Only a One to One relationship can have the 'jpaDerivedIdentifier' option."
-        );
-      });
-    });
-    context('with invalid relationship options', () => {
-      let checker;
-
-      before(() => {
-        const entityA = new JDLEntity({ name: 'A' });
-        const entityB = new JDLEntity({ name: 'B' });
-        const relationship = new JDLRelationship({
-          from: entityA.name,
-          to: entityB.name,
-          injectedFieldInTo: 'a',
-          type: RelationshipTypes.ONE_TO_ONE,
-          options: ['invalid']
-        });
-        const jdlObject = new JDLObject();
-        jdlObject.addEntity(entityA);
-        jdlObject.addEntity(entityB);
-        jdlObject.addRelationship(relationship);
-        checker = new BusinessErrorChecker(jdlObject);
-      });
-      it('fails', () => {
-        expect(() => checker.checkForRelationshipErrors()).to.throw(
-          "This relationship option does not exist: 'invalid' for relationship from 'A' to 'B'."
         );
       });
     });

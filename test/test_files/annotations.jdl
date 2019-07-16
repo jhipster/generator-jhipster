@@ -3,7 +3,11 @@
 @skipClient
 @myCustomUnaryOption
 @myCustomBinaryOption(customValue)
-entity A
+@myCustomBinaryOption(customValue)
+entity A {
+  @id @multiValue(value1) @multiValue(value2) @multiValue(value3) name String
+  noAnnotation String
+}
 
 @paginate(pager)
 @dto(mapstruct)
@@ -16,3 +20,7 @@ entity B
 @paginate(pager)
 @myCustomBinaryOption(customValue2)
 entity C
+
+relationship OneToMany {
+  @id A{b required} to B{a}
+}
