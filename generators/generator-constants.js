@@ -70,7 +70,7 @@ const YARN_VERSION = '1.17.3';
 const NPM_VERSION = '6.9.2';
 
 // Libraries version
-const JIB_VERSION = '1.3.0';
+const JIB_VERSION = '1.4.0';
 
 // all constants used throughout all generators
 
