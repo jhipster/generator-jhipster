@@ -36,6 +36,12 @@
     <property name="autoIncrement" value="<%- autoIncrementValue %>"/>
     <%_ } _%>
 
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
+    <changeSet id="<%= changelogDate %>-0" author="jhipster">
+        <createSequence sequenceName="<%= entityTableName %>_sequence" startValue="1" incrementBy="50"/>
+    </changeSet>
+    <%_ } _%>
+
     <!--
         Added the entity <%= entityClass %>.
     -->
