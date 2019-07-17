@@ -218,6 +218,7 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
+            when: () => !reactive,
             type: 'list',
             name: 'cacheProvider',
             message: 'Do you want to use the Spring cache abstraction?',
@@ -310,7 +311,7 @@ function askForServerSideOpts(meta) {
         if (this.serverPort === undefined) {
             this.serverPort = '8080';
         }
-        this.cacheProvider = props.cacheProvider;
+        this.cacheProvider = !reactive ? props.cacheProvider : 'no';
         this.enableHibernateCache = props.enableHibernateCache;
         this.databaseType = props.databaseType;
         this.devDatabaseType = props.devDatabaseType;
