@@ -128,7 +128,7 @@ module.exports = class extends BaseGenerator {
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
         const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight`;
-        this.info(`new regenerate: ${regenerateCmd}`);
+        this.info(regenerateCmd);
         try {
             childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
             this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
