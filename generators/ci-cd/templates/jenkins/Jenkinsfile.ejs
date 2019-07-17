@@ -141,7 +141,7 @@ node {
 <%= indent %>    stage('quality analysis') {
 <%= indent %>        withSonarQubeEnv('<%= sonarName %>') {
     <%_ if (buildTool === 'maven') { _%>
-<%= indent %>            sh "./mvnw sonar:sonar"
+<%= indent %>            sh "./mvnw initialize sonar:sonar"
     <%_ } else if (buildTool === 'gradle' ) { _%>
 <%= indent %>            sh "./gradlew sonarqube --no-daemon"
     <%_ } _%>
