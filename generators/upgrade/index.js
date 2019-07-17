@@ -22,6 +22,7 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const fs = require('fs');
 const gitignore = require('parse-gitignore');
+const childProcess = require('child_process');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
@@ -127,12 +128,14 @@ module.exports = class extends BaseGenerator {
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
         const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight`;
-        this.info(regenerateCmd);
-        shelljs.exec(regenerateCmd, { silent: this.silent }, (code, msg, err) => {
-            if (code === 0) this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
-            else this.error(`Something went wrong while generating project! ${err}`);
+        this.info(`new regenerate: ${regenerateCmd}`);
+        try {
+            childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
+            this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
             callback();
-        });
+        } catch (err) {
+            this.error(`Something went wrong while generating project! ${err}`);
+        }
     }
 
     _gitCommitAll(commitMsg, callback) {
