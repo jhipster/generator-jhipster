@@ -888,6 +888,7 @@ _%>
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= asEntity(entityInstance) %>.get<%= relationship.relationshipNameCapitalized %>();
         <%_ } else { _%>
         // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();
