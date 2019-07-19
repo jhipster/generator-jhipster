@@ -206,6 +206,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.uaaBaseName = uaaBaseName;
                 }
                 this.clientFramework = configuration.get('clientFramework');
+                this.clientTheme = configuration.get('clientTheme');
                 const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
