@@ -34,7 +34,7 @@
                 </tr>
                 </thead>
                 <tbody v-if ="users">
-                    <tr v-for="user of orderBy(users, propOrder, reverse === true ? 1 : -1)" :key="user.id" :id="user.login">
+                    <tr v-for="user in users" :key="user.id" :id="user.login">
                         <td><router-link tag="a" :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}">{{user.id}}</router-link></td>
                         <td>{{user.login}}</td>
                         <td class="jhi-user-email">{{user.email}}</td>

@@ -60,7 +60,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="<% if (pagination !== 'no') { %><%= entityInstance %> of orderBy(<%= entityInstancePlural %>, propOrder, reverse === true ? 1 : -1)<% } else {%><%= entityInstance %> in <%= entityInstancePlural %><% } %>"
+                <tr v-for="<%= entityInstance %> in <%= entityInstancePlural %>"
                     :key="<%= entityInstance %>.id">
                     <td>
                         <router-link :to="{name: '<%= entityAngularName %>View', params: {<%= entityInstance %>Id: <%= entityInstance %>.id}}">{{<%= entityInstance %>.id}}</router-link>
