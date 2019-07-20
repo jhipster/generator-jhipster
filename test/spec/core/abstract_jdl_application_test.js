@@ -105,6 +105,21 @@ describe('AbstractJDLApplication', () => {
         });
       });
     });
+    context('when the application is reactive', () => {
+      let application;
+
+      before(() => {
+        application = new AbstractJDLApplication({
+          config: {
+            reactive: true
+          }
+        });
+      });
+
+      it('should unset any cache provider', () => {
+        expect(application.config.cacheProvider).to.equal('no');
+      });
+    });
   });
   describe('#getEntityNames', () => {
     context('when there is no entity', () => {
