@@ -35,27 +35,27 @@ describe('FormatUtils', () => {
 
       context(buildTestTitle(oneLineComment1), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment1)).to.eq(expectedResult1);
+          expect(FormatUtils.formatComment(oneLineComment1)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(oneLineComment2), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment2)).to.eq(expectedResult1);
+          expect(FormatUtils.formatComment(oneLineComment2)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(oneLineComment3), () => {
         it(`returns ${buildTestTitle(expectedResult2)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment3)).to.eq(expectedResult2);
+          expect(FormatUtils.formatComment(oneLineComment3)).to.equal(expectedResult2);
         });
       });
       context(buildTestTitle(oneLineComment4), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment4)).to.eq(expectedResult3);
+          expect(FormatUtils.formatComment(oneLineComment4)).to.equal(expectedResult3);
         });
       });
       context(buildTestTitle(oneLineComment5), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment5)).to.eq(expectedResult3);
+          expect(FormatUtils.formatComment(oneLineComment5)).to.equal(expectedResult3);
         });
       });
     });
@@ -64,23 +64,23 @@ describe('FormatUtils', () => {
       const multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
       const multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
       const multiLineComment3 = '\n * abcde\n * fghij\n * nothing\n';
-      const expectedResult1 = '<p>first line of comment</p><br/>\n<p>second line</p>';
-      const expectedResult2 = '<p>first line of comment</p><br/>\n*<p>second line</p>';
-      const expectedResult3 = 'abcde\nfghij\nnothing';
+      const expectedResult1 = '<p>first line of comment</p><br/>\\n<p>second line</p>';
+      const expectedResult2 = '<p>first line of comment</p><br/>\\n*<p>second line</p>';
+      const expectedResult3 = 'abcde\\nfghij\\nnothing';
 
       context(buildTestTitle(multiLineComment1), () => {
         it(`returns ${buildTestTitle(expectedResult1)}`, () => {
-          expect(FormatUtils.formatComment(multiLineComment1)).to.eq(expectedResult1);
+          expect(FormatUtils.formatComment(multiLineComment1)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(multiLineComment2), () => {
         it(`returns ${buildTestTitle(expectedResult2)}`, () => {
-          expect(FormatUtils.formatComment(multiLineComment2)).to.eq(expectedResult2);
+          expect(FormatUtils.formatComment(multiLineComment2)).to.equal(expectedResult2);
         });
       });
       context(buildTestTitle(multiLineComment3), () => {
         it(`returns ${buildTestTitle(expectedResult3)}`, () => {
-          expect(FormatUtils.formatComment(multiLineComment3)).to.eq(expectedResult3);
+          expect(FormatUtils.formatComment(multiLineComment3)).to.equal(expectedResult3);
         });
       });
     });

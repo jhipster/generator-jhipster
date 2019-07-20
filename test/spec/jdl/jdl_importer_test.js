@@ -191,7 +191,7 @@ describe('JDLImporter', () => {
             }
           ],
           name: 'Employee',
-          javadoc: 'The Employee entity.\nSecond line in javadoc.',
+          javadoc: 'The Employee entity.\\nSecond line in javadoc.',
           entityTableName: 'employee',
           dto: 'mapstruct',
           pagination: 'infinite-scroll',
