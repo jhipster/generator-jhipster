@@ -121,10 +121,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(configuration.get('buildTool'));
-                this.skipUserManagement =
-                    this.authenticationType === 'oauth2' ||
-                    (this.databaseType === 'no' && this.authenticationType !== 'uaa') ||
-                    (this.applicationType === 'gateway' && this.authenticationType === 'uaa');
+                this.skipUserManagement = configuration.get('skipUserManagement');
             }
         };
     }
@@ -238,7 +235,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
                 }
-                if (!this.skipServer && !this.skipUserManagement) {
+                if (!this.skipUserManagement) {
                     this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
                 }
             }
