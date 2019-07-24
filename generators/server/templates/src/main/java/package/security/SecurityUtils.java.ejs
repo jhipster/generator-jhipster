@@ -184,7 +184,7 @@ public final class SecurityUtils {
             })<% if (!reactive) { %>
             .orElse(false)<% } %>;
     }
-    
+
 <%_ if (authenticationType === 'oauth2') { _%>
     public static List<GrantedAuthority> extractAuthorityFromClaims(Map<String, Object> claims) {
         List<GrantedAuthority> rolesGrantedAuthorities = mapRolesToGrantedAuthorities(getRolesFromClaims(claims));
@@ -228,7 +228,7 @@ public final class SecurityUtils {
 
     private static List<GrantedAuthority> mapScopesToGrantedAuthorities(Collection<String> scopes) {
         return scopes.stream()
-            .filter(scope -> scope.startsWith("SCOPE_"))
+            .map(scope -> "SCOPE_" + scope)
             .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 <%_ } _%>
