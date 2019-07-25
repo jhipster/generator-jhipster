@@ -46,7 +46,7 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
     }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<I<%= entityAngularName %>> {
-        const id = route.params['id'] ? route.params['id'] : null;
+        const id = route.params['id'];
         if (id) {
             return this.service.find(id).pipe(
                 filter((response: HttpResponse<<%= entityAngularName %>>) => response.ok),
