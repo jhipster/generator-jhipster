@@ -40,6 +40,8 @@ const GENERATOR_JHIPSTER = 'generator-jhipster';
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
+const DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
+
 /**
  * This is the Generator base class.
  * This provides all the public API methods exposed via the module system.
