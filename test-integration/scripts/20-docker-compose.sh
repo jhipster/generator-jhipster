@@ -1,12 +1,14 @@
 #!/bin/bash
 
 set -e
+set -x
 source $(dirname $0)/00-init-env.sh
 
 #-------------------------------------------------------------------------------
 # Start docker container
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
+pwd
 if [ -a src/main/docker/keycloak.yml ]; then
     docker-compose -f src/main/docker/keycloak.yml up -d
 fi
