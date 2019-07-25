@@ -79,8 +79,8 @@ const vueFiles = {
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.component.spec.ts`
                 },
                 {
-                    file: 'spec/app/entities/entity-management-detail.component.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-detail.component.spec.ts`
+                    file: 'spec/app/entities/entity-management-details.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.spec.ts`
                 },
                 {
                     file: 'spec/app/entities/entity-management-update.component.spec.ts',
