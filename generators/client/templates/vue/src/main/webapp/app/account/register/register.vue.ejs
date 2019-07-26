@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" for="firstPassword" v-text="$t('global.form.newpassword')">New password</label>
+                        <label class="form-control-label" for="firstPassword" v-text="$t('global.form[\'newpassword.label\']')">New password</label>
                         <input type="password" class="form-control" id="firstPassword" name="password"
                                :class="{'valid': !$v.registerAccount.password.$invalid, 'invalid': $v.registerAccount.password.$invalid }"
                                v-model="$v.registerAccount.password.$model" minlength=4 maxlength=50 required v-bind:placeholder="$t('global.form[\'newpassword.placeholder\']')">
