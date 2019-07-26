@@ -55,7 +55,9 @@ import org.springframework.core.annotation.Order;
 <%_ if (!reactive) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+    <%_ if (!skipClient) { _%>
 import org.springframework.http.MediaType;
+    <%_ } _%>
 <%_ } _%>
 import org.springframework.web.cors.CorsConfiguration;
 <%_ if (!reactive) { _%>
@@ -139,6 +141,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         <%_ } _%>
         log.info("Web application fully configured");
     }
+    <%_ if (!skipClient) { _%>
 
     /**
      * Customize the Servlet engine: Mime types, the document root, the cache.
@@ -146,10 +149,8 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     @Override
     public void customize(WebServerFactory server) {
         setMimeMappings(server);
-        <%_ if (!skipClient) { _%>
         // When running in an IDE or with <% if (buildTool === 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
         setLocationForStaticAssets(server);
-        <%_ } _%>
     }
 
     private void setMimeMappings(WebServerFactory server) {
@@ -163,7 +164,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             servletWebServer.setMimeMappings(mappings);
         }
     }
-        <%_ if (!skipClient) { _%>
 
     private void setLocationForStaticAssets(WebServerFactory server) {
         if (server instanceof ConfigurableServletWebServerFactory) {
