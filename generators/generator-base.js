@@ -56,9 +56,9 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
+    addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation);
+            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -83,9 +83,9 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
+    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation);
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
