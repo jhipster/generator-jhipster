@@ -58,6 +58,7 @@ public class LiquibaseConfiguration {
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
         liquibase.setContexts(liquibaseProperties.getContexts());
         liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
+        liquibase.setLiquibaseSchema(liquibaseProperties.getLiquibaseSchema());
         liquibase.setDropFirst(liquibaseProperties.isDropFirst());
         liquibase.setChangeLogParameters(liquibaseProperties.getParameters());
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE))) {
