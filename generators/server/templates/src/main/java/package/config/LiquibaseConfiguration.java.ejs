@@ -25,9 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
-<%_ if (enableHibernateCache) { _%>
-import org.springframework.cache.CacheManager;
-<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -42,16 +39,9 @@ public class LiquibaseConfiguration {
     private final Logger log = LoggerFactory.getLogger(LiquibaseConfiguration.class);
 
     private final Environment env;
-    <%_ if (enableHibernateCache) { _%>
 
-    private final CacheManager cacheManager;
-    <%_ } _%>
-
-    public LiquibaseConfiguration(Environment env<% if (enableHibernateCache) { %>, CacheManager cacheManager<% } %>) {
+    public LiquibaseConfiguration(Environment env) {
         this.env = env;
-        <%_ if (enableHibernateCache) { _%>
-        this.cacheManager = cacheManager;
-        <%_ } _%>
     }
 
     @Bean
