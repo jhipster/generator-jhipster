@@ -5,7 +5,7 @@
             <router-link :to="{name: '<%= entityAngularName %>Create'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>">
                 <font-awesome-icon icon="plus"></font-awesome-icon>
                 <span  v-text="$t('<%= i18nKeyPrefix %>.home.createLabel')">
-                    Create new <%= entityAngularName %>
+                    Create a new <%= entityClassHumanized %>
                 </span>
             </router-link>
         </h2>
