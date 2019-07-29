@@ -22,7 +22,7 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span <% if (searchEngine === 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
-            Create new <%= entityClassHumanized %>
+            Create a new <%= entityClassHumanized %>
             </span>
         </button>
     </h2>
