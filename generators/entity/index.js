@@ -993,6 +993,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             relationship.otherEntityModuleName = `${context.angularXAppName +
                                 relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
+                            if (relationship.otherEntityFolderName === undefined) {
+                                relationship.otherEntityFolderName = _.kebabCase(relationship.otherEntityAngularName);
+                            }
                             if (
                                 context.skipUiGrouping ||
                                 otherEntityData === undefined ||
@@ -1005,22 +1008,22 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             }
                             if (otherEntityData !== undefined && otherEntityData.clientRootFolder) {
                                 if (context.clientRootFolder === otherEntityData.clientRootFolder) {
-                                    relationship.otherEntityModulePath = relationship.otherEntityFileName;
+                                    relationship.otherEntityModulePath = relationship.otherEntityFolderName;
                                 } else {
                                     relationship.otherEntityModulePath = `${
                                         context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                    }${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                                    }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                                 }
                                 relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${
                                     relationship.otherEntityFileName
                                 }`;
-                                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                             } else {
                                 relationship.otherEntityModulePath = `${
                                     context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                }${relationship.otherEntityFileName}`;
+                                }${relationship.otherEntityFolderName}`;
                                 relationship.otherEntityModelName = relationship.otherEntityFileName;
-                                relationship.otherEntityPath = relationship.otherEntityFileName;
+                                relationship.otherEntityPath = relationship.otherEntityFolderName;
                             }
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
