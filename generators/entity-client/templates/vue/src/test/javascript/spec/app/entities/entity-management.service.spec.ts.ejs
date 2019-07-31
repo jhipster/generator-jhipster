@@ -60,7 +60,7 @@ describe('Service Tests', () => {
       <%_ } _%>
 
       elemDefault = new <%= entityAngularName %>(
-        <%_ if (pkType === 'String') { _%>
+        <%_ if (pkType === 'String'  || pkType === 'UUID') { _%>
         'ID',
         <%_ } else { _%>
         0,
@@ -109,7 +109,7 @@ describe('Service Tests', () => {
 
       it('should create a <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
-  <%_ if (pkType === 'String') { _%>
+  <%_ if (pkType === 'String'  || pkType === 'UUID') { _%>
           id: 'ID',
   <%_ } else { _%>
           id: 0,
