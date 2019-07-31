@@ -582,7 +582,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
 
                 // Validate root entity json content
-                if (_.isUndefined(context.changelogDate) && (context.databaseType === 'sql' || context.databaseType === 'cassandra')) {
+                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
                     const currentDate = this.dateFormatForLiquibase();
                     this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
                     context.changelogDate = currentDate;
@@ -617,7 +617,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     return; // do not update if regenerating entity
                 }
                 // store information in a file for further use.
-                if (!context.useConfigurationFile && ['sql', 'cassandra'].includes(context.databaseType)) {
+                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
                     context.changelogDate = this.dateFormatForLiquibase();
                 }
                 this.data = {};
