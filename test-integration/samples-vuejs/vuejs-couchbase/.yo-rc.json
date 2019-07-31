@@ -29,7 +29,7 @@
         "nativeLanguage": "en",
         "languages": ["en", "fr"],
         "blueprint": "generator-jhipster-vuejs",
-            "clientFramework": "vue"
+        "clientFramework": "vue"
         },
         "generator-jhipster-vuejs": {
             "applicationType": "monolith",
