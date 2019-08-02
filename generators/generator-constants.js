@@ -65,7 +65,7 @@ const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
 // version of Node, Yarn, NPM
-const NODE_VERSION = '10.16.0';
+const NODE_VERSION = '10.16.1';
 const YARN_VERSION = '1.17.3';
 const NPM_VERSION = '6.9.2';
 
