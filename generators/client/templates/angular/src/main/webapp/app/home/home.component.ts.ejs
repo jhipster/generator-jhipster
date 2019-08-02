@@ -16,8 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit<%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> } from '@angular/core';
 <%_ if (authenticationType !== 'oauth2') { _%>
+import { Subscription } from 'rxjs';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 <%_ } _%>
@@ -32,9 +33,10 @@ import { <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else 
     ]
 
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> {
     account: Account;
     <%_ if (authenticationType !== 'oauth2') { _%>
+    eventSubscriber: Subscription;
     modalRef: NgbModalRef;
     <%_ } _%>
 
@@ -58,7 +60,7 @@ export class HomeComponent implements OnInit {
     }
 
     registerAuthenticationSuccess() {
-        this.eventManager.subscribe('authenticationSuccess', (message) => {
+        this.eventSubscriber = this.eventManager.subscribe('authenticationSuccess', (message) => {
             this.accountService.identity().then((account) => {
                 this.account = account;
             });
@@ -77,4 +79,10 @@ export class HomeComponent implements OnInit {
         this.loginService.login();
         <%_ }_%>
     }
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    ngOnDestroy() {
+        this.eventManager.destroy(this.eventSubscriber);
+    }
+    <%_ }_%>
 }
