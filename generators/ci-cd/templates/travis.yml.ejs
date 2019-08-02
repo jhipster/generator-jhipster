@@ -18,14 +18,12 @@
 -%>
 os:
   - linux
+dist: bionic
 services:
   - docker
 language: node_js
 node_js:
   - "<%= NODE_VERSION %>"
-jdk:
-  - oraclejdk8
-sudo: false
 cache:
   directories:
     - node
@@ -46,7 +44,6 @@ env:
     - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
 before_install:
-  - jdk_switcher use oraclejdk8
   - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop

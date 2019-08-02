@@ -1,6 +1,6 @@
 {
     "name": "generator-jhipster",
-    "version": "6.1.2",
+    "version": "6.2.0",
     "description": "Spring Boot + Angular/React in one handy generator",
     "files": [
         "cli",
@@ -88,7 +88,7 @@
         "eslint-plugin-import": "2.16.0",
         "eslint-plugin-prettier": "3.0.1",
         "fs-extra": "7.0.1",
-        "jsdoc": "3.6.2",
+        "jsdoc": "3.6.3",
         "mocha": "6.1.4",
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
