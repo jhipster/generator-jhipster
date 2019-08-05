@@ -59,6 +59,15 @@ jobs:
                   JHI_APP: vuejs-ws-theme
               vuejs-oauth2:
                   JHI_APP: vuejs-oauth2
+              vuejs-couchbase:
+                  JHI_APP: vuejs-couchbase
+                  JHI_ENTITY: couchbase
+              vuejs-mongodb-kafka-cucumber:
+                  JHI_APP: vuejs-mongodb-kafka-cucumber
+                  JHI_ENTITY: mongodb
+              vuejs-session-cassandra-fr:
+                  JHI_APP: vuejs-session-cassandra-fr
+                  JHI_ENTITY: cassandra
 
       steps:
           #----------------------------------------------------------------------
