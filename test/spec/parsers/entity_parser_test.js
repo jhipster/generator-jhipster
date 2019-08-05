@@ -57,6 +57,60 @@ describe('EntityParser', () => {
           }).to.throw('The JDL object and the database type are both mandatory.');
         });
       });
+
+      context('such as an app with Cassandra and relationships between entities', () => {
+        let jdlObject = null;
+
+        before(() => {
+          const entityA = new JDLEntity({
+            name: 'EntityA',
+            tableName: 'a',
+            fields: {
+              aa: new JDLField({
+                name: 'aa',
+                type: FieldTypes.CommonDBTypes.STRING,
+                comment: 'My field',
+                validations: { required: new JDLValidation({ name: Validations.REQUIRED }) }
+              }),
+              ab: new JDLField({
+                name: 'ab',
+                type: FieldTypes.CommonDBTypes.ZONED_DATE_TIME
+              })
+            }
+          });
+          const entityB = new JDLEntity({
+            name: 'EntityB',
+            fields: {}
+          });
+          const oneToOneRelationship = new JDLRelationship({
+            type: RelationshipTypes.ONE_TO_ONE,
+            from: entityA.name,
+            to: entityB.name,
+            injectedFieldInFrom: 'b',
+            injectedFieldInTo: 'a',
+            isInjectedFieldInFromRequired: true
+          });
+          const microserviceOption = new JDLBinaryOption({
+            name: BinaryOptions.MICROSERVICE,
+            value: 'myMs'
+          });
+          jdlObject = new JDLObject();
+          jdlObject.addEntity(entityA);
+          jdlObject.addEntity(entityB);
+          jdlObject.addRelationship(oneToOneRelationship);
+          jdlObject.addOption(microserviceOption);
+        });
+
+        it('throws an error', () => {
+          expect(() => {
+            EntityParser.parse({
+              jdlObject,
+              databaseType: DatabaseTypes.CASSANDRA,
+              applicationType: ApplicationTypes.MICROSERVICE
+            });
+          }).to.throw("Cassandra entities don't have relationships.");
+        });
+      });
     });
     context('when passing valid arguments', () => {
       let content = null;
