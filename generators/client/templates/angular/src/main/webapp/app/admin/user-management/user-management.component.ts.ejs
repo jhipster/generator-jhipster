@@ -18,11 +18,11 @@
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
@@ -42,8 +42,8 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     users: User[];
     error: any;
     success: any;
-    <%_ if (databaseType !== 'cassandra') { _%>
     eventSubscriber: Subscription;
+    <%_ if (databaseType !== 'cassandra') { _%>
     routeData: Subscription;
     links: any;
     totalItems: any;
