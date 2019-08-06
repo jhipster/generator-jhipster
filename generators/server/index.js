@@ -115,6 +115,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
                 this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
                 this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+                this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
 
                 this.JAVA_VERSION = constants.JAVA_VERSION;
 
@@ -206,6 +207,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.uaaBaseName = uaaBaseName;
                 }
                 this.clientFramework = configuration.get('clientFramework');
+                this.clientTheme = configuration.get('clientTheme');
                 const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;

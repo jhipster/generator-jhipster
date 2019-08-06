@@ -20,7 +20,6 @@ const webpack = require('webpack');
 const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const rxPaths = require('rxjs/_esm5/path-mapping');
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 <%_ } if (buildTool === undefined) { _%>
@@ -33,9 +32,9 @@ module.exports = (options) => ({
     resolve: {
         extensions: ['.ts', '.js'],
         modules: ['node_modules'],
+        mainFields: [ 'es2015', 'browser', 'module', 'main'],
         alias: {
-            app: utils.root('<%= MAIN_SRC_DIR %>app/'),
-            ...rxPaths()
+            app: utils.root('<%= MAIN_SRC_DIR %>app/')
         }
     },
     stats: {

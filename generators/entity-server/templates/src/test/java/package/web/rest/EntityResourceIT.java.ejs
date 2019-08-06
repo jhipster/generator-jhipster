@@ -156,7 +156,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 /**
- * Integration tests for the {@Link <%= entityClass %>Resource} REST controller.
+ * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
 <%_ if (messageBroker === 'kafka') { _%>
 @EmbeddedKafka
@@ -892,6 +892,7 @@ _%>
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= asEntity(entityInstance) %>.get<%= relationship.relationshipNameCapitalized %>();
         <%_ } else { _%>
         // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntityNameCapitalized %>ResourceIT.createEntity(em);
         em.persist(<%= relationship.relationshipFieldName %>);
         em.flush();

@@ -44,7 +44,7 @@ if (!viaService) {
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = <%= dtoToEntity %>(<%= instanceName %>);
         <%_ if (isUsingMapsId === true) { _%>
         <%= dataTypeName %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>Id();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= asEntity(entityInstance)%>::<%= otherEntityName %>);
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= asEntity(entityInstance) %>::<%= mapsIdAssoc.relationshipName %>);
         <%_ } _%>
         <%= asEntity(entityInstance) %> = <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= asEntity(entityInstance) %>);

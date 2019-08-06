@@ -43,7 +43,7 @@ plugins {
     id "org.openapi.generator" version "4.0.2"
     <%_ } _%>
     <%_ if (!skipClient) { _%>
-    id "com.github.node-gradle.node" version "1.5.1"
+    id "com.github.node-gradle.node" version "2.0.0"
     <%_ } _%>
     id "net.ltgt.apt-eclipse" version "0.21"
     id "net.ltgt.apt-idea" version "0.21"
@@ -526,7 +526,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "5.4.1"
+    gradleVersion = "5.5.1"
 }
 <%_ if (!skipClient) { _%>
 

@@ -18,14 +18,12 @@
 -%>
 os:
   - linux
+dist: bionic
 services:
   - docker
 language: node_js
 node_js:
   - "<%= NODE_VERSION %>"
-jdk:
-  - oraclejdk8
-sudo: false
 cache:
   directories:
     - node
@@ -46,7 +44,6 @@ env:
     - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
 before_install:
-  - jdk_switcher use oraclejdk8
   - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
@@ -80,7 +77,7 @@ script:
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
-  - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
+  - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
   <%_ } _%>
   - ./mvnw verify -Pprod -DskipTests
   <%_ if (cicdIntegrations.includes('heroku')) { _%>

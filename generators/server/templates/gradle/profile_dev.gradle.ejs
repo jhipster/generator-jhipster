@@ -60,6 +60,7 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
     <%_ } else { _%>
     inputs.files("yarn.lock")
     <%_ } _%>
+    inputs.files("build.gradle")
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
 
     def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>/")

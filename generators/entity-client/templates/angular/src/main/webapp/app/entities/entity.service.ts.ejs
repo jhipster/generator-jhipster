@@ -65,7 +65,8 @@ export class <%= entityAngularName %>Service {
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
-    find(id: <% if (primaryKeyType === 'String') { %>string<% } else { %>number<% } %>): Observable<EntityResponseType> {
+    find(id: <% if (primaryKeyType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %>): Observable<EntityResponseType> {
+
         return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
@@ -76,7 +77,7 @@ export class <%= entityAngularName %>Service {
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
 
-    delete(id: <% if (primaryKeyType === 'String') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<any>> {
+    delete(id: <% if (primaryKeyType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
     }
 

@@ -18,7 +18,7 @@
 -%>
 <%_
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-const tsKeyId = generateTestEntityId(primaryKeyType, prodDatabaseType);
+const tsKeyId = generateTestEntityId(primaryKeyType);
 const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
 _%>
 /* tslint:disable max-line-length */
@@ -67,7 +67,7 @@ describe('Service Tests', () => {
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (primaryKeyType === 'String') { _%>
+                <%_ if (pkType === 'String' || pkType === 'UUID') { _%>
                 'ID',
                 <%_ } else { _%>
                 0,
@@ -117,7 +117,7 @@ describe('Service Tests', () => {
 
             it('should create a <%= entityAngularName %>', async () => {
                 const returnedFromService = Object.assign({
-<%_ if (primaryKeyType === 'String') { _%>
+<%_ if (pkType === 'String' || pkType === 'UUID') { _%>
                     id: 'ID',
 <%_ } else { _%>
                     id: 0,

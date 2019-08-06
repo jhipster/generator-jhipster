@@ -18,7 +18,7 @@
 -%>
 <%_
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-const tsKeyId = generateTestEntityId(primaryKeyType, prodDatabaseType);
+const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
 /* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';

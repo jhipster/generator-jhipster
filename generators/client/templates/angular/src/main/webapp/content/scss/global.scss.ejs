@@ -31,14 +31,15 @@ h4 {
     font-weight: 300;
 }
 
-a {
+<%_ if (clientTheme === 'none') { _%>
+/* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
+a, a:hover {
     color: #533f03;
     font-weight: bold;
 }
+<%_ } _%>
 
 a:hover {
-    color: #533f03;
-    font-weight: bold;
     /* make sure browsers use the pointer cursor for anchors, even with no href */
     cursor: pointer;
 }
