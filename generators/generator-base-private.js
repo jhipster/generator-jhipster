@@ -1151,6 +1151,28 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Generate Entity Client Enum Imports
+     *
+     * @param {Array|Object} fields - array of the entity fields
+     * @param {string} clientFramework the client framework, 'angularX' or 'react'.
+     * @returns typeImports: Map
+     */
+    generateEntityClientEnumImports(fields, clientFramework = this.clientFramework) {
+        const typeImports = new Map();
+        const uniqueEnums = {};
+        fields.forEach(field => {
+            const fileName = _.kebabCase(field.fieldType);
+            if (field.fieldIsEnum && (!uniqueEnums[field.fieldType] || (uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))) {
+                const importType = `${field.fieldType}`;
+                const importPath = `app/shared/model/enumerations/${fileName}.model`;
+                uniqueEnums[field.fieldType] = field.fieldType;
+                typeImports.set(importType, importPath);
+            }
+        });
+        return typeImports;
+    }
+
+    /**
      * Get DB type from DB value
      * @param {string} db - db
      */
