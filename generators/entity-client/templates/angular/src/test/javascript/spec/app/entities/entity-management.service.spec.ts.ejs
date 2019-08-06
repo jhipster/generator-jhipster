@@ -67,7 +67,7 @@ describe('Service Tests', () => {
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (pkType === 'String' || pkType === 'UUID') { _%>
+                <%_ if (primaryKeyType === 'String' || primaryKeyType === 'UUID') { _%>
                 'ID',
                 <%_ } else { _%>
                 0,
