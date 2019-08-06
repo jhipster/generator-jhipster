@@ -18,14 +18,12 @@
 -%>
 import { NgModule } from '@angular/core';
 
-import {
-    <%=angularXAppName%>SharedLibsModule,
-    <%_ if (enableTranslation) { _%>
-    FindLanguageFromKeyPipe,
-    <%_ } _%>
-    <%=jhiPrefixCapitalized%>AlertComponent,
-    <%=jhiPrefixCapitalized%>AlertErrorComponent
-} from './';
+import { <%=angularXAppName%>SharedLibsModule } from './shared-libs.module';
+<%_ if (enableTranslation) { _%>
+import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
+<%_ } _%>
+import { <%=jhiPrefixCapitalized%>AlertComponent } from './alert/alert.component';
+import { <%=jhiPrefixCapitalized%>AlertErrorComponent } from './alert/alert-error.component';
 
 @NgModule({
     imports: [

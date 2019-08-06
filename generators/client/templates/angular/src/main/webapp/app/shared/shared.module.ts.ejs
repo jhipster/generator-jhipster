@@ -17,13 +17,11 @@
  limitations under the License.
 -%>
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {
-    <%=angularXAppName%>SharedCommonModule,
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    <%=jhiPrefixCapitalized%>LoginModalComponent,
-    <%_ } _%>
-    HasAnyAuthorityDirective
-} from './';
+import { <%=angularXAppName%>SharedCommonModule } from './shared-common.module';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { <%=jhiPrefixCapitalized%>LoginModalComponent } from './login/login.component';
+<%_ } _%>
+import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 
 @NgModule({
     imports: [
