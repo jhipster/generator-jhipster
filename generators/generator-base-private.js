@@ -1305,7 +1305,7 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Decide the primary key type based on DB
+     * Return the primary key data type based on DB
      *
      * @param {any} databaseType - the database type
      */
@@ -1327,7 +1327,7 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Decide the primary key type based on authentication type, DB and given association
+     * Returns the primary key data type based on authentication type, DB and given association
      *
      * @param {string} authenticationType - the auth type
      * @param {string} databaseType - the database type
