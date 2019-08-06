@@ -36,7 +36,7 @@ import { <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else 
 export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> {
     account: Account;
     <%_ if (authenticationType !== 'oauth2') { _%>
-    eventSubscriber: Subscription;
+    authSubscription: Subscription;
     modalRef: NgbModalRef;
     <%_ } _%>
 
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
     }
 
     registerAuthenticationSuccess() {
-        this.eventSubscriber = this.eventManager.subscribe('authenticationSuccess', (message) => {
+        this.authSubscription = this.eventManager.subscribe('authenticationSuccess', (message) => {
             this.accountService.identity().then((account) => {
                 this.account = account;
             });
@@ -82,7 +82,9 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
 
     <%_ if (authenticationType !== 'oauth2') { _%>
     ngOnDestroy() {
-        this.eventManager.destroy(this.eventSubscriber);
+        if(this.authSubscription) {
+            this.eventManager.destroy(this.authSubscription);
+        }
     }
     <%_ }_%>
 }
