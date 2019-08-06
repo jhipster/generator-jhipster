@@ -20,6 +20,7 @@
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const tsKeyId = generateTestEntityId(primaryKeyType);
 const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
+const enumImports = generateEntityClientEnumImports(fields);
 _%>
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
@@ -32,14 +33,10 @@ import * as moment from 'moment';
 import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from 'app/shared/constants/input.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { I<%= entityAngularName %>, <%= entityAngularName %>, <%_ const enumsAlreadyDeclared = [];
-fields.forEach(field => {
-if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
-    enumsAlreadyDeclared.push(field.fieldType); _%>
-<%=field.fieldType%>,
-<%_ }
-}) _%>
-} from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
 
 describe('Service Tests', () => {
 
