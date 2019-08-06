@@ -42,7 +42,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     users: User[];
     error: any;
     success: any;
-    eventSubscriber: Subscription;
+    userListSubscription: Subscription;
     <%_ if (databaseType !== 'cassandra') { _%>
     routeData: Subscription;
     links: any;
@@ -89,11 +89,13 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.routeData.unsubscribe();
         <%_ } _%>
-        this.eventManager.destroy(this.eventSubscriber);
+        if(this.userListSubscription) {
+            this.eventManager.destroy(this.userListSubscription);
+        }
     }
 
     registerChangeInUsers() {
-        this.eventSubscriber = this.eventManager.subscribe('userListModification', (response) => this.loadAll());
+        this.userListSubscription = this.eventManager.subscribe('userListModification', (response) => this.loadAll());
     }
 
     setActive(user, isActivated) {
