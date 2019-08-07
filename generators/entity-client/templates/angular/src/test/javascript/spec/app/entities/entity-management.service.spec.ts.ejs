@@ -20,11 +20,8 @@
 const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
 const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto);
 _%>
-/* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 <%_ if (fieldsContainDate) { _%>
 import * as moment from 'moment';
@@ -228,8 +225,7 @@ describe('Service Tests', () => {
             });
 
             it('should delete a <%= entityAngularName %>', async () => {
-                const rxPromise = service
-                    .delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
+                service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
 
                 const req  = httpMock.expectOne({ method: 'DELETE' });
                 req.flush({ status: 200 });
