@@ -12,8 +12,8 @@ export class NavBarPage {
     signIn = element(by.id('login'));
     register = element(by.css('[routerLink="register"]'));
     signOut = element(by.id('logout'));
-    passwordMenu = element(by.css('[routerLink="password"]'));
-    settingsMenu = element(by.css('[routerLink="settings"]'));
+    passwordMenu = element(by.css('[routerLink="account/password"]'));
+    settingsMenu = element(by.css('[routerLink="account/settings"]'));
 
     constructor(asAdmin?: Boolean) {
         if (asAdmin) {

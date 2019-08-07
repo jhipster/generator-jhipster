@@ -159,13 +159,13 @@
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
                     <%_ if (!skipUserManagement) { _%>
                     <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="settings" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="account/settings" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="wrench" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.settings">Settings</span>
                         </a>
                     </li>
                     <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="password" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="account/password" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="lock" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.password">Password</span>
                         </a>
@@ -173,7 +173,7 @@
                     <%_ } _%>
                     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
                     <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="sessions" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="account/sessions" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon icon="cloud" fixedWidth="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.sessions">Sessions</span>
                         </a>
