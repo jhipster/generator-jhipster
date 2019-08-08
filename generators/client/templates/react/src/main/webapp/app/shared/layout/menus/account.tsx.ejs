@@ -39,14 +39,14 @@ const accountMenuItemsAuthenticated = (
     <MenuItem icon="cloud" to="/account/sessions"><Translate contentKey="global.menu.account.sessions">Sessions</Translate></MenuItem>
     <%_ } _%>
   <%_ } _%>
-    <MenuItem icon="sign-out-alt" to="/logout"><Translate contentKey="global.menu.account.logout">Sign out</Translate></MenuItem>
+    <MenuItem icon="sign-out-alt" to="/account/logout"><Translate contentKey="global.menu.account.logout">Sign out</Translate></MenuItem>
   </>
   );
 
 const accountMenuItems = (
   <>
   <%_ if (authenticationType !== 'oauth2') { _%>
-    <MenuItem id="login-item" icon="sign-in-alt" to="/login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
+    <MenuItem id="login-item" icon="sign-in-alt" to="/account/login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
   <%_ } else { _%>
     <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
   <%_ } _%>

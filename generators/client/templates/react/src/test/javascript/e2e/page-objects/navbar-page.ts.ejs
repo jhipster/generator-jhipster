@@ -46,7 +46,7 @@ export default class NavBarPage extends BasePage {
   async getSignInPage() {
     await this.clickOnAccountMenu();
     <%_ if (authenticationType !== 'oauth2') { _%>
-    await this.clickOnTabMenu('/login');
+    await this.clickOnTabMenu('/account/login');
     <%_ } else { _%>
     await this.loginItem.click();
     <%_ } _%>
@@ -98,6 +98,6 @@ export default class NavBarPage extends BasePage {
 
   async autoSignOut() {
     await this.accountMenu.click();
-    await this.selector.$(`.dropdown-item[href="/logout"`).click();
+    await this.selector.$(`.dropdown-item[href="/account/logout"`).click();
   }
 }

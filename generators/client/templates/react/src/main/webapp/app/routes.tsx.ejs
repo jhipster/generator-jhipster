@@ -55,9 +55,9 @@ const Routes = () => (
   <div className="view-routes">
     <Switch>
     <%_ if (authenticationType !== 'oauth2') { _%>
-      <ErrorBoundaryRoute path="/login" component={Login} />
+      <ErrorBoundaryRoute path="/account/login" component={Login} />
     <%_ } _%>
-      <ErrorBoundaryRoute path="/logout" component={Logout} />
+      <ErrorBoundaryRoute path="/account/logout" component={Logout} />
     <%_ if (!skipUserManagement) { _%>
       <ErrorBoundaryRoute path="/account/register" component={Register} />
       <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />
