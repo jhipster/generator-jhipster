@@ -170,7 +170,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('to state register');
-            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/register']);
+            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/account/register']);
         });
 
         it('should redirect user when request password', () => {
