@@ -62,7 +62,7 @@ describe('administration', () => {
     <%_ } _%>
 
     it('should load metrics', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-metrics');
+        await navBarPage.clickOnAdmin('metrics');
         <%_ if (enableTranslation) { _%>
         const expect1 = 'metrics.title';
         <%_ } else { _%>
@@ -73,7 +73,7 @@ describe('administration', () => {
     });
 
     it('should load health', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-health');
+        await navBarPage.clickOnAdmin('health');
         <%_ if (enableTranslation) { _%>
         const expect1 = 'health.title';
         <%_ } else { _%>
@@ -84,7 +84,7 @@ describe('administration', () => {
     });
 
     it('should load configuration', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-configuration');
+        await navBarPage.clickOnAdmin('configuration');
         await browser.sleep(500);
         <%_ if (enableTranslation) { _%>
         const expect1 = 'configuration.title';
