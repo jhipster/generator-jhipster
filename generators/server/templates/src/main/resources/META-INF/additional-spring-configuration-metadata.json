@@ -1,0 +1,579 @@
+{
+  "groups": [
+    {
+      "name": "jhipster",
+      "type": "io.github.jhipster.config.JHipsterProperties",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties"
+    },
+    {
+      "name": "jhipster.async",
+      "type": "io.github.jhipster.config.JHipsterProperties$Async",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getAsync()"
+    },
+    {
+      "name": "jhipster.cache",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getCache()"
+    },
+    {
+      "name": "jhipster.cache.ehcache",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Ehcache",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache",
+      "sourceMethod": "getEhcache()"
+    },
+    {
+      "name": "jhipster.cache.hazelcast",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Hazelcast",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache",
+      "sourceMethod": "getHazelcast()"
+    },
+    {
+      "name": "jhipster.cache.hazelcast.management-center",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Hazelcast$ManagementCenter",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Hazelcast",
+      "sourceMethod": "getManagementCenter()"
+    },
+    {
+      "name": "jhipster.cache.infinispan",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache",
+      "sourceMethod": "getInfinispan()"
+    },
+    {
+      "name": "jhipster.cache.infinispan.distributed",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Distributed",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan",
+      "sourceMethod": "getDistributed()"
+    },
+    {
+      "name": "jhipster.cache.infinispan.local",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Local",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan",
+      "sourceMethod": "getLocal()"
+    },
+    {
+      "name": "jhipster.cache.infinispan.replicated",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Replicated",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan",
+      "sourceMethod": "getReplicated()"
+    },
+    {
+      "name": "jhipster.cache.memcached",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Memcached",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache",
+      "sourceMethod": "getMemcached()"
+    },
+    {
+      "name": "jhipster.cache.redis",
+      "type": "io.github.jhipster.config.JHipsterProperties$Cache$Redis",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache",
+      "sourceMethod": "getRedis()"
+    },
+    {
+      "name": "jhipster.client-app",
+      "type": "io.github.jhipster.config.JHipsterProperties$ClientApp",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getClientApp()"
+    },
+    {
+      "name": "jhipster.gateway",
+      "type": "io.github.jhipster.config.JHipsterProperties$Gateway",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getGateway()"
+    },
+    {
+      "name": "jhipster.gateway.rate-limiting",
+      "type": "io.github.jhipster.config.JHipsterProperties$Gateway$RateLimiting",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Gateway",
+      "sourceMethod": "getRateLimiting()"
+    },
+    {
+      "name": "jhipster.http",
+      "type": "io.github.jhipster.config.JHipsterProperties$Http",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getHttp()"
+    },
+    {
+      "name": "jhipster.http.cache",
+      "type": "io.github.jhipster.config.JHipsterProperties$Http$Cache",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Http",
+      "sourceMethod": "getCache()"
+    },
+    {
+      "name": "jhipster.logging",
+      "type": "io.github.jhipster.config.JHipsterProperties$Logging",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getLogging()"
+    },
+    {
+      "name": "jhipster.logging.logstash",
+      "type": "io.github.jhipster.config.JHipsterProperties$Logging$Logstash",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Logging",
+      "sourceMethod": "getLogstash()"
+    },
+    {
+      "name": "jhipster.mail",
+      "type": "io.github.jhipster.config.JHipsterProperties$Mail",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getMail()"
+    },
+    {
+      "name": "jhipster.metrics",
+      "type": "io.github.jhipster.config.JHipsterProperties$Metrics",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getMetrics()"
+    },
+    {
+      "name": "jhipster.metrics.logs",
+      "type": "io.github.jhipster.config.JHipsterProperties$Metrics$Logs",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Metrics",
+      "sourceMethod": "getLogs()"
+    },
+    {
+      "name": "jhipster.registry",
+      "type": "io.github.jhipster.config.JHipsterProperties$Registry",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getRegistry()"
+    },
+    {
+      "name": "jhipster.security",
+      "type": "io.github.jhipster.config.JHipsterProperties$Security",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getSecurity()"
+    },
+    {
+      "name": "jhipster.security.authentication",
+      "type": "io.github.jhipster.config.JHipsterProperties$Security$Authentication",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security",
+      "sourceMethod": "getAuthentication()"
+    },
+    {
+      "name": "jhipster.security.authentication.jwt",
+      "type": "io.github.jhipster.config.JHipsterProperties$Security$Authentication$Jwt",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$Authentication",
+      "sourceMethod": "getJwt()"
+    },
+    {
+      "name": "jhipster.security.client-authorization",
+      "type": "io.github.jhipster.config.JHipsterProperties$Security$ClientAuthorization",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security",
+      "sourceMethod": "getClientAuthorization()"
+    },
+    {
+      "name": "jhipster.security.remember-me",
+      "type": "io.github.jhipster.config.JHipsterProperties$Security$RememberMe",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security",
+      "sourceMethod": "getRememberMe()"
+    },
+    {
+      "name": "jhipster.social",
+      "type": "io.github.jhipster.config.JHipsterProperties$Social",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getSocial()"
+    },
+    {
+      "name": "jhipster.swagger",
+      "type": "io.github.jhipster.config.JHipsterProperties$Swagger",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties",
+      "sourceMethod": "getSwagger()"
+    },
+    {
+      "name": "management.endpoint.jhimetrics",
+      "type": "io.github.jhipster.config.metric.JHipsterMetricsEndpoint",
+      "sourceType": "io.github.jhipster.config.metric.JHipsterMetricsEndpoint"
+    }
+  ],
+  "properties": [
+    {
+      "name": "management.info.active-profiles.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable active-profiles info.",
+      "defaultValue": true
+    },
+    {
+      "name": "jhipster.cors.allowed-origins",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Set global CORS allowed origins.",
+      "sourceType": "org.springframework.web.cors.CorsConfiguration"
+    },
+    {
+      "name": "jhipster.cors.allowed-methods",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Set global CORS allowed methods.",
+      "sourceType": "org.springframework.web.cors.CorsConfiguration"
+    },
+    {
+      "name": "jhipster.cors.resolved-methods",
+      "type": "java.util.List<org.springframework.http.HttpMethod>",
+      "description": "Set global CORS resolved methods.",
+      "sourceType": "org.springframework.web.cors.CorsConfiguration"
+    },
+    {
+      "name": "jhipster.cors.allowed-headers",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Set global CORS allowed headers.",
+      "sourceType": "org.springframework.web.cors.CorsConfiguration"
+    },
+    {
+      "name": "jhipster.cors.exposed-headers",
+      "type": "java.util.List<java.lang.String>",
+      "description": "Set global CORS exposed methods.",
+      "sourceType": "org.springframework.web.cors.CorsConfiguration"
+    },
+    {
+      "name": "jhipster.cors.allow-credentials",
+      "type": "java.lang.Boolean",
+      "description": "Set global CORS allow credentials.",
+      "sourceType": "org.springframework.web.cors.CorsConfiguration"
+    },
+    {
+      "name": "jhipster.cors.max-age",
+      "type": "java.lang.Long",
+      "description": "Set global CORS max age.",
+      "sourceType": "org.springframework.web.cors.CorsConfiguration"
+    },
+    {
+      "name": "jhipster.async.core-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Async"
+    },
+    {
+      "name": "jhipster.async.max-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Async"
+    },
+    {
+      "name": "jhipster.async.queue-capacity",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Async"
+    },
+    {
+      "name": "jhipster.cache.ehcache.max-entries",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Ehcache"
+    },
+    {
+      "name": "jhipster.cache.ehcache.time-to-live-seconds",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Ehcache"
+    },
+    {
+      "name": "jhipster.cache.hazelcast.backup-count",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Hazelcast"
+    },
+    {
+      "name": "jhipster.cache.hazelcast.management-center.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Hazelcast$ManagementCenter"
+    },
+    {
+      "name": "jhipster.cache.hazelcast.management-center.update-interval",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Hazelcast$ManagementCenter"
+    },
+    {
+      "name": "jhipster.cache.hazelcast.management-center.url",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Hazelcast$ManagementCenter"
+    },
+    {
+      "name": "jhipster.cache.hazelcast.time-to-live-seconds",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Hazelcast"
+    },
+    {
+      "name": "jhipster.cache.infinispan.config-file",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan"
+    },
+    {
+      "name": "jhipster.cache.infinispan.distributed.instance-count",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Distributed"
+    },
+    {
+      "name": "jhipster.cache.infinispan.distributed.max-entries",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Distributed"
+    },
+    {
+      "name": "jhipster.cache.infinispan.distributed.time-to-live-seconds",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Distributed"
+    },
+    {
+      "name": "jhipster.cache.infinispan.local.max-entries",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Local"
+    },
+    {
+      "name": "jhipster.cache.infinispan.local.time-to-live-seconds",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Local"
+    },
+    {
+      "name": "jhipster.cache.infinispan.replicated.max-entries",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Replicated"
+    },
+    {
+      "name": "jhipster.cache.infinispan.replicated.time-to-live-seconds",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan$Replicated"
+    },
+    {
+      "name": "jhipster.cache.infinispan.stats-enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Infinispan"
+    },
+    {
+      "name": "jhipster.cache.memcached.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Memcached"
+    },
+    {
+      "name": "jhipster.cache.memcached.expiration",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Memcached"
+    },
+    {
+      "name": "jhipster.cache.memcached.servers",
+      "type": "java.lang.String",
+      "description": "Comma or whitespace separated list of servers' addresses.",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Memcached"
+    },
+    {
+      "name": "jhipster.cache.memcached.use-binary-protocol",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Memcached"
+    },
+    {
+      "name": "jhipster.cache.redis.expiration",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Redis"
+    },
+    {
+      "name": "jhipster.cache.redis.server",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Cache$Redis"
+    },
+    {
+      "name": "jhipster.client-app.name",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$ClientApp"
+    },
+    {
+      "name": "jhipster.gateway.authorized-microservices-endpoints",
+      "type": "java.util.Map<java.lang.String,java.util.List<java.lang.String>>",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Gateway"
+    },
+    {
+      "name": "jhipster.gateway.rate-limiting.duration-in-seconds",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Gateway$RateLimiting"
+    },
+    {
+      "name": "jhipster.gateway.rate-limiting.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Gateway$RateLimiting"
+    },
+    {
+      "name": "jhipster.gateway.rate-limiting.limit",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Gateway$RateLimiting"
+    },
+    {
+      "name": "jhipster.http.cache.time-to-live-in-days",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Http$Cache"
+    },
+    {
+      "name": "jhipster.logging.logstash.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Logging$Logstash"
+    },
+    {
+      "name": "jhipster.logging.logstash.host",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Logging$Logstash"
+    },
+    {
+      "name": "jhipster.logging.logstash.port",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Logging$Logstash"
+    },
+    {
+      "name": "jhipster.logging.logstash.queue-size",
+      "type": "java.lang.Integer",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Logging$Logstash"
+    },
+    {
+      "name": "jhipster.logging.use-json-format",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Logging"
+    },
+    {
+      "name": "jhipster.mail.base-url",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Mail"
+    },
+    {
+      "name": "jhipster.mail.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Mail"
+    },
+    {
+      "name": "jhipster.mail.from",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Mail"
+    },
+    {
+      "name": "jhipster.metrics.logs.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Metrics$Logs"
+    },
+    {
+      "name": "jhipster.metrics.logs.report-frequency",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Metrics$Logs"
+    },
+    {
+      "name": "jhipster.registry.password",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Registry"
+    },
+    {
+      "name": "jhipster.security.authentication.jwt.base64-secret",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$Authentication$Jwt"
+    },
+    {
+      "name": "jhipster.security.authentication.jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$Authentication$Jwt"
+    },
+    {
+      "name": "jhipster.security.authentication.jwt.token-validity-in-seconds",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$Authentication$Jwt"
+    },
+    {
+      "name": "jhipster.security.authentication.jwt.token-validity-in-seconds-for-remember-me",
+      "type": "java.lang.Long",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$Authentication$Jwt"
+    },
+    {
+      "name": "jhipster.security.client-authorization.access-token-uri",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$ClientAuthorization"
+    },
+    {
+      "name": "jhipster.security.client-authorization.client-id",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$ClientAuthorization"
+    },
+    {
+      "name": "jhipster.security.client-authorization.client-secret",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$ClientAuthorization"
+    },
+    {
+      "name": "jhipster.security.client-authorization.token-service-id",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$ClientAuthorization"
+    },
+    {
+      "name": "jhipster.security.remember-me.key",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Security$RememberMe"
+    },
+    {
+      "name": "jhipster.social.redirect-after-sign-in",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Social"
+    },
+    {
+      "name": "jhipster.swagger.contact-email",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.contact-name",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.contact-url",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.default-include-pattern",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.description",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.host",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.license",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.license-url",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.protocols",
+      "type": "java.lang.String[]",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.terms-of-service-url",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.title",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.use-default-response-messages",
+      "type": "java.lang.Boolean",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "jhipster.swagger.version",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.config.JHipsterProperties$Swagger"
+    },
+    {
+      "name": "management.endpoint.jhimetrics.cache.time-to-live",
+      "type": "java.time.Duration",
+      "description": "Maximum time that a response can be cached.",
+      "sourceType": "io.github.jhipster.config.metric.JHipsterMetricsEndpoint",
+      "defaultValue": "0ms"
+    },
+    {
+      "name": "management.endpoint.jhimetrics.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Whether to enable the jhimetrics endpoint.",
+      "sourceType": "io.github.jhipster.config.metric.JHipsterMetricsEndpoint",
+      "defaultValue": true
+    }
+  ],
+  "hints": []
+}
