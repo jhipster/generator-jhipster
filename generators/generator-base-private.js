@@ -1327,7 +1327,7 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Decide the primary key type based on DB
+     * Return the primary key data type based on DB
      *
      * @param {any} databaseType - the database type
      */
@@ -1346,6 +1346,25 @@ module.exports = class extends Generator {
                 break;
         }
         return pk;
+    }
+
+    /**
+     * Returns the primary key data type based on authentication type, DB and given association
+     *
+     * @param {string} authenticationType - the auth type
+     * @param {string} databaseType - the database type
+     * @param {any} relationships - relationships
+     */
+    getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
+        let hasFound = false;
+        let primaryKeyType = this.getPkType(databaseType);
+        relationships.forEach(relationship => {
+            if (relationship.useJPADerivedIdentifier === true && !hasFound) {
+                primaryKeyType = relationship.otherEntityName === 'user' && authenticationType === 'oauth2' ? 'String' : primaryKeyType;
+                hasFound = true;
+            }
+        });
+        return primaryKeyType;
     }
 
     /**

@@ -17,8 +17,9 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType);
-const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto);
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const tsKeyId = generateTestEntityId(primaryKeyType);
+const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
 const enumImports = generateEntityClientEnumImports(fields);
 _%>
 /* tslint:disable max-line-length */
@@ -63,7 +64,7 @@ describe('Service Tests', () => {
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (pkType === 'String' || pkType === 'UUID') { _%>
+                <%_ if (primaryKeyType === 'String' || primaryKeyType === 'UUID') { _%>
                 'ID',
                 <%_ } else { _%>
                 0,
