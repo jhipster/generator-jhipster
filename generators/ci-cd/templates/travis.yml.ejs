@@ -18,7 +18,6 @@
 -%>
 os:
   - linux
-dist: bionic
 services:
   - docker
 language: node_js
@@ -44,6 +43,8 @@ env:
     - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
 before_install:
+  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+  - source install-jdk.sh --feature 11
   - java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
