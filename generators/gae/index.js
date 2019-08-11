@@ -18,7 +18,6 @@
  */
 const os = require('os');
 const exec = require('child_process').exec;
-const spawn = require('child_process').spawn;
 const execSync = require('child_process').execSync;
 const chalk = require('chalk');
 const _ = require('lodash');
@@ -59,23 +58,26 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 const component = 'app-engine-java';
 
-                exec('gcloud components list --quiet --filter="Status=Installed" --format="value(id)"', (err, stdout, srderr) => {
-                    if (_.includes(stdout, component)) {
-                        done();
-                    } else {
-                        this.log(chalk.bold('\nInstalling App Engine Java SDK'));
-                        this.log(`... Running: gcloud components install ${component} --quiet`);
-                        const child = spawn('gcloud', ['components', 'install', component, '--quiet'], {
-                            stdio: [process.stdin, process.stdout, process.stderr]
-                        });
-                        child.on('exit', code => {
-                            if (code !== 0) {
-                                this.abort = true;
-                            }
+                exec(
+                    'gcloud components list --quiet --filter="Status=Installed OR Status=\\"Update Available\\"" --format="value(id)"',
+                    (err, stdout, srderr) => {
+                        if (_.includes(stdout, component)) {
                             done();
-                        });
+                        } else {
+                            this.log(chalk.bold('\nInstalling App Engine Java SDK'));
+                            this.log(`... Running: gcloud components install ${component} --quiet`);
+                            const child = exec(`gcloud components install ${component} --quiet`, {
+                                stdio: [process.stdin, process.stdout, process.stderr]
+                            });
+                            child.on('exit', code => {
+                                if (code !== 0) {
+                                    this.abort = true;
+                                }
+                                done();
+                            });
+                        }
                     }
-                });
+                );
             },
 
             loadConfig() {
@@ -371,9 +373,8 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
-
                 exec(
-                    `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
+                    `gcloud sql instances list  --format="value[separator=":"](project,region,name)" --project="${this.gcpProjectId}"`,
                     (err, stdout, stderr) => {
                         if (err) {
                             this.log.error(err);
