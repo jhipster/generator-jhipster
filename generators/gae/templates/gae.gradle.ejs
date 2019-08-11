@@ -27,9 +27,6 @@ appengine {
 
 bootWar {
     webXml = file("${project.rootDir}/<%= CLIENT_MAIN_SRC_DIR %>WEB-INF/web.xml")
-    from("${project.rootDir}/<%= CLIENT_MAIN_SRC_DIR %>WEB-INF/appengine-web.xml") {
-        into("WEB-INF")
-    }
 }
 
 processResources {
