@@ -660,7 +660,6 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
-                this.template('web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/web.xml`);
                 this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
                 this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
                 if (this.buildTool === 'gradle') {
