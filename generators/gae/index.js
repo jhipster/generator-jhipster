@@ -106,6 +106,7 @@ module.exports = class extends BaseGenerator {
                 this.gaeInstances = this.config.get('gaeInstances');
                 this.gaeMaxInstances = this.config.get('gaeMaxInstances');
                 this.gaeMinInstances = this.config.get('gaeMinInstances');
+                this.gaeCloudInstanceNeeded = this.config.get('gaeCloudInstanceNeeded');
             }
         };
     }
@@ -365,7 +366,31 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
+            askIfCloudSqlIsNeeded() {
+                if (this.abort) return;
+                const done = this.async();
+                const prompts = [];
+
+                prompts.push({
+                    type: 'input',
+                    name: 'gaeCloudInstanceNeeded',
+                    message: 'Initialize a new Cloud SQL instance (Y/N) ?',
+                    default: this.gaeCloudInstanceNeeded ? this.gaeCloudInstanceNeeded : 'Y',
+                    validate: input => {
+                        if (input !== 'Y' && input !== 'N') {
+                            return 'Input should be Y or N';
+                        }
+                        return true;
+                    }
+                });
+
+                this.prompt(prompts).then(props => {
+                    done();
+                });
+            },
+
             askForCloudSqlInstance() {
+                if (this.gaeCloudInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (this.prodDatabaseType !== 'mysql' && this.prodDatabaseType !== 'mariadb' && this.prodDatabaseType !== 'postgresql')
                     return;
@@ -405,6 +430,7 @@ module.exports = class extends BaseGenerator {
             },
 
             promptForCloudSqlInstanceNameIfNeeded() {
+                if (this.gaeCloudInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (this.gcpCloudSqlInstanceName) return;
 
@@ -427,6 +453,7 @@ module.exports = class extends BaseGenerator {
             },
 
             askForCloudSqlLogin() {
+                if (this.gaeCloudInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceName) return;
 
@@ -460,6 +487,7 @@ module.exports = class extends BaseGenerator {
             },
 
             askForCloudSqlDatabaseName() {
+                if (this.gaeCloudInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceNameExists) return;
 
@@ -499,6 +527,7 @@ module.exports = class extends BaseGenerator {
             },
 
             promptForCloudSqlDatabaseNameIfNeeded() {
+                if (this.gaeCloudInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (this.gcpCloudSqlInstanceName !== 'new' && this.gcpCloudSqlDatabaseName) return;
 
