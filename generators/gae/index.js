@@ -106,7 +106,7 @@ module.exports = class extends BaseGenerator {
                 this.gaeInstances = this.config.get('gaeInstances');
                 this.gaeMaxInstances = this.config.get('gaeMaxInstances');
                 this.gaeMinInstances = this.config.get('gaeMinInstances');
-                this.gaeCloudInstanceNeeded = this.config.get('gaeCloudInstanceNeeded');
+                this.gaeCloudSQLInstanceNeeded = this.config.get('gaeCloudSQLInstanceNeeded');
             }
         };
     }
@@ -375,7 +375,7 @@ module.exports = class extends BaseGenerator {
                     type: 'input',
                     name: 'gaeCloudInstanceNeeded',
                     message: 'Initialize a new Cloud SQL instance (Y/N) ?',
-                    default: this.gaeCloudInstanceNeeded ? this.gaeCloudInstanceNeeded : 'Y',
+                    default: this.gaeCloudSQLInstanceNeeded ? this.gaeCloudSQLInstanceNeeded : 'Y',
                     validate: input => {
                         if (input !== 'Y' && input !== 'N') {
                             return 'Input should be Y or N';
@@ -385,6 +385,7 @@ module.exports = class extends BaseGenerator {
                 });
 
                 this.prompt(prompts).then(props => {
+                    this.gaeCloudSQLInstanceNeeded = props.gaeCloudSQLInstanceNeeded;
                     done();
                 });
             },
