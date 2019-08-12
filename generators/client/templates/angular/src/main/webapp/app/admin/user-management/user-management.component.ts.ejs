@@ -18,6 +18,7 @@
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
@@ -41,8 +42,9 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     users: User[];
     error: any;
     success: any;
+    userListSubscription: Subscription;
     <%_ if (databaseType !== 'cassandra') { _%>
-    routeData: any;
+    routeData: Subscription;
     links: any;
     totalItems: any;
     itemsPerPage: any;
@@ -67,10 +69,10 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
-            this.page = data['pagingParams'].page;
-            this.previousPage = data['pagingParams'].page;
-            this.reverse = data['pagingParams'].ascending;
-            this.predicate = data['pagingParams'].predicate;
+            this.page = data.pagingParams.page;
+            this.previousPage = data.pagingParams.page;
+            this.reverse = data.pagingParams.ascending;
+            this.predicate = data.pagingParams.predicate;
         });
         <%_ } _%>
     }
@@ -87,10 +89,13 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.routeData.unsubscribe();
         <%_ } _%>
+        if(this.userListSubscription) {
+            this.eventManager.destroy(this.userListSubscription);
+        }
     }
 
     registerChangeInUsers() {
-        this.eventManager.subscribe('userListModification', (response) => this.loadAll());
+        this.userListSubscription = this.eventManager.subscribe('userListModification', (response) => this.loadAll());
     }
 
     setActive(user, isActivated) {

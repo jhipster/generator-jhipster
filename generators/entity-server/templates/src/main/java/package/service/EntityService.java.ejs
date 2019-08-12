@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service;
+package <%=packageName%>.service;<%
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+%>
 <%  const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
     const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance); %>
 <%_ if (dto === 'mapstruct') { _%>
@@ -93,14 +95,14 @@ public interface <%= entityClass %>Service {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<<%= instanceType %>> findOne(<%= pkType %> id);
+    Optional<<%= instanceType %>> findOne(<%= primaryKeyType %> id);
 
     /**
      * Delete the "id" <%= entityInstance %>.
      *
      * @param id the id of the entity.
      */
-    void delete(<%= pkType %> id);<% if (searchEngine === 'elasticsearch') { %>
+    void delete(<%= primaryKeyType %> id);<% if (searchEngine === 'elasticsearch') { %>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.

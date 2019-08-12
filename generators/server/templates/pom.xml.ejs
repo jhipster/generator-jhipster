@@ -785,6 +785,11 @@
                     <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                            <version>${spring-boot.version}</version>
+                        </path>
+                        <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.version}</version>
@@ -1266,7 +1271,7 @@
                                 <modelPackage><%= packageName %>.web.api.model</modelPackage>
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                                 <importMappings>Problem=org.zalando.problem.Problem</importMappings>
-                                <validateSpec>true</validateSpec>
+                                <skipValidateSpec>false</skipValidateSpec>
                                 <configOptions>
     <%_ if (reactive) { _%>
                                     <reactive>true</reactive>
