@@ -33,8 +33,10 @@
   },
   "rules": {
     <%_ if (websocket === 'spring-websocket') { _%>
-    "@typescript-eslint/tslint/config": [ "error", {
-      "lintFile": "./tslint.json"
+    "@typescript-eslint/tslint/config": [
+      "error",
+      {
+        "lintFile": "./tslint.json"
       }
     ],
     <%_ } _%>%>
@@ -44,13 +46,17 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/ban-types": [ "error", {
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
         "types": {
           "Object": "Use {} instead."
         }
       }
     ],
-    "@typescript-eslint/member-ordering": [ "error", {
+    "@typescript-eslint/member-ordering": [
+      "error",
+      {
         "default": ["static-field", "instance-field", "constructor", "static-method", "instance-method"]
       }
     ],
@@ -77,11 +83,15 @@
     "react/prop-types": "off",
     "react/display-name": "off",
 
-    "import/no-internal-modules": [ "error", {
+    "import/no-internal-modules": [
+      "error",
+      {
         "allow": ["app", "test", "uuid/v4", "@fortawesome/**", "lodash/**", "react-toastify/**"]
       }
     ],
-    "import/no-extraneous-dependencies": [ "error", {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
         "devDependencies": true
       }
     ],
