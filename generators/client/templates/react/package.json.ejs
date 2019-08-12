@@ -85,6 +85,11 @@ limitations under the License.
     "@types/selenium-webdriver": "4.0.0",
     <%_ } _%>
     "@types/webpack-env": "1.13.9",
+    "@typescript-eslint/eslint-plugin": "1.13.0",
+    <%_ if (websocket === 'spring-websocket') { _%>
+    "@typescript-eslint/eslint-plugin-tslint": "1.13.0",
+    <%_ } _%>%>
+    "@typescript-eslint/parser": "1.13.0",
     "autoprefixer": "9.5.0",
     "base-href-webpack-plugin": "2.0.0",
     "browser-sync": "2.26.5",
@@ -101,8 +106,13 @@ limitations under the License.
     "enzyme": "3.9.0",
     "enzyme-adapter-react-16": "1.11.2",
     "enzyme-to-json": "3.3.5",
+    "eslint": "5.16.0",
+    "eslint-config-prettier": "5.1.0",
+    "eslint-loader": "2.2.1",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-react": "7.14.3",
     "file-loader": "3.0.1",
-    "fork-ts-checker-webpack-plugin": "1.0.0",
+    "fork-ts-checker-webpack-plugin": "1.5.0",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-webpack-plugin": "3.2.0",
@@ -157,11 +167,9 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "ts-node": "8.0.3",
     <%_ } _%>
+    <%_ if (websocket === 'spring-websocket') { _%>
     "tslint": "5.14.0",
-    "tslint-config-prettier": "1.18.0",
-    "tslint-eslint-rules": "5.4.0",
-    "tslint-loader": "3.6.0",
-    "tslint-react": "3.6.0",
+    <%_ } _%>
     "typescript": "3.3.4000",
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.5",
@@ -193,7 +201,7 @@ limitations under the License.
   <%_ } _%>
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
-    "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
+    "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
     <%_ if (protractorTests) { _%>

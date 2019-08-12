@@ -33,7 +33,8 @@ const files = {
         {
             templates: [
                 'package.json',
-                'tslint.json',
+                '.eslintrc.json',
+                '.eslintignore',
                 'tsconfig.json',
                 'tsconfig.test.json',
                 { file: '.editorconfig', method: 'copy', noEjs: true },
@@ -51,6 +52,10 @@ const files = {
         {
             condition: generator => !generator.skipCommitHook,
             templates: ['.huskyrc']
+        },
+        {
+            condition: generator => generator.websocket === 'spring-websocket',
+            templates: ['tslint.json']
         }
     ],
     sass: [

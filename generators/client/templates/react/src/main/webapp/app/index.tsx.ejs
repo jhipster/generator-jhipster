@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+/* eslint import/no-internal-modules: off */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -47,6 +48,7 @@ loadIcons();
 const rootEl = document.getElementById('root');
 
 const render = Component =>
+  // eslint-disable-next-line react/no-render-return-value
   ReactDOM.render(
     <ErrorBoundary>
       <Provider store={store}>
