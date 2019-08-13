@@ -582,6 +582,7 @@ module.exports = class extends BaseGenerator {
             },
 
             createCloudSqlInstance() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceName) return;
                 if (this.gcpCloudSqlInstanceNameExists) return;
@@ -615,6 +616,7 @@ module.exports = class extends BaseGenerator {
             },
 
             createCloudSqlLogin() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceName) return;
                 const done = this.async();
@@ -646,6 +648,7 @@ module.exports = class extends BaseGenerator {
             },
 
             createCloudSqlDatabase() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceName) return;
                 if (this.gcpCloudSqlDatabaseNameExists) return;
@@ -677,7 +680,8 @@ module.exports = class extends BaseGenerator {
                     gaeScalingType: this.gaeScalingType,
                     gaeInstances: this.gaeInstances,
                     gaeMinInstances: this.gaeMinInstances,
-                    gaeMaxInstances: this.gaeMaxInstances
+                    gaeMaxInstances: this.gaeMaxInstances,
+                    gaeCloudSQLInstanceNeeded: this.gaeCloudSQLInstanceNeeded
                 });
             }
         };
@@ -692,7 +696,9 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
                 this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
-                this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
+                if (this.gaeCloudSQLInstanceNeeded === 'Y') {
+                    this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
+                }
                 if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
                 }
@@ -703,6 +709,7 @@ module.exports = class extends BaseGenerator {
             },
 
             addDependencies() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.prodDatabaseType === 'mysql' || this.prodDatabaseType === 'mariadb') {
                     if (this.buildTool === 'maven') {
                         this.addMavenDependency('com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
@@ -721,16 +728,20 @@ module.exports = class extends BaseGenerator {
 
             addGradlePlugin() {
                 if (this.buildTool === 'gradle') {
-                    this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '1.3.3');
+                    if (this.gaeCloudSQLInstanceNeeded === 'Y') {
+                        this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '1.3.3');
+                    }
                     this.applyFromGradleScript('gradle/gae');
                 }
             },
 
             addMavenPlugin() {
                 if (this.buildTool === 'maven') {
-                    this.render('pom-plugin.xml.ejs', rendered => {
-                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.2', rendered.trim());
-                    });
+                    if (this.gaeCloudSQLInstanceNeeded === 'Y') {
+                        this.render('pom-plugin.xml.ejs', rendered => {
+                            this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.2', rendered.trim());
+                        });
+                    }
                     this.render('pom-profile.xml.ejs', rendered => {
                         this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
                     });
