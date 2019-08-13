@@ -36,7 +36,7 @@ import { trackerRoute } from './tracker/tracker.route';
 import { userMgmtRoute } from './user-management/user-management.route';
 <%_ } _%>
 
-import { UserRouteAccessService } from 'app/core';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
 const ADMIN_ROUTES = [
     <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>

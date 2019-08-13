@@ -141,13 +141,11 @@ const files = {
                 // entities
                 'entities/entity.module.ts',
                 // home module
-                'home/index.ts',
                 { file: 'home/home.module.ts', method: 'processJs' },
                 { file: 'home/home.route.ts', method: 'processJs' },
                 { file: 'home/home.component.ts', method: 'processJs' },
                 { file: 'home/home.component.html', method: 'processHtml' },
                 // layouts
-                'layouts/index.ts',
                 'layouts/profiles/page-ribbon.component.ts',
                 'layouts/profiles/profile.service.ts',
                 'layouts/profiles/profile-info.model.ts',
@@ -178,7 +176,6 @@ const files = {
             path: ANGULAR_DIR,
             condition: generator => !generator.skipUserManagement,
             templates: [
-                'account/index.ts',
                 { file: 'account/account.route.ts', method: 'processJs' },
                 'account/account.module.ts',
                 { file: 'account/activate/activate.route.ts', method: 'processJs' },
@@ -228,7 +225,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'admin/index.ts',
                 { file: 'admin/admin.route.ts', method: 'processJs' },
                 'admin/admin.module.ts',
                 // admin modules
@@ -310,7 +306,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'core/index.ts',
                 'core/core.module.ts',
                 // login
                 'core/login/login.service.ts',
@@ -340,7 +335,6 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'shared/index.ts',
                 'shared/shared.module.ts',
                 'shared/shared-libs.module.ts',
                 'shared/shared-common.module.ts',
