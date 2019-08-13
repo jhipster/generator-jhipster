@@ -1,12 +1,9 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"<%_ if (websocket === 'spring-websocket') { _%>, "@typescript-eslint/tslint"<%_ } _%>],
+  "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
@@ -32,14 +29,6 @@
     }
   },
   "rules": {
-    <%_ if (websocket === 'spring-websocket') { _%>
-    "@typescript-eslint/tslint/config": [
-      "error",
-      {
-        "lintFile": "./tslint.json"
-      }
-    ],
-    <%_ } _%>%>
     "@typescript-eslint/explicit-member-accessibility": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-parameter-properties": ["warn", { "allows": ["public", "private", "protected"] }],
@@ -81,20 +70,6 @@
     "no-invalid-this": "off",
 
     "react/prop-types": "off",
-    "react/display-name": "off",
-
-    "import/no-internal-modules": [
-      "error",
-      {
-        "allow": ["app", "test", "uuid/v4", "@fortawesome/**", "lodash/**", "react-toastify/**"]
-      }
-    ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": true
-      }
-    ],
-    "import/no-unresolved": "off"
+    "react/display-name": "off"
   }
 }

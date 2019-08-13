@@ -24,7 +24,6 @@ const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields, 'r
 const enumImports = generateEntityClientEnumImports(fields);
 %>
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
-// eslint-disable-next-line import/named
 import { Moment } from 'moment';
 <%_ } _%>
 <%_ typeImports.forEach( (importedPath, importedType) => { _%>

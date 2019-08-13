@@ -52,10 +52,6 @@ const files = {
         {
             condition: generator => !generator.skipCommitHook,
             templates: ['.huskyrc']
-        },
-        {
-            condition: generator => generator.websocket === 'spring-websocket',
-            templates: ['tslint.json']
         }
     ],
     sass: [
