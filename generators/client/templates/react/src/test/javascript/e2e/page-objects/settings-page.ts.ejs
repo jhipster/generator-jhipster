@@ -1,5 +1,4 @@
 import { $, browser, ElementFinder } from 'protractor';
-import { promise } from 'selenium-webdriver';
 
 import BasePage from './base-component';
 
