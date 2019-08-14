@@ -56,6 +56,9 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        this.configuration.requireAllConfigs(this, 'app');
+        this.configuration.requireAllConfigs(this, 'common');
+
         this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
 
         this.setupServerOptions(this);
@@ -384,7 +387,12 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             saveConfig() {
+                if (this.configuration.runtimeOptions.newConfiguration) {
+                    this.config.set(this.configuration.getPersistentOptions(this.options.blueprintName));
+                    return;
+                }
                 const config = {
+                    ...this.configuration.getPersistentOptions(this.options.blueprintName),
                     jhipsterVersion: packagejs.version,
                     applicationType: this.applicationType,
                     baseName: this.baseName,

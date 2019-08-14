@@ -21,6 +21,7 @@ const path = require('path');
 const _ = require('lodash');
 const fs = require('fs');
 const Generator = require('yeoman-generator');
+const Storage = require('yeoman-generator/lib/util/storage');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 const semver = require('semver');
@@ -29,6 +30,10 @@ const https = require('https');
 const jhiCore = require('jhipster-core');
 const filter = require('gulp-filter');
 
+const runAsync = require('run-async');
+const debug = require('debug')('jhipster:base-private');
+
+const Configuration = require('./configuration');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -36,6 +41,8 @@ const { prettierTransform, prettierOptions } = require('./generator-transforms')
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+
+let newConfiguration;
 
 /**
  * This is the Generator base private class.
@@ -51,11 +58,81 @@ module.exports = class extends Generator {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         // expose lodash to templates
         this._ = _;
+
+        // this.options.configuration is required
+        if (this.options.configuration === undefined) {
+            if (this.options.newConfiguration && !this.skipChecks && !this.options['init-configuration']) {
+                this.error('Configuration needs to be passed by the initial module');
+            }
+            delete this.options['init-configuration'];
+            this.configuration = new Configuration(this);
+            this.options.configuration = this.configuration;
+        } else {
+            this.configuration = this.options.configuration;
+        }
+
+        this.configuration.requireAllConfigs(this, 'base');
+
+        newConfiguration = this.configuration.runtimeOptions.newConfiguration;
     }
 
     /* ======================================================================== */
     /* private methods use within generator (not exposed to modules) */
     /* ======================================================================== */
+
+    /**
+     * Return a storage instance.
+     * Override yeoman original function to add rootGeneratorName parameter
+     * @return {Storage} Generator storage
+     * @private
+     */
+    _getStorage(rootGeneratorName = this.rootGeneratorName()) {
+        const storePath = path.join(this.destinationRoot(), '.yo-rc.json');
+        return new Storage(rootGeneratorName, this.fs, storePath);
+    }
+
+    /**
+     * Yeoman uses this to create the configuration root in '.yo-rc.json'.
+     * Override to force the same root for jhipster and blueprints.
+     */
+    rootGeneratorName() {
+        if (newConfiguration) {
+            return 'generator-jhipster';
+        }
+        return Generator.prototype.rootGeneratorName.apply(this);
+    }
+
+    /**
+     * Queue a function to be executed by the main loop
+     * otherwise a prompt will not await for input.
+     *
+     * Copied from yeoman generator addMethod
+     */
+    queueMethod(method, methodName, queueName) {
+        const self = this;
+        queueName = queueName || 'default';
+        debug(`Queueing ${methodName} in ${queueName}`);
+        self.env.runLoop.add(queueName, completed => {
+            debug(`Running ${methodName}`);
+            self.emit(`method:${methodName}`);
+
+            runAsync(function() {
+                self.async = () => this.async();
+                return method.apply(self, self.args);
+            })()
+                .then(completed)
+                .catch(err => {
+                    debug(`An error occured while running ${methodName}`, err);
+
+                    // Ensure we emit the error event outside the promise context so it won't be
+                    // swallowed when there's no listeners.
+                    setImmediate(() => {
+                        self.emit('error', err);
+                        // reject(err);
+                    });
+                });
+        });
+    }
 
     /**
      * Install I18N Client Files By Language
@@ -772,8 +849,10 @@ module.exports = class extends Generator {
                 this.checkBlueprint(blueprint, subGen);
             }
             try {
+                this.configuration.registerBlueprint(this, blueprint);
                 const finalOptions = {
                     ...options,
+                    blueprintName: blueprint,
                     jhipsterContext: this
                 };
                 this.useBlueprint = true;

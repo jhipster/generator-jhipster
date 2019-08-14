@@ -1777,6 +1777,7 @@ module.exports = class extends PrivateBase {
             // skip client if app type is server
             const skipClient = type && type === 'server';
             generator.composeWith(require.resolve('./languages'), {
+                ...generator.options,
                 configOptions,
                 'skip-install': true,
                 'skip-server': skipServer,
@@ -2024,6 +2025,15 @@ module.exports = class extends PrivateBase {
             (generator.options && generator.options.configRootPath) ||
             (generator.configOptions && generator.configOptions.configRootPath) ||
             '';
+        if (generator.configuration.runtimeOptions.newConfiguration) {
+            const configuration = generator.configuration;
+            const allOptions = configuration.getAllOptions();
+            return {
+                ...allOptions,
+                getAll: () => allOptions,
+                get: configuration.findOptionValue.bind(configuration)
+            };
+        }
         return jhipsterUtils.getAllJhipsterConfig(generator, force, configRootPath);
     }
 

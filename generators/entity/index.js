@@ -120,6 +120,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        this.configuration.requireAllConfigs(this, 'app');
+        this.configuration.requireAllConfigs(this, 'common');
+
         this.context = {};
 
         this.setupEntityOptions(this, this, this.context);
@@ -1097,8 +1100,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const context = this.context;
                 if (context.skipServer) return;
                 const configOptions = this.configOptions;
+                const configuration = this.options.configuration;
 
                 this.composeWith(require.resolve('../entity-server'), {
+                    configuration,
                     context,
                     configOptions,
                     force: context.options.force,
@@ -1110,8 +1115,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const context = this.context;
                 if (context.skipClient) return;
                 const configOptions = this.configOptions;
+                const configuration = this.options.configuration;
 
                 this.composeWith(require.resolve('../entity-client'), {
+                    configuration,
                     context,
                     configOptions,
                     'skip-install': context.options['skip-install'],
@@ -1124,7 +1131,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const context = this.context;
                 if (context.skipClient) return;
                 const configOptions = this.configOptions;
+                const configuration = this.options.configuration;
                 this.composeWith(require.resolve('../entity-i18n'), {
+                    configuration,
                     context,
                     configOptions,
                     'skip-install': context.options['skip-install'],

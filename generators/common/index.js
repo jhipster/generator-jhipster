@@ -36,6 +36,9 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        this.configuration.requireAllConfigs(this, 'app');
+        this.configuration.requireAllConfigs(this, 'common');
+
         this.setupServerOptions(this);
         this.setupClientOptions(this);
 

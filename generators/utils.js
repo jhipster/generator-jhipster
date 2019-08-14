@@ -435,6 +435,12 @@ function getAllJhipsterConfig(generator, force, basePath = '') {
             configuration = { ...configuration, ...mergedConfigs };
         }
     }
+    if (generator && generator.configuration) {
+        configuration = {
+            ...generator.configuration.getAllOptions(),
+            ...configuration
+        };
+    }
     if (!configuration.get || typeof configuration.get !== 'function') {
         configuration = {
             ...configuration,

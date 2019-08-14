@@ -61,6 +61,9 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        this.configuration.requireAllConfigs(this, 'app');
+        this.configuration.requireAllConfigs(this, 'common');
+
         this.setupClientOptions(this);
 
         useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
@@ -227,7 +230,12 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             saveConfig() {
+                if (this.configuration.getRuntimeOption('newConfiguration')) {
+                    // saveConfig is queued by the configuration.
+                    return;
+                }
                 const config = {
+                    ...this.configuration.getPersistentOptions(this.options.blueprintName),
                     jhipsterVersion: packagejs.version,
                     applicationType: this.applicationType,
                     baseName: this.baseName,

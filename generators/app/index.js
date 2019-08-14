@@ -30,12 +30,9 @@ module.exports = class extends BaseGenerator {
         super(args, opts);
 
         this.configOptions = {};
-        // This adds support for a `--from-cli` flag
-        this.option('from-cli', {
-            desc: 'Indicates the command is run from JHipster CLI',
-            type: Boolean,
-            defaults: false
-        });
+
+        this.configuration.requireAllConfigs(this, 'app');
+
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
@@ -425,7 +422,12 @@ module.exports = class extends BaseGenerator {
             },
 
             saveConfig() {
+                if (this.configuration.getRuntimeOption('newConfiguration')) {
+                    // saveConfig is queued by the configuration.
+                    return;
+                }
                 const config = {
+                    ...this.configuration.getPersistentOptions(this.options.blueprintName),
                     jhipsterVersion: packagejs.version,
                     applicationType: this.applicationType,
                     baseName: this.baseName,
