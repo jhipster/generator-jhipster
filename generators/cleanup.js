@@ -87,11 +87,11 @@ function cleanupOldFiles(generator) {
         if (generator.withEntities) {
             generator.getExistingEntities().forEach(entity => {
                 // find entity folder name
-                let entityFileName = _.upperFirst(entity.name);
+                let entityFolderName = _.upperFirst(entity.name);
                 if (entity.definition && entity.definition.angularJSSuffix) {
-                    entityFileName += _.upperFirst(entity.definition.angularJSSuffix);
+                    entityFolderName += _.upperFirst(entity.definition.angularJSSuffix);
                 }
-                let entityFolderName = _.kebabCase(entityFileName);
+                entityFolderName = _.kebabCase(entityFolderName);
                 if (entity.definition && entity.definition.clientRootFolder) {
                     entityFolderName = `${entity.definition.clientRootFolder}/${entityFolderName}`;
                 }
