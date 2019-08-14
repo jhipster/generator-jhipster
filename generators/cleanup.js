@@ -17,8 +17,6 @@
  * limitations under the License.
  */
 
-const _ = require('lodash');
-
 const constants = require('./generator-constants');
 
 const ANGULAR_DIR = constants.ANGULAR_DIR;
@@ -77,28 +75,13 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.ts`);
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
     }
-    if (generator.isJhipsterVersionLessThan('6.3.0')) {
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
         generator.removeFile(`${ANGULAR_DIR}account/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}admin/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}core/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}home/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}layouts/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/index.ts`);
-        if (generator.withEntities) {
-            generator.getExistingEntities().forEach(entity => {
-                // find entity folder name
-                let entityFolderName = _.upperFirst(entity.name);
-                if (entity.definition && entity.definition.angularJSSuffix) {
-                    entityFolderName += _.upperFirst(entity.definition.angularJSSuffix);
-                }
-                entityFolderName = _.kebabCase(entityFolderName);
-                if (entity.definition && entity.definition.clientRootFolder) {
-                    entityFolderName = `${entity.definition.clientRootFolder}/${entityFolderName}`;
-                }
-                // delete barrel
-                generator.removeFile(`${ANGULAR_DIR}entities/${entityFolderName}/index.ts`);
-            });
-        }
     }
 }
 
