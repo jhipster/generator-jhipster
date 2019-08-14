@@ -23,7 +23,9 @@ const variables = query.variables;
 let hasManyToMany = query.hasManyToMany;
 _%>
 import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -228,8 +230,11 @@ _%>
             } else {
                 reject(`Base64 data was not set as file could not be extracted from passed parameter: ${event}`);
             }
-        }).then(() => console.log('blob added'),// sucess
-                this.onError);
+        }).then(
+            // eslint-disable-next-line no-console
+            () => console.log('blob added'),    // success
+            this.onError
+        );
     }
 
     <%_ if (fieldsContainImageBlob) { _%>
@@ -337,7 +342,7 @@ _%>
 <%_ entitiesSeen.push(otherEntityNameCapitalized); } } _%>
 <%_ if (hasManyToMany) { _%>
 
-    getSelected(selectedVals: Array<any>, option: any) {
+    getSelected(selectedVals: any[], option: any) {
         if (selectedVals) {
             for (let i = 0; i < selectedVals.length; i++) {
                 if (option.id === selectedVals[i].id) {
