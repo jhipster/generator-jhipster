@@ -17,8 +17,10 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
-const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto);
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const tsKeyId = generateTestEntityId(primaryKeyType);
+const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
+const enumImports = generateEntityClientEnumImports(fields);
 _%>
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
@@ -31,14 +33,10 @@ import * as moment from 'moment';
 import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from 'app/shared/constants/input.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { I<%= entityAngularName %>, <%= entityAngularName %>, <%_ const enumsAlreadyDeclared = [];
-fields.forEach(field => {
-if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
-    enumsAlreadyDeclared.push(field.fieldType); _%>
-<%=field.fieldType%>,
-<%_ }
-}) _%>
-} from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
 
 describe('Service Tests', () => {
 
@@ -66,7 +64,7 @@ describe('Service Tests', () => {
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (pkType === 'String') { _%>
+                <%_ if (primaryKeyType === 'String' || primaryKeyType === 'UUID') { _%>
                 'ID',
                 <%_ } else { _%>
                 0,
@@ -116,7 +114,7 @@ describe('Service Tests', () => {
 
             it('should create a <%= entityAngularName %>', async () => {
                 const returnedFromService = Object.assign({
-<%_ if (pkType === 'String') { _%>
+<%_ if (pkType === 'String' || pkType === 'UUID') { _%>
                     id: 'ID',
 <%_ } else { _%>
                     id: 0,

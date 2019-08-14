@@ -16,11 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
-services:
-    <%= baseName.toLowerCase() %>-mongodb:
-        image: <%= DOCKER_MONGODB %>
-        ports:
-            - "27017:27017"
-        # volumes:
-        #     - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
+export const enum <%= enumName %> {<%
+  for (let i = 0; i < enums.length; i++) { %>
+  <%= enums[i] %> = '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
+  } %>
+}

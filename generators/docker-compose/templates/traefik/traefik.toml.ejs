@@ -21,3 +21,20 @@ endpoint = "consul:8500"
 exposedByDefault = true
 prefix = "traefik"
 frontEndRule = "PathPrefixStrip: /services/{{.ServiceName}}"
+
+
+<%_ if (skipClient && authenticationType === 'oauth2') { _%>
+
+[file]
+
+[backends]
+  [backends.gateway]
+    [backends.gateway.server.server1]
+    url= "http://localhost:9000"
+[frontends]
+  [frontends.frontend1]
+    backend= "gateway"
+    [frontends.frontend1.routes.domain]
+    rule = "Host:localhost:9000"
+
+<%_ } _%>

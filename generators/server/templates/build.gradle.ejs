@@ -40,10 +40,10 @@ plugins {
     id "com.google.cloud.tools.jib" version "<%= JIB_VERSION %>"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
     <%_ if (enableSwaggerCodegen) { _%>
-    id "org.openapi.generator" version "4.0.2"
+    id "org.openapi.generator" version "4.1.0"
     <%_ } _%>
     <%_ if (!skipClient) { _%>
-    id "com.github.node-gradle.node" version "1.5.1"
+    id "com.github.node-gradle.node" version "2.0.0"
     <%_ } _%>
     id "net.ltgt.apt-eclipse" version "0.21"
     id "net.ltgt.apt-idea" version "0.21"
@@ -255,6 +255,8 @@ repositories {
         }
     }
     <%_ } _%>
+    // TODO To remove after final JHipster release
+    maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -318,7 +320,7 @@ dependencies {
     implementation "commons-codec:commons-codec"
     <%_ } _%>
     <%_ if (enableSwaggerCodegen) { _%>
-    implementation "org.openapitools:jackson-databind-nullable:0.1.0"
+    implementation "org.openapitools:jackson-databind-nullable:0.2.0"
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io"
@@ -524,7 +526,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "5.4.1"
+    gradleVersion = "5.5.1"
 }
 <%_ if (!skipClient) { _%>
 

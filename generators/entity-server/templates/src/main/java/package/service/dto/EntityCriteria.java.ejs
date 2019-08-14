@@ -33,39 +33,40 @@ import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 <%_ } _%>
 
 <%_
-  const referenceFilterType = '' + pkType + 'Filter';
-  var filterVariables = [{name:'id', type: pkType, filterType:referenceFilterType,fieldInJavaBeanMethod:'Id' } ];
-  var extraFilters = {};
-  fields.forEach((field) => {
-    const fieldType = field.fieldType;
-    if (isFilterableType(fieldType)) {
-      var filterType;
-      if (field.fieldIsEnum == true) {
-        filterType = fieldType + 'Filter';
-        extraFilters[fieldType] = {type: filterType, superType: 'Filter<' + fieldType + '>', fieldType: fieldType};
-      } else if (['Duration', 'UUID', 'LocalDate', 'ZonedDateTime', 'Instant', 'String', 'Long', 'Integer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType)) {
-        filterType = fieldType + 'Filter';
-      } else {
-        filterType = 'Filter<' + fieldType + '>';
-      }
-      filterVariables.push( { filterType : filterType,
-            name: field.fieldName,
-            type: fieldType,
-            fieldInJavaBeanMethod: field.fieldInJavaBeanMethod });
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const referenceFilterType = '' + primaryKeyType + 'Filter';
+var filterVariables = [{name:'id', type: primaryKeyType, filterType:referenceFilterType,fieldInJavaBeanMethod:'Id' } ];
+var extraFilters = {};
+fields.forEach((field) => {
+const fieldType = field.fieldType;
+if (isFilterableType(fieldType)) {
+    var filterType;
+    if (field.fieldIsEnum == true) {
+    filterType = fieldType + 'Filter';
+    extraFilters[fieldType] = {type: filterType, superType: 'Filter<' + fieldType + '>', fieldType: fieldType};
+    } else if (['Duration', 'UUID', 'LocalDate', 'ZonedDateTime', 'Instant', 'String', 'Long', 'Integer', 'Float', 'Double', 'BigDecimal', 'Boolean'].includes(fieldType)) {
+    filterType = fieldType + 'Filter';
+    } else {
+    filterType = 'Filter<' + fieldType + '>';
     }
-  });
-  relationships.forEach((relationship) => {
-    const relationshipType = relationship.relationshipType;
-    // user has a String PK when using OAuth, so change relationships accordingly
-    let oauthAwareReferenceFilterType = referenceFilterType;
-    if (relationship.otherEntityName === 'user' && authenticationType === 'oauth2') {
-        oauthAwareReferenceFilterType = 'StringFilter';
-    }
-    filterVariables.push({ filterType : oauthAwareReferenceFilterType,
-        name: relationship.relationshipFieldName + 'Id',
-        type: relationshipType,
-        fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
-  });
+    filterVariables.push( { filterType : filterType,
+        name: field.fieldName,
+        type: fieldType,
+        fieldInJavaBeanMethod: field.fieldInJavaBeanMethod });
+}
+});
+relationships.forEach((relationship) => {
+const relationshipType = relationship.relationshipType;
+// user has a String PK when using OAuth, so change relationships accordingly
+let oauthAwareReferenceFilterType = referenceFilterType;
+if (relationship.otherEntityName === 'user' && authenticationType === 'oauth2') {
+    oauthAwareReferenceFilterType = 'StringFilter';
+}
+filterVariables.push({ filterType : oauthAwareReferenceFilterType,
+    name: relationship.relationshipFieldName + 'Id',
+    type: relationshipType,
+    fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
+});
 _%>
 /**
  * Criteria class for the {@link <%=packageName%>.domain.<%= asEntity(entityClass) %>} entity. This class is used

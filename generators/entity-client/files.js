@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const _ = require('lodash');
+const utils = require('../utils');
 const constants = require('../generator-constants');
 
 /* Constants use throughout */
@@ -224,6 +226,26 @@ module.exports = {
     reactFiles
 };
 
+function addEnumerationFiles(generator, templateDir, clientFolder) {
+    generator.fields.forEach(field => {
+        if (field.fieldIsEnum === true) {
+            const enumFileName = _.kebabCase(field.fieldType);
+            const enumInfo = utils.buildEnumInfo(field, generator.angularAppName, generator.packageName, generator.clientRootFolder);
+            if (!generator.skipClient) {
+                generator.template(
+                    `${generator.fetchFromInstalledJHipster(
+                        `entity-client/templates/${templateDir}`
+                    )}/${clientFolder}entities/enumerations/enum.model.ts.ejs`,
+                    `${clientFolder}shared/model/enumerations/${enumFileName}.model.ts`,
+                    generator,
+                    {},
+                    enumInfo
+                );
+            }
+        }
+    });
+}
+
 function writeFiles() {
     return {
         writeClientFiles() {
@@ -247,6 +269,8 @@ function writeFiles() {
                     this.clientFramework,
                     this.microserviceName
                 );
+
+                addEnumerationFiles(this, CLIENT_NG2_TEMPLATES_DIR, ANGULAR_DIR);
             } else if (this.clientFramework === 'react') {
                 // write client side files for react
                 this.writeFilesToDisk(
@@ -264,6 +288,8 @@ function writeFiles() {
                     this.entityUrl,
                     this.clientFramework
                 );
+
+                addEnumerationFiles(this, CLIENT_REACT_TEMPLATES_DIR, REACT_DIR);
             }
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
