@@ -1,4 +1,16 @@
-# Latest v4.2.0
+# Latest: v4.3.0
+
+## What's new
+  -  Unset `cacheProvider` option when the application type is `reactive`
+  -  Made the `reactive` option available
+
+## Fixed
+  - Fixed muli-line JDL comment generation (thanks to @yelhouti for the report!)
+  - Fixed checkNoSQLModeling with multi applications (thanks to @clement26695!)
+
+---
+
+# v4.2.0
 
 ## What's new
   - Improved and fixed the JDL export, which now exports single & multi apps with their entities (thanks to @Shaolans)
