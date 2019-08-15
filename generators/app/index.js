@@ -25,6 +25,8 @@ const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const jhipsterUtils = require('../utils');
 
+let newConfiguration;
+
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
@@ -32,6 +34,8 @@ module.exports = class extends BaseGenerator {
         this.configOptions = {};
 
         this.configuration.requireAllConfigs(this, 'app');
+
+        newConfiguration = this.configuration.runtimeOptions.newConfiguration;
 
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
@@ -315,6 +319,8 @@ module.exports = class extends BaseGenerator {
     }
 
     get prompting() {
+        if (newConfiguration) return {};
+
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
             askForApplicationType: prompts.askForApplicationType,
@@ -403,8 +409,13 @@ module.exports = class extends BaseGenerator {
     }
 
     get default() {
+        let configurationSteps;
+        if (newConfiguration) configurationSteps = {};
+        configurationSteps = configurationSteps || {
+            askForTestOpts: prompts.askForTestOpts
+        };
         return {
-            askForTestOpts: prompts.askForTestOpts,
+            ...configurationSteps,
 
             askForMoreModules: prompts.askForMoreModules,
 
