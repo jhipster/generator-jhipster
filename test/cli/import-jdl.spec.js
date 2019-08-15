@@ -60,6 +60,7 @@ function testDocumentsRelationships() {
             force: false,
             interactive: true,
             'from-cli': true,
+            'init-configuration': true,
             'no-fluent-methods': undefined,
             'skip-client': undefined,
             'skip-install': true,
@@ -106,9 +107,17 @@ describe('JHipster generator import jdl', () => {
                 '--no-insight',
                 '--interactive',
                 '--with-entities',
-                '--from-cli'
+                '--from-cli',
+                '--init-configuration'
             ]);
-            expect(subGenCallParams.options[3]).to.eql(['--skip-prompts', '--skip-install', '--no-insight', '--interactive', '--from-cli']);
+            expect(subGenCallParams.options[3]).to.eql([
+                '--skip-prompts',
+                '--skip-install',
+                '--no-insight',
+                '--interactive',
+                '--from-cli',
+                '--init-configuration'
+            ]);
         });
     });
 
@@ -175,6 +184,7 @@ describe('JHipster generator import jdl', () => {
                 force: false,
                 skipInstall: true,
                 'from-cli': true,
+                'init-configuration': true,
                 interactive: true,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
@@ -234,6 +244,7 @@ describe('JHipster generator import jdl', () => {
                 force: false,
                 skipInstall: true,
                 'from-cli': true,
+                'init-configuration': true,
                 interactive: true,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
@@ -266,6 +277,7 @@ describe('JHipster generator import jdl', () => {
                 force: true,
                 skipInstall: true,
                 'from-cli': true,
+                'init-configuration': true,
                 interactive: false,
                 'no-fluent-methods': undefined,
                 'skip-client': undefined,
@@ -306,7 +318,8 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--with-entities',
                 '--force',
-                '--from-cli'
+                '--from-cli',
+                '--init-configuration'
             ]);
         });
     });
@@ -337,7 +350,8 @@ describe('JHipster generator import jdl', () => {
                 '--no-interactive',
                 '--no-skip-git',
                 '--force',
-                '--from-cli'
+                '--from-cli',
+                '--init-configuration'
             ]);
         });
     });
@@ -383,7 +397,8 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--with-entities',
                 '--force',
-                '--from-cli'
+                '--from-cli',
+                '--init-configuration'
             ]);
         });
     });
@@ -436,6 +451,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--regenerate',
                 '--from-cli',
+                '--init-configuration',
                 '--force'
             ]);
         });
@@ -466,7 +482,8 @@ describe('JHipster generator import jdl', () => {
                 '--no-interactive',
                 '--no-skip-git',
                 '--force',
-                '--from-cli'
+                '--from-cli',
+                '--init-configuration'
             ]);
         });
     });
@@ -501,7 +518,8 @@ describe('JHipster generator import jdl', () => {
                     '--no-skip-git',
                     '--with-entities',
                     '--force',
-                    '--from-cli'
+                    '--from-cli',
+                    '--init-configuration'
                 ]);
                 expect(subGenCallParams.options[3]).to.eql([
                     '--skip-prompts',
@@ -510,7 +528,8 @@ describe('JHipster generator import jdl', () => {
                     '--no-interactive',
                     '--no-skip-git',
                     '--force',
-                    '--from-cli'
+                    '--from-cli',
+                    '--init-configuration'
                 ]);
             });
         });
@@ -570,7 +589,8 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--with-entities',
                 '--force',
-                '--from-cli'
+                '--from-cli',
+                '--init-configuration'
             ]);
         });
     });

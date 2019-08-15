@@ -71,43 +71,71 @@ describe('jhipster cli utils test', () => {
     describe('getOptionAsArgs', () => {
         describe('when called with empty args', () => {
             it('returns a default string array', () => {
-                expect(cliUtil.getOptionAsArgs({})).to.eql(['--from-cli']);
+                expect(cliUtil.getOptionAsArgs({})).to.eql(['--from-cli', '--init-configuration']);
             });
         });
         describe('when called with valid arguments', () => {
             const argument = { foo: true, bar: '123' };
             it('returns an array of truthy string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--from-cli', '--init-configuration']);
             });
         });
         describe('when called with valid argument having false value', () => {
             const argument = { foo: true, bar: '123', insight: false };
             it('returns an array of truthy string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '--no-insight', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql([
+                    '--foo',
+                    '--bar',
+                    '123',
+                    '--no-insight',
+                    '--from-cli',
+                    '--init-configuration'
+                ]);
             });
         });
         describe('when called with valid arguments and withEntities', () => {
             const argument = { foo: true, bar: '123' };
             it('returns an array of string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument, true)).to.eql(['--foo', '--bar', '123', '--with-entities', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument, true)).to.eql([
+                    '--foo',
+                    '--bar',
+                    '123',
+                    '--with-entities',
+                    '--from-cli',
+                    '--init-configuration'
+                ]);
             });
         });
         describe('when called with valid arguments and force', () => {
             const argument = { foo: true, bar: '123' };
             it('returns an array of string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql(['--foo', '--bar', '123', '--force', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql([
+                    '--foo',
+                    '--bar',
+                    '123',
+                    '--force',
+                    '--from-cli',
+                    '--init-configuration'
+                ]);
             });
         });
         describe('when called with valid arguments with duplicates in different case', () => {
             const argument = { fooBar: true, bar: '123', 'foo-bar': true, foo_bar: true };
             it('returns an array of string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql(['--foo-bar', '--bar', '123', '--force', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument, false, true)).to.eql([
+                    '--foo-bar',
+                    '--bar',
+                    '123',
+                    '--force',
+                    '--from-cli',
+                    '--init-configuration'
+                ]);
             });
         });
         describe('when called with valid arguments with single char keys', () => {
             const argument = { foo: true, bar: '123', d: true };
             it('returns an array of string args', () => {
-                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '-d', '--from-cli']);
+                expect(cliUtil.getOptionAsArgs(argument)).to.eql(['--foo', '--bar', '123', '-d', '--from-cli', '--init-configuration']);
             });
         });
     });
@@ -132,7 +160,7 @@ describe('jhipster cli utils test', () => {
     describe('getCommandOptions', () => {
         describe('when called with empty argv', () => {
             it('returns the default object', () => {
-                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({ 'from-cli': true });
+                expect(cliUtil.getCommandOptions(packageJson, [])).to.eql({ 'from-cli': true, 'init-configuration': true });
             });
         });
         describe('when called with argv flags', () => {
@@ -142,7 +170,8 @@ describe('jhipster cli utils test', () => {
                     force: true,
                     'skip-install': true,
                     skipInstall: true,
-                    'from-cli': true
+                    'from-cli': true,
+                    'init-configuration': true
                 });
             });
         });
@@ -154,7 +183,8 @@ describe('jhipster cli utils test', () => {
                     'skip-install': true,
                     skipInstall: true,
                     foo: 'bar',
-                    'from-cli': true
+                    'from-cli': true,
+                    'init-configuration': true
                 });
             });
         });
@@ -166,7 +196,8 @@ describe('jhipster cli utils test', () => {
                     'skip-install': true,
                     skipInstall: true,
                     foo: 'bar,who',
-                    'from-cli': true
+                    'from-cli': true,
+                    'init-configuration': true
                 });
             });
         });
