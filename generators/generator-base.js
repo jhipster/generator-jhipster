@@ -1264,6 +1264,21 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Check if the generated app package.json contains the Angular core dependency, so we can claim this is an Angular app
+     */
+    isAngularAppAccordingToPackageJson() {
+        try {
+            const appPackageJson = require(this.destinationPath('package.json')); // eslint-disable-line
+            if (appPackageJson && appPackageJson.dependencies && appPackageJson.dependencies['@angular/core']) {
+                return true;
+            }
+        } catch (err) {
+            return false;
+        }
+        return false;
+    }
+
+    /**
      * executes a Git command using shellJS
      * gitExec(args [, options ], callback)
      *

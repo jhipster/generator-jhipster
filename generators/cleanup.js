@@ -75,7 +75,7 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.ts`);
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
     }
-    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.isAngularAppAccordingToPackageJson()) {
         generator.removeFile(`${ANGULAR_DIR}account/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}admin/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}core/index.ts`);
