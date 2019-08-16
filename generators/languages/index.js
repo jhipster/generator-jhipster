@@ -26,12 +26,19 @@ const statistics = require('../statistics');
 const constants = require('../generator-constants');
 
 let useBlueprints;
+let newConfiguration;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
         this.configOptions = this.options.configOptions || {};
+
+        this.configuration.requireAllConfigs(this, 'app');
+        this.configuration.requireAllConfigs(this, 'languages');
+
+        newConfiguration = this.configuration.runtimeOptions.newConfiguration;
+
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -133,6 +140,8 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _prompting() {
+        if (newConfiguration) return {};
+
         return {
             askForLanguages: prompts.askForLanguages
         };
@@ -148,6 +157,9 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             saveConfig() {
                 if (this.enableTranslation) {
+                    if (newConfiguration) {
+                        return;
+                    }
                     this.languages = _.union(this.currentLanguages, this.languagesToApply);
                     this.config.set('languages', this.languages);
                 }

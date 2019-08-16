@@ -110,7 +110,7 @@ describe('JHipster generator', () => {
                         jhipsterVersion: packagejs.version,
                         jhiPrefix: 'test',
                         baseName: 'jhipster',
-                        languages: ['fr']
+                        enableTranslation: true
                     }
                 });
                 assert.noJsonFileContent('.yo-rc.json', {
@@ -118,6 +118,16 @@ describe('JHipster generator', () => {
                         skipClient: true, // test not positive
                         skipUserManagement: true, // test not positive
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277' // saved only by server
+                    }
+                });
+            });
+
+            it('Verify languages configurations', () => {
+                assert.JSONFileContent('.yo-rc.json', {
+                    'generator-jhipster': {
+                        enableTranslation: true,
+                        nativeLanguage: 'fr',
+                        languages: ['fr']
                     }
                 });
             });
@@ -135,8 +145,6 @@ describe('JHipster generator', () => {
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
-                        enableTranslation: true,
-                        nativeLanguage: 'fr',
                         buildTool: 'maven',
                         serverSideOptions: []
                     }

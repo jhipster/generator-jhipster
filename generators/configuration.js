@@ -21,6 +21,7 @@ const debug = require('debug')('jhipster:configuration');
 
 const packagejs = require('../package.json');
 const app = require('./app/configs');
+const languages = require('./languages/configs');
 const common = require('./common/configs');
 
 module.exports = class {
@@ -82,6 +83,7 @@ module.exports = class {
          * Blueprints can register and require their own configs at the module constructor
          */
         this.registerConfigs(app);
+        this.registerConfigs(languages);
         this.registerConfigs(common);
     }
 

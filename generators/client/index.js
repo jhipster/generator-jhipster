@@ -62,6 +62,7 @@ module.exports = class extends BaseBlueprintGenerator {
         });
 
         this.configuration.requireAllConfigs(this, 'app');
+        this.configuration.requireAllConfigs(this, 'languages');
         this.configuration.requireAllConfigs(this, 'common');
 
         this.setupClientOptions(this);

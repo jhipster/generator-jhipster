@@ -57,6 +57,7 @@ module.exports = class extends BaseBlueprintGenerator {
         });
 
         this.configuration.requireAllConfigs(this, 'app');
+        this.configuration.requireAllConfigs(this, 'languages');
         this.configuration.requireAllConfigs(this, 'common');
 
         this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
