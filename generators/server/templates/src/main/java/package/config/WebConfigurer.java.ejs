@@ -81,12 +81,8 @@ import javax.servlet.*;
     <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-    <%_ } _%>
 import java.nio.charset.StandardCharsets;
-    <%_ if (!skipClient) { _%>
 import java.nio.file.Paths;
-    <%_ } _%>
-    <%_ if (!skipClient) { _%>
 import java.util.*;
 
 import static java.net.URLDecoder.decode;
@@ -105,7 +101,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory><% } %><% if (reactive) { %>WebFluxConfigurer<% } %> {
+public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<% if (!skipClient) { %>, WebServerFactoryCustomizer<WebServerFactory><% } %><% } %><% if (reactive) { %>WebFluxConfigurer<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
