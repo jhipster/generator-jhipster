@@ -216,8 +216,8 @@ _%>
     setFileData(event, field: string, isImage) {
         return new Promise((resolve, reject) => {
             if (event && event.target && event.target.files && event.target.files[0]) {
-                const file = event.target.files[0];
-                if (isImage && !/^image\//.test(file.type)) {
+                const file: File = event.target.files[0];
+                if (isImage && !file.type.startsWith('image/')) {
                     reject(`File was expected to be an image but was found to be ${file.type}`);
                 } else {
                     const filedContentType: string = field + 'ContentType';

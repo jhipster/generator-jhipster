@@ -6,6 +6,7 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier",
     "prettier/@typescript-eslint",
     "eslint-config-prettier"
@@ -16,7 +17,7 @@
     "commonjs": true
   },
   "parserOptions": {
-    "project": "./tsconfig.json",
+    "project": "./tsconfig.e2e.json",
     "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
@@ -50,6 +51,7 @@
       }
     ],
     "@typescript-eslint/array-type": "off",
+    "@typescript-eslint/unbound-method": "off",
     "spaced-comment": ["warn", "always"],
     "guard-for-in": "error",
     "no-labels": "error",

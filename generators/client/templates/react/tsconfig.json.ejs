@@ -30,9 +30,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "<%= DIST_DIR %>app",
     "lib": ["es2015", "es2017", "dom"],
-    "typeRoots": [
-      "node_modules/@types"
-    ],
     "types": ["webpack-env", "jest"],
     "allowJs": true,
     "checkJs": false,
@@ -44,11 +41,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "<%= MAIN_SRC_DIR %>app/typing.d.ts",
-    "<%= MAIN_SRC_DIR %>app/**/*",
-    "<%= TEST_SRC_DIR %>spec/**/*"
-  ],
+  "include": ["<%= MAIN_SRC_DIR %>app", "<%= TEST_SRC_DIR %>spec"],
   "exclude": [
     "node_modules"
   ]

@@ -71,8 +71,8 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
         }).then(() => {
             this.authenticationError = false;
             this.activeModal.dismiss('login success');
-            if (this.router.url === '/register' || (/^\/activate\//.test(this.router.url)) ||
-                (/^\/reset\//.test(this.router.url))) {
+            if (this.router.url === '/register' || this.router.url.startsWith('/activate/') ||
+this.router.url.startsWith('/reset/')) {
                 this.router.navigate(['']);
             }
 
