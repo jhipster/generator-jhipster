@@ -28,6 +28,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
 let useBlueprints;
+let newConfiguration;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -64,6 +65,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.configuration.requireAllConfigs(this, 'app');
         this.configuration.requireAllConfigs(this, 'languages');
         this.configuration.requireAllConfigs(this, 'common');
+        this.configuration.requireAllConfigs(this, 'client');
+
+        newConfiguration = this.configuration.runtimeOptions.newConfiguration;
 
         this.setupClientOptions(this);
 
@@ -180,6 +184,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _prompting() {
+        if (newConfiguration) return {};
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,

@@ -23,6 +23,7 @@ const packagejs = require('../package.json');
 const app = require('./app/configs');
 const languages = require('./languages/configs');
 const common = require('./common/configs');
+const client = require('./client/configs');
 
 module.exports = class {
     constructor(generator, rootConfiguration = true, rootOptions = generator.options, rootConfig = generator.config) {
@@ -85,6 +86,7 @@ module.exports = class {
         this.registerConfigs(app);
         this.registerConfigs(languages);
         this.registerConfigs(common);
+        this.registerConfigs(client);
     }
 
     /**

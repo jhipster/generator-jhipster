@@ -132,10 +132,17 @@ describe('JHipster generator', () => {
                 });
             });
 
+            it('Verify client configurations', () => {
+                assert.JSONFileContent('.yo-rc.json', {
+                    'generator-jhipster': {
+                        clientFramework: 'angularX'
+                    }
+                });
+            });
+
             it('Compare not implemented configuration', () => {
                 assert.noJsonFileContent('.yo-rc.json', {
                     'generator-jhipster': {
-                        clientFramework: 'angularX',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: false,
