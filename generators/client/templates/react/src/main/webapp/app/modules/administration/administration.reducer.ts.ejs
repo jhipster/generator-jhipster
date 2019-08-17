@@ -172,7 +172,7 @@ export default (state: AdministrationState = initialState, action): Administrati
         health: action.payload.data
       };
      <%_ if (websocket === 'spring-websocket') { _%>
-     case ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE:
+     case ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE: {
        // filter out activities from the same session
        const uniqueActivities = state.tracker.activities.filter(activity => activity.sessionId !== action.payload.sessionId);
        // remove any activities with the page of logout
@@ -181,6 +181,7 @@ export default (state: AdministrationState = initialState, action): Administrati
          ...state,
          tracker: { activities }
        };
+    }
      <%_ } _%>
     default:
       return state;

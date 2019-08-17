@@ -72,6 +72,9 @@
     "@types/mocha": "5.2.7",
     <%_ } _%>
     "@types/node": "10.12.27",
+    "@typescript-eslint/eslint-plugin": "1.13.0",
+    "@typescript-eslint/eslint-plugin-tslint": "1.13.0",
+    "@typescript-eslint/parser": "1.13.0",
     <%_ if (protractorTests) { _%>
     "@types/selenium-webdriver": "4.0.0",
     <%_ } _%>
@@ -96,6 +99,9 @@ Remove it once the issue is closed
     "codelyzer": "5.1.0",
     "copy-webpack-plugin": "5.0.3",
     "css-loader": "3.0.0",
+    "eslint": "5.16.0",
+    "eslint-config-prettier": "5.1.0",
+    "eslint-loader": "2.2.1",
     "file-loader": "4.0.0",
     "fork-ts-checker-webpack-plugin": "1.3.6",
     "friendly-errors-webpack-plugin": "1.7.0",
@@ -139,9 +145,7 @@ Remove it once the issue is closed
     <%_ if (protractorTests) { _%>
     "ts-node": "8.2.0",
     <%_ } _%>
-    "tslint": "5.17.0",
-    "tslint-config-prettier": "1.18.0",
-    "tslint-loader": "3.5.4",
+    "tslint": "5.18.0",
     "typescript": "3.4.5",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
@@ -172,7 +176,7 @@ Remove it once the issue is closed
   <%_ } _%>
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\"",
-    "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
+    "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "ngc": "ngc -p tsconfig-aot.json",
     "cleanup": "rimraf <%= DIST_DIR %> <%= AOT_DIR %>",

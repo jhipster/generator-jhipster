@@ -63,10 +63,6 @@ const angularFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.component.html`
                 },
                 {
-                    file: 'entities/index.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/index.ts`
-                },
-                {
                     file: 'entities/entity-management.module.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.module.ts`
                 },
