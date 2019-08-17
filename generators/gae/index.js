@@ -729,7 +729,7 @@ module.exports = class extends BaseGenerator {
             addGradlePlugin() {
                 if (this.buildTool === 'gradle') {
                     if (this.gaeCloudSQLInstanceNeeded === 'Y') {
-                        this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.0.1');
+                        this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.1.0');
                     }
                     this.applyFromGradleScript('gradle/gae');
                 }
@@ -739,7 +739,7 @@ module.exports = class extends BaseGenerator {
                 if (this.buildTool === 'maven') {
                     if (this.gaeCloudSQLInstanceNeeded === 'Y') {
                         this.render('pom-plugin.xml.ejs', rendered => {
-                            this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.0.0', rendered.trim());
+                            this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.1.0', rendered.trim());
                         });
                     }
                     this.render('pom-profile.xml.ejs', rendered => {
