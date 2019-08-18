@@ -1,15 +1,15 @@
 {
     "gateway": {
-        "title": "Gateway",
+        "title": "Brama",
         "routes": {
-            "title": "Current routes",
+            "title": "Aktualne ścieżki",
             "url": "URL",
-            "service": "service",
-            "servers": "Available servers",
-            "error": "Warning: no server available!"
+            "service": "serwis",
+            "servers": "Dostępne serwery",
+            "error": "Uwaga: brak dostępnych serwerów!"
         },
         "refresh": {
-            "button": "Refresh"
+            "button": "Odśwież"
         }
     }
 }

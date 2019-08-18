@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "မှားယွင်းနေသည်!",
+        "http": {
+            "400": "တောင်းဆိုမှုမှားယွင်းနေပါသည်။",
+            "403": "သင်သည် ဤစာမျက်နှာကိုဝင်ရောက်ခွင့်မရှိပါ။",
+            "404": "စာမကျြနှာမတည်ရှိပါဘူး",
+            "405": "The HTTP verb you used is not supported for this URL.",
+            "500": "ဆာဗာ error တက်နေပါသည်။"
+        },
+        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+        "validation": "ဆာဗာတွင် validation error တက်နေပါသည်။"
+    }
+}

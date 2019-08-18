@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,7 +18,7 @@
 -%>
 package <%=packageName%>.service;
 
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
 
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -39,7 +39,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 /**
  * Service for sending emails.
  * <p>
- * We use the @Async annotation to send emails asynchronously.
+ * We use the {@link Async} annotation to send emails asynchronously.
  */
 @Service
 public class MailService {
@@ -92,7 +92,7 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+    public void sendEmailFromTemplate(<%= asEntity('User') %> user, String templateName, String titleKey) {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
         context.setVariable(USER, user);
@@ -100,24 +100,23 @@ public class MailService {
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
-
     }
     <%_ if (authenticationType !== 'oauth2') { _%>
 
     @Async
-    public void sendActivationEmail(User user) {
+    public void sendActivationEmail(<%= asEntity('User') %> user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendCreationEmail(User user) {
+    public void sendCreationEmail(<%= asEntity('User') %> user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendPasswordResetMail(User user) {
+    public void sendPasswordResetMail(<%= asEntity('User') %> user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }

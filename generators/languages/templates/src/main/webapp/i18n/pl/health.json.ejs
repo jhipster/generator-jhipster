@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -30,12 +30,12 @@
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
-            "binders": "Message broker",
+            "binders": "Broker wiadomości",
             <%_ } _%>
             <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
             "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
+            "refreshScope": "Obszar aktualizacji mikroserwisów",
+            "configServer": "Serwer konfiguracyjny mikroserwisów",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
@@ -52,9 +52,9 @@
             "status": "Status"
         },
         "status": {
-            "UNKNOWN": "UNKNOWN",
-            "UP": "DOSTĘPNE",
-            "DOWN": "NIEDZIAŁAJĄCY"
+            "UNKNOWN": "NIEZNANY",
+            "UP": "DOSTĘPNA",
+            "DOWN": "NIEDOSTĘPNA"
         }
     }
 }

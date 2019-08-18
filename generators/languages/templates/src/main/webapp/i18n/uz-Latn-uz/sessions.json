@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<strong>{{username}}</strong>] uchun faol sessiyalar",
+        "table": {
+            "ipaddress": "IP manzil",
+            "useragent": "User Agent",
+            "date": "Sana",
+            "button": "Yakunlash"
+        },
+        "messages": {
+            "success": "<strong>Sessiya tugadi!</strong>",
+            "error": "<strong>Xatokik yuz berdi!</strong> Sessiya tugatilmadi."
+        }
+    }
+}

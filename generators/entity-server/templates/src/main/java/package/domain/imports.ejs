@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -35,14 +35,12 @@ if (!importApiModelProperty) {
 }
 
 for (idx in relationships) {
-    if (relationships[idx].relationshipType === 'one-to-many'
-        || relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === false
-        || relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === false) {
+    if (relationships[idx].ownerSide === false && ['one-to-many', 'one-to-one', 'many-to-many'].includes(relationships[idx].relationshipType)) {
         importJsonIgnore = true;
     } else if (relationships[idx].relationshipType === 'many-to-one') {
         importJsonIgnoreProperties = true;
     }
-    if(importJsonIgnore && importJsonIgnoreProperties) {
+    if (importJsonIgnore && importJsonIgnoreProperties) {
         break;
     }
 }

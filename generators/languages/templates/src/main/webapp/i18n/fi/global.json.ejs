@@ -1,0 +1,159 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Käytät <strong>vanhentunutta</strong> selainta. Ole hyvä ja <a href=\"http://browsehappy.com/?locale=en\">päivitä selaimesi</a> parempaa käyttökokemusta varten.",
+        "menu": {
+            "home": "Etusivu",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Entiteetit",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Tili",
+                "settings": "Asetukset",
+                "password": "Salasanat",
+                "sessions": "Sessiot",
+                "login": "Kirjaudu sisään",
+                "logout": "Kirjaudu ulos",
+                "register": "Rekisteröidy"
+            },
+            "admin": {
+                "main": "Hallinto",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "Käyttäjähallinta",
+                "tracker": "User tracker",
+                "metrics": "Metriikat",
+                "health": "Terveys",
+                "configuration": "Konfiguraatio",
+                "logs": "Logit",
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+                "audits": "Audit logit",
+                <%_ } _%>
+                "apidocs": "API",
+                "database": "Tietokanta",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Kieli"
+        },
+        "form": {
+            "username.label": "Käyttäjänimi",
+            "username.placeholder": "Käyttäjänimesi",
+            "currentpassword.label": "Nykyinen salasana",
+            "currentpassword.placeholder": "Nykyinen salasana",
+            "newpassword.label": "Uusi salasana",
+            "newpassword.placeholder": "Uusi salasana",
+            "confirmpassword.label": "Uuden salasanan vahvistus",
+            "confirmpassword.placeholder": "Vahvista uusi salasana",
+            "email.label": "Sähköposti",
+            "email.placeholder": "Sähköpostisi"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Jos haluat ",
+                    "link": "kirjaudu sisään",
+                    "suffix": ", voit koittaa käyttää oletustilejä:<br/>- Administrator (login=\"admin\" ja salasana=\"admin\") <br/>- User (login=\"user\" ja salasana=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Eikö sinulla ole vielä tiliä?",
+                    "link": "Rekisteröi uusi tili"
+                }
+            },
+            "error": {
+                "dontmatch": "Salasana ja sen vahvistus eivät ole samoja!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Salasana on pakollinen.",
+                    "minlength": "Salasanan tulee olla vähintään 4 merkin pituinen.",
+                    "maxlength": "Salasana ei voi olla pitempi kuin 50 merkkiä.",
+                    "strength": "Salasanan vahvuus:"
+                },
+                "confirmpassword": {
+                    "required": "Salasana on pakollinen.",
+                    "minlength": "Salasanan tulee olla vähintään 4 merkin pituinen.",
+                    "maxlength": "Salasana ei voi olla pitempi kuin 50 merkkiä."
+                },
+                "email": {
+                    "required": "Sähköposti on pakollinen.",
+                    "invalid": "Sähköpostisi ei ole validi.",
+                    "minlength": "Sähköpostisi tulee olla vähintään 5 merkin pituinen.",
+                    "maxlength": "Sähköpostisi ei voi olla pitempi kuin 50 merkkiä."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Kehitys"
+        },
+        "item-count": "Näytetään {{first}} - {{second}} yhteensä {{total}}."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Lisää blob",
+            "addimage": "Lisää kuva",
+            "back": "Takaisin",
+            "cancel": "Peruuta",
+            "delete": "Poista",
+            "edit": "Muokkaa",
+            "open": "Avaa",
+            "save": "Tallenna",
+            "view": "Lue"
+        },
+        "detail": {
+            "field": "Kenttä",
+            "value": "Arvo"
+        },
+        "delete": {
+            "title": "Vahvista poistaminen"
+        },
+        "validation": {
+            "required": "Tämä kenttä on pakollinen.",
+            "minlength": "Tämän kentän tulee olla vähintään {{ min }} merkin pituinen.",
+            "maxlength": "Tämä kenttä voi olla enintään {{ max }} merkkiä.",
+            "min": "Tämän kentän tulee olla vähintään {{ min }}.",
+            "max": "Tämä kenttä voi olla enintään {{ max }}.",
+            "minbytes": "Tämän kentän tulee olla vähintään {{ min }} tavua.",
+            "maxbytes": "Tämä kenttä voi olla enintään {{ max }} tavua.",
+            "pattern": "Tämän kentän tulee olla muotoa {{ pattern }}.",
+            "number": "Tämän kentän tulee olla numero.",
+            "datetimelocal": "Tämän kentän tulee olla pvm ja aika.",
+            "patternLogin": "Tämä kenttä voi sisältää kirjaimia, numeroita ja sähköpostiosoitteita."
+        }
+    },
+    "error": {
+        "internalServerError": "Palvelinvirhe",
+        "server.not.reachable": "Palvelinta ei voida tavoittaa",
+        "url.not.found": "Ei löytynyt",
+        "NotNull": "Kenttä {{ fieldName }} ei voi olla tyhjä!",
+        "Size": "Kenttä {{ fieldName }} ei täytä minimi ja maksimi kokorajoituksia!",
+        "userexists": "Käyttäjänimi on jo käytössä!",
+        "emailexists": "Sähköposti on jo käytössä!",
+        "idexists": "Uusi {{ entityName }} ei voi sisältää ID:tä",
+        "idnull": "ID virheellinen"
+    },
+    "footer": "Tämä on footer teksti"
+}

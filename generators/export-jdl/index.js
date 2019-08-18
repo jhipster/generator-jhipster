@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,36 +17,45 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const JCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
+const { logger } = require('../utils');
+const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.baseName = this.config.get('baseName');
         this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jh` });
-        this.jdlFile = this.options.jdlFile;
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
     }
 
     get default() {
         return {
-            insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'export-jdl');
+            validateFromCli() {
+                this.checkInvocationFromCLI();
             },
 
-            parseJson() {
-                this.log('Parsing entities from .jhipster dir...');
-                this.jdl = this.generateJDLFromEntities();
+            insight() {
+                statistics.sendSubGenEvent('generator', 'export-jdl');
+            },
+
+            convertToJDL() {
+                try {
+                    JCore.convertToJDL();
+                } catch (error) {
+                    logger.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
+                }
             }
         };
     }
 
-    writing() {
-        const content = `// JDL definition for application '${this.baseName}' generated with command 'jhipster export-jdl'\n\n${this.jdl.toString()}`;
-        this.fs.write(this.jdlFile, content);
-    }
-
     end() {
-        this.log(chalk.green.bold('\nEntities successfully exported to JDL file\n'));
+        this.log(chalk.green.bold('\nThe JDL export is complete!\n'));
     }
 };

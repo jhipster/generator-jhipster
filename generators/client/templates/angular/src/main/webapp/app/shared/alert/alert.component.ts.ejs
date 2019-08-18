@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,7 +23,7 @@ import { JhiAlertService } from 'ng-jhipster';
     selector: '<%= jhiPrefixDashed %>-alert',
     template: `
         <div class="alerts" role="alert">
-            <div *ngFor="let alert of alerts" [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
+            <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
                 <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="alert.close(alerts)">
                     <pre [innerHTML]="alert.msg"></pre>
                 </ngb-alert>
@@ -37,6 +37,13 @@ export class <%=jhiPrefixCapitalized%>AlertComponent implements OnInit, OnDestro
 
     ngOnInit() {
         this.alerts = this.alertService.get();
+    }
+
+    setClasses(alert) {
+        return {
+            'jhi-toast': alert.toast,
+            [alert.position]: true
+        };
     }
 
     ngOnDestroy() {

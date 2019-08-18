@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "Faqe e gabuar!",
+        "http": {
+            "400": "Kërkesë e gabuar.",
+            "403": "Ju nuk jeni i autorizuar tek kjo faqe.",
+            "404": "Faqja e kërkuar nuk ekziston.",
+            "405": "Folja HTTP që ju përdorët nuk mbulohet nga kjo URL.",
+            "500": "Gabim i brëndshëm i serverit."
+        },
+        "concurrencyFailure": "Një përdorues tjetër ndryshoi këto të dhëna në të njëjtën kohë me ju. Ndryshimet u refuzuan.",
+        "validation": "Gavim me validimin në server."
+    }
+}

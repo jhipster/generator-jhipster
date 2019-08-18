@@ -15,9 +15,8 @@
     "searchEngine": "no",
     "serviceDiscoveryType": "eureka",
     "buildTool": "maven",
-    "jwtSecretKey": "1ab78a668a06b55d1a25551d5f332ae97afcaf27",
-    "useSass": false,
-    "applicationType": "gateway",
+    "jwtSecretKey": "fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8",
+        "applicationType": "gateway",
     "testFrameworks": [
       "gatling"
     ],

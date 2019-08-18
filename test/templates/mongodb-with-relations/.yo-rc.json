@@ -1,0 +1,23 @@
+{
+    "generator-jhipster": {
+        "applicationType": "monolith",
+        "baseName": "sampleMongodb",
+        "packageName": "com.mycompany.myapp",
+        "packageFolder": "com/mycompany/myapp",
+        "authenticationType": "session",
+        "cacheProvider": "ehcache",
+        "enableHibernateCache": true,
+        "websocket": "no",
+        "databaseType": "mongodb",
+        "devDatabaseType": "mongodb",
+        "prodDatabaseType": "mongodb",
+        "searchEngine": "elasticsearch",
+                "buildTool": "maven",
+        "enableTranslation": true,
+        "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
+        "languages": ["en", "fr"],
+        "testFrameworks": [
+            "gatling"
+        ]
+    }
+}

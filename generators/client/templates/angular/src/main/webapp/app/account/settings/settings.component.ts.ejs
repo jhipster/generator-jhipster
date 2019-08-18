@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,9 +17,13 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { JhiLanguageService } from 'ng-jhipster';
 
-import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageHelper<% } %> } from 'app/core';
+import { AccountService } from 'app/core/auth/account.service';
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
+<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-settings',
@@ -28,39 +32,50 @@ import { Principal, AccountService<% if (enableTranslation) { %>, JhiLanguageHel
 export class SettingsComponent implements OnInit {
     error: string;
     success: string;
-    settingsAccount: any;
     languages: any[];
+    settingsForm = this.fb.group({
+        firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
+        lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
+        email: [ undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
+        activated: [false],
+        authorities: [[]],
+        langKey: ['en'],
+        login: [],
+        imageUrl: []
+    });
 
     constructor(
-        private account: AccountService,
-        private principal: Principal<% if (enableTranslation) { %>,
+        private accountService: AccountService,
+        private fb: FormBuilder<% if (enableTranslation) { %>,
         private languageService: JhiLanguageService,
         private languageHelper: JhiLanguageHelper<% } %>
     ) {
     }
 
     ngOnInit() {
-        this.principal.identity().then((account) => {
-            this.settingsAccount = this.copyAccount(account);
+        this.accountService.identity().then((account) => {
+            this.updateForm(account);
         });
         <%_ if (enableTranslation) { _%>
         this.languageHelper.getAll().then((languages) => {
             this.languages = languages;
         });
         <%_ } _%>
+
     }
 
     save() {
-        this.account.save(this.settingsAccount).subscribe(() => {
+        const settingsAccount = this.accountFromForm();
+        this.accountService.save(settingsAccount).subscribe(() => {
             this.error = null;
             this.success = 'OK';
-            this.principal.identity(true).then((account) => {
-                this.settingsAccount = this.copyAccount(account);
+            this.accountService.identity(true).then((account) => {
+                this.updateForm(account);
             });
             <%_ if (enableTranslation) { _%>
             this.languageService.getCurrent().then((current) => {
-                if (this.settingsAccount.langKey !== current) {
-                    this.languageService.changeLanguage(this.settingsAccount.langKey);
+                if (settingsAccount.langKey !== current) {
+                    this.languageService.changeLanguage(settingsAccount.langKey);
                 }
             });
             <%_ } _%>
@@ -70,15 +85,31 @@ export class SettingsComponent implements OnInit {
         });
     }
 
-    copyAccount(account) {
-        return {
-            activated: account.activated,
-            email: account.email,
-            firstName: account.firstName,
-            langKey: account.langKey,
-            lastName: account.lastName,
-            login: account.login,
-            imageUrl: account.imageUrl
+    private accountFromForm(): any {
+        const account = {};
+        return {...account,
+            firstName: this.settingsForm.get('firstName').value,
+            lastName: this.settingsForm.get('lastName').value,
+            email: this.settingsForm.get('email').value,
+            activated: this.settingsForm.get('activated').value,
+            authorities: this.settingsForm.get('authorities').value,
+            langKey: this.settingsForm.get('langKey').value,
+            login: this.settingsForm.get('login').value,
+            imageUrl: this.settingsForm.get('imageUrl').value
         };
     }
+
+    updateForm(account: any): void {
+        this.settingsForm.patchValue({
+            firstName: account.firstName,
+            lastName: account.lastName,
+            email: account.email,
+            activated: account.activated,
+            authorities: account.authorities,
+            langKey: account.langKey,
+            login: account.login,
+            imageUrl: account.imageUrl
+        });
+    }
+
 }

@@ -12,7 +12,7 @@
                 "authentication": "<strong>Ha fallat l'autenticació!</strong> Si us plau, confirmi les seves credencials i torni a probar-ho."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Ha oblidat la seva contrasenya?"
         }
     }

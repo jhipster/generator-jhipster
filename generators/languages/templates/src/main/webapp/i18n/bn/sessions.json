@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "চলতি সেশন [<strong>{{username}}</strong>] এর জন্য",
+        "table": {
+            "ipaddress": "আই পি অ্যাড্রেস",
+            "useragent": "ইউজার এজেন্ট",
+            "date": "দিনক্ষণ",
+            "button": "বাতিল করে দিন"
+        },
+        "messages": {
+            "success": "<strong>সেশন বাতিল করা হয়েছে!</strong>",
+            "error": "<strong>ত্রুটি হয়েছে!</strong> সেশন বাতিল করা যায়নি!"
+        }
+    }
+}

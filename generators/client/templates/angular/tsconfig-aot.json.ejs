@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,8 +18,8 @@
 -%>
 {
     "compilerOptions": {
-        "target": "es5",
-        "module": "es2015",
+        "target": "es6",
+        "module": "esnext",
         "moduleResolution": "node",
         "sourceMap": false,
         "emitDecoratorMetadata": true,
@@ -35,12 +35,12 @@
         ],
         "baseUrl": "./",
         "paths": {
-            "app/*": ["src/main/webapp/app/*"]
+            "app/*": ["<%= CLIENT_MAIN_SRC_DIR %>app/*"]
         },
         "importHelpers": true
     },
     "angularCompilerOptions": {
-        "genDir": "<%= BUILD_DIR %>aot",
+        "genDir": "<%= AOT_DIR %>",
         "skipMetadataEmit" : true,
         "fullTemplateTypeCheck": true,
         "preserveWhitespaces": true

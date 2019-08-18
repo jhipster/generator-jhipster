@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Avtorizatsiya",
+        "form": {
+            "password": "Parol",
+            "password.placeholder": "Parolingiz",
+            "rememberme": "Meni eslab qol",
+            "button": "Kirish"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Kira olmadiz!</strong> Iltimoz, ma`lumotlaringizni tekshirib qayta urunib ko`ring."
+            }
+        },
+        "password": {
+            "forgot": "Parolingizni unutdingizmi?"
+        }
+    }
+}

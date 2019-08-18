@@ -7,12 +7,12 @@
     "last_name": "System",
     "email": "system@localhost",
     "activated": true,
-    "lang_key": "fr",
+    "lang_key": "<%= nativeLanguage %>",
     "created_by": "system",
     "last_modified_by": "system",
     "authorities": [
         "ROLE_USER",
         "ROLE_ADMIN"
     ],
-    "_class": "<%=packageName%>.domain.User"
+    "_class": "<%=packageName%>.domain.<%= asEntity('User') %>"
 }

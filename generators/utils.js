@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,9 +21,13 @@ const path = require('path');
 const shelljs = require('shelljs');
 const ejs = require('ejs');
 const _ = require('lodash');
+const jhiCore = require('jhipster-core');
+const fs = require('fs');
+const crypto = require('crypto');
+
 const constants = require('./generator-constants');
 
-const LANGUAGES_MAIN_SRC_DIR = `../../languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
 
 module.exports = {
     rewrite,
@@ -37,7 +41,15 @@ module.exports = {
     getJavadoc,
     buildEnumInfo,
     copyObjectProps,
-    decodeBase64
+    decodeBase64,
+    getAllJhipsterConfig,
+    getDBTypeFromDBValue,
+    getBase64Secret,
+    getRandomHex,
+    checkStringInFile,
+    loadBlueprintsFromConfiguration,
+    parseBluePrints,
+    normalizeBlueprintName
 };
 
 /**
@@ -110,7 +122,8 @@ function rewrite(args) {
 
     let spaceStr = '';
 
-    while ((spaces -= 1) >= 0) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((spaces -= 1) >= 0) {
         spaceStr += ' ';
     }
 
@@ -160,20 +173,20 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
     if (generator.enableTranslation) {
         generator.template(source, dest, generator, opt);
     } else {
-        renderContent(source, generator, generator, opt, (body) => {
+        renderContent(source, generator, generator, opt, body => {
             body = body.replace(regex, '');
             switch (type) {
-            case 'html':
-                body = replacePlaceholders(body, generator);
-                break;
-            case 'js':
-                body = replaceTitle(body, generator);
-                break;
-            case 'jsx':
-                body = replaceTranslation(body, generator);
-                break;
-            default:
-                break;
+                case 'html':
+                    body = replacePlaceholders(body, generator);
+                    break;
+                case 'js':
+                    body = replaceTitle(body, generator);
+                    break;
+                case 'jsx':
+                    body = replaceTranslation(body, generator);
+                    break;
+                default:
+                    break;
             }
             generator.fs.write(dest, body);
         });
@@ -209,7 +222,8 @@ function replaceTitle(body, generator) {
     const re = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
     let match;
 
-    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
         const key = match[1];
         const target = key;
@@ -232,7 +246,8 @@ function replacePlaceholders(body, generator) {
     const re = /placeholder=['|"]([{]{2}['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)[}]{2})['|"]/g;
     let match;
 
-    while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
+    while ((match = re.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
         const key = match[2];
         const target = match[1];
@@ -254,14 +269,20 @@ function replacePlaceholders(body, generator) {
 function replaceTranslation(body, generator) {
     const replaceRegex = (re, defultReplaceText) => {
         let match;
-        while ((match = re.exec(body)) !== null) { // eslint-disable-line no-cond-assign
+        // eslint-disable-next-line no-cond-assign
+        while ((match = re.exec(body)) !== null) {
             // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
             const key = match[2];
             const target = match[1];
+            const limit = match[4]; // string indicating validation limit (e.g. "{ max: 4 }")
             const jsonData = geti18nJson(key, generator);
             let keyValue = jsonData !== undefined ? deepFind(jsonData, key) : undefined;
             if (!keyValue) {
                 keyValue = deepFind(jsonData, key, true); // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+            }
+            if (limit) {
+                // Replace "{{ placeholder }}" with numeric limit
+                keyValue = keyValue.replace(/{{.+}}/, /{.+:\s(.+)\s}/.exec(limit)[1]);
             }
 
             body = body.replace(target, keyValue !== undefined ? `"${keyValue}"` : defultReplaceText);
@@ -269,7 +290,7 @@ function replaceTranslation(body, generator) {
     };
 
     replaceRegex(/(\{translate\('([a-zA-Z0-9.\-_]+)'(, ?null, ?'.*')?\)\})/g, '""');
-    replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, '\'\'');
+    replaceRegex(/(translate\(\s*'([a-zA-Z0-9.\-_]+)'(,\s*(null|\{.*\}),?\s*('.*')?\s*)?\))/g, "''");
 
     return body;
 }
@@ -288,12 +309,12 @@ function geti18nJson(key, generator) {
     }
     let filename = `${i18nDirectory + name}.json`;
     let render;
-    if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
-        filename = `${i18nDirectory}${name}.json.ejs`;
+    if (!shelljs.test('-f', filename)) {
+        filename = `${filename}.ejs`;
         render = true;
     }
     try {
-        let file = generator.fs.read(path.join(generator.sourceRoot(), filename));
+        let file = generator.fs.read(filename);
         file = render ? ejs.render(file, generator, {}) : file;
         file = JSON.parse(file);
         return file;
@@ -314,7 +335,8 @@ function geti18nJson(key, generator) {
 function deepFind(obj, path, placeholder) {
     const paths = path.split('.');
     let current = obj;
-    if (placeholder) { // dirty fix for placeholders, the json files needs to be corrected
+    if (placeholder) {
+        // dirty fix for placeholders, the json files needs to be corrected
         paths[paths.length - 2] = `${paths[paths.length - 2]}.${paths[paths.length - 1]}`;
         paths.pop();
     }
@@ -366,7 +388,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enums: field.fieldValues.replace(/\s/g, '').split(','),
         angularAppName,
         packageName,
-        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
     return enumInfo;
 }
@@ -377,6 +399,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
  * @param {*} fromObj
  */
 function copyObjectProps(toObj, fromObj) {
+    // we use Object.assign instead of spread as we want to mutilate the object.
     Object.assign(toObj, fromObj);
 }
 
@@ -387,4 +410,146 @@ function copyObjectProps(toObj, fromObj) {
  */
 function decodeBase64(string, encoding = 'utf-8') {
     return Buffer.from(string, 'base64').toString(encoding);
+}
+
+/**
+ * Get all the generator configuration from the .yo-rc.json file
+ * @param {Generator} generator the generator instance to use
+ * @param {boolean} force force getting direct from file
+ * @param {String} base path where the .yo-rc.json file is located. Default is cwd.
+ */
+function getAllJhipsterConfig(generator, force, basePath = '') {
+    let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
+    const filePath = path.join(basePath || '', '.yo-rc.json');
+    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
+        const yoRc = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
+        configuration = yoRc['generator-jhipster'];
+
+        // merge the blueprint configs if available
+        const oldBlueprintName = configuration.blueprint;
+        const blueprints = configuration.blueprints || [];
+        if (oldBlueprintName && blueprints.indexOf(oldBlueprintName) === -1) {
+            const oldBlueprintVersion = configuration.blueprintVersion || 'latest';
+            blueprints.push({
+                name: oldBlueprintName,
+                version: oldBlueprintVersion
+            });
+        }
+        const blueprintConfigs = blueprints.map(bp => yoRc[bp.name]).filter(el => el !== null && el !== undefined);
+        if (blueprintConfigs.length > 0) {
+            const mergedConfigs = Object.assign(...blueprintConfigs);
+            configuration = { ...configuration, ...mergedConfigs };
+        }
+    }
+    if (!configuration.get || typeof configuration.get !== 'function') {
+        configuration = {
+            ...configuration,
+            getAll: () => configuration,
+            get: key => configuration[key],
+            set: (key, value) => {
+                configuration[key] = value;
+            }
+        };
+    }
+    return configuration;
+}
+
+/**
+ * Get DB type from DB value
+ * @param {string} db - db
+ */
+function getDBTypeFromDBValue(db) {
+    if (constants.SQL_DB_OPTIONS.map(db => db.value).includes(db)) {
+        return 'sql';
+    }
+    return db;
+}
+
+/**
+ * Get a random hex string
+ * @param {int} len the length to use, defaults to 50
+ */
+function getRandomHex(len = 50) {
+    return crypto.randomBytes(len).toString('hex');
+}
+/**
+ * Generates a base64 secret from given string or random hex
+ * @param {string} value the value used to get base64 secret
+ * @param {int} len the length to use for random hex, defaults to 50
+ */
+function getBase64Secret(value, len = 50) {
+    return Buffer.from(value || getRandomHex(len)).toString('base64');
+}
+
+function checkStringInFile(path, search, generator) {
+    const fileContent = generator.fs.read(path);
+    return fileContent.includes(search);
+}
+
+/**
+ * Loads the blueprint information from the configuration of the specified generator.
+ * @param config - the generator's configuration object.
+ * @returns {Array} an array that contains the info for each blueprint
+ */
+function loadBlueprintsFromConfiguration(generator) {
+    // load blueprints from config file
+    const blueprints = generator.config.get('blueprints') || [];
+
+    const oldBlueprintName = generator.config.get('blueprint');
+    if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
+        const version = generator.config.get('blueprintVersion') || 'latest';
+        blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
+    }
+    return blueprints;
+}
+
+/**
+ * Splits and normalizes a comma separated list of blueprint names with optional versions.
+ * @param {string} blueprints - comma separated list of blueprint names, e.g kotlin,vuewjs@1.0.1. If an array then
+ * no processing is performed and it is returned as is.
+ * @returns {Array} an array that contains the info for each blueprint
+ */
+function parseBluePrints(blueprints) {
+    if (blueprints && !Array.isArray(blueprints)) {
+        return blueprints
+            .split(',')
+            .filter(el => el != null && el.length > 0)
+            .map(blueprint => parseBlueprintInfo(blueprint));
+    }
+    return blueprints;
+}
+
+/**
+ * Normalize blueprint name if needed and also extracts version if defined. If no version is defined then `latest`
+ * is used by default.
+ * @param {string} blueprint - name of the blueprint and optionally a version, e.g kotlin[@0.8.1]
+ * @returns {object} containing the name and version of the blueprint
+ */
+function parseBlueprintInfo(blueprint) {
+    let bpName = normalizeBlueprintName(blueprint);
+    let version = 'latest';
+    const idx = bpName.lastIndexOf('@');
+    if (idx > 0) {
+        version = bpName.slice(idx + 1);
+        bpName = bpName.slice(0, idx);
+    }
+    return {
+        name: bpName,
+        version
+    };
+}
+
+/**
+ * Normalize blueprint name: prepend 'generator-jhipster-' if needed
+ * @param {string} blueprint - name of the blueprint
+ * @returns {string} the normalized blueprint name
+ */
+function normalizeBlueprintName(blueprint) {
+    if (blueprint && blueprint.startsWith('@')) {
+        return blueprint;
+    }
+    if (blueprint && !blueprint.startsWith('generator-jhipster')) {
+        return `generator-jhipster-${blueprint}`;
+    }
+    return blueprint;
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,7 +47,7 @@
                 "health": "Sağlık",
                 "configuration": "Yapılandırma",
                 "logs": "Kayıtlar",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Denetim",
                 <%_ } _%>
                 "apidocs": "API",
@@ -57,13 +57,15 @@
             "language": "Dil"
         },
         "form": {
-            "username": "Kullanıcı Adı",
+            "username.label": "Kullanıcı Adı",
             "username.placeholder": "Kullanıcı Adınız",
-            "newpassword": "Yeni Şifre",
-            "newpassword.placeholder": "Yeni Şifre",
-            "confirmpassword": "Yeni Şifre Tekrar",
-            "confirmpassword.placeholder": "Yeni Şifre Tekrar",
-            "email": "E-posta",
+            "currentpassword.label": "Mevcut Şifre",
+            "currentpassword.placeholder": "Mevcut Şifreniz",
+            "newpassword.label": "Yeni Şifre",
+            "newpassword.placeholder": "Yeni Şifreniz",
+            "confirmpassword.label": "Yeni Şifre Tekrar",
+            "confirmpassword.placeholder": "Yeni Şifreniz Tekrar",
+            "email.label": "E-posta",
             "email.placeholder": "E-posta adresiniz"
         },
         "messages": {
@@ -105,7 +107,7 @@
             "id" : "ID"
         },
         "ribbon": {
-            "dev":"Development"
+            "dev": "Development"
         },
         "item-count": "Toplam {{total}} kaydın {{first}} - {{second}} arası gösteriliyor."
     },
@@ -138,7 +140,8 @@
             "maxbytes": "Bu alan en fazla {{max}} byte olmalı.",
             "pattern": "Bu alan {{pattern}} şablonuna uymuyor.",
             "number": "Bu alan numara içermeli.",
-            "datetimelocal": "Bu alan tarih veya zaman içermeli."
+            "datetimelocal": "Bu alan tarih veya zaman içermeli.",
+            "patternLogin": "Bu alan harf, rakam veya e-posta adresi içermeli."
         }
     },
     "error": {

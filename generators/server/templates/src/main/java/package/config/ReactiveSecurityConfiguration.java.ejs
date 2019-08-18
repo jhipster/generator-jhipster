@@ -1,0 +1,172 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import <%= packageName %>.security.AuthoritiesConstants;
+<%_ if (authenticationType === 'jwt') { _%>
+import <%= packageName %>.security.jwt.JWTFilter;
+import <%= packageName %>.security.jwt.TokenProvider;
+<%_ } _%>
+<%_ if (authenticationType === 'session') { _%>
+import io.github.jhipster.web.filter.reactive.CookieCsrfFilter;
+<%_ } _%>
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
+<%_ if (authenticationType === 'session') { _%>
+import org.springframework.http.HttpStatus;
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+<%_ } _%>
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+<%_ if (!skipUserManagement) { _%>
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+<%_ } _%>
+import org.springframework.security.web.server.SecurityWebFilterChain;
+<%_ if (authenticationType === 'session') { _%>
+import org.springframework.security.web.server.WebFilterExchange;
+import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
+import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
+import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+<%_ } _%>
+import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
+<%_ if (authenticationType === 'session') { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
+
+import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
+
+@Configuration
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
+@Import(SecurityProblemSupport.class)
+public class SecurityConfiguration {
+
+    <%_ if (!skipUserManagement) { _%>
+    private final ReactiveUserDetailsService userDetailsService;
+
+    <%_ } _%>
+    <%_ if (authenticationType === 'jwt') { _%>
+    private final TokenProvider tokenProvider;
+
+    <%_ } _%>
+    private final SecurityProblemSupport problemSupport;
+
+    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider,  <% } %>SecurityProblemSupport problemSupport) {
+        <%_ if (!skipUserManagement) { _%>
+        this.userDetailsService = userDetailsService;
+        <%_ } _%>
+        <%_ if (authenticationType === 'jwt') { _%>
+        this.tokenProvider = tokenProvider;
+        <%_ } _%>
+        this.problemSupport = problemSupport;
+    }
+
+    <%_ if (!skipUserManagement) { _%>
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ReactiveAuthenticationManager reactiveAuthenticationManager() {
+        UserDetailsRepositoryReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+        authenticationManager.setPasswordEncoder(passwordEncoder());
+        return authenticationManager;
+    }
+
+    <%_ } _%>
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        http
+            .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
+                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/index.html", "/test/**"),
+                pathMatchers(HttpMethod.OPTIONS, "/**")
+            )))
+            .csrf()
+            <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
+            .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+        .and()
+            // See https://github.com/spring-projects/spring-security/issues/5766
+            .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
+            <%_ } else{ _%>
+            .disable()
+            <%_ } _%>
+            <%_ if (authenticationType === 'jwt') { _%>
+            .addFilterAt(new JWTFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
+            <%_ } _%>
+            <%_ if (!skipUserManagement) { _%>
+            .authenticationManager(reactiveAuthenticationManager())
+            <%_ } _%>
+            .exceptionHandling()
+            .accessDeniedHandler(problemSupport)
+            .authenticationEntryPoint(problemSupport)
+            <%_ if (authenticationType === 'session') { _%>
+        .and()
+            .formLogin()
+            .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
+            .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
+            .authenticationSuccessHandler((exchange, authentication) -> setStatusCode(exchange, HttpStatus.OK))
+            .authenticationFailureHandler((exchange, exception) -> setStatusCode(exchange, HttpStatus.UNAUTHORIZED))
+        .and()
+            .logout()
+            .logoutUrl("/api/logout")
+            .logoutSuccessHandler(new HttpStatusReturningServerLogoutSuccessHandler())
+            <%_ } _%>
+        .and()
+            .headers()
+            .frameOptions()
+            .disable()
+        .and()
+            .authorizeExchange()
+            <%_ if (!skipClient) { _%>
+            .pathMatchers("/").permitAll()
+            .pathMatchers("/*.*").permitAll()
+            <%_ } _%>
+            <%_ if (!skipUserManagement) { _%>
+            .pathMatchers("/api/register").permitAll()
+            .pathMatchers("/api/activate").permitAll()
+            .pathMatchers("/api/authenticate").permitAll()
+            .pathMatchers("/api/account/reset-password/init").permitAll()
+            .pathMatchers("/api/account/reset-password/finish").permitAll()
+            <%_ } _%>
+            .pathMatchers("/api/**").authenticated()
+            .pathMatchers("/management/health").permitAll()
+            .pathMatchers("/management/info").permitAll()
+            .pathMatchers("/management/prometheus").permitAll()
+            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+        return http.build();
+    }
+    <%_ if (authenticationType === 'session') { _%>
+
+    private static Mono<Void> setStatusCode(WebFilterExchange exchange, HttpStatus status) {
+        return Mono.fromRunnable(() -> exchange.getExchange().getResponse().setStatusCode(status));
+    }
+    <%_ } _%>
+}

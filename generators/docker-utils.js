@@ -1,3 +1,21 @@
+/**
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const dockerCLI = require('./docker-cli');
@@ -11,7 +29,7 @@ const dockerCLI = require('./docker-cli');
 module.exports = {
     checkDocker,
     checkImageExist,
-    checkAndBuildImages,
+    checkAndBuildImages
 };
 
 /**
@@ -19,22 +37,30 @@ module.exports = {
  * @param failOver flag
  */
 function checkDocker() {
-    if (this.abort) return;
+    if (this.abort || this.skipChecks) return;
     const done = this.async();
 
     shelljs.exec('docker -v', { silent: true }, (code, stdout, stderr) => {
         if (stderr) {
-            this.log(chalk.red('Docker version 1.10.0 or later is not installed on your computer.\n'
-                + '         Read http://docs.docker.com/engine/installation/#installation\n'));
+            this.log(
+                chalk.red(
+                    'Docker version 1.10.0 or later is not installed on your computer.\n' +
+                        '         Read http://docs.docker.com/engine/installation/#installation\n'
+                )
+            );
             this.abort = true;
         } else {
             const dockerVersion = stdout.split(' ')[2].replace(/,/g, '');
             const dockerVersionMajor = dockerVersion.split('.')[0];
             const dockerVersionMinor = dockerVersion.split('.')[1];
             if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
-                this.log(chalk.red(`${'Docker version 1.10.0 or later is not installed on your computer.\n'
-                    + '         Docker version found: '}${dockerVersion}\n`
-                    + '         Read http://docs.docker.com/engine/installation/#installation\n'));
+                this.log(
+                    chalk.red(
+                        `${'Docker version 1.10.0 or later is not installed on your computer.\n' +
+                            '         Docker version found: '}${dockerVersion}\n` +
+                            '         Read http://docs.docker.com/engine/installation/#installation\n'
+                    )
+                );
                 this.abort = true;
             } else {
                 this.log.ok('Docker is installed');
@@ -59,10 +85,10 @@ function checkImageExist(opts = { cwd: './', appConfig: null }) {
     this.warningMessage = 'To generate the missing Docker image(s), please run:\n';
     if (opts.appConfig.buildTool === 'maven') {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/target/docker`);
-        this.dockerBuildCommand = './mvnw verify -Pprod dockerfile:build';
+        this.dockerBuildCommand = './mvnw -Pprod verify jib:dockerBuild';
     } else {
         imagePath = this.destinationPath(`${opts.cwd + opts.cwd}/build/docker`);
-        this.dockerBuildCommand = './gradlew -Pprod bootWar buildDocker';
+        this.dockerBuildCommand = './gradlew bootWar -Pprod jibDockerBuild';
     }
 
     if (shelljs.ls(imagePath).length === 0) {
@@ -84,13 +110,15 @@ function checkAndBuildImages(opts = { cwd: './', forceBuild: false, appConfig: {
     checkImageExist.call(this, opts);
     const pwd = shelljs.pwd();
     shelljs.cd(opts.cwd);
-    return new Promise((resolve, reject) => dockerCLI.command(`${opts.cwd}${this.dockerBuildCommand}`, (err) => {
-        shelljs.cd(pwd);
-        if (err) {
-            this.log.error(chalk.red(`The Docker image build failed. ${err}`));
-            this.abort = true;
-            reject();
-        }
-        resolve();
-    }));
+    return new Promise((resolve, reject) =>
+        dockerCLI.command(`${opts.cwd}${this.dockerBuildCommand}`, err => {
+            shelljs.cd(pwd);
+            if (err) {
+                this.log.error(chalk.red(`The Docker image build failed. ${err}`));
+                this.abort = true;
+                reject();
+            }
+            resolve();
+        })
+    );
 }

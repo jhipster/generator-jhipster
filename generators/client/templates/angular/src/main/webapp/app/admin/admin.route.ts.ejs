@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,30 +18,28 @@
 -%>
 import { Routes } from '@angular/router';
 
-import {
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
-    auditsRoute,
-    <%_ } _%>
-    configurationRoute,
-    docsRoute,
-    healthRoute,
-    logsRoute,
-    metricsRoute,
-    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-    gatewayRoute,
-    <%_ } _%>
-    <%_ if (websocket === 'spring-websocket') { _%>
-    trackerRoute,
-    <%_ } _%>
-    <%_ if (!skipUserManagement) { _%>
-    userMgmtRoute
-    <%_ } _%>
-} from './';
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+import { auditsRoute } from './audits/audits.route';
+<%_ } _%>
+import { configurationRoute } from './configuration/configuration.route';
+import { docsRoute } from './docs/docs.route';
+import { healthRoute } from './health/health.route';
+import { logsRoute } from './logs/logs.route';
+import { metricsRoute } from './metrics/metrics.route';
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+import { gatewayRoute } from './gateway/gateway.route';
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import { trackerRoute } from './tracker/tracker.route';
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+import { userMgmtRoute } from './user-management/user-management.route';
+<%_ } _%>
 
-import { UserRouteAccessService } from 'app/core';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
 const ADMIN_ROUTES = [
-    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     auditsRoute,
     <%_ } _%>
     configurationRoute,

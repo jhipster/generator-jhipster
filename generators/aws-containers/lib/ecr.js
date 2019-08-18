@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -38,9 +38,11 @@ module.exports = class ECR {
      * @returns {Promise.<string>}
      */
     getEcrRepositoryURI(respositoryName) {
-        return this.ecr.describeRepositories({
-            repositoryNames: [respositoryName]
-        }).promise()
+        return this.ecr
+            .describeRepositories({
+                repositoryNames: [respositoryName]
+            })
+            .promise()
             .then(result => _(result.repositories).first().repositoryUri);
     }
 };

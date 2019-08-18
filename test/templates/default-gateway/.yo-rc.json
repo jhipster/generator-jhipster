@@ -1,0 +1,37 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.mycompany.myapp",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "5.3.0",
+    "applicationType": "gateway",
+    "baseName": "gway",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MTBlZDY1OTk5Yjc2MjRkZDY3ZDkwZTE1ZWY1Nzg5MTQ0NWU0MjA4OTcxZDMyMTUzZTcxOGFhM2UwMWIyYjlkZmQ3OTljZTkwNThlYmViZDM0M2Y2OWFiM2JhNWY5ZDZkYzBhODg3ZDkwOGQyYmY1ZTFiYzFkNDhkNjhjZGFmNDE=",
+    "clientFramework": "angularX",
+        "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "es"
+    ]
+  }
+}

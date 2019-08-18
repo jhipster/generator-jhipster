@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,60 +16,66 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit<%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> } from '@angular/core';
 <%_ if (authenticationType !== 'oauth2') { _%>
+import { Subscription } from 'rxjs';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-<%_ } _%>
 import { JhiEventManager } from 'ng-jhipster';
+<%_ } _%>
 
-import { <% if (authenticationType !== 'oauth2') { %>LoginModalService<% } else { %>LoginService<% } %>, Principal, Account } from 'app/core';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { LoginModalService } from 'app/core/login/login-modal.service';
+<%_ } else { _%>
+import { LoginService } from 'app/core/login/login.service';
+<%_ } _%>
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-home',
     templateUrl: './home.component.html',
     styleUrls: [
-        <%_ if (useSass) { _%>
         'home.scss'
-        <%_ } else { _%>
-        'home.css'
-        <%_ } _%>
     ]
 
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oauth2') { _%>, OnDestroy <%_ } _%> {
     account: Account;
     <%_ if (authenticationType !== 'oauth2') { _%>
+    authSubscription: Subscription;
     modalRef: NgbModalRef;
     <%_ } _%>
 
     constructor(
-        private principal: Principal,
+        private accountService: AccountService,
         <%_ if (authenticationType !== 'oauth2') { _%>
         private loginModalService: LoginModalService,
-        <%_ } else { _%>
-        private loginService: LoginService,
-        <%_ } _%>
         private eventManager: JhiEventManager
+        <%_ } else { _%>
+        private loginService: LoginService
+        <%_ } _%>
     ) {
     }
 
     ngOnInit() {
-        this.principal.identity().then((account) => {
+        this.accountService.identity().then((account: Account) => {
             this.account = account;
         });
+        <%_ if (authenticationType !== 'oauth2') { _%>
         this.registerAuthenticationSuccess();
     }
 
     registerAuthenticationSuccess() {
-        this.eventManager.subscribe('authenticationSuccess', (message) => {
-            this.principal.identity().then((account) => {
+        this.authSubscription = this.eventManager.subscribe('authenticationSuccess', (message) => {
+            this.accountService.identity().then((account) => {
                 this.account = account;
             });
         });
+        <%_ } _%>
     }
 
     isAuthenticated() {
-        return this.principal.isAuthenticated();
+        return this.accountService.isAuthenticated();
     }
 
     login() {
@@ -79,4 +85,12 @@ export class HomeComponent implements OnInit {
         this.loginService.login();
         <%_ }_%>
     }
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
+    ngOnDestroy() {
+        if(this.authSubscription) {
+            this.eventManager.destroy(this.authSubscription);
+        }
+    }
+    <%_ }_%>
 }

@@ -1,0 +1,327 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "stringJade",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "stringRequiredJade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "stringMinlengthJade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength"
+            ],
+            "fieldValidateRulesMinlength": 0
+        },
+        {
+            "fieldName": "stringMaxlengthJade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 20
+        },
+        {
+            "fieldName": "stringPatternJade",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "pattern"
+            ],
+            "fieldValidateRulesPattern": "^[a-zA-Z0-9]*$",
+            "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
+        },
+        {
+            "fieldName": "integerJade",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "integerRequiredJade",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "integerMinJade",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "integerMaxJade",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "longJade",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "longRequiredJade",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "longMinJade",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "longMaxJade",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "floatJade",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "floatRequiredJade",
+            "fieldType": "Float",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "floatMinJade",
+            "fieldType": "Float",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "floatMaxJade",
+            "fieldType": "Float",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "doubleRequiredJade",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "doubleMinJade",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "doubleMaxJade",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "bigDecimalRequiredJade",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "bigDecimalMinJade",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "bigDecimalMaxJade",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "localDateJade",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "localDateRequiredJade",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "instantJade",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredJade",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "zonedDateTimeJade",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "zonedDateTimeRequiredJade",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "durationJade",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredJade",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "booleanJade",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "booleanRequiredJade",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "enumJade",
+            "fieldType": "EnumFieldClass",
+            "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
+        },
+        {
+            "fieldName": "enumRequiredJade",
+            "fieldType": "EnumRequiredFieldClass",
+            "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidJade",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredJade",
+            "fieldType": "UUID",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "byteImageJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "byteImageRequiredJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "byteImageMinbytesJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "minbytes"
+            ],
+            "fieldValidateRulesMinbytes": 0
+        },
+        {
+            "fieldName": "byteImageMaxbytesJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "maxbytes"
+            ],
+            "fieldValidateRulesMaxbytes": 10000
+        },
+        {
+            "fieldName": "byteAnyJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "byteAnyRequiredJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "byteAnyMinbytesJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "minbytes"
+            ],
+            "fieldValidateRulesMinbytes": 0
+        },
+        {
+            "fieldName": "byteAnyMaxbytesJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "maxbytes"
+            ],
+            "fieldValidateRulesMaxbytes": 10000
+        },
+        {
+            "fieldName": "byteTextJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "byteTextRequiredJade",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160208184031",
+    "dto": "no",
+    "service": "no",
+    "pagination": "pager"
+}

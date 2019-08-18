@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,8 +20,14 @@ const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
 const AwsFactory = require('./lib/aws.js');
+const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+        this.registerPrettierTransform();
+    }
+
     get initializing() {
         return {
             initAws() {
@@ -46,25 +52,29 @@ module.exports = class extends BaseGenerator {
                     this.dbName = awsConfig.dbName;
                     this.dbInstanceClass = awsConfig.dbInstanceClass;
 
-                    this.log(chalk.green('This is an existing deployment, using the configuration from your .yo-rc.json file \n'
-                        + 'to deploy your application...\n'));
+                    this.log(
+                        chalk.green(
+                            'This is an existing deployment, using the configuration from your .yo-rc.json file \n' +
+                                'to deploy your application...\n'
+                        )
+                    );
                 }
             },
             checkDatabase() {
                 const prodDatabaseType = this.config.get('prodDatabaseType');
 
                 switch (prodDatabaseType.toLowerCase()) {
-                case 'mariadb':
-                    this.dbEngine = 'mariadb';
-                    break;
-                case 'mysql':
-                    this.dbEngine = 'mysql';
-                    break;
-                case 'postgresql':
-                    this.dbEngine = 'postgres';
-                    break;
-                default:
-                    this.error(chalk.red('Sorry deployment for this database is not possible'));
+                    case 'mariadb':
+                        this.dbEngine = 'mariadb';
+                        break;
+                    case 'mysql':
+                        this.dbEngine = 'mysql';
+                        break;
+                    case 'postgresql':
+                        this.dbEngine = 'postgres';
+                        break;
+                    default:
+                        this.error('Sorry deployment for this database is not possible');
                 }
             }
         };
@@ -77,8 +87,7 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'aws');
+                statistics.sendSubGenEvent('generator', 'aws');
             },
             createAwsFactory() {
                 const cb = this.async();
@@ -105,16 +114,16 @@ module.exports = class extends BaseGenerator {
                 const cb = this.async();
                 this.log(chalk.bold('Building application'));
 
-                const child = this.buildApplication(this.buildTool, 'prod', (err) => {
+                const child = this.buildApplication(this.buildTool, 'prod', true, err => {
                     if (err) {
-                        this.error(chalk.red(err));
+                        this.error(err);
                     } else {
                         cb();
                     }
                 });
 
-                child.stdout.on('data', (data) => {
-                    this.log(data.toString());
+                child.stdout.on('data', data => {
+                    process.stdout.write(data.toString());
                 });
             },
             createBucket() {
@@ -127,9 +136,9 @@ module.exports = class extends BaseGenerator {
                 s3.createBucket({ bucket: this.bucketName }, (err, data) => {
                     if (err) {
                         if (err.message == null) {
-                            this.error(chalk.red(('The S3 bucket could not be created. Are you sure its name is not already used?')));
+                            this.error('The S3 bucket could not be created. Are you sure its name is not already used?');
                         } else {
-                            this.error(chalk.red(err.message));
+                            this.error(err.message);
                         }
                     } else {
                         this.log(data.message);
@@ -151,7 +160,7 @@ module.exports = class extends BaseGenerator {
 
                 s3.uploadWar(params, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         this.warKey = data.warKey;
                         this.log(data.message);
@@ -176,7 +185,7 @@ module.exports = class extends BaseGenerator {
 
                 rds.createDatabase(params, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         this.log(data.message);
                         cb();
@@ -201,7 +210,7 @@ module.exports = class extends BaseGenerator {
 
                 rds.createDatabaseUrl(params, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         this.dbUrl = data.dbUrl;
                         this.log(data.message);
@@ -214,9 +223,9 @@ module.exports = class extends BaseGenerator {
                 this.log();
                 this.log(chalk.bold('Verifying ElasticBeanstalk Roles'));
                 const iam = this.awsFactory.getIam();
-                iam.verifyRoles({}, (err) => {
+                iam.verifyRoles({}, err => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         cb();
                     }
@@ -242,7 +251,7 @@ module.exports = class extends BaseGenerator {
 
                 eb.createApplication(params, (err, data) => {
                     if (err) {
-                        this.error(chalk.red(err.message));
+                        this.error(err.message);
                     } else {
                         this.log(data.message);
                         cb();

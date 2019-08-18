@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,9 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
-const JasmineReporters = require('jasmine-reporters');
-
 exports.config = {
     allScriptsTimeout: 20000,
 
@@ -32,7 +29,9 @@ exports.config = {
     capabilities: {
         browserName: 'chrome',
         chromeOptions: {
-            args: [ "--disable-gpu", "--window-size=800,600" ]
+            args: process.env.JHI_E2E_HEADLESS
+                ? [ "--headless", "--disable-gpu", "--window-size=800,600" ]
+                : [ "--disable-gpu", "--window-size=800,600" ]
         }
     },
 
@@ -40,28 +39,35 @@ exports.config = {
 
     baseUrl: 'http://localhost:<%= serverPort %>/',
 
-    framework: 'jasmine2',
+    framework: 'mocha',
 
-    jasmineNodeOpts: {
-        showColors: true,
-        defaultTimeoutInterval: 720000
+    SELENIUM_PROMISE_MANAGER: false,
+
+    mochaOpts: {
+        reporter: 'spec',
+        slow: 3000,
+        ui: 'bdd',
+        timeout: 720000
     },
 
     beforeLaunch: function() {
         require('ts-node').register({
-            project: ''
+            project: 'tsconfig.e2e.json'
         });
     },
 
     onPrepare: function() {
         browser.driver.manage().window().setSize(1280, 1024);
-        jasmine.getEnv().addReporter(new JasmineReporters.JUnitXmlReporter({
-            savePath: '<%= BUILD_DIR %>reports/e2e',
-            consolidateAll: false
-        }));
-        jasmine.getEnv().addReporter(new HtmlScreenshotReporter({
-            dest: "<%= BUILD_DIR %>reports/e2e/screenshots"
-        }));
+        // Disable animations
+        // @ts-ignore
+        browser.executeScript('document.body.className += " notransition";');
+        const chai = require('chai');
+        const chaiAsPromised = require('chai-as-promised');
+        chai.use(chaiAsPromised);
+        const chaiString = require('chai-string');
+        chai.use(chaiString);
+        // @ts-ignore
+        global.chai = chai;
     },
 
     useAllAngular2AppRoots: true

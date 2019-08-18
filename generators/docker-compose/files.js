@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -53,10 +53,11 @@ function writeFiles() {
         },
 
         writeKeycloakFiles() {
-            if (this.authenticationType !== 'oauth2') return;
-            this.template('keycloak.yml.ejs', 'keycloak.yml');
-            this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
-            this.template('realm-config/jhipster-users-0.json.ejs', 'realm-config/jhipster-users-0.json');
+            if (this.authenticationType === 'oauth2' && this.applicationType !== 'microservice') {
+                this.template('keycloak.yml.ejs', 'keycloak.yml');
+                this.template('realm-config/jhipster-realm.json.ejs', 'realm-config/jhipster-realm.json');
+                this.template('realm-config/jhipster-users-0.json.ejs', 'realm-config/jhipster-users-0.json');
+            }
         },
 
         writeElkFiles() {
@@ -73,7 +74,7 @@ function writeFiles() {
             // Generate a list of target apps to monitor for the prometheus config
             const appsToMonitor = [];
             for (let i = 0; i < this.appConfigs.length; i++) {
-                appsToMonitor.push(`             - ${this.appConfigs[i].baseName}-app:${this.appConfigs[i].serverPort}`);
+                appsToMonitor.push(`        - ${this.appConfigs[i].baseName}-app:${this.appConfigs[i].serverPort}`);
             }
 
             // Format the application target list as a YAML array
@@ -81,7 +82,7 @@ function writeFiles() {
 
             this.template('prometheus.yml.ejs', 'prometheus.yml');
             this.template('prometheus-conf/prometheus.yml.ejs', 'prometheus-conf/prometheus.yml');
-            this.template('prometheus-conf/alert.rules.ejs', 'prometheus-conf/alert.rules');
+            this.template('prometheus-conf/alert_rules.yml.ejs', 'prometheus-conf/alert_rules.yml');
             this.template('alertmanager-conf/config.yml.ejs', 'alertmanager-conf/config.yml');
         }
     };

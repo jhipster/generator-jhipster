@@ -1,0 +1,182 @@
+application {
+  config {
+    applicationType monolith,
+    baseName jhipsterSampleApplication,
+    packageName io.github.jhipster.sample,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    buildTool maven,
+    searchEngine false,
+    testFrameworks [gatling, protractor],
+    clientFramework angularX,
+    enableTranslation true,
+    nativeLanguage en,
+    languages [ en, fr ]
+  }
+  entities *
+}
+
+entity BankAccount {
+  name String required
+  bankNumber Integer
+  agencyNumber Long
+  lastOperationDuration Float
+  meanOperationDuration Double
+  balance BigDecimal required
+  openingDay LocalDate
+  lastOperationDate Instant
+  active Boolean
+  accountType BankAccountType
+  attachment AnyBlob
+  description TextBlob
+}
+entity TheLabel {
+  labelName String required minlength(3)
+}
+entity Operation {
+  date Instant required
+  description String
+  amount BigDecimal required
+}
+
+enum BankAccountType {
+  CHECKING,
+  SAVINGS,
+  LOAN
+}
+
+entity Department {
+  name String required,
+  description TextBlob,
+  advertisement Blob,
+  logo ImageBlob
+}
+
+/**
+ * JobHistory comment.
+ */
+entity JobHistory {
+  startDate ZonedDateTime,
+  endDate ZonedDateTime,
+  language Language
+}
+
+enum Language {
+  FRENCH, ENGLISH, SPANISH
+}
+
+enum JobType {
+  BOSS, SLAVE
+}
+
+entity Job {
+  title String minlength(5) maxlength(25),
+  type JobType,
+  minSalary Long,
+  maxSalary Long
+}
+
+/**
+ * The Employee entity.
+ * Second line in javadoc.
+ */
+entity Employee {
+  /**
+   * The firstname attribute.
+   */
+  firstName String,
+  lastName String,
+  email String,
+  phoneNumber String,
+  hireDate ZonedDateTime,
+  salary Long,
+  commissionPct Long
+}
+
+entity Location {
+  streetAddress String,
+  postalCode String,
+  city String,
+  stateProvince String
+}
+
+entity Task {
+  title String,
+  description String
+}
+
+entity GoldenBadge {
+  name String
+}
+
+entity SilverBadge {
+  name String
+}
+
+entity Identifier {
+  name String required unique
+}
+
+entity Country {
+  name String
+}
+
+entity Region {
+  name String
+}
+
+relationship OneToOne {
+  Department{location} to Location,
+  Employee{user(login)} to User with jpaDerivedIdentifier
+}
+
+relationship OneToMany {
+  BankAccount{operation} to Operation{bankAccount(name)}
+}
+relationship ManyToOne {
+  BankAccount{user(login)} to User
+}
+relationship ManyToMany {
+  Operation{theLabel(labelName)} to TheLabel{operation}
+}
+
+relationship OneToMany {
+  /**
+   * A relationship
+   */
+  Department{employee} to
+  /**
+   * Another side of the same relationship,
+   */
+  Employee{department},
+  Employee{job} to Job{emp(lastName)},
+  Location{country} to Country,
+  Country{area(name)} to Region
+}
+
+relationship ManyToOne {
+  Employee{manager(lastName)} to Employee,
+  Employee{sibag(name) required} to SilverBadge,
+  Employee{gobag(name) required} to GoldenBadge,
+  SilverBadge{iden(name) required} to Identifier,
+  GoldenBadge{iden(name) required} to Identifier
+}
+
+relationship ManyToMany {
+  JobHistory to Department,
+  JobHistory to Job{history},
+  JobHistory{emp(firstName)} to Employee{history},
+  Job{chore(title)} to Task{linkedJob(title)}
+}
+
+dto BankAccount, Employee, Department, Location, Country, Region, SilverBadge, GoldenBadge, Identifier with mapstruct
+
+angularSuffix BankAccount with mySuffix
+filter BankAccount, Employee
+clientRootFolder BankAccount, TheLabel, Operation with test-root
+
+paginate TheLabel, Job with pagination
+paginate Operation, JobHistory, Employee with infinite-scroll
+
+service TheLabel, Employee, Department, Region with serviceClass
+service BankAccount, Location, Country with serviceImpl

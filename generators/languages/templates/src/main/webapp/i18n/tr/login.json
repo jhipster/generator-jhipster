@@ -12,7 +12,7 @@
                 "authentication": "<strong>Giriş işlemi başarısız oldu!</strong> Lütfen kullanıcı bilgilerinizi kontrol edip tekrar deneyin."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Şifreni mi unuttun?"
         }
     }

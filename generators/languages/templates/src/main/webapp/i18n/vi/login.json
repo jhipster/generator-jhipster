@@ -12,7 +12,7 @@
                 "authentication": "<strong>Đăng nhập thất bại!</strong> Bạn vui lòng kiểm tra thông tin đăng nhập và thử lại."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Bạn quên mật khẩu?"
         }
     }

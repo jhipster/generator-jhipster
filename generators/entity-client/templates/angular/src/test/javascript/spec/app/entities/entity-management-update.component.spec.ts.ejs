@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,12 +17,13 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { FormBuilder } from '@angular/forms';
+import { of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>UpdateComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';
@@ -39,7 +40,8 @@ describe('Component Tests', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [<%= entityAngularName %>UpdateComponent]
+                declarations: [<%= entityAngularName %>UpdateComponent],
+                providers: [FormBuilder]
             })
             .overrideTemplate(<%= entityAngularName %>UpdateComponent, '')
             .compileComponents();
@@ -55,7 +57,7 @@ describe('Component Tests', () => {
                     // GIVEN
                     const entity = new <%= entityAngularName %>(<%- tsKeyId %>);
                     spyOn(service, 'update').and.returnValue(of(new HttpResponse({body: entity})));
-                    comp.<%= entityInstance %> = entity;
+                    comp.updateForm(entity);
                     // WHEN
                     comp.save();
                     tick(); // simulate async
@@ -71,7 +73,7 @@ describe('Component Tests', () => {
                     // GIVEN
                     const entity = new <%= entityAngularName %>();
                     spyOn(service, 'create').and.returnValue(of(new HttpResponse({body: entity})));
-                    comp.<%= entityInstance %> = entity;
+                    comp.updateForm(entity);
                     // WHEN
                     comp.save();
                     tick(); // simulate async

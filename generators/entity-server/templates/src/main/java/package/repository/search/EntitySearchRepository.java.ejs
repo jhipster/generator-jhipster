@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,15 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository.search;
-
-import <%=packageName%>.domain.<%=entityClass%>;
+package <%=packageName%>.repository.search;<%
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+%>
+import <%=packageName%>.domain.<%=asEntity(entityClass)%>;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;<% if (databaseType === 'cassandra') { %>
 
 import java.util.UUID;<% } %>
 
 /**
- * Spring Data Elasticsearch repository for the <%=entityClass%> entity.
+ * Spring Data Elasticsearch repository for the {@link <%=asEntity(entityClass)%>} entity.
  */
-public interface <%=entityClass%>SearchRepository extends ElasticsearchRepository<<%=entityClass%>, <% if (databaseType === 'sql') { %>Long<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %>> {
+public interface <%=entityClass%>SearchRepository extends ElasticsearchRepository<<%=asEntity(entityClass)%>, <% if (databaseType === 'sql') { %><%=primaryKeyType%><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %>> {
 }

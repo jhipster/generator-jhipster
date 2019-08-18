@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -31,8 +31,10 @@ import userManagement, {
   getUser,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  reset
 } from 'app/modules/administration/user-management/user-management.reducer';
+import { defaultValue } from 'app/shared/model/user.model';
 
 describe('User management reducer tests', () => {
   function isEmpty(element): boolean {
@@ -124,14 +126,20 @@ describe('User management reducer tests', () => {
 
   describe('Success', () => {
     it('should update state according to a successful fetch users request', () => {
+      <%_ if (databaseType !== 'cassandra') { _%>
       const headers = { ['x-total-count']: 42 };
       const payload = { data: 'some handsome users', headers };
+      <%_ } else { _%>
+      const payload = { data: 'some handsome users' };
+      <%_ } _%>
       const toTest = userManagement(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_USERS), payload });
 
       expect(toTest).toMatchObject({
         loading: false,
         users: payload.data,
+        <%_ if (databaseType !== 'cassandra') { _%>
         totalItems: headers['x-total-count']
+        <%_ } _%>
       });
     });
 
@@ -176,12 +184,39 @@ describe('User management reducer tests', () => {
     });
   });
 
+  describe('Reset', () => {
+    it('should reset the state', () => {
+      const initialState = {
+        loading: false,
+        errorMessage: null,
+        users: [],
+        authorities: [] as any[],
+        user: defaultValue,
+        updating: false,
+        updateSuccess: false,
+        totalItems: 0
+      };
+      const payload = {
+        ...initialState,
+        loading: true
+      };
+      expect(
+        userManagement(
+          payload,
+          {
+            type: ACTION_TYPES.RESET
+          }
+        )
+      ).toEqual(initialState);
+    });
+  });
+
   describe('Actions', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
     beforeEach(() => {
-      const mockStore = configureStore([thunk, promiseMiddleware()]);
+      const mockStore = configureStore([thunk, promiseMiddleware]);
       store = mockStore({});
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
@@ -293,6 +328,15 @@ describe('User management reducer tests', () => {
         }
       ];
       await store.dispatch(deleteUser('admin')).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
+        }
+      ];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
     });
   });
 });

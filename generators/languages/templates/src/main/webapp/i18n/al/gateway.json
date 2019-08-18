@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Gateway",
+        "routes": {
+            "title": "Route aktuale",
+            "url": "URL",
+            "service": "Service",
+            "servers": "Serverat e pranishëm",
+            "error": "Paralajmërim: ska servera të pranishëm!"
+        },
+        "refresh": {
+            "button": "Rifresko"
+        }
+    }
+}

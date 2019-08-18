@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,6 +18,8 @@
  */
 const chalk = require('chalk');
 const shelljs = require('shelljs');
+const { loadConfigs, setClusteredApps } = require('./docker-base');
+const { getBase64Secret } = require('./utils');
 
 module.exports = {
     askForApplicationType,
@@ -38,27 +40,31 @@ module.exports = {
  * Ask For Application Type
  */
 function askForApplicationType() {
+    if (this.regenerate) return;
+
     const done = this.async();
 
-    const prompts = [{
-        type: 'list',
-        name: 'composeApplicationType',
-        message: 'Which *type* of application would you like to deploy?',
-        choices: [
-            {
-                value: 'monolith',
-                name: 'Monolithic application'
-            },
-            {
-                value: 'microservice',
-                name: 'Microservice application'
-            }
-        ],
-        default: 'monolith'
-    }];
+    const prompts = [
+        {
+            type: 'list',
+            name: 'deploymentApplicationType',
+            message: 'Which *type* of application would you like to deploy?',
+            choices: [
+                {
+                    value: 'monolith',
+                    name: 'Monolithic application'
+                },
+                {
+                    value: 'microservice',
+                    name: 'Microservice application'
+                }
+            ],
+            default: 'monolith'
+        }
+    ];
 
-    this.prompt(prompts).then((props) => {
-        this.composeApplicationType = props.composeApplicationType;
+    this.prompt(prompts).then(props => {
+        this.deploymentApplicationType = props.deploymentApplicationType;
         done();
     });
 }
@@ -68,27 +74,29 @@ function askForApplicationType() {
  */
 function askForGatewayType() {
     if (this.regenerate) return;
-    if (this.composeApplicationType !== 'microservice') return;
+    if (this.deploymentApplicationType !== 'microservice') return;
     const done = this.async();
 
-    const prompts = [{
-        type: 'list',
-        name: 'gatewayType',
-        message: 'Which *type* of gateway would you like to use?',
-        choices: [
-            {
-                value: 'zuul',
-                name: 'JHipster gateway based on Netflix Zuul'
-            },
-            {
-                value: 'traefik',
-                name: '[BETA] Traefik gateway (only works with Consul)'
-            }
-        ],
-        default: 'zuul'
-    }];
+    const prompts = [
+        {
+            type: 'list',
+            name: 'gatewayType',
+            message: 'Which *type* of gateway would you like to use?',
+            choices: [
+                {
+                    value: 'zuul',
+                    name: 'JHipster gateway based on Netflix Zuul'
+                },
+                {
+                    value: 'traefik',
+                    name: 'Traefik gateway (only works with Consul)'
+                }
+            ],
+            default: 'zuul'
+        }
+    ];
 
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.gatewayType = props.gatewayType;
         done();
     });
@@ -101,33 +109,37 @@ function askForPath() {
     if (this.regenerate) return;
 
     const done = this.async();
-    const composeApplicationType = this.composeApplicationType;
+    const deploymentApplicationType = this.deploymentApplicationType;
     let messageAskForPath;
-    if (composeApplicationType === 'monolith') {
+    if (deploymentApplicationType === 'monolith') {
         messageAskForPath = 'Enter the root directory where your applications are located';
     } else {
         messageAskForPath = 'Enter the root directory where your gateway(s) and microservices are located';
     }
-    const prompts = [{
-        type: 'input',
-        name: 'directoryPath',
-        message: messageAskForPath,
-        default: this.directoryPath || '../',
-        validate: (input) => {
-            const path = this.destinationPath(input);
-            if (shelljs.test('-d', path)) {
-                const appsFolders = getAppFolders.call(this, input, composeApplicationType);
+    const prompts = [
+        {
+            type: 'input',
+            name: 'directoryPath',
+            message: messageAskForPath,
+            default: this.directoryPath || '../',
+            validate: input => {
+                const path = this.destinationPath(input);
+                if (shelljs.test('-d', path)) {
+                    const appsFolders = getAppFolders.call(this, input, deploymentApplicationType);
 
-                if (appsFolders.length === 0) {
-                    return composeApplicationType === 'monolith' ? `No monolith found in ${path}` : `No microservice or gateway found in ${path}`;
+                    if (appsFolders.length === 0) {
+                        return deploymentApplicationType === 'monolith'
+                            ? `No monolith found in ${path}`
+                            : `No microservice or gateway found in ${path}`;
+                    }
+                    return true;
                 }
-                return true;
+                return `${path} is not a directory or doesn't exist`;
             }
-            return `${path} is not a directory or doesn't exist`;
         }
-    }];
+    ];
 
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.directoryPath = props.directoryPath;
         // Patch the path if there is no trailing "/"
         if (!this.directoryPath.endsWith('/')) {
@@ -135,7 +147,7 @@ function askForPath() {
             this.directoryPath += '/';
         }
 
-        this.appsFolders = getAppFolders.call(this, this.directoryPath, composeApplicationType);
+        this.appsFolders = getAppFolders.call(this, this.directoryPath, deploymentApplicationType);
 
         // Removing registry from appsFolders, using reverse for loop
         for (let i = this.appsFolders.length - 1; i >= 0; i--) {
@@ -150,7 +162,6 @@ function askForPath() {
     });
 }
 
-
 /**
  * Ask For Apps
  */
@@ -160,50 +171,22 @@ function askForApps() {
     const done = this.async();
     const messageAskForApps = 'Which applications do you want to include in your configuration?';
 
-    const prompts = [{
-        type: 'checkbox',
-        name: 'chosenApps',
-        message: messageAskForApps,
-        choices: this.appsFolders,
-        default: this.defaultAppsFolders,
-        validate: input => (input.length === 0 ? 'Please choose at least one application' : true)
-    }];
+    const prompts = [
+        {
+            type: 'checkbox',
+            name: 'chosenApps',
+            message: messageAskForApps,
+            choices: this.appsFolders,
+            default: this.defaultAppsFolders,
+            validate: input => (input.length === 0 ? 'Please choose at least one application' : true)
+        }
+    ];
 
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.appsFolders = props.chosenApps;
 
         loadConfigs.call(this);
         done();
-    });
-}
-
-/*
- * Load config from this.appFolders
- * TODO: Extracted from AdForApps. Move into utils?
- */
-function loadConfigs() {
-    this.appConfigs = [];
-    this.gatewayNb = 0;
-    this.monolithicNb = 0;
-    this.microserviceNb = 0;
-
-    // Loading configs
-    this.appsFolders.forEach((appFolder) => {
-        const path = this.destinationPath(`${this.directoryPath + appFolder}/.yo-rc.json`);
-        const fileData = this.fs.readJSON(path);
-        const config = fileData['generator-jhipster'];
-
-        if (config.applicationType === 'monolith') {
-            this.monolithicNb++;
-        } else if (config.applicationType === 'gateway') {
-            this.gatewayNb++;
-        } else if (config.applicationType === 'microservice') {
-            this.microserviceNb++;
-        }
-
-        this.portsToBind = this.monolithicNb + this.gatewayNb;
-        config.appFolder = appFolder;
-        this.appConfigs.push(config);
     });
 }
 
@@ -223,21 +206,19 @@ function askForClustersMode() {
 
     const done = this.async();
 
-    const prompts = [{
-        type: 'checkbox',
-        name: 'clusteredDbApps',
-        message: 'Which applications do you want to use with clustered databases (only available with MongoDB and Couchbase)?',
-        choices: clusteredDbApps,
-        default: this.clusteredDbApps
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.clusteredDbApps = props.clusteredDbApps;
-        for (let i = 0; i < this.appsFolders.length; i++) {
-            for (let j = 0; j < props.clusteredDbApps.length; j++) {
-                this.appConfigs[i].clusteredDb = this.appsFolders[i] === props.clusteredDbApps[j];
-            }
+    const prompts = [
+        {
+            type: 'checkbox',
+            name: 'clusteredDbApps',
+            message: 'Which applications do you want to use with clustered databases (only available with MongoDB and Couchbase)?',
+            choices: clusteredDbApps,
+            default: this.clusteredDbApps
         }
+    ];
+
+    this.prompt(prompts).then(props => {
+        this.clusteredDbApps = props.clusteredDbApps;
+        setClusteredApps.call(this);
 
         done();
     });
@@ -251,28 +232,33 @@ function askForMonitoring() {
 
     const done = this.async();
 
-    const prompts = [{
-        type: 'list',
-        name: 'monitoring',
-        message: 'Do you want to setup monitoring for your applications ?',
-        choices: [
-            {
-                value: 'no',
-                name: 'No'
-            },
-            {
-                value: 'elk',
-                name: (this.composeApplicationType === 'monolith') ? 'Yes, for logs and metrics with the JHipster Console (based on ELK)' : 'Yes, for logs and metrics with the JHipster Console (based on ELK and Zipkin)'
-            },
-            {
-                value: 'prometheus',
-                name: 'Yes, for metrics only with Prometheus (only compatible with JHipster >= v3.12)'
-            }
-        ],
-        default: this.monitoring ? this.monitoring : 'no'
-    }];
+    const prompts = [
+        {
+            type: 'list',
+            name: 'monitoring',
+            message: 'Do you want to setup monitoring for your applications ?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No'
+                },
+                {
+                    value: 'elk',
+                    name:
+                        this.deploymentApplicationType === 'monolith'
+                            ? 'Yes, for logs and metrics with the JHipster Console (based on ELK)'
+                            : 'Yes, for logs and metrics with the JHipster Console (based on ELK and Zipkin)'
+                },
+                {
+                    value: 'prometheus',
+                    name: 'Yes, for metrics only with Prometheus'
+                }
+            ],
+            default: this.monitoring ? this.monitoring : 'no'
+        }
+    ];
 
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.monitoring = props.monitoring;
         done();
     });
@@ -288,25 +274,28 @@ function askForConsoleOptions() {
 
     const done = this.async();
 
-    const prompts = [{
-        type: 'checkbox',
-        name: 'consoleOptions',
-        message: 'You have selected the JHipster Console which is based on the ELK stack and additional technologies, which one do you want to use ?',
-        choices: [
-            {
-                value: 'curator',
-                name: 'Curator, to help you curate and manage your Elasticsearch indices'
-            }
-        ],
-        default: this.monitoring
-    }];
-    if (this.composeApplicationType === 'microservice') {
+    const prompts = [
+        {
+            type: 'checkbox',
+            name: 'consoleOptions',
+            message:
+                'You have selected the JHipster Console which is based on the ELK stack and additional technologies, which one do you want to use ?',
+            choices: [
+                {
+                    value: 'curator',
+                    name: 'Curator, to help you curate and manage your Elasticsearch indices'
+                }
+            ],
+            default: this.monitoring
+        }
+    ];
+    if (this.deploymentApplicationType === 'microservice') {
         prompts[0].choices.push({
             value: 'zipkin',
             name: 'Zipkin, for distributed tracing (only compatible with JHipster >= v4.2.0)'
         });
     }
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.consoleOptions = props.consoleOptions;
         done();
     });
@@ -347,32 +336,34 @@ function askForServiceDiscovery() {
     } else {
         this.log(chalk.yellow('Unable to determine the service discovery and configuration provider to use from your apps configuration.'));
         this.log('Your service discovery enabled apps:');
-        serviceDiscoveryEnabledApps.forEach((app) => {
+        serviceDiscoveryEnabledApps.forEach(app => {
             this.log(` -${app.baseName} (${app.serviceDiscoveryType})`);
         });
 
-        const prompts = [{
-            type: 'list',
-            name: 'serviceDiscoveryType',
-            message: 'Which Service Discovery registry and Configuration server would you like to use ?',
-            choices: [
-                {
-                    value: 'eureka',
-                    name: 'JHipster Registry'
-                },
-                {
-                    value: 'consul',
-                    name: 'Consul'
-                },
-                {
-                    value: false,
-                    name: 'No Service Discovery and Configuration'
-                }
-            ],
-            default: 'eureka'
-        }];
+        const prompts = [
+            {
+                type: 'list',
+                name: 'serviceDiscoveryType',
+                message: 'Which Service Discovery registry and Configuration server would you like to use ?',
+                choices: [
+                    {
+                        value: 'eureka',
+                        name: 'JHipster Registry'
+                    },
+                    {
+                        value: 'consul',
+                        name: 'Consul'
+                    },
+                    {
+                        value: false,
+                        name: 'No Service Discovery and Configuration'
+                    }
+                ],
+                default: 'eureka'
+            }
+        ];
 
-        this.prompt(prompts).then((props) => {
+        this.prompt(prompts).then(props => {
             this.serviceDiscoveryType = props.serviceDiscoveryType;
             done();
         });
@@ -387,17 +378,65 @@ function askForAdminPassword() {
 
     const done = this.async();
 
-    const prompts = [{
-        type: 'input',
-        name: 'adminPassword',
-        message: 'Enter the admin password used to secure the JHipster Registry',
-        default: 'admin',
-        validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true)
-    }];
+    const prompts = [
+        {
+            type: 'input',
+            name: 'adminPassword',
+            message: 'Enter the admin password used to secure the JHipster Registry',
+            default: 'admin',
+            validate: input => (input.length < 5 ? 'The password must have at least 5 characters' : true)
+        }
+    ];
 
-    this.prompt(prompts).then((props) => {
+    this.prompt(prompts).then(props => {
         this.adminPassword = props.adminPassword;
-        this.adminPasswordBase64 = Buffer.from(this.adminPassword).toString('base64');
+        this.adminPasswordBase64 = getBase64Secret(this.adminPassword);
+        done();
+    });
+}
+
+/**
+ * Ask For Docker Repository Name
+ */
+function askForDockerRepositoryName() {
+    if (this.regenerate) return;
+
+    const done = this.async();
+
+    const prompts = [
+        {
+            type: 'input',
+            name: 'dockerRepositoryName',
+            message: 'What should we use for the base Docker repository name?',
+            default: this.dockerRepositoryName
+        }
+    ];
+
+    this.prompt(prompts).then(props => {
+        this.dockerRepositoryName = props.dockerRepositoryName;
+        done();
+    });
+}
+
+/**
+ * Ask For Docker Push Command
+ */
+function askForDockerPushCommand() {
+    if (this.regenerate) return;
+
+    const done = this.async();
+
+    const prompts = [
+        {
+            type: 'input',
+            name: 'dockerPushCommand',
+            message: 'What command should we use for push Docker image to repository?',
+            default: this.dockerPushCommand ? this.dockerPushCommand : 'docker push'
+        }
+    ];
+
+    this.prompt(prompts).then(props => {
+        this.dockerPushCommand = props.dockerPushCommand;
         done();
     });
 }
@@ -405,25 +444,27 @@ function askForAdminPassword() {
 /**
  * Get App Folders
  * @param input path to join to destination path
- * @param composeApplicationType type of application being composed
+ * @param deploymentApplicationType type of application being composed
  * @returns {Array} array of string representing app folders
  */
-function getAppFolders(input, composeApplicationType) {
+function getAppFolders(input, deploymentApplicationType) {
     const destinationPath = this.destinationPath(input);
     const files = shelljs.ls('-l', destinationPath);
     const appsFolders = [];
 
-    files.forEach((file) => {
+    files.forEach(file => {
         if (file.isDirectory()) {
-            if ((shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`))
-                && (shelljs.test('-f', `${destinationPath}/${file.name}/src/main/docker/app.yml`))) {
+            if (shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`)) {
                 try {
                     const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
-                    if ((fileData['generator-jhipster'].baseName !== undefined)
-                        && ((composeApplicationType === undefined)
-                            || (composeApplicationType === fileData['generator-jhipster'].applicationType)
-                            || ((composeApplicationType === 'microservice') && (fileData['generator-jhipster'].applicationType === 'gateway'))
-                            || ((composeApplicationType === 'microservice') && (fileData['generator-jhipster'].applicationType === 'uaa')))) {
+                    if (
+                        fileData['generator-jhipster'].baseName !== undefined &&
+                        (deploymentApplicationType === undefined ||
+                            deploymentApplicationType === fileData['generator-jhipster'].applicationType ||
+                            (deploymentApplicationType === 'microservice' &&
+                                fileData['generator-jhipster'].applicationType === 'gateway') ||
+                            (deploymentApplicationType === 'microservice' && fileData['generator-jhipster'].applicationType === 'uaa'))
+                    ) {
                         appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
                     }
                 } catch (err) {
@@ -435,42 +476,4 @@ function getAppFolders(input, composeApplicationType) {
     });
 
     return appsFolders;
-}
-
-/**
- * Ask For Docker Repository Name
- */
-function askForDockerRepositoryName() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'input',
-        name: 'dockerRepositoryName',
-        message: 'What should we use for the base Docker repository name?',
-        default: this.dockerRepositoryName
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.dockerRepositoryName = props.dockerRepositoryName;
-        done();
-    });
-}
-
-/**
- * Ask For Docker Push Command
- */
-function askForDockerPushCommand() {
-    const done = this.async();
-
-    const prompts = [{
-        type: 'input',
-        name: 'dockerPushCommand',
-        message: 'What command should we use for push Docker image to repository?',
-        default: this.dockerPushCommand ? this.dockerPushCommand : 'docker push'
-    }];
-
-    this.prompt(prompts).then((props) => {
-        this.dockerPushCommand = props.dockerPushCommand;
-        done();
-    });
 }

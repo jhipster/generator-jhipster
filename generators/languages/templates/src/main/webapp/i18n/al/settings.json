@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Mjedisi për përdoruesin [<strong>{{username}}</strong>]",
+        "form": {
+            "firstname": "Emri",
+            "firstname.placeholder": "Emri juar",
+            "lastname": "Mbiemri",
+            "lastname.placeholder": "Mbiemri juaj",
+            "language": "Gjuha",
+            "button": "Ruaj"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Ndodhi një gabim!</strong> Mjedisi nuk mund të ruhej.",
+                "emailexists": "<strong>Email është i zënë!</strong> Ju lutem zgjidhni një tjetër."
+            },
+            "success": "<strong>Mjedisi u ruajt!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Kërkohet emri juaj.",
+                    "minlength": "Duhet që emri juaj të jetë të paktën 1 gërmë",
+                    "maxlength": "Emri juaj nuk mund të jetë më shumë se 50 gërma"
+                },
+                "lastname": {
+                    "required": "Kërkohet mbiemri juaj.",
+                    "minlength": "Duhet që mbiemri juaj të jetë të paktën 1 gërmë",
+                    "maxlength": "Mbiemri juaj nuk mund të jetë më shumë se 50 gërma"
+                }
+            }
+        }
+    }
+}

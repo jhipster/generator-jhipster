@@ -1,5 +1,3 @@
-/* global describe, beforeEach, it */
-
 const assert = require('assert');
 
 describe('JHipster generator', () => {

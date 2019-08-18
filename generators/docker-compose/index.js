@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,130 +20,70 @@ const chalk = require('chalk');
 const shelljs = require('shelljs');
 const jsyaml = require('js-yaml');
 const pathjs = require('path');
-const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
-const BaseGenerator = require('../generator-base');
-const docker = require('../docker-base');
+const BaseDockerGenerator = require('../generator-base-docker');
 
-const constants = require('../generator-constants');
-
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseDockerGenerator {
     constructor(args, opts) {
         super(args, opts);
-        // This adds support for a `--skip-checks` flag
-        this.option('skip-checks', {
-            desc: 'Check the status of the required tools',
-            type: Boolean,
-            defaults: false
-        });
+        this.registerPrettierTransform();
     }
 
     get initializing() {
+        return {
+            ...super.initializing,
+
+            checkDockerCompose() {
+                if (this.skipChecks) return;
+
+                const done = this.async();
+
+                shelljs.exec('docker-compose -v', { silent: true }, (code, stdout, stderr) => {
+                    if (stderr) {
+                        this.log(
+                            chalk.red(
+                                'Docker Compose 1.6.0 or later is not installed on your computer.\n' +
+                                    '         Read https://docs.docker.com/compose/install/\n'
+                            )
+                        );
+                    } else {
+                        const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
+                        const composeVersionMajor = composeVersion.split('.')[0];
+                        const composeVersionMinor = composeVersion.split('.')[1];
+                        if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
+                            this.log(
+                                chalk.red(
+                                    `${'Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
+                                        '         Docker Compose version found: '}${composeVersion}\n` +
+                                        '         Read https://docs.docker.com/compose/install/\n'
+                                )
+                            );
+                        }
+                    }
+                    done();
+                });
+            }
+        };
+    }
+
+    get prompting() {
+        return super.prompting;
+    }
+
+    get configuring() {
         return {
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('🐳')}  Welcome to the JHipster Docker Compose Sub-Generator ${chalk.bold('🐳')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
 
-            setupServerConsts() {
-                // Make constants available in templates
-                this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-                this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-                this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_CURATOR = constants.DOCKER_JHIPSTER_CURATOR;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-                this.DOCKER_JHIPSTER_IMPORT_DASHBOARDS = constants.DOCKER_JHIPSTER_IMPORT_DASHBOARDS;
-                this.DOCKER_JHIPSTER_ZIPKIN = constants.DOCKER_JHIPSTER_ZIPKIN;
-                this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
-                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
-                this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-                this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-                this.DOCKER_PROMETHEUS_ALERTMANAGER = constants.DOCKER_PROMETHEUS_ALERTMANAGER;
-                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-                this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
-            },
-
-            checkDocker: docker.checkDocker,
-
-            checkDockerCompose() {
-                if (this.options['skip-checks']) return;
-
-                const done = this.async();
-
-                shelljs.exec('docker-compose -v', { silent: true }, (code, stdout, stderr) => {
-                    if (stderr) {
-                        this.log(chalk.red('Docker Compose 1.6.0 or later is not installed on your computer.\n'
-                            + '         Read https://docs.docker.com/compose/install/\n'));
-                    } else {
-                        const composeVersion = stdout.split(' ')[2].replace(/,/g, '');
-                        const composeVersionMajor = composeVersion.split('.')[0];
-                        const composeVersionMinor = composeVersion.split('.')[1];
-                        if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
-                            this.log(chalk.red(`${'Docker Compose version 1.6.0 or later is not installed on your computer.\n'
-                                + '         Docker Compose version found: '}${composeVersion}\n`
-                                + '         Read https://docs.docker.com/compose/install/\n'));
-                        }
-                    }
-                    done();
-                });
-            },
-
-            loadConfig() {
-                this.authenticationType = this.config.get('authenticationType');
-                this.defaultAppsFolders = this.config.get('appsFolders');
-                this.directoryPath = this.config.get('directoryPath');
-                this.gatewayType = this.config.get('gatewayType');
-                this.clusteredDbApps = this.config.get('clusteredDbApps');
-                this.monitoring = this.config.get('monitoring');
-                this.consoleOptions = this.config.get('consoleOptions');
-                this.useKafka = false;
-                this.useMemcached = false;
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = 'eureka';
-                }
-                this.adminPassword = this.config.get('adminPassword');
-                this.jwtSecretKey = this.config.get('jwtSecretKey');
-
-                if (this.defaultAppsFolders !== undefined) {
-                    this.log('\nFound .yo-rc.json config file...');
-                }
-            }
-        };
-    }
-
-    get prompting() {
-        return {
-            askForApplicationType: prompts.askForApplicationType,
-            askForGatewayType: prompts.askForGatewayType,
-            askForPath: prompts.askForPath,
-            askForApps: prompts.askForApps,
-            askForClustersMode: prompts.askForClustersMode,
-            askForMonitoring: prompts.askForMonitoring,
-            askForConsoleOptions: prompts.askForConsoleOptions,
-            askForServiceDiscovery: prompts.askForServiceDiscovery,
-            askForAdminPassword: prompts.askForAdminPassword
-        };
-    }
-
-    get configuring() {
-        return {
-            insight() {
-                const insight = this.insight();
-                insight.trackWithEvent('generator', 'docker-compose');
-            },
-
-            checkImages: docker.checkImages,
-            generateJwtSecret: docker.generateJwtSecret,
-            setAppsFolderPaths: docker.setAppsFolderPaths,
+            ...super.configuring,
 
             setAppsYaml() {
                 this.appsYaml = [];
-                this.keycloakRedirectUri = '';
+                this.keycloakRedirectUris = '';
                 let portIndex = 8080;
+                this.serverPort = portIndex;
                 this.appsFolders.forEach((appsFolder, index) => {
                     const appConfig = this.appConfigs[index];
                     const lowercaseBaseName = appConfig.baseName.toLowerCase();
@@ -154,8 +94,9 @@ module.exports = class extends BaseGenerator {
                     const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
                     if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
+                        this.keycloakRedirectUris += '"http://localhost/*", "https://localhost/*", ';
                     } else if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
-                        this.keycloakRedirectUri += `"http://localhost:${portIndex}/*", `;
+                        this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
                         const ports = yamlConfig.ports[0].split(':');
                         ports[0] = portIndex;
                         yamlConfig.ports[0] = ports.join(':');
@@ -168,11 +109,6 @@ module.exports = class extends BaseGenerator {
                         yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
-                    }
-
-                    if (this.monitoring === 'prometheus') {
-                        yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENABLED=true');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics');
                     }
 
                     if (this.serviceDiscoveryType === 'eureka') {
@@ -224,7 +160,8 @@ module.exports = class extends BaseGenerator {
                             }
                             parentConfiguration[`${databaseServiceName}-node`] = dbNodeConfig;
                             if (database === 'mongodb') {
-                                parentConfiguration[`${databaseServiceName}-config`] = clusterDbYaml.services[`${databaseServiceName}-config`];
+                                parentConfiguration[`${databaseServiceName}-config`] =
+                                    clusterDbYaml.services[`${databaseServiceName}-config`];
                             }
                         }
 
@@ -256,22 +193,24 @@ module.exports = class extends BaseGenerator {
                     this.authenticationType = appConfig.authenticationType;
 
                     // Dump the file
-                    let yamlString = jsyaml.dump(parentConfiguration, { indent: 4 });
+                    let yamlString = jsyaml.dump(parentConfiguration, { indent: 4, lineWidth: -1 });
 
-                    // Fix the output file which is totally broken!!!
+                    // Add extra indentation for each lines
                     const yamlArray = yamlString.split('\n');
                     for (let j = 0; j < yamlArray.length; j++) {
                         yamlArray[j] = `    ${yamlArray[j]}`;
-                        yamlArray[j] = yamlArray[j].replace(/'/g, '');
                     }
                     yamlString = yamlArray.join('\n');
-                    yamlString = yamlString.replace(/>-\n/g, '');
-                    yamlString = yamlString.replace(/-\s\s+/g, '- ');
                     this.appsYaml.push(yamlString);
+
+                    this.skipClient = appConfig.skipClient;
                 });
             },
 
             saveConfig() {
+                if (this.monitoring === 'no') {
+                    this.consoleOptions = [];
+                }
                 this.config.set({
                     appsFolders: this.appsFolders,
                     directoryPath: this.directoryPath,
@@ -280,7 +219,6 @@ module.exports = class extends BaseGenerator {
                     monitoring: this.monitoring,
                     consoleOptions: this.consoleOptions,
                     serviceDiscoveryType: this.serviceDiscoveryType,
-                    adminPassword: this.adminPassword,
                     jwtSecretKey: this.jwtSecretKey
                 });
             }
@@ -293,17 +231,30 @@ module.exports = class extends BaseGenerator {
 
     end() {
         if (this.warning) {
-            this.log('\n');
-            this.log(chalk.red('Docker Compose configuration generated with missing images!'));
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Docker Compose configuration generated, but no Jib cache found`);
+            this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(chalk.red(this.warningMessage));
         } else {
             this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
-        this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
+        if (this.gatewayType === 'traefik' && this.authenticationType === 'oauth2') {
+            if (!this.skipClient) {
+                this.log(
+                    `\n${chalk.yellow.bold('WARNING!')} The complete generation of the stack with Traefik and OAuth 2.0 is not complete.`
+                );
+                this.log('Please refer to the documentation to finish the configuration of your stack.');
+                this.log('Visit https://www.jhipster.tech/traefik/#configure-for-oauth2');
+            } else {
+                this.log('Please refer to the documentation to help you for the configuration of your stack.');
+                this.log('Visit https://www.jhipster.tech/traefik/#configuration-with-oauth-2.0-and-traefik');
+            }
+        } else {
+            this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
+        }
         if (this.gatewayNb + this.monolithicNb > 1) {
             this.log('\nYour applications will be accessible on these URLs:');
             let portIndex = 8080;
-            this.appConfigs.forEach((appConfig) => {
+            this.appConfigs.forEach(appConfig => {
                 if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
                     this.log(`\t- ${appConfig.baseName}: http://localhost:${portIndex}`);
                     portIndex++;

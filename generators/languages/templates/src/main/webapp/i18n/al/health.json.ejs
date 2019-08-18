@@ -1,0 +1,60 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "health": {
+        "title": "Kontrolli shendetit",
+        "refresh.button": "Rifresko",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detaje",
+            "properties": "Tipare",
+            "name": "Emri",
+            "value": "Vlera",
+            "error": "Gabim"
+        },
+        "indicator": {
+            <%_ if (messageBroker === 'kafka') { _%>
+            "binders": "Message broker",
+            <%_ } _%>
+            <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
+            "discoveryComposite": "Discovery Composite",
+            "refreshScope": "Microservice Refresh Scope",
+            "configServer": "Microservice Config Server",
+            "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
+            "consul": "Consul",<% } %>
+            <%_ } _%>
+            "diskSpace": "Disk space",
+            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
+            "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>,
+            "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
+            "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
+            "couchbase": "Couchbase"<% } %>
+        },
+        "table": {
+            "service": "Emri i sherbimit",
+            "status": "Statusi"
+        },
+        "status": {
+            "UNKNOWN": "UNKNOWN",
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

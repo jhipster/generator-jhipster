@@ -32,9 +32,8 @@
     </system-properties>
     <class-loader-config>
         <!-- temporary workaround to make sure the app uses it's memcache/mail jars.!-->
-        <priority-specifier filename="cache-api-1.0.0.jar"/>
         <priority-specifier filename="cache-api-1.1.0.jar"/>
-        <priority-specifier filename="javax-mail-1.5.6.jar"/>
+        <priority-specifier filename="javax.mail-1.6.2.jar"/>
     </class-loader-config>
     <env-variables>
         <env-var name="SERVER_PORT" value="8080"/>

@@ -1,0 +1,327 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "stringMika",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "stringRequiredMika",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "stringMinlengthMika",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength"
+            ],
+            "fieldValidateRulesMinlength": 0
+        },
+        {
+            "fieldName": "stringMaxlengthMika",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 20
+        },
+        {
+            "fieldName": "stringPatternMika",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "pattern"
+            ],
+            "fieldValidateRulesPattern": "^[a-zA-Z0-9]*$",
+            "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
+        },
+        {
+            "fieldName": "integerMika",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "integerRequiredMika",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "integerMinMika",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "integerMaxMika",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "longMika",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "longRequiredMika",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "longMinMika",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "longMaxMika",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "floatMika",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "floatRequiredMika",
+            "fieldType": "Float",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "floatMinMika",
+            "fieldType": "Float",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "floatMaxMika",
+            "fieldType": "Float",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "doubleRequiredMika",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "doubleMinMika",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "doubleMaxMika",
+            "fieldType": "Double",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "bigDecimalRequiredMika",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "bigDecimalMinMika",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": 0
+        },
+        {
+            "fieldName": "bigDecimalMaxMika",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": 100
+        },
+        {
+            "fieldName": "localDateMika",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "localDateRequiredMika",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "instantMika",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "instanteRequiredMika",
+            "fieldType": "Instant",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "zonedDateTimeMika",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "zonedDateTimeRequiredMika",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "durationMika",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredMika",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "booleanMika",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "booleanRequiredMika",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "enumMika",
+            "fieldType": "EnumFieldClass",
+            "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
+        },
+        {
+            "fieldName": "enumRequiredMika",
+            "fieldType": "EnumRequiredFieldClass",
+            "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidMika",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredMika",
+            "fieldType": "UUID",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "byteImageMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "byteImageRequiredMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "byteImageMinbytesMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "minbytes"
+            ],
+            "fieldValidateRulesMinbytes": 0
+        },
+        {
+            "fieldName": "byteImageMaxbytesMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "maxbytes"
+            ],
+            "fieldValidateRulesMaxbytes": 10000
+        },
+        {
+            "fieldName": "byteAnyMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldName": "byteAnyRequiredMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "byteAnyMinbytesMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "minbytes"
+            ],
+            "fieldValidateRulesMinbytes": 0
+        },
+        {
+            "fieldName": "byteAnyMaxbytesMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any",
+            "fieldValidateRules": [
+                "maxbytes"
+            ],
+            "fieldValidateRulesMaxbytes": 10000
+        },
+        {
+            "fieldName": "byteTextMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "byteTextRequiredMika",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160208184031",
+    "dto": "no",
+    "service": "serviceImpl",
+    "pagination": "no"
+}

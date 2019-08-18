@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,9 +20,6 @@
     let entityActionName = entityInstance.toUpperCase();
     let entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
-<%_ if (pagination === 'infinite-scroll') { _%>
-import isEqual from 'lodash/isEqual';
-<%_ } _%>
 import axios from 'axios';
 import {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -43,9 +40,6 @@ import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util'
 
 <%_ } _%>
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
-<%_ if (pagination === 'infinite-scroll') { _%>
-import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
-<%_ } _%>
 
 export const ACTION_TYPES = {
   <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -120,31 +114,33 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       };
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case SUCCESS(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
-      return {
-        ...state,
-        loading: false,
-        entities: action.payload.data
-      };
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
       <%_ if (pagination === 'infinite-scroll') { _%>
+      {
       const links = parseHeaderForLinks(action.payload.headers.link);
       <%_ } _%>
+
       return {
         ...state,
-        <%_ if (pagination === 'infinite-scroll') { _%>
-        links,
-        <%_ } _%>
         loading: false,
-        <%_ if (pagination !== 'no') { _%>
-        totalItems: action.payload.headers['x-total-count'],
-        <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
-        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links, ITEMS_PER_PAGE)
+          <%_ if (databaseType !== 'cassandra') { _%>
+        links,
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links),
+          <%_ } _%>
         <%_ } else { _%>
-        entities: action.payload.data
+        entities: action.payload.data,
+        <%_ } _%>
+        <%_ if (pagination !== 'no') { _%>
+          <%_ if (databaseType !== 'cassandra') { _%>
+        totalItems: parseInt(action.payload.headers['x-total-count'], 10)
+          <%_ } _%>
         <%_ } _%>
       };
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    }
+    <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -167,7 +163,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         entity: {}
       };
     <%_ if (fieldsContainBlob) { _%>
-    case ACTION_TYPES.SET_BLOB:
+    case ACTION_TYPES.SET_BLOB: {
       const { name, data, contentType } = action.payload;
       return {
         ...state,
@@ -177,6 +173,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
           [name + 'ContentType']: contentType
         }
       };
+    }
     <%_ } _%>
     case ACTION_TYPES.RESET:
       return {
@@ -187,17 +184,21 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
   }
 };
 
-const apiUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
+const apiUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
 <%_ if (searchEngine === 'elasticsearch') { _%>
-const apiSearchUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %><%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
+const apiSearchUrl = '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
 <%_ } _%>
 
 // Actions
 
 <%_ if (searchEngine === 'elasticsearch') { _%>
-export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = query => ({
+export const getSearchEntities: ICrudSearchAction<I<%= entityReactName %>> = (query, page, size, sort) => ({
   type: ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>,
-  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=` + query)
+<%_ if (pagination !== 'no') { _%>
+  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`)
+<%_ } else { _%>
+  payload: axios.get<I<%= entityReactName %>>(`${apiSearchUrl}?query=${query}`)
+<%_ } _%>
 });
 
 <%_ } _%>
@@ -230,7 +231,9 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 
@@ -239,7 +242,9 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 
@@ -249,7 +254,9 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 

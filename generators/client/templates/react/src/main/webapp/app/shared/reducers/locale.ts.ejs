@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,23 +32,23 @@ export type LocaleState =  Readonly<typeof initialState>;
 
 export default (state: LocaleState = initialState, action): LocaleState => {
   switch (action.type) {
-    case ACTION_TYPES.SET_LOCALE:
+    case ACTION_TYPES.SET_LOCALE: {
       const currentLocale = action.locale;
       if (state.currentLocale !== currentLocale) {
-        Storage.session.set('locale', currentLocale);
         TranslatorContext.setLocale(currentLocale);
       }
       return {
         currentLocale
       };
+    }
     default:
       return state;
   }
 };
 
 export const setLocale = locale => async dispatch => {
-  if (Object.keys(TranslatorContext.context.translations).indexOf(locale) === -1) {
-    const response = await axios.get(`i18n/${locale}.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}`);
+  if (!Object.keys(TranslatorContext.context.translations).includes(locale)) {
+    const response = await axios.get(`i18n/${locale}.json?buildTimestamp=${process.env.BUILD_TIMESTAMP}`, { baseURL: '' });
     TranslatorContext.registerTranslations(locale, response.data);
   }
   dispatch({

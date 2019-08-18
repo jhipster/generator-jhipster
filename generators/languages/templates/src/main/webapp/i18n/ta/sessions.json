@@ -1,6 +1,6 @@
 {
     "sessions": {
-        "title": "தற்போதைய வேளைகள் [<b>{{username}}</b>]",
+        "title": "தற்போதைய வேளைகள் [<strong>{{username}}</strong>]",
         "table": {
             "ipaddress": "ஐ.பி முகவரி",
             "useragent": "பிரெளஸர்",

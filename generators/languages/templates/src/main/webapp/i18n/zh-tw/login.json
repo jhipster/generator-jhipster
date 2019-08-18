@@ -12,8 +12,8 @@
                 "authentication": "<strong>登入失敗!</strong> 請檢查您的憑證再重試一次。"
             }
         },
-        "password" : {
-            "forgot": "忘記密碼?"
+        "password": {
+            "forgot": "密碼忘了?"
         }
     }
 }

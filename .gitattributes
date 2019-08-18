@@ -19,6 +19,7 @@
 *.gz binary
 *.ai binary
 *.eps binary
+*.ico binary
 
 # Used by GitHub to determine which language is used
 # See https://github.com/github/linguist

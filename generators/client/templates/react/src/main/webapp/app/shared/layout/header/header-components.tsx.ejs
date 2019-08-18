@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,33 +19,16 @@
 import React from 'react';
 import { Translate } from 'react-jhipster';
 
-import {
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  NavItem,
-  NavLink,
-  NavbarBrand
-} from 'reactstrap';
+import { NavItem, NavLink, NavbarBrand } from 'reactstrap';
 import { NavLink as Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import appConfig from 'app/config/constants';
 
-export const NavDropdown = props => (
-  <UncontrolledDropdown nav inNavbar id={props.id}>
-    <DropdownToggle nav caret className="d-flex align-items-center">
-      <FontAwesomeIcon icon={props.icon} />
-      <span>{props.name}</span>
-    </DropdownToggle>
-    <DropdownMenu right style={props.style}>{props.children}</DropdownMenu>
-  </UncontrolledDropdown>
-);
-
 export const BrandIcon = props => (
   <div {...props} className="brand-icon">
     <img
-      src="content/images/logo-jhipster-react.svg"
+      src="content/images/logo-jhipster.png"
       alt="Logo"
     />
   </div>

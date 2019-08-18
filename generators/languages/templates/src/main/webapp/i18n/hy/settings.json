@@ -1,6 +1,6 @@
 {
     "settings": {
-        "title": "Օգտվողի կարգավորումներ [<b>{{username}}</b>]",
+        "title": "Օգտվողի կարգավորումներ [<strong>{{username}}</strong>]",
         "form": {
             "firstname": "Անուն",
             "firstname.placeholder": "Ձեր անունը",

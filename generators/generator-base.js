@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -31,14 +31,13 @@ const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
+const NeedleApi = require('./needle-api');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
-const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 /**
@@ -50,22 +49,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
-     * Get the JHipster configuration from the .yo-rc.json file.
-     *
-     * @param {string} namespace - namespace of the .yo-rc.json config file. By default: generator-jhipster
-     */
-    getJhipsterAppConfig(namespace = 'generator-jhipster') {
-        const fromPath = '.yo-rc.json';
-        if (shelljs.test('-f', fromPath)) {
-            const fileData = this.fs.readJSON(fromPath);
-            if (fileData && fileData[namespace]) {
-                return fileData[namespace];
-            }
-        }
-        return false;
-    }
-
-    /**
      * Add a new menu element, at the root of the menu.
      *
      * @param {string} routerName - The name of the Angular router that is added to the menu.
@@ -74,28 +57,11 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
-        let navbarPath;
-        try {
-            if (clientFramework === 'angularX') {
-                navbarPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
-                jhipsterUtils.rewriteFile({
-                    file: navbarPath,
-                    needle: 'jhipster-needle-add-element-to-menu',
-                    splicable: [`<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                                <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
-                                    <span${enableTranslation ? ` jhiTranslate="global.menu.${routerName}"` : ''}>${_.startCase(routerName)}</span>
-                                </a>
-                            </li>`
-                    ]
-                }, this);
-            } else {
-                // React
-                // TODO:
-            }
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + navbarPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`);
-            this.debug('Error:', e);
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation);
+        } else if (clientFramework === 'react') {
+            // React
+            // TODO:
         }
     }
 
@@ -106,24 +72,8 @@ module.exports = class extends PrivateBase {
      * @param {string} comment - comment to add before resources content.
      */
     addExternalResourcesToRoot(resources, comment) {
-        const indexFilePath = `${CLIENT_MAIN_SRC_DIR}index.html`;
-        let resourcesBlock = '';
-        if (comment) {
-            resourcesBlock += `<!-- ${comment} -->\n`;
-        }
-        resourcesBlock += `${resources}\n`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: indexFilePath,
-                needle: 'jhipster-needle-add-resources-to-root',
-                splicable: [resourcesBlock]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + indexFilePath + chalk.yellow(' or missing required jhipster-needle. Resources are not added to JHipster app.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.client.addExternalResourcesToRoot(resources, comment);
     }
-
 
     /**
      * Add a new menu element to the admin menu.
@@ -134,41 +84,12 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
-        let navbarAdminPath;
-        try {
-            if (clientFramework === 'angularX') {
-                navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
-                jhipsterUtils.rewriteFile({
-                    file: navbarAdminPath,
-                    needle: 'jhipster-needle-add-element-to-admin-menu',
-                    splicable: [`<li>
-                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
-                            <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${routerName}"` : ''}>${_.startCase(routerName)}</span>
-                        </a>
-                    </li>`
-                    ]
-                }, this);
-            }
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + navbarAdminPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`);
-            this.debug('Error:', e);
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation);
+        } else if (clientFramework === 'react') {
+            // React
+            // TODO:
         }
-    }
-
-    /**
-     * Add a new entity route path to webpacks config
-     *
-     * @param {string} microserviceName - The name of the microservice to put into the url
-     * @param {string} clientFramework - The name of the client framework
-     */
-    addEntityToWebpack(microserviceName, clientFramework) {
-        const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.dev.js`;
-        jhipsterUtils.rewriteFile({
-            file: webpackDevPath,
-            needle: 'jhipster-needle-add-entity-to-webpack',
-            splicable: [`'/${microserviceName.toLowerCase()}',`]
-        }, this);
     }
 
     /**
@@ -177,40 +98,13 @@ module.exports = class extends PrivateBase {
      * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
     addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
-        let entityMenuPath;
-        try {
-            if (this.clientFramework === 'angularX') {
-                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
-                jhipsterUtils.rewriteFile({
-                    file: entityMenuPath,
-                    needle: 'jhipster-needle-add-entity-to-menu',
-                    splicable: [
-                        this.stripMargin(`|<li>
-                             |                        <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                             |                            <fa-icon [icon]="'asterisk'" [fixedWidth]="true"></fa-icon>
-                             |                            <span${enableTranslation ? ` jhiTranslate="global.menu.entities.${entityTranslationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
-                             |                        </a>
-                             |                    </li>`)
-                    ]
-                }, this);
-            } else if (this.clientFramework === 'react') {
-                // React
-                entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus/entities.tsx`;
-                jhipsterUtils.rewriteFile({
-                    file: entityMenuPath,
-                    needle: 'jhipster-needle-add-entity-to-menu',
-                    splicable: [
-                        this.stripMargin(`|<DropdownItem tag={Link} to="/entity/${routerName}">
-                        |      <FontAwesomeIcon icon="asterisk" />&nbsp;${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
-                        |    </DropdownItem>`)
-                    ]
-                }, this);
-            }
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + entityMenuPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`);
-            this.debug('Error:', e);
+        if (this.clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+        } else if (this.clientFramework === 'react') {
+            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
         }
     }
 
@@ -219,95 +113,35 @@ module.exports = class extends PrivateBase {
      *
      * @param {string} entityInstance - Entity Instance
      * @param {string} entityClass - Entity Class
-     * @param {string} entityAngularName - Entity Angular Name
+     * @param {string} entityName - Entity Name
      * @param {string} entityFolderName - Entity Folder Name
      * @param {string} entityFileName - Entity File Name
-     * @param {boolean} enableTranslation - If translations are enabled or not
+     * @param {boolean} entityUrl - Entity router URL
      * @param {string} clientFramework - The name of the client framework
+     * @param {string} microServiceName - Microservice Name
      */
-    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, enableTranslation, clientFramework, microServiceName) {
-        const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
-        try {
-            if (clientFramework === 'angularX') {
-                const appName = this.getAngularXAppName();
-                let importName = `${appName}${entityAngularName}Module`;
-                if (microServiceName) {
-                    importName = `${importName} as ${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`;
-                }
-                let importStatement = `|import { ${importName} } from './${entityFolderName}/${entityFileName}.module';`;
-                if (importStatement.length > constants.LINE_LENGTH) {
-                    importStatement = `|// prettier-ignore
-                         |import {
-                         |    ${importName}
-                         |} from './${entityFolderName}/${entityFileName}.module';`;
-                }
-                jhipsterUtils.rewriteFile({
-                    file: entityModulePath,
-                    needle: 'jhipster-needle-add-entity-module-import',
-                    splicable: [
-                        this.stripMargin(importStatement)
-                    ]
-                }, this);
-
-                jhipsterUtils.rewriteFile({
-                    file: entityModulePath,
-                    needle: 'jhipster-needle-add-entity-module',
-                    splicable: [
-                        this.stripMargin(microServiceName ? `|${this.upperFirstCamelCase(microServiceName)}${entityAngularName}Module,` : `|${appName}${entityAngularName}Module,`)
-                    ]
-                }, this);
-            } else if (clientFramework === 'react') {
-                // React
-                const indexModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/index.tsx`;
-
-                jhipsterUtils.rewriteFile({
-                    file: indexModulePath,
-                    needle: 'jhipster-needle-add-route-import',
-                    splicable: [
-                        this.stripMargin(`|import ${entityAngularName} from './${entityFolderName}';`)
-                    ]
-                }, this);
-
-                jhipsterUtils.rewriteFile({
-                    file: indexModulePath,
-                    needle: 'jhipster-needle-add-route-path',
-                    splicable: [
-                        this.stripMargin(`|<ErrorBoundaryRoute path={\`\${match.url}/${entityFileName}\`} component={${entityAngularName}} />`)
-                    ]
-                }, this);
-
-                const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
-
-                jhipsterUtils.rewriteFile({
-                    file: indexReducerPath,
-                    needle: 'jhipster-needle-add-reducer-import',
-                    splicable: [
-                        this.stripMargin(`|// prettier-ignore
-                            |import ${entityInstance}, {
-                            |  ${entityAngularName}State
-                            |} from 'app/entities/${entityFolderName}/${entityFileName}.reducer';`)
-                    ]
-                }, this);
-
-                jhipsterUtils.rewriteFile({
-                    file: indexReducerPath,
-                    needle: 'jhipster-needle-add-reducer-type',
-                    splicable: [
-                        this.stripMargin(`|  readonly ${entityInstance}: ${entityAngularName}State;`)
-                    ]
-                }, this);
-
-                jhipsterUtils.rewriteFile({
-                    file: indexReducerPath,
-                    needle: 'jhipster-needle-add-reducer-combine',
-                    splicable: [
-                        this.stripMargin(`|  ${entityInstance},`)
-                    ]
-                }, this);
-            }
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + entityModulePath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + entityInstance + entityClass + entityFolderName + entityFileName} ${chalk.yellow(`not added to ${entityModulePath}.\n`)}`);
-            this.debug('Error:', e);
+    addEntityToModule(
+        entityInstance,
+        entityClass,
+        entityName,
+        entityFolderName,
+        entityFileName,
+        entityUrl,
+        clientFramework,
+        microServiceName
+    ) {
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addEntityToModule(
+                entityInstance,
+                entityClass,
+                entityName,
+                entityFolderName,
+                entityFileName,
+                entityUrl,
+                microServiceName
+            );
+        } else if (clientFramework === 'react') {
+            this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
         }
     }
 
@@ -322,33 +156,14 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework.
      */
     addAdminToModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`;
-        try {
-            let importStatement = `|import { ${appName}${adminAngularName}Module } from './${adminFolderName}/${adminFileName}.module';`;
-            if (importStatement.length > constants.LINE_LENGTH) {
-                importStatement = `|import {
-                     |    ${appName}${adminAngularName}Module
-                     |} from './${adminFolderName}/${adminFileName}.module';`;
-            }
-            jhipsterUtils.rewriteFile({
-                file: adminModulePath,
-                needle: 'jhipster-needle-add-admin-module-import',
-                splicable: [
-                    this.stripMargin(importStatement)
-                ]
-            }, this);
-
-            jhipsterUtils.rewriteFile({
-                file: adminModulePath,
-                needle: 'jhipster-needle-add-admin-module',
-                splicable: [
-                    this.stripMargin(`|${appName}${adminAngularName}Module,`)
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + adminAngularName + adminFolderName + adminFileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${adminModulePath}.\n`)}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.clientAngular.addToAdminModule(
+            appName,
+            adminAngularName,
+            adminFolderName,
+            adminFileName,
+            enableTranslation,
+            clientFramework
+        );
     }
 
     /**
@@ -359,19 +174,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addElementTranslationKey(key, value, language) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-menu-add-element',
-                splicable: [
-                    `"${key}": "${_.startCase(value)}",`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.clientI18n.addElementTranslationKey(key, value, language);
     }
 
     /**
@@ -382,19 +185,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addAdminElementTranslationKey(key, value, language) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-menu-add-admin-element',
-                splicable: [
-                    `"${key}": "${_.startCase(value)}",`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entry in the admin menu.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.clientI18n.addAdminElementTranslationKey(key, value, language);
     }
 
     /**
@@ -405,19 +196,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addEntityTranslationKey(key, value, language) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-menu-add-entry',
-                splicable: [
-                    `"${key}": "${_.startCase(value)}",`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.clientI18n.addEntityTranslationKey(key, value, language);
     }
 
     /**
@@ -430,11 +209,19 @@ module.exports = class extends PrivateBase {
     addGlobalTranslationKey(key, value, language) {
         const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
         try {
-            jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
-                jsonObj[key] = value;
-            }, this);
+            jhipsterUtils.rewriteJSONFile(
+                fullPath,
+                jsonObj => {
+                    jsonObj[key] = value;
+                },
+                this
+            );
         } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(' not added to global translations.\n')}`);
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(' not added to global translations.\n')}`
+            );
             this.debug('Error:', e);
         }
     }
@@ -449,7 +236,7 @@ module.exports = class extends PrivateBase {
      */
     addTranslationKeyToAllLanguages(key, value, method, enableTranslation) {
         if (enableTranslation) {
-            this.getAllInstalledLanguages().forEach((language) => {
+            this.getAllInstalledLanguages().forEach(language => {
                 this[method](key, value, language);
             });
         }
@@ -460,7 +247,7 @@ module.exports = class extends PrivateBase {
      */
     getAllInstalledLanguages() {
         const languages = [];
-        this.getAllSupportedLanguages().forEach((language) => {
+        this.getAllSupportedLanguages().forEach(language => {
             try {
                 const stats = fs.lstatSync(`${CLIENT_MAIN_SRC_DIR}i18n/${language}`);
                 if (stats.isDirectory()) {
@@ -513,84 +300,20 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * return the momentLocaleId from the given language key (from constants.LANGUAGES)
+     * if no momentLocaleId is defined, return the language key (which is a localeId itself)
+     * @param {string} language - language key
+     */
+    getMomentLocaleId(language) {
+        const langObj = this.getAllSupportedLanguageOptions().find(langObj => langObj.value === language);
+        return langObj.momentLocaleId || language;
+    }
+
+    /**
      * get all the languages options supported by JHipster
      */
     getAllSupportedLanguageOptions() {
         return constants.LANGUAGES;
-    }
-
-    /**
-     * Add a new dependency in the "bower.json".
-     *
-     * @param {string} name - dependency name
-     * @param {string} version - dependency version
-     */
-    addBowerDependency(name, version) {
-        const fullPath = 'bower.json';
-        try {
-            jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
-                if (jsonObj.dependencies === undefined) {
-                    jsonObj.dependencies = {};
-                }
-                jsonObj.dependencies[name] = version;
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bower dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new override configuration in the "bower.json".
-     *
-     * @param {string} bowerPackageName - Bower package name use in dependencies
-     * @param {array} main - You can specify which files should be selected
-     * @param {boolean} isIgnored - Default: false, Set to true if you want to ignore this package.
-     * @param {object} dependencies - You can override the dependencies of a package. Set to null to ignore the dependencies.
-     *
-     */
-    addBowerOverride(bowerPackageName, main, isIgnored, dependencies) {
-        const fullPath = 'bower.json';
-        try {
-            jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
-                const override = {};
-                if (main !== undefined && main.length > 0) {
-                    override.main = main;
-                }
-                if (isIgnored) {
-                    override.ignore = true;
-                }
-                if (dependencies) {
-                    override.dependencies = dependencies;
-                }
-                if (jsonObj.overrides === undefined) {
-                    jsonObj.overrides = {};
-                }
-                jsonObj.overrides[bowerPackageName] = override;
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bower override configuration (bowerPackageName: ${bowerPackageName}, main:${JSON.stringify(main)}, ignore:${isIgnored})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new parameter in the ".bowerrc".
-     *
-     * @param {string} key - name of the parameter
-     * @param {string | boolean | any} value - value of the parameter
-     */
-    addBowerrcParameter(key, value) {
-        const fullPath = '.bowerrc';
-        try {
-            this.log(chalk.yellow('   update ') + fullPath);
-            jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
-                jsonObj[key] = value;
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}bowerrc parameter (key: ${key}, value:${value})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
     }
 
     /**
@@ -602,14 +325,22 @@ module.exports = class extends PrivateBase {
     addNpmDependency(name, version) {
         const fullPath = 'package.json';
         try {
-            jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
-                if (jsonObj.dependencies === undefined) {
-                    jsonObj.dependencies = {};
-                }
-                jsonObj.dependencies[name] = version;
-            }, this);
+            jhipsterUtils.rewriteJSONFile(
+                fullPath,
+                jsonObj => {
+                    if (jsonObj.dependencies === undefined) {
+                        jsonObj.dependencies = {};
+                    }
+                    jsonObj.dependencies[name] = version;
+                },
+                this
+            );
         } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow('. Reference to ')}npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
+            );
             this.debug('Error:', e);
         }
     }
@@ -623,14 +354,22 @@ module.exports = class extends PrivateBase {
     addNpmDevDependency(name, version) {
         const fullPath = 'package.json';
         try {
-            jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
-                if (jsonObj.devDependencies === undefined) {
-                    jsonObj.devDependencies = {};
-                }
-                jsonObj.devDependencies[name] = version;
-            }, this);
+            jhipsterUtils.rewriteJSONFile(
+                fullPath,
+                jsonObj => {
+                    if (jsonObj.devDependencies === undefined) {
+                        jsonObj.devDependencies = {};
+                    }
+                    jsonObj.devDependencies[name] = version;
+                },
+                this
+            );
         } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`);
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow('. Reference to ')}npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
+            );
             this.debug('Error:', e);
         }
     }
@@ -644,14 +383,22 @@ module.exports = class extends PrivateBase {
     addNpmScript(name, data) {
         const fullPath = 'package.json';
         try {
-            jhipsterUtils.rewriteJSONFile(fullPath, (jsonObj) => {
-                if (jsonObj.scripts === undefined) {
-                    jsonObj.scripts = {};
-                }
-                jsonObj.scripts[name] = data;
-            }, this);
+            jhipsterUtils.rewriteJSONFile(
+                fullPath,
+                jsonObj => {
+                    if (jsonObj.scripts === undefined) {
+                        jsonObj.scripts = {};
+                    }
+                    jsonObj.scripts[name] = data;
+                },
+                this
+            );
         } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')}npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`);
+            this.log(
+                `${chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow('. Reference to ')}npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`
+            );
             this.debug('Error:', e);
         }
     }
@@ -667,55 +414,7 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework.
      */
     addAngularModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
-        const modulePath = `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
-        try {
-            let importStatement = `|import { ${appName}${angularName}Module } from './${folderName}/${fileName}.module';`;
-            if (importStatement.length > constants.LINE_LENGTH) {
-                importStatement = `|import {
-                     |    ${appName}${angularName}Module
-                     |} from './${folderName}/${fileName}.module';`;
-            }
-            jhipsterUtils.rewriteFile({
-                file: modulePath,
-                needle: 'jhipster-needle-angular-add-module-import',
-                splicable: [
-                    this.stripMargin(importStatement)
-                ]
-            }, this);
-
-            jhipsterUtils.rewriteFile({
-                file: modulePath,
-                needle: 'jhipster-needle-angular-add-module',
-                splicable: [
-                    this.stripMargin(`|${appName}${angularName}Module,`)
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + appName + chalk.yellow(' or missing required jhipster-needle. Reference to ') + angularName + folderName + fileName + enableTranslation + clientFramework} ${chalk.yellow(`not added to ${modulePath}.\n`)}`);
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add a new http interceptor to the angular application in "blocks/config/http.config.js".
-     * The interceptor should be in its own .js file inside app/blocks/interceptor folder
-     * @param {string} interceptorName - angular name of the interceptor
-     *
-     */
-    addAngularJsInterceptor(interceptorName) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/blocks/config/http.config.js`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-angularjs-add-interceptor',
-                splicable: [
-                    `$httpProvider.interceptors.push('${interceptorName}');`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Interceptor not added to JHipster app.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.clientAngular.addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework);
     }
 
     /**
@@ -750,15 +449,7 @@ module.exports = class extends PrivateBase {
      * @param {string} cacheProvider - the cache provider
      */
     addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider) {
-        // Add the entity to ehcache
-        this.addEntryToCache(`${packageName}.domain.${entityClass}.class.getName()`, packageFolder, cacheProvider);
-        // Add the collections linked to that entity to ehcache
-        relationships.forEach((relationship) => {
-            const relationshipType = relationship.relationshipType;
-            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
-                this.addEntryToCache(`${packageName}.domain.${entityClass}.class.getName() + ".${relationship.relationshipFieldNamePlural}"`, packageFolder, cacheProvider);
-            }
-        });
+        this.needleApi.serverCache.addEntityToCache(entityClass, relationships, packageName, packageFolder, cacheProvider);
     }
 
     /**
@@ -769,29 +460,7 @@ module.exports = class extends PrivateBase {
      * @param {string} cacheProvider - the cache provider
      */
     addEntryToCache(entry, packageFolder, cacheProvider) {
-        try {
-            const cachePath = `${SERVER_MAIN_SRC_DIR}${packageFolder}/config/CacheConfiguration.java`;
-            if (cacheProvider === 'ehcache') {
-                jhipsterUtils.rewriteFile({
-                    file: cachePath,
-                    needle: 'jhipster-needle-ehcache-add-entry',
-                    splicable: [`cm.createCache(${entry}, jcacheConfiguration);`
-                    ]
-                }, this);
-            } else if (cacheProvider === 'infinispan') {
-                jhipsterUtils.rewriteFile({
-                    file: cachePath,
-                    needle: 'jhipster-needle-infinispan-add-entry',
-                    splicable: [`registerPredefinedCache(${entry}, new JCache<Object, Object>(
-                cacheManager.getCache(${entry}).getAdvancedCache(), this,
-                ConfigurationAdapter.create()));`
-                    ]
-                }, this);
-            }
-        } catch (e) {
-            this.log(chalk.yellow(`\nUnable to add ${entry} to CacheConfiguration.java file.\n\t${e.message}`));
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverCache.addEntryToCache(entry, packageFolder, cacheProvider);
     }
 
     /**
@@ -800,7 +469,7 @@ module.exports = class extends PrivateBase {
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
      */
     addChangelogToLiquibase(changelogName) {
-        this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-changelog');
+        this.needleApi.serverLiquibase.addChangelog(changelogName);
     }
 
     /**
@@ -809,7 +478,7 @@ module.exports = class extends PrivateBase {
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
      */
     addConstraintsChangelogToLiquibase(changelogName) {
-        this.addLiquibaseChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-constraints-changelog');
+        this.needleApi.serverLiquibase.addConstraintsChangelog(changelogName);
     }
 
     /**
@@ -819,19 +488,7 @@ module.exports = class extends PrivateBase {
      * @param {string} needle - The needle at where it has to be added.
      */
     addLiquibaseChangelogToMaster(changelogName, needle) {
-        const fullPath = `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle,
-                splicable: [
-                    `<include file="config/liquibase/changelog/${changelogName}.xml" relativeToChangelogFile="false"/>`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName}.xml ${chalk.yellow('not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverLiquibase.addChangelogToMaster(changelogName, needle);
     }
 
     /**
@@ -841,18 +498,17 @@ module.exports = class extends PrivateBase {
      * @param {string} content - The content to be added as column, can have multiple columns as well
      */
     addColumnToLiquibaseEntityChangeset(filePath, content) {
-        try {
-            jhipsterUtils.rewriteFile({
-                file: filePath,
-                needle: 'jhipster-needle-liquibase-add-column',
-                splicable: [
-                    content
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Column not added.\n') + e);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverLiquibase.addColumnToEntityChangeset(filePath, content);
+    }
+
+    /**
+     * Add a new load column to a Liquibase changelog file for entity.
+     *
+     * @param {string} filePath - The full path of the changelog file.
+     * @param {string} content - The content to be added as column, can have multiple columns as well
+     */
+    addLoadColumnToLiquibaseEntityChangeSet(filePath, content) {
+        this.needleApi.serverLiquibase.addLoadColumnToEntityChangeSet(filePath, content);
     }
 
     /**
@@ -862,24 +518,12 @@ module.exports = class extends PrivateBase {
      * @param {string} content - The content to be added as changeset
      */
     addChangesetToLiquibaseEntityChangelog(filePath, content) {
-        try {
-            jhipsterUtils.rewriteFile({
-                file: filePath,
-                needle: 'jhipster-needle-liquibase-add-changeset',
-                splicable: [
-                    content
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Changeset not added.\n') + e);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverLiquibase.addChangesetToEntityChangelog(filePath, content);
     }
 
     /**
-     * Add new css style to the angular application in "main.css".
+     * Add new scss style to the angular application in "global.scss
      *
-     * @param {boolean} isUseSass - flag indicating if sass should be used
      * @param {string} style - css to add in the file
      * @param {string} comment - comment to add before css code
      *
@@ -896,74 +540,8 @@ module.exports = class extends PrivateBase {
      * }
      *
      */
-    addMainCSSStyle(isUseSass, style, comment) {
-        if (isUseSass) {
-            this.addMainSCSSStyle(style, comment);
-        }
-
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/css/main.css`;
-        let styleBlock = '';
-        if (comment) {
-            styleBlock += '/* ==========================================================================\n';
-            styleBlock += `${comment}\n`;
-            styleBlock += '========================================================================== */\n';
-        }
-        styleBlock += `${style}\n`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-css-add-main',
-                splicable: [
-                    styleBlock
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Add new scss style to the angular application in "main.scss".
-     *
-     * @param {string} style - scss to add in the file
-     * @param {string} comment - comment to add before css code
-     *
-     * example:
-     *
-     * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
-     * comment = 'Message'
-     *
-     * * ==========================================================================
-     * Message
-     * ========================================================================== *
-     * .success {
-     *     @extend .message;
-     *     border-color: green;
-     * }
-     *
-     */
     addMainSCSSStyle(style, comment) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}scss/main.scss`;
-        let styleBlock = '';
-        if (comment) {
-            styleBlock += '/* ==========================================================================\n';
-            styleBlock += `${comment}\n`;
-            styleBlock += '========================================================================== */\n';
-        }
-        styleBlock += `${style}\n`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-scss-add-main',
-                splicable: [
-                    styleBlock
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.clientAngular.addGlobalSCSSStyle(style, comment);
     }
 
     /**
@@ -987,26 +565,30 @@ module.exports = class extends PrivateBase {
      *
      */
     addVendorSCSSStyle(style, comment) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`;
-        let styleBlock = '';
-        if (comment) {
-            styleBlock += '/* ==========================================================================\n';
-            styleBlock += `${comment}\n`;
-            styleBlock += '========================================================================== */\n';
-        }
-        styleBlock += `${style}\n`;
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-scss-add-vendor',
-                splicable: [
-                    styleBlock
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.clientAngular.addVendorSCSSStyle(style, comment);
+    }
+
+    /**
+     * Add new scss style to the react application in "app.scss".
+     *
+     * @param {string} style - css to add in the file
+     * @param {string} comment - comment to add before css code
+     *
+     * example:
+     *
+     * style = '.jhipster {\n     color: #baa186;\n}'
+     * comment = 'New JHipster color'
+     *
+     * * ==========================================================================
+     * New JHipster color
+     * ========================================================================== *
+     * .jhipster {
+     *     color: #baa186;
+     * }
+     *
+     */
+    addAppSCSSStyle(style, comment) {
+        this.needleApi.clientReact.addAppSCSSStyle(style, comment);
     }
 
     /**
@@ -1016,26 +598,7 @@ module.exports = class extends PrivateBase {
      * @param {string} targetFolder - third-party library resources destination path
      */
     copyExternalAssetsInWebpack(sourceFolder, targetFolder) {
-        const from = `${CLIENT_MAIN_SRC_DIR}content/${sourceFolder}/`;
-        const to = `content/${targetFolder}/`;
-        const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
-        let assetBlock = '';
-        if (sourceFolder && targetFolder) {
-            assetBlock = `{ from: './${from}', to: '${to}' },`;
-        }
-
-        try {
-            jhipsterUtils.rewriteFile({
-                file: webpackDevPath,
-                needle: 'jhipster-needle-add-assets-to-webpack',
-                splicable: [
-                    assetBlock
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + webpackDevPath + chalk.yellow(' or missing required jhipster-needle. Resource path not added to JHipster app.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.clientWebpack.copyExternalAssets(sourceFolder, targetFolder);
     }
 
     /**
@@ -1049,36 +612,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing:  exclusions...
      */
     addMavenDependencyManagement(groupId, artifactId, version, type, scope, other) {
-        const fullPath = 'pom.xml';
-        try {
-            let dependency = `${'<dependency>\n'
-                + '                <groupId>'}${groupId}</groupId>\n`
-                + `                <artifactId>${artifactId}</artifactId>\n`;
-            if (version) {
-                dependency += `                <version>${version}</version>\n`;
-            }
-            if (type) {
-                dependency += `                <type>${type}</type>\n`;
-            }
-            if (scope) {
-                dependency += `                <scope>${version}</scope>\n`;
-            }
-            if (other) {
-                dependency += `${other}\n`;
-            }
-            dependency += '             </dependency>';
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-maven-add-dependency-management',
-                splicable: [
-                    dependency
-                ]
-            }, this);
-        } catch (e) {
-            this.log(e);
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverMaven.addDependencyManagement(groupId, artifactId, version, type, scope, other);
     }
 
     /**
@@ -1088,55 +622,29 @@ module.exports = class extends PrivateBase {
      * @param {string} url - url of the repository
      */
     addMavenRepository(id, url) {
-        const fullPath = 'pom.xml';
-        try {
-            const repository = `${'<repository>\n'
-                + '            <id>'}${id}</id>\n`
-                + `            <url>${url}</url>\n`
-                + '        </repository>';
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-maven-repository',
-                splicable: [
-                    repository
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverMaven.addRepository(id, url);
+    }
+
+    /**
+     * Add a remote Maven Plugin Repository to the Maven build.
+     *
+     * @param {string} id - id of the repository
+     * @param {string} url - url of the repository
+     */
+    addMavenPluginRepository(id, url) {
+        this.needleApi.serverMaven.addPluginRepository(id, url);
     }
 
     /**
      * Add a distributionManagement to the Maven build.
      *
-     * @param {string} id - id of the repository
-     * @param {string} url - url of the repository
+     * @param {string} snapshotsId Snapshots Repository Id
+     * @param {string} snapshotsUrl Snapshots Repository Url
+     * @param {string} releasesId Repository Id
+     * @param {string} releasesUrl Repository Url
      */
     addMavenDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl) {
-        const fullPath = 'pom.xml';
-        try {
-            const repository = `${'<distributionManagement>\n'
-                + '        <snapshotRepository>\n'
-                + '            <id>'}${snapshotsId}</id>\n`
-                + `            <url>${snapshotsUrl}</url>\n`
-                + '        </snapshotRepository>\n'
-                + '        <repository>\n'
-                + `            <id>${releasesId}</id>\n`
-                + `            <url>${releasesUrl}</url>\n`
-                + '        </repository>\n'
-                + '    </distributionManagement>';
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-distribution-management',
-                splicable: [
-                    repository
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven repository ${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverMaven.addDistributionManagement(snapshotsId, snapshotsUrl, releasesId, releasesUrl);
     }
 
     /**
@@ -1146,21 +654,7 @@ module.exports = class extends PrivateBase {
      * @param {string} value - property value
      */
     addMavenProperty(name, value) {
-        const fullPath = 'pom.xml';
-        try {
-            const property = `<${name}>${value}</${name}>`;
-
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-maven-property',
-                splicable: [
-                    property
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven property (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverMaven.addProperty(name, value);
     }
 
     /**
@@ -1185,29 +679,7 @@ module.exports = class extends PrivateBase {
      * @param {string} other - (optional) explicit other thing: scope, exclusions...
      */
     addMavenDependencyInDirectory(directory, groupId, artifactId, version, other) {
-        try {
-            let dependency = `${'<dependency>\n'
-                + '            <groupId>'}${groupId}</groupId>\n`
-                + `            <artifactId>${artifactId}</artifactId>\n`;
-            if (version) {
-                dependency += `            <version>${version}</version>\n`;
-            }
-            if (other) {
-                dependency += `${other}\n`;
-            }
-            dependency += '        </dependency>';
-            jhipsterUtils.rewriteFile({
-                path: directory,
-                file: 'pom.xml',
-                needle: 'jhipster-needle-maven-add-dependency',
-                splicable: [
-                    dependency
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + directory + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven dependency (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverMaven.addDependencyInDirectory(directory, groupId, artifactId, version, other);
     }
 
     /**
@@ -1219,29 +691,18 @@ module.exports = class extends PrivateBase {
      * @param {string} other - explicit other thing: executions, configuration...
      */
     addMavenPlugin(groupId, artifactId, version, other) {
-        const fullPath = 'pom.xml';
-        try {
-            let plugin = `${'<plugin>\n'
-                + '                <groupId>'}${groupId}</groupId>\n`
-                + `                <artifactId>${artifactId}</artifactId>\n`;
-            if (version) {
-                plugin += `                <version>${version}</version>\n`;
-            }
-            if (other) {
-                plugin += `${other}\n`;
-            }
-            plugin += '            </plugin>';
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-maven-add-plugin',
-                splicable: [
-                    plugin
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven plugin (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
+    }
+
+    /**
+     * Add a new annotation processor path to Maven compiler configuration.
+     *
+     * @param {string} groupId - plugin groupId
+     * @param {string} artifactId - plugin artifactId
+     * @param {string} version - explicit plugin version number
+     */
+    addMavenAnnotationProcessor(groupId, artifactId, version) {
+        this.needleApi.serverMaven.addAnnotationProcessor(groupId, artifactId, version);
     }
 
     /**
@@ -1251,25 +712,17 @@ module.exports = class extends PrivateBase {
      * @param {string} other - explicit other thing: build, dependencies...
      */
     addMavenProfile(profileId, other) {
-        const fullPath = 'pom.xml';
-        try {
-            let profile = '<profile>\n'
-                + `            <id>${profileId}</id>\n`;
-            if (other) {
-                profile += `${other}\n`;
-            }
-            profile += '        </profile>';
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-maven-add-profile',
-                splicable: [
-                    profile
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}maven profile (id: ${profileId})${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverMaven.addProfile(profileId, other);
+    }
+
+    /**
+     * A new Gradle property.
+     *
+     * @param {string} name - property name
+     * @param {string} value - property value
+     */
+    addGradleProperty(name, value) {
+        this.needleApi.serverGradle.addProperty(name, value);
     }
 
     /**
@@ -1280,19 +733,7 @@ module.exports = class extends PrivateBase {
      * @param {string} version - explicit plugin version number
      */
     addGradlePlugin(group, name, version) {
-        const fullPath = 'build.gradle';
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-gradle-buildscript-dependency',
-                splicable: [
-                    `classpath '${group}:${name}:${version}'`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}classpath: ${group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addPlugin(group, name, version);
     }
 
     /**
@@ -1302,47 +743,7 @@ module.exports = class extends PrivateBase {
      * @param {string} version - explicit plugin version number
      */
     addGradlePluginToPluginsBlock(id, version) {
-        const fullPath = 'build.gradle';
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-gradle-plugins',
-                splicable: [
-                    `id "${id}" version "${version}"`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ')}id ${id} version ${version}${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * A new dependency to build.gradle file.
-     *
-     * @param {string} scope - scope of the new dependency, e.g. compile
-     * @param {string} group - maven GroupId
-     * @param {string} name - maven ArtifactId
-     * @param {string} version - (optional) explicit dependency version number
-     */
-    addGradleDependencyManagement(scope, group, name, version) {
-        const fullPath = 'build.gradle';
-        let dependency = `${group}:${name}`;
-        if (version) {
-            dependency += `:${version}`;
-        }
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-gradle-dependency-management',
-                splicable: [
-                    `${scope} "${dependency}"`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addPluginToPluginsBlock(id, version);
     }
 
     /**
@@ -1360,29 +761,14 @@ module.exports = class extends PrivateBase {
     /**
      * A new dependency to build.gradle file in a specific folder.
      *
+     * @param {string} directory - directory
      * @param {string} scope - scope of the new dependency, e.g. compile
      * @param {string} group - maven GroupId
      * @param {string} name - maven ArtifactId
      * @param {string} version - (optional) explicit dependency version number
      */
     addGradleDependencyInDirectory(directory, scope, group, name, version) {
-        let dependency = `${group}:${name}`;
-        if (version) {
-            dependency += `:${version}`;
-        }
-        try {
-            jhipsterUtils.rewriteFile({
-                path: directory,
-                file: 'build.gradle',
-                needle: 'jhipster-needle-gradle-dependency',
-                splicable: [
-                    `${scope} "${dependency}"`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(`${chalk.yellow('\nUnable to find ') + directory + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group}:${name}:${version}${chalk.yellow(' not added.\n')}`);
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addDependencyInDirectory(directory, scope, group, name, version);
     }
 
     /**
@@ -1391,19 +777,7 @@ module.exports = class extends PrivateBase {
      * @param {string} name - name of the file to apply from, must be 'fileName.gradle'
      */
     applyFromGradleScript(name) {
-        const fullPath = 'build.gradle';
-        try {
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-gradle-apply-from',
-                splicable: [
-                    `apply from: '${name}.gradle'`
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + name + chalk.yellow(' not added.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.applyFromScript(name);
     }
 
     /**
@@ -1414,34 +788,7 @@ module.exports = class extends PrivateBase {
      * @param {string} password - (optional) password of the repository credentials
      */
     addGradleMavenRepository(url, username, password) {
-        const fullPath = 'build.gradle';
-        try {
-            let repository = 'maven {\n';
-            if (url) {
-                repository += `        url "${url}"\n`;
-            }
-            if (username || password) {
-                repository += '        credentials {\n';
-                if (username) {
-                    repository += `            username = "${username}"\n`;
-                }
-                if (password) {
-                    repository += `            password = "${password}"\n`;
-                }
-                repository += '        }\n';
-            }
-            repository += '    }';
-            jhipsterUtils.rewriteFile({
-                file: fullPath,
-                needle: 'jhipster-needle-gradle-repositories',
-                splicable: [
-                    repository
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + url + chalk.yellow(' not added.\n'));
-            this.debug('Error:', e);
-        }
+        this.needleApi.serverGradle.addMavenRepository(url, username, password);
     }
 
     /**
@@ -1449,7 +796,14 @@ module.exports = class extends PrivateBase {
      */
     dateFormatForLiquibase() {
         const now = new Date();
-        const nowUTC = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+        const nowUTC = new Date(
+            now.getUTCFullYear(),
+            now.getUTCMonth(),
+            now.getUTCDate(),
+            now.getUTCHours(),
+            now.getUTCMinutes(),
+            now.getUTCSeconds()
+        );
         const year = `${nowUTC.getFullYear()}`;
         let month = `${nowUTC.getMonth() + 1}`;
         if (month.length === 1) {
@@ -1488,43 +842,58 @@ module.exports = class extends PrivateBase {
         const _this = generator || this;
         let regex;
         switch (action) {
-        case 'stripHtml':
-            regex = new RegExp([
-                /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
-                /( translate(-v|V)alues="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
-                /( translate-compile)/, // translate-compile
-                /( translate-value-max="[0-9{}()|]*")/, // translate-value-max
-            ].map(r => r.source).join('|'), 'g');
+            case 'stripHtml':
+                regex = new RegExp(
+                    [
+                        /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
+                        /( \[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+                        /( translate-compile)/, // translate-compile
+                        /( translate-value-max="[0-9{}()|]*")/ // translate-value-max
+                    ]
+                        .map(r => r.source)
+                        .join('|'),
+                    'g'
+                );
 
-            jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
-            break;
-        case 'stripJs':
-            regex = new RegExp([
-                /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
-                /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
-                /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
-                /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
-                /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[['"a-zA-Z0-9\-_,\s]+\]\);[\s]*)/, // jhiLanguageService invocations
-            ].map(r => r.source).join('|'), 'g');
+                jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, opt, template);
+                break;
+            case 'stripJs':
+                regex = new RegExp(
+                    [
+                        /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
+                        /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
+                        /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
+                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
+                        /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[['"a-zA-Z0-9\-_,\s]+\]\);[\s]*)/ // jhiLanguageService invocations
+                    ]
+                        .map(r => r.source)
+                        .join('|'),
+                    'g'
+                );
 
-            jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
-            break;
-        case 'stripJsx':
-            regex = new RegExp([
-                /(import { ?Translate, ?translate ?} from 'react-jhipster';?)/, // Translate imports
-                /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
-                /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
-                /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
-                /<Translate(\s*)?((component="[a-z]+")(\s*)|(contentKey=("[a-zA-Z0-9.\-_]+"|\{.*\}))(\s*)|(interpolate=\{.*\})(\s*))*(\s*)\/?>|<\/Translate>/, // Translate component tag
-            ].map(r => r.source).join('|'), 'g');
+                jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, opt, template);
+                break;
+            case 'stripJsx':
+                regex = new RegExp(
+                    [
+                        /(import { ?Translate, ?translate ?} from 'react-jhipster';?)/, // Translate imports
+                        /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
+                        /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
+                        /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
+                        /<Translate(\s*)?((component="[a-z]+")(\s*)|(contentKey=("[a-zA-Z0-9.\-_]+"|\{.*\}))(\s*)|(interpolate=\{.*\})(\s*))*(\s*)\/?>|<\/Translate>/ // Translate component tag
+                    ]
+                        .map(r => r.source)
+                        .join('|'),
+                    'g'
+                );
 
-            jhipsterUtils.copyWebResource(source, dest, regex, 'jsx', _this, opt, template);
-            break;
-        case 'copy':
-            _this.copy(source, dest);
-            break;
-        default:
-            _this.template(source, dest, _this, opt);
+                jhipsterUtils.copyWebResource(source, dest, regex, 'jsx', _this, opt, template);
+                break;
+            case 'copy':
+                _this.copy(source, dest);
+                break;
+            default:
+                _this.template(source, dest, _this, opt);
         }
     }
 
@@ -1575,18 +944,8 @@ module.exports = class extends PrivateBase {
      * @param {string} content - content to be written
      */
     rewriteFile(filePath, needle, content) {
-        try {
-            jhipsterUtils.rewriteFile({
-                file: filePath,
-                needle,
-                splicable: [
-                    content
-                ]
-            }, this);
-        } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required needle. File rewrite failed.\n'));
-            this.debug('Error:', e);
-        }
+        const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
+        this.needleApi.base.addBlockContentToFile(rewriteFileModel);
     }
 
     /**
@@ -1599,14 +958,19 @@ module.exports = class extends PrivateBase {
      */
     replaceContent(filePath, pattern, content, regex) {
         try {
-            jhipsterUtils.replaceContent({
-                file: filePath,
-                pattern,
-                content,
-                regex
-            }, this);
+            jhipsterUtils.replaceContent(
+                {
+                    file: filePath,
+                    pattern,
+                    content,
+                    regex
+                },
+                this
+            );
         } catch (e) {
-            this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
+            this.log(
+                chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e
+            );
             this.debug('Error:', e);
         }
     }
@@ -1699,7 +1063,7 @@ module.exports = class extends PrivateBase {
     callHooks(hookFor, hookType, options, cb) {
         const modules = this.getModuleHooks();
         // run through all module hooks, which matches the hookFor and hookType
-        modules.forEach((module) => {
+        modules.forEach(module => {
             this.debug('Composing module with config:', module);
             if (module.hookFor === hookFor && module.hookType === hookType) {
                 // compose with the modules callback generator
@@ -1707,8 +1071,12 @@ module.exports = class extends PrivateBase {
                 try {
                     this.composeExternalModule(module.npmPackageName, hook || 'app', options);
                 } catch (e) {
-                    this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName)
-                        + chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`));
+                    this.log(
+                        chalk.red('Could not compose module ') +
+                            chalk.bold.yellow(module.npmPackageName) +
+                            chalk.red('. \nMake sure you have installed the module with ') +
+                            chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`)
+                    );
                     this.debug('ERROR:', e);
                 }
             }
@@ -1759,12 +1127,15 @@ module.exports = class extends PrivateBase {
             context.fileData = this.fs.readJSON(fromPath);
         } catch (err) {
             this.debug('Error:', err);
-            this.error(chalk.red('\nThe entity configuration file could not be read!\n'));
+            this.error('\nThe entity configuration file could not be read!\n');
+        }
+        if (context.fileData.databaseType) {
+            context.databaseType = context.fileData.databaseType;
         }
         context.relationships = context.fileData.relationships || [];
         context.fields = context.fileData.fields || [];
         context.haveFieldWithJavadoc = false;
-        context.fields.forEach((field) => {
+        context.fields.forEach(field => {
             if (field.javadoc) {
                 context.haveFieldWithJavadoc = true;
             }
@@ -1781,20 +1152,24 @@ module.exports = class extends PrivateBase {
         context.jhiPrefix = context.fileData.jhiPrefix || context.jhiPrefix;
         context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
+        context.skipClient = context.fileData.skipClient || context.skipClient;
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
             context.entityTableName = this.getTableName(context.name);
         }
-        if (jhiCore.isReservedTableName(context.entityTableName, context.prodDatabaseType)) {
+        if (jhiCore.isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiPrefix) {
             context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
         }
-        context.fields.forEach((field) => {
+        context.fields.forEach(field => {
             context.fieldNamesUnderscored.push(_.snakeCase(field.fieldName));
             context.fieldNameChoices.push({ name: field.fieldName, value: field.fieldName });
         });
-        context.relationships.forEach((rel) => {
-            context.relNameChoices.push({ name: `${rel.relationshipName}:${rel.relationshipType}`, value: `${rel.relationshipName}:${rel.relationshipType}` });
+        context.relationships.forEach(rel => {
+            context.relNameChoices.push({
+                name: `${rel.relationshipName}:${rel.relationshipType}`,
+                value: `${rel.relationshipName}:${rel.relationshipType}`
+            });
         });
         if (context.fileData.angularJSSuffix !== undefined) {
             context.entityAngularJSSuffix = context.fileData.angularJSSuffix;
@@ -1803,7 +1178,7 @@ module.exports = class extends PrivateBase {
         if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
             context.microserviceName = context.fileData.microserviceName;
             if (!context.microserviceName) {
-                this.error(chalk.red('Microservice name for the entity is not found. Entity cannot be generated!'));
+                this.error('Microservice name for the entity is not found. Entity cannot be generated!');
             }
             context.microserviceAppName = this.getMicroserviceAppName(context.microserviceName);
             context.skipServer = true;
@@ -1845,17 +1220,20 @@ module.exports = class extends PrivateBase {
             return entities;
         }
 
-        return shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).reduce((acc, file) => {
-            try {
-                const definition = jhiCore.readEntityJSON(file);
-                acc.push({ name: path.basename(file, '.json'), definition });
-            } catch (error) {
-                // not an entity file / malformed?
-                this.warning(`Unable to parse entity file ${file}`);
-                this.debug('Error:', error);
-            }
-            return acc;
-        }, entities).sort(isBefore);
+        return shelljs
+            .ls(path.join(JHIPSTER_CONFIG_DIR, '*.json'))
+            .reduce((acc, file) => {
+                try {
+                    const definition = jhiCore.readEntityJSON(file);
+                    acc.push({ name: path.basename(file, '.json'), definition });
+                } catch (error) {
+                    // not an entity file / malformed?
+                    this.warning(`Unable to parse entity file ${file}`);
+                    this.debug('Error:', error);
+                }
+                return acc;
+            }, entities)
+            .sort(isBefore);
     }
 
     /**
@@ -1868,7 +1246,8 @@ module.exports = class extends PrivateBase {
      */
     copyI18nFilesByName(generator, webappDir, fileToCopy, lang) {
         const _this = generator || this;
-        _this.copy(`${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
+        const prefix = this.fetchFromInstalledJHipster('languages/templates');
+        _this.copy(`${prefix}/${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
     }
 
     /**
@@ -1949,25 +1328,82 @@ module.exports = class extends PrivateBase {
         const joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
-            this.warning(`The generated join table "${joinTableName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`
+            );
 
             limit = 30;
         } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
-            this.warning(`The generated join table "${joinTableName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`
+            );
 
             limit = 64;
+        } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 63;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
             const entityTable = this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = this.getTableName(relationshipName).substring(0, halfLimit - 1);
+            const relationTable = this.getTableName(relationshipName).substring(0, limit - entityTable.length - 1);
             return `${entityTable}_${relationTable}`;
         }
         return joinTableName;
     }
 
     /**
-     * get a constraint name for tables in JHipster preferred style.
+     * get a constraint name for tables in JHipster preferred style after applying any length limits required.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} columnOrRelationName - name of the column or related entity
+     * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
+     * @param {string} constraintNamePrefix - constraintName prefix for the constraintName
+     */
+    getConstraintNameWithLimit(entityName, columnOrRelationName, prodDatabaseType, noSnakeCase, constraintNamePrefix = '') {
+        let constraintName;
+        if (noSnakeCase) {
+            constraintName = `${constraintNamePrefix}${entityName}_${columnOrRelationName}`;
+        } else {
+            constraintName = `${constraintNamePrefix}${this.getTableName(entityName)}_${this.getTableName(columnOrRelationName)}`;
+        }
+        let limit = 0;
+        if (prodDatabaseType === 'oracle' && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`
+            );
+
+            limit = 28;
+        } else if (prodDatabaseType === 'mysql' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`
+            );
+
+            limit = 62;
+        } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+            );
+
+            limit = 61;
+        }
+        if (limit > 0) {
+            const halfLimit = Math.floor(limit / 2);
+            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
+            const otherTable = noSnakeCase
+                ? columnOrRelationName.substring(0, limit - entityTable.length - 2)
+                : this.getTableName(columnOrRelationName).substring(0, limit - entityTable.length - 2);
+            return `${entityTable}_${otherTable}`;
+        }
+        return constraintName;
+    }
+
+    /**
+     * get a foreign key constraint name for tables in JHipster preferred style.
      *
      * @param {string} entityName - name of the entity
      * @param {string} relationshipName - name of the related entity
@@ -1975,30 +1411,32 @@ module.exports = class extends PrivateBase {
      * @param {boolean} noSnakeCase - do not convert names to snakecase
      */
     getConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
-        let constraintName;
-        if (noSnakeCase) {
-            constraintName = `fk_${entityName}_${relationshipName}_id`;
-        } else {
-            constraintName = `fk_${this.getTableName(entityName)}_${this.getTableName(relationshipName)}_id`;
-        }
-        let limit = 0;
+        // for backward compatibility
+        return this.getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase);
+    }
 
-        if (prodDatabaseType === 'oracle' && constraintName.length > 30 && !this.skipCheckLengthOfIdentifier) {
-            this.warning(`The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`);
+    /**
+     * get a foreign key constraint name for tables in JHipster preferred style.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} relationshipName - name of the related entity
+     * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
+     */
+    getFKConstraintName(entityName, relationshipName, prodDatabaseType, noSnakeCase) {
+        return `${this.getConstraintNameWithLimit(entityName, relationshipName, prodDatabaseType, noSnakeCase, 'fk_')}_id`;
+    }
 
-            limit = 28;
-        } else if (prodDatabaseType === 'mysql' && constraintName.length > 64 && !this.skipCheckLengthOfIdentifier) {
-            this.warning(`The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`);
-
-            limit = 62;
-        }
-        if (limit > 0) {
-            const halfLimit = Math.floor(limit / 2);
-            const entityTable = noSnakeCase ? entityName.substring(0, halfLimit) : this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = noSnakeCase ? relationshipName.substring(0, halfLimit - 2) : this.getTableName(relationshipName).substring(0, halfLimit - 2);
-            return `${entityTable}_${relationTable}_id`;
-        }
-        return constraintName;
+    /**
+     * get a unique constraint name for tables in JHipster preferred style.
+     *
+     * @param {string} entityName - name of the entity
+     * @param {string} columnName - name of the column
+     * @param {string} prodDatabaseType - database type
+     * @param {boolean} noSnakeCase - do not convert names to snakecase
+     */
+    getUXConstraintName(entityName, columnName, prodDatabaseType, noSnakeCase) {
+        return `ux_${this.getConstraintNameWithLimit(entityName, columnName, prodDatabaseType, noSnakeCase)}`;
     }
 
     /**
@@ -2007,7 +1445,7 @@ module.exports = class extends PrivateBase {
      * @param {string} msg - message to print
      */
     error(msg) {
-        this.env.error(`${chalk.red.bold('ERROR!')} ${msg}`);
+        this.env.error(`${msg}`);
     }
 
     /**
@@ -2042,29 +1480,33 @@ module.exports = class extends PrivateBase {
      */
     generateKeyStore() {
         const done = this.async();
-        const keyStoreFile = `${SERVER_MAIN_RES_DIR}keystore.jks`;
+        const keyStoreFile = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
         if (this.fs.exists(keyStoreFile)) {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', SERVER_MAIN_RES_DIR);
+            shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {
                 keytoolPath = `${javaHome}/bin/`;
             }
+            // Generate the PKCS#12 keystore
             shelljs.exec(
+                // prettier-ignore
                 `"${keytoolPath}keytool" -genkey -noprompt `
+                + '-storetype PKCS12 '
                 + '-keyalg RSA '
                 + '-alias selfsigned '
                 + `-keystore ${keyStoreFile} `
                 + '-storepass password '
                 + '-keypass password '
                 + '-keysize 2048 '
+                + '-validity 99999 '
                 + `-dname "CN=Java Hipster, OU=Development, O=${this.packageName}, L=, ST=, C="`,
-                (code) => {
+                code => {
                     if (code !== 0) {
-                        this.error('\nFailed to create a KeyStore with \'keytool\'', code);
+                        this.warning("\nFailed to create a KeyStore with 'keytool'", code);
                     } else {
                         this.log(chalk.green(`\nKeyStore '${keyStoreFile}' generated successfully.\n`));
                     }
@@ -2090,20 +1532,38 @@ module.exports = class extends PrivateBase {
         this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
         if (process.cwd() === this.getUserHome()) {
             this.log(chalk.red.bold('\n️⚠️  WARNING ⚠️  You are in your HOME folder!'));
-            this.log(chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.'));
+            this.log(
+                chalk.red('This can cause problems, you should always create a new directory and run the jhipster command from here.')
+            );
             this.log(chalk.white(`See the troubleshooting section at ${chalk.yellow('https://www.jhipster.tech/installation/')}`));
         }
-        this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
-        this.log(chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`));
-        this.log(chalk.white(`  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow('https://opencollective.com/generator-jhipster')}`));
-        this.log(chalk.green(' _______________________________________________________________________________________________________________\n'));
+        this.log(
+            chalk.green(
+                ' _______________________________________________________________________________________________________________\n'
+            )
+        );
+        this.log(
+            chalk.white(`  Documentation for creating an application is at ${chalk.yellow('https://www.jhipster.tech/creating-an-app/')}`)
+        );
+        this.log(
+            chalk.white(
+                `  If you find JHipster useful, consider sponsoring the project at ${chalk.yellow(
+                    'https://opencollective.com/generator-jhipster'
+                )}`
+            )
+        );
+        this.log(
+            chalk.green(
+                ' _______________________________________________________________________________________________________________\n'
+            )
+        );
     }
 
     /**
      * Return the user home
      */
     getUserHome() {
-        return process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME'];
+        return process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME'];
     }
 
     /**
@@ -2112,19 +1572,27 @@ module.exports = class extends PrivateBase {
     checkForNewVersion() {
         try {
             const done = this.async();
-            shelljs.exec(`npm show ${GENERATOR_JHIPSTER} version`, { silent: true }, (code, stdout, stderr) => {
-                if (!stderr && semver.lt(packagejs.version, stdout)) {
-                    this.log(`${chalk.yellow(' ______________________________________________________________________________\n\n')
-                        + chalk.yellow('  JHipster update available: ') + chalk.green.bold(stdout.replace('\n', '')) + chalk.gray(` (current: ${packagejs.version})`)}\n`);
-                    if (this.useYarn) {
-                        this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
-                    } else {
-                        this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+            shelljs.exec(
+                `npm show ${GENERATOR_JHIPSTER} version --fetch-retries 1 --fetch-retry-mintimeout 500 --fetch-retry-maxtimeout 500`,
+                { silent: true },
+                (code, stdout, stderr) => {
+                    if (!stderr && semver.lt(packagejs.version, stdout)) {
+                        this.log(
+                            `${chalk.yellow(' ______________________________________________________________________________\n\n') +
+                                chalk.yellow('  JHipster update available: ') +
+                                chalk.green.bold(stdout.replace('\n', '')) +
+                                chalk.gray(` (current: ${packagejs.version})`)}\n`
+                        );
+                        if (this.useNpm) {
+                            this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
+                        } else {
+                            this.log(chalk.yellow(`  Run ${chalk.magenta(`yarn global upgrade ${GENERATOR_JHIPSTER}`)} to update.\n`));
+                        }
+                        this.log(chalk.yellow(' ______________________________________________________________________________\n'));
                     }
-                    this.log(chalk.yellow(' ______________________________________________________________________________\n'));
+                    done();
                 }
-                done();
-            });
+            );
         } catch (err) {
             this.debug('Error:', err);
             // fail silently as this function doesn't affect normal generator flow
@@ -2169,6 +1637,39 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * get a hipster based on the applications name.
+     * @param {string} baseName of application
+     */
+    getHipster(baseName = this.baseName) {
+        let hash = 0;
+        let i;
+        let chr;
+
+        for (i = 0; i < baseName.length; i++) {
+            chr = baseName.charCodeAt(i);
+            hash = (hash << 5) - hash + chr; // eslint-disable-line no-bitwise
+            hash |= 0; // eslint-disable-line no-bitwise
+        }
+
+        if (hash < 0) {
+            hash *= -1;
+        }
+
+        switch (hash % 4) {
+            case 0:
+                return 'jhipster_family_member_0';
+            case 1:
+                return 'jhipster_family_member_1';
+            case 2:
+                return 'jhipster_family_member_2';
+            case 3:
+                return 'jhipster_family_member_3';
+            default:
+                return 'jhipster_family_member_0';
+        }
+    }
+
+    /**
      * ask a prompt for apps name.
      *
      * @param {object} generator - generator instance to use
@@ -2176,27 +1677,32 @@ module.exports = class extends PrivateBase {
     askModuleName(generator) {
         const done = generator.async();
         const defaultAppBaseName = this.getDefaultAppName();
-        generator.prompt({
-            type: 'input',
-            name: 'baseName',
-            validate: (input) => {
-                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
-                    return 'Your application name cannot contain special characters or a blank space';
-                }
-                if (generator.applicationType === 'microservice' && /_/.test(input)) {
-                    return 'Your microservice name cannot contain underscores as this does not meet the URI spec';
-                }
-                if (input === 'application') {
-                    return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
-                }
-                return true;
-            },
-            message: 'What is the base name of your application?',
-            default: defaultAppBaseName
-        }).then((prompt) => {
-            generator.baseName = prompt.baseName;
-            done();
-        });
+        generator
+            .prompt({
+                type: 'input',
+                name: 'baseName',
+                validate: input => {
+                    if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+                        return 'Your base name cannot contain special characters or a blank space';
+                    }
+                    if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+                        return 'Your base name cannot contain underscores as this does not meet the URI spec';
+                    }
+                    if (generator.applicationType === 'uaa' && input === 'auth') {
+                        return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
+                    }
+                    if (input === 'application') {
+                        return "Your base name cannot be named 'application' as this is a reserved name for Spring Boot";
+                    }
+                    return true;
+                },
+                message: 'What is the base name of your application?',
+                default: defaultAppBaseName
+            })
+            .then(prompt => {
+                generator.baseName = prompt.baseName;
+                done();
+            });
     }
 
     /**
@@ -2233,7 +1739,7 @@ module.exports = class extends PrivateBase {
             }
         ];
 
-        generator.prompt(prompts).then((prompt) => {
+        generator.prompt(prompts).then(prompt => {
             generator.enableTranslation = prompt.enableTranslation;
             generator.nativeLanguage = prompt.nativeLanguage;
             generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
@@ -2259,6 +1765,8 @@ module.exports = class extends PrivateBase {
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
+                'from-cli': generator.options['from-cli'],
+                skipChecks: generator.options.skipChecks,
                 languages: generator.languages,
                 force: generator.options.force,
                 debug: generator.options.debug
@@ -2267,28 +1775,26 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * @Deprecated
-     * Add numbering to a question
-     *
-     * @param {String} msg - question text
-     * @param {boolean} cond - increment question
-     */
-    getNumberedQuestion(msg, cond) {
-        return msg;
-    }
-
-    /**
      * build a generated application.
      *
      * @param {String} buildTool - maven | gradle
      * @param {String} profile - dev | prod
+     * @param {Boolean} buildWar - build a war instead of a jar
      * @param {Function} cb - callback when build is complete
      */
-    buildApplication(buildTool, profile, cb) {
+    buildApplication(buildTool, profile, buildWar, cb) {
         let buildCmd = 'mvnw verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew bootWar -x test';
+            buildCmd = 'gradlew -x test';
+            if (buildWar) {
+                buildCmd += ' bootWar';
+            } else {
+                buildCmd += ' bootJar';
+            }
+        }
+        if (buildWar) {
+            buildCmd += ' -Pwar';
         }
 
         if (os.platform() !== 'win32') {
@@ -2320,7 +1826,7 @@ module.exports = class extends PrivateBase {
                 const blockTemplate = blockTemplates[j];
                 if (!blockTemplate.condition || blockTemplate.condition(_this)) {
                     const path = blockTemplate.path || '';
-                    blockTemplate.templates.forEach((templateObj) => {
+                    blockTemplate.templates.forEach(templateObj => {
                         let templatePath = path;
                         let method = 'template';
                         let useTemplate = false;
@@ -2348,9 +1854,12 @@ module.exports = class extends PrivateBase {
                         if (!returnFiles) {
                             let templatePathFrom = prefix ? `${prefix}/${templatePath}` : templatePath;
                             if (
-                                !templateObj.noEjs && !templatePathFrom.endsWith('.png')
-                                && !templatePathFrom.endsWith('.jpg') && !templatePathFrom.endsWith('.gif')
-                                && !templatePathFrom.endsWith('.svg') && !templatePathFrom.endsWith('.ico')
+                                !templateObj.noEjs &&
+                                !templatePathFrom.endsWith('.png') &&
+                                !templatePathFrom.endsWith('.jpg') &&
+                                !templatePathFrom.endsWith('.gif') &&
+                                !templatePathFrom.endsWith('.svg') &&
+                                !templatePathFrom.endsWith('.ico')
                             ) {
                                 templatePathFrom = `${templatePathFrom}.ejs`;
                             }
@@ -2366,6 +1875,34 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Setup shared level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
+     */
+    setupSharedOptions(generator, context = generator, dest = context) {
+        dest.skipClient = context.options['client-hook'] === false || context.configOptions.skipClient || context.config.get('skipClient');
+        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
+        dest.skipUserManagement =
+            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        dest.otherModules = context.configOptions.otherModules || [];
+        dest.baseName = context.configOptions.baseName;
+        dest.logo = context.configOptions.logo;
+        dest.clientPackageManager = context.configOptions.clientPackageManager;
+        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+        dest.experimental = context.configOptions.experimental || context.options.experimental;
+
+        const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
+        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
+            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+        }
+        dest.uaaBaseName = uaaBaseName;
+    }
+
+    /**
      * Setup client instance level options from context.
      * all variables should be set to dest,
      * all variables should be referred from context,
@@ -2375,42 +1912,32 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupClientOptions(generator, context = generator, dest = context) {
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
-        dest.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        this.setupSharedOptions(generator, context, dest);
         dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
-        dest.authenticationType = context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
-        if (dest.authenticationType === 'oauth2') {
-            dest.skipUserManagement = true;
-        }
-        const uaaBaseName = context.options.uaaBaseName || context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
-        if (context.options.auth === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        dest.uaaBaseName = uaaBaseName;
+        dest.authenticationType =
+            context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
-        dest.buildTool = context.options.build;
-        dest.websocket = context.options.websocket;
-        dest.devDatabaseType = context.options.db || context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
-        dest.prodDatabaseType = context.options.db || context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
-        dest.databaseType = generator.getDBTypeFromDBValue(context.options.db) || context.configOptions.databaseType || context.config.get('databaseType');
-        dest.searchEngine = context.options['search-engine'] || context.config.get('searchEngine');
-        dest.cacheProvider = context.options['cache-provider'] || context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        dest.enableHibernateCache = context.options['hb-cache'] || context.config.get('enableHibernateCache') || (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
-        dest.otherModules = context.configOptions.otherModules || [];
-        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix') || context.options['jhi-prefix'];
+        dest.buildTool = context.configOptions.buildTool;
+        dest.websocket = context.configOptions.websocket;
+        dest.devDatabaseType = context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
+        dest.prodDatabaseType = context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
+        dest.databaseType =
+            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
+            context.configOptions.databaseType ||
+            context.config.get('databaseType');
+        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
+            dest.skipUserManagement = true;
+        }
+        dest.searchEngine = context.config.get('searchEngine');
+        dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
+        dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
+        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        dest.testFrameworks = [];
+        dest.testFrameworks = context.configOptions.testFrameworks || [];
 
-        if (context.options.protractor) dest.testFrameworks.push('protractor');
-
-        dest.baseName = context.configOptions.baseName;
-        dest.logo = context.configOptions.logo;
-        dest.useYarn = context.configOptions.useYarn = !context.options.npm;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
+        dest.useYarn = context.configOptions.useYarn;
     }
 
     /**
@@ -2423,19 +1950,9 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupServerOptions(generator, context = generator, dest = context) {
-        dest.skipClient = !context.options['client-hook'] || context.configOptions.skipClient || context.config.get('skipClient');
-        dest.skipUserManagement = context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
-        dest.enableTranslation = context.options.i18n || context.configOptions.enableTranslation || context.config.get('enableTranslation');
-        dest.testFrameworks = [];
-
-        if (context.options.gatling) dest.testFrameworks.push('gatling');
-        if (context.options.cucumber) dest.testFrameworks.push('cucumber');
-
-        dest.logo = context.configOptions.logo;
-        dest.baseName = context.configOptions.baseName;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
+        this.setupSharedOptions(generator, context, dest);
+        dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
+        dest.testFrameworks = context.configOptions.testFrameworks;
     }
 
     /**
@@ -2485,23 +2002,12 @@ module.exports = class extends PrivateBase {
      * @param {boolean} force force getting direct from file
      */
     getAllJhipsterConfig(generator = this, force) {
-        let configuration = generator.config.getAll() || {};
-        if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
-            const yoRc = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
-            configuration = yoRc['generator-jhipster'];
-            // merge the blueprint config if available
-            if (configuration.blueprint) {
-                configuration = Object.assign(configuration, yoRc[configuration.blueprint]);
-            }
-        }
-        if (!configuration.get || typeof configuration.get !== 'function') {
-            Object.assign(configuration, {
-                getAll: () => configuration,
-                get: key => configuration[key],
-                set: (key, value) => { configuration[key] = value; }
-            });
-        }
-        return configuration;
+        const configRootPath =
+            generator.configRootPath ||
+            (generator.options && generator.options.configRootPath) ||
+            (generator.configOptions && generator.configOptions.configRootPath) ||
+            '';
+        return jhipsterUtils.getAllJhipsterConfig(generator, force, configRootPath);
     }
 
     /**
@@ -2510,5 +2016,28 @@ module.exports = class extends PrivateBase {
      */
     fetchFromInstalledJHipster(subpath) {
         return path.join(__dirname, subpath);
+    }
+
+    /**
+     * Construct the entity name by appending the entity suffix.
+     * @param {String} name entity name
+     */
+    asEntity(name) {
+        return name + this.entitySuffix;
+    }
+
+    /**
+     * Construct the entity's dto name by appending the dto suffix.
+     * @param {String} name entity name
+     */
+    asDto(name) {
+        return name + this.dtoSuffix;
+    }
+
+    get needleApi() {
+        if (this._needleApi === undefined || this._needleApi === null) {
+            this._needleApi = new NeedleApi(this);
+        }
+        return this._needleApi;
     }
 };

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -53,26 +53,22 @@ test:
     override:
 <%_ if (buildTool === 'maven') { _%>
         - chmod +x mvnw
-        - ./mvnw clean test
+        - ./mvnw clean verify
 <%_ } else if (buildTool === 'gradle') { _%>
         - chmod +x gradlew
-        - ./gradlew clean test --no-daemon
+        - ./gradlew clean test integrationTest --no-daemon
 <%_ } _%>
-<%_ if (applicationType !== 'microservice') { _%>
-    <%_ if (clientPackageManager === 'yarn') { _%>
-        - yarn test
-    <%_ } else if (clientPackageManager === 'npm') { _%>
-        - npm test
-    <%_ } _%>
+<%_ if (!skipClient) { _%>
+        - <%= clientPackageManager %> run <%= frontTestCommand %>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
     <%_ if (cicdIntegrations.includes('circle')) { _%>
-        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.appName=<%= herokuAppName %>
+        - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
     <%_ } else { _%>
         - ./mvnw verify -Pprod -DskipTests
     <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
-        - ./gradlew bootWar -Pprod -x test --no-daemon
+        - ./gradlew bootJar -Pprod -x test --no-daemon
     <%_ if (heroku.includes('circle')) { _%>
         - ./gradlew deployHeroku --no-daemon
     <%_ } _%>

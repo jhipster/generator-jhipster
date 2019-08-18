@@ -1,0 +1,83 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "testEntity",
+            "otherEntityName": "testEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyToMany"
+        },
+        {
+            "relationshipName": "testMapstruct",
+            "otherEntityName": "testMapstruct",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyToMany"
+        },
+        {
+            "relationshipName": "testServiceClass",
+            "otherEntityName": "testServiceClass",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyToMany"
+        },
+        {
+            "relationshipName": "testServiceImpl",
+            "otherEntityName": "testServiceImpl",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyToMany"
+        },
+        {
+            "relationshipName": "testInfiniteScroll",
+            "otherEntityName": "testInfiniteScroll",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyToMany"
+        },
+        {
+            "relationshipName": "testPager",
+            "otherEntityName": "testPager",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyToMany"
+        },
+        {
+            "relationshipName": "testPagination",
+            "otherEntityName": "testPagination",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyToMany"
+        },
+        {
+            "relationshipName": "testCustomTableName",
+            "otherEntityName": "testCustomTableName",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyToMany"
+        },
+        {
+            "relationshipName": "superMegaLargeTestEntity",
+            "otherEntityName": "superMegaLargeTestEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "superMegaLargeTestManyToMany"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210534",
+    "dto": "no",
+    "service": "no",
+    "angularJSSuffix": "mySuffix",
+    "pagination": "no"
+}

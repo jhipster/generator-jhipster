@@ -1,0 +1,27 @@
+{
+    "generator-jhipster": {
+        "baseName": "travisReact",
+        "packageName": "io.github.jhipster.travis",
+        "packageFolder": "io/github/jhipster/travis",
+        "serverPort": "8080",
+        "authenticationType": "session",
+        "cacheProvider": "ehcache",
+        "enableHibernateCache": true,
+        "websocket": "spring-websocket",
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "prodDatabaseType": "mysql",
+        "searchEngine": "elasticsearch",
+        "buildTool": "gradle",
+        "enableTranslation": false,
+        "messageBroker": false,
+        "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
+        "applicationType": "monolith",
+        "testFrameworks": ["protractor"],
+        "jhiPrefix": "myPrefix",
+        "travis": true,
+        "serviceDiscoveryType": false,
+        "clientPackageManager": "npm",
+        "clientFramework": "react"
+    }
+}

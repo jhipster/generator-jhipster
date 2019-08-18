@@ -1,3 +1,21 @@
+/**
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const _ = require('lodash');
 const exec = require('child_process').exec;
 
@@ -31,14 +49,11 @@ function setOutputs(stdout, stderr) {
  * @attr maxBuffer value of the buffer to store the live outputs. Default to 10240000
  */
 function command(cmd, cb, opts = {}) {
-    const options = Object.assign(
-        {},
-        {
-            silent: false,
-            maxBuffer: 10240000
-        },
-        opts
-    );
+    const options = {
+        silent: false,
+        maxBuffer: 10240000,
+        ...opts
+    };
     const command = exec(`${cmd}`, { maxBuffer: options.maxBuffer }, cb);
 
     if (!options.silent) {
@@ -57,28 +72,40 @@ function getImageID(imageName, tag) {
     const dockerNameTag = `${imageName}${_.isNil(tag) ? '' : `:${tag}`}`;
     const commandLine = `docker image ls --quiet ${dockerNameTag}`;
 
-    return new Promise((resolve, reject) => command(commandLine, (err, stdout) => {
-        if (err) {
-            reject(err);
-        }
-        const dockerID = _.trim(stdout);
-        if (_.isEmpty(dockerID)) {
-            reject(new Error(`No Docker ID found for ${dockerNameTag}`));
-        } else {
-            resolve(dockerID);
-        }
-    }, { silent: true }));
+    return new Promise((resolve, reject) =>
+        command(
+            commandLine,
+            (err, stdout) => {
+                if (err) {
+                    reject(err);
+                }
+                const dockerID = _.trim(stdout);
+                if (_.isEmpty(dockerID)) {
+                    reject(new Error(`No Docker ID found for ${dockerNameTag}`));
+                } else {
+                    resolve(dockerID);
+                }
+            },
+            { silent: true }
+        )
+    );
 }
 
 function tagImage(from, to) {
     const commandLine = `docker tag ${from} ${to}`;
 
-    return new Promise((resolve, reject) => command(commandLine, (err, stdout) => {
-        if (err) {
-            reject(err);
-        }
-        resolve(stdout);
-    }, { silent: true }));
+    return new Promise((resolve, reject) =>
+        command(
+            commandLine,
+            (err, stdout) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(stdout);
+            },
+            { silent: true }
+        )
+    );
 }
 
 /**
@@ -92,12 +119,13 @@ function tagImage(from, to) {
 function loginToAws(region, accountId, username, password) {
     const commandLine = `docker login --username AWS --password ${password} https://${accountId}.dkr.ecr.${region}.amazonaws.com`;
     return new Promise(
-        (resolve, reject) => command(commandLine, (err, stdout) => {
-            if (err) {
-                reject(err);
-            }
-            resolve(stdout);
-        }),
+        (resolve, reject) =>
+            command(commandLine, (err, stdout) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(stdout);
+            }),
         { silent: true }
     );
 }
@@ -109,10 +137,12 @@ function loginToAws(region, accountId, username, password) {
  */
 function pushImage(repository) {
     const commandLine = `docker push ${repository}`;
-    return new Promise((resolve, reject) => command(commandLine, (err, stdout) => {
-        if (err) {
-            reject(err);
-        }
-        resolve(stdout);
-    }));
+    return new Promise((resolve, reject) =>
+        command(commandLine, (err, stdout) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(stdout);
+        })
+    );
 }

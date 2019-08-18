@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Masuk",
+        "form": {
+            "password": "Password",
+            "password.placeholder": "Password anda",
+            "rememberme": "Ingat saya",
+            "button": "Masuk"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Gagal masuk!</strong> Silakan cek data anda dan coba lagi."
+            }
+        },
+        "password": {
+            "forgot": "Apakah anda lupa passsword?"
+        }
+    }
+}

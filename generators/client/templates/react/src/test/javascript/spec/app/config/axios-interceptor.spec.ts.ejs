@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,13 +27,12 @@ describe('Axios Interceptor', () => {
     const onUnauthenticated = sinon.spy();
     setupAxiosInterceptors(onUnauthenticated);
 
-    it('onRequestSuccess is called on fullfilled request', () => {
+    it('onRequestSuccess is called on fulfilled request', () => {
       expect((client.interceptors.request as any).handlers[0].fulfilled({ data: 'foo', url: '/test' })).toMatchObject({
-        data: 'foo',
-        timeout: 1000000
+        data: 'foo'
       });
     });
-    it('onResponseSuccess is called on fullfilled response', () => {
+    it('onResponseSuccess is called on fulfilled response', () => {
       expect((client.interceptors.response as any).handlers[0].fulfilled({ data: 'foo' })).toEqual({ data: 'foo' });
     });
     it('onResponseError is called on rejected response', () => {

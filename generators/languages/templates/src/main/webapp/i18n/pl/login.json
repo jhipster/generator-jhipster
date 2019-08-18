@@ -12,7 +12,7 @@
                 "authentication": "<strong>Nieudane logowanie!</strong> Sprawdź swoje dane logowania i spróbuj ponownie."
             }
         },
-        "password" : {
+        "password": {
             "forgot": "Zapomniałeś swojego hasła?"
         }
     }

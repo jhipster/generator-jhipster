@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,34 +20,43 @@
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 const meow = require('meow');
+const yeoman = require('yeoman-environment');
+const _ = require('lodash');
+
+const SUB_GENERATORS = require('./commands');
 
 const CLI_NAME = 'jhipster';
-const debug = function (msg) {
+const GENERATOR_NAME = 'generator-jhipster';
+const debug = function(msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
     }
 };
 
-const info = function (msg) {
-    console.info(msg);
+const info = function(msg) {
+    console.info(`${chalk.green.bold('INFO!')} ${msg}`);
 };
 
-const log = function (msg) {
+const log = function(msg) {
     console.log(msg);
 };
 
-const error = function (msg) {
-    console.error(`${chalk.red.bold('ERROR!')} ${chalk.red(msg)}`);
+const error = function(msg, trace) {
+    console.error(`${chalk.red(msg)}`);
+    if (trace) {
+        console.log(trace);
+    }
+    process.exit(1);
 };
 
-const init = function (program) {
+const init = function(program) {
     program.option('-d, --debug', 'enable debugger');
 
     const argv = program.normalize(process.argv);
     this.debugEnabled = program.debug = argv.includes('-d') || argv.includes('--debug'); // Need this early
 
     if (this.debugEnabled) {
-        debug('Debug logging is on');
+        info('Debug logging is on');
     }
 };
 
@@ -59,16 +68,16 @@ const logger = {
     error
 };
 
-const toString = (item) => {
+const toString = item => {
     if (typeof item == 'object') {
         if (Array.isArray(item)) {
             return item.map(it => toString(it)).join(', ');
         }
-        return Object.keys(item).map(k => `${k}: ${
-            typeof item[k] != 'function' && typeof item[k] != 'object' ? toString(item[k]) : 'Object'
-        }`).join(', ');
+        return Object.keys(item)
+            .map(k => `${k}: ${typeof item[k] != 'function' && typeof item[k] != 'object' ? toString(item[k]) : 'Object'}`)
+            .join(', ');
     }
-    return item;
+    return item ? item.toString() : item;
 };
 
 const initHelp = (program, cliName) => {
@@ -78,13 +87,15 @@ const initHelp = (program, cliName) => {
         logger.info('');
     });
 
-    program.on('command:*', (name) => {
-        logger.error(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`);
+    program.on('command:*', name => {
+        console.error(chalk.red(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`));
 
-        const d = didYouMean(name.toString(), program.commands, '_name');
+        const cmd = Object.values(name).join('');
+        const availableCommands = program.commands.map(c => c._name);
 
-        if (d) {
-            logger.info(`Did you mean: ${chalk.yellow(d)}?`);
+        const suggestion = didYouMean(cmd, availableCommands);
+        if (suggestion) {
+            logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
         }
 
         process.exit(1);
@@ -93,8 +104,8 @@ const initHelp = (program, cliName) => {
 
 /**
  * Get arguments
-*/
-const getArgs = (opts) => {
+ */
+const getArgs = opts => {
     if (opts.argument) {
         return `[${opts.argument.join(' ')}]`;
     }
@@ -103,10 +114,10 @@ const getArgs = (opts) => {
 
 /**
  * Get options from arguments
-*/
-const getOptionsFromArgs = (args) => {
+ */
+const getOptionsFromArgs = args => {
     const options = [];
-    args.forEach((item) => {
+    args.forEach(item => {
         if (typeof item == 'string') {
             options.push(item);
         } else if (typeof item == 'object') {
@@ -116,6 +127,25 @@ const getOptionsFromArgs = (args) => {
         }
     });
     return options;
+};
+
+/* Convert option objects to command line args */
+const getOptionAsArgs = (options, withEntities, force) => {
+    const args = Object.entries(options).map(([key, value]) => {
+        const prefix = key.length === 1 ? '-' : '--';
+        if (value === true) {
+            return `${prefix}${_.kebabCase(key)}`;
+        }
+        if (value === false) {
+            return `${prefix}no-${_.kebabCase(key)}`;
+        }
+        return value ? `${prefix}${_.kebabCase(key)} ${value}` : '';
+    });
+    if (withEntities) args.push('--with-entities');
+    if (force) args.push('--force');
+    args.push('--from-cli');
+    logger.debug(`converted options: ${args}`);
+    return _.uniq(args.join(' ').split(' ')).filter(it => it !== '');
 };
 
 /**
@@ -139,23 +169,52 @@ const getCommandOptions = (pkg, argv) => {
     const options = meow({ help: false, pkg, argv });
     const flags = options ? options.flags : null;
     if (flags) {
+        flags['from-cli'] = true;
         // Add un-camelized options too, for legacy
-        Object.keys(flags).forEach((key) => {
+        Object.keys(flags).forEach(key => {
             const legacyKey = key.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`);
             flags[legacyKey] = flags[key];
         });
         return flags;
     }
-    return {};
+    return { 'from-cli': true };
+};
+
+const done = errorMsg => {
+    if (errorMsg) {
+        logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+    } else {
+        logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+    }
+};
+
+const createYeomanEnv = () => {
+    const env = yeoman.createEnv();
+    /* Register yeoman generators */
+    Object.keys(SUB_GENERATORS)
+        .filter(command => !SUB_GENERATORS[command].cliOnly)
+        .forEach(generator => {
+            if (SUB_GENERATORS[generator].blueprint) {
+                /* eslint-disable prettier/prettier */
+                env.register(require.resolve(`${SUB_GENERATORS[generator].blueprint}/generators/${generator}`), `${CLI_NAME}:${generator}`);
+            } else {
+                env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
+            }
+        });
+    return env;
 };
 
 module.exports = {
     CLI_NAME,
+    GENERATOR_NAME,
     toString,
     logger,
     initHelp,
     getArgs,
     getOptionsFromArgs,
     getCommand,
-    getCommandOptions
+    getCommandOptions,
+    done,
+    createYeomanEnv,
+    getOptionAsArgs
 };

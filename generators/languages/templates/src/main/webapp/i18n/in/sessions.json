@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Sesi aktif untuk [<strong>{{username}}</strong>]",
+        "table": {
+            "ipaddress": "Alamat IP",
+            "useragent": "User Agent",
+            "date": "Tanggal",
+            "button": "Validasi Ulang"
+        },
+        "messages": {
+            "success": "<strong>Sesi berhasil divalidasi ulang!</strong>",
+            "error": "<strong>Terjadi kesalahan!</strong> Sesi tidak bisa divalidasi ulang."
+        }
+    }
+}

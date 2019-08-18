@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -59,10 +59,13 @@ function prompting() {
             name: 'cloudfoundryDatabaseServicePlan',
             message: 'What is the name of your database plan?',
             default: 'turtle'
-        }];
+        }
+    ];
 
-    this.prompt(prompts).then((props) => {
-        this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName).split('-').join('');
+    this.prompt(prompts).then(props => {
+        this.cloudfoundryDeployedName = _.kebabCase(props.cloudfoundryDeployedName)
+            .split('-')
+            .join('');
         this.cloudfoundryProfile = props.cloudfoundryProfile;
         this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
         this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;

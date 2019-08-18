@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2018 the original author or authors from the JHipster project.
+ * Copyright 2013-2019 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,29 +19,21 @@
 /* eslint-disable consistent-return */
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
-const BaseGenerator = require('../generator-base');
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 /* constants used throughout */
-let useBlueprint;
+let useBlueprints;
 
-module.exports = class extends BaseGenerator {
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
-        if (this.databaseType === 'cassandra') {
-            this.pkType = 'UUID';
-        }
-        const blueprint = this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'entity-server', {
-                context: opts.context,
-                force: opts.force,
-                debug: opts.context.isDebugEnabled
-            });
-        } else {
-            useBlueprint = false;
-        }
+        this.jhipsterContext = opts.jhipsterContext || opts.context;
+        this.configOptions = opts.configOptions || {};
+
+        useBlueprints =
+            !opts.fromBlueprint &&
+            this.instantiateBlueprints('entity-server', { context: opts.context, debug: opts.context.isDebugEnabled });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -50,7 +42,7 @@ module.exports = class extends BaseGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 };

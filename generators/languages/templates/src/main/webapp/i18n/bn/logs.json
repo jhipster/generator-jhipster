@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "লগ",
+        "nbloggers": "মোট লগঃ {{ total }}.",
+        "filter": "ফিল্টার",
+        "table": {
+            "name": "নাম",
+            "level": "লেভেল"
+        }
+    }
+}

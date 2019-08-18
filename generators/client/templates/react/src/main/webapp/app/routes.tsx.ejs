@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,8 @@ import Loadable from 'react-loadable';
 
 <%_ if (authenticationType !== 'oauth2') { _%>
 import Login from 'app/modules/login/login';
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
 import Register from 'app/modules/account/register/register';
 import Activate from 'app/modules/account/activate/activate';
 import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
@@ -32,10 +34,10 @@ import Home from 'app/modules/home/home';
 import Entities from 'app/entities';
 import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
+import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
 
-// tslint:disable:space-in-parens
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
   loading: () => <div>loading ...</div>
@@ -46,27 +48,27 @@ const Admin = Loadable({
   loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
   loading: () => <div>loading ...</div>
 });
-// tslint:enable
 
 const Routes = () => (
   <div className="view-routes">
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    <ErrorBoundaryRoute path="/login" component={Login} />
-    <%_ } _%>
     <Switch>
-      <ErrorBoundaryRoute path="/logout" component={Logout} />
     <%_ if (authenticationType !== 'oauth2') { _%>
+      <ErrorBoundaryRoute path="/login" component={Login} />
+    <%_ } _%>
+      <ErrorBoundaryRoute path="/logout" component={Logout} />
+    <%_ if (!skipUserManagement) { _%>
       <ErrorBoundaryRoute path="/register" component={Register} />
       <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />
       <ErrorBoundaryRoute path="/reset/request" component={PasswordResetInit} />
       <ErrorBoundaryRoute path="/reset/finish/:key?" component={PasswordResetFinish} />
     <%_ } _%>
       <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]}/>
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
       <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
     <%_ } _%>
       <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
-      <ErrorBoundaryRoute path="/" component={Home}/>
+      <ErrorBoundaryRoute path="/" exact component={Home}/>
+      <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>
   </div>
 );

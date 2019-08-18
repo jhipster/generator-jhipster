@@ -1,0 +1,137 @@
+{
+    "global": {
+        "browsehappy":
+            "Сизнинг браузерингиз <strong>эски</strong>. Илтимос, браузерингизни<a href=\"http://browsehappy.com/?locale=en\">янгиланг</a>.",
+        "menu": {
+            "home": "Бош саҳифа",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Маълумотлар",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Профил",
+                "settings": "Созламалар",
+                "password": "Парол",
+                "sessions": "Сессиялар",
+                "login": "Кириш",
+                "logout": "Чиқиш",
+                "register": "Рўйхатдан ўтиш"
+            },
+            "admin": {
+                "main": "Бошқарув",
+                "userManagement": "Фойдалаувчилар бошқаруви",
+                "tracker": "Фойдалаувчи кузатуви",
+                "metrics": "Метрикалар",
+                "health": "Ҳолат",
+                "configuration": "Созламалар",
+                "logs": "Логлар",
+                "audits": "Аудит",
+                "apidocs": "API",
+                "database": "Маълумотлар базаси",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Тил"
+        },
+        "form": {
+            "username": "Логин",
+            "username.placeholder": "Сизнинг логинингиз",
+            "currentpassword.label": "Ҳозирги паролингиз",
+            "currentpassword.placeholder": "Ҳозирги паролингиз",
+            "newpassword.label": "Янги парол",
+            "newpassword.placeholder": "Янги парол",
+            "confirmpassword": "Янги паролнинг тасдиғи",
+            "confirmpassword.placeholder": "Янги паролнинг тасдиғи",
+            "email": "Email",
+            "email.placeholder": "Сизнинг email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Агар ",
+                    "link": "автаризациядан ўтишни",
+                    "suffix":
+                        ", хоҳласангиз, мавжуд фойдаланувчини текшириб кўринг:<<br/>- Маъмур (логин=\"admin\" and парол=\"admin\") <br/>- Оддий фойдаланувчи (логин=\"user\" and парол=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Сиз рўйхатдан ўтмаганмисиз?",
+                    "link": "Янги фойдаланувчи қўшинг"
+                }
+            },
+            "error": {
+                "dontmatch": "Парол ва унинг тасдиғи мос келмади!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Парол киритилиши зарур.",
+                    "minlength": "Парол  узунлиги камида 4 ҳарфдан иборат бўлсин.",
+                    "maxlength": "Парол 50 ҳарфдан узун бўлмасин.",
+                    "strength": "Парол мураккаблиги:"
+                },
+                "confirmpassword": {
+                    "required": "Парол тасдиғи киритилиши зарур.",
+                    "minlength": "Парол тасдиғи узунлиги камида 4 ҳарфдан иборат бўлсин.",
+                    "maxlength": "Парол тасдиғи 50 ҳарфдан узун бўлмасин."
+                },
+                "email": {
+                    "required": "Email киритилиши зарур.",
+                    "invalid": "Илтимос, тўғри Email киритинг.",
+                    "minlength": "Email узунлиги камида 5 ҳарфдан иборат бўлсин.",
+                    "maxlength": "Email 50 ҳарфдан узун бўлмасин."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Созланмоқда"
+        },
+        "item-count": "{{total}} тадан ({{first}} - {{second}}) - лари."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Бинар маълумот қўшиш",
+            "addimage": "Расм қўшиш",
+            "back": "Орқага",
+            "cancel": "Бекор қилиш",
+            "delete": "Ўчириш",
+            "edit": "Ўзгартириш",
+            "open": "Очиш",
+            "save": "Сақлаш",
+            "view": "Кўриш"
+        },
+        "detail": {
+            "field": "Майдон",
+            "value": "Қиймат"
+        },
+        "delete": {
+            "title": "Ўчириш амалини тасдиқланг"
+        },
+        "validation": {
+            "required": "Ушбу майдон тўлдирилиши шарт.",
+            "minlength": "Ушбу майдон камида {{min}} белгидан иборат бўлиши зарур.",
+            "maxlength": "Ушбу майдон {{max}} белгидан ошмаслиги зарур.",
+            "min": "Ушбу майдоннинг энг кичик қиймати {{min}} бўлиши зарур.",
+            "max": "Ушбу майдон қиймати {{ max }} дан ошмаслиги зарур.",
+            "minbytes": "Ушбу майдон камида {{min}} байт бўлиши зарур.",
+            "maxbytes": "Ушбу майдон {{max}} байтдан ошмаслиги зарур.",
+            "pattern": "Ушбу майдон {{ pattern }} форматида бўлиши зарур.",
+            "number": "Ушбу майдон сон бўлиши шарт.",
+            "datetimelocal": "Ушбу майдон сана - вақт бирлиги бўлиши зарур.",
+            "patternLogin": "Ушбу майдон фақат ҳарф, рақам ёки email манзил бўлиши мумкин."
+        }
+    },
+    "error": {
+        "internalServerError": "Ички хатолик",
+        "server.not.reachable": "Серверга боғланиш имкони йўқ",
+        "url.not.found": "Маълумот топилмади",
+        "NotNull": "{{ fieldName }} майдони бўш бўлиши мумкин эмас!",
+        "Size": "{{ fieldName }} майдонинг ўлчами нотўғри!",
+        "userexists": "Ушбу фойдаланувчи номи тизимда мавжуд!",
+        "emailexists": "Email аллақачон тизимда мавжуд!",
+        "idexists": "Янги {{ entityName }} IDси тизимда мавжуд ID бўлмаслиги керак.",
+        "idnull": "Нотўғри ID"
+    },
+    "footer": "Саҳифа таг қисми"
+}

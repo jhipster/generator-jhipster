@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -43,28 +43,15 @@ eureka:
 spring:
     application:
         name: <%= baseName %>
-    <%_ if (cacheManagerIsAvailable === true) { _%>
-    cache:
-        type: simple
-    <%_ } _%>
-    <%_ if (messageBroker === 'kafka') { _%>
-    cloud:
-        stream:
-            kafka:
-                binder:
-                    brokers: localhost
-                    zk-nodes: localhost
-            bindings:
-                output:
-                    destination: topic-jhipster
-    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MULTI_THREADED=FALSE
         name:
         username:
         password:
+        hikari:
+            auto-commit: false
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         database: H2
@@ -77,12 +64,14 @@ spring:
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true
+            hibernate.generate_statistics: false
             hibernate.hbm2ddl.auto: validate
+            hibernate.jdbc.time_zone: UTC
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -99,11 +88,21 @@ spring:
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
     <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+        elasticsearch:
+            properties:
+                path:
+                    home: <%= BUILD_DIR %>elasticsearch
+    <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
         bucket:
             name: jhipster
             password: password
+    <%_ } _%>
+    <%_ if (messageBroker === 'kafka') { _%>
+    kafka:
+        bootstrap-servers: ${spring.embedded.kafka.brokers}
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
@@ -111,35 +110,45 @@ spring:
     <%_ } _%>
     mail:
         host: localhost
+    main:
+        allow-bean-definition-overriding: true
     messages:
         basename: i18n/messages
     mvc:
         favicon:
             enabled: false
+    <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && authenticationType === 'jwt') { _%>
+    security:
+        user:
+            name: test
+            password: test
+    <%_ } _%>
+    task:
+        execution:
+            thread-name-prefix: <%= dasherizedBaseName %>-task-
+            pool:
+                core-size: 1
+                max-size: 50
+                queue-capacity: 10000
+        scheduling:
+            thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+            pool:
+                size: 1
     thymeleaf:
         mode: HTML
-        
 <%_ if (authenticationType === 'oauth2') { _%>
-security:
-    oauth2:
-    # client configuration needed : for condition in Spring Boot 
-        client:
-            access-token-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/token
-            user-authorization-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/auth
-            client-id: web_app
-            client-secret: web_app
-            scope: openid profile email
-        resource:
-            user-info-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+    # Allow SecurityConfiguration to initialize w/o specifying an empty issuer-uri is OK
+    security:
+        oauth2:
+            client:
+                provider:
+                    oidc:
+                        issuer-uri: http://DO_NOT_CALL:9080/auth/realms/jhipster
 <%_ } _%>
 
 server:
     port: 10344
     address: localhost
-
-info:
-    project:
-        version: #project.version#
 
 # ===================================================================
 # JHipster specific properties
@@ -148,14 +157,13 @@ info:
 # ===================================================================
 
 jhipster:
-    async:
-        core-pool-size: 1
-        max-pool-size: 50
-        queue-capacity: 10000
-    # To test logstash appender
+    clientApp:
+        name: "<%= angularAppName %>"
     logging:
+        # To test json console appender
+        use-json-format: true # By default, logs are in Json format
         logstash:
-            enabled: true
+            enabled: false
             host: localhost
             port: 5000
             queue-size: 512
@@ -169,7 +177,8 @@ jhipster:
         authentication:
     <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
             jwt:
-                secret: <%= jwtSecretKey %>
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
     <%_ } _%>
@@ -183,15 +192,14 @@ jhipster:
             client-secret: internal
     <%_ } _%>
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
 <%_ } _%>
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx.enabled: true
-        logs: # Reports Dropwizard metrics in the logs
+    metrics:
+        logs: # Reports metrics in the logs
             enabled: true
             report-frequency: 60 # in seconds
 

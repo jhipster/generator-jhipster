@@ -13,7 +13,7 @@
     "prodDatabaseType": "postgresql",
     "searchEngine": "elasticsearch",
     "buildTool": "maven",
-    "jwtSecretKey": "5eaa09fd4bce111761b4cecb7831102d846b99b8",
+    "jwtSecretKey": "fd54a45s65fds737b9aafcb3412e07ed99b267f33413274720ddbb7f6c5e64e9f14075f2d7ed041592f0b7657baf8",
     "enableTranslation": true,
     "applicationType": "microservice",
     "serviceDiscoveryType": "eureka",

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -49,46 +49,61 @@ eureka:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
+<%_ if (searchEngine === 'elasticsearch') { _%>
+management:
+    health:
+        elasticsearch:
+            enabled: false
+
+<%_ } _%>
 spring:
     profiles:
         active: dev
-        include: swagger
+        include:
+            - swagger
+            # Uncomment to activate TLS for the dev profile
+            #- tls
     devtools:
         restart:
             enabled: true
+            <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+            additional-exclude: .h2.server.properties
+            <%_ } _%>
         livereload:
             enabled: false # we use Webpack dev server + BrowserSync for livereload
     jackson:
-        serialization.indent_output: true
-    <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
+        serialization:
+            indent-output: true
+    <%_ if (messageBroker === 'kafka') { _%>
+    kafka:
+        consumer:
+            bootstrap-servers: localhost:9092
+            group-id: group_id
+            auto-offset-reset: earliest
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        producer:
+            bootstrap-servers: localhost:9092
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
-        <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             discovery:
                prefer-ip-address: true
             host: localhost
             port: 8500
-        <%_ } _%>
-        <%_ if (messageBroker === 'kafka') { _%>
-        stream:
-            kafka:
-                binder:
-                    brokers: localhost
-                    zk-nodes: localhost
-            bindings:
-                output:
-                    destination: topic-jhipster
-        <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         <%_ if (devDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password:
         <%_ } else if (devDatabaseType === 'mariadb') { _%>
-        url: jdbc:mariadb://localhost:3306/<%= baseName %>
+        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
         username: root
         password:
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
@@ -100,8 +115,6 @@ spring:
         username: system
         password: oracle
         <%_ } else if (devDatabaseType === 'mssql') { _%>
-        # If you use the Docker Compose configuration provided by JHipster, the database name is "tempdb"
-        # So you should use url: jdbc:sqlserver://localhost:1433;database=tempdb
         url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
         username: SA
         password: yourStrong(!)Password
@@ -114,8 +127,10 @@ spring:
         username: <%= baseName %>
         password:
         <%_ } _%>
-        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
         hikari:
+            poolName: Hikari
+            auto-commit: false
+        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb' || devDatabaseType === 'mssql') { _%>
             data-source-properties:
                 cachePrepStmts: true
                 prepStmtCacheSize: 250
@@ -131,7 +146,7 @@ spring:
         <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
         <%_ } else if (devDatabaseType === 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle12cDialect
         <%_ } else if (devDatabaseType === 'mssql') { _%>
@@ -153,13 +168,12 @@ spring:
         show-sql: true
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true
+            hibernate.generate_statistics: false
             <%_ if (enableHibernateCache) { _%>
-                <%_ if (cacheProvider === 'ehcache') { _%>
-            hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.BeanClassLoaderAwareJCacheRegionFactory
-                <%_ } else if (cacheProvider === 'hazelcast') { _%>
+                <%_ if (cacheProvider === 'hazelcast') { _%>
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
                 <%_ } else if (cacheProvider === 'infinispan') { _%>
@@ -167,7 +181,7 @@ spring:
             hibernate.cache.inifinispan.statistics: true
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
-            hibernate.cache.infinispan.entity.eviction.max_entries: 1000
+            hibernate.cache.infinispan.entity.memory.size: 1000
             hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
                 <%_ } _%>
                 <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -181,7 +195,7 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
         mongodb:
-            uri: mongodb://localhost:27017
+            uri: mongodb://localhost:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
             database: <%= baseName %>
     <%_ } _%>
     <%_ if (databaseType === 'cassandra') { _%>
@@ -193,12 +207,9 @@ spring:
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
         elasticsearch:
-            cluster-name:
-            cluster-nodes: localhost:9300
             properties:
                 path:
-                    logs: <%= BUILD_DIR %>elasticsearch/log
-                    data: <%= BUILD_DIR %>elasticsearch/data
+                    home: <%= BUILD_DIR %>elasticsearch
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -209,7 +220,8 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
-        contexts: dev
+        # Remove 'faker' if you do not want the sample data to be loaded automatically
+        contexts: dev, faker
     <%_ } _%>
     mail:
         host: localhost
@@ -221,6 +233,9 @@ spring:
     thymeleaf:
         cache: false
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>
+    sleuth:
+        sampler:
+            probability: 1 # report 100% of traces
     zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
         base-url: http://localhost:9411
         enabled: false
@@ -229,23 +244,6 @@ spring:
                 enabled: true
 <%_ } _%>
 
-# ===================================================================
-# To enable SSL, generate a certificate using:
-# keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
-#
-# You can also use Let's Encrypt:
-# https://maximilian-boehm.com/hp2121/Create-a-Java-Keystore-JKS-from-Let-s-Encrypt-Certificates.htm
-#
-# Then, modify the server.ssl properties so your "server" configuration looks like:
-#
-# server:
-#    port: 8443
-#    ssl:
-#        key-store: keystore.p12
-#        key-store-password: <your-password>
-#        key-store-type: PKCS12
-#        key-alias: <%= baseName.toLowerCase() %>
-# ===================================================================
 server:
     port: <%= serverPort %>
 
@@ -265,8 +263,6 @@ jhipster:
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api,/v2/api-docs # recommended dev configuration
     <%_ } _%>
-    http:
-        version: V_1_1 # To use HTTP/2 you will need SSL support (see above the "server.ssl" configuration)
     <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration
         <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -325,18 +321,19 @@ jhipster:
     # CORS is disabled by default on microservices, as you should access them through a gateway.
     # If you want to enable it, please uncomment the configuration below.
     # cors:
-        # allowed-origins: "*"
-        # allowed-methods: "*"
-        # allowed-headers: "*"
-        # exposed-headers: "Authorization,Link,X-Total-Count"
-        # allow-credentials: true
-        # max-age: 1800
+    #     allowed-origins: "*"
+    #     allowed-methods: "*"
+    #     allowed-headers: "*"
+    #     exposed-headers: "Authorization,Link,X-Total-Count"
+    #     allow-credentials: true
+    #     max-age: 1800
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     security:
         authentication:
             jwt:
-                secret: my-secret-token-to-change-in-production
+                # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
+                base64-secret: <%= jwtSecretKey %>
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
                 token-validity-in-seconds-for-remember-me: 2592000
@@ -351,22 +348,20 @@ jhipster:
             client-id: internal
             client-secret: internal
     <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (authenticationType === 'session' && !reactive) { _%>
     security:
         remember-me:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
 <%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: <%= baseName %>@localhost
-        base-url: http://127.0.0.1:<%= serverPort %>
-    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
-        jmx:
-            enabled: true
-        logs: # Reports Dropwizard metrics in the logs
+        base-url: http://127.0.0.1:<%= applicationType !== 'uaa' ? serverPort : 9000 %>
+    metrics:
+        logs: # Reports metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
     logging:
+        use-json-format: false # By default, logs are not in Json format
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
             host: localhost
@@ -375,7 +370,7 @@ jhipster:
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:
-        name: keystore.jks
+        name: config/tls/keystore.p12
         password: password
         alias: selfsigned
     web-client-configuration:

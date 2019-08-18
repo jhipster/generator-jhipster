@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,7 +21,7 @@
 # This is centralized/externalized configuration service from OpenShift. Pls note wherever displayName says
 # *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: application-config-template
@@ -44,7 +44,7 @@ parameters:
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: ConfigMap
     metadata:
       name: ${APPLICATION_NAME}
@@ -71,7 +71,7 @@ objects:
           security:
             authentication:
               jwt:
-                secret: <%= jwtSecretKey %>
+                base64-secret: <%= jwtSecretKey %>
       # app specific configuration
       <%_ if (serviceDiscoveryType === 'eureka') {  _%>
       jhipster-registry.yml: |-

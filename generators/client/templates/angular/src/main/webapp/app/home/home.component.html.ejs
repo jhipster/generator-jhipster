@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -26,15 +26,15 @@
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
-                <span *ngIf="account" jhiTranslate="home.logged.message"
-                    translateValues="{username: '{{account.login}}'}"> You are logged in as user "{{account.login}}". </span>
+                <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message"
+                    [translateValues]="{username: account.login}"> You are logged in as user "{{account.login}}". </span>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>
                 <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a><span jhiTranslate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
             </div>
-            <%_ if (authenticationType !== 'oauth2') { _%>
+            <%_ if (!skipUserManagement) { _%>
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>&nbsp;
                 <a class="alert-link" routerLink="register" jhiTranslate="global.messages.info.register.link">Register a new account</a>

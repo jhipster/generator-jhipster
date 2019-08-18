@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,7 +20,7 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
     <!--
         Added the constraints for entity <%= entityClass %>.
     -->
@@ -31,26 +31,31 @@
             ownerSide = relationships[idx].ownerSide,
             otherEntityTableName = relationships[idx].otherEntityTableName;
             if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
-                const constraintName = getConstraintName(name, relationshipName, prodDatabaseType);%>
-        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
+                const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
+                let baseColumnName = getColumnName(relationshipName) + '_id';
+                if (relationshipType === 'one-to-one' && ownerSide && relationships[idx].useJPADerivedIdentifier === true) {
+                    baseColumnName = 'id';
+                }%>
+        <addForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%_ } else if (relationshipType === 'many-to-many' && ownerSide) {
-                const joinTableName = getJoinTableName(name, relationshipName, prodDatabaseType);
-                const constraintName = getConstraintName(joinTableName, getPluralColumnName(name), prodDatabaseType, true);
-                const otherEntityConstraintName = getConstraintName(joinTableName, getPluralColumnName(relationshipName), prodDatabaseType, true);
+                const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
+                const constraintName = getFKConstraintName(joinTableName, getColumnName(entityTableName), prodDatabaseType, true);
+                const otherEntityConstraintName = getFKConstraintName(joinTableName, getColumnName(relationshipName), prodDatabaseType, true);
           _%>
 
-        <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(name) %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(name) %>_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= entityTableName %>"/>
-        <addForeignKeyConstraint baseColumnNames="<%= getPluralColumnName(relationshipName) %>_id"
+
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= joinTableName %>"
-                                 constraintName="<%= otherEntityConstraintName %>"
+                                 constraintName="<%= getColumnName(otherEntityConstraintName) %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
         <%  } %><% } %>

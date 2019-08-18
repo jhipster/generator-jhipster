@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,21 +19,19 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { <%=angularXAppName%>SharedModule } from 'app/shared';
+import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 
-import {
-    <%_ if (authenticationType === 'session') { _%>
-    SessionsComponent,
-    <%_ } _%>
-    PasswordStrengthBarComponent,
-    RegisterComponent,
-    ActivateComponent,
-    PasswordComponent,
-    PasswordResetInitComponent,
-    PasswordResetFinishComponent,
-    SettingsComponent,
-    accountState
-} from './';
+<%_ if (authenticationType === 'session') { _%>
+import { SessionsComponent } from './sessions/sessions.component';
+<%_ } _%>
+import { PasswordStrengthBarComponent } from './password/password-strength-bar.component';
+import { RegisterComponent } from './register/register.component';
+import { ActivateComponent } from './activate/activate.component';
+import { PasswordComponent } from './password/password.component';
+import { PasswordResetInitComponent } from './password-reset/init/password-reset-init.component';
+import { PasswordResetFinishComponent } from './password-reset/finish/password-reset-finish.component';
+import { SettingsComponent } from './settings/settings.component';
+import { accountState } from './account.route';
 
 @NgModule({
     imports: [

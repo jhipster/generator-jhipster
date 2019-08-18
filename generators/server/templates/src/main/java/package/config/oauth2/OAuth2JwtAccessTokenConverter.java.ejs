@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://jhipster.github.io/
  for more information.
@@ -29,7 +29,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import java.util.Map;
 
 /**
- * Improved JwtAccessTokenConverter that can handle lazy fetching of public verifier keys.
+ * Improved {@link JwtAccessTokenConverter} that can handle lazy fetching of public verifier keys.
  */
 public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
     private final Logger log = LoggerFactory.getLogger(OAuth2JwtAccessTokenConverter.class);
@@ -106,17 +106,17 @@ public class OAuth2JwtAccessTokenConverter extends JwtAccessTokenConverter {
      *  Authentication authentication = securityContext.getAuthentication();
      *  if (authentication != null) {
      *      Object details = authentication.getDetails();
-     *      if(details instanceof OAuth2AuthenticationDetails) {
+     *      if (details instanceof OAuth2AuthenticationDetails) {
      *          Object decodedDetails = ((OAuth2AuthenticationDetails) details).getDecodedDetails();
-     *          if(decodedDetails != null &amp;&amp; decodedDetails instanceof Map) {
+     *          if (decodedDetails != null &amp;&amp; decodedDetails instanceof Map) {
      *             String detailFoo = ((Map) decodedDetails).get("foo");
      *          }
      *      }
      *  }
      * </code>
      *  </pre>
-     * @param claims OAuth2JWTToken claims
-     * @return OAuth2Authentication
+     * @param claims OAuth2JWTToken claims.
+     * @return {@link OAuth2Authentication}.
      */
     @Override
     public OAuth2Authentication extractAuthentication(Map<String, ?> claims) {

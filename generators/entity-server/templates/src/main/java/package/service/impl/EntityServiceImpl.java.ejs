@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,18 +19,33 @@
 package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
 <%  const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
     let viaService = false;
-    const instanceType = (dto === 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    const instanceName = (dto === 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     const mapper = entityInstance  + 'Mapper';
     const dtoToEntity = mapper + '.'+ 'toEntity';
     const entityToDto = 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
     const searchRepository = entityInstance  + 'SearchRepository';
+    let isUsingMapsId = false;
+    let primaryKeyType = pkType;
+    let mapsIdAssoc;
+    for (idx in relationships) {
+        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        if ( isUsingMapsId === true) {
+            mapsIdAssoc = relationships[idx];
+            primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
+            break;
+        }
+        isUsingMapsId = false;
+    }
     if (service === 'serviceImpl') { %>
 import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
-import <%= packageName %>.domain.<%= entityClass %>;
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import <%= packageName %>.repository.<%= entityClass %>Repository;
+<%_ if (isUsingMapsId === true) { _%>
+import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+<%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
 <%_ } _%>
@@ -38,7 +53,7 @@ import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveReposito
 import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%= packageName %>.service.dto.<%= entityClass %>DTO;
+import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
 import org.slf4j.Logger;
@@ -57,44 +72,55 @@ import reactor.core.publisher.Flux;
 <%_ } _%>
 
 <%_ if (dto === 'mapstruct' && (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true)) { _%>
-import java.util.LinkedList;<% } %><% if (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true) { %>
-import java.util.List;<% } %>
-import java.util.Optional;<% if (databaseType === 'cassandra') { %>
-import java.util.UUID;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { %>
-import java.util.stream.Collectors;<% } %><% if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { %>
-import java.util.stream.StreamSupport;<% } %><% if (searchEngine === 'elasticsearch') { %>
+import java.util.LinkedList;
+<%_ } _%>
+<%_ if (pagination === 'no' ||  fieldsContainNoOwnerOneToOne === true) { _%>
+import java.util.List;
+<%_ } _%>
+import java.util.Optional;
+<%_ if (databaseType === 'cassandra') { _%>
+import java.util.UUID;
+<%_ } _%>
+<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { _%>
+import java.util.stream.Collectors;
+<%_ } _%>
+<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { _%>
+import java.util.stream.StreamSupport;
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
 
 /**
- * Service Implementation for managing <%= entityClass %>.
+ * Service Implementation for managing {@link <%= asEntity(entityClass) %>}.
  */
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
 public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> implements <%= entityClass %>Service<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../../common/inject_template', {viaService: viaService, constructorName: serviceClassName, queryService: false}); -%>
+<%- include('../../common/inject_template', {asEntity, asDto, viaService: viaService, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
 
     /**
      * Save a <%= entityInstance %>.
      *
-     * @param <%= instanceName %> the entity to save
-     * @return the persisted entity
+     * @param <%= instanceName %> the entity to save.
+     * @return the persisted entity.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
-        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService, returnDirectly: true}); -%>
+        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
+<%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
     }
 
     /**
      * Get all the <%= entityInstancePlural %>.
      *<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } %>
-     * @return the list of entities
+     * @param pageable the pagination information.<% } %>
+     * @return the list of entities.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
@@ -117,7 +143,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
 
     /**
      * Get all the <%= entityInstancePlural %>.
-     * @return the Flux of entities
+     * @return the {@link Flux} of entities.
      */
     public Flux<<%= instanceType %>> findAllAsFlux() {
         log.debug("Request to get all <%= entityClassPlural %> as a flux");
@@ -128,20 +154,20 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
 
     /**
-     * Get all the <%= entityClass %> with eager load of many-to-many relationships.
+     * Get all the <%= entityInstancePlural %> with eager load of many-to-many relationships.
      *
-     * @return the list of entities
+     * @return the list of entities.
      */
     public Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
     }
     <% } %>
-<%- include('../../common/get_filtered_template'); -%>
+<%- include('../../common/get_filtered_template', {asEntity, asDto}); -%>
     /**
      * Get one <%= entityInstance %> by id.
      *
-     * @param id the id of the entity
-     * @return the entity
+     * @param id the id of the entity.
+     * @return the entity.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
@@ -149,29 +175,30 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public Optional<<%= instanceType %>> findOne(<%= pkType %> id) {
-        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService, returnDirectly:true}); -%>
+    public Optional<<%= instanceType %>> findOne(<%= primaryKeyType %> id) {
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:true}); -%>
     }
 
     /**
      * Delete the <%= entityInstance %> by id.
      *
-     * @param id the id of the entity
+     * @param id the id of the entity.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override
     <%_ } _%>
-    public void delete(<%= pkType %> id) {
-        log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
+    public void delete(<%= primaryKeyType %> id) {
+        log.debug("Request to delete <%= entityClass %> : {}", id);
+<%- include('../../common/delete_template', {viaService: viaService}); -%>
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
      *
-     * @param query the query of the search<% if (pagination !== 'no') { %>
-     * @param pageable the pagination information<% } %>
-     * @return the list of entities
+     * @param query the query of the search.<% if (pagination !== 'no') { %>
+     * @param pageable the pagination information.<% } %>
+     * @return the list of entities.
      */
     <%_ if (service === 'serviceImpl') { _%>
     @Override

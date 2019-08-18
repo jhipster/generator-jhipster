@@ -1,7 +1,6 @@
 ---
 name: 💥 Report an issue
 about: Report a problem with JHipster itself.
-
 ---
 
 <!--
@@ -45,7 +44,16 @@ To provide all information we need, you should run `jhipster info` in the projec
 copy/paste the result here.
 The `.yo-rc.json` file generated in the root folder is mandatory for bug reports. This will help us to replicate the scenario.
 You should remove any sensitive information like the rememberMe key or the jwtSecretKey key.
+---
+If you have a JDL please wrap it in below structure
+  <details>
+  <summary>JDL definitions</summary>
+  <pre>
+     JDL content here
+  </pre>
+  </details>
 -->
+
 
 ##### **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory**
 
@@ -58,7 +66,7 @@ If you are using JDL, please share that configuration as well.
 
 <!-- What OS are you on? is this a problem with all browsers or only IE8? -->
 
-- [ ] Checking this box is mandatory (this is just to show you read everything)
+-   [ ] Checking this box is mandatory (this is just to show you read everything)
 
 <!-- Love JHipster? Please consider supporting our collective:
 👉  https://opencollective.com/generator-jhipster/donate -->

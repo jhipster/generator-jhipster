@@ -1,0 +1,74 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "testEntity",
+            "otherEntityName": "testEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        },
+        {
+            "relationshipName": "testMapstruct",
+            "otherEntityName": "testMapstruct",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        },
+        {
+            "relationshipName": "testServiceClass",
+            "otherEntityName": "testServiceClass",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        },
+        {
+            "relationshipName": "testServiceImpl",
+            "otherEntityName": "testServiceImpl",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        },
+        {
+            "relationshipName": "testInfiniteScroll",
+            "otherEntityName": "testInfiniteScroll",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        },
+        {
+            "relationshipName": "testPager",
+            "otherEntityName": "testPager",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        },
+        {
+            "relationshipName": "testPagination",
+            "otherEntityName": "testPagination",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        },
+        {
+            "relationshipName": "testCustomTableName",
+            "otherEntityName": "testCustomTableName",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        },
+        {
+            "relationshipName": "superMegaLargeTestEntity",
+            "otherEntityName": "superMegaLargeTestEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "testManyToOne"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208211440",
+    "dto": "no",
+    "service": "no",
+    "angularJSSuffix": "mySuffix",
+    "pagination": "no"
+}

@@ -17,11 +17,12 @@
                 "principal": "Usuário",
                 "date": "Data",
                 "status": "Estado",
-                "data": "Informações extras"
+                "data": "Dados extras"
             },
             "data": {
                 "remoteAddress": "Endereço remoto:"
             }
-        }
+        },
+        "notFound": "Nenhuma auditoria encontrada"
     }
 }

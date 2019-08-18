@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,11 +17,12 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-<%_ if (authenticationType === 'jwt') { _%>
+<%_ if (authenticationType === 'jwt' || enableTranslation) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
 
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+<% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
 
 export const ACTION_TYPES = {
   <%_ if (authenticationType !== 'oauth2') { _%>
@@ -47,7 +48,10 @@ const initialState = {
   <%_ } _%>
   account: {} as any,
   errorMessage: null as string, // Errors returned from server side
-  redirectMessage: null as string
+  redirectMessage: null as string,
+  sessionHasBeenFetched: false,
+  idToken: null as string,
+  logoutUrl: null as string
 };
 
 export type AuthenticationState =  Readonly<typeof initialState>;
@@ -78,6 +82,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         ...state,
         loading: false,
         isAuthenticated: false,
+        sessionHasBeenFetched: true,
       <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true,
       <%_ } _%>
@@ -93,11 +98,18 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         loginSuccess: true
       };
     <%_ } _%>
+    <%_ if (authenticationType === 'jwt') { _%>
     case ACTION_TYPES.LOGOUT:
+    <%_ } else { _%>
+    case SUCCESS(ACTION_TYPES.LOGOUT):
+    <%_ } _%>
       return {
         ...initialState,
       <%_ if (authenticationType !== 'oauth2') { _%>
         showModalLogin: true
+      <%_ } else { _%>
+        idToken: action.payload.data.idToken,
+        logoutUrl: action.payload.data.logoutUrl
       <%_ } _%>
       };
     case SUCCESS(ACTION_TYPES.GET_SESSION):
@@ -107,6 +119,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
           ...state,
           isAuthenticated,
           loading: false,
+          sessionHasBeenFetched: true,
           account: action.payload.data
         };
       }
@@ -134,19 +147,34 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
-export const getSession = () => dispatch => dispatch({
-  type: ACTION_TYPES.GET_SESSION,
-  payload: axios.get('<%= apiUaaPath %>api/account')
-});
+export const getSession = () => async (dispatch, getState) => {
+    <%_ if (enableTranslation) { _%>
+    await dispatch({
+      type: ACTION_TYPES.GET_SESSION,
+      payload: axios.get('<%= apiUaaPath %>api/account')
+    });
+
+    const { account } = getState().authentication;
+    if (account && account.langKey) {
+      const langKey = Storage.session.get('locale', account.langKey);
+      await dispatch(setLocale(langKey));
+    }
+    <%_ } else { _%>
+    dispatch({
+      type: ACTION_TYPES.GET_SESSION,
+      payload: axios.get('<%= apiUaaPath %>api/account')
+    });
+    <%_ } _%>
+}
 
 <%_ if (authenticationType === 'session') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
-  const data = `j_username=${encodeURIComponent(username)}&j_password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
+  const data = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&remember-me=${rememberMe}&submit=Login`;
   await dispatch({
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('api/authentication', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
   });
-  dispatch(getSession());
+  await dispatch(getSession());
 };
 <%_ } else if (authenticationType === 'jwt') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -163,7 +191,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
       Storage.session.set(AUTH_TOKEN_KEY, jwt);
     }
   }
-  dispatch(getSession());
+  await dispatch(getSession());
 };
 <%_ } else if (authenticationType === 'uaa') { _%>
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
@@ -171,7 +199,7 @@ export const login = (username, password, rememberMe = false) => async (dispatch
     type: ACTION_TYPES.LOGIN,
     payload: axios.post('auth/login', { username, password })
   });
-  dispatch(getSession());
+  await dispatch(getSession());
 };
 <%_ } _%>
 
@@ -191,20 +219,14 @@ export const logout = () => dispatch => {
     type: ACTION_TYPES.LOGOUT
   });
 };
-<%_ } else if (authenticationType === 'uaa') { _%>
-export const logout = () => async dispatch => {
-  await dispatch({
-    type: ACTION_TYPES.LOGOUT,
-    payload: axios.post('auth/logout', {})
-  });
-  dispatch(getSession());
-};
 <%_ } else { _%>
 export const logout = () => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.LOGOUT,
-    payload: axios.post('api/logout', {})
+    payload: axios.post(<%_ if (authenticationType === 'uaa') { _%>'auth/logout'<%_ } else { _%>'api/logout'<%_ } _%>, {})
   });
+
+  // fetch new csrf token
   dispatch(getSession());
 };
 <%_ } _%>

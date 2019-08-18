@@ -25,6 +25,10 @@
             "fieldType": "Long"
         },
         {
+            "fieldName": "employeeUuid",
+            "fieldType": "UUID"
+        },
+        {
             "fieldName": "firstName",
             "javadoc": "The firstname attribute.",
             "fieldType": "String"

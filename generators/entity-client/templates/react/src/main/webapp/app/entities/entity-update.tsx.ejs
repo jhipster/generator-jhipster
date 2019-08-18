@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -37,8 +37,7 @@ import {
   Col,
   Label
   <% if (haveFieldWithJavadoc) { %>, UncontrolledTooltip<% } %> } from 'reactstrap';
-import { AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
-// tslint:disable-next-line:no-unused-variable
+import { AvFeedback, AvForm, AvGroup, AvInput<% if (fieldsIsReactAvField) { %>, AvField <% } %> } from 'availity-reactstrap-validation';
 import {
   Translate,
   translate,
@@ -46,7 +45,7 @@ import {
   ICrudGetAllAction,
   <%_ if (fieldsContainBlob) { _%>
   setFileData,
-  <% if(fieldsContainBlobOrImage) { %> openFile,<% } %>
+  <% if (fieldsContainBlobOrImage) { %> openFile,<% } %>
   byteSize,
   <%_ } _%>
   ICrudPutAction
@@ -115,13 +114,12 @@ import {
   reset
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-// tslint:disable-next-line:no-unused-variable
-import { convertDateTimeFromServer } from 'app/shared/util/date-utils';
+import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipType === 'many-to-many') !== undefined) { _%>
-import { keysToValues } from 'app/shared/util/entity-utils';
+import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
 
-export interface I<%= entityReactName %>UpdateProps extends StateProps, DispatchProps, RouteComponentProps<{id: number}>  {}
+export interface I<%= entityReactName %>UpdateProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
 
 export interface I<%= entityReactName %>UpdateState {
   isNew: boolean;
@@ -129,7 +127,7 @@ export interface I<%= entityReactName %>UpdateState {
   ids<%= val.relationshipName %>: any[];
   <%_ }) _%>
   <%_ relFieldNames.forEach(val => { _%>
-  <%= val.relationshipFieldName %>Id: number;
+  <%= val.relationshipFieldName %>Id: string;
   <%_ }) _%>
 }
 
@@ -142,18 +140,30 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
       ids<%= val.relationshipName %>: [],
       <%_ }) _%>
       <%_ relFieldNames.forEach(val => { _%>
-      <%= val.relationshipFieldName %>Id: 0,
+      <%= val.relationshipFieldName %>Id: '0',
       <%_ }) _%>
       isNew: !this.props.match.params || !this.props.match.params.id,
     };
   }
 
+  componentWillUpdate (nextProps, nextState) {
+    if (nextProps.updateSuccess !== this.props.updateSuccess && nextProps.updateSuccess) {
+      this.handleClose();
+    }
+  }
+
   componentDidMount() {
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    if (!this.state.isNew) {
+      this.props.getEntity(this.props.match.params.id);
+    }
+    <%_ } else { _%>
     if (this.state.isNew) {
       this.props.reset();
     } else {
       this.props.getEntity(this.props.match.params.id);
     }
+    <%_ } _%>
 
     <%_ otherEntityActions.forEach(val => { _%>
     this.props.<%= val.action %>();
@@ -176,7 +186,7 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
         const fieldName = fields[idx].fieldName;
     _%>
     <%_ if (fieldType === 'Instant' || fieldType === 'ZonedDateTime')  { _%>
-    values.<%=fieldName%> = new Date(values.<%= fieldName %>);
+    values.<%=fieldName%> = convertDateTimeToServer(values.<%= fieldName %>);
     <%_ } _%>
     <%_ } _%>
 
@@ -185,6 +195,9 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
       const entity = {
         ...<%= entityInstance %>Entity,
         ...values
+        <%_ manyToManyOwners.forEach(rel => { _%>
+        , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
+        <%_ }) _%>
       }
 
       if (this.state.isNew) {
@@ -192,7 +205,6 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
       } else {
         this.props.updateEntity(entity);
       }
-      this.handleClose();
     }
   }
 
@@ -200,78 +212,6 @@ export class <%= entityReactName %>Update extends React.Component<I<%= entityRea
     this.props.history.push('/entity/<%= entityFileName %>');
   }
 
-<%_ relationships.forEach(rel => {
-const relationshipType = rel.relationshipType;
-const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
-const otherEntityNamePlural = rel.otherEntityNamePlural;
-const relationshipName = rel.relationshipName;
-const otherEntityField = rel.otherEntityField;
-const relationshipFieldName = rel.relationshipFieldName;
-const ownerSide = rel.ownerSide;
-_%>
-  <%_ if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
-  <%= relationshipFieldName %>Update = element => {
-    const selected = Array.from(element.target.selectedOptions).map((e: any) => parseInt(e.value, 10));
-    this.setState({
-      ids<%= relationshipName %>: keysToValues(selected, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
-    });
-  }
-
-  <%_ } else if (relationshipType === 'many-to-one' || relationshipType === 'one-to-one' && ownerSide === true) { _%>
-  <%= relationshipFieldName %>Update = element => {
-    const <%= otherEntityField %> = element.target.value.toString();
-    if (<%= otherEntityField %> === '') {
-      this.setState({
-        <%= relationshipFieldName %>Id: -1
-      })
-    } else {
-      for (const i in this.props.<%= otherEntityNamePlural %>) {
-          if (<%= otherEntityField %> === this.props.<%= otherEntityNamePlural %>[i].<%= otherEntityField %>.toString()) {
-              this.setState({
-                  <%= relationshipFieldName %>Id: this.props.<%= otherEntityNamePlural %>[i].id
-              });
-          }
-      }
-    }
-
-  }
-
-  <%_ } _%>
-<%_ }) _%>
-<%_ relationships.forEach(rel => {
-    const relationshipType = rel.relationshipType;
-    const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
-    const otherEntityNamePlural = rel.otherEntityNamePlural;
-    const relationshipName = rel.relationshipName;
-    const otherEntityField = rel.otherEntityField;
-    if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
-  display<%= relationshipName %>(value: any) {
-    if (this.state.ids<%= relationshipName %> && this.state.ids<%= relationshipName %>.length !== 0) {
-        const list = [];
-        for (const i in this.state.ids<%= relationshipName %>) {
-            if (this.state.ids<%= relationshipName %>[i]) {
-                list.push(this.state.ids<%= relationshipName %>[i].<%= otherEntityField %>);
-            }
-        }
-        return list;
-    }
-    if (value.<%= relationshipFieldNamePlural %> && value.<%= relationshipFieldNamePlural %>.length !== 0) {
-        const list = [];
-        for (const i in value.<%= relationshipFieldNamePlural %>) {
-            if (value.<%= relationshipFieldNamePlural %>[i]) {
-                list.push(value.<%= relationshipFieldNamePlural %>[i].<%= otherEntityField %>);
-            }
-        }
-        this.setState({
-          ids<%= relationshipName %>: keysToValues(list, this.props.<%= otherEntityNamePlural %>, '<%= otherEntityField %>')
-        });
-        return list;
-    }
-    return null;
-  }
-
-<%_ } _%>
-<%_ }) _%>
   render() {
     const { <%= entityInstance %>Entity,<%
     uniqueRealtionFields.forEach(rel => {
@@ -311,7 +251,7 @@ _%>
           <AvForm model={isNew ? {} : <%= entityInstance %>Entity} onSubmit={this.saveEntity} >
             { !isNew ?
               <AvGroup>
-                <Label for="id"><Translate contentKey="global.field.id">ID</Translate></Label>
+                <Label for="<%= entityFileName %>-id"><Translate contentKey="global.field.id">ID</Translate></Label>
                 <AvInput id="<%= entityFileName %>-id" type="text" className="form-control" name="id" required readOnly/>
               </AvGroup>
               : null
@@ -330,7 +270,7 @@ _%>
                 </Translate>
               </Label>
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -340,11 +280,12 @@ _%>
                 type="datetime-local"
                 className="form-control"
                 name="<%= fieldName %>"
+                placeholder={"YYYY-MM-DD HH:mm"}
                 value={isNew ? null : convertDateTimeFromServer(this.props.<%= entityInstance %>Entity.<%= fieldName %>)}
                 <%- include react_validators %>
               />
             <%_ } else if (fieldType === 'LocalDate') { _%>
-              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -360,7 +301,7 @@ _%>
               } else if (fields[idx].fieldIsEnum) {
                 const values = fields[idx].fieldValues.replace(/\s/g, '').split(',');
             _%>
-              <Label id="<%= fieldName %>Label">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -379,7 +320,7 @@ _%>
               _%>
                 <option value="<%= value %>">
                 <%_ if (enableTranslation) { _%>
-                  <Translate contentKey="<%= enumPrefix %>.<%= value %>" />
+                  {translate("<%= enumPrefix %>.<%= value %>")}
                 <%_ } else { _%>
                   <%= value %>
                 <%_ } _%>
@@ -387,12 +328,12 @@ _%>
               <%_ } _%>
               </AvInput>
             <%_ } else if (['Integer', 'Long', 'Float', 'Double'].includes(fieldType)) { _%>
-              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
               </Label>
-              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="number" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
+              <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
             <%_
             } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -435,7 +376,7 @@ _%>
             </AvGroup>
 
             <%_ } else { _%>
-              <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+              <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
                 <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                   <%= fieldNameHumanized %>
                 </Translate>
@@ -443,7 +384,7 @@ _%>
               <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %>/>
               <%_ } _%>
             <%_ } else { _%>
-            <Label id="<%= fieldName %>Label" for="<%= fieldName %>">
+            <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
                 <%= fieldNameHumanized %>
               </Translate>
@@ -477,7 +418,7 @@ _%>
                 const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
                 <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
             <AvGroup>
-              <Label for="<%= relationshipFieldName %>.<%= otherEntityField %>">
+              <Label for="<%= entityFileName %>-<%= relationshipName %>">
                 <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
               </Label>
               <%_ if (dto === 'no') { _%>
@@ -486,14 +427,13 @@ _%>
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="select"
                 className="form-control"
-                name="<%= relationshipFieldName %>.<%= otherEntityField %>"
-                onChange={this.<%= relationshipFieldName %>Update}
+                name="<%= relationshipFieldName %>.id"
               >
                 <option value="" key="0" />
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                     <option
-                      value={otherEntity.<%=otherEntityField%>}
+                      value={otherEntity.id}
                       key={otherEntity.id}>
                       {otherEntity.<%=otherEntityField%>}
                     </option>
@@ -506,8 +446,8 @@ _%>
                 type="select"
                 className="form-control"
                 name="<%= relationshipFieldName %>.id"
-                onChange={this.<%= relationshipFieldName %>Update}
-                value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
+                value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
+                required
               >
                 {
                   <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -519,7 +459,8 @@ _%>
                   ) : null
                 }
               </AvInput>
-                <%_ } _%>
+              <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
+              <%_ } _%>
               <%_ } else { _%>
                 <%_ if (!relationshipRequired) { _%>
                   <AvInput
@@ -527,7 +468,7 @@ _%>
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
-                    onChange={this.<%= relationshipFieldName %>Update}>
+                  >
                     <option value="" key="0" />
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -545,8 +486,7 @@ _%>
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
-                    onChange={this.<%= relationshipFieldName %>Update}
-                    value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
+                    required
                   >
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
@@ -558,12 +498,13 @@ _%>
                       ) : null
                     }
                   </AvInput>
+                  <AvFeedback><Translate contentKey="entity.validation.required">This field is required.</Translate></AvFeedback>
                 <%_ } _%>
               <%_ } _%>
             </AvGroup>
                 <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true) { _%>
             <AvGroup>
-              <Label for="<%= relationshipFieldName %>.<%= otherEntityField %>">
+              <Label for="<%= entityFileName %>-<%= relationshipName %>">
                 <Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate>
               </Label>
                 <%_ if (dto === 'no') { _%>
@@ -572,8 +513,6 @@ _%>
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>.id"
-                    onChange={this.<%= relationshipFieldName %>Update}
-                    value={isNew && <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : ''}
                   >
                     <option value="" key="0" />
                     {
@@ -592,13 +531,12 @@ _%>
                     type="select"
                     className="form-control"
                     name="<%= relationshipFieldName %>Id"
-                    onChange={this.<%= relationshipFieldName %>Update}
                   >
                     <option value="" key="0" />
                     {
                       <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                         <option
-                          value={otherEntity.<%=otherEntityField%>}
+                          value={otherEntity.id}
                           key={otherEntity.id}>
                           {otherEntity.<%=otherEntityField%>}
                         </option>
@@ -609,32 +547,26 @@ _%>
             </AvGroup>
                 <%_ } else if (relationshipType === 'many-to-many' && rel.ownerSide === true) { _%>
             <AvGroup>
-              <Label for="<%= otherEntityNamePlural %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
+              <Label for="<%= entityFileName %>-<%= relationshipName %>"><Translate contentKey="<%= translationKey %>"><%= relationshipNameHumanized %></Translate></Label>
               <AvInput
                 id="<%= entityFileName %>-<%= relationshipName %>"
                 type="select"
                 multiple
                 className="form-control"
-                name="fake<%= otherEntityNamePlural %>"
-                value={this.display<%= relationshipName %>(<%= entityInstance %>Entity)}
-                onChange={this.<%= relationshipFieldName %>Update}>
+                name="<%= relationshipFieldNamePlural %>"
+                value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e => e.id)}
+              >
                 <option value="" key="0" />
                 {
-                  (<%= otherEntityNamePlural %>) ? <%=otherEntityNamePlural %>.map(otherEntity =>
+                  (<%= otherEntityNamePlural %>) ? <%= otherEntityNamePlural %>.map(otherEntity =>
                   <option
-                      value={otherEntity.<%=otherEntityField%>}
+                      value={otherEntity.id}
                       key={otherEntity.id}>
                       {otherEntity.<%=otherEntityField%>}
                   </option>
                   ) : null
                 }
               </AvInput>
-              <AvInput
-                id="<%= entityFileName %>-<%= relationshipName %>"
-                type="hidden"
-                name="<%= relationshipFieldNamePlural %>"
-                value={this.state.ids<%= relationshipName %>}
-              />
             </AvGroup>
             <%_ } _%>
           <%_ }) _%>
@@ -662,7 +594,8 @@ const mapStateToProps = (storeState: IRootState) => ({
   <%_ }) _%>
   <%= entityInstance %>Entity: storeState.<%= entityInstance %>.entity,
   loading: storeState.<%= entityInstance %>.loading,
-  updating: storeState.<%= entityInstance %>.updating
+  updating: storeState.<%= entityInstance %>.updating,
+  updateSuccess: storeState.<%= entityInstance %>.updateSuccess,
 });
 
 const mapDispatchToProps = {

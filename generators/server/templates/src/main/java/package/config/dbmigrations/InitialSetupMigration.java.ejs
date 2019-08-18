@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,7 +19,7 @@
 package <%=packageName%>.config.dbmigrations;
 
 import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.<%= asEntity('User') %>;
 import <%=packageName%>.security.AuthoritiesConstants;
 
 import com.github.mongobee.changeset.ChangeLog;
@@ -29,7 +29,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import java.time.Instant;
 
 /**
- * Creates the initial database setup
+ * Creates the initial database setup.
  */
 @ChangeLog(order = "001")
 public class InitialSetupMigration {
@@ -52,7 +52,7 @@ public class InitialSetupMigration {
         Authority userAuthority = new Authority();
         userAuthority.setName(AuthoritiesConstants.USER);
 
-        User systemUser = new User();
+        <%= asEntity('User') %> systemUser = new <%= asEntity('User') %>();
         systemUser.setId("user-0");
         systemUser.setLogin("system");
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -62,14 +62,14 @@ public class InitialSetupMigration {
         systemUser.setLastName("System");
         systemUser.setEmail("system@localhost");
         systemUser.setActivated(true);
-        systemUser.setLangKey("en");
+        systemUser.setLangKey("<%= nativeLanguage %>");
         systemUser.setCreatedBy(systemUser.getLogin());
         systemUser.setCreatedDate(Instant.now());
         systemUser.getAuthorities().add(adminAuthority);
         systemUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(systemUser);
 
-        User anonymousUser = new User();
+        <%= asEntity('User') %> anonymousUser = new <%= asEntity('User') %>();
         anonymousUser.setId("user-1");
         anonymousUser.setLogin("anonymoususer");
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -79,12 +79,12 @@ public class InitialSetupMigration {
         anonymousUser.setLastName("User");
         anonymousUser.setEmail("anonymous@localhost");
         anonymousUser.setActivated(true);
-        anonymousUser.setLangKey("en");
+        anonymousUser.setLangKey("<%= nativeLanguage %>");
         anonymousUser.setCreatedBy(systemUser.getLogin());
         anonymousUser.setCreatedDate(Instant.now());
         mongoTemplate.save(anonymousUser);
 
-        User adminUser = new User();
+        <%= asEntity('User') %> adminUser = new <%= asEntity('User') %>();
         adminUser.setId("user-2");
         adminUser.setLogin("admin");
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -94,14 +94,14 @@ public class InitialSetupMigration {
         adminUser.setLastName("Administrator");
         adminUser.setEmail("admin@localhost");
         adminUser.setActivated(true);
-        adminUser.setLangKey("en");
+        adminUser.setLangKey("<%= nativeLanguage %>");
         adminUser.setCreatedBy(systemUser.getLogin());
         adminUser.setCreatedDate(Instant.now());
         adminUser.getAuthorities().add(adminAuthority);
         adminUser.getAuthorities().add(userAuthority);
         mongoTemplate.save(adminUser);
 
-        User userUser = new User();
+        <%= asEntity('User') %> userUser = new <%= asEntity('User') %>();
         userUser.setId("user-3");
         userUser.setLogin("user");
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -111,7 +111,7 @@ public class InitialSetupMigration {
         userUser.setLastName("User");
         userUser.setEmail("user@localhost");
         userUser.setActivated(true);
-        userUser.setLangKey("en");
+        userUser.setLangKey("<%= nativeLanguage %>");
         userUser.setCreatedBy(systemUser.getLogin());
         userUser.setCreatedDate(Instant.now());
         userUser.getAuthorities().add(userAuthority);

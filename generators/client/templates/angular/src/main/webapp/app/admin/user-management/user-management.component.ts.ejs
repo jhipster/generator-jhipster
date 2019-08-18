@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,18 +18,21 @@
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { ITEMS_PER_PAGE } from 'app/shared';
+import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 <%_ } else { _%>
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 <%_ } _%>
-import { Principal, UserService, User } from 'app/core';
-import { UserMgmtDeleteDialogComponent } from 'app/admin';
+import { AccountService } from 'app/core/auth/account.service';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.model';
+import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-user-mgmt',
@@ -41,11 +44,11 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     users: User[];
     error: any;
     success: any;
+    userListSubscription: Subscription;
     <%_ if (databaseType !== 'cassandra') { _%>
-    routeData: any;
+    routeData: Subscription;
     links: any;
     totalItems: any;
-    queryCount: any;
     itemsPerPage: any;
     page: any;
     predicate: any;
@@ -56,7 +59,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     constructor(
         private userService: UserService,
         private alertService: JhiAlertService,
-        private principal: Principal,
+        private accountService: AccountService,
         <%_ if (prodDatabaseType !== 'cassandra') { _%>
         private parseLinks: JhiParseLinks,
         private activatedRoute: ActivatedRoute,
@@ -68,16 +71,16 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
-            this.page = data['pagingParams'].page;
-            this.previousPage = data['pagingParams'].page;
-            this.reverse = data['pagingParams'].ascending;
-            this.predicate = data['pagingParams'].predicate;
+            this.page = data.pagingParams.page;
+            this.previousPage = data.pagingParams.page;
+            this.reverse = data.pagingParams.ascending;
+            this.predicate = data.pagingParams.predicate;
         });
         <%_ } _%>
     }
 
     ngOnInit() {
-        this.principal.identity().then((account) => {
+        this.accountService.identity().then((account) => {
             this.currentAccount = account;
             this.loadAll();
             this.registerChangeInUsers();
@@ -88,10 +91,13 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.routeData.unsubscribe();
         <%_ } _%>
+        if(this.userListSubscription) {
+            this.eventManager.destroy(this.userListSubscription);
+        }
     }
 
     registerChangeInUsers() {
-        this.eventManager.subscribe('userListModification', (response) => this.loadAll());
+        this.userListSubscription = this.eventManager.subscribe('userListModification', (response) => this.loadAll());
     }
 
     setActive(user, isActivated) {
@@ -169,7 +175,6 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
-        this.queryCount = this.totalItems;
         <%_ } _%>
         this.users = data;
     }

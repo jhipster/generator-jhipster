@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,7 +19,7 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "target": "es5",
+    "target": "es6",
     "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -33,7 +33,7 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "types": ["webpack-env"],
+    "types": ["webpack-env", "jest"],
     "allowJs": true,
     "checkJs": false,
     "baseUrl": "./",
@@ -46,7 +46,8 @@
   },
   "include": [
     "<%= MAIN_SRC_DIR %>app/typing.d.ts",
-    "<%= MAIN_SRC_DIR %>app/**/*"
+    "<%= MAIN_SRC_DIR %>app/**/*",
+    "<%= TEST_SRC_DIR %>spec/**/*"
   ],
   "exclude": [
     "node_modules"

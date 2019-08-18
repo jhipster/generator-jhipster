@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2019 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -25,6 +25,7 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
 const path = require('path');
+const sass = require('sass');
 
 const utils = require('./utils.js');
 const commonConfig = require('./webpack.common.js');
@@ -34,21 +35,22 @@ const ENV = 'development';
 module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     devtool: 'eval-source-map',
     devServer: {
-        contentBase: './<%= BUILD_DIR %>www',
+        contentBase: './<%= DIST_DIR %>',
         proxy: [{
-            context: [<% if (authenticationType === 'uaa') { %>
-                '/<%= uaaBaseName.toLowerCase() %>',<% } %>
-                /* jhipster-needle-add-entity-to-webpack - JHipster will add entity api paths here */
+            context: [
                 '/api',
+                '/services',
                 '/management',
                 '/swagger-resources',
                 '/v2/api-docs',
-                '/h2-console',
+                '/h2-console',<% if (authenticationType === 'oauth2') { %>
+                '/oauth2',
+                '/login',<% } %>
                 '/auth'
             ],
-            target: 'http://127.0.0.1:<%= serverPort %>',
+            target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
             secure: false,
-            headers: { host: 'localhost:9000' }
+            changeOrigin: options.tls
         }<% if (websocket === 'spring-websocket') { %>,{
             context: [
                 '/websocket'
@@ -59,33 +61,31 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         stats: options.stats,
         watchOptions: {
             ignored: /node_modules/
-        }
+        },
+        https: options.tls,
+        historyApiFallback: true
     },
     entry: {
         polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
-        <%_ if (useSass) { _%>
         global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
-        <%_ } else { _%>
-        global: './<%= MAIN_SRC_DIR %>content/css/global.css',
-        <%_ } _%>
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
     output: {
-        path: utils.root('<%= BUILD_DIR %>www'),
+        path: utils.root('<%= DIST_DIR %>'),
         filename: 'app/[name].bundle.js',
         chunkFilename: 'app/[id].chunk.js'
     },
     module: {
         rules: [{
-            test: /\.ts$/,
+            test: /\.(j|t)s$/,
             enforce: 'pre',
-            loaders: 'tslint-loader',
-            exclude: ['node_modules', new RegExp('reflect-metadata\\' + path.sep + 'Reflect\\.ts')]
+            loader: 'eslint-loader',
+            exclude: /node_modules/
         },
         {
             test: /\.ts$/,
             use: [
-                { loader: 'angular2-template-loader' },
+                'angular2-template-loader',
                 {
                     loader: 'cache-loader',
                     options: {
@@ -95,7 +95,9 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 {
                     loader: 'thread-loader',
                     options: {
-                        // there should be 1 cpu for the fork-ts-checker-webpack-plugin
+                        // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
+                        // The value may need to be adjusted (e.g. to 1) in some CI environments,
+                        // as cpus() may report more cores than what are available to the build.
                         workers: require('os').cpus().length - 1
                     }
                 },
@@ -106,51 +108,57 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                         happyPackMode: true
                     }
                 },
-                { loader: 'angular-router-loader' }
+                'angular-router-loader'
             ],
-            exclude: ['node_modules']
+            exclude: /(node_modules)/
         },
-        <%_ if (useSass) { _%>
         {
             test: /\.scss$/,
-            loaders: ['to-string-loader', 'css-loader', 'sass-loader'],
+            use: ['to-string-loader', 'css-loader', {
+                loader: 'sass-loader',
+                options: { implementation: sass }
+            }],
             exclude: /(vendor\.scss|global\.scss)/
         },
         {
             test: /(vendor\.scss|global\.scss)/,
-            loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-        },
-        <%_ } _%>
-        {
-            test: /\.css$/,
-            loaders: ['to-string-loader', 'css-loader'],
-            exclude: /(vendor\.css|global\.css)/
-        },
-        {
-            test: /(vendor\.css|global\.css)/,
-            loaders: ['style-loader', 'css-loader']
+            use: ['style-loader', 'css-loader', 'postcss-loader', {
+                loader: 'sass-loader',
+                options: { implementation: sass }
+            }]
         }]
     },
-    stats: options.stats,
+    stats: process.env.JHI_DISABLE_WEBPACK_LOGS ? 'none' : options.stats,
     plugins: [
-        new SimpleProgressWebpackPlugin({
-            format: options.stats === 'minimal' ? 'compact' : 'expanded'
-        }),
+        process.env.JHI_DISABLE_WEBPACK_LOGS
+            ? null
+            : new SimpleProgressWebpackPlugin({
+                format: options.stats === 'minimal' ? 'compact' : 'expanded'
+              }),
         new FriendlyErrorsWebpackPlugin(),
         new ForkTsCheckerWebpackPlugin(),
         new BrowserSyncPlugin({
+            https: options.tls,
             host: 'localhost',
             port: 9000,
             proxy: {
-                target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
-                ws: true<% } %>
+                target: `http${options.tls ? 's' : ''}://localhost:9060`<% if (websocket === 'spring-websocket') { %>,
+                ws: true<% } %>,
+                proxyOptions: {
+                    changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
+                }
+            },
+            socket: {
+                clients: {
+                    heartbeatTimeout: 60000
+                }
             }
         }, {
             reload: false
         }),
         new webpack.ContextReplacementPlugin(
             /angular(\\|\/)core(\\|\/)/,
-            path.resolve(__dirname, './src/main/webapp')
+            path.resolve(__dirname, './<%= CLIENT_MAIN_SRC_DIR %>')
         ),
         new writeFilePlugin(),
         new webpack.WatchIgnorePlugin([
@@ -160,6 +168,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             title: 'JHipster',
             contentImage: path.join(__dirname, 'logo-jhipster.png')
         })
-    ],
+    ].filter(Boolean),
     mode: 'development'
 });

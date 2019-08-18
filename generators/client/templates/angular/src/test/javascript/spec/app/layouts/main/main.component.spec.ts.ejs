@@ -1,0 +1,100 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NavigationCancel, Router } from '@angular/router';
+
+import { AccountService } from 'app/core/auth/account.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { <%=jhiPrefixCapitalized%>MainComponent } from 'app/layouts/main/main.component';
+import { MockStateStorageService } from '../../../helpers/mock-state-storage.service';
+import { <%=angularXAppName%>TestModule } from '../../../test.module';
+
+describe('Component Tests', () => {
+  describe('MainComponent', () => {
+    let comp: <%=jhiPrefixCapitalized%>MainComponent;
+    let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>MainComponent>;
+    let accountService: any;
+    let storageService: any;
+    let router: any;
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        imports: [<%=angularXAppName%>TestModule],
+        declarations: [<%=jhiPrefixCapitalized%>MainComponent],
+        providers: [
+          {
+            provide: StateStorageService,
+            useClass: MockStateStorageService
+          }
+        ]
+      })
+        .overrideTemplate(<%=jhiPrefixCapitalized%>MainComponent, '')
+        .compileComponents();
+    }));
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(<%=jhiPrefixCapitalized%>MainComponent);
+      comp = fixture.componentInstance;
+      accountService = fixture.debugElement.injector.get(AccountService);
+      storageService = fixture.debugElement.injector.get(StateStorageService);
+      router = fixture.debugElement.injector.get(Router);
+    });
+
+    it('should navigate to the previous stored url post successful authentication', () => {
+      accountService.setIdentityResponse({ firstName: 'John' });
+      storageService.setResponse('admin/users?page=0');
+      router.setRouterEvent(new NavigationCancel(0, 'http://localhost:9000', 'cancel'));
+
+      // WHEN/
+      comp.ngOnInit();
+
+      // THEN
+      expect(storageService.getUrlSpy).toHaveBeenCalledTimes(1);
+      expect(storageService.storeUrlSpy).toHaveBeenCalledWith(null);
+      expect(router.navigateByUrlSpy).toHaveBeenCalledWith('admin/users?page=0');
+    });
+
+    it('should not navigate to the previous stored url when authentication fails', () => {
+      accountService.setIdentityResponse();
+      router.setRouterEvent(new NavigationCancel(0, 'http://localhost:9000', 'cancel'));
+
+      // WHEN/
+      comp.ngOnInit();
+
+      // THEN
+      expect(storageService.getUrlSpy).not.toHaveBeenCalled();
+      expect(storageService.storeUrlSpy).not.toHaveBeenCalled();
+      expect(router.navigateByUrlSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not navigate to the previous stored url when no such url exists post successful authentication', () => {
+      accountService.setIdentityResponse({ firstName: 'John' });
+      storageService.setResponse(undefined);
+      router.setRouterEvent(new NavigationCancel(0, 'http://localhost:9000', 'cancel'));
+
+      // WHEN/
+      comp.ngOnInit();
+
+      // THEN
+      expect(storageService.getUrlSpy).toHaveBeenCalledTimes(1);
+      expect(storageService.storeUrlSpy).not.toHaveBeenCalled();
+      expect(router.navigateByUrlSpy).not.toHaveBeenCalled();
+    });
+  });
+});
