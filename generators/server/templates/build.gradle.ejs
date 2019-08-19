@@ -59,8 +59,8 @@ version = "0.0.1-SNAPSHOT"
 
 description = ""
 
-sourceCompatibility=<%= JAVA_VERSION %>
-targetCompatibility=<%= JAVA_VERSION %>
+sourceCompatibility=<%= javaVersion %>
+targetCompatibility=<%= javaVersion %>
 assert System.properties["java.specification.version"] == "1.8" || "11" || "12"
 
 apply from: "gradle/docker.gradle"
@@ -278,7 +278,12 @@ dependencies {
     <%_ } _%>
     implementation "com.fasterxml.jackson.core:jackson-annotations"
     implementation "com.fasterxml.jackson.core:jackson-databind"
+    <%_ if (javaVersion === '1.8') { _%>
     implementation "com.fasterxml.jackson.module:jackson-module-afterburner"
+    <%_ } _%>
+    <%_ if (javaVersion === '11' && useJacksonBlackBird) { _%>
+    implementation "org.jdbi.jackson-contrib:jackson-module-blackbird:${jackson_module_blackbird_version}"
+    <%_ } _%>
     <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
     implementation "org.apache.httpcomponents:httpclient"
     <%_ } _%>
