@@ -65,6 +65,19 @@ describe('JHipster languages generator with blueprint', () => {
                     .on('end', done);
             });
 
+            // it('Just print', () => {
+            //    assert.fileContent('.yo-rc.json', /fail to debug/);
+            // });
+
+            // This will fail
+            // it('Verify if language has been saved', () => {
+            //    assert.JSONFileContent('.yo-rc.json', {
+            //        'generator-jhipster': {
+            //            languages: ['de']
+            //        }
+            //    });
+            // });
+
             it('creates expected files from jhipster languages generator', () => {
                 assert.file(expectedFiles.i18nDeJson);
             });
