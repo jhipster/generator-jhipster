@@ -1091,7 +1091,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (this.isJhipsterVersionLessThan('5.0.0')) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
                 }
-                if (this.isJhipsterVersionLessThan('6.3.0')) {
+                if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === 'angularX') {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
                 }
             },

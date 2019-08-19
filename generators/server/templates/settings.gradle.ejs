@@ -16,4 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+
+pluginManagement {
+     plugins {
+          id 'org.springframework.boot' version "${spring_boot_version}"
+          id 'com.google.cloud.tools.jib' version "${jib_plugin_version}"
+          id 'com.gorylenko.gradle-git-properties' version "${git_properties_plugin_version}"
+          <%_ if (enableSwaggerCodegen) { _%>
+          id "org.openapi.generator" version "${openapi_plugin_version}"
+          <%_ } _%>
+          <%_ if (!skipClient) { _%>
+          id 'com.github.node-gradle.node' version "${gradle_node_plugin_version}"
+          <%_ } _%>
+          <%_ if (databaseType === 'sql') { _%>
+          id 'org.liquibase.gradle' version "${liquibase_plugin_version}"
+          <%_ } _%>
+          id 'org.sonarqube' version "${sonarqube_plugin_version}"
+          id 'net.ltgt.apt-eclipse' version "${apt_plugin_version}"
+          id 'net.ltgt.apt-idea' version "${apt_plugin_version}"
+          id 'net.ltgt.apt' version "${apt_plugin_version}"
+     }
+}
+
 rootProject.name = "<%= dasherizedBaseName %>"
