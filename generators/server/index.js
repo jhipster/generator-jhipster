@@ -212,8 +212,14 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
                 }
-                this.javaVersion = configuration.get('javaVersion');
-                this.useJacksonBlackBird = configuration.get('useJacksonBlackBird');
+                const javaVersion = configuration.get('javaVersion');
+                if (javaVersion) {
+                    this.javaVersion = javaVersion;
+                }
+                const useJacksonBlackBird = configuration.get('useJacksonBlackBird');
+                if (javaVersion) {
+                    this.useJacksonBlackBird = useJacksonBlackBird;
+                }
 
                 const baseName = configuration.get('baseName');
                 if (baseName) {
