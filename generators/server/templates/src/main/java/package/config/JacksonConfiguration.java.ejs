@@ -26,7 +26,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 <%_ if (javaVersion === '1.8') { _%>
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 <%_ } _%>
-<%_ if (javaVersion === '11' && useJacksonBlackBird === 'Y') { _%>
+<%_ if (javaVersion === '11' && useJacksonBlackBird) { _%>
 import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
@@ -70,7 +70,7 @@ public class JacksonConfiguration {
         return new AfterburnerModule();
     }
 <%_ } _%>
-<%_ if (javaVersion === '11' && useJacksonBlackBird === 'Y') { _%>
+<%_ if (javaVersion === '11' && useJacksonBlackBird) { _%>
 
     /*
      * Jackson BlackBird module to speed up serialization/deserialization.

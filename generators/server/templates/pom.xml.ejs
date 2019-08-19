@@ -126,7 +126,7 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version>0.2.0</jackson-databind-nullable.version>
 <%_ } _%>
-<%_ if (javaVersion === '11' && useJacksonBlackBird === 'Y') { _%>
+<%_ if (javaVersion === '11' && useJacksonBlackBird) { _%>
         <jackson-module-blackbird.version>0.0.1</jackson-module-blackbird.version>
 <%_ } _%>
         <!-- Plugin versions -->
@@ -215,7 +215,7 @@
             <artifactId>jackson-module-afterburner</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (javaVersion === '11' && useJacksonBlackBird === 'Y') { _%>
+<%_ if (javaVersion === '11' && useJacksonBlackBird) { _%>
         <dependency>
             <groupId>org.jdbi.jackson-contrib</groupId>
             <artifactId>jackson-module-blackbird</artifactId>

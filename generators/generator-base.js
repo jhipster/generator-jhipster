@@ -1937,7 +1937,7 @@ module.exports = class extends PrivateBase {
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
         dest.testFrameworks = context.configOptions.testFrameworks || [];
         dest.javaVersion = context.configOptions.javaVersion;
-        dest.useJacksonBlackBird = context.configOptions.useJacksonBlackBird || 'N';
+        dest.useJacksonBlackBird = context.configOptions.useJacksonBlackBird || false;
 
         dest.useYarn = context.configOptions.useYarn;
     }

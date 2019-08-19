@@ -247,16 +247,10 @@ function askForJavaVersion() {
 
 function askJacksonBlackBirdToBeInstalled(done, generator) {
     const PROMPT = {
-        type: 'input',
+        type: 'confirm',
         name: 'useJacksonBlackBird',
-        message: 'Add jackson-blackbird for increased performance (this is a experimental library) (Y/N) ?',
-        default: this.useJacksonBlackBird ? this.useJacksonBlackBird : 'N',
-        validate: input => {
-            if (input !== 'Y' && input !== 'N') {
-                return 'Input should be Y or N';
-            }
-            return true;
-        }
+        message: 'Add jackson-blackbird for increased performance (this is an experimental library) ?',
+        default: false
     };
 
     generator.prompt(PROMPT).then(prompt => {

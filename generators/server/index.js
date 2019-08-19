@@ -283,7 +283,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.javaVersion = constants.JAVA_VERSION;
                     }
                     if (this.useJacksonBlackBird === undefined) {
-                        this.useJacksonBlackBird = 'N';
+                        this.useJacksonBlackBird = false;
                     }
                     // user-management will be handled by UAA app, oauth expects users to be managed in IpP
                     if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
