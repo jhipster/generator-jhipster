@@ -357,6 +357,8 @@ module.exports = class extends BaseGenerator {
                     this.configOptions.websocket = this.options.websocket;
                 }
                 this.configOptions.clientPackageManager = this.clientPackageManager;
+                this.configOptions.javaVersion = this.javaVersion;
+                this.configOptions.useJacksonBlackBird = this.useJacksonBlackBird;
             },
 
             composeServer() {
