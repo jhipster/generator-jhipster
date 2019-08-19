@@ -126,6 +126,9 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version>0.2.0</jackson-databind-nullable.version>
 <%_ } _%>
+<%_ if (javaVersion === '11' && useJacksonBlackBird === 'Y') { _%>
+        <jackson-module-blackbird.version>0.0.1</jackson-module-blackbird.version>
+<%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -216,7 +219,6 @@
         <dependency>
             <groupId>org.jdbi.jackson-contrib</groupId>
             <artifactId>jackson-module-blackbird</artifactId>
-            <version>0.0.1</version>
         </dependency>
 <%_ } _%>
         <dependency>
