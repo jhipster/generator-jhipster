@@ -212,14 +212,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
                 }
-                const javaVersion = configuration.get('javaVersion');
-                if (javaVersion) {
-                    this.javaVersion = javaVersion;
-                }
-                const useJacksonBlackBird = configuration.get('useJacksonBlackBird');
-                if (javaVersion) {
-                    this.useJacksonBlackBird = useJacksonBlackBird;
-                }
+                this.javaVersion = configuration.get('javaVersion');
+                this.useJacksonBlackBird = configuration.get('useJacksonBlackBird');
 
                 const baseName = configuration.get('baseName');
                 if (baseName) {
@@ -330,6 +324,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.configOptions.buildTool = this.buildTool;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.configOptions.authenticationType = this.authenticationType;
+                this.configOptions.javaVersion = this.javaVersion;
                 const uaaBaseName = this.uaaBaseName;
                 if (uaaBaseName) {
                     this.configOptions.uaaBaseName = this.uaaBaseName;

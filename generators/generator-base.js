@@ -1955,7 +1955,6 @@ module.exports = class extends PrivateBase {
         this.setupSharedOptions(generator, context, dest);
         dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
         dest.testFrameworks = context.configOptions.testFrameworks;
-        dest.javaVersion = context.configOptions.javaVersion;
     }
 
     /**
