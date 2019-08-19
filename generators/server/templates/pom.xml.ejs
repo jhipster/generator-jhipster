@@ -64,7 +64,7 @@
     <properties>
         <!-- Build properties -->
         <maven.version>3.3.9</maven.version>
-        <java.version><%= JAVA_VERSION %></java.version>
+        <java.version><%= javaVersion %></java.version>
 <%_ if (!skipClient) { _%>
         <node.version>v<%= NODE_VERSION %></node.version>
     <%_ if (clientPackageManager === 'npm') { _%>
@@ -206,10 +206,19 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+<%_ if (javaVersion === '1.8') { _%>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-afterburner</artifactId>
         </dependency>
+<%_ } _%>
+<%_ if (javaVersion === '11' && useJacksonBlackBird === 'Y') { _%>
+        <dependency>
+            <groupId>org.jdbi.jackson-contrib</groupId>
+            <artifactId>jackson-module-blackbird</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+<%_ } _%>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

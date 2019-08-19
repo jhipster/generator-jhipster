@@ -285,6 +285,8 @@ module.exports = class extends BaseGenerator {
                     this.otherModules = this.otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
                     this.otherModules.push(...this.blueprints);
                 }
+                this.javaVersion = this.config.get('javaVersion');
+                this.useJacksonBlackBird = this.config.get('userJacksonBlackBird');
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.enableTranslation = this.config.get('enableTranslation');
                 this.nativeLanguage = this.config.get('nativeLanguage');
@@ -313,6 +315,7 @@ module.exports = class extends BaseGenerator {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
             askForApplicationType: prompts.askForApplicationType,
+            askForJavaVersion: prompts.askForJavaVersion,
             askForModuleName: prompts.askForModuleName
         };
     }
@@ -422,6 +425,8 @@ module.exports = class extends BaseGenerator {
                     applicationType: this.applicationType,
                     baseName: this.baseName,
                     testFrameworks: this.testFrameworks,
+                    javaVersion: this.javaVersion,
+                    useJacksonBlackBird: this.useJacksonBlackBird,
                     jhiPrefix: this.jhiPrefix,
                     entitySuffix: this.entitySuffix,
                     dtoSuffix: this.dtoSuffix,

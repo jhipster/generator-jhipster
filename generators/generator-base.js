@@ -1936,6 +1936,8 @@ module.exports = class extends PrivateBase {
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
         dest.testFrameworks = context.configOptions.testFrameworks || [];
+        dest.javaVersion = context.configOptions.javaVersion;
+        dest.useJacksonBlackBird = context.configOptions.useJacksonBlackBird || 'N';
 
         dest.useYarn = context.configOptions.useYarn;
     }

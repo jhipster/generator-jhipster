@@ -22,6 +22,7 @@ const statistics = require('../statistics');
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
+    askForJavaVersion,
     askForModuleName,
     askFori18n,
     askForTestOpts,
@@ -215,4 +216,51 @@ function askModulesToBeInstalled(done, generator) {
             done();
         }
     );
+}
+
+function askForJavaVersion() {
+    if (this.existingProject) {
+        return;
+    }
+
+    const choices = [{ name: 'Java 11', value: '11' }, { name: 'Java 8', value: '1.8' }];
+    const defaultChoice = [{ name: 'Java 11', value: '11' }];
+    const PROMPT = {
+        type: 'list',
+        name: 'javaVersion',
+        message: 'Which Java version would you like to use?',
+        choices,
+        default: defaultChoice
+    };
+
+    const done = this.async();
+
+    this.prompt(PROMPT).then(prompt => {
+        this.javaVersion = prompt.javaVersion;
+        if (prompt.javaVersion === '11') {
+            askJacksonBlackBirdToBeInstalled(done, this);
+        } else {
+            done();
+        }
+    });
+}
+
+function askJacksonBlackBirdToBeInstalled(done, generator) {
+    const PROMPT = {
+        type: 'input',
+        name: 'useJacksonBlackBird',
+        message: 'Add jackson-blackbird for increased performance (this is a experimental library) (Y/N) ?',
+        default: this.useJacksonBlackBird ? this.useJacksonBlackBird : 'N',
+        validate: input => {
+            if (input !== 'Y' && input !== 'N') {
+                return 'Input should be Y or N';
+            }
+            return true;
+        }
+    };
+
+    generator.prompt(PROMPT).then(prompt => {
+        generator.useJacksonBlackBird = prompt.useJacksonBlackBird;
+        done();
+    });
 }

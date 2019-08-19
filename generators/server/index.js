@@ -212,6 +212,14 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
                 }
+                const javaVersion = configuration.get('javaVersion');
+                if (javaVersion) {
+                    this.javaVersion = javaVersion;
+                }
+                const useJacksonBlackBird = configuration.get('useJacksonBlackBird');
+                if (javaVersion) {
+                    this.useJacksonBlackBird = useJacksonBlackBird;
+                }
 
                 const baseName = configuration.get('baseName');
                 if (baseName) {
@@ -429,6 +437,12 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.testFrameworks = [];
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
+                }
+                if (this.configOptions.javaVersion) {
+                    this.javaVersion = this.configOptions.javaVersion;
+                }
+                if (this.configOptions.useJacksonBlackBird) {
+                    this.useJacksonBlackBird = this.configOptions.useJacksonBlackBird;
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
