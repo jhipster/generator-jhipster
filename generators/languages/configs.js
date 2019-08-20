@@ -64,7 +64,7 @@ module.exports = {
                 required: false
             },
             dependsOn: ['languages.i18n'],
-            validate(repository) {
+            validatePrompt(repository) {
                 if (!Array.isArray(repository.languages)) repository.languages = [repository.languages];
             },
             async prompt(generator, repository) {

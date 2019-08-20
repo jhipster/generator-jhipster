@@ -146,13 +146,13 @@ module.exports = class {
      * Return the config repository acording to the config spec.
      */
     findRepository(config) {
-        let repository;
-        if (config.persistent && config.blueprintName !== undefined) {
-            repository = this.blueprintsConfigs[config.blueprintName].persistentOptions;
-        } else {
-            repository = !config.persistent ? this.runtimeOptions : this.persistentOptions;
+        if (!config.persistent) {
+            return this.runtimeOptions;
         }
-        return repository;
+        if (config.blueprintName !== undefined) {
+            return this.blueprintsConfigs[config.blueprintName].persistentOptions;
+        }
+        return this.persistentOptions;
     }
 
     /**
@@ -170,31 +170,46 @@ module.exports = class {
      * Install cli options and queue prompts.
      */
     requireAllConfigs(generator, module, blueprint) {
-        this.installCliConfigs(generator, module, blueprint);
+        this.installCliOptions(generator, module, blueprint);
         this.queueConfigPrompts(generator, module, blueprint);
     }
 
     /**
      * Install CLI options
      */
-    installCliConfigs(generator, module, blueprint) {
+    installCliOptions(generator, module, blueprint) {
         const configs = blueprint !== undefined ? this.blueprintsConfigs[blueprint][module] : this.modulesConfigs[module];
         Object.entries(configs).forEach(([optName, config]) => {
             if (!config.cli) return;
 
-            const camelCase = _.camelCase(config.cliName);
-            const repository = this.findRepository(config);
-            if (repository[camelCase] !== undefined) return;
-
-            generator.option(config.cliName, config.spec);
-
-            const value = (repository[camelCase] = this.rootOptions[config.cliName]);
-            // debug(`cli ${optName} = ${config}`);
-
-            if (value !== undefined) {
-                this.installOption(generator, camelCase, value);
-            }
+            this.installCliOption(generator, optName, config);
         });
+    }
+
+    /**
+     * Validate and install CLI option
+     */
+    installCliOption(generator, optName, config) {
+        const camelCase = _.camelCase(config.cliName);
+        const repository = this.findRepository(config);
+
+        // Value already defined, ignore
+        if (repository[camelCase] !== undefined) return;
+
+        // if (repository)
+
+        generator.option(config.cliName, config.spec);
+
+        repository[camelCase] = this.rootOptions[config.cliName];
+
+        if (!repository) generator.error('Error');
+        if (config.validateCli !== undefined) config.validateCli.apply(this, [repository]);
+
+        const value = repository[camelCase];
+        debug(`cli option ${optName} = ${value}`);
+        if (value !== undefined) {
+            this.installOption(generator, camelCase, value);
+        }
     }
 
     /**
@@ -220,7 +235,8 @@ module.exports = class {
         if (value === undefined) {
             value = repository[config.varName] = this.rootOptions[config.varName] || this.rootConfig.get(config.varName);
         }
-        const shouldRunPrompt = value === undefined;
+
+        const shouldRunPrompt = !this.runtimeOptions.noninteractive && value === undefined;
 
         const promptIfUndefined = function(name, spec) {
             if (self.findOptionValue(name) !== undefined) return;
@@ -254,10 +270,10 @@ module.exports = class {
             );
         }
         const validateName = `${promptName}Validate`;
-        if (spec.config.validate && !this.queuedPrompts.includes(validateName)) {
+        if (spec.config.validatePrompt && !this.queuedPrompts.includes(validateName)) {
             this.queuedPrompts.push(validateName);
             generator.queueMethod(
-                spec.config.validate.bind(generator, repository),
+                spec.config.validatePrompt.bind(self, repository),
                 `${promptName}Validate`,
                 spec.config.configQueue || 'configuring'
             );

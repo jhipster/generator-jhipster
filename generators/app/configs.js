@@ -62,6 +62,36 @@ module.exports = {
                 defaults: false
             }
         },
+        force: {
+            persistent: false,
+            cli: true,
+            cliName: 'force',
+            spec: {
+                desc: 'Force',
+                type: Boolean,
+                defaults: false
+            }
+        },
+        noninteractive: {
+            persistent: false,
+            cli: true,
+            cliName: 'noninteractive',
+            spec: {
+                desc: 'Ignore prompts using the default value',
+                type: Boolean,
+                defaults: false
+            },
+            // Not implemented
+            // dependsOnCli: ['base.force'],
+            validateCli(repository) {
+                /**
+                 * existingProject is different for app, client, server and aws
+                 * Using a modified app version.
+                 */
+                if (this.rootConfig.exists && this.rootConfig.get('baseName') && this.rootConfig.get('applicationType'))
+                    repository.noninteractive = true;
+            }
+        },
         jhiPrefix: {
             persistent: true,
             cli: true,

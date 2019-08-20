@@ -28,7 +28,7 @@ else
         mkdir -p "$JHI_FOLDER_UAA"
         cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json "$JHI_FOLDER_UAA"/
         cd "$JHI_FOLDER_UAA"
-        jhipster --force --no-insight --with-entities --skip-checks --from-cli
+        jhipster --force --no-insight --with-entities --skip-checks --from-cli --noninteractive
         ls -al "$JHI_FOLDER_UAA"
     fi
 
@@ -38,7 +38,7 @@ else
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
-    jhipster --force --no-insight --skip-checks --with-entities --from-cli
+    jhipster --force --no-insight --skip-checks --with-entities --from-cli --noninteractive
 
 fi
 
