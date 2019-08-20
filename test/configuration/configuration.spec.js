@@ -42,6 +42,7 @@ describe('JHipster generator', () => {
                         jhiPrefix: 'test',
                         baseName: 'jhipster',
                         clientFramework: 'angularX',
+                        clientTheme: 'none',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: false,

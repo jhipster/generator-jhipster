@@ -271,13 +271,21 @@ module.exports = class {
             );
         }
         const validateName = `${promptName}Validate`;
-        if (spec.config.validatePrompt && !this.queuedPrompts.includes(validateName)) {
-            this.queuedPrompts.push(validateName);
-            generator.queueMethod(
-                spec.config.validatePrompt.bind(self, repository),
-                `${promptName}Validate`,
-                spec.config.configQueue || 'configuring'
-            );
+        if (!this.queuedPrompts.includes(validateName)) {
+            if (spec.config.validatePrompt) {
+                this.queuedPrompts.push(validateName);
+                generator.queueMethod(
+                    spec.config.validatePrompt.bind(self, repository),
+                    `${promptName}Validate`,
+                    spec.config.configQueue || 'configuring'
+                );
+            } else if (spec.config.defaultValue !== undefined) {
+                this.queuedPrompts.push(validateName);
+                const validateDefault = function() {
+                    if (repository[spec.config.varName] === undefined) repository[spec.config.varName] = config.defaultValue;
+                };
+                generator.queueMethod(validateDefault, `${promptName}Validate`, spec.config.configQueue || 'configuring');
+            }
         }
         generator.queueMethod(installConfig.bind(generator, key, spec), `${promptName}Config`, spec.config.configQueue || 'configuring');
     }

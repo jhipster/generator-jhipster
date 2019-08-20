@@ -69,6 +69,7 @@ module.exports = {
             persistent: true,
             varName: 'clientTheme',
             dependsOn: ['client.framework'],
+            defaultValue: 'none',
             prompt(generator, repository) {
                 if (repository.clientTheme !== undefined || repository.skipClient) return;
                 const done = generator.async();
