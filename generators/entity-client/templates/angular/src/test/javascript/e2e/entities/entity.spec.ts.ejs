@@ -16,10 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* tslint:disable no-unused-expression */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { browser, ExpectedConditions as ec, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor, <% } %>promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { <%= entityClass %>ComponentsPage, <%= entityClass %>DeleteDialog, <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
 <%_ if (fieldsContainBlobOrImage) { _%>
 import * as path from 'path';
@@ -33,8 +34,8 @@ if (enableTranslation) {
 }
 for (let relationship of relationships) {
     if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
-        openBlockComment = `/*`;
-        closeBlockComment = `*/`;
+        openBlockComment = `/* `;
+        closeBlockComment = ` */`;
         break;
     }
 } _%>

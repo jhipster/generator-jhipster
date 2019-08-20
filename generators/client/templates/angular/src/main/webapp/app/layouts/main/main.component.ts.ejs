@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 import { Component,<%_ if (authenticationType === 'oauth2') { _%> OnDestroy,<%_ } _%> OnInit } from '@angular/core';
+<%_ if (!enableTranslation) { _%>
+import { Title } from '@angular/platform-browser';
+<%_ } _%>
 import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { Subject } from 'rxjs';
@@ -24,12 +27,12 @@ import { takeUntil } from 'rxjs/operators';
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper<%_ if (authenticationType === 'oauth2') { _%>, Account, AccountService, StateStorageService<%_ } _%> } from 'app/core';
-<%_ } else { _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-import { Account, AccountService, StateStorageService } from 'app/core';
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
 <%_ } _%>
-import { Title } from '@angular/platform-browser';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { Account } from 'app/core/user/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ } _%>
 
 @Component({
