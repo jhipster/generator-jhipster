@@ -39,6 +39,12 @@ export interface JhiAlert {
     providedIn: 'root'
 })
 export class JhiAlertService {
+    private alertId: number;
+    private alerts: JhiAlert[];
+    private timeout: number;
+    private toast: boolean;
+    private i18nEnabled: boolean;
+
     constructor(private sanitizer: Sanitizer, private configService: JhiConfigService, private translateService: TranslateService) {
         const config = this.configService.getConfig();
         this.toast = config.alertAsToast;
@@ -47,11 +53,6 @@ export class JhiAlertService {
         this.alerts = [];
         this.timeout = config.alertTimeout;
     }
-    private alertId: number;
-    private alerts: JhiAlert[];
-    private timeout: number;
-    private toast: boolean;
-    private i18nEnabled: boolean;
 
     clear() {
         this.alerts.splice(0, this.alerts.length);

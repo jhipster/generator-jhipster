@@ -31,7 +31,6 @@ class TestJhiTranslateDirectiveComponent {}
 
 describe('JhiTranslate Tests', () => {
     let fixture: ComponentFixture<TestJhiTranslateDirectiveComponent>;
-    let component: TestJhiTranslateDirectiveComponent;
     let configService: JhiConfigService;
     let translateService: TranslateService;
 
@@ -55,7 +54,6 @@ describe('JhiTranslate Tests', () => {
         translateService = TestBed.get(TranslateService);
 
         fixture = TestBed.createComponent(TestJhiTranslateDirectiveComponent);
-        component = fixture.componentInstance;
     });
 
     it('should not change HTML if i18n is disabled', () => {

@@ -1,29 +1,31 @@
 import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { FaIconComponent, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { fas, faSort, faSortDown, faSortUp } from '@fortawesome/free-solid-svg-icons';
 
 import { JhiConfigService } from '../../src/config.service';
 import { JhiSortByDirective, JhiSortDirective } from '../../src/directive';
 
 @Component({
     template: `
-    <table>
-        <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-                <th jhiSortBy="name">ID<fa-icon [icon]="'sort'"></fa-icon></th>
-            </tr>
-        </thead>
-    </table>
+        <table>
+            <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                    <th jhiSortBy="name">ID<fa-icon [icon]="'sort'"></fa-icon></th>
+                </tr>
+            </thead>
+        </table>
     `
 })
 class TestJhiSortByDirectiveComponent {
     predicate: string;
     reverse: boolean;
-    transition() {
+    constructor(library: FaIconLibrary) {
+        library.addIconPacks(fas);
+        library.addIcons(faSort, faSortDown, faSortUp);
     }
+    transition() {}
 }
 
 describe('Directive: JhiSortByDirective', () => {
@@ -41,11 +43,9 @@ describe('Directive: JhiSortByDirective', () => {
         component = fixture.componentInstance;
         tableRow = fixture.debugElement.query(By.directive(JhiSortDirective));
         tableHead = fixture.debugElement.query(By.directive(JhiSortByDirective));
-        library.add(faSort, faSortDown, faSortUp);
     });
 
     it('should initialize predicate, order, icon when initial component predicate is _score', () => {
-
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = '_score';
@@ -65,7 +65,6 @@ describe('Directive: JhiSortByDirective', () => {
     });
 
     it('should initialize predicate, order, icon when initial component predicate differs from column predicate', () => {
-
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = 'id';
@@ -85,7 +84,6 @@ describe('Directive: JhiSortByDirective', () => {
     });
 
     it('should initialize predicate, order, icon when initial component predicate is same as column predicate', () => {
-
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = 'name';
@@ -108,7 +106,6 @@ describe('Directive: JhiSortByDirective', () => {
     });
 
     it('should initialize predicate, order, icon when initial component predicate is _score and user clicks on column header', () => {
-
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = '_score';
@@ -132,7 +129,6 @@ describe('Directive: JhiSortByDirective', () => {
     });
 
     it('should update component predicate, order, icon when user clicks on column header', () => {
-
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = 'name';
@@ -156,7 +152,6 @@ describe('Directive: JhiSortByDirective', () => {
     });
 
     it('should update component predicate, order, icon when user double clicks on column header', () => {
-
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = 'name';
@@ -183,5 +178,4 @@ describe('Directive: JhiSortByDirective', () => {
         expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortDown);
         expect(component.transition).toHaveBeenCalledTimes(2);
     });
-
 });
