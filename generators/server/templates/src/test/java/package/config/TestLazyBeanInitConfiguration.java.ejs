@@ -37,8 +37,8 @@ import java.util.Arrays;
  */
 @Component
 @Profile("!" + TestLazyBeanInitConfiguration.EAGER_BEAN_INIT)
-public class TestLazyBeanInitConfiguration {
-    public static final String EAGER_BEAN_INIT = "eagerBeanInit";
+public class TestLazyBeanInitConfiguration implements BeanFactoryPostProcessor {
+    public static final String EAGER_BEAN_INIT = "eager-bean-init";
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
