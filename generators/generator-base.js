@@ -1256,11 +1256,11 @@ module.exports = class extends PrivateBase {
      * @param {string} version - A valid semver version string
      */
     isJhipsterVersionLessThan(version) {
-        const jhipsterVersion = this.config.get('jhipsterVersion');
-        if (!jhipsterVersion) {
-            return true;
+        if (!this.jhipsterOldVersion) {
+            // if old version is unknown then can't compare and return false
+            return false;
         }
-        return semver.lt(jhipsterVersion, version);
+        return semver.lt(this.jhipsterOldVersion, version);
     }
 
     /**

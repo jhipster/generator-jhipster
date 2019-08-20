@@ -195,6 +195,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = configuration.get('jhipsterVersion');
                 }
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 this.authenticationType = configuration.get('authenticationType');
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
