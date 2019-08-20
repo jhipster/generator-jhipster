@@ -65,7 +65,11 @@ module.exports = {
             },
             dependsOn: ['languages.i18n'],
             validatePrompt(repository) {
+                if (repository.nativeLanguage === undefined) return;
+                if (repository.languages === undefined) repository.languages = [repository.nativeLanguage];
                 if (!Array.isArray(repository.languages)) repository.languages = [repository.languages];
+                if (!repository.languages.includes(repository.nativeLanguage))
+                    repository.languages = [repository.nativeLanguage, ...repository.languages];
             },
             async prompt(generator, repository) {
                 if (!repository.enableTranslation) return;

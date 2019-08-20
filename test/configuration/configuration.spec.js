@@ -93,7 +93,7 @@ describe('JHipster generator', () => {
                         devDatabaseType: 'h2Memory',
                         prodDatabaseType: 'mysql',
                         enableTranslation: true,
-                        nativeLanguage: 'fr',
+                        nativeLanguage: 'de',
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
@@ -126,8 +126,9 @@ describe('JHipster generator', () => {
                 assert.JSONFileContent('.yo-rc.json', {
                     'generator-jhipster': {
                         enableTranslation: true,
-                        nativeLanguage: 'fr',
-                        languages: ['fr']
+                        nativeLanguage: 'de',
+                        // native language should be added
+                        languages: ['de', 'fr']
                     }
                 });
             });
