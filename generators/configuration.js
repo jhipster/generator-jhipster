@@ -232,25 +232,26 @@ module.exports = class {
         const repository = self.findRepository(spec.config);
 
         let value = repository[config.varName];
-        if (value === undefined) {
+        if (value === undefined && config.blueprintName === undefined) {
             value = repository[config.varName] = this.rootOptions[config.varName] || this.rootConfig.get(config.varName);
         }
 
         const shouldRunPrompt = !this.runtimeOptions.noninteractive && value === undefined;
 
         const promptIfUndefined = function(name, spec) {
-            if (self.findOptionValue(name) !== undefined) return;
+            if (repository[name] !== undefined) return;
             spec.config.prompt.apply(self, [this, repository]);
         };
         const installConfig = function(name, spec) {
-            self.installOption(this, name, self.findOptionValue(name));
+            self.installOption(this, name, repository[name]);
             spec.config.otherVars &&
                 spec.config.otherVars.forEach(configName => {
-                    self.installOption(this, name, self.findOptionValue(name));
+                    self.installOption(this, name, repository[name]);
                 });
         };
 
-        const promptName = `${module}.${key}`;
+        const blueprintPrefix = config.blueprintName ? `${config.blueprintName}.` : '';
+        const promptName = `${blueprintPrefix}${module}.${key}`;
         if (spec.config.dependsOn !== undefined) {
             spec.config.dependsOn.forEach(dependency => {
                 const split = dependency.split('.');
