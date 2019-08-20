@@ -35,7 +35,9 @@ hibernate_version=5.3.10.Final
 mapstruct_version=1.3.0.Final
 
 liquibase_hibernate5_version=3.7
+<%_ if (javaVersion === '11' && useJacksonBlackBird) { _%>
 jackson_module_blackbird_version=0.0.1
+<%_ } _%>
 liquibaseTaskPrefix=liquibase
 
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
