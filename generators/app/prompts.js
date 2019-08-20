@@ -23,6 +23,7 @@ module.exports = {
     askForInsightOptIn,
     askForApplicationType,
     askForJavaVersion,
+    askJacksonBlackBirdToBeInstalled,
     askForModuleName,
     askFori18n,
     askForTestOpts,
@@ -237,24 +238,23 @@ function askForJavaVersion() {
 
     this.prompt(PROMPT).then(prompt => {
         this.javaVersion = prompt.javaVersion;
-        if (prompt.javaVersion === '11') {
-            askJacksonBlackBirdToBeInstalled(done, this);
-        } else {
-            done();
-        }
+        done();
     });
 }
 
-function askJacksonBlackBirdToBeInstalled(done, generator) {
+function askJacksonBlackBirdToBeInstalled() {
     const PROMPT = {
+        when: () => this.javaVersion === '11',
         type: 'confirm',
         name: 'useJacksonBlackBird',
         message: 'Add jackson-blackbird for increased performance (this is an experimental library) ?',
         default: false
     };
 
-    generator.prompt(PROMPT).then(prompt => {
-        generator.useJacksonBlackBird = prompt.useJacksonBlackBird;
+    const done = this.async();
+
+    this.prompt(PROMPT).then(prompt => {
+        this.useJacksonBlackBird = prompt.useJacksonBlackBird;
         done();
     });
 }

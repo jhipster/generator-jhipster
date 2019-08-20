@@ -316,6 +316,7 @@ module.exports = class extends BaseGenerator {
             askForInsightOptIn: prompts.askForInsightOptIn,
             askForApplicationType: prompts.askForApplicationType,
             askForJavaVersion: prompts.askForJavaVersion,
+            askJacksonBlackBirdToBeInstalled: prompts.askJacksonBlackBirdToBeInstalled,
             askForModuleName: prompts.askForModuleName
         };
     }
