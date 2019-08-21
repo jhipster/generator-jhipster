@@ -28,6 +28,7 @@ const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 
 const packageJson = require('./../package.json');
 <%_ } _%>
+const tsconfig = require('../tsconfig.json');
 const utils = require('./utils.js');
 
 const getTsLoaderRule = env => {
@@ -70,9 +71,12 @@ module.exports = options => ({
       '.js', '.jsx', '.ts', '.tsx', '.json'
     ],
     modules: ['node_modules'],
-    alias: {
-      app: utils.root('<%= MAIN_SRC_DIR %>app/')
-    }
+    alias: Object.keys(tsconfig.compilerOptions.paths).reduce((aliases, aliasName) => {
+      const finalAliasName = aliasName.replace(/\/\*$/, '');
+      const finalPath = tsconfig.compilerOptions.paths[aliasName][0].replace(/\/\*$/, '');
+      aliases[finalAliasName] = utils.root(finalPath);
+      return aliases;
+    }, {})
   },
   module: {
     rules: [
