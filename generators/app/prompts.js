@@ -224,8 +224,8 @@ function askForJavaVersion() {
         return;
     }
 
-    const choices = [{ name: 'Java 11', value: '11' }, { name: 'Java 8', value: '1.8' }];
-    const defaultChoice = [{ name: 'Java 11', value: '11' }];
+    const choices = [{ name: 'Java >= 11', value: '11' }, { name: 'Java 8', value: '1.8' }];
+    const defaultChoice = [{ name: 'Java >= 11', value: '11' }];
     const PROMPT = {
         type: 'list',
         name: 'javaVersion',
