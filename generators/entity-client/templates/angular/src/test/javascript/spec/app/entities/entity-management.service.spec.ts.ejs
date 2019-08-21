@@ -89,7 +89,7 @@ describe('Service Tests', () => {
         });
 
         describe('Service methods', () => {
-            it('should find an element', async () => {
+            it('should find an element', () => {
                 const returnedFromService = Object.assign({
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
@@ -109,7 +109,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toMatchObject({body: elemDefault});
             });
 
-            it('should create a <%= entityAngularName %>', async () => {
+            it('should create a <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
 <%_ if (pkType === 'String' || pkType === 'UUID') { _%>
                     id: 'ID',
@@ -143,7 +143,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toMatchObject({body: expected});
             });
 
-            it('should update a <%= entityAngularName %>', async () => {
+            it('should update a <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
@@ -181,7 +181,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toMatchObject({body: expected});
             });
 
-            it('should return a list of <%= entityAngularName %>', async () => {
+            it('should return a list of <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
@@ -222,7 +222,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toContainEqual(expected);
             });
 
-            it('should delete a <%= entityAngularName %>', async () => {
+            it('should delete a <%= entityAngularName %>', () => {
                 service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
 
                 const req  = httpMock.expectOne({ method: 'DELETE' });
