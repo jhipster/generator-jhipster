@@ -35,6 +35,6 @@ CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
         if (fieldType === 'ZonedDateTime') { %> <%= fieldName %> tuple<timestamp,varchar>,<% } else 
         if (fieldType === 'Boolean') { %> <%= fieldName %> boolean,<% } else 
         if (fieldType === 'ByteBuffer') { %> <%= fieldName %> blob,<% 
-            if (fieldTypeBlobContent !== 'text') { %> <%= fieldNameUnderscored %>_content_type text,<% } } } %>
+        if (fieldTypeBlobContent !== 'text') { %> <%= fieldNameUnderscored %>_content_type text,<% } } } %>
     PRIMARY KEY(id)
 );

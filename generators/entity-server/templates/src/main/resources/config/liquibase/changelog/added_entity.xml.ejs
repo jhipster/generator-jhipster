@@ -38,7 +38,7 @@
 
     <%_ if (prodDatabaseType === 'postgresql') { _%>
     <changeSet id="<%= changelogDate %>-0" author="jhipster">
-        <createSequence sequenceName="<%= entityTableName %>_sequence" startValue="1" incrementBy="50"/>
+        <createSequence sequenceName="<%= entityTableName %>_id_seq" startValue="1" incrementBy="5"/>
     </changeSet>
     <%_ } _%>
 
