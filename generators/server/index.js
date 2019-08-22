@@ -208,6 +208,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (uaaBaseName) {
                     this.uaaBaseName = uaaBaseName;
                 }
+                this.embeddableLaunchScript = configuration.get('embeddableLaunchScript');
+                if (this.embeddableLaunchScript) {
+                    this.embeddableLaunchScript = false;
+                }
                 this.clientFramework = configuration.get('clientFramework');
                 this.clientTheme = configuration.get('clientTheme');
                 const testFrameworks = configuration.get('testFrameworks');
@@ -399,7 +403,8 @@ module.exports = class extends BaseBlueprintGenerator {
                     enableSwaggerCodegen: this.enableSwaggerCodegen,
                     jwtSecretKey: this.jwtSecretKey,
                     rememberMeKey: this.rememberMeKey,
-                    enableTranslation: this.enableTranslation
+                    enableTranslation: this.enableTranslation,
+                    embeddableLaunchScript: this.embeddableLaunchScript
                 };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     config.nativeLanguage = this.nativeLanguage;

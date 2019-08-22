@@ -869,7 +869,9 @@
                 </executions>
                 <configuration>
                     <mainClass>${start-class}</mainClass>
+                    <%_ if (embeddableLaunchScript) { _%>
                     <executable>true</executable>
+                    <%_ } _%>
                     <fork>true</fork>
                     <!--
                     Enable the line below to have remote debugging of your application on port 5005
@@ -1475,7 +1477,9 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <mainClass>${start-class}</mainClass>
+                            <%_ if (embeddableLaunchScript) { _%>
                             <executable>true</executable>
+                            <%_ } _%>
                         </configuration>
                         <executions>
                             <execution>
