@@ -1,3 +1,5 @@
+const tsconfig = require('../../../tsconfig.json');
+
 module.exports = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
@@ -10,10 +12,9 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '<rootDir>/src/test/javascript'
   ],
-  moduleNameMapper: {
-    'app/(.*)': '<rootDir>/<%= CLIENT_MAIN_SRC_DIR %>app/$1',
+  moduleNameMapper: addAliasesFromTypescriptConfig({
     '\\.(css|scss)$': 'identity-obj-proxy'
-  },
+  }),
   reporters: [
     'default',
     [ 'jest-junit', { output: './<%= BUILD_DIR %>test-results/TESTS-results-jest.xml' } ]
@@ -34,3 +35,12 @@ module.exports = {
     }
   }
 };
+
+function addAliasesFromTypescriptConfig(initialAliases) {
+  return Object.keys(tsconfig.compilerOptions.paths).reduce((aliases, aliasName) => {
+    const finalAliasName = aliasName.replace(/(.*)(\/\*)$/, '$1/(.*)');
+    const finalPath = tsconfig.compilerOptions.paths[aliasName][0].replace(/(.*)(\/\*)$/, '$1/\$ 1').replace(/\/\$ 1$/, '/$1');
+    aliases[finalAliasName] = `<rootDir>/${finalPath}`;
+    return aliases;
+  }, initialAliases);
+}
