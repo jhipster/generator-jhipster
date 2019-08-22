@@ -230,7 +230,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <%_ } _%>
           {
             <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?(
-              <Table responsive>
+              <Table responsive aria-describedby="<%= entityFileName %>-heading">
                 <thead>
                   <tr>
                     <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
