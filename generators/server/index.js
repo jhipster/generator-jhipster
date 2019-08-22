@@ -115,6 +115,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
                 this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
                 this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+                this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
 
                 this.JAVA_VERSION = constants.JAVA_VERSION;
 
@@ -194,6 +195,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = configuration.get('jhipsterVersion');
                 }
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 this.authenticationType = configuration.get('authenticationType');
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
@@ -206,6 +209,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.uaaBaseName = uaaBaseName;
                 }
                 this.clientFramework = configuration.get('clientFramework');
+                this.clientTheme = configuration.get('clientTheme');
                 const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;

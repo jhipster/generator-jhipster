@@ -652,7 +652,7 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> getUserWithAuthorities(<%= pkType %> id) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> getUserWithAuthorities(<% if (pkType === 'UUID') { %>String<% } else { %><%= pkType %><% } %> id) {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesById(id);
         <%_ } else { // MongoDB, Couchbase and and Cassandra _%>

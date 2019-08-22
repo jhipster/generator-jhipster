@@ -81,8 +81,8 @@ export class SessionsPage extends React.Component<ISessionsProps> {
             </thead>
 
             <tbody>
-            {sessions.map(s => (
-              <tr>
+            {sessions.map((s, index) => (
+              <tr key={index}>
                 <td>{s.ipAddress}</td>
                 <td>{s.userAgent}</td>
                 <td>{s.tokenDate}</td>

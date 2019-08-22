@@ -35,20 +35,35 @@ jhipster:
         logs: # report metrics in the logs
             enabled: true
             report-frequency: 60 # in seconds
-  <%_ if (consoleOptions.includes('zipkin')) { _%>
+<%_ } _%>
+
+<%_ if (consoleOptions && consoleOptions.includes('zipkin') || !skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
 spring:
+    <%_ if (consoleOptions && consoleOptions.includes('zipkin')) {_%>
     zipkin:
         base-url: http://jhipster-zipkin:9411
         enabled: true
     sleuth:
         sampler:
             probability: 1 # report 100% of traces to Zipkin
-  <%_ } _%>
+    <%_ } _%>
+    <%_ if (!skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
+    cloud:
+        consul:
+            discovery:
+                tags:
+                    - traefik.enable=true
+                    - traefik.frontend.login.rule=PathPrefix:/login
+                    - traefik.frontend.login.priority=1001
+                    - traefik.frontend.oauth.rule=PathPrefix:/oauth2
+                    - traefik.frontend.oauth.priority=1001
+    <%_ } _%>
 <%_ } _%>
-
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
         service-url:
             defaultZone: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
 <%_ } _%>
+
+

@@ -166,6 +166,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.testFrameworks = configuration.get('testFrameworks');
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 // backward compatibility on testing frameworks
                 if (context.testFrameworks === undefined) {
                     context.testFrameworks = ['gatling'];
@@ -1090,6 +1092,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityName = context.name;
                 if (this.isJhipsterVersionLessThan('5.0.0')) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
+                }
+                if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === 'angularX') {
+                    this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
                 }
             },
 

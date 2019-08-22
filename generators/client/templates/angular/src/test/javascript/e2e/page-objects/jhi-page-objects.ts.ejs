@@ -5,6 +5,7 @@ let elementGetter = `getText()`;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
 } _%>
+/* eslint @typescript-eslint/no-use-before-define: 0 */
 export class NavBarPage {
     entityMenu = element(by.id('entity-menu'));
     accountMenu = element(by.id('account-menu'));
