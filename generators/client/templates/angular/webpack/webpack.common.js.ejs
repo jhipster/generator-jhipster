@@ -26,7 +26,6 @@ const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 
 const packageJson = require('./../package.json');
 <%_ } _%>
-const tsconfig = require('../tsconfig.json');
 const utils = require('./utils.js');
 
 module.exports = (options) => ({
@@ -34,12 +33,7 @@ module.exports = (options) => ({
         extensions: ['.ts', '.js'],
         modules: ['node_modules'],
         mainFields: [ 'es2015', 'browser', 'module', 'main'],
-        alias: Object.keys(tsconfig.compilerOptions.paths).reduce((aliases, aliasName) => {
-          const finalAliasName = aliasName.replace(/\/\*$/, '');
-          const finalPath = tsconfig.compilerOptions.paths[aliasName][0].replace(/\/\*$/, '');
-          aliases[finalAliasName] = utils.root(finalPath);
-          return aliases;
-        }, {})
+        alias: utils.addAliasesFromTypescriptConfig({})
     },
     stats: {
         children: false

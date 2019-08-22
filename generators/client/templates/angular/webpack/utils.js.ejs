@@ -18,8 +18,11 @@
 -%>
 const path = require('path');
 
+const tsconfig = require('../tsconfig.json');
+
 module.exports = {
-    root
+    root,
+    addAliasesFromTypescriptConfig
 };
 
 const _root = path.resolve(__dirname, '..');
@@ -27,4 +30,13 @@ const _root = path.resolve(__dirname, '..');
 function root(args) {
   args = Array.prototype.slice.call(arguments, 0);
   return path.join.apply(path, [_root].concat(args));
+}
+
+function addAliasesFromTypescriptConfig(initialAliases) {
+  return Object.keys(tsconfig.compilerOptions.paths).reduce((aliases, aliasName) => {
+    const finalAliasName = aliasName.replace(/\/\*$/, '');
+    const finalPath = tsconfig.compilerOptions.paths[aliasName][0].replace(/\/\*$/, '');
+    aliases[finalAliasName] = root(finalPath);
+    return aliases;
+  }, initialAliases);
 }
