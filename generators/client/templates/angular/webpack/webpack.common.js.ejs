@@ -33,7 +33,7 @@ module.exports = (options) => ({
         extensions: ['.ts', '.js'],
         modules: ['node_modules'],
         mainFields: [ 'es2015', 'browser', 'module', 'main'],
-        alias: utils.addAliasesFromTypescriptConfig({})
+        alias: utils.mapTypescriptAliasToWebpackAlias()
     },
     stats: {
         children: false

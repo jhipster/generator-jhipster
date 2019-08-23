@@ -70,7 +70,7 @@ module.exports = options => ({
       '.js', '.jsx', '.ts', '.tsx', '.json'
     ],
     modules: ['node_modules'],
-    alias: utils.addAliasesFromTypescriptConfig({})
+    alias: utils.mapTypescriptAliasToWebpackAlias()
   },
   module: {
     rules: [
