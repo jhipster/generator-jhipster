@@ -94,17 +94,17 @@ export class JhiMetricsSystemComponent {
             minute: 60000,
             second: 1000
         };
-        let time_string = '';
+        let timeString = '';
         for (const key in times) {
             if (Math.floor(ms / times[key]) > 0) {
                 let plural = '';
                 if (Math.floor(ms / times[key]) > 1) {
                     plural = 's';
                 }
-                time_string += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
+                timeString += Math.floor(ms / times[key]).toString() + ' ' + key.toString() + plural + ' ';
                 ms = ms - times[key] * Math.floor(ms / times[key]);
             }
         }
-        return time_string;
+        return timeString;
     }
 }

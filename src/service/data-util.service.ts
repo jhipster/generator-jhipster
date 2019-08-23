@@ -89,10 +89,10 @@ export class JhiDataUtils {
      */
     clearInputImage(entity: any, elementRef: ElementRef, field: string, fieldContentType: string, idInput: string) {
         if (entity && field && fieldContentType) {
-            if (entity.hasOwnProperty(field)) {
+            if (Object.prototype.hasOwnProperty.call(entity, field)) {
                 entity[field] = null;
             }
-            if (entity.hasOwnProperty(fieldContentType)) {
+            if (Object.prototype.hasOwnProperty.call(entity, fieldContentType)) {
                 entity[fieldContentType] = null;
             }
             if (elementRef && idInput && elementRef.nativeElement.querySelector('#' + idInput)) {
@@ -114,8 +114,8 @@ export class JhiDataUtils {
     setFileData(event, entity, field: string, isImage: boolean): Promise<any> {
         return new Promise((resolve, reject) => {
             if (event && event.target && event.target.files && event.target.files[0]) {
-                const file = event.target.files[0];
-                if (isImage && !/^image\//.test(file.type)) {
+                const file: File = event.target.files[0];
+                if (isImage && !file.type.startsWith('image/')) {
                     reject(`File was expected to be an image but was found to be ${file.type}`);
                 } else {
                     this.toBase64(file, base64Data => {
@@ -151,7 +151,7 @@ export class JhiDataUtils {
     }
 
     private endsWith(suffix: string, str: string): boolean {
-        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+        return str.includes(suffix, str.length - suffix.length);
     }
 
     private paddingSize(value: string): number {
