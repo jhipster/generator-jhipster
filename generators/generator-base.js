@@ -1894,6 +1894,7 @@ module.exports = class extends PrivateBase {
         dest.clientPackageManager = context.configOptions.clientPackageManager;
         dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
         dest.experimental = context.configOptions.experimental || context.options.experimental;
+        dest.embeddableLaunchScript = context.configOptions.embeddableLaunchScript || false;
 
         const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
         if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {

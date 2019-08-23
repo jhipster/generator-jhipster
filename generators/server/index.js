@@ -208,9 +208,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (uaaBaseName) {
                     this.uaaBaseName = uaaBaseName;
                 }
-                this.embeddableLaunchScript = configuration.get('embeddableLaunchScript');
-                if (this.embeddableLaunchScript) {
-                    this.embeddableLaunchScript = false;
+                const embeddableLaunchScript = configuration.get('embeddableLaunchScript');
+                if (embeddableLaunchScript) {
+                    this.embeddableLaunchScript = embeddableLaunchScript;
                 }
                 this.clientFramework = configuration.get('clientFramework');
                 this.clientTheme = configuration.get('clientTheme');
