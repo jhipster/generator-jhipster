@@ -286,7 +286,7 @@ module.exports = class extends BaseGenerator {
                     this.otherModules.push(...this.blueprints);
                 }
                 this.javaVersion = this.config.get('javaVersion');
-                this.useJacksonBlackBird = this.config.get('userJacksonBlackBird');
+                this.useJacksonBlackBird = this.config.get('useJacksonBlackBird');
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.enableTranslation = this.config.get('enableTranslation');
                 this.nativeLanguage = this.config.get('nativeLanguage');
