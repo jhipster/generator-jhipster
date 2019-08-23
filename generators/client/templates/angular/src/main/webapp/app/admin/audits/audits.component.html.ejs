@@ -40,7 +40,7 @@
         <span jhiTranslate="audits.notFound">No audit found</span>
     </div>
     <div class="table-responsive" *ngIf="audits?.length > 0">
-        <table class="table table-sm table-striped" aria-describedby="Audit Table">
+        <table class="table table-sm table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
                 <th id="auditEventDate" jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span><fa-icon [icon]="'sort'"></fa-icon></th>
