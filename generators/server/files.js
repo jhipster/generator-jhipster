@@ -771,6 +771,15 @@ const serverFiles = {
             condition: generator => !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [{ file: 'package/ApplicationWebXml.java', renameTo: generator => `${generator.javaDir}ApplicationWebXml.java` }]
+        },
+        {
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/ArchTest.java',
+                    renameTo: generator => `${generator.testDir}ArchTest.java`
+                }
+            ]
         }
     ],
     serverJavaConfig: [
