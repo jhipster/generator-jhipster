@@ -42,7 +42,6 @@ import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.util.RandomUtil;
-import <%=packageName%>.web.rest.errors.*;
 <%_ } _%>
 
 <%_ if (databaseType !== 'no') { _%>

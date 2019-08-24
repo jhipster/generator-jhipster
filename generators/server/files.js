@@ -1026,6 +1026,26 @@ const serverFiles = {
             ]
         }
     ],
+    serverJavaServiceError: [
+        {
+            condition: generator => !generator.skipUserManagement,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/service/EmailAlreadyUsedException.java',
+                    renameTo: generator => `${generator.javaDir}service/EmailAlreadyUsedException.java`
+                },
+                {
+                    file: 'package/service/InvalidPasswordException.java',
+                    renameTo: generator => `${generator.javaDir}service/InvalidPasswordException.java`
+                },
+                {
+                    file: 'package/service/LoginAlreadyUsedException.java',
+                    renameTo: generator => `${generator.javaDir}service/LoginAlreadyUsedException.java`
+                }
+            ]
+        }
+    ],
     serverJavaService: [
         {
             path: SERVER_MAIN_SRC_DIR,

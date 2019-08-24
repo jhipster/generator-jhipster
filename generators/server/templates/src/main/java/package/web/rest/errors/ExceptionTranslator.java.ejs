@@ -160,7 +160,25 @@ _%>
         return create(ex, problem, request);
     }
     <%_ } _%>
+    <%_ if (!skipUserManagement) { _%>
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleEmailAreadyUsedException(<%=packageName%>.service.EmailAlreadyUsedException ex, NativeWebRequest request) {
+        EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName, true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    }
 
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleLoginAreadyUsedException(<%=packageName%>.service.LoginAlreadyUsedException ex, NativeWebRequest request) {
+        LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName, true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleInvalidPasswordException(<%=packageName%>.service.InvalidPasswordException ex, NativeWebRequest request) {
+        InvalidPasswordException problem = new InvalidPasswordException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName, true, null, null, problem.getMessage()));
+    }
+    <%_ } _%>
     @ExceptionHandler
     public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
         return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
