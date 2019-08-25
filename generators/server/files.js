@@ -1040,8 +1040,8 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}service/InvalidPasswordException.java`
                 },
                 {
-                    file: 'package/service/LoginAlreadyUsedException.java',
-                    renameTo: generator => `${generator.javaDir}service/LoginAlreadyUsedException.java`
+                    file: 'package/service/UsernameAlreadyUsedException.java',
+                    renameTo: generator => `${generator.javaDir}service/UsernameAlreadyUsedException.java`
                 }
             ]
         }

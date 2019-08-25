@@ -168,7 +168,7 @@ _%>
     }
 
     @ExceptionHandler
-    public <%- returnType %> handleLoginAreadyUsedException(<%=packageName%>.service.LoginAlreadyUsedException ex, <%= requestClass %> request) {
+    public <%- returnType %> handleUsernameAreadyUsedException(<%=packageName%>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
