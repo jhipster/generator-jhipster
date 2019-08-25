@@ -72,11 +72,6 @@ const serverFiles = {
             templates: ['mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js']
         },
         {
-            condition: generator => generator.prodDatabaseType === 'mongodb',
-            path: DOCKER_DIR,
-            templates: ['mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js']
-        },
-        {
             condition: generator => generator.prodDatabaseType === 'couchbase',
             path: DOCKER_DIR,
             templates: ['couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh']
