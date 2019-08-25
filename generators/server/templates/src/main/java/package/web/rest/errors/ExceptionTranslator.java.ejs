@@ -175,8 +175,7 @@ _%>
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleInvalidPasswordException(<%=packageName%>.service.InvalidPasswordException ex, NativeWebRequest request) {
-        InvalidPasswordException problem = new InvalidPasswordException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName, true, null, null, problem.getMessage()));
+        return create(new InvalidPasswordException(), request);
     }
     <%_ } _%>
     @ExceptionHandler
