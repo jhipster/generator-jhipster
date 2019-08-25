@@ -164,13 +164,13 @@ _%>
     @ExceptionHandler
     public <%- returnType %> handleEmailAreadyUsedException(<%=packageName%>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName, true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
     public <%- returnType %> handleLoginAreadyUsedException(<%=packageName%>.service.LoginAlreadyUsedException ex, <%= requestClass %> request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName, true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
