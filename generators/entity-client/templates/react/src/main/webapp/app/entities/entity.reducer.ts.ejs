@@ -117,6 +117,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
       <%_ if (pagination === 'infinite-scroll') { _%>
+      {
       const links = parseHeaderForLinks(action.payload.headers.link);
       <%_ } _%>
 
@@ -137,6 +138,9 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
           <%_ } _%>
         <%_ } _%>
       };
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    }
+    <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
@@ -159,7 +163,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         entity: {}
       };
     <%_ if (fieldsContainBlob) { _%>
-    case ACTION_TYPES.SET_BLOB:
+    case ACTION_TYPES.SET_BLOB: {
       const { name, data, contentType } = action.payload;
       return {
         ...state,
@@ -169,6 +173,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
           [name + 'ContentType']: contentType
         }
       };
+    }
     <%_ } _%>
     case ACTION_TYPES.RESET:
       return {

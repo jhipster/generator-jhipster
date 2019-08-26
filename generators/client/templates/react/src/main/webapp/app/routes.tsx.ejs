@@ -37,7 +37,6 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
 
-// tslint:disable:space-in-parens
 <%_ if (!skipUserManagement) { _%>
 const Account = Loadable({
   loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
@@ -49,7 +48,6 @@ const Admin = Loadable({
   loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
   loading: () => <div>loading ...</div>
 });
-// tslint:enable
 
 const Routes = () => (
   <div className="view-routes">

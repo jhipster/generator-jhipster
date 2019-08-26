@@ -40,7 +40,7 @@ public class ExceptionTranslatorTestController {
     <%_ } _%>
 
     @PostMapping("/test/method-argument")
-    public void methodArgument(@Valid @RequestBody TestDTO testDTO) {
+    public void methodArgument(@Valid @RequestBody Test<%= dtoSuffix %> test<%= dtoSuffix %>) {
     }
 
     @GetMapping("/test/missing-servlet-request-part")
@@ -71,7 +71,7 @@ public class ExceptionTranslatorTestController {
         throw new RuntimeException();
     }
 
-    public static class TestDTO {
+    public static class Test<%= dtoSuffix %> {
 
         @NotNull
         private String test;

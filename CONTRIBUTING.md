@@ -107,13 +107,13 @@ Before you submit your pull request consider the following guidelines:
 -   Generate a new JHipster project, and ensure that all tests pass
 
     ```shell
-    mvn verify -Pprod
+    mvnw verify -Pprod
     ```
 
 -   Test that the new project runs correctly:
 
     ```shell
-    mvn spring-boot:run
+    mvnw spring-boot:run
     ```
 
 -   You can generate our Continuous Integration (with Travis CI and Azure Pipelines) by following [this](#local-build)
