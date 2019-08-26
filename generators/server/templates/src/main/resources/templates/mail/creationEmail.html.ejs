@@ -13,7 +13,7 @@
             Your JHipster account has been created, please click on the URL below to access it:
         </p>
         <p>
-            <a th:with="url=(@{|${baseUrl}/reset/finish?key=${user.resetKey}|})" th:href="${url}"
+            <a th:with="url=(@{|${baseUrl}/account/reset/finish?key=${user.resetKey}|})" th:href="${url}"
             th:text="${url}">Login link</a>
         </p>
         <p>
