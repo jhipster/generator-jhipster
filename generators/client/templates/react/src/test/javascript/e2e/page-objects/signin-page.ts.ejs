@@ -22,7 +22,7 @@ export default class SignInPage extends BasePage {
   }
 
   async get() {
-    await browser.get('/account/login');
+    await browser.get('/login');
     await this.waitUntilDisplayed();
   }
 
@@ -63,7 +63,7 @@ export default class SignInPage extends BasePage {
   <%_ } _%>
 
   async autoSignOut() {
-    await browser.get('/account/logout');
+    await browser.get('/logout');
   }
 
   async login() {
