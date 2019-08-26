@@ -101,10 +101,78 @@ module.exports = class extends PrivateBase {
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
     addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
-        if (this.clientFramework === 'angularX') {
+        if (clientFramework === 'angularX') {
             this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
-        } else if (this.clientFramework === 'react') {
+        } else if (clientFramework === 'react') {
             this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+        }
+    }
+
+    /**
+     * Add a new entity in the "entities" menu.
+     *
+     * @param {string} routerName - The name of the Angular router (which by default is the name of the entity).
+     * @param {boolean} enableTranslation - If translations are enabled or not
+     * @param {string} clientFramework - The name of the client framework
+     * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
+     */
+    addElementToAnyMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu, entityModule) {
+        if (entityModule === undefined || entityModule === 'entities') {
+            this.addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu);
+        } else if (entityModule === 'admin') {
+            this.addElementToAdminMenu(routerName, 'asterisk', enableTranslation, clientFramework, entityTranslationKeyMenu);
+        } else {
+            this.log(`Entry ${routerName} not added to module ${entityModule}`);
+        }
+    }
+
+    /**
+     * Add a new entry in the TS modules file.
+     *
+     * @param {string} entityInstance - Entity Instance
+     * @param {string} entityClass - Entity Class
+     * @param {string} entityName - Entity Name
+     * @param {string} entityFolderName - Entity Folder Name
+     * @param {string} entityFileName - Entity File Name
+     * @param {boolean} entityUrl - Entity router URL
+     * @param {string} clientFramework - The name of the client framework
+     * @param {string} microServiceName - Microservice Name
+     */
+    addEntityToAnyModule(
+        entityInstance,
+        entityClass,
+        entityName,
+        entityFolderName,
+        entityFileName,
+        entityStateName,
+        clientFramework,
+        microServiceName,
+        entityModule
+    ) {
+        if (entityModule === undefined || entityModule === 'entities') {
+            this.addEntityToModule(
+                entityInstance,
+                entityClass,
+                entityName,
+                entityFolderName,
+                entityFileName,
+                entityStateName,
+                clientFramework,
+                microServiceName
+            );
+        } else if (entityModule === 'admin') {
+            this.addEntityToModule(
+                entityInstance,
+                entityClass,
+                entityName,
+                entityFolderName,
+                entityFileName,
+                entityStateName,
+                clientFramework,
+                microServiceName
+            );
+        } else {
+            this.log(`Entry ${entityStateName} not added to module ${entityModule}`);
         }
     }
 
@@ -116,7 +184,7 @@ module.exports = class extends PrivateBase {
      * @param {string} entityName - Entity Name
      * @param {string} entityFolderName - Entity Folder Name
      * @param {string} entityFileName - Entity File Name
-     * @param {boolean} entityUrl - Entity router URL
+     * @param {boolean} entityStateName - Entity router URL
      * @param {string} clientFramework - The name of the client framework
      * @param {string} microServiceName - Microservice Name
      */
@@ -126,7 +194,7 @@ module.exports = class extends PrivateBase {
         entityName,
         entityFolderName,
         entityFileName,
-        entityUrl,
+        entityStateName,
         clientFramework,
         microServiceName
     ) {
@@ -137,7 +205,7 @@ module.exports = class extends PrivateBase {
                 entityName,
                 entityFolderName,
                 entityFileName,
-                entityUrl,
+                entityStateName,
                 microServiceName
             );
         } else if (clientFramework === 'react') {
@@ -146,7 +214,44 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a new admin in the TS modules file.
+     * Add a new entry in the admin TS modules file.
+     *
+     * @param {string} entityInstance - Entity Instance
+     * @param {string} entityClass - Entity Class
+     * @param {string} entityName - Entity Name
+     * @param {string} entityFolderName - Entity Folder Name
+     * @param {string} entityFileName - Entity File Name
+     * @param {boolean} entityUrl - Entity router URL
+     * @param {string} clientFramework - The name of the client framework
+     * @param {string} microServiceName - Microservice Name
+     */
+    addEntityToAdminModule(
+        entityInstance,
+        entityClass,
+        entityName,
+        entityFolderName,
+        entityFileName,
+        entityStateName,
+        clientFramework,
+        microServiceName
+    ) {
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addEntityToAdminModule(
+                entityInstance,
+                entityClass,
+                entityName,
+                entityFolderName,
+                entityFileName,
+                entityStateName,
+                microServiceName
+            );
+        } else {
+            this.log(`${chalk.yellow('addEntityToAdminModule ')} not implemented in ${clientFramework}`);
+        }
+    }
+
+    /**
+     * Add a new entry in the admin TS modules file.
      *
      * @param {string} appName - Angular2 application name.
      * @param {string} adminAngularName - The name of the new admin item.
@@ -197,6 +302,23 @@ module.exports = class extends PrivateBase {
      */
     addEntityTranslationKey(key, value, language) {
         this.needleApi.clientI18n.addEntityTranslationKey(key, value, language);
+    }
+
+    /**
+     * Add a new menu entry in the "global.json" translations.
+     *
+     * @param {string} key - Key for the entity name
+     * @param {string} value - Default translated value
+     * @param {string} language - The language to which this translation should be added
+     */
+    addMenuTranslationKey(key, value, language, entityModule) {
+        if (entityModule === undefined || entityModule === 'entities') {
+            this.addEntityTranslationKey(key, value, language);
+        } else if (entityModule === 'admin') {
+            this.addAdminElementTranslationKey(key, value, language);
+        } else {
+            this.log(`Entry ${key} not added to translation on module ${entityModule}`);
+        }
     }
 
     /**

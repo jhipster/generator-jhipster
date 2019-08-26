@@ -171,8 +171,64 @@ module.exports = class extends needleClientBase {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
-        const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
+    addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityStateName, microServiceName) {
+        this.addEntityToAnyModule(
+            entityInstance,
+            entityClass,
+            entityAngularName,
+            entityFolderName,
+            entityFileName,
+            entityStateName,
+            microServiceName,
+            {
+                entityModulePath: `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
+                needleName: 'jhipster-needle-add-entity-route'
+            }
+        );
+    }
+
+    addEntityToAdminModule(
+        entityInstance,
+        entityClass,
+        entityAngularName,
+        entityFolderName,
+        entityFileName,
+        entityStateName,
+        microServiceName
+    ) {
+        this.addEntityToAnyModule(
+            entityInstance,
+            entityClass,
+            entityAngularName,
+            entityFolderName,
+            entityFileName,
+            entityStateName,
+            microServiceName,
+            {
+                entityModulePath: `${CLIENT_MAIN_SRC_DIR}app/admin/admin.route.ts`,
+                needleName: 'jhipster-needle-add-admin-route',
+                aditionalRouteOptions: `data: {
+                    |            authorities: ['ROLE_ADMIN']
+                    |        },
+                    |        canActivate: [UserRouteAccessService],
+                    |        `,
+                addComma: true
+            }
+        );
+    }
+
+    addEntityToAnyModule(
+        entityInstance,
+        entityClass,
+        entityAngularName,
+        entityFolderName,
+        entityFileName,
+        entityStateName,
+        microServiceName,
+        options
+    ) {
+        const entityModulePath = options.entityModulePath;
+        const needleName = options.needleName;
         const errorMessage = `${chalk.yellow('Reference to ') +
             entityInstance +
             entityClass +
@@ -182,33 +238,26 @@ module.exports = class extends needleClientBase {
         try {
             const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
                 entityModulePath,
-                `path: '${entityUrl}'`,
+                `path: '${entityStateName}'`,
                 this.generator
             );
 
             if (!isSpecificEntityAlreadyGenerated) {
                 const appName = this.generator.getAngularXAppName();
-                const isAnyEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this.generator);
+                const addComma = options.addComma || jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this.generator);
 
                 const modulePath = `./${entityFolderName}/${entityFileName}.module`;
                 const moduleName = microServiceName
                     ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
                     : `${appName}${entityAngularName}Module`;
 
-                const splicable = isAnyEntityAlreadyGenerated
-                    ? `|,{
-                            |                path: '${entityUrl}',
-                            |                loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
-                            |            }`
-                    : `|{
-                                |                path: '${entityUrl}',
-                                |                loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
-                                |            }`;
-                const rewriteFileModel = this.generateFileModel(
-                    entityModulePath,
-                    'jhipster-needle-add-entity-route',
-                    this.generator.stripMargin(splicable)
-                );
+                let splicable = addComma ? ',' : '';
+                const aditionalRouteOptions = options.aditionalRouteOptions || '';
+                splicable = `|            ${splicable}{
+                    |                path: '${entityStateName}',
+                    |                ${aditionalRouteOptions}loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
+                    |            }`;
+                const rewriteFileModel = this.generateFileModel(entityModulePath, needleName, this.generator.stripMargin(splicable));
 
                 this.addBlockContentToFile(rewriteFileModel, errorMessage);
             }

@@ -674,6 +674,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.entityReactName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
                 context.entityStateName = _.kebabCase(context.entityAngularName);
                 context.entityUrl = context.entityStateName;
+                if (context.entityModule !== undefined && context.entityModule !== 'entities') {
+                    context.entityUrl = `${context.entityModule}/${context.entityStateName}`;
+                }
                 context.entityTranslationKey = context.clientRootFolder
                     ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`)
                     : context.entityInstance;

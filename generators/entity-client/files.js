@@ -255,15 +255,16 @@ function writeFiles() {
                     false,
                     this.fetchFromInstalledJHipster(`entity-client/templates/${CLIENT_NG2_TEMPLATES_DIR}`)
                 );
-                this.addEntityToModule(
+                this.addEntityToAnyModule(
                     this.entityInstance,
                     this.entityClass,
                     this.entityAngularName,
                     this.entityFolderName,
                     this.entityFileName,
-                    this.entityUrl,
+                    this.entityStateName,
                     this.clientFramework,
-                    this.microserviceName
+                    this.microserviceName,
+                    this.entityModule
                 );
 
                 addEnumerationFiles(this, CLIENT_NG2_TEMPLATES_DIR, ANGULAR_DIR);
@@ -275,19 +276,28 @@ function writeFiles() {
                     false,
                     this.fetchFromInstalledJHipster(`entity-client/templates/${CLIENT_REACT_TEMPLATES_DIR}`)
                 );
-                this.addEntityToModule(
+                this.addEntityToAnyModule(
                     this.entityInstance,
                     this.entityClass,
                     this.entityAngularName,
                     this.entityFolderName,
                     this.entityFileName,
-                    this.entityUrl,
-                    this.clientFramework
+                    this.entityStateName,
+                    this.clientFramework,
+                    undefined,
+                    this.entityModule
                 );
 
                 addEnumerationFiles(this, CLIENT_REACT_TEMPLATES_DIR, REACT_DIR);
             }
-            this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+
+            this.addElementToAnyMenu(
+                this.entityUrl,
+                this.enableTranslation,
+                this.clientFramework,
+                this.entityTranslationKeyMenu,
+                this.entityModule
+            );
         }
     };
 }
