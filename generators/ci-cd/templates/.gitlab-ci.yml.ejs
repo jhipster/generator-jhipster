@@ -101,6 +101,8 @@ frontend-test:
 <%_ if (cicdIntegrations.includes('sonar')) { _%>
 sonar-analyze:
     stage: analyze
+    except:
+        - merge_requests
     dependencies:
         - gradle-test
         - gradle-integration-test
