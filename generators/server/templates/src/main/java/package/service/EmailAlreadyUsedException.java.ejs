@@ -16,6 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export * from './home.component';
-export * from './home.route';
-export * from './home.module';
+package <%=packageName%>.service;
+
+public class EmailAlreadyUsedException extends RuntimeException {
+
+    public EmailAlreadyUsedException() {
+        super("Email is already in use!");
+    }
+
+}

@@ -832,9 +832,9 @@ module.exports = class extends Generator {
         }
 
         // Path to the yo cli script in generator-jhipster's node_modules
-        const yoInternalCliPath = `${__dirname}/../node_modules/yo/lib/cli.js`;
+        const yoInternalCliPath = path.join(__dirname, '../node_modules/yo/lib/cli.js');
 
-        shelljs.exec(`${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
+        shelljs.exec(`node ${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
             if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
                 this.error(
                     `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(

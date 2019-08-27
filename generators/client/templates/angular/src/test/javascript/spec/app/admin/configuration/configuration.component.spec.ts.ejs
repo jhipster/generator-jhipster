@@ -18,13 +18,10 @@ limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from 'app/admin/configuration/configuration.component';
 import { <%=jhiPrefixCapitalized%>ConfigurationService } from 'app/admin/configuration/configuration.service';
-import { ITEMS_PER_PAGE } from 'app/shared';
-import { Log } from 'app/admin';
 
 describe('Component Tests', () => {
     describe('<%=jhiPrefixCapitalized%>ConfigurationComponent', () => {

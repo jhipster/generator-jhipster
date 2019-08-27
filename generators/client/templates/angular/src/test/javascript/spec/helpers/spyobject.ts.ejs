@@ -44,6 +44,7 @@ export class SpyObject {
         return object;
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     constructor(type = null) {
         if (type) {
             Object.keys(type.prototype).forEach((prop) => {
@@ -76,10 +77,10 @@ export class SpyObject {
 
     /** @internal */
     _createGuinnessCompatibleSpy(name): GuinessCompatibleSpy {
-        const newSpy: GuinessCompatibleSpy = < any > jasmine.createSpy(name);
-        newSpy.andCallFake = < any > newSpy.and.callFake;
-        newSpy.andReturn = < any > newSpy.and.returnValue;
-        newSpy.reset = < any > newSpy.calls.reset;
+        const newSpy: GuinessCompatibleSpy = jasmine.createSpy(name) as any;
+        newSpy.andCallFake = newSpy.and.callFake as any;
+        newSpy.andReturn = newSpy.and.returnValue as any;
+        newSpy.reset = newSpy.calls.reset as any;
         // revisit return null here (previously needed for rtts_assert).
         newSpy.and.returnValue(null);
         return newSpy;
