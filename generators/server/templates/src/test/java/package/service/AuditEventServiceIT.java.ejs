@@ -29,6 +29,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -59,6 +62,9 @@ public class AuditEventServiceIT {
 
     @BeforeEach
     public void init() {
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
         auditEventOld = new PersistentAuditEvent();
         auditEventOld.setAuditEventDate(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod() + 1, ChronoUnit.DAYS));
         auditEventOld.setPrincipal("test-user-old");
