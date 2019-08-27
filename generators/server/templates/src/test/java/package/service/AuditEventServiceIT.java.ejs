@@ -73,8 +73,6 @@ public class AuditEventServiceIT {
         auditEventNew.setAuditEventDate(Instant.now());
         auditEventNew.setPrincipal("test-user-new");
         auditEventNew.setAuditEventType("test-type");
-
-
     }
 
     @Test
@@ -82,6 +80,7 @@ public class AuditEventServiceIT {
     @Transactional
     <%_ } _%>
     public void verifyOldAuditEventsAreDeleted() {
+        persistenceAuditEventRepository.deleteAll();
         persistenceAuditEventRepository.save(auditEventOld);
         persistenceAuditEventRepository.save(auditEventWithinRetention);
         persistenceAuditEventRepository.save(auditEventNew);
@@ -96,6 +95,5 @@ public class AuditEventServiceIT {
         assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")).isEmpty();
         assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-retention")).isNotEmpty();
         assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-new")).isNotEmpty();
-        persistenceAuditEventRepository.deleteAll();
     }
 }
