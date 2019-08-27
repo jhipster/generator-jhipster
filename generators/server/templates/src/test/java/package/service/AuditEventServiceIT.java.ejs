@@ -38,7 +38,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Integration tests for {@link AuditEventService}.
  */
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ if (databaseType === 'sql') { _%>
 @Transactional
+<%_ } _%>
 public class AuditEventServiceIT {
     @Autowired
     private AuditEventService auditEventService;
