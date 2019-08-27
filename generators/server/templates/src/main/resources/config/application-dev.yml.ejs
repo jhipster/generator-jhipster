@@ -367,8 +367,10 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
-    audit-events:
-        retention-period: 30 # Number of days before audit events are deleted.
+        <%_ if (applicationType === 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb')) { _%>
+        audit-events:
+            retention-period: 30 # Number of days before audit events are deleted.
+        <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:
