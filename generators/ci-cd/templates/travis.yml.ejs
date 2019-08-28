@@ -73,25 +73,25 @@ install:
 script:
 <%_ if (buildTool === 'maven') { _%>
   - chmod +x mvnw
-  - ./mvnw clean verify
+  - ./mvnw -ntp clean verify
 <%_ } else if (buildTool === 'gradle') { _%>
   - chmod +x gradlew
   - ./gradlew clean test integrationTest
 <%_ } _%>
 <%_ if (!skipClient) { _%>
   <%_ if (buildTool === 'maven') { _%>
-  - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
+  - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
   <%_ } else if (buildTool === 'gradle') { _%>
   - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
   <%_ } _%>
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN
   <%_ } _%>
-  - ./mvnw verify -Pprod -DskipTests
+  - ./mvnw -ntp verify -Pprod -DskipTests
   <%_ if (cicdIntegrations.includes('heroku')) { _%>
-  - ./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+  - ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
   <%_ } _%>
 <%_ } else if (buildTool === 'gradle') { _%>
   <%_ if (cicdIntegrations.includes('sonar')) { _%>

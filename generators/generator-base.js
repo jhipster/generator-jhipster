@@ -1783,7 +1783,7 @@ module.exports = class extends PrivateBase {
      * @param {Function} cb - callback when build is complete
      */
     buildApplication(buildTool, profile, buildWar, cb) {
-        let buildCmd = 'mvnw verify -DskipTests=true -B';
+        let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
             buildCmd = 'gradlew -x test';
