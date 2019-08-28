@@ -149,7 +149,7 @@ spring:
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
                 <%_ } else if (cacheProvider === 'infinispan') { _%>
             hibernate.cache.region.factory_class: <%=packageName%>.config.CacheFactoryConfiguration
-            hibernate.cache.inifinispan.statistics: false
+            hibernate.cache.infinispan.statistics: false
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
             hibernate.cache.infinispan.entity.memory.size: 1000
