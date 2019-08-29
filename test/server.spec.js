@@ -17,7 +17,7 @@ describe('JHipster server generator', () => {
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    cacheProvider: 'ehcache',
+                    cacheProvider: 'caffeine',
                     enableHibernateCache: true,
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',

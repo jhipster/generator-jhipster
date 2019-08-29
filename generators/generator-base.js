@@ -418,25 +418,25 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * Add a new entity to Ehcache, for the 2nd level cache of an entity and its relationships.
+     * Add a new entity to Caffeine, for the 2nd level cache of an entity and its relationships.
      *
      * @param {string} entityClass - the entity to cache
      * @param {array} relationships - the relationships of this entity
      * @param {string} packageName - the Java package name
      * @param {string} packageFolder - the Java package folder
      */
-    addEntityToEhcache(entityClass, relationships, packageName, packageFolder) {
-        this.addEntityToCache(entityClass, relationships, packageName, packageFolder, 'ehcache');
+    addEntityToCaffeine(entityClass, relationships, packageName, packageFolder) {
+        this.addEntityToCache(entityClass, relationships, packageName, packageFolder, 'caffeine');
     }
 
     /**
-     * Add a new entry to Ehcache in CacheConfiguration.java
+     * Add a new entry to Caffeine in CacheConfiguration.java
      *
      * @param {string} entry - the entry (including package name) to cache
      * @param {string} packageFolder - the Java package folder
      */
-    addEntryToEhcache(entry, packageFolder) {
-        this.addEntryToCache(entry, packageFolder, 'ehcache');
+    addEntryToCaffeine(entry, packageFolder) {
+        this.addEntryToCache(entry, packageFolder, 'caffeine');
     }
 
     /**

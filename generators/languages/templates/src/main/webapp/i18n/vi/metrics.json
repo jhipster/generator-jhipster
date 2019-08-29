@@ -69,8 +69,8 @@
                 "p99": "99%"
             }
         },
-        "ehcache": {
-            "title": "Thống kê Ehcache",
+        "caffeine": {
+            "title": "Thống kê Caffeine",
             "cachename": "Tên cache",
             "objects": "Các đối tượng",
             "hits": "Tìm thấy",

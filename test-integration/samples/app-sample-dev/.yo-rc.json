@@ -5,7 +5,7 @@
         "packageName": "io.github.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "authenticationType": "jwt",
-        "cacheProvider": "ehcache",
+        "cacheProvider": "caffeine",
         "enableHibernateCache": true,
         "websocket": false,
         "databaseType": "sql",

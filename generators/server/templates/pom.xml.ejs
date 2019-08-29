@@ -126,10 +126,10 @@
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version>0.2.0</jackson-databind-nullable.version>
 <%_ } _%>
-<%_ if (cacheProvider === 'ehcache') { _%>
+<%_ if (cacheProvider === 'caffeine') { _%>
         <caffeine.version>2.8.0</caffeine.version>
         <jcache.version>2.8.0</jcache.version>
-        <config.version>1.3.4</config.version>
+        <typesafe.version>1.3.4</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
@@ -345,7 +345,7 @@
             <artifactId>encryption</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(cacheProvider)) { _%>
+<%_ if (['caffeine', 'hazelcast', 'infinispan', 'memcached'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
@@ -415,7 +415,7 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-<%_ if (cacheProvider === 'ehcache') { _%>
+<%_ if (cacheProvider === 'caffeine') { _%>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
@@ -427,6 +427,7 @@
         <dependency>
             <groupId>com.typesafe</groupId>
             <artifactId>config</artifactId>
+            <version>${typesafe.version}</version>
         </dependency>
     <%_ if (enableHibernateCache) { _%>
         <dependency>

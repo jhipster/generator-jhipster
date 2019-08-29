@@ -70,7 +70,7 @@
             }
         },
         "cache": {
-            "title": "Ehcache 統計資料",
+            "title": "Caffeine 統計資料",
             "cachename": "快取名稱",
             "hits": "快取命中計數",
             "misses": "快取遺漏計數",

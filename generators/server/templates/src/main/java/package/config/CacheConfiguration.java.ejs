@@ -18,8 +18,10 @@
 -%>
 package <%=packageName%>.config;
 
-<%_ if (cacheProvider === 'ehcache') { _%>
+<%_ if (cacheProvider === 'caffeine') { _%>
 import com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration;
+import java.util.OptionalLong;
+import java.util.concurrent.TimeUnit;
 
     <%_ if (enableHibernateCache) { _%>
 import org.hibernate.cache.jcache.ConfigSettings;
@@ -41,7 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
     <%_ } _%>
 <%_ } _%>
-<%_ if (cacheProvider === 'ehcache') { _%>
+<%_ if (cacheProvider === 'caffeine') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
     <%_ if (enableHibernateCache) { _%>
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
@@ -138,17 +140,16 @@ import io.github.jhipster.config.JHipsterProperties;
 @Import(InfinispanEmbeddedCacheManagerAutoConfiguration.class)
 <%_ } _%>
 public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implements DisposableBean<% } %> {
-    <%_ if (cacheProvider === 'ehcache') { _%>
+    <%_ if (cacheProvider === 'caffeine') { _%>
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        JHipsterProperties.Cache.Ehcache ehcache =
-        jHipsterProperties.getCache().getEhcache();
-
+        JHipsterProperties.Cache.Caffeine caffeine = jHipsterProperties.getCache().getCaffeine();
         CaffeineConfiguration caffeineConfiguration = new CaffeineConfiguration();
-        caffeineConfiguration.setMaximumSize(OptionalLong.of(ehcache.getMaxEntries()));
-        caffeineConfiguration.setExpireAfterAccess(OptionalLong.of(ehcache.getTimeToLiveSeconds()));
+        caffeineConfiguration.setMaximumSize(OptionalLong.of(caffeine.getMaxEntries()));
+        caffeineConfiguration.setExpireAfterWrite(OptionalLong.of(TimeUnit.SECONDS.toNanos(caffeine.getTimeToLiveSeconds())));
+        caffeineConfiguration.setStatisticsEnabled(true);
         jcacheConfiguration = caffeineConfiguration;
     }
 
@@ -178,7 +179,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                     <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
-            // jhipster-needle-ehcache-add-entry
+            // jhipster-needle-caffeine-add-entry
         };
     }
 
