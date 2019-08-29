@@ -19,13 +19,11 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
-import { icons } from './vendor';
+import './vendor';
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } _%>
@@ -111,9 +109,7 @@ import { ErrorComponent } from './layouts/error/error.component';
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
 export class <%=angularXAppName%>AppModule {
-    constructor(private dpConfig: NgbDatepickerConfig, iconLibrary: FaIconLibrary) {
+    constructor(private dpConfig: NgbDatepickerConfig) {
         this.dpConfig.minDate = {year: moment().year() - 100, month: 1, day: 1};
-        iconLibrary.addIconPacks(fas);
-        iconLibrary.addIcons(...icons);
     }
 }
