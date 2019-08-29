@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
@@ -56,7 +56,6 @@ const ENTITY_STATES = [
     <%_ if (enableTranslation) { _%>
     providers: [ { provide: JhiLanguageService, useClass: JhiLanguageService } ],
     <%_ } _%>
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {
     <%_ if (enableTranslation) { _%>

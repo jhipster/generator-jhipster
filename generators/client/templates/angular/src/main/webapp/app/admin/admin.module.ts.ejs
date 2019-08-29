@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
@@ -85,8 +85,7 @@ import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker/tracker.com
         UserMgmtDeleteDialogComponent,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>HealthModalComponent
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ]
 })
 export class <%=angularXAppName%>AdminModule {
     <%_ if (enableTranslation) { _%>
