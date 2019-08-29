@@ -40,10 +40,10 @@ const mockBlueprintSubGen = class extends ServerGenerator {
     get writing() {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
-            ehCacheStep() {
-                if (this.cacheProvider === 'ehcache') {
-                    this.addEntryToEhcache('entry', 'com/mycompany/myapp');
-                    this.addEntityToEhcache(
+            caffeineStep() {
+                if (this.cacheProvider === 'caffeine') {
+                    this.addEntryToCaffeine('entry', 'com/mycompany/myapp');
+                    this.addEntityToCaffeine(
                         'entityClass',
                         [
                             { relationshipType: 'one-to-many', relationshipFieldNamePlural: 'entitiesOneToMany' },
@@ -75,7 +75,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
 };
 
 describe('needle API server cache: JHipster server generator with blueprint', () => {
-    describe('ehcache', () => {
+    describe('caffeine', () => {
         before(done => {
             helpers
                 .run(path.join(__dirname, '../../generators/server'))
@@ -92,7 +92,7 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    cacheProvider: 'ehcache',
+                    cacheProvider: 'caffeine',
                     enableHibernateCache: true,
                     databaseType: 'sql',
                     devDatabaseType: 'h2Memory',
@@ -107,11 +107,11 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
                 .on('end', done);
         });
 
-        it('Assert ehCache configuration has entry added', () => {
+        it('Assert caffeine configuration has entry added', () => {
             assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`, 'createCache(cm, entry);');
         });
 
-        it('Assert ehCache configuration has entity added', () => {
+        it('Assert caffeine configuration has entity added', () => {
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
                 'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName());'

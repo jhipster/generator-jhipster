@@ -834,7 +834,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider) ||
+                ['caffeine', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider) ||
                 generator.applicationType === 'gateway',
             path: SERVER_MAIN_SRC_DIR,
             templates: [

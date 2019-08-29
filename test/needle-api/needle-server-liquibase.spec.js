@@ -115,7 +115,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
                 packageFolder: 'com/mycompany/myapp',
                 serviceDiscoveryType: false,
                 authenticationType: 'jwt',
-                cacheProvider: 'ehcache',
+                cacheProvider: 'caffeine',
                 enableHibernateCache: true,
                 databaseType: 'sql',
                 devDatabaseType: 'h2Memory',
