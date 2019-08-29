@@ -19,10 +19,7 @@
 package <%=packageName%>.config;
 
 <%_ if (cacheProvider === 'ehcache') { _%>
-import java.time.Duration;
-
-import org.ehcache.config.builders.*;
-import org.ehcache.jsr107.Eh107Configuration;
+import com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration;
 
     <%_ if (enableHibernateCache) { _%>
 import org.hibernate.cache.jcache.ConfigSettings;
@@ -147,13 +144,12 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
         JHipsterProperties.Cache.Ehcache ehcache =
-            jHipsterProperties.getCache().getEhcache();
+        jHipsterProperties.getCache().getEhcache();
 
-        jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
-            CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
-                ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
-                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
-                .build());
+        CaffeineConfiguration caffeineConfiguration = new CaffeineConfiguration();
+        caffeineConfiguration.setMaximumSize(OptionalLong.of(ehcache.getMaxEntries()));
+        caffeineConfiguration.setExpireAfterAccess(OptionalLong.of(ehcache.getTimeToLiveSeconds()));
+        jcacheConfiguration = caffeineConfiguration;
     }
 
         <%_ if (enableHibernateCache) { _%>

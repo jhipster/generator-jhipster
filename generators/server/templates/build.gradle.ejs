@@ -325,7 +325,9 @@ dependencies {
     implementation "org.lz4:lz4-java"
     <%_ } _%>
     <%_ if (cacheProvider === 'ehcache') { _%>
-    implementation "org.ehcache:ehcache"
+    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_cache_version}"
+    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_jcache_version}"
+    implementation "com.typesafe:config:${typesafe_config_version}"
         <%_ if (enableHibernateCache) { _%>
     implementation "org.hibernate:hibernate-jcache"
         <%_ } _%>
