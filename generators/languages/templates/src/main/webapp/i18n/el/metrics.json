@@ -69,7 +69,7 @@
                 "p99": "p99"
             }
         },
-        "caffeine": {
+        "ehcache": {
             "title": "Cache statistics",
             "cachename": "Όνομα cache",
             "hits": "Κτυπήματα",

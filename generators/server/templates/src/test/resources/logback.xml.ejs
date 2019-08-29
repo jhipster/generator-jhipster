@@ -55,6 +55,9 @@
     <%_ if (cacheProvider === 'memcached') { _%>
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'ehcache') { _%>
+    <logger name="org.ehcache" level="WARN"/>
+    <%_ } _%>
     <%_ if (cacheProvider === 'caffeine') { _%>
     <logger name="com.github.benmanes.caffeine" level="WARN"/>
     <%_ } _%>

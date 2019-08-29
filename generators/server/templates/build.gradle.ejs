@@ -305,7 +305,7 @@ dependencies {
     implementation "com.google.code.simple-spring-memcached:xmemcached-provider"
     implementation "com.googlecode.xmemcached:xmemcached"
     <%_ } _%>
-    <%_ if (['caffeine', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
+    <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
     implementation "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
@@ -323,6 +323,12 @@ dependencies {
     implementation "javax.transaction:javax.transaction-api"
     <%_ if (databaseType === 'cassandra') { _%>
     implementation "org.lz4:lz4-java"
+    <%_ } _%>
+    <%_ if (cacheProvider === 'ehcache') { _%>
+    implementation "org.ehcache:ehcache"
+        <%_ if (enableHibernateCache) { _%>
+    implementation "org.hibernate:hibernate-jcache"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider === 'caffeine') { _%>
     implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_cache_version}"

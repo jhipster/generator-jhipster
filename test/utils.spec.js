@@ -129,7 +129,7 @@ describe('JHipster Utils', () => {
             packageName: 'com.mycompany.myapp',
             packageFolder: 'com/mycompany/myapp',
             authenticationType: 'session',
-            cacheProvider: 'caffeine',
+            cacheProvider: 'ehcache',
             websocket: 'no',
             databaseType: 'sql',
             devDatabaseType: 'h2Disk',

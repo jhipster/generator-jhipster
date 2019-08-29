@@ -224,6 +224,10 @@ function askForServerSideOpts(meta) {
             message: 'Do you want to use the Spring cache abstraction?',
             choices: [
                 {
+                    value: 'ehcache',
+                    name: 'Yes, with the Ehcache implementation (local cache, for a single node)'
+                },
+                {
                     value: 'caffeine',
                     name: 'Yes, with the Caffeine implementation (local cache, for a single node)'
                 },

@@ -131,7 +131,7 @@ describe('JHipster entity generator with multiple blueprints', () => {
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        cacheProvider: 'caffeine',
+                        cacheProvider: 'ehcache',
                         enableHibernateCache: true,
                         databaseType: 'sql',
                         devDatabaseType: 'h2Memory',
