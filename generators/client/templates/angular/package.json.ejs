@@ -27,16 +27,16 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "8.2.2",
-    "@angular/compiler": "8.2.2",
-    "@angular/core": "8.2.2",
-    "@angular/forms": "8.2.2",
-    "@angular/platform-browser": "8.2.2",
-    "@angular/platform-browser-dynamic": "8.2.2",
-    "@angular/router": "8.2.2",
+    "@angular/common": "8.2.4",
+    "@angular/compiler": "8.2.4",
+    "@angular/core": "8.2.4",
+    "@angular/forms": "8.2.4",
+    "@angular/platform-browser": "8.2.4",
+    "@angular/platform-browser-dynamic": "8.2.4",
+    "@angular/router": "8.2.4",
     "@fortawesome/angular-fontawesome": "0.5.0",
-    "@fortawesome/fontawesome-svg-core": "1.2.21",
-    "@fortawesome/free-solid-svg-icons": "5.10.1",
+    "@fortawesome/fontawesome-svg-core": "1.2.22",
+    "@fortawesome/free-solid-svg-icons": "5.10.2",
     "@ng-bootstrap/ng-bootstrap": "5.1.0",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
@@ -60,9 +60,9 @@
     "zone.js": "0.10.2"
   },
   "devDependencies": {
-    "@angular/cli": "8.2.2",
-    "@angular/compiler-cli": "8.2.2",
-    "@ngtools/webpack": "8.2.2",
+    "@angular/cli": "8.3.1",
+    "@angular/compiler-cli": "8.2.4",
+    "@ngtools/webpack": "8.3.1",
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.0",
     "@types/chai-string": "1.4.2",
@@ -92,9 +92,9 @@
     "codelyzer": "5.1.0",
     "copy-webpack-plugin": "5.0.4",
     "css-loader": "3.2.0",
-    "eslint": "6.1.0",
-    "eslint-config-prettier": "6.0.0",
-    "eslint-loader": "2.2.1",
+    "eslint": "6.2.2",
+    "eslint-config-prettier": "6.1.0",
+    "eslint-loader": "3.0.0",
     "file-loader": "4.2.0",
     "fork-ts-checker-webpack-plugin": "1.5.0",
     "friendly-errors-webpack-plugin": "1.7.0",
@@ -105,11 +105,11 @@
     "husky": "3.0.4",
     <%_ } _%>
     "jest": "24.9.0",
-    "jest-junit": "7.0.0",
+    "jest-junit": "8.0.0",
     "jest-preset-angular": "7.1.1",
     "jest-sonar-reporter": "2.0.0",
     <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "9.2.3",
+    "lint-staged": "9.2.5",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.19",
@@ -128,7 +128,7 @@
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.0",
     "sass": "1.22.10",
-    "sass-loader": "7.2.0",
+    "sass-loader": "7.3.1",
     "simple-progress-webpack-plugin": "1.1.2",
     "style-loader": "1.0.0",
     "terser-webpack-plugin": "1.4.1",
@@ -138,7 +138,7 @@
     <%_ if (protractorTests) { _%>
     "ts-node": "8.3.0",
     <%_ } _%>
-    "tslint": "5.18.0",
+    "tslint": "5.19.0",
     "typescript": "3.4.5",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
@@ -146,10 +146,10 @@
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.6",
     <%_ } _%>
-    "webpack": "4.39.2",
+    "webpack": "4.39.3",
     "webpack-cli": "3.3.7",
     "webpack-dev-server": "3.8.0",
-    "webpack-merge": "4.2.1",
+    "webpack-merge": "4.2.2",
     "webpack-notifier": "1.8.0",
     "webpack-visualizer-plugin": "0.1.11",
     "workbox-webpack-plugin": "4.3.1",
