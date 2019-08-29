@@ -17,7 +17,7 @@
     "commonjs": true
   },
   "parserOptions": {
-    "project": "./tsconfig.e2e.json",
+    "project": "./<% if (protractorTests) { %>tsconfig.e2e.json<% } else { %>tsconfig.json<% } %>",
     "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
