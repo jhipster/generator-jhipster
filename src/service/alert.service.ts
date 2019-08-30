@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Injectable, Sanitizer, SecurityContext } from '@angular/core';
+import { Injectable, Sanitizer, SecurityContext, Optional } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 import { JhiConfigService } from '../config.service';
@@ -45,7 +45,11 @@ export class JhiAlertService {
     private toast: boolean;
     private i18nEnabled: boolean;
 
-    constructor(private sanitizer: Sanitizer, private configService: JhiConfigService, private translateService: TranslateService) {
+    constructor(
+        private sanitizer: Sanitizer,
+        private configService: JhiConfigService,
+        @Optional() private translateService: TranslateService
+    ) {
         const config = this.configService.getConfig();
         this.toast = config.alertAsToast;
         this.i18nEnabled = config.i18nEnabled;

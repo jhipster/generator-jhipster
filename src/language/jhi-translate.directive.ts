@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Input, Directive, ElementRef, OnChanges, OnInit } from '@angular/core';
+import { Input, Directive, ElementRef, OnChanges, OnInit, Optional } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 import { JhiConfigService } from '../config.service';
@@ -31,7 +31,7 @@ export class JhiTranslateDirective implements OnChanges, OnInit {
     @Input() jhiTranslate: string;
     @Input() translateValues: any;
 
-    constructor(private configService: JhiConfigService, private el: ElementRef, private translateService: TranslateService) {}
+    constructor(private configService: JhiConfigService, private el: ElementRef, @Optional() private translateService: TranslateService) {}
 
     ngOnInit() {
         const enabled = this.configService.getConfig().i18nEnabled;
