@@ -109,7 +109,7 @@
     "jest-preset-angular": "7.1.1",
     "jest-sonar-reporter": "2.0.0",
     <%_ if (!skipCommitHook) { _%>
-    "lint-staged": "9.2.5",
+    "lint-staged": "8.2.1",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
     "merge-jsons-webpack-plugin": "1.0.19",
@@ -157,16 +157,8 @@
   },
   "engines": {
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
-    "yarn": ">=1.16.0"<% } %>
+    "yarn": ">=1.17.3"<% } %>
   },
-  <%_ if (!skipCommitHook) { _%>
-  "lint-staged": {
-    "{,src/**/}*.{md,json,ts,css,scss,yml}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  <%_ } _%>
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\"",
     "lint": "eslint . --ext .js,.ts",
