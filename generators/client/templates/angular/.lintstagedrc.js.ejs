@@ -1,0 +1,4 @@
+module.exports = {
+  '{,src/**/}*.{md,json,ts,css,scss,yml}': [filenames => filenames.map(filename => `prettier --write '${filename}'`), 'git add'],
+  '*.{js,ts}': 'eslint'
+};

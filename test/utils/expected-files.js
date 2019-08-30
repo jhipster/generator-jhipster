@@ -359,6 +359,7 @@ const expectedFiles = {
         '.eslintrc.json',
         '.eslintignore',
         '.huskyrc',
+        '.lintstagedrc.js',
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',

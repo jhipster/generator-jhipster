@@ -157,16 +157,8 @@
   },
   "engines": {
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
-    "yarn": ">=1.16.0"<% } %>
+    "yarn": ">=1.17.3"<% } %>
   },
-  <%_ if (!skipCommitHook) { _%>
-  "lint-staged": {
-    "{,src/**/}*.{md,json,ts,css,scss,yml}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
-  <%_ } _%>
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\"",
     "lint": "eslint . --ext .js,.ts",
