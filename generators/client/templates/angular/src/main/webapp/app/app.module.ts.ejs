@@ -37,9 +37,6 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 import { <%=angularXAppName%>CoreModule } from 'app/core/core.module';
 import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
 import { <%=angularXAppName%>HomeModule } from './home/home.module';
-<%_ if (!skipUserManagement) { _%>
-import { <%=angularXAppName%>AccountModule } from './account/account.module';
-<%_ } _%>
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
 import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
@@ -82,9 +79,6 @@ import { ErrorComponent } from './layouts/error/error.component';
         <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
-        <%_ if (!skipUserManagement) { _%>
-        <%=angularXAppName%>AccountModule,
-        <%_ } _%>
         // jhipster-needle-angular-add-module JHipster will add new module here
         <%=angularXAppName%>EntityModule,
         <%=angularXAppName%>AppRoutingModule
