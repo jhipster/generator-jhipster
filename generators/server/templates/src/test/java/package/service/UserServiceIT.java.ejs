@@ -512,19 +512,6 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         assertThat(userDTO.getLangKey()).isEqualTo("en");
     }
 
-    @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
-    public void testUserDetailsWithUSLocale2() {
-        userDetails.put("locale", "en-US");
-
-        OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
-
-        assertThat(userDTO.getLangKey()).isEqualTo("en");
-    }
-
     private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
         Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(Constants.ANONYMOUS_USER, Constants.ANONYMOUS_USER, authorities);
