@@ -62,7 +62,7 @@ import { ErrorComponent } from './layouts/error/error.component';
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
         }),
-        <%=angularXAppName%>SharedModule.forRoot(),
+        <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
         <%_ if (!skipUserManagement) { _%>
