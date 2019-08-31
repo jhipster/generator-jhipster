@@ -1,9 +1,5 @@
-const _ = require('lodash');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
-const { tokens } = require('./lib/dsl/lexer');
-
-const allTokenTypeNames = _.mapValues(tokens, tokenType => tokenType.name);
 
 module.exports = {
   mode: 'production',
@@ -26,16 +22,6 @@ module.exports = {
     }
   },
   optimization: {
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          mangle: {
-            // Avoid mangling TokenType names, this can break Chevrotain initialization phase
-            // due to reliance on Function.protoType.toString.
-            reserved: allTokenTypeNames
-          }
-        }
-      })
-    ]
+    minimizer: [new TerserPlugin({})]
   }
 };
