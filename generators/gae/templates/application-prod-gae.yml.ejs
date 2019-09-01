@@ -32,18 +32,18 @@ spring:
 <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mysql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
-        username: <%=gcpCloudSqlUserName%>
-        password: <%=gcpCloudSqlPassword%>
+        url: "jdbc:mysql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false"
+        username: "<%=gcpCloudSqlUserName%>"
+        password: "<%=gcpCloudSqlPassword%>"
         hikari:
             maximumPoolSize: 8
 <%_ } _%>
 <%_ if (prodDatabaseType === 'postgresql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.postgres.SocketFactory
-        username: <%=gcpCloudSqlUserName%>
-        password: <%=gcpCloudSqlPassword%>
+        url: "jdbc:postgresql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
+        username: "<%=gcpCloudSqlUserName%>"
+        password: "<%=gcpCloudSqlPassword%>"
         hikari:
             maximumPoolSize: 8
 <%_ } _%>
