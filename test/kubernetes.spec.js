@@ -30,6 +30,7 @@ const expectedFiles = {
     ],
     msmongodb: ['./msmongodb/msmongodb-deployment.yml', './msmongodb/msmongodb-mongodb.yml', './msmongodb/msmongodb-service.yml'],
     msmariadb: ['./msmariadb/msmariadb-deployment.yml', './msmariadb/msmariadb-mariadb.yml', './msmariadb/msmariadb-service.yml'],
+    msmssqldb: ['./msmssqldb/msmssqldb-deployment.yml', './msmssqldb/msmssqldb-mssql.yml', './msmssqldb/msmssqldb-service.yml'],
     monolith: [
         './samplemysql/samplemysql-deployment.yml',
         './samplemysql/samplemysql-mysql.yml',
@@ -236,7 +237,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
     });
 
-    describe('gateway, mysql, psql, mongodb, mariadb microservices', () => {
+    describe('gateway, mysql, psql, mongodb, mariadb, mssql microservices', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/kubernetes'))
@@ -247,7 +248,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                 .withPrompts({
                     deploymentApplicationType: 'microservice',
                     directoryPath: './',
-                    chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
+                    chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
@@ -274,6 +275,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected mariadb files', () => {
             assert.file(expectedFiles.msmariadb);
+        });
+        it('creates expected mssql files', () => {
+            assert.file(expectedFiles.msmssqldb);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
