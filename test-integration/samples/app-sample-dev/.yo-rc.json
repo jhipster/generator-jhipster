@@ -12,7 +12,6 @@
         "devDatabaseType": "h2Disk",
         "prodDatabaseType": "mysql",
         "searchEngine": false,
-
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",
@@ -24,6 +23,7 @@
         "messageBroker": false,
         "serviceDiscoveryType": false,
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "embeddableLaunchScript": false
     }
 }
