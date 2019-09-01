@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { <%=angularXAppName%>SharedCommonModule } from './shared-common.module';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { <%=jhiPrefixCapitalized%>LoginModalComponent } from './login/login.component';
@@ -42,14 +42,6 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
         HasAnyAuthorityDirective
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
-
+    ]
 })
-export class <%=angularXAppName%>SharedModule {
-    static forRoot() {
-        return {
-            ngModule: <%=angularXAppName%>SharedModule
-        };
-    }
-}
+export class <%=angularXAppName%>SharedModule {}

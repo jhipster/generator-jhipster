@@ -49,7 +49,7 @@
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.notFound">No <%=entityInstancePlural %> found</span>
     </div>
     <div class="table-responsive" *ngIf="<%=entityInstancePlural %>?.length > 0">
-        <table class="table table-striped">
+        <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="<%=pagination !== 'infinite-scroll' ? 'transition.bind(this)' : 'reset.bind(this)'%>"<% } %>>
             <th<% if (pagination !== 'no') { %> jhiSortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><% if (pagination !== 'no') { %> <fa-icon [icon]="'sort'"></fa-icon><% } %></th>
@@ -184,7 +184,7 @@
     <%_ } else if (pagination === 'pagination') { _%>
     <div [hidden]="<%=entityInstancePlural %>?.length === 0">
         <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
         <div class="row justify-content-center">
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>

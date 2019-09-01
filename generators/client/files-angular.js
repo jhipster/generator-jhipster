@@ -50,7 +50,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipCommitHook,
-            templates: ['.huskyrc']
+            templates: ['.huskyrc', '.lintstagedrc.js']
         }
     ],
     sass: [
@@ -311,7 +311,10 @@ const files = {
                 'core/core.module.ts',
                 // login
                 'core/login/login.service.ts',
-                'core/user/account.model.ts'
+                'core/user/account.model.ts',
+
+                // icons
+                'core/icons/font-awesome-icons.ts'
             ]
         },
         {

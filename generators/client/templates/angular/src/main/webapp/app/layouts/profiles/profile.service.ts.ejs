@@ -32,7 +32,7 @@ export class ProfileService {
     constructor(private http: HttpClient) { }
 
     getProfileInfo(): Promise<ProfileInfo> {
-        if (!this.profileInfo) {
+        if (this.profileInfo === undefined) {
             this.profileInfo = this.http.get<ProfileInfo>(this.infoUrl, { observe: 'response' })
                 .pipe(map((res: HttpResponse<ProfileInfo>) => {
                     const data = res.body;

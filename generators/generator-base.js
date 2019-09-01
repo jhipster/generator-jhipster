@@ -56,9 +56,9 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
+    addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation);
+            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -83,9 +83,9 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
+    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation);
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -1256,11 +1256,11 @@ module.exports = class extends PrivateBase {
      * @param {string} version - A valid semver version string
      */
     isJhipsterVersionLessThan(version) {
-        const jhipsterVersion = this.config.get('jhipsterVersion');
-        if (!jhipsterVersion) {
-            return true;
+        if (!this.jhipsterOldVersion) {
+            // if old version is unknown then can't compare and return false
+            return false;
         }
-        return semver.lt(jhipsterVersion, version);
+        return semver.lt(this.jhipsterOldVersion, version);
     }
 
     /**
@@ -1783,7 +1783,7 @@ module.exports = class extends PrivateBase {
      * @param {Function} cb - callback when build is complete
      */
     buildApplication(buildTool, profile, buildWar, cb) {
-        let buildCmd = 'mvnw verify -DskipTests=true -B';
+        let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
             buildCmd = 'gradlew -x test';
@@ -1894,6 +1894,7 @@ module.exports = class extends PrivateBase {
         dest.clientPackageManager = context.configOptions.clientPackageManager;
         dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
         dest.experimental = context.configOptions.experimental || context.options.experimental;
+        dest.embeddableLaunchScript = context.configOptions.embeddableLaunchScript || false;
 
         const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
         if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {

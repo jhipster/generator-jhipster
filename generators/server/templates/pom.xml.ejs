@@ -131,8 +131,7 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-        <!-- We can't go to 3.0.0-M2 as it has a regression. See https://issues.apache.org/jira/browse/MENFORCER-306 -->
-        <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
         <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
@@ -146,13 +145,14 @@
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>4.1.0</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>4.1.1</openapi-generator-maven-plugin.version>
 <%_ } _%>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-        <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
-        <jacoco.reportFolder>${project.build.directory}/jacoco</jacoco.reportFolder>
-        <jacoco.utReportFile>${jacoco.reportFolder}/test.exec</jacoco.utReportFile>
-        <jacoco.itReportFile>${jacoco.reportFolder}/integrationTest.exec</jacoco.itReportFile>
+        <sonar-maven-plugin.version>3.6.1.1688</sonar-maven-plugin.version>
+        <jacoco.utReportFolder>${project.build.directory}/jacoco/test</jacoco.utReportFolder>
+        <jacoco.utReportFile>${jacoco.utReportFolder}/test.exec</jacoco.utReportFile>
+        <jacoco.itReportFolder>${project.build.directory}/jacoco/integrationTest</jacoco.itReportFolder>
+        <jacoco.itReportFile>${jacoco.itReportFolder}/integrationTest.exec</jacoco.itReportFile>
         <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
         <!-- jhipster-needle-maven-property -->
@@ -583,6 +583,20 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-api</artifactId>
+            <version>0.11.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
+        <!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-engine</artifactId>
+            <version>0.11.0</version>
+            <scope>test</scope>
+        </dependency>
 <%_ if (messageBroker === 'kafka') { _%>
         <!-- Kafka support -->
         <dependency>
@@ -816,7 +830,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.version}</version>
                 <configuration>
-                    <source>8</source>
+                    <source>${maven.compiler.source}</source>
                 </configuration>
             </plugin>
             <plugin>
@@ -869,7 +883,9 @@
                 </executions>
                 <configuration>
                     <mainClass>${start-class}</mainClass>
+                    <%_ if (embeddableLaunchScript) { _%>
                     <executable>true</executable>
+                    <%_ } _%>
                     <fork>true</fork>
                     <!--
                     Enable the line below to have remote debugging of your application on port 5005
@@ -971,7 +987,7 @@
                             </goals>
                             <configuration>
                                 <dataFile>${jacoco.utReportFile}</dataFile>
-                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
+                                <outputDirectory>${jacoco.utReportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                         <execution>
@@ -993,7 +1009,7 @@
                             </goals>
                             <configuration>
                                 <dataFile>${jacoco.itReportFile}</dataFile>
-                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
+                                <outputDirectory>${jacoco.itReportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -1475,7 +1491,9 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <mainClass>${start-class}</mainClass>
+                            <%_ if (embeddableLaunchScript) { _%>
                             <executable>true</executable>
+                            <%_ } _%>
                         </configuration>
                         <executions>
                             <execution>

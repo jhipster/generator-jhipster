@@ -491,6 +491,8 @@ dependencies {
     <%_ if (cucumberTests) { _%>
     testImplementation "org.junit.vintage:junit-vintage-engine"
     <%_ } _%>
+    testImplementation 'com.tngtech.archunit:archunit-junit5-api:0.11.0'
+    testRuntime 'com.tngtech.archunit:archunit-junit5-engine:0.11.0'
     testImplementation "org.assertj:assertj-core"
     testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"
@@ -522,7 +524,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "5.6"
+    gradleVersion = "5.6.1"
 }
 <%_ if (!skipClient) { _%>
 
@@ -534,7 +536,12 @@ if (project.hasProperty("nodeInstall")) {
         download = true
     }
 }
+<%_ } _%>
+<%_ if (embeddableLaunchScript) { _%>
 
+bootJar {
+    launchScript()
+}
 <%_ } _%>
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo

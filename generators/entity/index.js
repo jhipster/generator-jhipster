@@ -166,6 +166,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.testFrameworks = configuration.get('testFrameworks');
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 // backward compatibility on testing frameworks
                 if (context.testFrameworks === undefined) {
                     context.testFrameworks = ['gatling'];

@@ -83,6 +83,10 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}layouts/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/index.ts`);
     }
+
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'react') {
+        generator.removeFile('tslint.json');
+    }
 }
 
 /**

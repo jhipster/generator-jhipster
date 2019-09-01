@@ -16,15 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import './vendor.ts';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgJhipsterModule } from 'ng-jhipster';
+import { NgxWebstorageModule } from 'ngx-webstorage';
 
+import './vendor';
 <%_ if (authenticationType === 'jwt') { _%>
 import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
 <%_ } _%>
@@ -63,7 +62,7 @@ import { ErrorComponent } from './layouts/error/error.component';
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
         }),
-        <%=angularXAppName%>SharedModule.forRoot(),
+        <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
         <%_ if (!skipUserManagement) { _%>
