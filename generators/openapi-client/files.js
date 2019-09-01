@@ -19,10 +19,8 @@
 
 const path = require('path');
 const shelljs = require('shelljs');
-const s = require('underscore.string');
 const _ = require('lodash');
 const chalk = require('chalk');
-const fs = require('fs-extra');
 const jhipsterConstants = require('../generator-constants');
 
 module.exports = {
@@ -56,11 +54,11 @@ function writeFiles() {
                 let command;
                 if (generatorName === 'spring') {
                     this.log(chalk.green(`\n\nGenerating java client code for client ${cliName} (${inputSpec})`));
-                    const cliPackage = `${this.packageName}.client.${s.underscored(cliName)}`;
+                    const cliPackage = `${this.packageName}.client.${_.snakeCase(cliName)}`;
                     const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
-                    if (fs.pathExistsSync(clientPackageLocation)) {
+                    if (shelljs.test('-d', clientPackageLocation)) {
                         this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
-                        fs.removeSync(clientPackageLocation);
+                        shelljs.rm('-rf', clientPackageLocation);
                     }
 
                     JAVA_OPTS = ' -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
@@ -69,12 +67,12 @@ function writeFiles() {
                         '  generate -g spring ' +
                         ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} ` +
                         ' --library spring-cloud ' +
-                        ` -i ${inputSpec} --artifact-id ${s.camelize(cliName)} --api-package ${cliPackage}.api` +
+                        ` -i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
                         ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate ' +
                         ' --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +
                         ` -DdateLibrary=custom,basePackage=${this.packageName}.client,configPackage=${cliPackage},` +
-                        `title=${s.camelize(cliName)}`;
+                        `title=${_.camelCase(cliName)}`;
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
                         params += ' --additional-properties ribbon=true';
