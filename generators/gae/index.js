@@ -400,7 +400,7 @@ module.exports = class extends BaseGenerator {
 
                 const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
                 exec(
-                    `gcloud sql instances list  --format="value[separator=":"](project,region,name)" --project="${this.gcpProjectId}"`,
+                    `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
                     (err, stdout, stderr) => {
                         if (err) {
                             this.log.error(err);
