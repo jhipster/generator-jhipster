@@ -153,7 +153,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         // Validation rules
         if (fields[idx].fieldValidate === true) {
             if (fields[idx].fieldValidateRules.includes('pattern')) {
-                data = new this.randexp(fields[idx].fieldValidateRulesPattern).gen();
+                data = `"${new this.randexp(fields[idx].fieldValidateRulesPattern).gen()}"`;
             }
 
             // manage String max length
@@ -219,12 +219,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
 }
 
 let result = table
-        .map(line =>
-            line.map(data => {
-                    return data;
-                })
-                .join(';')
-        )
+        .map(line => line.join(';'))
         .join('\n');
  _%>
 <%-result%>
