@@ -29,6 +29,8 @@ exports.config = {
 
   capabilities: {
     browserName: 'chrome',
+    shardTestFiles: true,
+    maxInstances: 10,
     chromeOptions: {
         args: process.env.JHI_E2E_HEADLESS
           ? [ '--headless', '--disable-gpu', '--window-size=800,600' ]
@@ -51,12 +53,6 @@ exports.config = {
     timeout: 720000
   },
 
-  beforeLaunch () {
-    require('ts-node').register({
-      project: './tsconfig.e2e.json'
-    });
-  },
-
   onPrepare () {
     // @ts-ignore
     browser.driver.manage().window().setSize(1280, 1024);
@@ -70,5 +66,8 @@ exports.config = {
     chai.use(chaiAsPromised);
     // @ts-ignore
     global.chai = chai;
+    require('ts-node').register({
+      project: './tsconfig.e2e.json'
+    });
   }
 };

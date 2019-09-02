@@ -28,6 +28,8 @@ exports.config = {
 
     capabilities: {
         browserName: 'chrome',
+        shardTestFiles: true,
+        maxInstances: 10,
         chromeOptions: {
             args: process.env.JHI_E2E_HEADLESS
                 ? [ "--headless", "--disable-gpu", "--window-size=800,600" ]
@@ -50,12 +52,6 @@ exports.config = {
         timeout: 720000
     },
 
-    beforeLaunch: function() {
-        require('ts-node').register({
-            project: 'tsconfig.e2e.json'
-        });
-    },
-
     onPrepare: function() {
         browser.driver.manage().window().setSize(1280, 1024);
         // Disable animations
@@ -68,6 +64,9 @@ exports.config = {
         chai.use(chaiString);
         // @ts-ignore
         global.chai = chai;
+        require('ts-node').register({
+            project: './tsconfig.e2e.json'
+        });
     },
 
     useAllAngular2AppRoots: true
