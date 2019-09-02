@@ -240,36 +240,6 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
                 })
                 .on('end', done);
         });
-
-        it('Assert Infinispan configuration has entity added', () => {
-            assert.fileContent(
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                '            registerPredefinedCache(entry, new JCache<Object, Object>(\n' +
-                    '                cacheManager.getCache(entry).getAdvancedCache(), this,\n' +
-                    '                ConfigurationAdapter.create()));'
-            );
-        });
-
-        it('Assert Infinispan configuration has entity added', () => {
-            assert.fileContent(
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                '            registerPredefinedCache(com.mycompany.myapp.domain.entityClass.class.getName(), new JCache<Object, Object>(\n' +
-                    '                cacheManager.getCache(com.mycompany.myapp.domain.entityClass.class.getName()).getAdvancedCache(), this,\n' +
-                    '                ConfigurationAdapter.create()));'
-            );
-            assert.fileContent(
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                '            registerPredefinedCache(com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany", new JCache<Object, Object>(\n' +
-                    '                cacheManager.getCache(com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany").getAdvancedCache(), this,\n' +
-                    '                ConfigurationAdapter.create()));'
-            );
-            assert.fileContent(
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
-                '            registerPredefinedCache(com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany", new JCache<Object, Object>(\n' +
-                    '                cacheManager.getCache(com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany").getAdvancedCache(), this,\n' +
-                    '                ConfigurationAdapter.create()));'
-            );
-        });
     });
 
     describe('redis', () => {
