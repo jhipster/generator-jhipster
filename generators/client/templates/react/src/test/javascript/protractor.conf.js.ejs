@@ -30,7 +30,7 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     shardTestFiles: true,
-    maxInstances: 10,
+    maxInstances: 2,
     chromeOptions: {
         args: process.env.JHI_E2E_HEADLESS
           ? [ '--headless', '--disable-gpu', '--window-size=800,600' ]
