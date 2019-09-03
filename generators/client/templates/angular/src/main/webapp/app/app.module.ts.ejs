@@ -23,6 +23,7 @@ import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
 <%_ } _%>
+import { CookieModule } from 'ngx-cookie';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { NgJhipsterModule, <% if (enableTranslation) { %>translatePartialLoader, missingTranslationHandler, JhiConfigService<% } %> } from 'ng-jhipster';
 
@@ -52,6 +53,7 @@ import { ErrorComponent } from './layouts/error/error.component';
 @NgModule({
     imports: [
         BrowserModule,
+        CookieModule.forRoot(),
         NgxWebstorageModule.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
