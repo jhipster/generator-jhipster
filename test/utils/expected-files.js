@@ -398,11 +398,11 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/app.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/app.main.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/config/prod.config.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/config/uib-pagination.config.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth-expired.interceptor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/errorhandler.interceptor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/notification.interceptor.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/config/prod.config.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/config/uib-pagination.config.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth-expired.interceptor.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/error-handler.interceptor.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/notification.interceptor.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/home/home.component.ts`,
@@ -445,7 +445,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/util/request-util.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/util/datepicker-adapter.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/date/datepicker-adapter.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-libs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/user/account.model.ts`,
@@ -560,7 +560,7 @@ const expectedFiles = {
     ],
 
     jwtClient: [
-        `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth.interceptor.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/interceptor/auth.interceptor.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`
     ],
 

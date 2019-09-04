@@ -83,6 +83,13 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}layouts/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}shared/shared-common.module.ts`);
+        generator.removeFile(`${ANGULAR_DIR}shared/util/datepicker-adapter.ts`);
+        generator.removeFile(`${ANGULAR_DIR}blocks/config/prod.config.ts`);
+        generator.removeFile(`${ANGULAR_DIR}blocks/config/uib-pagination.config.ts`);
+        generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/auth.interceptor.ts`);
+        generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/auth-expired.interceptor.ts`);
+        generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`);
+        generator.removeFile(`${ANGULAR_DIR}blocks/interceptor/notification.interceptor.ts`);
     }
 
     if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'react') {
