@@ -24,6 +24,9 @@ import { NgJhipsterModule } from 'ng-jhipster';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { CookieModule } from 'ngx-cookie';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 @NgModule({
     imports: [
@@ -40,7 +43,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         NgJhipsterModule,
         InfiniteScrollModule,
         FontAwesomeModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        <%_ if (enableTranslation) { _%>
+        TranslateModule
+        <%_ } _%>
     ]
 })
 export class <%=angularXAppName%>SharedLibsModule {}

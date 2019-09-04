@@ -16,12 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, <% if (enableTranslation) { %>HttpClient<% } %> } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgJhipsterModule } from 'ng-jhipster';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
+<%_ } _%>
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { NgJhipsterModule, <% if (enableTranslation) { %>translatePartialLoader, missingTranslationHandler, JhiConfigService<% } %> } from 'ng-jhipster';
 
 import './vendor';
 <%_ if (authenticationType === 'jwt') { _%>
@@ -62,6 +65,20 @@ import { ErrorComponent } from './layouts/error/error.component';
             defaultI18nLang: '<%= nativeLanguage %>'
             <%_ } _%>
         }),
+        <%_ if (enableTranslation) { _%>
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: translatePartialLoader,
+                deps: [HttpClient]
+            },
+            missingTranslationHandler: {
+                provide: MissingTranslationHandler,
+                useFactory: missingTranslationHandler,
+                deps: [JhiConfigService]
+            }
+        }),
+        <%_ } _%>
         <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
