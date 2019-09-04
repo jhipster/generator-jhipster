@@ -131,8 +131,9 @@ function askForIngressDomain() {
         try {
             istioIngressIp = execSync(istioIpCommand, { encoding: 'utf8' });
         } catch (ex) {
-            istioInstruction = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line: ${istioIpCommand}`
-            return undefined;
+        }
+        if (!istioIngressIp) {
+            istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
         }
     }
 
@@ -142,7 +143,7 @@ function askForIngressDomain() {
             type: 'input',
             name: 'ingressDomain',
             message:
-                'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io' + (this.ingressType !== 'nginx' && !istio ? ', none' : '') + '...)?',
+                (istioMessage ? `${istioMessage}\n` : '' ) +'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io' + (this.ingressType !== 'nginx' && !istio ? ', none' : '') + '...)?',
             // if Ingress Type is nginx, then default to minikube ip
             // else, default to empty string, because it's mostly not needed.
             default: this.ingressDomain ? this.ingressDomain : this.ingressType === 'nginx' ? '192.168.99.100.nip.io' : (istio && istioIngressIp ? istioIngressIp + '.nip.io' : ''),
