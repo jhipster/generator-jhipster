@@ -50,7 +50,12 @@ const prettierTransform = function(defaultOptions) {
     return through.obj(transform);
 };
 
+const prettierFormat = function(str, options = {}) {
+    return prettier.format(str, { ...prettierOptions, ...options });
+};
+
 module.exports = {
     prettierTransform,
+    prettierFormat,
     prettierOptions
 };

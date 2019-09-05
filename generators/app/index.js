@@ -19,7 +19,6 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
-const cleanup = require('../cleanup');
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
@@ -470,10 +469,6 @@ module.exports = class extends BaseGenerator {
 
     get writing() {
         return {
-            cleanup() {
-                cleanup.cleanupOldFiles(this);
-            },
-
             regenerateEntities() {
                 if (this.withEntities) {
                     const options = this.options;

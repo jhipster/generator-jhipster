@@ -23,22 +23,79 @@ const ANGULAR_DIR = constants.ANGULAR_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
+const ANGULAR_TEMPLATE_DIR = `angular/${ANGULAR_DIR}`;
+
 module.exports = {
-    cleanupOldFiles,
-    cleanupOldServerFiles
+    cleanupOldClientFiles,
+    cleanupOldServerFiles,
+    warnRenamedAndChangedClientFiles
 };
 
 /**
- * Removes files that where generated in previous JHipster versions and therefore
+ * Prints warnings in client sub-generator if new version renames file and old content differs from new content.
+ *
+ * WARNING this only warns in client sub-generator. Each other sub-generator should warn it's own renames.
+ *
+ * @param {any} generator - reference to generator
+ */
+function warnRenamedAndChangedClientFiles(generator) {
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.clientFramework === 'angularX') {
+        const newDatePickerAdapter = 'core/date/datepicker-adapter.ts';
+        const newProdConfig = 'core/config/prod.config.ts';
+        const newUibPaginationConfig = 'core/config/prod.config.ts';
+        const newAuthInterceptor = 'core/interceptor/auth.interceptor.ts';
+        const newAuthExpiredInterceptor = 'core/interceptor/auth-expired.interceptor.ts';
+        const newErrorHandlerInterceptor = 'core/interceptor/error-handler.interceptor.ts';
+        const newNotificationInterceptor = 'core/interceptor/notification.interceptor.ts';
+        generator.warnIfFilesNotEqualOnRename(
+            `${ANGULAR_DIR}shared/util/datepicker-adapter.ts`,
+            `${ANGULAR_TEMPLATE_DIR}${newDatePickerAdapter}.ejs`,
+            `${ANGULAR_DIR}${newDatePickerAdapter}`
+        );
+        generator.warnIfFilesNotEqualOnRename(
+            `${ANGULAR_DIR}blocks/config/prod.config.ts`,
+            `${ANGULAR_TEMPLATE_DIR}${newProdConfig}.ejs`,
+            `${ANGULAR_DIR}${newProdConfig}`
+        );
+        generator.warnIfFilesNotEqualOnRename(
+            `${ANGULAR_DIR}blocks/config/uib-pagination.config.ts`,
+            `${ANGULAR_TEMPLATE_DIR}${newUibPaginationConfig}.ejs`,
+            `${ANGULAR_DIR}${newUibPaginationConfig}`
+        );
+        generator.warnIfFilesNotEqualOnRename(
+            `${ANGULAR_DIR}blocks/interceptor/auth.interceptor.ts`,
+            `${ANGULAR_TEMPLATE_DIR}${newAuthInterceptor}.ejs`,
+            `${ANGULAR_DIR}${newAuthInterceptor}`
+        );
+        generator.warnIfFilesNotEqualOnRename(
+            `${ANGULAR_DIR}blocks/interceptor/auth-expired.interceptor.ts`,
+            `${ANGULAR_TEMPLATE_DIR}${newAuthExpiredInterceptor}.ejs`,
+            `${ANGULAR_DIR}${newAuthExpiredInterceptor}`
+        );
+        generator.warnIfFilesNotEqualOnRename(
+            `${ANGULAR_DIR}blocks/interceptor/errorhandler.interceptor.ts`,
+            `${ANGULAR_TEMPLATE_DIR}${newErrorHandlerInterceptor}.ejs`,
+            `${ANGULAR_DIR}${newErrorHandlerInterceptor}`
+        );
+        generator.warnIfFilesNotEqualOnRename(
+            `${ANGULAR_DIR}blocks/interceptor/notification.interceptor.ts`,
+            `${ANGULAR_TEMPLATE_DIR}${newNotificationInterceptor}.ejs`,
+            `${ANGULAR_DIR}${newNotificationInterceptor}`
+        );
+    }
+}
+
+/**
+ * Removes client files that where generated in previous JHipster versions and therefore
  * need to be removed.
  *
- * WARNING this only removes files created by the main generator. Each sub-generator
+ * WARNING this only removes files created by the client sub-generator. Each other sub-generator
  * should clean-up its own files: see the `cleanup` method in entity/index.js for cleaning
  * up entities.
  *
  * @param {any} generator - reference to generator
  */
-function cleanupOldFiles(generator) {
+function cleanupOldClientFiles(generator) {
     if (generator.isJhipsterVersionLessThan('3.2.0')) {
         // removeFile and removeFolder methods should be called here for files and folders to cleanup
         generator.removeFile(`${ANGULAR_DIR}components/form/uib-pager.config.js`);

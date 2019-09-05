@@ -32,7 +32,7 @@ const filter = require('gulp-filter');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
-const { prettierTransform, prettierOptions } = require('./generator-transforms');
+const { prettierTransform, prettierFormat, prettierOptions } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
@@ -1411,6 +1411,42 @@ module.exports = class extends Generator {
                     'jhipster <command>'
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
+        }
+    }
+
+    formatSourceCodeForCompare(sourceCode, extension) {
+        let options = {};
+        if (extension === '.ts') {
+            options = { parser: 'typescript' };
+        }
+        try {
+            // normalize line endings, because for example in Windows this can be in generated content \n and in disk \r\n
+            return prettierFormat(sourceCode, options)
+                .replace(new RegExp('\\r\\n', 'g'), '\n')
+                .replace(new RegExp('\\r', 'g'), '\n');
+        } catch (e) {
+            return sourceCode.replace(new RegExp('\\s', 'g'), '');
+        }
+    }
+
+    warnIfFilesNotEqualOnRename(oldFile, templateFile, newFile) {
+        const extension = path.extname(oldFile);
+        const oldFilePath = this.destinationPath(oldFile);
+        const templateFilePath = this.templatePath(templateFile);
+        if (shelljs.test('-f', oldFilePath) && shelljs.test('-f', templateFilePath)) {
+            try {
+                this.render(templateFilePath, newFileContent => {
+                    newFileContent = this.formatSourceCodeForCompare(newFileContent, extension);
+                    const oldFileContent = this.formatSourceCodeForCompare(fs.readFileSync(oldFilePath, 'utf-8').toString(), extension);
+                    if (oldFileContent !== newFileContent) {
+                        this.log(
+                            chalk.red.bold(`WARNING! File moved from ${oldFile} to ${newFile} and new version differs from old version.`)
+                        );
+                    }
+                });
+            } catch (e) {
+                this.warning(`File moved from ${oldFile} to ${newFile} and version comparison failed with error "${e}".`);
+            }
         }
     }
 };
