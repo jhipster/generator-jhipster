@@ -445,7 +445,6 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    kubernetesServiceType: 'Ingress',
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
                     istio: true
