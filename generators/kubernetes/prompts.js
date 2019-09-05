@@ -114,7 +114,6 @@ function askForIngressType() {
     });
 }
 
-
 function askForIngressDomain() {
     if (this.regenerate) return;
     const done = this.async();
@@ -122,19 +121,30 @@ function askForIngressDomain() {
     const istio = this.istio;
     this.ingressDomain = this.ingressDomain && this.ingressDomain.startsWith('.') ? this.ingressDomain.substring(1) : this.ingressDomain;
 
-    let istioIpCommand = "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'";
+    const istioIpCommand = "kubectl -n istio-system get svc istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'";
     let istioMessage = '';
     let istioIngressIp = '';
 
-    // If it's Istio, and no previous domain is configured, try to determine the default value
-    if (istio && !this.ingressDomain) {
+    let defaultValue = '';
+    if (this.ingressDomain) {
+        defaultValue = this.ingressDomain;
+    } else if (istio) {
+        // If it's Istio, and no previous domain is configured, try to determine the default value
         try {
             istioIngressIp = execSync(istioIpCommand, { encoding: 'utf8' });
+            defaultValue = `${istioIngressIp}.nip.io`;
         } catch (ex) {
-        }
-        if (!istioIngressIp) {
             istioMessage = `Unable to determine Istio Ingress IP address. You can find the Istio Ingress IP address by running the command line:\n    ${istioIpCommand}`;
         }
+    } else if (this.ingressType === 'nginx') {
+        defaultValue = '192.168.99.100.nip.io';
+    } else {
+        defaultValue = 'none';
+    }
+
+    const examples = ['example.com', '192.168.99.100.nip.io'];
+    if (this.ingressType !== 'nginx' && !istio) {
+        examples.push('none');
     }
 
     const prompts = [
@@ -142,18 +152,18 @@ function askForIngressDomain() {
             when: () => kubernetesServiceType === 'Ingress' || istio === true,
             type: 'input',
             name: 'ingressDomain',
-            message:
-                (istioMessage ? `${istioMessage}\n` : '' ) +'What is the root FQDN for your ingress services (e.g. example.com, sub.domain.co, www.10.10.10.10.xip.io' + (this.ingressType !== 'nginx' && !istio ? ', none' : '') + '...)?',
+            message: `${istioMessage}${istioMessage ? '\n' : ''}What is the root FQDN for your ingress services (e.g. ${examples.join(
+                ', '
+            )})?`,
             // if Ingress Type is nginx, then default to minikube ip
             // else, default to empty string, because it's mostly not needed.
-            default: this.ingressDomain ? this.ingressDomain : this.ingressType === 'nginx' ? '192.168.99.100.nip.io' : (istio && istioIngressIp ? istioIngressIp + '.nip.io' : ''),
+            default: defaultValue,
             validate: input => {
                 if (input.length === 0) {
                     if (this.ingressType === 'nginx' || istio) {
-                       return 'domain name cannot be empty'
-                    } else {
-                        return true;
+                        return 'domain name cannot be empty';
                     }
+                    return true;
                 }
                 if (input.charAt(0) === '.') {
                     return 'domain name cannot start with a "."';
@@ -168,7 +178,11 @@ function askForIngressDomain() {
     ];
 
     this.prompt(prompts).then(props => {
-        this.ingressDomain = props.ingressDomain ? '.'.concat(props.ingressDomain) : '';
+        if (props.ingressDomain === 'none') {
+            this.ingressDomain = '';
+        } else {
+            this.ingressDomain = props.ingressDomain ? '.'.concat(props.ingressDomain) : '';
+        }
         done();
     });
 }

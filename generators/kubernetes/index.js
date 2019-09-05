@@ -110,13 +110,11 @@ module.exports = class extends BaseDockerGenerator {
 
         if (this.dockerRepositoryName) {
             this.log(
-                `\n${chalk.green.bold(
-                'INFO!'
-                )} Alternatively, you can use Jib to build and push image directly to a remote registry:`
+                `\n${chalk.green.bold('INFO!')} Alternatively, you can use Jib to build and push image directly to a remote registry:`
             );
             this.appsFolders.forEach((appsFolder, index) => {
                 const appConfig = this.appConfigs[index];
-                let runCommand = ''
+                let runCommand = '';
                 if (appConfig.buildTool === 'maven') {
                     runCommand = `./mvnw -ntp -Pprod verify jib:build -Djib.to.image=${appConfig.targetImageName}`;
                 } else {
