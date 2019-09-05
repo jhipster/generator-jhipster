@@ -68,6 +68,7 @@ module.exports = class extends BaseDockerGenerator {
             askForDockerPushCommand: prompts.askForDockerPushCommand,
             askForIstioSupport: prompts.askForIstioSupport,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
+            askForIngressType: prompts.askForIngressType,
             askForIngressDomain: prompts.askForIngressDomain
         };
     }
