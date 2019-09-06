@@ -832,7 +832,7 @@ module.exports = class extends Generator {
         }
 
         // Path to the yo cli script in generator-jhipster's node_modules
-        const yoInternalCliPath = path.join(__dirname, '../node_modules/yo/lib/cli.js');
+        const yoInternalCliPath = require.resolve('yo/lib/cli.js');
 
         shelljs.exec(`node ${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
             if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
