@@ -1701,6 +1701,10 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/AuditResourceIT.java',
                     renameTo: generator => `${generator.testDir}web/rest/AuditResourceIT.java`
+                },
+                {
+                    file: 'package/service/AuditEventServiceIT.java',
+                    renameTo: generator => `${generator.testDir}service/AuditEventServiceIT.java`
                 }
             ]
         },
