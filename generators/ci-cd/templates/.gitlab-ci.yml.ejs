@@ -157,12 +157,13 @@ before_script:
     <%_ } _%>
     - export MAVEN_USER_HOME=`pwd`/.maven
     <%_ if (!skipClient) { _%>
+    # enable next lines if you want to install frontend tool over maven
         <%_ if (clientPackageManager === 'yarn') { _%>
-    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
+    # - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } else if (clientPackageManager === 'npm') { _%>
-    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
+    # - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %> -Dmaven.repo.local=$MAVEN_USER_HOME
         <%_ } _%>
-    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dmaven.repo.local=$MAVEN_USER_HOME
+    # - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dmaven.repo.local=$MAVEN_USER_HOME
     <%_ } _%>
 
 nohttp:
@@ -173,7 +174,7 @@ nohttp:
 maven-compile:
     stage: build
     script:
-        - ./mvnw -ntp compile -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw compile -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/classes/
@@ -183,7 +184,7 @@ maven-compile:
 maven-test:
     stage: test
     script:
-        - ./mvnw -ntp verify -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw verify -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
             junit: target/test-results/**/TEST-*.xml
@@ -196,7 +197,10 @@ maven-test:
 frontend-test:
     stage: test
     script:
-        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
+        - npm install
+        - npm test
+        # enable next line if you want to execute the test over npm installed with maven
+        # - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
             junit: target/test-results/TESTS-results-jest.xml
@@ -214,8 +218,8 @@ sonar-analyze:
         - frontend-test
         <%_ } _%>
     script:
-        - ./mvnw -ntp compile -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw -ntp org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+        # - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
     allow_failure: true
 <%_ } _%>
 
