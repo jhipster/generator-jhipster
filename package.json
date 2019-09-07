@@ -78,9 +78,11 @@
         "sync-request": "6.0.0",
         "yeoman-environment": "2.3.4",
         "yeoman-generator": "3.2.0",
-        "yo": "3.1.0"
+        "yo": "3.1.0",
+        "progress": "2.0.3"
     },
     "devDependencies": {
+        "aws-sdk": "^2.524.0",
         "chai": "4.2.0",
         "ejs-lint": "0.3.0",
         "eslint": "6.2.2",
@@ -91,6 +93,7 @@
         "fs-extra": "7.0.1",
         "jsdoc": "3.6.3",
         "mocha": "6.1.4",
+        "ora": "^3.4.0",
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
         "yeoman-test": "1.9.1",
