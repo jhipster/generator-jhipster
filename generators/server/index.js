@@ -125,6 +125,8 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.JIB_VERSION = constants.JIB_VERSION;
 
+                this.KAFKA_VERSION = constants.KAFKA_VERSION;
+
                 this.packagejs = packagejs;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;

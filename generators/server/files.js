@@ -1068,6 +1068,11 @@ const serverFiles = {
                     file: 'package/service/KafkaProducer.java',
                     renameTo: generator =>
                         `${generator.javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`
+                },
+                {
+                    file: 'package/config/KafkaProperties.java',
+                    renameTo: generator =>
+                        `${generator.javaDir}config/KafkaProperties.java`
                 }
             ]
         }

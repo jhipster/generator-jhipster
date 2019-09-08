@@ -18,25 +18,46 @@
 -%>
 package <%=packageName%>.service;
 
+import <%= packageName %>.config.KafkaProperties;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class <%= upperFirstCamelCase(baseName) %>KafkaProducer {
 
-    private static final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaProducer.class);
+    private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaProducer.class);
+
     private static final String TOPIC = "topic_<%= baseName.toLowerCase() %>";
 
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaProperties kafkaProperties;
 
-    public <%= upperFirstCamelCase(baseName) %>KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    private KafkaProducer<String, String> kafkaProducer;
+
+    public <%= upperFirstCamelCase(baseName) %>KafkaProducer(KafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
     }
 
-    public void sendMessage(String message) {
-        log.info("Producing message to {} : {}", TOPIC, message);
-        this.kafkaTemplate.send(TOPIC, message);
+    public void init() {
+        log.info("Kafka producer initializing...");
+        kafkaProducer = new KafkaProducer<>(kafkaProperties.getProducerProps());
+        Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+        log.info("Kafka producer initialized");
+    }
+
+    public void send(String message) {
+        ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, message);
+        try {
+            kafkaProducer.send(record);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    public void shutdown() {
+        log.info("Shutdown Kafka producer");
+        kafkaProducer.close();
     }
 }
