@@ -19,8 +19,9 @@
 const _ = require('lodash');
 const randexp = require('randexp');
 const chalk = require('chalk');
-const faker = require('faker');
 const fs = require('fs');
+
+const faker = require('../faker');
 const utils = require('../utils');
 const constants = require('../generator-constants');
 

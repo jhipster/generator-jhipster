@@ -87,11 +87,19 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
         } else if (columnType === 'date') {
-            data = this.faker.date.recent().toISOString().split('T')[0];
+            let formatedDate;
+            if (changelogDate !== undefinded) {
+                formatedDate = changelogDate.substring(0, 4) + '-' + changelogDate.substring(5, 6) + '-' + changelogDate.substring(7, 8);
+            }
+            data = this.faker.date.recent(1, formatedDate).toISOString().split('T')[0];
         } else if (columnType === 'datetime') {
             // Write the date without milliseconds so Java can parse it
             // See https://stackoverflow.com/a/34053802/150868
-            data = this.faker.date.recent().toISOString().split('.')[0];
+            let formatedDate;
+            if (changelogDate !== undefinded) {
+                formatedDate = changelogDate.substring(0, 4) + '-' + changelogDate.substring(5, 6) + '-' + changelogDate.substring(7, 8);
+            }
+            data = this.faker.date.recent(1, formatedDate).toISOString().split('.')[0];
         } else if (columnType.startsWith('varchar')) {
             let columnName = fields[idx].fieldNameAsDatabaseColumn;
             if (columnName === 'first_name') {
@@ -139,7 +147,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         if (fields[idx].fieldIsEnum) {
             if (fields[idx].fieldValues.length !== 0) {
                 const enums = fields[idx].fieldValues.split(',');
-                data = enums[Math.floor(Math.random() * Math.floor(enums.length))];
+                data = enums[this.faker.random.number({min: 0, max: enums.length - 1 })];
             } else {
                 data = '';
             }
