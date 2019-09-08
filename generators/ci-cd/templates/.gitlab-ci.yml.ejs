@@ -199,8 +199,13 @@ frontend-test:
     stage: test
     script:
 <%_ if (insideDocker) { _%>
+    <%_ if (clientPackageManager === 'yarn') { _%>
+        - yarn install
+        - yarn test    
+        <%_ } else if (clientPackageManager === 'npm') { _%>
         - npm install
         - npm test
+    <%_ } _%>
 <%_ } else { _%>
         - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
 <%_ } _%>
