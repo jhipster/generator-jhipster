@@ -28,12 +28,12 @@ const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const { JPA_DERIVED_IDENTIFIER } = require('../../../lib/core/jhipster/relationship_options');
 const {
-  Options: { DTO, SEARCH_ENGINE, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
+  Options: { DTO, SEARCH, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
   Values: {
     dto: { MAPSTRUCT },
     pagination,
     service: { SERVICE_CLASS },
-    searchEngine: { ELASTIC_SEARCH }
+    search: { ELASTIC_SEARCH }
   }
 } = require('../../../lib/core/jhipster/binary_options');
 
@@ -121,7 +121,7 @@ describe('JSONToJDLEntityConverter', () => {
               .getOptions()
               .filter(
                 option =>
-                  option.name === SEARCH_ENGINE && option.value === ELASTIC_SEARCH && option.entityNames.has('Employee')
+                  option.name === SEARCH && option.value === ELASTIC_SEARCH && option.entityNames.has('Employee')
               ).length
           ).to.eq(1);
           expect(

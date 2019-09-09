@@ -180,9 +180,9 @@ describe('DocumentParser', () => {
               value: 'mymicroservice'
             }),
             new JDLBinaryOption({
-              name: BinaryOptions.SEARCH_ENGINE,
+              name: BinaryOptions.SEARCH,
               entityNames: ['Employee'],
-              value: BinaryOptionValues.searchEngine.ELASTIC_SEARCH
+              value: BinaryOptionValues.search.ELASTIC_SEARCH
             })
           ]);
         });
