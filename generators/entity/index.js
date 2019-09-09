@@ -120,16 +120,19 @@ class EntityGenerator extends BaseBlueprintGenerator {
             defaults: false
         });
 
-        this.configuration.requireAllConfigs(this, 'app');
-        this.configuration.requireAllConfigs(this, 'languages');
-        this.configuration.requireAllConfigs(this, 'common');
-
         this.context = {};
 
         this.setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
 
         useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('entity', { arguments: [this.context.name] });
+
+        // Blueprints should decide which config the module depends on
+        if (!useBlueprints) {
+            this.configuration.requireAllConfigs(this, 'app');
+            this.configuration.requireAllConfigs(this, 'languages');
+            this.configuration.requireAllConfigs(this, 'common');
+        }
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -339,6 +342,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
+            /*
+             * Compatibility for old blueprints.
+             */
+            askForRequiredConfigs() {
+                this.configuration.requireAllConfigs(this, 'app');
+                this.configuration.requireAllConfigs(this, 'languages');
+                this.configuration.requireAllConfigs(this, 'common');
+            },
+
             /* pre entity hook needs to be written here */
             askForMicroserviceJson: prompts.askForMicroserviceJson,
             /* ask question to user if s/he wants to update entity */

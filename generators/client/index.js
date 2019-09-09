@@ -62,16 +62,19 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
-        this.configuration.requireAllConfigs(this, 'app');
-        this.configuration.requireAllConfigs(this, 'languages');
-        this.configuration.requireAllConfigs(this, 'common');
-        this.configuration.requireAllConfigs(this, 'client');
-
         newConfiguration = this.configuration.runtimeOptions.newConfiguration;
 
         this.setupClientOptions(this);
 
         useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
+
+        // Blueprints should decide which config the module depends on
+        if (!useBlueprints) {
+            this.configuration.requireAllConfigs(this, 'app');
+            this.configuration.requireAllConfigs(this, 'languages');
+            this.configuration.requireAllConfigs(this, 'common');
+            this.configuration.requireAllConfigs(this, 'client');
+        }
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -186,6 +189,16 @@ module.exports = class extends BaseBlueprintGenerator {
     _prompting() {
         if (newConfiguration) return {};
         return {
+            /*
+             * Compatibility for old blueprints.
+             */
+            askForRequiredConfigs() {
+                this.configuration.requireAllConfigs(this, 'app');
+                this.configuration.requireAllConfigs(this, 'languages');
+                this.configuration.requireAllConfigs(this, 'common');
+                this.configuration.requireAllConfigs(this, 'client');
+            },
+
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
             askFori18n: prompts.askFori18n,

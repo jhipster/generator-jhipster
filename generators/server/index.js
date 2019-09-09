@@ -56,10 +56,6 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
-        this.configuration.requireAllConfigs(this, 'app');
-        this.configuration.requireAllConfigs(this, 'languages');
-        this.configuration.requireAllConfigs(this, 'common');
-
         this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
 
         this.setupServerOptions(this);
@@ -67,6 +63,13 @@ module.exports = class extends BaseBlueprintGenerator {
         useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
 
         this.registerPrettierTransform();
+
+        // Blueprints should decide which config the module depends on
+        if (!useBlueprints) {
+            this.configuration.requireAllConfigs(this, 'app');
+            this.configuration.requireAllConfigs(this, 'languages');
+            this.configuration.requireAllConfigs(this, 'common');
+        }
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -310,6 +313,15 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
+            /*
+             * Compatibility for old blueprints.
+             */
+            askForRequiredConfigs() {
+                this.configuration.requireAllConfigs(this, 'app');
+                this.configuration.requireAllConfigs(this, 'languages');
+                this.configuration.requireAllConfigs(this, 'common');
+            },
+
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
             askForOptionalItems: prompts.askForOptionalItems,
