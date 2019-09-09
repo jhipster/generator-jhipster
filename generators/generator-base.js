@@ -808,7 +808,21 @@ module.exports = class extends PrivateBase {
      * Generate a date to be used by Liquibase changelogs.
      */
     dateFormatForLiquibase() {
-        const now = new Date();
+        let now = new Date();
+        // Run reproducible timestamp when regenerating the project with with-entities option.
+        if (this.options.withEntities) {
+            if (this.configOptions.lastLiquibaseTimestamp) {
+                // Counter already started.
+                now = this.configOptions.lastLiquibaseTimestamp;
+            } else {
+                // Create a new counter
+                const creationTimestamp = this.parseCreationTimestamp() || this.config.get('creationTimestamp');
+                now = creationTimestamp ? new Date(creationTimestamp) : now;
+            }
+            now.setMinutes(now.getMinutes() + 1);
+            this.configOptions.lastLiquibaseTimestamp = now;
+        }
+
         const nowUTC = new Date(
             now.getUTCFullYear(),
             now.getUTCMonth(),
