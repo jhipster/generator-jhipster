@@ -63,6 +63,12 @@ module.exports = class extends BaseGenerator {
             self.option(key, options[key]);
         });
 
+        // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
+        this.option('creation-timestamp', {
+            desc: 'Project creation timestamp (used for reproducible builds)',
+            type: String
+        });
+
         this.loadOptions();
 
         this.withEntities = this.options['with-entities'];
@@ -90,6 +96,17 @@ module.exports = class extends BaseGenerator {
         if (!this.options.skipLoadShared) {
             this.queueLoadShared();
         }
+
+        let creationTimestamp;
+        if (this.options.creationTimestamp) {
+            creationTimestamp = Date.parse(this.options.creationTimestamp);
+            if (creationTimestamp) {
+                creationTimestamp = new Date(creationTimestamp);
+            } else {
+                this.warn(`Error parsing creationTimestamp ${this.options.creationTimestamp}`);
+            }
+        }
+        this.storedConfig.creationTimestamp = creationTimestamp || this.config.get('creationTimestamp') || new Date();
     }
 
     get initializing() {

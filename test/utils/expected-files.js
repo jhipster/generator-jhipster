@@ -127,6 +127,7 @@ const expectedFiles = {
             // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
             `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`
         ],
+        serverLiquibase: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_added_entity_Foo.xml`],
         gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
     },
 
