@@ -684,7 +684,7 @@ describe('EntityParser', () => {
           const entityA = new JDLEntity({ name: 'A' });
           const entityB = new JDLEntity({ name: 'B' });
           const option = new JDLBinaryOption({
-            name: BinaryOptions.SEARCH_ENGINE,
+            name: BinaryOptions.SEARCH,
             value: 'elasticsearch',
             excludedNames: ['B']
           });
