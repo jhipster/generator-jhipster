@@ -228,6 +228,10 @@ function askForServerSideOpts(meta) {
                     name: 'Yes, with the Ehcache implementation (local cache, for a single node)'
                 },
                 {
+                    value: 'caffeine',
+                    name: 'Yes, with the Caffeine implementation (local cache, for a single node)'
+                },
+                {
                     value: 'hazelcast',
                     name:
                         'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)'
