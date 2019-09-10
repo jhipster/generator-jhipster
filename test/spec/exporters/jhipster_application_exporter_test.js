@@ -50,8 +50,8 @@ describe('JHipsterApplicationExporter', () => {
     });
     context('when passing valid arguments', () => {
       context('when exporting an application to JSON', () => {
-        let content = null;
-        let returned = null;
+        let content;
+        let returned;
 
         before(done => {
           returned = JHipsterApplicationExporter.exportApplication(
@@ -61,7 +61,8 @@ describe('JHipsterApplicationExporter', () => {
                 packageName: 'com.mathieu.sample',
                 enableTranslation: false,
                 languages: ['en', 'fr'],
-                jhipsterVersion: '4.9.0'
+                jhipsterVersion: '4.9.0',
+                otherModules: ['MyModule']
               }
             })
           );
@@ -101,6 +102,7 @@ describe('JHipsterApplicationExporter', () => {
               languages: ['en', 'fr'],
               messageBroker: false,
               nativeLanguage: 'en',
+              otherModules: ['MyModule'],
               packageFolder: 'com/mathieu/sample',
               packageName: 'com.mathieu.sample',
               prodDatabaseType: 'mysql',
@@ -142,6 +144,7 @@ describe('JHipsterApplicationExporter', () => {
             languages: ['en', 'fr'],
             messageBroker: false,
             nativeLanguage: 'en',
+            otherModules: ['MyModule'],
             packageFolder: 'com/mathieu/sample',
             packageName: 'com.mathieu.sample',
             prodDatabaseType: 'mysql',
@@ -158,12 +161,9 @@ describe('JHipsterApplicationExporter', () => {
         });
       });
       describe('when exporting an existing application to JSON', () => {
-        after(() => {
-          fs.unlinkSync(path.join('.yo-rc.json'));
-        });
+        let content;
 
-        it('content has the exported application', done => {
-          let content = null;
+        before(() => {
           fs.writeFileSync(
             '.yo-rc.json',
             JSON.stringify(
@@ -189,7 +189,12 @@ describe('JHipsterApplicationExporter', () => {
             })
           );
           content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
+        });
+        after(() => {
+          fs.unlinkSync(path.join('.yo-rc.json'));
+        });
 
+        it('adds the read content to the exported application', () => {
           expect(content).to.deep.equal({
             entities: [],
             test: 1234,
@@ -228,7 +233,6 @@ describe('JHipsterApplicationExporter', () => {
               jwtSecretKey: '1234'
             }
           });
-          done();
         });
       });
     });
@@ -245,7 +249,7 @@ describe('JHipsterApplicationExporter', () => {
     });
     context('when passing valid arguments', () => {
       context('when exporting applications to JSON', () => {
-        let returned = null;
+        let returned;
 
         before('common setup for both applications', () => {
           returned = JHipsterApplicationExporter.exportApplications({
@@ -274,7 +278,7 @@ describe('JHipsterApplicationExporter', () => {
           expect(returned).to.have.lengthOf(2);
         });
         context('for the first application', () => {
-          let content = null;
+          let content;
 
           before('setup for the first application', done => {
             fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
@@ -334,7 +338,7 @@ describe('JHipsterApplicationExporter', () => {
           });
         });
         context('for the second application', () => {
-          let content = null;
+          let content;
 
           before('setup for the first application', done => {
             fs.readFile(path.join('titi', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {

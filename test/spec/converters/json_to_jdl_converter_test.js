@@ -59,7 +59,6 @@ describe('JSONToJDLConverter', () => {
     skipClient true
     testFrameworks []
     websocket false
-    promptValues [object Object]
     jhipsterVersion 6.0.1
     applicationType microservice
     baseName truc
@@ -110,7 +109,6 @@ describe('JSONToJDLConverter', () => {
     skipClient true
     testFrameworks []
     websocket false
-    promptValues [object Object]
     jhipsterVersion 6.0.1
     applicationType microservice
     baseName truc
@@ -241,7 +239,6 @@ noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region,
     skipClient true
     testFrameworks []
     websocket false
-    promptValues [object Object]
     jhipsterVersion 6.0.1
     applicationType microservice
     baseName app1
@@ -278,7 +275,6 @@ application {
     skipClient true
     testFrameworks []
     websocket false
-    promptValues [object Object]
     jhipsterVersion 6.0.1
     applicationType microservice
     baseName app2
@@ -315,7 +311,6 @@ application {
     skipClient true
     testFrameworks []
     websocket false
-    promptValues [object Object]
     jhipsterVersion 6.0.1
     applicationType microservice
     baseName app3
