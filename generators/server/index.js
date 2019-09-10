@@ -195,6 +195,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = configuration.get('jhipsterVersion');
                 }
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 this.authenticationType = configuration.get('authenticationType');
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
@@ -205,6 +207,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 const uaaBaseName = configuration.get('uaaBaseName');
                 if (uaaBaseName) {
                     this.uaaBaseName = uaaBaseName;
+                }
+                const embeddableLaunchScript = configuration.get('embeddableLaunchScript');
+                if (embeddableLaunchScript) {
+                    this.embeddableLaunchScript = embeddableLaunchScript;
                 }
                 this.clientFramework = configuration.get('clientFramework');
                 this.clientTheme = configuration.get('clientTheme');
@@ -379,7 +385,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
-                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider);
+                this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider);
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
@@ -412,7 +418,8 @@ module.exports = class extends BaseBlueprintGenerator {
                     enableSwaggerCodegen: this.enableSwaggerCodegen,
                     jwtSecretKey: this.jwtSecretKey,
                     rememberMeKey: this.rememberMeKey,
-                    enableTranslation: this.enableTranslation
+                    enableTranslation: this.enableTranslation,
+                    embeddableLaunchScript: this.embeddableLaunchScript
                 };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     config.nativeLanguage = this.nativeLanguage;

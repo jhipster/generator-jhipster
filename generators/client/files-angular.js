@@ -50,7 +50,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipCommitHook,
-            templates: ['.huskyrc']
+            templates: ['.huskyrc', '.lintstagedrc.js']
         }
     ],
     sass: [
@@ -311,7 +311,10 @@ const files = {
                 'core/core.module.ts',
                 // login
                 'core/login/login.service.ts',
-                'core/user/account.model.ts'
+                'core/user/account.model.ts',
+
+                // icons
+                'core/icons/font-awesome-icons.ts'
             ]
         },
         {
@@ -339,7 +342,6 @@ const files = {
             templates: [
                 'shared/shared.module.ts',
                 'shared/shared-libs.module.ts',
-                'shared/shared-common.module.ts',
                 'shared/constants/error.constants.ts',
                 'shared/constants/input.constants.ts',
                 'shared/constants/pagination.constants.ts',

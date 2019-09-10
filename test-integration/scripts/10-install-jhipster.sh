@@ -13,7 +13,7 @@ if [[ "$JHI_REPO" == *"/jhipster" ]]; then
     cd "$JHI_HOME"
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    ./mvnw clean install -Dgpg.skip=true
+    ./mvnw -ntp clean install -Dgpg.skip=true
 
 elif [[ "$JHI_LIB_BRANCH" == "release" ]]; then
     echo "*** jhipster: use release version"
@@ -32,7 +32,7 @@ else
 
     test-integration/scripts/10-replace-version-jhipster.sh
 
-    ./mvnw clean install -Dgpg.skip=true
+    ./mvnw -ntp clean install -Dgpg.skip=true
     ls -al ~/.m2/repository/io/github/jhipster/jhipster-framework/
     ls -al ~/.m2/repository/io/github/jhipster/jhipster-dependencies/
     ls -al ~/.m2/repository/io/github/jhipster/jhipster-parent/

@@ -36,6 +36,9 @@ spec:
      <%_ } _%>
     spec:
       volumes:
+      - name: mssqldb
+        persistentVolumeClaim:
+          claimName: mssql-data
       - name: data
         emptyDir: {}
       containers:
@@ -50,16 +53,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: mssql
-              key: SA_PASSWORD 
+              key: SA_PASSWORD
         ports:
         - containerPort: 1433
         volumeMounts:
         - name: mssqldb
           mountPath: /var/opt/mssql
-      volumes:
-      - name: mssqldb
-        persistentVolumeClaim:
-          claimName: mssql-data
 
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>

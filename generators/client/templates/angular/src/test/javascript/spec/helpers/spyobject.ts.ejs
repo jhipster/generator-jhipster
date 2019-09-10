@@ -44,6 +44,7 @@ export class SpyObject {
         return object;
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     constructor(type = null) {
         if (type) {
             Object.keys(type.prototype).forEach((prop) => {
