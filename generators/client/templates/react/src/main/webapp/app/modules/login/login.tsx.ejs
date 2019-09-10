@@ -30,7 +30,7 @@ export const Login = (props: ILoginProps) => {
   const [showModal, setShowModal] = useState(props.showModal);
 
   useEffect(() => {
-    setShowModal(props.showModal);
+    setShowModal(true);
   }, []);
 
   const handleLogin = (username, password, rememberMe = false) => props.login(username, password, rememberMe);
