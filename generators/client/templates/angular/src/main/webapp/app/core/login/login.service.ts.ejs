@@ -56,12 +56,7 @@ export class LoginService {
         return this.authServerProvider.login(credentials).pipe(flatMap(() => this.accountService.identity(true)));
     }
     <%_ } _%>
-    <%_ if (authenticationType === 'jwt') { _%>
 
-    loginWithToken(jwt, rememberMe) {
-        return this.authServerProvider.loginWithToken(jwt, rememberMe);
-    }
-    <%_ } _%>
     <%_ if (authenticationType === 'uaa') { _%>
 
     isAuthenticated() {
