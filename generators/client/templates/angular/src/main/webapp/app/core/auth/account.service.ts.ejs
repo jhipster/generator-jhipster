@@ -60,25 +60,16 @@ export class AccountService  {
         this.authenticationState.next(this.userIdentity);
     }
 
-    hasAnyAuthority(authorities: string[]): boolean {
+    hasAnyAuthority(authorities: string[] | string): boolean {
         if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
             return false;
         }
-        
-        return authorities.some((authority: string) => this.userIdentity.authorities.includes(authority));
-    }
 
-    hasAuthority(authority: string): Promise<boolean> {
-        // TODO: Use observable
-        if (!this.authenticated) {
-           return Promise.resolve(false);
+        if (!Array.isArray(authorities)) {
+            authorities = [authorities];
         }
 
-        return this.identity().toPromise().then((id) => {
-            return Promise.resolve(id.authorities && id.authorities.includes(authority));
-        }, () => {
-            return Promise.resolve(false);
-        });
+        return authorities.some((authority: string) => this.userIdentity.authorities.includes(authority));
     }
 
     identity(force?: boolean): Observable<Account> {
@@ -109,7 +100,6 @@ export class AccountService  {
                     this.authenticated = false;
                   }
                   this.authenticationState.next(this.userIdentity);
-                  return this.userIdentity;
                 },
                 () => {
                     <%_ if (websocket === 'spring-websocket') { _%>
