@@ -77,9 +77,9 @@ function loadAWS(generator) {
             ora = require('ora'); // eslint-disable-line
         } catch (e) {
             generator.log('Installing AWS dependencies');
-            let installCommand = 'yarn add aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0';
+            let installCommand = 'yarn add aws-sdk@2.524.0 progress@2.0.3 ora@3.4.0';
             if (generator.config.get('clientPackageManager') === 'npm') {
-                installCommand = 'npm install aws-sdk@2.167.0 progress@2.0.0 ora@1.3.0--save';
+                installCommand = 'npm install aws-sdk@2.524.0 progress@2.0.3 ora@3.4.0--save';
             }
             shelljs.exec(installCommand, { silent: false }, code => {
                 if (code !== 0) {

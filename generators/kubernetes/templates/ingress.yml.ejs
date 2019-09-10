@@ -32,7 +32,7 @@ spec:
           servicePort: <%= app.serverPort %>
       <%_ if (!app.serviceDiscoveryType) { _%>
         <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(function(config) { _%>
-      - path: /<%= config.baseName.toLowerCase() %>/.*
+      - path: /services/<%= config.baseName.toLowerCase() %>/.*
         backend:
           serviceName: <%= config.baseName.toLowerCase() %>
           servicePort: <%= config.serverPort %>

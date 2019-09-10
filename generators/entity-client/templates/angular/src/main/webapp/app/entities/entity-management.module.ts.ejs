@@ -18,10 +18,6 @@
 -%>
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageService } from 'ng-jhipster';
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
-<%_ } _%>
 
 import { <%= angularXAppName %>SharedModule } from 'app/shared/shared.module';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
@@ -52,19 +48,7 @@ const ENTITY_STATES = [
         <%= entityAngularName %>UpdateComponent,
         <%= entityAngularName %>DeleteDialogComponent,
         <%= entityAngularName %>DeletePopupComponent,
-    ],
-    <%_ if (enableTranslation) { _%>
-    providers: [ { provide: JhiLanguageService, useClass: JhiLanguageService } ],
-    <%_ } _%>
+    ]
 })
 export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {
-    <%_ if (enableTranslation) { _%>
-    constructor(private languageService: JhiLanguageService, private languageHelper: JhiLanguageHelper) {
-        this.languageHelper.language.subscribe((languageKey: string) => {
-            if (languageKey) {
-                this.languageService.changeLanguage(languageKey);
-            }
-        });
-    }
-    <%_ } _%>
 }

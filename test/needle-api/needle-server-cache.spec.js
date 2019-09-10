@@ -54,6 +54,21 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                     );
                 }
             },
+            caffeineStep() {
+                if (this.cacheProvider === 'caffeine') {
+                    this.addEntryToCache('entry', 'com/mycompany/myapp', 'caffeine');
+                    this.addEntityToCache(
+                        'entityClass',
+                        [
+                            { relationshipType: 'one-to-many', relationshipFieldNamePlural: 'entitiesOneToMany' },
+                            { relationshipType: 'many-to-many', relationshipFieldNamePlural: 'entitiesManoToMany' }
+                        ],
+                        'com.mycompany.myapp',
+                        'com/mycompany/myapp',
+                        'caffeine'
+                    );
+                }
+            },
             infinispanCacheStep() {
                 if (this.cacheProvider === 'infinispan') {
                     this.addEntryToCache('entry', 'com/mycompany/myapp', 'infinispan');
@@ -112,6 +127,58 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
         });
 
         it('Assert ehCache configuration has entity added', () => {
+            assert.fileContent(
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
+                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName());'
+            );
+            assert.fileContent(
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
+                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesOneToMany");'
+            );
+            assert.fileContent(
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
+                'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName() + ".entitiesManoToMany");'
+            );
+        });
+    });
+
+    describe('caffeine', () => {
+        before(done => {
+            helpers
+                .run(path.join(__dirname, '../../generators/server'))
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'myblueprint',
+                    skipChecks: true
+                })
+                .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
+                .withPrompts({
+                    baseName: 'jhipster',
+                    packageName: 'com.mycompany.myapp',
+                    packageFolder: 'com/mycompany/myapp',
+                    serviceDiscoveryType: false,
+                    authenticationType: 'jwt',
+                    cacheProvider: 'caffeine',
+                    enableHibernateCache: true,
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Memory',
+                    prodDatabaseType: 'mysql',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: ['fr'],
+                    buildTool: 'maven',
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                    serverSideOptions: []
+                })
+                .on('end', done);
+        });
+
+        it('Assert caffeine configuration has entry added', () => {
+            assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`, 'createCache(cm, entry);');
+        });
+
+        it('Assert caffeine configuration has entity added', () => {
             assert.fileContent(
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
                 'createCache(cm, com.mycompany.myapp.domain.entityClass.class.getName());'

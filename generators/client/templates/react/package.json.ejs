@@ -104,6 +104,8 @@ limitations under the License.
     "enzyme-adapter-react-16": "1.11.2",
     "enzyme-to-json": "3.3.5",
     "eslint": "6.1.0",
+    "eslint-config-jhipster": "0.0.1",
+    "eslint-config-jhipster-react": "0.0.1",
     "eslint-config-prettier": "6.0.0",
     "eslint-loader": "2.2.1",
     "eslint-plugin-react": "7.14.3",
@@ -164,6 +166,7 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.5",
     <%_ } _%>
+    "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
     "webpack": "4.28.4",
     "webpack-cli": "3.3.0",
     "webpack-dev-server": "3.2.1",
@@ -174,7 +177,8 @@ limitations under the License.
   },
 <%_ if (clientPackageManager === 'yarn') { _%>
   "resolutions": {
-    "@types/react": "16.8.10"
+    "@types/react": "16.8.10",
+    "redux": "4.0.1"
   },
 <%_ } _%>
   "engines": {

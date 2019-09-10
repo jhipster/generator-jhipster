@@ -237,6 +237,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/AuditEventServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`
     ],
@@ -446,7 +447,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/util/request-util.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/util/datepicker-adapter.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/shared-common.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared-libs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/shared.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/user/account.model.ts`,

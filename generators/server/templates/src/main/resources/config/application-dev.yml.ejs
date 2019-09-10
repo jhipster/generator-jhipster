@@ -279,6 +279,11 @@ jhipster:
             time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
             max-entries: 100 # Number of objects in each cache entry
         <%_ } _%>
+        <%_ if (cacheProvider === 'caffeine') { _%>
+        caffeine: # Caffeine configuration
+            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+            max-entries: 100 # Number of objects in each cache entry
+        <%_ } _%>
         <%_ if (cacheProvider === 'infinispan') { _%>
         infinispan:
             config-file: default-configs/default-jgroups-tcp.xml
@@ -367,6 +372,10 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    audit-events:
+        retention-period: 30 # Number of days before audit events are deleted.
+    <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:
