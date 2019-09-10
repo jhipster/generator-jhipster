@@ -19,6 +19,9 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.<%= mainClass %>;
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%=packageName%>.config.TestSecurityConfiguration;
+<%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -41,7 +44,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ if (messageBroker === 'kafka') { _%>
 @EmbeddedKafka
 <%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
 public class <%= controllerClass %>IT {
 
     private MockMvc restMockMvc;
