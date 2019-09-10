@@ -39,9 +39,17 @@ export interface IUserManagementProps extends StateProps, DispatchProps, RouteCo
 export const UserManagement = (props: IUserManagementProps) => {
   const [pagination, setPagination] = useState(getSortState(props.location, ITEMS_PER_PAGE));
 
+  const getAllUsers = () =>
+    props.getUsers(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
+
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  const sortUsers = () => {
+    getAllUsers();
+    props.history.push(`${props.location.pathname}?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`);
+  };
 
   useEffect(() => {
     sortUsers();
@@ -54,19 +62,11 @@ export const UserManagement = (props: IUserManagementProps) => {
       sort: p
     });
 
-  const sortUsers = () => {
-    getAllUsers();
-    props.history.push(`${props.location.pathname}?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`);
-  };
-
   const handlePagination = currentPage =>
     setPagination({
       ...pagination,
       activePage: currentPage
     });
-
-  const getAllUsers = () =>
-    props.getUsers(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
 
   const toggleActive = user => () =>
     props.updateUser({
