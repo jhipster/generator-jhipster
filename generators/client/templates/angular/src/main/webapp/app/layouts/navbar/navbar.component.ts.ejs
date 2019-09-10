@@ -77,7 +77,7 @@ export class NavbarComponent implements OnInit {
         this.languages = this.languageHelper.getAll();
 
         <%_ } _%>
-        this.profileService.getProfileInfo().then((profileInfo) => {
+        this.profileService.getProfileInfo().subscribe((profileInfo) => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
