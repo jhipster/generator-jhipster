@@ -46,21 +46,20 @@ export const UserManagement = (props: IUserManagementProps) => {
     getAllUsers();
   }, []);
 
-  const sortUsers = () => {
-    getAllUsers();
-    props.history.push(`${props.location.pathname}?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`);
-  };
+  const sortUsers = () => getAllUsers();
 
   useEffect(() => {
     sortUsers();
   }, [pagination.activePage, pagination.order, pagination.sort]);
 
-  const sort = p => () =>
+  const sort = p => () => {
     setPagination({
       ...pagination,
       order: pagination.order === 'asc' ? 'desc' : 'asc',
       sort: p
     });
+    props.history.push(`${props.location.pathname}?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`);
+  };
 
   const handlePagination = currentPage =>
     setPagination({
