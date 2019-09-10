@@ -80,7 +80,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.accountService.identity().then((account) => {
+        this.accountService.identity().subscribe((account) => {
             this.currentAccount = account;
             this.loadAll();
             this.registerChangeInUsers();
@@ -105,14 +105,12 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
 
         this.userService.update(user).subscribe(
             (response) => {
-                if (response.status === 200) {
-                    this.error = null;
-                    this.success = 'OK';
-                    this.loadAll();
-                } else {
-                    this.success = null;
-                    this.error = 'ERROR';
-                }
+                this.error = null;
+                this.success = 'OK';
+                this.loadAll();
+            }, () => {
+                this.success = null;
+                this.error = 'ERROR';
             });
     }
 
