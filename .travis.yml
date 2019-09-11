@@ -22,6 +22,7 @@ os:
     - linux
 services:
     - docker
+    - xvfb
 language: node_js
 node_js:
     - '10.16.3'
@@ -86,7 +87,6 @@ before_install:
     - date
     # Use this for Protractor
     - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
     # Update NPM
     - npm install -g npm
     # Install Yarn
