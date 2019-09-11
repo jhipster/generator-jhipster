@@ -80,11 +80,10 @@ before_install:
         else
             echo '*** Using OpenJDK 8 by default'
         fi
+    - sudo apt-get install -y google-chrome-stable
     - java -version
     - export TZ=Australia/Canberra
     - date
-    - sudo /etc/init.d/mysql stop
-    - sudo /etc/init.d/postgresql stop
     # Use this for Protractor
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
