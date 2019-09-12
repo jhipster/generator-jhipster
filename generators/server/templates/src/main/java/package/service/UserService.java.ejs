@@ -202,7 +202,7 @@ public class UserService {
         return userRepository.findOneByEmailIgnoreCase(mail)
             .filter(<%= asEntity('User') %>::getActivated)
             .<% if (reactive) { %>flatMap<% } else { %>map<% } %>(user -> {
-                user.setResetKey(RandomUtil.generateResetKey());
+                user.setResetKey(RandomUtil.getInstance().generateResetKey());
                 user.setResetDate(Instant.now());
             <%_ if (!reactive) { _%>
                 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
@@ -252,7 +252,7 @@ public class UserService {
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.setActivationKey(RandomUtil.getInstance().generateActivationKey());
         <%_ if (['sql', 'mongodb'].includes(databaseType)) { _%>
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
@@ -310,7 +310,7 @@ public class UserService {
                 // new user is not active
                 newUser.setActivated(false);
                 // new user gets registration key
-                newUser.setActivationKey(RandomUtil.generateActivationKey());
+                newUser.setActivationKey(RandomUtil.getInstance().generateActivationKey());
                 Set<<% if (['sql', 'mongodb'].includes(databaseType)) { %>Authority<% } else { %>String<% } %>> authorities = new HashSet<>();
                 <%_ if (['sql', 'mongodb'].includes(databaseType)) { _%>
                 return authorityRepository.findById(AuthoritiesConstants.USER)
@@ -362,9 +362,9 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        String encryptedPassword = passwordEncoder.encode(RandomUtil.getInstance().generatePassword());
         user.setPassword(encryptedPassword);
-        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetKey(RandomUtil.getInstance().generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
     <%_ if (!reactive) { _%>

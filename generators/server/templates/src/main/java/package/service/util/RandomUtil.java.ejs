@@ -20,6 +20,9 @@ package <%=packageName%>.service.util;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+
 /**
  * Utility class for generating random Strings.
  */
@@ -27,7 +30,20 @@ public final class RandomUtil {
 
     private static final int DEF_COUNT = 20;
 
+    private static final RandomUtil INSTANCE = new RandomUtil();
+
+    public static RandomUtil getInstance() {
+        return INSTANCE;
+    }
+
+    private SecureRandom secureRandom;
+
     private RandomUtil() {
+        try {
+            secureRandom = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Unable to find secure algorithms.", e); //NOSONAR
+        }
     }
 
     /**
@@ -35,8 +51,8 @@ public final class RandomUtil {
      *
      * @return the generated password.
      */
-    public static String generatePassword() {
-        return RandomStringUtils.randomAlphanumeric(DEF_COUNT);
+    public String generatePassword() {
+        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
     }
 
     /**
@@ -44,8 +60,8 @@ public final class RandomUtil {
      *
      * @return the generated activation key.
      */
-    public static String generateActivationKey() {
-        return RandomStringUtils.randomNumeric(DEF_COUNT);
+    public String generateActivationKey() {
+        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
     }
 
     /**
@@ -53,8 +69,8 @@ public final class RandomUtil {
      *
      * @return the generated reset key.
      */
-    public static String generateResetKey() {
-        return RandomStringUtils.randomNumeric(DEF_COUNT);
+    public String generateResetKey() {
+        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
     }
     <%_ if (authenticationType === 'session' && !reactive) { _%>
 
@@ -64,8 +80,8 @@ public final class RandomUtil {
      *
      * @return the generated series data.
      */
-    public static String generateSeriesData() {
-        return RandomStringUtils.randomAlphanumeric(DEF_COUNT);
+    public String generateSeriesData() {
+        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
     }
 
     /**
@@ -73,8 +89,8 @@ public final class RandomUtil {
      *
      * @return the generated token data.
      */
-    public static String generateTokenData() {
-        return RandomStringUtils.randomAlphanumeric(DEF_COUNT);
+    public String generateTokenData() {
+        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
     }
     <%_ } _%>
 }

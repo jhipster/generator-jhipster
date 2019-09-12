@@ -295,7 +295,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ } _%>
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
-        String resetKey = RandomUtil.generateResetKey();
+        String resetKey = RandomUtil.getInstance().generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
@@ -329,7 +329,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     public void assertThatUserCanResetPassword() {
         String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
-        String resetKey = RandomUtil.generateResetKey();
+        String resetKey = RandomUtil.getInstance().generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
