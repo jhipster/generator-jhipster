@@ -36,7 +36,7 @@ public final class RandomUtil {
         return INSTANCE;
     }
 
-    private SecureRandom secureRandom;
+    private final SecureRandom secureRandom;
 
     private RandomUtil() {
         try {
@@ -46,13 +46,17 @@ public final class RandomUtil {
         }
     }
 
+    private String generateRandomAlphanumericString() {
+        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
+    }
+
     /**
      * Generate a password.
      *
      * @return the generated password.
      */
     public String generatePassword() {
-        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
+        return generateRandomAlphanumericString();
     }
 
     /**
@@ -61,7 +65,7 @@ public final class RandomUtil {
      * @return the generated activation key.
      */
     public String generateActivationKey() {
-        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
+        return generateRandomAlphanumericString();
     }
 
     /**
@@ -70,7 +74,7 @@ public final class RandomUtil {
      * @return the generated reset key.
      */
     public String generateResetKey() {
-        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
+        return generateRandomAlphanumericString();
     }
     <%_ if (authenticationType === 'session' && !reactive) { _%>
 
@@ -81,7 +85,7 @@ public final class RandomUtil {
      * @return the generated series data.
      */
     public String generateSeriesData() {
-        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
+        return generateRandomAlphanumericString();
     }
 
     /**
@@ -90,7 +94,7 @@ public final class RandomUtil {
      * @return the generated token data.
      */
     public String generateTokenData() {
-        return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
+        return generateRandomAlphanumericString();
     }
     <%_ } _%>
 }
