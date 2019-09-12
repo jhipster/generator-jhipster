@@ -42,6 +42,13 @@
             "en",
             "fr"
         ],
-        "blueprint": "generator-jhipster-myblueprint"
+        "blueprint": "generator-jhipster-myblueprint",
+        "blueprintVersion": "0.1",
+        "blueprints": [
+            {
+                "name": "generator-jhipster-myblueprint",
+                "version": "0.2"
+            }
+        ]
     }
 }

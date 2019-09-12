@@ -428,7 +428,7 @@ function getAllJhipsterConfig(generator, force, basePath = '') {
         // merge the blueprint configs if available
         const oldBlueprintName = configuration.blueprint;
         const blueprints = configuration.blueprints || [];
-        if (oldBlueprintName && blueprints.indexOf(oldBlueprintName) === -1) {
+        if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
             const oldBlueprintVersion = configuration.blueprintVersion || 'latest';
             blueprints.push({
                 name: oldBlueprintName,
