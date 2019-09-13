@@ -68,7 +68,9 @@ import org.springframework.core.convert.converter.Converter;<% } %>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
+    <%_ } _%>
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
@@ -86,7 +88,9 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.BeanNames;
 import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
+    <%_ if (!reactive) { _%>
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
+    <%_ } _%>
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
     <%_ if (reactive) { _%>
 import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
@@ -146,8 +150,8 @@ import java.util.UUID;
 @Import(value = {MongoAutoConfiguration.class, MongoReactiveAutoConfiguration.class})
     <%_ } else { _%>
 @Import(value = MongoAutoConfiguration.class)
-    <%_ } _%>
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 @EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
@@ -155,7 +159,9 @@ import java.util.UUID;
 @EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository.reactive")
     <%_ } _%>
 @Import(value = CouchbaseAutoConfiguration.class)
+    <%_ if (!reactive) { _%>
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
 <%_ } _%>
 public class DatabaseConfiguration {
 
