@@ -643,7 +643,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.entityAngularJSSuffix) {
                     this.data.angularJSSuffix = context.entityAngularJSSuffix;
                 }
-                if (context.applicationType === 'microservice') {
+                if (context.applicationType === 'microservice' || context.applicationType === 'uaa') {
                     this.data.microserviceName = context.baseName;
                 }
                 if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
