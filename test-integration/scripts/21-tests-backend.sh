@@ -19,7 +19,7 @@ fi
 if [ -f "mvnw" ]; then
     ./mvnw -ntp javadoc:javadoc
 elif [ -f "gradlew" ]; then
-    ./gradlew javadoc
+    ./gradlew javadoc -x webpack
 fi
 
 #-------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ if [ -f "mvnw" ]; then
         -Dlogging.level.org.springframework.security=OFF
 
 elif [ -f "gradlew" ]; then
-    ./gradlew test -P-webpack integrationTest \
+    ./gradlew test integrationTest -x webpack \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
