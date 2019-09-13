@@ -24,12 +24,12 @@ import <%= packageName %>.AbstractCassandraTest;
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (!skipUserManagement) { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-    <%_ if (reactive) { _%>
-import <%= packageName %>.repository.reactive.PersistenceAuditEventRepository;
-    <%_ } _%>
 import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
 <%_ } _%>
 import <%= packageName %>.security.jwt.TokenProvider;
+<%_ if (reactive) { _%>
+import <%= packageName %>.service.AuditEventService;
+<%_ } _%>
 import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 import <%= packageName %>.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,7 +90,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
 
     <%_ if (reactive) { _%>
     @Autowired
-    private PersistenceAuditEventRepository persistenceAuditEventRepository;
+    private AuditEventService auditEventService;
 
     <%_ }  _%>
     <%_ if (!skipUserManagement) { _%>
@@ -112,7 +112,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
 
     @BeforeEach
     public void setup() {
-        UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager<% if (reactive) { %>, persistenceAuditEventRepository<% } %>);
+        UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager<% if (reactive) { %>, auditEventService<% } %>);
         <%_ if (!reactive) { _%>
         this.mockMvc = MockMvcBuilders.standaloneSetup(userJWTController)
             .setControllerAdvice(exceptionTranslator)

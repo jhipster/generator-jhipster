@@ -20,19 +20,16 @@ package <%= packageName %>.web.rest;
 
 <%_ if (reactive) { _%>
 import <%= packageName %>.config.Constants;
-import <%= packageName %>.domain.PersistentAuditEvent;
-import <%= packageName %>.repository.reactive.PersistenceAuditEventRepository;
 <%_ } _%>
 import <%= packageName %>.security.jwt.JWTFilter;
 import <%= packageName %>.security.jwt.TokenProvider;
+<%_ if (reactive) { _%>
+import <%= packageName %>.service.AuditEventService;
+<%_ } _%>
 import <%= packageName %>.web.rest.vm.LoginVM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-<%_ if (reactive) { _%>
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-<%_ } _%>
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,12 +51,6 @@ import reactor.core.publisher.Mono;
 <%_ } _%>
 
 import javax.validation.Valid;
-<%_ if (reactive) { _%>
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-<%_ } _%>
 
 /**
  * Controller to authenticate users.
@@ -93,33 +84,16 @@ public class UserJWTController {
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
     }
     <%_ } else { _%>
-    /**
-     * Authentication success event type.
-     */
-    public static final String AUTHENTICATION_SUCCESS = "AUTHENTICATION_SUCCESS";
-
-    /**
-     * Authentication failure event type.
-     */
-    public static final String AUTHENTICATION_FAILURE = "AUTHENTICATION_FAILURE";
-
-    /**
-     * Should be the same as in Liquibase migration.
-     */
-    protected static final int EVENT_DATA_COLUMN_MAX_LENGTH = 255;
-
-    private static final Logger log = LoggerFactory.getLogger(UserJWTController.class);
-
     private final TokenProvider tokenProvider;
 
     private final ReactiveAuthenticationManager authenticationManager;
 
-    private final PersistenceAuditEventRepository persistenceAuditEventRepository;
+    private final AuditEventService auditEventService;
 
-    public UserJWTController(TokenProvider tokenProvider, ReactiveAuthenticationManager authenticationManager, PersistenceAuditEventRepository persistenceAuditEventRepository) {
+    public UserJWTController(TokenProvider tokenProvider, ReactiveAuthenticationManager authenticationManager, AuditEventService auditEventService) {
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
-        this.persistenceAuditEventRepository = persistenceAuditEventRepository;
+        this.auditEventService = auditEventService;
     }
 
     @PostMapping("/authenticate")
@@ -139,53 +113,21 @@ public class UserJWTController {
     }
 
     private Mono<? extends Authentication> onAuthenticationSuccess(LoginVM login, Authentication auth) {
-        if (!Constants.ANONYMOUS_USER.equals(login.getUsername())) {
-            PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
-            persistentAuditEvent.setPrincipal(login.getUsername());
-            persistentAuditEvent.setAuditEventType(AUTHENTICATION_SUCCESS);
-            persistentAuditEvent.setAuditEventDate(Instant.now());
-            return persistenceAuditEventRepository.save(persistentAuditEvent).thenReturn(auth);
-        }
-        return Mono.just(auth);
+        return Mono.just(login)
+            .map(LoginVM::getUsername)
+            .filter(username -> !Constants.ANONYMOUS_USER.equals(username))
+            .flatMap(auditEventService::saveAuthenticationSuccess)
+            .thenReturn(auth);
     }
 
     private Mono<? extends Authentication> onAuthenticationError(LoginVM login, Throwable throwable) {
-        if (!Constants.ANONYMOUS_USER.equals(login.getUsername())) {
-            PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
-            persistentAuditEvent.setPrincipal(login.getUsername());
-            persistentAuditEvent.setAuditEventType(AUTHENTICATION_FAILURE);
-            persistentAuditEvent.setAuditEventDate(Instant.now());
-            Map<String, String> eventData = new HashMap<>();
-            eventData.put("type", throwable.getClass().getName());
-            eventData.put("message", throwable.getMessage());
-            persistentAuditEvent.setData(truncate(eventData));
-            return persistenceAuditEventRepository.save(persistentAuditEvent).then(Mono.error(throwable));
-        }
-        return Mono.error(throwable);
+        return Mono.just(login)
+                .map(LoginVM::getUsername)
+                .filter(username -> !Constants.ANONYMOUS_USER.equals(username))
+                .flatMap(username -> auditEventService.saveAuthenticationError(username, throwable))
+                .then(Mono.error(throwable));
     }
 
-    /**
-     * Truncate event data that might exceed column length.
-     */
-    private static Map<String, String> truncate(Map<String, String> data) {
-        Map<String, String> results = new HashMap<>();
-
-        if (data != null) {
-            for (Map.Entry<String, String> entry : data.entrySet()) {
-                String value = entry.getValue();
-                if (value != null) {
-                    int length = value.length();
-                    if (length > EVENT_DATA_COLUMN_MAX_LENGTH) {
-                        value = value.substring(0, EVENT_DATA_COLUMN_MAX_LENGTH);
-                        log.warn("Event data for {} too long ({}) has been truncated to {}. Consider increasing column width.",
-                            entry.getKey(), length, EVENT_DATA_COLUMN_MAX_LENGTH);
-                    }
-                }
-                results.put(entry.getKey(), value);
-            }
-        }
-        return results;
-    }
     <%_ } _%>
 
     /**
