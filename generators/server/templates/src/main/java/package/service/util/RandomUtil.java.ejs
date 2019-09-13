@@ -30,23 +30,12 @@ public final class RandomUtil {
 
     private static final int DEF_COUNT = 20;
 
-    private static final RandomUtil INSTANCE = new RandomUtil();
-
-    public static RandomUtil getInstance() {
-        return INSTANCE;
-    }
-
-    private final SecureRandom secureRandom;
+    private static final SecureRandom secureRandom = new SecureRandom(new SecureRandom().generateSeed(128));
 
     private RandomUtil() {
-        try {
-            secureRandom = SecureRandom.getInstanceStrong();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Unable to find secure algorithms.", e); //NOSONAR
-        }
     }
 
-    private String generateRandomAlphanumericString() {
+    private static String generateRandomAlphanumericString() {
         return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, secureRandom);
     }
 
@@ -55,7 +44,7 @@ public final class RandomUtil {
      *
      * @return the generated password.
      */
-    public String generatePassword() {
+    public static String generatePassword() {
         return generateRandomAlphanumericString();
     }
 
@@ -64,7 +53,7 @@ public final class RandomUtil {
      *
      * @return the generated activation key.
      */
-    public String generateActivationKey() {
+    public static String generateActivationKey() {
         return generateRandomAlphanumericString();
     }
 
@@ -73,7 +62,7 @@ public final class RandomUtil {
      *
      * @return the generated reset key.
      */
-    public String generateResetKey() {
+    public static String generateResetKey() {
         return generateRandomAlphanumericString();
     }
     <%_ if (authenticationType === 'session' && !reactive) { _%>
@@ -84,7 +73,7 @@ public final class RandomUtil {
      *
      * @return the generated series data.
      */
-    public String generateSeriesData() {
+    public static String generateSeriesData() {
         return generateRandomAlphanumericString();
     }
 
@@ -93,7 +82,7 @@ public final class RandomUtil {
      *
      * @return the generated token data.
      */
-    public String generateTokenData() {
+    public static String generateTokenData() {
         return generateRandomAlphanumericString();
     }
     <%_ } _%>
