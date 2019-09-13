@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -7,7 +8,7 @@ const ServerGenerator = require('../../generators/server');
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
     }
 
     get initializing() {
@@ -56,7 +57,7 @@ const mockClientBlueprintSubGen = class extends ClientGenerator {
 
 const mockServerBlueprintSubGen = class extends ServerGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
     }
 
     get initializing() {

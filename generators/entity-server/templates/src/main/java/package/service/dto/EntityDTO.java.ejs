@@ -62,9 +62,9 @@ import java.util.UUID;
 <%_ if (fieldsContainBlob && databaseType === 'sql') { _%>
 import javax.persistence.Lob;
 <%_ } _%>
-<%_ for (idx in fields) { if (fields[idx].fieldIsEnum) { _%>
-import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
-<%_ } } _%>
+<%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
+import <%=packageName%>.domain.enumeration.<%= element %>;
+<%_ }); _%>
 
 /**
  * A DTO for the {@link <%=packageName%>.domain.<%= asEntity(entityClass) %>} entity.

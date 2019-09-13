@@ -57,10 +57,10 @@ const Routes = () => (
     <%_ } _%>
       <ErrorBoundaryRoute path="/logout" component={Logout} />
     <%_ if (!skipUserManagement) { _%>
-      <ErrorBoundaryRoute path="/register" component={Register} />
-      <ErrorBoundaryRoute path="/activate/:key?" component={Activate} />
-      <ErrorBoundaryRoute path="/reset/request" component={PasswordResetInit} />
-      <ErrorBoundaryRoute path="/reset/finish/:key?" component={PasswordResetFinish} />
+      <ErrorBoundaryRoute path="/account/register" component={Register} />
+      <ErrorBoundaryRoute path="/account/activate/:key?" component={Activate} />
+      <ErrorBoundaryRoute path="/account/reset/request" component={PasswordResetInit} />
+      <ErrorBoundaryRoute path="/account/reset/finish/:key?" component={PasswordResetFinish} />
     <%_ } _%>
       <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]}/>
     <%_ if (!skipUserManagement) { _%>

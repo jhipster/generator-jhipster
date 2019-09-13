@@ -26,9 +26,10 @@ module.exports = class {
 
     addBlockContentToFile(rewriteFileModel, errorMessage) {
         try {
-            jhipsterUtils.rewriteFile(rewriteFileModel, this.generator);
+            return jhipsterUtils.rewriteFile(rewriteFileModel, this.generator);
         } catch (e) {
             this.logNeedleNotFound(e, errorMessage, rewriteFileModel.file);
+            return false;
         }
     }
 

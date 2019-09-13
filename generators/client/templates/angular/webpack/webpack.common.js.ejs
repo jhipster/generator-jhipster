@@ -33,9 +33,7 @@ module.exports = (options) => ({
         extensions: ['.ts', '.js'],
         modules: ['node_modules'],
         mainFields: [ 'es2015', 'browser', 'module', 'main'],
-        alias: {
-            app: utils.root('<%= MAIN_SRC_DIR %>app/')
-        }
+        alias: utils.mapTypescriptAliasToWebpackAlias()
     },
     stats: {
         children: false

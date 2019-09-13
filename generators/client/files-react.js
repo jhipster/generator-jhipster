@@ -51,7 +51,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipCommitHook,
-            templates: ['.huskyrc']
+            templates: ['.huskyrc', '.lintstagedrc.js']
         }
     ],
     sass: [

@@ -58,6 +58,9 @@
     <%_ if (cacheProvider === 'ehcache') { _%>
     <logger name="org.ehcache" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'caffeine') { _%>
+    <logger name="com.github.benmanes.caffeine" level="WARN"/>
+    <%_ } _%>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/>

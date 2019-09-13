@@ -75,24 +75,26 @@
         "tabtab": "2.2.2",
         "through2": "3.0.1",
         "uuid": "3.3.2",
+        "sync-request": "6.0.0",
         "yeoman-environment": "2.3.4",
         "yeoman-generator": "3.2.0",
-        "yo": "2.0.6"
+        "yo": "3.1.0"
     },
     "devDependencies": {
         "chai": "4.2.0",
         "ejs-lint": "0.3.0",
-        "eslint": "5.14.1",
-        "eslint-config-airbnb-base": "13.1.0",
-        "eslint-config-prettier": "4.1.0",
-        "eslint-plugin-import": "2.16.0",
-        "eslint-plugin-prettier": "3.0.1",
+        "eslint": "6.2.2",
+        "eslint-config-airbnb-base": "14.0.0",
+        "eslint-config-prettier": "6.1.0",
+        "eslint-plugin-import": "2.18.2",
+        "eslint-plugin-prettier": "3.1.0",
         "fs-extra": "7.0.1",
         "jsdoc": "3.6.3",
         "mocha": "6.1.4",
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
-        "yeoman-test": "1.9.1"
+        "yeoman-test": "1.9.1",
+        "@openapitools/openapi-generator-cli": "0.0.14-4.0.2"
     },
     "resolutions": {
         "inquirer": "6.3.1"

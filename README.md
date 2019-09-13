@@ -6,7 +6,7 @@ Greetings, Java Hipster!
 
 Full documentation and information is available on our website at [https://www.jhipster.tech/][jhipster-url]
 
-Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here](issue-template). For feature requests and queries you can use [this template][feature-template].
+Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here][issue-template]. For feature requests and queries you can use [this template][feature-template].
 
 ## Sponsors
 
@@ -21,6 +21,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 [![Octo Consulting Group][octoconsulting-image]][octoconsulting-url]
 [Octo Consulting Group][octoconsulting-url]
+
+**Silver sponsors**
+
+[![BizEquity][bizequity-image]][bizequity-url]
+[BizEquity][bizequity-url]
 
 **Bronze sponsors**
 
@@ -37,8 +42,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 [![Clay][clay-image]][clay-url]
 
 [![UX Planet][uxplanet-image]][uxplanet-url]
-
-[![PapersOwl][papersowl-image]][papersowl-url]
 
 **Thank you to all our backers!**
 
@@ -113,6 +116,8 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [okta-url]: https://developer.okta.com/signup?utm_source=JHipster&utm_medium=logo&utm_campaign=Gold-Sponsor
 [octoconsulting-image]: https://www.jhipster.tech/images/open-collective/octoconsulting.png
 [octoconsulting-url]: http://www.octoconsulting.com/
+[bizequity-image]: https://www.jhipster.tech/images/open-collective/bizequity.png
+[bizequity-url]: https://www.bizequity.com/
 [forsyslab-image]: https://www.jhipster.tech/images/open-collective/forsyslab.jpg
 [forsyslab-url]: https://forsyslab.com/
 [cubaplatform-image]: https://www.jhipster.tech/images/open-collective/cubaplatform.png
@@ -127,8 +132,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [clay-url]: https://clay.global/
 [uxplanet-image]: https://www.jhipster.tech/images/open-collective/uxplanet.png
 [uxplanet-url]: https://uxplanet.org/
-[papersowl-image]: https://www.jhipster.tech/images/open-collective/papersowl.png
-[papersowl-url]: https://papersowl.com/
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat

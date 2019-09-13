@@ -17,19 +17,13 @@
 # limitations under the License.
 #
 
-os:
-    - linux
+dist: bionic
 services:
     - docker
+    - xvfb
 language: node_js
 node_js:
     - '10.16.3'
-addons:
-    apt:
-        sources:
-            - google-chrome
-        packages:
-            - google-chrome-stable
 cache:
     directories:
         - $HOME/.m2
@@ -39,7 +33,7 @@ env:
         - JHI_PROFILE=dev
         - JHI_RUN_APP=1
         - JHI_PROTRACTOR=0
-        - JHI_JDK=8
+        - JHI_JDK=11
         # if JHI_LIB_BRANCH value is release, use the release from Maven
         - JHI_LIB_REPO=https://github.com/jhipster/jhipster.git
         - JHI_LIB_BRANCH=master
@@ -68,27 +62,10 @@ env:
 # Install all tools and check configuration
 #----------------------------------------------------------------------
 before_install:
-    - |
-        if [[ $JHI_JDK = '11' ]]; then
-            echo '*** Using OpenJDK 11'
-            sudo add-apt-repository ppa:openjdk-r/ppa
-            sudo apt-get update
-            sudo apt-get install -y openjdk-11-jdk
-            sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
-            java -version
-        else
-            echo '*** Using OpenJDK 8 by default'
-        fi
+    - sudo apt-get install -y google-chrome-stable
     - java -version
     - export TZ=Australia/Canberra
     - date
-    - sudo /etc/init.d/mysql stop
-    - sudo /etc/init.d/postgresql stop
-    # Use this for Protractor
-    - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
-    # Update NPM
-    - npm install -g npm
     # Install Yarn
     - npm install -g yarn
     - $JHI_SCRIPTS/04-git-config.sh

@@ -254,7 +254,7 @@ To launch your application's tests, run:
     <%_ if (buildTool === 'maven') { _%>
     ./mvnw verify
     <%_ } else { _%>
-    ./gradlew test integrationTest
+    ./gradlew test integrationTest jacocoTestReport
     <%_ } _%>
 <% if (!skipClient) { %>
 ### Client tests
@@ -298,7 +298,7 @@ If you need to re-run the Sonar phase, please be sure to specify at least the `i
 or
 <%_ } else if(buildTool === 'gradle') { _%>
 ```
-./gradlew -Pprod clean check sonarqube
+./gradlew -Pprod clean check jacocoTestReport sonarqube
 ```
 <%_ } _%>
 
