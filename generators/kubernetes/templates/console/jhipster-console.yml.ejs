@@ -70,7 +70,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   rules:
-  - host: jhipster-console.<%= kubernetesNamespace %><%= ingressDomain %>
+  - host: jhipster-console.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
       paths:
       - path: /
