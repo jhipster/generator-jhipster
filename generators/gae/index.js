@@ -35,8 +35,7 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.bold('Welcome to Google App Engine Generator (Beta)'));
-                this.warning(chalk.bold('This sub-generator is still in development, please report bugs on Github'));
+                this.log(chalk.bold('Welcome to Google App Engine Generator'));
             },
             checkInstallation() {
                 if (this.abort) return;
@@ -66,12 +65,12 @@ module.exports = class extends BaseGenerator {
                         } else {
                             this.log(chalk.bold('\nInstalling App Engine Java SDK'));
                             this.log(`... Running: gcloud components install ${component} --quiet`);
-                            const child = exec(`gcloud components install ${component} --quiet`, {
-                                stdio: [process.stdin, process.stdout, process.stderr]
-                            });
-                            child.on('exit', code => {
-                                if (code !== 0) {
-                                    this.abort = true;
+                            exec(`gcloud components install ${component} --quiet`, err => {
+                                if (err) {
+                                    this.log.error(err);
+                                    done(
+                                        `Installation failed. \nPlease try to install the app-engine-java component manually via; gcloud components install ${component}`
+                                    );
                                 }
                                 done();
                             });
@@ -112,6 +111,7 @@ module.exports = class extends BaseGenerator {
     }
 
     defaultProjectId() {
+        if (this.abort) return null;
         if (this.gcpProjectId) {
             return this.gcpProjectId;
         }
@@ -709,6 +709,7 @@ module.exports = class extends BaseGenerator {
             },
 
             addDependencies() {
+                if (this.abort) return;
                 if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.prodDatabaseType === 'mysql' || this.prodDatabaseType === 'mariadb') {
                     if (this.buildTool === 'maven') {
@@ -727,6 +728,7 @@ module.exports = class extends BaseGenerator {
             },
 
             addGradlePlugin() {
+                if (this.abort) return;
                 if (this.buildTool === 'gradle') {
                     if (this.gaeCloudSQLInstanceNeeded === 'Y') {
                         this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.1.0');
@@ -736,6 +738,7 @@ module.exports = class extends BaseGenerator {
             },
 
             addMavenPlugin() {
+                if (this.abort) return;
                 if (this.buildTool === 'maven') {
                     if (this.gaeCloudSQLInstanceNeeded === 'Y') {
                         this.render('pom-plugin.xml.ejs', rendered => {
@@ -756,8 +759,8 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
 
                 if (this.buildTool === 'maven') {
-                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests'));
-                    this.log(chalk.bold('Deploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae'));
+                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw package appengine:run -DskipTests'));
+                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pprod,prod-gae'));
                 } else if (this.buildTool === 'gradle') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
                     this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pprod -Pprod-gae'));

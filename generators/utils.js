@@ -64,6 +64,7 @@ function rewriteFile(args, generator) {
     args.haystack = generator.fs.read(fullPath);
     const body = rewrite(args);
     generator.fs.write(fullPath, body);
+    return args.haystack !== body;
 }
 
 /**
@@ -77,9 +78,10 @@ function replaceContent(args, generator) {
 
     const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 
-    let body = generator.fs.read(fullPath);
-    body = body.replace(re, args.content);
-    generator.fs.write(fullPath, body);
+    const currentBody = generator.fs.read(fullPath);
+    const newBody = currentBody.replace(re, args.content);
+    generator.fs.write(fullPath, newBody);
+    return newBody !== currentBody;
 }
 
 /**

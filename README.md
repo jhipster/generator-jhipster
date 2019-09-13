@@ -22,6 +22,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 [![Octo Consulting Group][octoconsulting-image]][octoconsulting-url]
 [Octo Consulting Group][octoconsulting-url]
 
+**Silver sponsors**
+
+[![BizEquity][bizequity-image]][bizequity-url]
+[BizEquity][bizequity-url]
+
 **Bronze sponsors**
 
 [![ForsysLab][forsyslab-image]][forsyslab-url]
@@ -111,6 +116,8 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [okta-url]: https://developer.okta.com/signup?utm_source=JHipster&utm_medium=logo&utm_campaign=Gold-Sponsor
 [octoconsulting-image]: https://www.jhipster.tech/images/open-collective/octoconsulting.png
 [octoconsulting-url]: http://www.octoconsulting.com/
+[bizequity-image]: https://www.jhipster.tech/images/open-collective/bizequity.png
+[bizequity-url]: https://www.bizequity.com/
 [forsyslab-image]: https://www.jhipster.tech/images/open-collective/forsyslab.jpg
 [forsyslab-url]: https://forsyslab.com/
 [cubaplatform-image]: https://www.jhipster.tech/images/open-collective/cubaplatform.png
