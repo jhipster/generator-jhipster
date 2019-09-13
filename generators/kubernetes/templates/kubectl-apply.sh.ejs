@@ -25,23 +25,23 @@ logSummary(){
     echo "#####################################################"
     echo "Please find the below useful endpoints,"
     <%_ if (monitoring === 'elk') { _%>
-    echo "JHipster Console - http://jhipster-console.<%= kubernetesNamespace %><%= ingressDomain %>"
+    echo "JHipster Console - http://jhipster-console.<%= kubernetesNamespace %>.<%= ingressDomain %>"
     <%_ } _%>
     <%_ if (monitoring === 'prometheus') { _%>
-    echo "JHipster Grafana - http://jhipster-grafana.<%= kubernetesNamespace %><%= ingressDomain %>"
+    echo "JHipster Grafana - http://jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>"
     <%_ } _%>
     <%_ if (kubernetesServiceType === 'Ingress') { _%>
     <%_ appConfigs.forEach((appConfig) =>  { _%>
     <%_ if (appConfig.applicationType === 'gateway') {_%>
-    echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>"
+    echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
     <%_ } _%><%_ if (appConfig.applicationType === 'monolith') {_%>
-    echo "<%= appConfig.baseName %> - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>"
+    echo "<%= appConfig.baseName %> - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
     <%_ } _%>
     <%_ }) _%>
     <%_ if (istio) { _%>
-    echo "Jaeger - http://jaeger.${ISTIO_SYSTEM}<%= ingressDomain %>"
-    echo "Grafana - http://grafana.${ISTIO_SYSTEM}<%= ingressDomain %>"
-    echo "Kiali - http://kiali.${ISTIO_SYSTEM}<%= ingressDomain %>"
+    echo "Jaeger - http://jaeger.istio-system.<%= ingressDomain %>"
+    echo "Grafana - http://grafana.istio-system.<%= ingressDomain %>"
+    echo "Kiali - http://kiali.istio-system.<%= ingressDomain %>"
     <%_ } _%>
     <%_ } _%>
     echo "#####################################################"

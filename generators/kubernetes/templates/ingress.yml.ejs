@@ -23,7 +23,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   rules:
-  - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>
+  - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
       paths:
       - path: /.*
@@ -31,7 +31,7 @@ spec:
           serviceName: <%= app.baseName.toLowerCase() %>
           servicePort: <%= app.serverPort %>
       <%_ if (!app.serviceDiscoveryType) { _%>
-        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(function(config) { _%>
+        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
       - path: /services/<%= config.baseName.toLowerCase() %>/.*
         backend:
           serviceName: <%= config.baseName.toLowerCase() %>

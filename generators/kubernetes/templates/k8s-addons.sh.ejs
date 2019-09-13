@@ -19,8 +19,8 @@
 -%>
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # kiali - istio service mesh observability
-export GRAFANA_URL="http://grafana.${ISTIO_SYSTEM}<%= ingressDomain %>"
-export JAEGER_URL="http://jaeger.${ISTIO_SYSTEM}<%= ingressDomain %>"
+export GRAFANA_URL="http://grafana.istio-system.<%= ingressDomain %>"
+export JAEGER_URL="http://jaeger.istio-system.<%= ingressDomain %>"
 export IMAGE_NAME="${IMAGE_NAME:-kiali/kiali}"
 export IMAGE_VERSION=
 export VERSION_LABEL=
