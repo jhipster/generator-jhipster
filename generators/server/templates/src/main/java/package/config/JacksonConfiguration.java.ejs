@@ -23,10 +23,10 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 <%_ } _%>
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-<%_ if (javaVersion === '1.8') { _%>
+<%_ if (!useJacksonBlackBird) { _%>
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
 <%_ } _%>
-<%_ if (javaVersion === '11' && useJacksonBlackBird) { _%>
+<%_ if (useJacksonBlackBird) { _%>
 import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
@@ -60,7 +60,7 @@ public class JacksonConfiguration {
         return new Hibernate5Module();
     }
 <%_ } _%>
-<%_ if (javaVersion === '1.8') { _%>
+<%_ if (!useJacksonBlackBird) { _%>
 
     /*
      * Jackson Afterburner module to speed up serialization/deserialization.
@@ -70,7 +70,7 @@ public class JacksonConfiguration {
         return new AfterburnerModule();
     }
 <%_ } _%>
-<%_ if (javaVersion === '11' && useJacksonBlackBird) { _%>
+<%_ if (useJacksonBlackBird) { _%>
 
     /*
      * Jackson BlackBird module to speed up serialization/deserialization.

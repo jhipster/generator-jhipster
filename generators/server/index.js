@@ -221,12 +221,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
                 }
-                const javaVersion = configuration.get('javaVersion');
-                if (javaVersion) {
-                    this.javaVersion = javaVersion;
-                }
                 const useJacksonBlackBird = configuration.get('useJacksonBlackBird');
-                if (javaVersion) {
+                if (useJacksonBlackBird) {
                     this.useJacksonBlackBird = useJacksonBlackBird;
                 }
 
@@ -288,9 +284,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     if (this.languages === undefined) {
                         this.languages = ['en', 'fr'];
                     }
-                    if (this.javaVersion === undefined) {
-                        this.javaVersion = constants.JAVA_VERSION;
-                    }
                     if (this.useJacksonBlackBird === undefined) {
                         this.useJacksonBlackBird = false;
                     }
@@ -339,7 +332,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.configOptions.buildTool = this.buildTool;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.configOptions.authenticationType = this.authenticationType;
-                this.configOptions.javaVersion = this.javaVersion;
                 const uaaBaseName = this.uaaBaseName;
                 if (uaaBaseName) {
                     this.configOptions.uaaBaseName = this.uaaBaseName;
@@ -454,9 +446,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.testFrameworks = [];
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
-                }
-                if (this.configOptions.javaVersion) {
-                    this.javaVersion = this.configOptions.javaVersion;
                 }
                 if (this.configOptions.useJacksonBlackBird) {
                     this.useJacksonBlackBird = this.configOptions.useJacksonBlackBird;

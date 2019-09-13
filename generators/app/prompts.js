@@ -22,8 +22,6 @@ const statistics = require('../statistics');
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
-    askForJavaVersion,
-    askJacksonBlackBirdToBeInstalled,
     askForModuleName,
     askFori18n,
     askForTestOpts,
@@ -217,44 +215,4 @@ function askModulesToBeInstalled(done, generator) {
             done();
         }
     );
-}
-
-function askForJavaVersion() {
-    if (this.existingProject) {
-        return;
-    }
-
-    const choices = [{ name: 'Java >= 11', value: '11' }, { name: 'Java 8', value: '1.8' }];
-    const defaultChoice = [{ name: 'Java >= 11', value: '11' }];
-    const PROMPT = {
-        type: 'list',
-        name: 'javaVersion',
-        message: 'Which Java version would you like to use?',
-        choices,
-        default: defaultChoice
-    };
-
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
-        this.javaVersion = prompt.javaVersion;
-        done();
-    });
-}
-
-function askJacksonBlackBirdToBeInstalled() {
-    const PROMPT = {
-        when: () => this.javaVersion === '11',
-        type: 'confirm',
-        name: 'useJacksonBlackBird',
-        message: 'Add jackson-blackbird for increased performance (this is an experimental library) ?',
-        default: false
-    };
-
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
-        this.useJacksonBlackBird = prompt.useJacksonBlackBird;
-        done();
-    });
 }
