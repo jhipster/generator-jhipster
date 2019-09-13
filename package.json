@@ -94,7 +94,7 @@
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
         "yeoman-test": "1.9.1",
-        "@openapitools/openapi-generator-cli": "0.0.19-4.1.2"
+        "@openapitools/openapi-generator-cli": "0.0.14-4.0.2"
     },
     "resolutions": {
         "inquirer": "6.3.1"
