@@ -730,9 +730,7 @@ module.exports = class extends BaseGenerator {
             addGradlePlugin() {
                 if (this.abort) return;
                 if (this.buildTool === 'gradle') {
-                    if (this.gaeCloudSQLInstanceNeeded === 'Y') {
-                        this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.1.0');
-                    }
+                    this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.1.0');
                     this.applyFromGradleScript('gradle/gae');
                 }
             },
