@@ -23,7 +23,7 @@ buildscript {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -369,7 +369,7 @@ dependencies {
     implementation "org.springframework.kafka:spring-kafka"
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
-    implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
+    implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
         exclude module: "spring-boot-starter-tomcat"
     }
     <%_ if (!reactive) { _%>
