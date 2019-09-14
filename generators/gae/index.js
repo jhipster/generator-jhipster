@@ -740,11 +740,9 @@ module.exports = class extends BaseGenerator {
             addMavenPlugin() {
                 if (this.abort) return;
                 if (this.buildTool === 'maven') {
-                    if (this.gaeCloudSQLInstanceNeeded === 'Y') {
-                        this.render('pom-plugin.xml.ejs', rendered => {
-                            this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.1.0', rendered.trim());
-                        });
-                    }
+                    this.render('pom-plugin.xml.ejs', rendered => {
+                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.1.0', rendered.trim());
+                    });
                     this.render('pom-profile.xml.ejs', rendered => {
                         this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
                     });
