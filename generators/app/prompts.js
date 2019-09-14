@@ -40,7 +40,7 @@ function askForInsightOptIn() {
         default: true,
     }).then(prompt => {
         if (prompt.insight !== undefined) {
-            statistics.setOptoutStatus(!prompt.insight);
+            statistics.setOptOutStatus(!prompt.insight);
         }
         done();
     });
