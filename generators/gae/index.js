@@ -748,6 +748,9 @@ module.exports = class extends BaseGenerator {
                     this.render('pom-profile.xml.ejs', rendered => {
                         this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
                     });
+                    this.render('pom-gae-build-profile.xml.ejs', rendered => {
+                        this.addMavenProfile('gae', `            ${rendered.trim()}`);
+                    });
                 }
             }
         };
@@ -760,10 +763,10 @@ module.exports = class extends BaseGenerator {
 
                 if (this.buildTool === 'maven') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw package appengine:run -DskipTests'));
-                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pprod,prod-gae'));
+                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod-gae'));
                 } else if (this.buildTool === 'gradle') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
-                    this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pprod -Pprod-gae'));
+                    this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pgae -Pprod-gae'));
                 }
                 /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {

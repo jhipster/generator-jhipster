@@ -28,3 +28,4 @@ automatic_scaling:
   max_instances: <%= gaeMaxInstances %>
   <%_ } _%>
 <%_ } _%>
+entrypoint: java -agentpath:/opt/cdbg/cdbg_java_agent.so=--log_dir=/var/log -noverify -XX:+AlwaysPreTouch -XX:TieredStopAtLevel=1 -Djava.security.egd=file:/dev/./urandom -cp BOOT-INF/resources/:BOOT-INF/classes/:BOOT-INF/lib/* <%= packageName %>.<%= baseName %>
