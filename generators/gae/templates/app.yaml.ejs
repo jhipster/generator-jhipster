@@ -8,6 +8,10 @@ runtime: java11
 instance_class: <%= gaeInstanceClass %>
 service: <%=gaeServiceName%>
 handlers:
+- url: /(.*\.(html|css|js))$
+  static_files: BOOT-INF/classes/static/\1
+  upload: BOOT-INF/classes/static/.*\.(html|css|js)$
+  secure: always
 - url: /(.*)
   script: auto
   secure: always
