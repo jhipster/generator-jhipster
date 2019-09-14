@@ -722,7 +722,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.fieldsIsReactAvField = true;
                     }
 
-                    const nonEnumType = [
+                    field.fieldIsEnum = ![
                         'String',
                         'Integer',
                         'Long',
@@ -738,11 +738,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'byte[]',
                         'ByteBuffer'
                     ].includes(fieldType);
-                    if (['sql', 'mongodb', 'couchbase', 'no', 'cassandra'].includes(context.databaseType) && !nonEnumType) {
-                        field.fieldIsEnum = true;
-                    } else {
-                        field.fieldIsEnum = false;
-                    }
 
                     if (field.fieldIsEnum === true) {
                         context.i18nToLoad.push(field.enumInstance);
