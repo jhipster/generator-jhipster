@@ -1243,9 +1243,6 @@
                         <excludes>
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
-<%_ if (cucumberTests) { _%>
-                            <exclude>**/*CucumberIT*</exclude>
-<%_ } _%>
                         </excludes>
                     </configuration>
                 </plugin>
@@ -1263,9 +1260,6 @@
                         <includes>
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
-<%_ if (cucumberTests) { _%>
-                            <include>**/*CucumberIT*</include>
-<%_ } _%>
                         </includes>
                     </configuration>
                     <executions>
