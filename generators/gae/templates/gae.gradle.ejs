@@ -25,10 +25,6 @@ appengine {
     }
 }
 
-bootWar {
-    webXml = file("${project.rootDir}/<%= CLIENT_MAIN_SRC_DIR %>WEB-INF/web.xml")
-}
-
 processResources {
     if (project.hasProperty("prod-gae")) {
         filesMatching("**/application.yml") {
