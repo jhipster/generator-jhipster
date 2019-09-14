@@ -44,10 +44,7 @@ const ENTITY_STATES = [
         <%= entityAngularName %>DeletePopupComponent,
     ],
     entryComponents: [
-        <%= entityAngularName %>Component,
-        <%= entityAngularName %>UpdateComponent,
-        <%= entityAngularName %>DeleteDialogComponent,
-        <%= entityAngularName %>DeletePopupComponent,
+        <%= entityAngularName %>DeleteDialogComponent
     ]
 })
 export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {
