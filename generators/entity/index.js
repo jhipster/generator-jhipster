@@ -738,7 +738,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'byte[]',
                         'ByteBuffer'
                     ].includes(fieldType);
-                    if (['sql', 'mongodb', 'couchbase', 'no'].includes(context.databaseType) && !nonEnumType) {
+                    if (['sql', 'mongodb', 'couchbase', 'no', 'cassandra'].includes(context.databaseType) && !nonEnumType) {
                         field.fieldIsEnum = true;
                     } else {
                         field.fieldIsEnum = false;
