@@ -448,7 +448,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 });
             },
 
-            askFori18n: prompts.askFori18n,
+            askForI18n: prompts.askForI18n,
         };
     }
 

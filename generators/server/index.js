@@ -348,7 +348,7 @@ module.exports = class extends BaseBlueprintGenerator {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
             askForOptionalItems: prompts.askForOptionalItems,
-            askFori18n: prompts.askFori18n,
+            askForI18n: prompts.askForI18n,
 
             setSharedConfigOptions() {
                 this.configOptions.packageName = this.packageName;
