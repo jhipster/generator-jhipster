@@ -34,3 +34,13 @@ processResources {
         }
     }
 }
+
+task unzip(type: Copy) {
+    def jarFile = file("build/libs/" + rootProject.name + rootProject.version + ".jar")
+    def outputDir = file("build/staged-app")
+
+    from zipTree(jarFile)
+    into outputDir
+}
+
+appengineStage.finalizedBy unzip
