@@ -41,7 +41,7 @@ module.exports = class extends needleServer {
         if (other) {
             dependency += `${other}\n`;
         }
-        dependency += '             </dependency>';
+        dependency += '            </dependency>';
         const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-add-dependency-management', dependency);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);

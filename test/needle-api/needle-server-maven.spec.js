@@ -39,56 +39,56 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         const customPhaseSteps = {
             mavenStep() {
                 this.addMavenDependencyManagement(
-                    'groupId',
-                    'artifactId',
+                    'dependencyManagementGroupId',
+                    'dependencyManagementArtifactId',
                     'version',
                     'type',
                     'scope',
-                    '            <exclusions>\n' +
-                        '                <exclusion>\n' +
-                        '                    <groupId>aGroupId</groupId>\n' +
-                        '                    <artifactId>anArtifactId</artifactId>\n' +
-                        '                </exclusion>\n' +
-                        '            </exclusions>'
+                    '                <exclusions>\n' +
+                        '                    <exclusion>\n' +
+                        '                        <groupId>exclusionGroupId</groupId>\n' +
+                        '                        <artifactId>exclusionArtifactId</artifactId>\n' +
+                        '                    </exclusion>\n' +
+                        '                </exclusions>'
                 );
 
-                this.addMavenRepository('id', 'url');
-                this.addMavenPluginRepository('id', 'url');
+                this.addMavenRepository('repoId', 'repoUrl');
+                this.addMavenPluginRepository('pluginRepoId', 'pluginRepoUrl');
                 this.addMavenDistributionManagement('snapshotsId', 'snapshotsUrl', 'releasesId', 'releasesUrl');
-                this.addMavenProperty('name', 'value');
+                this.addMavenProperty('propertyName', 'propertyValue');
                 this.addMavenDependency(
-                    'groupId',
-                    'artifactId',
+                    'dependencyGroupId',
+                    'dependencyArtifactId',
                     'version',
                     '            <exclusions>\n' +
                         '                <exclusion>\n' +
-                        '                    <groupId>aGroupId</groupId>\n' +
-                        '                    <artifactId>anArtifactId</artifactId>\n' +
+                        '                    <groupId>exclusionGroupId</groupId>\n' +
+                        '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                         '                </exclusion>\n' +
                         '            </exclusions>'
                 );
                 this.addMavenDependencyInDirectory(
                     '.',
-                    'groupId2',
-                    'artifactId2',
+                    'directoryDependencyGroupId',
+                    'directoryDependencyArtifactId',
                     'version2',
                     '            <exclusions>\n' +
                         '                <exclusion>\n' +
-                        '                    <groupId>aGroupId</groupId>\n' +
-                        '                    <artifactId>anArtifactId</artifactId>\n' +
+                        '                    <groupId>exclusionGroupId</groupId>\n' +
+                        '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                         '                </exclusion>\n' +
                         '            </exclusions>'
                 );
                 this.addMavenPlugin(
-                    'groupId',
-                    'artifactId',
+                    'mavenPluginGroupId',
+                    'mavenPluginArtifactId',
                     'version',
-                    '            <exclusions>\n' +
-                        '                <exclusion>\n' +
-                        '                    <groupId>aGroupId</groupId>\n' +
-                        '                    <artifactId>anArtifactId</artifactId>\n' +
-                        '                </exclusion>\n' +
-                        '            </exclusions>'
+                    '                <exclusions>\n' +
+                        '                    <exclusion>\n' +
+                        '                        <groupId>exclusionGroupId</groupId>\n' +
+                        '                        <artifactId>exclusionArtifactId</artifactId>\n' +
+                        '                    </exclusion>\n' +
+                        '                </exclusions>'
                 );
                 this.addMavenAnnotationProcessor(
                     'annotationProcessorGroupId',
@@ -138,29 +138,32 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
         assert.fileContent(
             'pom.xml',
             '            <dependency>\n' +
-                '                <groupId>groupId</groupId>\n' +
-                '                <artifactId>artifactId</artifactId>\n' +
+                '                <groupId>dependencyManagementGroupId</groupId>\n' +
+                '                <artifactId>dependencyManagementArtifactId</artifactId>\n' +
                 '                <version>version</version>\n' +
                 '                <type>type</type>\n' +
                 '                <scope>scope</scope>\n' +
-                '            <exclusions>\n' +
-                '                <exclusion>\n' +
-                '                    <groupId>aGroupId</groupId>\n' +
-                '                    <artifactId>anArtifactId</artifactId>\n' +
-                '                </exclusion>\n' +
-                '            </exclusions>\n' +
-                '             </dependency>'
+                '                <exclusions>\n' +
+                '                    <exclusion>\n' +
+                '                        <groupId>exclusionGroupId</groupId>\n' +
+                '                        <artifactId>exclusionArtifactId</artifactId>\n' +
+                '                    </exclusion>\n' +
+                '                </exclusions>\n' +
+                '            </dependency>'
         );
     });
 
     it('Assert pom.xml has the repository added', () => {
-        assert.fileContent('pom.xml', '        <repository>\n            <id>id</id>\n            <url>url</url>\n        </repository>');
+        assert.fileContent(
+            'pom.xml',
+            '        <repository>\n            <id>repoId</id>\n            <url>repoUrl</url>\n        </repository>'
+        );
     });
 
     it('Assert pom.xml has the plugin repository added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <pluginRepository>\n            <id>id</id>\n            <url>url</url>\n        </pluginRepository>'
+            '        <pluginRepository>\n            <id>pluginRepoId</id>\n            <url>pluginRepoUrl</url>\n        </pluginRepository>'
         );
     });
 
@@ -175,24 +178,20 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
     });
 
     it('Assert pom.xml has the property added', () => {
-        assert.fileContent('pom.xml', '<name>value</name>');
-    });
-
-    it('Assert pom.xml has the dependencyManagement added', () => {
-        assert.fileContent('pom.xml', '');
+        assert.fileContent('pom.xml', '<propertyName>propertyValue</propertyName>');
     });
 
     it('Assert pom.xml has the dependency added', () => {
         assert.fileContent(
             'pom.xml',
             '        <dependency>\n' +
-                '            <groupId>groupId</groupId>\n' +
-                '            <artifactId>artifactId</artifactId>\n' +
+                '            <groupId>dependencyGroupId</groupId>\n' +
+                '            <artifactId>dependencyArtifactId</artifactId>\n' +
                 '            <version>version</version>\n' +
                 '            <exclusions>\n' +
                 '                <exclusion>\n' +
-                '                    <groupId>aGroupId</groupId>\n' +
-                '                    <artifactId>anArtifactId</artifactId>\n' +
+                '                    <groupId>exclusionGroupId</groupId>\n' +
+                '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                 '                </exclusion>\n' +
                 '            </exclusions>\n' +
                 '        </dependency>'
@@ -203,16 +202,33 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
         assert.fileContent(
             'pom.xml',
             '        <dependency>\n' +
-                '            <groupId>groupId2</groupId>\n' +
-                '            <artifactId>artifactId2</artifactId>\n' +
+                '            <groupId>directoryDependencyGroupId</groupId>\n' +
+                '            <artifactId>directoryDependencyArtifactId</artifactId>\n' +
                 '            <version>version2</version>\n' +
                 '            <exclusions>\n' +
                 '                <exclusion>\n' +
-                '                    <groupId>aGroupId</groupId>\n' +
-                '                    <artifactId>anArtifactId</artifactId>\n' +
+                '                    <groupId>exclusionGroupId</groupId>\n' +
+                '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                 '                </exclusion>\n' +
                 '            </exclusions>\n' +
                 '        </dependency>'
+        );
+    });
+
+    it('Assert pom.xml has the maven plugin added', () => {
+        assert.fileContent(
+            'pom.xml',
+            '            <plugin>\n' +
+                '                <groupId>mavenPluginGroupId</groupId>\n' +
+                '                <artifactId>mavenPluginArtifactId</artifactId>\n' +
+                '                <version>version</version>\n' +
+                '                <exclusions>\n' +
+                '                    <exclusion>\n' +
+                '                        <groupId>exclusionGroupId</groupId>\n' +
+                '                        <artifactId>exclusionArtifactId</artifactId>\n' +
+                '                    </exclusion>\n' +
+                '                </exclusions>\n' +
+                '            </plugin>'
         );
     });
 
