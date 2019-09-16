@@ -90,6 +90,17 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '                    </exclusion>\n' +
                         '                </exclusions>'
                 );
+                this.addMavenPluginManagement(
+                    'mavenPluginManagementGroupId',
+                    'mavenPluginManagementArtifactId',
+                    'version',
+                    '                    <exclusions>\n' +
+                        '                        <exclusion>\n' +
+                        '                            <groupId>exclusionGroupId</groupId>\n' +
+                        '                            <artifactId>exclusionArtifactId</artifactId>\n' +
+                        '                        </exclusion>\n' +
+                        '                    </exclusions>'
+                );
                 this.addMavenAnnotationProcessor(
                     'annotationProcessorGroupId',
                     'annotationProcessorArtifactId',
@@ -252,6 +263,24 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 '                </exclusions>\n' +
                 '            </plugin>\n' +
                 '            <!-- jhipster-needle-maven-add-plugin -->'
+        );
+    });
+
+    it('Assert pom.xml has the maven plugin management added', () => {
+        assert.fileContent(
+            'pom.xml',
+            '                <plugin>\n' +
+                '                    <groupId>mavenPluginManagementGroupId</groupId>\n' +
+                '                    <artifactId>mavenPluginManagementArtifactId</artifactId>\n' +
+                '                    <version>version</version>\n' +
+                '                    <exclusions>\n' +
+                '                        <exclusion>\n' +
+                '                            <groupId>exclusionGroupId</groupId>\n' +
+                '                            <artifactId>exclusionArtifactId</artifactId>\n' +
+                '                        </exclusion>\n' +
+                '                    </exclusions>\n' +
+                '                </plugin>\n' +
+                '                <!-- jhipster-needle-maven-add-plugin-management -->'
         );
     });
 

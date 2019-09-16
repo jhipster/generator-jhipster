@@ -696,6 +696,18 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a new Maven plugin management.
+     *
+     * @param {string} groupId - plugin groupId
+     * @param {string} artifactId - plugin artifactId
+     * @param {string} version - explicit plugin version number
+     * @param {string} other - explicit other thing: executions, configuration...
+     */
+    addMavenPluginManagement(groupId, artifactId, version, other) {
+        this.needleApi.serverMaven.addPluginManagement(groupId, artifactId, version, other);
+    }
+
+    /**
      * Add a new annotation processor path to Maven compiler configuration.
      *
      * @param {string} groupId - plugin groupId

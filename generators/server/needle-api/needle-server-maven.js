@@ -141,6 +141,25 @@ module.exports = class extends needleServer {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
+    addPluginManagement(groupId, artifactId, version, other) {
+        const errorMessage = `${chalk.yellow('Reference to maven plugin management ')}
+            (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`;
+        // prettier-ignore
+        let plugin = `${'    <plugin>\n'
+            + '                    <groupId>'}${groupId}</groupId>\n`
+            + `                    <artifactId>${artifactId}</artifactId>\n`;
+        if (version) {
+            plugin += `                    <version>${version}</version>\n`;
+        }
+        if (other) {
+            plugin += `${other}\n`;
+        }
+        plugin += '                </plugin>';
+        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-add-plugin-management', plugin);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
     addAnnotationProcessor(groupId, artifactId, version) {
         const errorMessage = `${chalk.yellow(
             ' Reference to '
