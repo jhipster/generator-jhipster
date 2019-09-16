@@ -25,8 +25,8 @@ services:
             ZOOKEEPER_TICK_TIME: 2000
     kafka:
         image: <%= DOCKER_KAFKA %>
-        depends_on:
-            - zookeeper
+#        depends_on:
+#            - zookeeper
         ports:
             - 9092:9092
         environment:
