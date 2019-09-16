@@ -32,11 +32,6 @@ describe('JDLUnaryOption', () => {
         }).to.throw("The option's name must be passed to create an option.");
       });
     });
-    context('when passing an invalid name', () => {
-      expect(() => {
-        new JDLUnaryOption({ name: 'IsNotAnOption' });
-      }).to.throw("The option's name must exist to create an option, got 'IsNotAnOption'.");
-    });
     context('when passing a name at least', () => {
       let option = null;
 

@@ -28,9 +28,10 @@ describe('BinaryOptions', () => {
         expect(BinaryOptions.exists(BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
       });
     });
-    context('when checking for an invalid binary option', () => {
-      it('returns false', () => {
-        expect(BinaryOptions.exists('NOTHING')).to.be.false;
+    context('when checking for a custom binary option', () => {
+      it('returns true', () => {
+        expect(BinaryOptions.exists('customOption')).to.be.true;
+        expect(BinaryOptions.exists('customOption', 'customValue')).to.be.true;
       });
     });
   });

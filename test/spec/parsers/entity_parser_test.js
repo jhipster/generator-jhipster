@@ -527,14 +527,16 @@ describe('EntityParser', () => {
             to: entityB.name,
             injectedFieldInFrom: 'b',
             injectedFieldInTo: 'a',
-            type: RelationshipTypes.ONE_TO_MANY
+            type: RelationshipTypes.ONE_TO_MANY,
+            options: { myCustomOption: 'myCustomValue' }
           });
           const manyToOneRelationship = new JDLRelationship({
             from: entityA.name,
             to: entityB.name,
             injectedFieldInFrom: 'bb',
             injectedFieldInTo: 'aa',
-            type: RelationshipTypes.MANY_TO_ONE
+            type: RelationshipTypes.MANY_TO_ONE,
+            options: { id: true }
           });
           const manyToManyRelationship = new JDLRelationship({
             from: entityA.name,
@@ -577,14 +579,16 @@ describe('EntityParser', () => {
               relationshipName: 'b',
               otherEntityName: 'b',
               relationshipType: 'one-to-many',
-              otherEntityRelationshipName: 'a'
+              otherEntityRelationshipName: 'a',
+              options: { myCustomOption: 'myCustomValue' }
             },
             {
               relationshipName: 'bb',
               otherEntityName: 'b',
               relationshipType: 'many-to-one',
               otherEntityField: 'id',
-              otherEntityRelationshipName: 'aa'
+              otherEntityRelationshipName: 'aa',
+              options: { id: true }
             },
             {
               relationshipName: 'bbb',
@@ -608,13 +612,15 @@ describe('EntityParser', () => {
               otherEntityName: 'a',
               relationshipType: 'many-to-one',
               otherEntityField: 'id',
-              otherEntityRelationshipName: 'b'
+              otherEntityRelationshipName: 'b',
+              options: { myCustomOption: 'myCustomValue' }
             },
             {
               relationshipName: 'aa',
               otherEntityName: 'a',
               relationshipType: 'one-to-many',
-              otherEntityRelationshipName: 'bb'
+              otherEntityRelationshipName: 'bb',
+              options: { id: true }
             },
             {
               relationshipName: 'aaa',
@@ -838,7 +844,7 @@ describe('EntityParser', () => {
             to: entityB.name,
             injectedFieldInTo: 'a',
             type: RelationshipTypes.ONE_TO_ONE,
-            options: new Set(['jpaDerivedIdentifier'])
+            options: { jpaDerivedIdentifier: true }
           });
           const jdlObject = new JDLObject();
           jdlObject.addEntity(entityA);

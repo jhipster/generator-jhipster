@@ -1,14 +1,26 @@
 @service(serviceClass)
 @dto(mapstruct)
 @skipClient
-entity A
+@myCustomUnaryOption
+@myCustomBinaryOption(customValue)
+@myCustomBinaryOption(customValue)
+entity A {
+  @id @multiValue(value1) @multiValue(value2) @multiValue(value3) name String
+  noAnnotation String
+}
 
 @paginate(pager)
 @dto(mapstruct)
 @service(serviceClass)
+@myCustomUnaryOption
 entity B
 
 @skipClient
 @filter
 @paginate(pager)
+@myCustomBinaryOption(customValue2)
 entity C
+
+relationship OneToMany {
+  @id A{b required} to B{a}
+}
