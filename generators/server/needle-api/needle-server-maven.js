@@ -47,13 +47,16 @@ module.exports = class extends needleServer {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addRepository(id, url) {
+    addRepository(id, url, other = '') {
         const errorMessage = `${chalk.yellow(' Reference to ')}maven repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`;
         // prettier-ignore
-        const repository = `${'<repository>\n'
+        let repository = `${'<repository>\n'
             + '            <id>'}${id}</id>\n`
-            + `            <url>${url}</url>\n`
-            + '        </repository>';
+            + `            <url>${url}</url>\n`;
+        if (other) {
+            repository += `${other}\n`;
+        }
+        repository += '        </repository>';
         const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-repository', repository);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);

@@ -52,7 +52,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '                </exclusions>'
                 );
 
-                this.addMavenRepository('repoId', 'repoUrl');
+                this.addMavenRepository('repoId', 'repoUrl', '            <name>repoName</name>');
                 this.addMavenPluginRepository('pluginRepoId', 'pluginRepoUrl');
                 this.addMavenDistributionManagement('snapshotsId', 'snapshotsUrl', 'releasesId', 'releasesUrl');
                 this.addMavenProperty('propertyName', 'propertyValue');
@@ -160,6 +160,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
             '        <repository>\n' +
                 '            <id>repoId</id>\n' +
                 '            <url>repoUrl</url>\n' +
+                '            <name>repoName</name>\n' +
                 '        </repository>\n' +
                 '        <!-- jhipster-needle-maven-repository -->'
         );
