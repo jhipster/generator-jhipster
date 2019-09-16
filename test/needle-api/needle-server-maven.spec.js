@@ -149,31 +149,47 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 '                        <artifactId>exclusionArtifactId</artifactId>\n' +
                 '                    </exclusion>\n' +
                 '                </exclusions>\n' +
-                '            </dependency>'
+                '            </dependency>\n' +
+                '            <!-- jhipster-needle-maven-add-dependency-management -->'
         );
     });
 
     it('Assert pom.xml has the repository added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <repository>\n            <id>repoId</id>\n            <url>repoUrl</url>\n        </repository>'
+            '        <repository>\n' +
+                '            <id>repoId</id>\n' +
+                '            <url>repoUrl</url>\n' +
+                '        </repository>\n' +
+                '        <!-- jhipster-needle-maven-repository -->'
         );
     });
 
     it('Assert pom.xml has the plugin repository added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <pluginRepository>\n            <id>pluginRepoId</id>\n            <url>pluginRepoUrl</url>\n        </pluginRepository>'
+            '        <pluginRepository>\n' +
+                '            <id>pluginRepoId</id>\n' +
+                '            <url>pluginRepoUrl</url>\n' +
+                '        </pluginRepository>\n' +
+                '        <!-- jhipster-needle-maven-plugin-repository -->'
         );
     });
 
     it('Assert pom.xml has the distributionManagement added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <repository>\n' +
+            '    <distributionManagement>\n' +
+                '        <snapshotRepository>\n' +
+                '            <id>snapshotsId</id>\n' +
+                '            <url>snapshotsUrl</url>\n' +
+                '        </snapshotRepository>\n' +
+                '        <repository>\n' +
                 '            <id>releasesId</id>\n' +
                 '            <url>releasesUrl</url>\n' +
-                '        </repository>'
+                '        </repository>\n' +
+                '    </distributionManagement>\n' +
+                '    <!-- jhipster-needle-distribution-management -->'
         );
     });
 
@@ -194,7 +210,11 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                 '                </exclusion>\n' +
                 '            </exclusions>\n' +
-                '        </dependency>'
+                '        </dependency>\n' +
+                // The needle is not here, since another dependency has been added with addMavenDependencyInDirectory()
+                '        <dependency>\n' +
+                '            <groupId>directoryDependencyGroupId</groupId>\n' +
+                '            <artifactId>directoryDependencyArtifactId</artifactId>'
         );
     });
 
@@ -211,7 +231,8 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 '                    <artifactId>exclusionArtifactId</artifactId>\n' +
                 '                </exclusion>\n' +
                 '            </exclusions>\n' +
-                '        </dependency>'
+                '        </dependency>\n' +
+                '        <!-- jhipster-needle-maven-add-dependency -->'
         );
     });
 
@@ -228,25 +249,31 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 '                        <artifactId>exclusionArtifactId</artifactId>\n' +
                 '                    </exclusion>\n' +
                 '                </exclusions>\n' +
-                '            </plugin>'
+                '            </plugin>\n' +
+                '            <!-- jhipster-needle-maven-add-plugin -->'
         );
     });
 
     it('Assert pom.xml has the annotation processor added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <path>\n' +
-                '            <groupId>annotationProcessorGroupId</groupId>\n' +
-                '            <artifactId>annotationProcessorArtifactId</artifactId>\n' +
-                '            <version>annotationProcessorVersion</version>\n' +
-                '        </path>'
+            '                        <path>\n' +
+                '                            <groupId>annotationProcessorGroupId</groupId>\n' +
+                '                            <artifactId>annotationProcessorArtifactId</artifactId>\n' +
+                '                            <version>annotationProcessorVersion</version>\n' +
+                '                        </path>\n' +
+                '                        <!-- jhipster-needle-maven-add-annotation-processor -->'
         );
     });
 
     it('Assert pom.xml has the profile added', () => {
         assert.fileContent(
             'pom.xml',
-            '        <profile>\n            <id>profileId</id>\n            <other>other</other>\n        </profile>'
+            '        <profile>\n' +
+                '            <id>profileId</id>\n' +
+                '            <other>other</other>\n' +
+                '        </profile>\n' +
+                '        <!-- jhipster-needle-maven-add-profile -->'
         );
     });
 });
