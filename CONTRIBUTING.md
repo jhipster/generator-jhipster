@@ -178,6 +178,8 @@ Sometimes your PR will have merge conflicts with the upstream repository's maste
     git push -f
     ```
 
+Useful Tip: You can also use the [Pull App](https://github.com/wei/pull) to keep your fork in sync with upstream. This will auto merge changes from master avoiding you the hassle of rebasing.
+
 #### After your pull request is merged
 
 After your pull request is merged, you can safely delete your branch and pull the changes
