@@ -166,8 +166,6 @@ services:
         extends:
             file: kafka.yml
             service: kafka
-        depends_on:
-            - zookeeper
         environment:
             - KAFKA_ADVERTISED_HOST_NAME=kafka
             - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
