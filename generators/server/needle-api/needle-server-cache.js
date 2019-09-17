@@ -56,7 +56,7 @@ module.exports = class extends needleServer {
             this._doAddBlockContentToFile(cachePath, needle, content, errorMessage);
         } else if (cacheProvider === 'redis') {
             const needle = 'jhipster-needle-redis-add-entry';
-            const content = `createCache(cm, ${entry});`;
+            const content = `createCache(cm, ${entry}, jcacheConfiguration);`;
 
             this._doAddBlockContentToFile(cachePath, needle, content, errorMessage);
         }

@@ -269,7 +269,6 @@ function writeFiles() {
                 this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
 
                 if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {
-
                     this.addEntityToCache(
                         this.asEntity(this.entityClass),
                         this.relationships,

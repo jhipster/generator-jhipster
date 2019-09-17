@@ -753,17 +753,16 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     <%_ } _%>
 
     <%_ if (cacheProvider === 'redis') { _%>
-    private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
-
-    public CacheConfiguration(JHipsterProperties jHipsterProperties) {
+    @Bean
+    @DependsOn({"testContainerRedis"})
+    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         Config config = new Config();
         config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer());
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
-        jcacheConfiguration = RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
+        return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
     }
-
 
     <%_ if (enableHibernateCache) { _%>
     @Bean
@@ -773,18 +772,18 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     <%_ } _%>
 
     @Bean
-    public JCacheManagerCustomizer cacheManagerCustomizer() {
+    public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         return cm -> {
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
-            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE);
+            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
                 <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName());
-            createCache(cm, <%=packageName%>.domain.Authority.class.getName());
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities");
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
+            createCache(cm, <%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
                     <%_ if (authenticationType === 'session') { _%>
-            createCache(cm, <%=packageName%>.domain.PersistentToken.class.getName());
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens");
+            createCache(cm, <%=packageName%>.domain.PersistentToken.class.getName(), jcacheConfiguration);
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
                     <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
@@ -792,12 +791,18 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
         };
     }
 
-    private void createCache(javax.cache.CacheManager cm, String cacheName) {
+    private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
         if (cache != null) {
             cm.destroyCache(cacheName);
         }
         cm.createCache(cacheName, jcacheConfiguration);
+    }
+
+    @Profile("!default")
+    @Bean(name = "testContainerRedis")
+    public Object emptyTestContainerRedis() {
+        return null;
     }
     <%_ } _%>
 }

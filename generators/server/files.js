@@ -869,6 +869,16 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.cacheProvider === 'redis',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/RedisTestContainerConfiguration.java',
+                    renameTo: generator => `${generator.testDir}config/RedisTestContainerConfiguration.java`
+                }
+            ]
+        },
+        {
             condition: generator =>
                 generator.databaseType === 'sql' || generator.databaseType === 'mongodb' || generator.databaseType === 'couchbase',
             path: SERVER_MAIN_SRC_DIR,
