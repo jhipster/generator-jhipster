@@ -109,7 +109,7 @@ const mockServerBlueprintSubGen = class extends ServerGenerator {
 
 const mockEntityBlueprintSubGen = class extends EntityGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { ...opts, fromBlueprint: true }); // fromBlueprint variable is important
     }
 
     get initializing() {
