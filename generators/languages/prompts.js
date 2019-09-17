@@ -22,7 +22,7 @@ module.exports = {
     askForLanguages
 };
 
-function askForLanguages() {
+function askForLanguages(meta, configCallback) {
     if (this.languages) return;
     const done = this.async();
     const languageOptions = this.getAllSupportedLanguageOptions();
@@ -37,6 +37,7 @@ function askForLanguages() {
     if (this.enableTranslation || this.configOptions.enableTranslation) {
         this.prompt(prompts).then(props => {
             this.languagesToApply = props.languages || [];
+            if (configCallback) configCallback({ languages: props.languages });
             done();
         });
     } else {

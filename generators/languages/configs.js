@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const prompts = require('./prompts');
 
 module.exports = {
     languages: {
@@ -23,34 +24,9 @@ module.exports = {
             persistent: true,
             varName: 'enableTranslation',
             otherVars: ['nativeLanguage'],
-            async prompt(generator, repository) {
-                const languageOptions = generator.getAllSupportedLanguageOptions();
-
-                const done = generator.async();
-                const prompts = [
-                    {
-                        type: 'confirm',
-                        name: 'enableTranslation',
-                        message: 'Would you like to enable internationalization support?',
-                        default: true
-                    },
-                    {
-                        when: response => response.enableTranslation === true,
-                        type: 'list',
-                        name: 'nativeLanguage',
-                        message: 'Please choose the native language of the application',
-                        choices: languageOptions,
-                        default: 'en',
-                        store: true
-                    }
-                ];
-
-                const answers = await generator.prompt(prompts);
-                repository.enableTranslation = answers.enableTranslation;
-                if (repository.enableTranslation) {
-                    repository.nativeLanguage = answers.nativeLanguage;
-                }
-                done();
+            async prompt(meta, configCallback) {
+                const generator = this;
+                await generator.aski18n(generator, configCallback);
             }
         },
         languages: {
@@ -71,24 +47,7 @@ module.exports = {
                 if (!repository.languages.includes(repository.nativeLanguage))
                     repository.languages = [repository.nativeLanguage, ...repository.languages];
             },
-            async prompt(generator, repository) {
-                if (!repository.enableTranslation) return;
-                const languageOptions = generator.getAllSupportedLanguageOptions();
-
-                const done = generator.async();
-                const prompts = [
-                    {
-                        type: 'checkbox',
-                        name: 'languages',
-                        message: 'Please choose additional languages to install',
-                        choices: response => generator._.filter(languageOptions, o => o.value !== repository.nativeLanguage)
-                    }
-                ];
-
-                const answers = await generator.prompt(prompts);
-                repository.languages = [repository.nativeLanguage].concat(answers.languages);
-                done();
-            }
+            prompt: prompts.askForLanguages
         }
     }
 };

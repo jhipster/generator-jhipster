@@ -28,7 +28,7 @@ module.exports = {
     askForMoreModules
 };
 
-function askForInsightOptIn() {
+function askForInsightOptIn(meta, configCallback) {
     const done = this.async();
 
     this.prompt({
@@ -41,12 +41,13 @@ function askForInsightOptIn() {
         if (prompt.insight !== undefined) {
             statistics.setOptoutStatus(!prompt.insight);
         }
+        if (configCallback) configCallback({ insight: prompt.insight });
         done();
     });
 }
 
-function askForApplicationType(meta) {
-    if (!meta && this.existingProject) return;
+function askForApplicationType(meta, configCallback) {
+    if (!configCallback && !meta && this.existingProject) return;
 
     const DEFAULT_APPTYPE = 'monolith';
 
@@ -104,6 +105,7 @@ function askForApplicationType(meta) {
             this.applicationType = this.configOptions.applicationType = prompt.applicationType;
             this.reactive = this.configOptions.reactive = false;
         }
+        if (configCallback) configCallback({ applicationType: this.applicationType, reactive: this.reactive });
         done();
     });
 }
@@ -119,8 +121,8 @@ function askFori18n() {
     this.aski18n(this);
 }
 
-function askForTestOpts(meta) {
-    if (!meta && this.existingProject) return;
+function askForTestOpts(meta, configCallback) {
+    if (!configCallback && !meta && this.existingProject) return;
 
     const choices = [];
     const defaultChoice = [];
@@ -146,11 +148,12 @@ function askForTestOpts(meta) {
 
     this.prompt(PROMPT).then(prompt => {
         this.testFrameworks = prompt.testFrameworks;
+        if (configCallback) configCallback({ testFrameworks: this.testFrameworks });
         done();
     });
 }
 
-function askForMoreModules() {
+function askForMoreModules(meta, configCallback) {
     if (this.existingProject) {
         return;
     }
@@ -163,14 +166,14 @@ function askForMoreModules() {
         default: false
     }).then(prompt => {
         if (prompt.installModules) {
-            askModulesToBeInstalled(done, this);
+            askModulesToBeInstalled(done, this, configCallback);
         } else {
             done();
         }
     });
 }
 
-function askModulesToBeInstalled(done, generator) {
+function askModulesToBeInstalled(done, generator, configCallback) {
     generator.httpsGet(
         'https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-5&from=0&size=50',
         body => {
@@ -198,6 +201,7 @@ function askModulesToBeInstalled(done, generator) {
                                 generator.otherModules.push({ name: module.name, version: module.version });
                             });
                             generator.configOptions.otherModules = generator.otherModules;
+                            if (configCallback) configCallback({ otherModules: this.otherModules });
                             done();
                         });
                 } else {

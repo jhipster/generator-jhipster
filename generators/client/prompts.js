@@ -32,8 +32,8 @@ function askForModuleName() {
     this.askModuleName(this);
 }
 
-function askForClient(meta) {
-    if (!meta && this.existingProject) return;
+function askForClient(meta, configCallback) {
+    if (!configCallback && !meta && this.existingProject) return;
 
     const applicationType = this.applicationType;
 
@@ -70,6 +70,7 @@ function askForClient(meta) {
         if (this.clientFramework === 'no') {
             this.skipClient = true;
         }
+        if (configCallback) configCallback({ clientFramework: this.clientFramework, skipClient: this.skipClient });
         done();
     });
 }
@@ -80,8 +81,8 @@ function askFori18n() {
     this.aski18n(this);
 }
 
-function askForClientTheme(meta) {
-    if (!meta && this.existingProject) {
+function askForClientTheme(meta, configCallback) {
+    if (!configCallback && !meta && this.existingProject) {
         return;
     }
 
@@ -143,28 +144,29 @@ function askForClientTheme(meta) {
                 ];
 
                 if (meta) return PROMPT; // eslint-disable-line consistent-return
-                promptQuestion(PROMPT, done, this);
+                promptQuestion(PROMPT, done, this, configCallback);
             } catch (err) {
                 this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-                promptQuestion(PROMPT, done, this);
+                promptQuestion(PROMPT, done, this, configCallback);
             }
         },
         () => {
             this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-            promptQuestion(PROMPT, done, this);
+            promptQuestion(PROMPT, done, this, configCallback);
         }
     );
 }
 
-function promptQuestion(PROMPT, done, generator) {
+function promptQuestion(PROMPT, done, generator, configCallback) {
     generator.prompt(PROMPT).then(prompt => {
         generator.clientTheme = prompt.clientTheme;
+        if (configCallback) configCallback({ clientTheme: prompt.clientTheme });
         done();
     });
 }
 
-function askForClientThemeVariant(meta) {
-    if (!meta && this.existingProject) {
+function askForClientThemeVariant(meta, configCallback) {
+    if (!configCallback && !meta && this.existingProject) {
         return;
     }
     if (this.clientTheme === 'none') {
@@ -191,6 +193,7 @@ function askForClientThemeVariant(meta) {
 
     this.prompt(PROMPT).then(prompt => {
         this.clientThemeVariant = prompt.clientThemeVariant;
+        if (configCallback) configCallback({ clientThemeVariant: prompt.clientThemeVariant });
         done();
     });
 }

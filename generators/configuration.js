@@ -167,6 +167,19 @@ module.exports = class {
     }
 
     /**
+     * Install all options
+     */
+    applyAll(generator, repository, values) {
+        debug('Running applyAll');
+        const self = this;
+        Object.entries(values).forEach(([key, value]) => {
+            debug(`Adding config ${key} with value ${value}`);
+            self.installOption(generator, key, value);
+            repository[key] = value;
+        });
+    }
+
+    /**
      * Install cli options and queue prompts.
      */
     requireAllConfigs(generator, module, blueprint) {
@@ -240,7 +253,8 @@ module.exports = class {
 
         const promptIfUndefined = function(name, spec) {
             if (repository[name] !== undefined) return;
-            spec.config.prompt.apply(self, [this, repository]);
+            // this = generator
+            spec.config.prompt.apply(this, [undefined /* meta */, self.applyAll.bind(self, this, repository), self, repository]);
         };
         const installConfig = function(name, spec) {
             self.installOption(this, name, repository[name]);
@@ -294,7 +308,7 @@ module.exports = class {
      * Get the required prompts.
      */
     requirePrompts(generator, module, blueprint) {
-        debug('requirePrompts');
+        debug(`requirePrompts for module ${module}, blueprint ${blueprint}`);
         const prompts = {};
         const configs = blueprint !== undefined ? this.blueprintsConfigs[blueprint][module] : this.modulesConfigs[module];
         Object.entries(configs).forEach(([optName, config]) => {
@@ -310,7 +324,7 @@ module.exports = class {
      * Get the required prompt.
      */
     requirePrompt(generator, module, configName, blueprint) {
-        debug('requirePrompt');
+        debug(`requirePrompt for module ${module}, configName ${configName}, blueprint ${blueprint}`);
         const config =
             blueprint !== undefined ? this.blueprintsConfigs[blueprint][module][configName] : this.modulesConfigs[module][configName];
         return this.parsePrompt(generator, config);

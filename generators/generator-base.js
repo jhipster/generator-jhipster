@@ -1690,7 +1690,7 @@ module.exports = class extends PrivateBase {
      *
      * @param {object} generator - generator instance to use
      */
-    askModuleName(generator) {
+    askModuleName(generator, configCallback) {
         const done = generator.async();
         const defaultAppBaseName = this.getDefaultAppName();
         generator
@@ -1717,6 +1717,7 @@ module.exports = class extends PrivateBase {
             })
             .then(prompt => {
                 generator.baseName = prompt.baseName;
+                if (configCallback) configCallback({ baseName: prompt.baseName });
                 done();
             });
     }
@@ -1726,7 +1727,7 @@ module.exports = class extends PrivateBase {
      *
      * @param {object} generator - generator instance to use
      */
-    aski18n(generator) {
+    aski18n(generator, configCallback) {
         const languageOptions = this.getAllSupportedLanguageOptions();
 
         const done = generator.async();
@@ -1759,6 +1760,12 @@ module.exports = class extends PrivateBase {
             generator.enableTranslation = prompt.enableTranslation;
             generator.nativeLanguage = prompt.nativeLanguage;
             generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
+            if (configCallback)
+                configCallback({
+                    enableTranslation: prompt.enableTranslation,
+                    nativeLanguage: prompt.nativeLanguage,
+                    languages: generator.languages
+                });
             done();
         });
     }

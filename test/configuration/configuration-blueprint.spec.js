@@ -25,7 +25,8 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     testVar: {
                         persistent: true,
                         varName: 'testVar',
-                        async prompt(generator, repository) {
+                        async prompt(meta, configCallback, configuration, repository) {
+                            const generator = this;
                             const done = generator.async();
                             const prompts = [
                                 {
@@ -43,7 +44,8 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     collided: {
                         persistent: true,
                         varName: 'collided',
-                        async prompt(generator, repository) {
+                        async prompt(meta, configCallback, configuration, repository) {
+                            const generator = this;
                             const done = generator.async();
                             const prompts = [
                                 {
@@ -90,7 +92,8 @@ const mockBlueprintSubGen2 = class extends ClientGenerator {
                     blueprintVar: {
                         persistent: true,
                         varName: 'blueprintVar',
-                        async prompt(generator, repository) {
+                        async prompt(meta, configCallback, configuration, repository) {
+                            const generator = this;
                             const done = generator.async();
                             const prompts = [
                                 {
@@ -108,7 +111,8 @@ const mockBlueprintSubGen2 = class extends ClientGenerator {
                     collided: {
                         persistent: true,
                         varName: 'collided',
-                        async prompt(generator, repository) {
+                        async prompt(meta, configCallback, configuration, repository) {
+                            const generator = this;
                             const done = generator.async();
                             const prompts = [
                                 {
