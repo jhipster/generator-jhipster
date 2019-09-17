@@ -1061,7 +1061,7 @@
                                 <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
                                 <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
                             </environment>
-                            <useCurrentTimestamp>true</useCurrentTimestamp>
+                            <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                         </container>
                     </configuration>
                 </plugin>
@@ -1243,9 +1243,6 @@
                         <excludes>
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
-<%_ if (cucumberTests) { _%>
-                            <exclude>**/*CucumberIT*</exclude>
-<%_ } _%>
                         </excludes>
                     </configuration>
                 </plugin>
@@ -1263,9 +1260,6 @@
                         <includes>
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
-<%_ if (cucumberTests) { _%>
-                            <include>**/*CucumberIT*</include>
-<%_ } _%>
                         </includes>
                     </configuration>
                     <executions>

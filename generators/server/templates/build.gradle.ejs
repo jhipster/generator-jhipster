@@ -130,7 +130,7 @@ springBoot {
 
 test {
     useJUnitPlatform()
-    exclude "**/*IT*", "**/*IntTest*"<%_ if (cucumberTests) { _%>, "**/*CucumberIT*"<%_ } _%>
+    exclude "**/*IT*", "**/*IntTest*"
 
     testLogging {
         events 'FAILED', 'SKIPPED'
