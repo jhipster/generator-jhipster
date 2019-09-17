@@ -52,7 +52,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '                </exclusions>'
                 );
 
-                this.addMavenRepository('repoId', 'repoUrl');
+                this.addMavenRepository('repoId', 'repoUrl', '            <name>repoName</name>');
                 this.addMavenPluginRepository('pluginRepoId', 'pluginRepoUrl');
                 this.addMavenDistributionManagement('snapshotsId', 'snapshotsUrl', 'releasesId', 'releasesUrl');
                 this.addMavenProperty('propertyName', 'propertyValue');
@@ -89,6 +89,17 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '                        <artifactId>exclusionArtifactId</artifactId>\n' +
                         '                    </exclusion>\n' +
                         '                </exclusions>'
+                );
+                this.addMavenPluginManagement(
+                    'mavenPluginManagementGroupId',
+                    'mavenPluginManagementArtifactId',
+                    'version',
+                    '                    <exclusions>\n' +
+                        '                        <exclusion>\n' +
+                        '                            <groupId>exclusionGroupId</groupId>\n' +
+                        '                            <artifactId>exclusionArtifactId</artifactId>\n' +
+                        '                        </exclusion>\n' +
+                        '                    </exclusions>'
                 );
                 this.addMavenAnnotationProcessor(
                     'annotationProcessorGroupId',
@@ -160,6 +171,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
             '        <repository>\n' +
                 '            <id>repoId</id>\n' +
                 '            <url>repoUrl</url>\n' +
+                '            <name>repoName</name>\n' +
                 '        </repository>\n' +
                 '        <!-- jhipster-needle-maven-repository -->'
         );
@@ -251,6 +263,24 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 '                </exclusions>\n' +
                 '            </plugin>\n' +
                 '            <!-- jhipster-needle-maven-add-plugin -->'
+        );
+    });
+
+    it('Assert pom.xml has the maven plugin management added', () => {
+        assert.fileContent(
+            'pom.xml',
+            '                <plugin>\n' +
+                '                    <groupId>mavenPluginManagementGroupId</groupId>\n' +
+                '                    <artifactId>mavenPluginManagementArtifactId</artifactId>\n' +
+                '                    <version>version</version>\n' +
+                '                    <exclusions>\n' +
+                '                        <exclusion>\n' +
+                '                            <groupId>exclusionGroupId</groupId>\n' +
+                '                            <artifactId>exclusionArtifactId</artifactId>\n' +
+                '                        </exclusion>\n' +
+                '                    </exclusions>\n' +
+                '                </plugin>\n' +
+                '                <!-- jhipster-needle-maven-add-plugin-management -->'
         );
     });
 
