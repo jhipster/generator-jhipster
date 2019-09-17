@@ -67,6 +67,7 @@ module.exports = class extends BaseDockerGenerator {
     }
 
     get prompting() {
+        if (this.abort) return undefined;
         return super.prompting;
     }
 
@@ -94,6 +95,7 @@ module.exports = class extends BaseDockerGenerator {
                     const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
                     if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
+                        this.keycloakRedirectUris += '"http://localhost/*", "https://localhost/*", ';
                     } else if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
                         this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
                         const ports = yamlConfig.ports[0].split(':');
@@ -201,10 +203,15 @@ module.exports = class extends BaseDockerGenerator {
                     }
                     yamlString = yamlArray.join('\n');
                     this.appsYaml.push(yamlString);
+
+                    this.skipClient = appConfig.skipClient;
                 });
             },
 
             saveConfig() {
+                if (this.monitoring === 'no') {
+                    this.consoleOptions = [];
+                }
                 this.config.set({
                     appsFolders: this.appsFolders,
                     directoryPath: this.directoryPath,
@@ -231,7 +238,20 @@ module.exports = class extends BaseDockerGenerator {
         } else {
             this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
-        this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
+        if (this.gatewayType === 'traefik' && this.authenticationType === 'oauth2') {
+            if (!this.skipClient) {
+                this.log(
+                    `\n${chalk.yellow.bold('WARNING!')} The complete generation of the stack with Traefik and OAuth 2.0 is not complete.`
+                );
+                this.log('Please refer to the documentation to finish the configuration of your stack.');
+                this.log('Visit https://www.jhipster.tech/traefik/#configure-for-oauth2');
+            } else {
+                this.log('Please refer to the documentation to help you for the configuration of your stack.');
+                this.log('Visit https://www.jhipster.tech/traefik/#configuration-with-oauth-2.0-and-traefik');
+            }
+        } else {
+            this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
+        }
         if (this.gatewayNb + this.monolithicNb > 1) {
             this.log('\nYour applications will be accessible on these URLs:');
             let portIndex = 8080;

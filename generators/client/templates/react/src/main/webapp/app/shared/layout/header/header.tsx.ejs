@@ -18,7 +18,7 @@
 -%>
 import './header.<%= styleSheetExt %>';
 
-import React from 'react';
+import React, { useState<% if (enableI18nRTL) { %>, useEffect<% } %> } from 'react';
 import { Translate<% if (enableTranslation) { %>, Storage<% } %> } from 'react-jhipster';
 import {
   Navbar,
@@ -51,36 +51,29 @@ export interface IHeaderProps {
 <%_ } _%>
 }
 
-export interface IHeaderState {
-  menuOpen: boolean
-}
 
-export default class Header extends React.Component<IHeaderProps, IHeaderState> {
-  state: IHeaderState = {
-      menuOpen: false
-  };
+const Header = (props: IHeaderProps) => {
+  const [menuOpen, setMenuOpen] = useState(false);
   <%_ if (enableI18nRTL) { _%>
-  componentDidMount () {
-    document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale')) ? 'rtl' : 'ltr');
-  };
+  useEffect(() => document.querySelector('html').setAttribute('dir', isRTL(Storage.session.get('locale')) ? 'rtl' : 'ltr'));
   <%_ } _%>
 
   <%_ if (enableTranslation) { _%>
-  handleLocaleChange = event => {
+  const handleLocaleChange = event => {
     const langKey = event.target.value;
     Storage.session.set('locale', langKey);
-    this.props.onLocaleChange(langKey);
+    props.onLocaleChange(langKey);
     <%_ if (enableI18nRTL) { _%>
     document.querySelector('html').setAttribute('dir', isRTL(langKey) ? 'rtl' : 'ltr');
     <%_ } _%>
   }
   <%_ } _%>
 
-  renderDevRibbon = () => this.props.isInProduction === false ? (
+  const renderDevRibbon = () => props.isInProduction === false ? (
     <div className="ribbon dev">
       <a href="">
         <%_ if (enableTranslation) { _%>
-        <Translate contentKey={`global.ribbon.${this.props.ribbonEnv}`} />
+        <Translate contentKey={`global.ribbon.${props.ribbonEnv}`} />
         <%_ } else { _%>
         Development
         <%_ } _%>
@@ -88,36 +81,32 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
     </div>
   ) : null;
 
-  toggleMenu = () => {
-    this.setState({ menuOpen: !this.state.menuOpen });
-  }
+  const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  render() {
-    const {<%_ if (enableTranslation) { _%>currentLocale,<%_ } _%> isAuthenticated, isAdmin, isSwaggerEnabled, isInProduction } = this.props;
+  /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
-    /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
+  return (
+    <div id="app-header">
+      {renderDevRibbon()}
+      <LoadingBar className="loading-bar"/>
+      <Navbar <% if (clientTheme === 'none' || clientThemeVariant !== 'light') { %>dark<% } else { %>light<% } %> expand="sm" fixed="top" className="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+        <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
+        <Brand />
+        <Collapse isOpen={menuOpen} navbar>
+          <Nav id="header-tabs" className="ml-auto" navbar>
+            <Home />
+            {props.isAuthenticated && <EntitiesMenu />}
+            {props.isAuthenticated && props.isAdmin &&
+              <AdminMenu showSwagger={props.isSwaggerEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!props.isInProduction} <%_ } _%> />}
+          <%_ if (enableTranslation) { _%>
+            <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
+          <%_ } _%>
+            <AccountMenu isAuthenticated={props.isAuthenticated} />
+          </Nav>
+        </Collapse>
+      </Navbar>
+    </div>
+  );
+};
 
-    return (
-      <div id="app-header">
-        {this.renderDevRibbon()}
-        <LoadingBar className="loading-bar"/>
-        <Navbar <% if (clientTheme === 'none' || clientThemeVariant !== 'light') { %>dark<% } else { %>light<% } %> expand="sm" fixed="top" className="<%_ if (clientTheme === 'none') { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
-          <NavbarToggler aria-label="Menu" onClick={this.toggleMenu} />
-          <Brand />
-          <Collapse isOpen={this.state.menuOpen} navbar>
-            <Nav id="header-tabs" className="ml-auto" navbar>
-              <Home />
-              {isAuthenticated && <EntitiesMenu />}
-              {isAuthenticated && isAdmin &&
-                <AdminMenu showSwagger={isSwaggerEnabled} <% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %> showDatabase={!isInProduction} <%_ } _%> />}
-            <%_ if (enableTranslation) { _%>
-              <LocaleMenu currentLocale={currentLocale} onClick={this.handleLocaleChange} />
-            <%_ } _%>
-              <AccountMenu isAuthenticated={isAuthenticated} />
-            </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
-    );
-  }
-}
+export default Header;

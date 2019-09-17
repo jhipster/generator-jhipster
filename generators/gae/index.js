@@ -18,7 +18,6 @@
  */
 const os = require('os');
 const exec = require('child_process').exec;
-const spawn = require('child_process').spawn;
 const execSync = require('child_process').execSync;
 const chalk = require('chalk');
 const _ = require('lodash');
@@ -36,8 +35,7 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.bold('Welcome to Google App Engine Generator (Beta)'));
-                this.warning(chalk.bold('This sub-generator is still in development, please report bugs on Github'));
+                this.log(chalk.bold('Welcome to Google App Engine Generator'));
             },
             checkInstallation() {
                 if (this.abort) return;
@@ -59,23 +57,26 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 const component = 'app-engine-java';
 
-                exec('gcloud components list --quiet --filter="Status=Installed" --format="value(id)"', (err, stdout, srderr) => {
-                    if (_.includes(stdout, component)) {
-                        done();
-                    } else {
-                        this.log(chalk.bold('\nInstalling App Engine Java SDK'));
-                        this.log(`... Running: gcloud components install ${component} --quiet`);
-                        const child = spawn('gcloud', ['components', 'install', component, '--quiet'], {
-                            stdio: [process.stdin, process.stdout, process.stderr]
-                        });
-                        child.on('exit', code => {
-                            if (code !== 0) {
-                                this.abort = true;
-                            }
+                exec(
+                    'gcloud components list --quiet --filter="Status=Installed OR Status=\\"Update Available\\"" --format="value(id)"',
+                    (err, stdout, srderr) => {
+                        if (_.includes(stdout, component)) {
                             done();
-                        });
+                        } else {
+                            this.log(chalk.bold('\nInstalling App Engine Java SDK'));
+                            this.log(`... Running: gcloud components install ${component} --quiet`);
+                            exec(`gcloud components install ${component} --quiet`, err => {
+                                if (err) {
+                                    this.log.error(err);
+                                    done(
+                                        `Installation failed. \nPlease try to install the app-engine-java component manually via; gcloud components install ${component}`
+                                    );
+                                }
+                                done();
+                            });
+                        }
                     }
-                });
+                );
             },
 
             loadConfig() {
@@ -84,9 +85,7 @@ module.exports = class extends BaseGenerator {
                 this.packageName = this.config.get('packageName');
                 this.packageFolder = this.config.get('packageFolder');
                 this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-                this.enableHibernateCache =
-                    this.config.get('enableHibernateCache') ||
-                    (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
+                this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
                 this.databaseType = this.config.get('databaseType');
                 this.prodDatabaseType = this.config.get('prodDatabaseType');
                 this.searchEngine = this.config.get('searchEngine');
@@ -106,11 +105,13 @@ module.exports = class extends BaseGenerator {
                 this.gaeInstances = this.config.get('gaeInstances');
                 this.gaeMaxInstances = this.config.get('gaeMaxInstances');
                 this.gaeMinInstances = this.config.get('gaeMinInstances');
+                this.gaeCloudSQLInstanceNeeded = this.config.get('gaeCloudSQLInstanceNeeded');
             }
         };
     }
 
     defaultProjectId() {
+        if (this.abort) return null;
         if (this.gcpProjectId) {
             return this.gcpProjectId;
         }
@@ -246,15 +247,15 @@ module.exports = class extends BaseGenerator {
                         name: 'gaeInstanceClass',
                         message: 'Google App Engine Instance Class',
                         choices: [
-                            { value: 'F1', name: 'F1 - 600MHz, 128MB, Automatic Scaling' },
-                            { value: 'F2', name: 'F2 - 1.2GHz, 256MB, Automatic Scaling' },
-                            { value: 'F4', name: 'F4 - 2.4GHz, 512MB, Automatic Scaling' },
-                            { value: 'F4_1G', name: 'F4_1G - 2.4GHz, 1GB, Automatic' },
-                            { value: 'B1', name: 'B1 - 600MHz, 128MB, Basic or Manual Scaling' },
-                            { value: 'B2', name: 'B2 - 1.2GHz, 256MB, Basic or Manual Scaling' },
-                            { value: 'B4', name: 'B4 - 2.4GHz, 512MB, Basic or Manual Scaling' },
-                            { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 1GB, Basic or Manual Scaling' },
-                            { value: 'B8', name: 'B8 - 4.8GHz, 1GB, Basic or Manual Scaling' }
+                            { value: 'F1', name: 'F1 - 600MHz, 256MB, Automatic Scaling' },
+                            { value: 'F2', name: 'F2 - 1.2GHz, 512MB, Automatic Scaling' },
+                            { value: 'F4', name: 'F4 - 2.4GHz, 1GB, Automatic Scaling' },
+                            { value: 'F4_1G', name: 'F4_1G - 2.4GHz, 2GB, Automatic' },
+                            { value: 'B1', name: 'B1 - 600MHz, 256MB, Basic or Manual Scaling' },
+                            { value: 'B2', name: 'B2 - 1.2GHz, 512MB, Basic or Manual Scaling' },
+                            { value: 'B4', name: 'B4 - 2.4GHz, 1GB, Basic or Manual Scaling' },
+                            { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 2GB, Basic or Manual Scaling' },
+                            { value: 'B8', name: 'B8 - 4.8GHz, 2GB, Basic or Manual Scaling' }
                         ],
                         default: this.gaeInstanceClass ? this.gaeInstanceClass : 0
                     }
@@ -365,7 +366,32 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
+            askIfCloudSqlIsNeeded() {
+                if (this.abort) return;
+                const done = this.async();
+                const prompts = [];
+
+                prompts.push({
+                    type: 'input',
+                    name: 'gaeCloudSQLInstanceNeeded',
+                    message: 'Initialize a new Cloud SQL instance (Y/N) ?',
+                    default: this.gaeCloudSQLInstanceNeeded ? this.gaeCloudSQLInstanceNeeded : 'Y',
+                    validate: input => {
+                        if (input !== 'Y' && input !== 'N') {
+                            return 'Input should be Y or N';
+                        }
+                        return true;
+                    }
+                });
+
+                this.prompt(prompts).then(props => {
+                    this.gaeCloudSQLInstanceNeeded = props.gaeCloudSQLInstanceNeeded;
+                    done();
+                });
+            },
+
             askForCloudSqlInstance() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (this.prodDatabaseType !== 'mysql' && this.prodDatabaseType !== 'mariadb' && this.prodDatabaseType !== 'postgresql')
                     return;
@@ -373,7 +399,6 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
-
                 exec(
                     `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
                     (err, stdout, stderr) => {
@@ -406,6 +431,7 @@ module.exports = class extends BaseGenerator {
             },
 
             promptForCloudSqlInstanceNameIfNeeded() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (this.gcpCloudSqlInstanceName) return;
 
@@ -428,6 +454,7 @@ module.exports = class extends BaseGenerator {
             },
 
             askForCloudSqlLogin() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceName) return;
 
@@ -461,6 +488,7 @@ module.exports = class extends BaseGenerator {
             },
 
             askForCloudSqlDatabaseName() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceNameExists) return;
 
@@ -500,6 +528,7 @@ module.exports = class extends BaseGenerator {
             },
 
             promptForCloudSqlDatabaseNameIfNeeded() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (this.gcpCloudSqlInstanceName !== 'new' && this.gcpCloudSqlDatabaseName) return;
 
@@ -553,6 +582,7 @@ module.exports = class extends BaseGenerator {
             },
 
             createCloudSqlInstance() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceName) return;
                 if (this.gcpCloudSqlInstanceNameExists) return;
@@ -586,6 +616,7 @@ module.exports = class extends BaseGenerator {
             },
 
             createCloudSqlLogin() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceName) return;
                 const done = this.async();
@@ -617,6 +648,7 @@ module.exports = class extends BaseGenerator {
             },
 
             createCloudSqlDatabase() {
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.abort) return;
                 if (!this.gcpCloudSqlInstanceName) return;
                 if (this.gcpCloudSqlDatabaseNameExists) return;
@@ -648,7 +680,8 @@ module.exports = class extends BaseGenerator {
                     gaeScalingType: this.gaeScalingType,
                     gaeInstances: this.gaeInstances,
                     gaeMinInstances: this.gaeMinInstances,
-                    gaeMaxInstances: this.gaeMaxInstances
+                    gaeMaxInstances: this.gaeMaxInstances,
+                    gaeCloudSQLInstanceNeeded: this.gaeCloudSQLInstanceNeeded
                 });
             }
         };
@@ -662,10 +695,10 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
-                this.template('web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/web.xml`);
-                this.template('appengine-web.xml.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/appengine-web.xml`);
-                this.template('logging.properties.ejs', `${constants.CLIENT_MAIN_SRC_DIR}/WEB-INF/logging.properties`);
-                this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
+                this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
+                if (this.gaeCloudSQLInstanceNeeded === 'Y') {
+                    this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
+                }
                 if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
                 }
@@ -676,6 +709,8 @@ module.exports = class extends BaseGenerator {
             },
 
             addDependencies() {
+                if (this.abort) return;
+                if (this.gaeCloudSQLInstanceNeeded === 'N') return;
                 if (this.prodDatabaseType === 'mysql' || this.prodDatabaseType === 'mariadb') {
                     if (this.buildTool === 'maven') {
                         this.addMavenDependency('com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
@@ -693,17 +728,23 @@ module.exports = class extends BaseGenerator {
             },
 
             addGradlePlugin() {
+                if (this.abort) return;
                 if (this.buildTool === 'gradle') {
-                    this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '1.3.3');
+                    if (this.gaeCloudSQLInstanceNeeded === 'Y') {
+                        this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.1.0');
+                    }
                     this.applyFromGradleScript('gradle/gae');
                 }
             },
 
             addMavenPlugin() {
+                if (this.abort) return;
                 if (this.buildTool === 'maven') {
-                    this.render('pom-plugin.xml.ejs', rendered => {
-                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '1.3.2', rendered.trim());
-                    });
+                    if (this.gaeCloudSQLInstanceNeeded === 'Y') {
+                        this.render('pom-plugin.xml.ejs', rendered => {
+                            this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.1.0', rendered.trim());
+                        });
+                    }
                     this.render('pom-profile.xml.ejs', rendered => {
                         this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
                     });
@@ -718,8 +759,8 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
 
                 if (this.buildTool === 'maven') {
-                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw appengine:run -DskipTests'));
-                    this.log(chalk.bold('Deploy to App Engine: ./mvnw appengine:deploy -DskipTests -Pprod,prod-gae'));
+                    this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw package appengine:run -DskipTests'));
+                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pprod,prod-gae'));
                 } else if (this.buildTool === 'gradle') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
                     this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pprod -Pprod-gae'));

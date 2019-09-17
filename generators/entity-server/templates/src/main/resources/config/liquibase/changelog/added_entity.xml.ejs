@@ -24,9 +24,12 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <%_ let autoIncrementValue = true;
+    <property name="now" value="now()" dbms="h2"/>
+    <% let autoIncrementValue = true;
+        let primaryKeyType = 'bigint';
         for (idx in relationships) {
             if (relationships[idx].useJPADerivedIdentifier === true) {
+                primaryKeyType = (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') ? 'varchar(100)' : primaryKeyType;
                 autoIncrementValue = false;
                 break;
             }
@@ -45,7 +48,7 @@
         <%_ } else { _%>
         <createTable tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
         <%_ } _%>
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <column name="id" type="<%= primaryKeyType %>" <%_ if (primaryKeyType === 'varchar(100)' ) { _%> > <% } else { %> autoIncrement="${autoIncrement}"> <%_ } %>
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (idx in fields) {
             let nullable = true;

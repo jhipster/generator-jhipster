@@ -28,11 +28,15 @@ import org.h2.server.web.WebServlet;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (!skipClient) { _%>
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
+<%_ } _%>
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.mock.web.MockServletContext;
+<%_ if (!skipClient) { _%>
 import org.springframework.test.util.ReflectionTestUtils;
+<%_ } _%>
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -42,7 +46,9 @@ import java.io.File;
 <%_ } _%>
 import java.util.*;
 
+<%_ if (!skipClient) { _%>
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ } _%>
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -104,6 +110,7 @@ public class WebConfigurerTest {
         <%_ } _%>
     }
 
+<%_ if (!skipClient) { _%>
     @Test
     public void testCustomizeServletContainer() {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
@@ -119,6 +126,7 @@ public class WebConfigurerTest {
         <%_ } _%>
     }
 
+<%_ } _%>
     @Test
     public void testCorsFilterOnApiPath() throws Exception {
         props.getCors().setAllowedOrigins(Collections.singletonList("*"));

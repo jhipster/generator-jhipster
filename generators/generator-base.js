@@ -56,9 +56,9 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
+    addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation);
+            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -83,9 +83,9 @@ module.exports = class extends PrivateBase {
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework) {
+    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation);
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -620,9 +620,10 @@ module.exports = class extends PrivateBase {
      *
      * @param {string} id - id of the repository
      * @param {string} url - url of the repository
+     * @param  {string} other - (optional) explicit other thing: name, releases, snapshots, ...
      */
-    addMavenRepository(id, url) {
-        this.needleApi.serverMaven.addRepository(id, url);
+    addMavenRepository(id, url, other = '') {
+        this.needleApi.serverMaven.addRepository(id, url, other);
     }
 
     /**
@@ -692,6 +693,18 @@ module.exports = class extends PrivateBase {
      */
     addMavenPlugin(groupId, artifactId, version, other) {
         this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
+    }
+
+    /**
+     * Add a new Maven plugin management.
+     *
+     * @param {string} groupId - plugin groupId
+     * @param {string} artifactId - plugin artifactId
+     * @param {string} version - explicit plugin version number
+     * @param {string} other - explicit other thing: executions, configuration...
+     */
+    addMavenPluginManagement(groupId, artifactId, version, other) {
+        this.needleApi.serverMaven.addPluginManagement(groupId, artifactId, version, other);
     }
 
     /**
@@ -942,10 +955,11 @@ module.exports = class extends PrivateBase {
      * @param {string} filePath - path of the source file to rewrite
      * @param {string} needle - needle to look for where content will be inserted
      * @param {string} content - content to be written
+     * @returns {boolean} true if the body has changed.
      */
     rewriteFile(filePath, needle, content) {
         const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
-        this.needleApi.base.addBlockContentToFile(rewriteFileModel);
+        return this.needleApi.base.addBlockContentToFile(rewriteFileModel);
     }
 
     /**
@@ -955,10 +969,11 @@ module.exports = class extends PrivateBase {
      * @param {string} pattern - pattern to look for where content will be replaced
      * @param {string} content - content to be written
      * @param {string} regex - true if pattern is regex
+     * @returns {boolean} true if the body has changed.
      */
     replaceContent(filePath, pattern, content, regex) {
         try {
-            jhipsterUtils.replaceContent(
+            return jhipsterUtils.replaceContent(
                 {
                     file: filePath,
                     pattern,
@@ -972,6 +987,7 @@ module.exports = class extends PrivateBase {
                 chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e
             );
             this.debug('Error:', e);
+            return false;
         }
     }
 
@@ -1256,11 +1272,11 @@ module.exports = class extends PrivateBase {
      * @param {string} version - A valid semver version string
      */
     isJhipsterVersionLessThan(version) {
-        const jhipsterVersion = this.config.get('jhipsterVersion');
-        if (!jhipsterVersion) {
-            return true;
+        if (!this.jhipsterOldVersion) {
+            // if old version is unknown then can't compare and return false
+            return false;
         }
-        return semver.lt(jhipsterVersion, version);
+        return semver.lt(this.jhipsterOldVersion, version);
     }
 
     /**
@@ -1783,7 +1799,7 @@ module.exports = class extends PrivateBase {
      * @param {Function} cb - callback when build is complete
      */
     buildApplication(buildTool, profile, buildWar, cb) {
-        let buildCmd = 'mvnw verify -DskipTests=true -B';
+        let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
 
         if (buildTool === 'gradle') {
             buildCmd = 'gradlew -x test';
@@ -1894,6 +1910,7 @@ module.exports = class extends PrivateBase {
         dest.clientPackageManager = context.configOptions.clientPackageManager;
         dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
         dest.experimental = context.configOptions.experimental || context.options.experimental;
+        dest.embeddableLaunchScript = context.configOptions.embeddableLaunchScript || false;
 
         const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
         if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
@@ -1931,9 +1948,7 @@ module.exports = class extends PrivateBase {
         }
         dest.searchEngine = context.config.get('searchEngine');
         dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        dest.enableHibernateCache =
-            context.config.get('enableHibernateCache') ||
-            (context.config.get('hibernateCache') !== undefined && context.config.get('hibernateCache') !== 'no');
+        dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
         dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);

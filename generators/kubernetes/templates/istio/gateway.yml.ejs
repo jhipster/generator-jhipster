@@ -33,13 +33,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>
+    - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>
+    - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
 ---
 apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: VirtualService
@@ -50,15 +50,15 @@ metadata:
     service: <%= app.baseName.toLowerCase() %>-gw-virtualservice
 spec:
   hosts:
-  - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>
+  - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
   gateways:
   - <%= app.baseName.toLowerCase() %>-gateway
   http:
   <%_ if (!app.serviceDiscoveryType) { _%>
-    <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(function(config) { _%>
+    <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
   - match:
     - uri:
-        prefix: /<%= config.baseName.toLowerCase() %>/
+        prefix: /services/<%= config.baseName.toLowerCase() %>/
     route:
     - destination:
         host: <%= config.baseName.toLowerCase() %>

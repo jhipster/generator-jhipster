@@ -26,8 +26,6 @@ buildscript {
         maven { url "http://repo.spring.io/plugins-release" }
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
-        classpath "io.spring.gradle:propdeps-plugin:0.0.10.RELEASE"
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
@@ -37,21 +35,22 @@ plugins {
     id "maven"
     id "idea"
     id "jacoco"
-    id "com.google.cloud.tools.jib" version "<%= JIB_VERSION %>"
-    id "com.gorylenko.gradle-git-properties" version "2.0.0"
+    id "org.springframework.boot"
+    id "com.google.cloud.tools.jib"
+    id "com.gorylenko.gradle-git-properties"
     <%_ if (enableSwaggerCodegen) { _%>
-    id "org.openapi.generator" version "4.0.2"
+    id "org.openapi.generator"
     <%_ } _%>
     <%_ if (!skipClient) { _%>
-    id "com.github.node-gradle.node" version "1.3.0"
+    id "com.github.node-gradle.node"
     <%_ } _%>
-    id "net.ltgt.apt-eclipse" version "0.21"
-    id "net.ltgt.apt-idea" version "0.21"
-    id "net.ltgt.apt" version "0.21"
+    id "net.ltgt.apt-eclipse"
+    id "net.ltgt.apt-idea"
+    id "net.ltgt.apt"
     <%_ if (databaseType === 'sql') { _%>
-    id "org.liquibase.gradle" version "2.0.1"
+    id "org.liquibase.gradle"
     <%_ } _%>
-    id "org.sonarqube" version "2.7.1"
+    id "org.sonarqube"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -63,9 +62,6 @@ description = ""
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
 assert System.properties["java.specification.version"] == "1.8" || "11" || "12"
-
-apply plugin: "org.springframework.boot"
-apply plugin: "propdeps"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -134,7 +130,7 @@ springBoot {
 
 test {
     useJUnitPlatform()
-    exclude "**/*IT*", "**/*IntTest*"<%_ if (cucumberTests) { _%>, "**/*CucumberIT*"<%_ } _%>
+    exclude "**/*IT*", "**/*IntTest*"
 
     testLogging {
         events 'FAILED', 'SKIPPED'
@@ -207,7 +203,7 @@ liquibase {
     activities {
         main {
             driver "<% if (devDatabaseType === 'mysql') { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>"
-            url "<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>"
+            url "<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./build/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>"
             username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
             password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
             changeLogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
@@ -217,7 +213,7 @@ liquibase {
         }
         diffLog {
             driver "<% if (devDatabaseType === 'mysql') { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>"
-            url "<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>"
+            url "<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./build/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>"
             username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
             password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
             changeLogFile project.ext.diffChangelogFile
@@ -255,8 +251,6 @@ repositories {
         }
     }
     <%_ } _%>
-    // TODO To remove after final JHipster release
-    maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -315,7 +309,7 @@ dependencies {
     implementation "org.hibernate:hibernate-jcache"
         <%_ } _%>
     <%_ } _%>
-    <%_ if (['ehcache', 'hazelcast', 'infinispan', 'redis'].includes(cacheProvider) || applicationType === 'gateway') { _%>
+    <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'redis'].includes(cacheProvider) || applicationType === 'gateway') { _%>
     implementation "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
@@ -326,7 +320,7 @@ dependencies {
     implementation "commons-codec:commons-codec"
     <%_ } _%>
     <%_ if (enableSwaggerCodegen) { _%>
-    implementation "org.openapitools:jackson-databind-nullable:0.1.0"
+    implementation "org.openapitools:jackson-databind-nullable:0.2.0"
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io"
@@ -340,9 +334,16 @@ dependencies {
     implementation "org.hibernate:hibernate-jcache"
         <%_ } _%>
     <%_ } _%>
+    <%_ if (cacheProvider === 'caffeine') { _%>
+    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_cache_version}"
+    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_jcache_version}"
+    implementation "com.typesafe:config:${typesafe_config_version}"
+        <%_ if (enableHibernateCache) { _%>
+    implementation "org.hibernate:hibernate-jcache"
+        <%_ } _%>
+    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     implementation "org.hibernate:hibernate-entitymanager"
-    implementation "org.hibernate:hibernate-envers"
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase:liquibase-core"
@@ -501,6 +502,8 @@ dependencies {
     <%_ if (cucumberTests) { _%>
     testImplementation "org.junit.vintage:junit-vintage-engine"
     <%_ } _%>
+    testImplementation 'com.tngtech.archunit:archunit-junit5-api:0.11.0'
+    testRuntime 'com.tngtech.archunit:archunit-junit5-engine:0.11.0'
     testImplementation "org.assertj:assertj-core"
     testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"
@@ -532,7 +535,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "5.4.1"
+    gradleVersion = "5.6.2"
 }
 <%_ if (!skipClient) { _%>
 
@@ -544,7 +547,12 @@ if (project.hasProperty("nodeInstall")) {
         download = true
     }
 }
+<%_ } _%>
+<%_ if (embeddableLaunchScript) { _%>
 
+bootJar {
+    launchScript()
+}
 <%_ } _%>
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo

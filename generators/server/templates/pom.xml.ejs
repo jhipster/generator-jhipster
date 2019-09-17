@@ -41,17 +41,6 @@
             </releases>
         </repository>
 <%_ } _%>
-        <!-- TODO To remove after final JHipster release -->
-        <repository>
-            <id>oss.sonatype.org-snapshot</id>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
@@ -63,7 +52,7 @@
 
     <properties>
         <!-- Build properties -->
-        <maven.version>3.0.0</maven.version>
+        <maven.version>3.3.9</maven.version>
         <java.version><%= JAVA_VERSION %></java.version>
 <%_ if (!skipClient) { _%>
         <node.version>v<%= NODE_VERSION %></node.version>
@@ -91,24 +80,24 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>3.0.4-SNAPSHOT</jhipster-dependencies.version>
+        <jhipster-dependencies.version>3.0.5</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
+        <spring-boot.version>2.1.8.RELEASE</spring-boot.version>
 <%_ if (databaseType === 'sql') { _%>
         <!-- The spring framework version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <spring.version>5.1.8.RELEASE</spring.version>
+        <spring.version>5.1.9.RELEASE</spring.version>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <hibernate.version>5.3.10.Final</hibernate.version>
+        <hibernate.version>5.3.11.Final</hibernate.version>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
-        <javassist.version>3.23.1-GA</javassist.version>
+        <javassist.version>3.23.2-GA</javassist.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <liquibase.version>3.6.3</liquibase.version>
-        <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
+        <liquibase.version>3.7.0</liquibase.version>
+        <liquibase-hibernate5.version>3.7</liquibase-hibernate5.version>
         <!-- The hibernate version to be used to override default version of liquibase maven plugin -->
         <hibernate-core.version>5.3.8.Final</hibernate-core.version>
     <%_ if (devDatabaseType === 'h2Disk') { _%>
@@ -124,35 +113,40 @@
 <%_ } _%>
         <mapstruct.version>1.3.0.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
-        <jackson-databind-nullable.version>0.1.0</jackson-databind-nullable.version>
+        <jackson-databind-nullable.version>0.2.0</jackson-databind-nullable.version>
+<%_ } _%>
+<%_ if (cacheProvider === 'caffeine') { _%>
+        <caffeine.version>2.8.0</caffeine.version>
+        <jcache.version>2.8.0</jcache.version>
+        <typesafe.version>1.3.4</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-javadoc-plugin.version>3.1.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-        <!-- We can't go to 3.0.0-M2 as it has a regression. See https://issues.apache.org/jira/browse/MENFORCER-306 -->
-        <maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
+        <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M3</maven-failsafe-plugin.version>
         <maven-idea-plugin.version>2.2.1</maven-idea-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
 <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.7.6</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.8.0</frontend-maven-plugin.version>
 <%_ } _%>
-        <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>3.0.1</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version>0.8.4</jacoco-maven-plugin.version>
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>4.0.2</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>4.1.2</openapi-generator-maven-plugin.version>
 <%_ } _%>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-        <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
-        <jacoco.reportFolder>${project.build.directory}/jacoco</jacoco.reportFolder>
-        <jacoco.utReportFile>${jacoco.reportFolder}/test.exec</jacoco.utReportFile>
-        <jacoco.itReportFile>${jacoco.reportFolder}/integrationTest.exec</jacoco.itReportFile>
+        <sonar-maven-plugin.version>3.6.1.1688</sonar-maven-plugin.version>
+        <jacoco.utReportFolder>${project.build.directory}/jacoco/test</jacoco.utReportFolder>
+        <jacoco.utReportFile>${jacoco.utReportFolder}/test.exec</jacoco.utReportFile>
+        <jacoco.itReportFolder>${project.build.directory}/jacoco/integrationTest</jacoco.itReportFolder>
+        <jacoco.itReportFile>${jacoco.itReportFolder}/integrationTest.exec</jacoco.itReportFile>
         <junit.utReportFolder>${project.testresult.directory}/test</junit.utReportFolder>
         <junit.itReportFolder>${project.testresult.directory}/integrationTest</junit.itReportFolder>
         <!-- jhipster-needle-maven-property -->
@@ -352,7 +346,7 @@
             <artifactId>encryption</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(cacheProvider)) { _%>
+<%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached'].includes(cacheProvider)) { _%>
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
@@ -434,6 +428,29 @@
         </dependency>
     <%_ } _%>
 <%_ } _%>
+<%_ if (cacheProvider === 'caffeine') { _%>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>jcache</artifactId>
+            <version>${jcache.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>${typesafe.version}</version>
+        </dependency>
+    <%_ if (enableHibernateCache) { _%>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+    <%_ } _%>
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -443,10 +460,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -593,6 +606,20 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-api</artifactId>
+            <version>0.11.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
+        <!-- https://www.archunit.org/userguide/html/000_Index.html#_junit_5 -->
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5-engine</artifactId>
+            <version>0.11.0</version>
             <scope>test</scope>
         </dependency>
 <%_ if (messageBroker === 'kafka') { _%>
@@ -797,6 +824,11 @@
                     <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                            <version>${spring-boot.version}</version>
+                        </path>
+                        <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${mapstruct.version}</version>
@@ -823,7 +855,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.version}</version>
                 <configuration>
-                    <source>8</source>
+                    <source>${maven.compiler.source}</source>
                 </configuration>
             </plugin>
             <plugin>
@@ -876,7 +908,9 @@
                 </executions>
                 <configuration>
                     <mainClass>${start-class}</mainClass>
+                    <%_ if (embeddableLaunchScript) { _%>
                     <executable>true</executable>
+                    <%_ } _%>
                     <fork>true</fork>
                     <!--
                     Enable the line below to have remote debugging of your application on port 5005
@@ -978,7 +1012,7 @@
                             </goals>
                             <configuration>
                                 <dataFile>${jacoco.utReportFile}</dataFile>
-                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
+                                <outputDirectory>${jacoco.utReportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                         <execution>
@@ -1000,7 +1034,7 @@
                             </goals>
                             <configuration>
                                 <dataFile>${jacoco.itReportFile}</dataFile>
-                                <outputDirectory>${jacoco.reportFolder}</outputDirectory>
+                                <outputDirectory>${jacoco.itReportFolder}</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -1035,7 +1069,7 @@
                                 <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
                                 <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
                             </environment>
-                            <useCurrentTimestamp>true</useCurrentTimestamp>
+                            <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                         </container>
                     </configuration>
                 </plugin>
@@ -1217,9 +1251,6 @@
                         <excludes>
                             <exclude>**/*IT*</exclude>
                             <exclude>**/*IntTest*</exclude>
-<%_ if (cucumberTests) { _%>
-                            <exclude>**/*CucumberIT*</exclude>
-<%_ } _%>
                         </excludes>
                     </configuration>
                 </plugin>
@@ -1237,9 +1268,6 @@
                         <includes>
                             <include>**/*IT*</include>
                             <include>**/*IntTest*</include>
-<%_ if (cucumberTests) { _%>
-                            <include>**/*CucumberIT*</include>
-<%_ } _%>
                         </includes>
                     </configuration>
                     <executions>
@@ -1278,7 +1306,7 @@
                                 <modelPackage><%= packageName %>.web.api.model</modelPackage>
                                 <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                                 <importMappings>Problem=org.zalando.problem.Problem</importMappings>
-                                <validateSpec>true</validateSpec>
+                                <skipValidateSpec>false</skipValidateSpec>
                                 <configOptions>
     <%_ if (reactive) { _%>
                                     <reactive>true</reactive>
@@ -1306,6 +1334,7 @@
                     </configuration>
 <%_ } _%>
                 </plugin>
+                <!-- jhipster-needle-maven-add-plugin-management -->
             </plugins>
         </pluginManagement>
     </build>
@@ -1482,7 +1511,9 @@
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
                             <mainClass>${start-class}</mainClass>
+                            <%_ if (embeddableLaunchScript) { _%>
                             <executable>true</executable>
+                            <%_ } _%>
                         </configuration>
                         <executions>
                             <execution>

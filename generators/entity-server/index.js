@@ -30,9 +30,6 @@ module.exports = class extends BaseBlueprintGenerator {
         utils.copyObjectProps(this, opts.context);
         this.jhipsterContext = opts.jhipsterContext || opts.context;
         this.configOptions = opts.configOptions || {};
-        if (this.databaseType === 'cassandra') {
-            this.pkType = 'UUID';
-        }
 
         useBlueprints =
             !opts.fromBlueprint &&

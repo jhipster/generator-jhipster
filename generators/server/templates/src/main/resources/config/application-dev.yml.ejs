@@ -178,7 +178,7 @@ spring:
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
                 <%_ } else if (cacheProvider === 'infinispan') { _%>
             hibernate.cache.region.factory_class: <%=packageName%>.config.CacheFactoryConfiguration
-            hibernate.cache.inifinispan.statistics: true
+            hibernate.cache.infinispan.statistics: true
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
             hibernate.cache.infinispan.entity.memory.size: 1000
@@ -279,22 +279,27 @@ jhipster:
             time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
             max-entries: 100 # Number of objects in each cache entry
         <%_ } _%>
+        <%_ if (cacheProvider === 'caffeine') { _%>
+        caffeine: # Caffeine configuration
+            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+            max-entries: 100 # Number of objects in each cache entry
+        <%_ } _%>
         <%_ if (cacheProvider === 'infinispan') { _%>
         infinispan:
             config-file: default-configs/default-jgroups-tcp.xml
             statsEnabled: true
             # local app cache
             local:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 100 # Number of objects in each cache entry
             # distributed app cache
             distributed:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 100 # Number of objects in each cache entry
                 instance-count: 1
             # replicated app cache
             replicated:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 100 # Number of objects in each cache entry
         <%_ } _%>
         <%_ if (cacheProvider === 'memcached') { _%>
@@ -371,6 +376,10 @@ jhipster:
             host: localhost
             port: 5000
             queue-size: 512
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    audit-events:
+        retention-period: 30 # Number of days before audit events are deleted.
+    <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     key-store:

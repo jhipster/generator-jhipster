@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '2'
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
@@ -171,6 +171,7 @@ services:
             service: kafka
         environment:
             - KAFKA_ADVERTISED_HOST_NAME=kafka
+            - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
     zookeeper:
         extends:
             file: kafka.yml

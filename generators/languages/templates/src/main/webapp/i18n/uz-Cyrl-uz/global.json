@@ -36,9 +36,9 @@
         "form": {
             "username": "Логин",
             "username.placeholder": "Сизнинг логинингиз",
-            "currentpassword": "Ҳозирги паролингиз",
+            "currentpassword.label": "Ҳозирги паролингиз",
             "currentpassword.placeholder": "Ҳозирги паролингиз",
-            "newpassword": "Янги парол",
+            "newpassword.label": "Янги парол",
             "newpassword.placeholder": "Янги парол",
             "confirmpassword": "Янги паролнинг тасдиғи",
             "confirmpassword.placeholder": "Янги паролнинг тасдиғи",

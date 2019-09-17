@@ -1,0 +1,30 @@
+# ========================================================================
+# App Engine Configuration.
+# Full reference is available at:
+# https://cloud.google.com/appengine/docs/standard/java11/config/appref
+# ========================================================================
+
+runtime: java11
+instance_class: <%= gaeInstanceClass %>
+service: <%=gaeServiceName%>
+handlers:
+- url: /(.*)
+  script: auto
+  secure: always
+<%_ if (gaeScalingType === 'manual') { _%>
+manual_scaling:
+  instances: <%= gaeInstances %>
+<%_ } else if (gaeScalingType === 'basic') { _%>
+basic_scaling:
+  <%_ if (gaeMaxInstances >= 0) { _%>
+  max_instances: <%= gaeMaxInstances %>
+  <%_ } _%>
+<%_ } else if (gaeScalingType === 'automatic') { _%>
+automatic_scaling:
+  <%_ if (gaeMinInstances >= 0) { _%>
+  min_instances: <%= gaeMinInstances %>
+  <%_ } _%>
+  <%_ if (gaeMaxInstances >= 0) { _%>
+  max_instances: <%= gaeMaxInstances %>
+  <%_ } _%>
+<%_ } _%>

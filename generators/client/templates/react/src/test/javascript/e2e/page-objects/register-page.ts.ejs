@@ -18,7 +18,7 @@ export default class RegisterPage extends BasePage {
   }
 
   async get() {
-    await browser.get('/register');
+    await browser.get('/account/register');
     await this.waitUntilDisplayed();
   }
 

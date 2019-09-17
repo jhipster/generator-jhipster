@@ -16,15 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export * from './error/error.component';
-export * from './error/error.route';
-export * from './main/main.component';
-export * from './footer/footer.component';
-export * from './navbar/navbar.component';
-export * from './navbar/navbar.route';
-<%_ if (enableTranslation) { _%>
-export * from './navbar/active-menu.directive';
-<%_ } _%>
-export * from './profiles/page-ribbon.component';
-export * from './profiles/profile.service';
-export * from './profiles/profile-info.model';
+{
+  "extends": ["jhipster-react"],
+  "parserOptions": {
+    "project": "./<% if (protractorTests) { %>tsconfig.e2e.json<% } else { %>tsconfig.json<% } %>"
+  },
+  "rules": {}
+}

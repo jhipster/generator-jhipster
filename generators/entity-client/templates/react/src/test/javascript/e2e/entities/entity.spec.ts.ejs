@@ -16,13 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* tslint:disable no-unused-expression */
 import { browser, element, by<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %> } from 'protractor';
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
-import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-object';
-import { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
+import <%= entityClass %>ComponentsPage, { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
 import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
 import { waitUntilDisplayed, waitUntilHidden } from '../../<%= entityParentPathAddition %>util/utils';
 <%_ if (fieldsContainBlobOrImage) { _%>
@@ -36,9 +34,9 @@ if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
 }
 for (let relationship of relationships) {
-    if (relationship.relationshipRequired) {
-        openBlockComment = `/*`;
-        closeBlockComment = `*/`;
+    if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
+        openBlockComment = `/* `;
+        closeBlockComment = ` */`;
         break;
     }
 } _%>
@@ -52,7 +50,7 @@ describe('<%= entityClass %> e2e test', () => {
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
     <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
     <%_ if (fieldsContainBlobOrImage) { _%>
-    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>static/images/logo-jhipster.png';
+    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
 

@@ -17,13 +17,13 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const tsKeyId = generateTestEntityId(primaryKeyType);
 _%>
-/* tslint:disable max-line-length */
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>UpdateComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-update.component';

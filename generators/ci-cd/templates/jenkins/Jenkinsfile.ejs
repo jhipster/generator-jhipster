@@ -36,33 +36,33 @@ node {
 <%_ if (buildTool === 'maven') { _%>
 <%= indent %>    stage('clean') {
 <%= indent %>        sh "chmod +x mvnw"
-<%= indent %>        sh "./mvnw clean"
+<%= indent %>        sh "./mvnw -ntp clean"
 <%= indent %>    }
 
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>"
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>"
 <%= indent %>    }
 
 <%= indent %>    stage('yarn install') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:yarn"
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:yarn"
 <%= indent %>    }
 
         <%_ } else if (clientPackageManager === 'npm') { _%>
 <%= indent %>    stage('install tools') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>"
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>"
 <%= indent %>    }
 
 <%= indent %>    stage('npm install') {
-<%= indent %>        sh "./mvnw com.github.eirslett:frontend-maven-plugin:npm"
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
 <%= indent %>    }
 
         <%_ } _%>
     <%_ } _%>
 <%= indent %>    stage('backend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./mvnw verify"
+<%= indent %>            sh "./mvnw -ntp verify"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -73,7 +73,7 @@ node {
     <%_ if (!skipClient) { _%>
 <%= indent %>    stage('frontend tests') {
 <%= indent %>        try {
-<%= indent %>            sh "./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
+<%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
 <%= indent %>        } catch(err) {
 <%= indent %>            throw err
 <%= indent %>        } finally {
@@ -84,10 +84,10 @@ node {
     <%_ } _%>
     <%_ if (cicdIntegrations.includes('heroku')) { _%>
 <%= indent %>    stage('package and deploy') {
-<%= indent %>        sh "./mvnw com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>"
+<%= indent %>        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>"
     <%_ } else { _%>
 <%= indent %>    stage('packaging') {
-<%= indent %>        sh "./mvnw verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests"
+<%= indent %>        sh "./mvnw -ntp verify <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests"
     <%_ } _%>
 <%= indent %>        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
 <%= indent %>    }
@@ -141,7 +141,7 @@ node {
 <%= indent %>    stage('quality analysis') {
 <%= indent %>        withSonarQubeEnv('<%= sonarName %>') {
     <%_ if (buildTool === 'maven') { _%>
-<%= indent %>            sh "./mvnw sonar:sonar"
+<%= indent %>            sh "./mvnw -ntp initialize sonar:sonar"
     <%_ } else if (buildTool === 'gradle' ) { _%>
 <%= indent %>            sh "./gradlew sonarqube --no-daemon"
     <%_ } _%>
@@ -158,7 +158,7 @@ node {
 <%= gitLabIndent %>        // A pre-requisite to this step is to setup authentication to the docker registry
     <%_ if (buildTool === 'maven') { _%>
 <%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
-<%= gitLabIndent %>        sh "./mvnw jib:build"
+<%= gitLabIndent %>        sh "./mvnw -ntp jib:build"
     <%_ } else if (buildTool === 'gradle' ) { _%>
 <%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods
 <%= gitLabIndent %>        sh "./gradlew jib"

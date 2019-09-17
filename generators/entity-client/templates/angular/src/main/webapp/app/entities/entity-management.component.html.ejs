@@ -22,7 +22,7 @@
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span <% if (searchEngine === 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
-            Create new <%= entityClassHumanized %>
+            Create a new <%= entityClassHumanized %>
             </span>
         </button>
     </h2>
@@ -49,7 +49,7 @@
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.notFound">No <%=entityInstancePlural %> found</span>
     </div>
     <div class="table-responsive" *ngIf="<%=entityInstancePlural %>?.length > 0">
-        <table class="table table-striped">
+        <table class="table table-striped" aria-describedby="page-heading">
             <thead>
             <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="<%=pagination !== 'infinite-scroll' ? 'transition.bind(this)' : 'reset.bind(this)'%>"<% } %>>
             <th<% if (pagination !== 'no') { %> jhiSortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><% if (pagination !== 'no') { %> <fa-icon [icon]="'sort'"></fa-icon><% } %></th>
@@ -125,16 +125,16 @@
                     <%_ } else { _%>
                         <%_ if (relationshipType === 'many-to-many') { _%>
                     <span *ngFor="let <%= relationshipFieldName %> of <%= entityInstance %>.<%= relationshipFieldNamePlural %>; let last = last">
-                            <a class="form-control-static" [routerLink]="['../<%= otherEntityStateName %>', <%= relationshipFieldName %>?.id, 'view' ]">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{last ? '' : ', '}}
+                            <a class="form-control-static" [routerLink]="['/<%= otherEntityStateName %>', <%= relationshipFieldName %>?.id, 'view' ]">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{last ? '' : ', '}}
                         </span>
                         <%_ } else { _%>
                             <%_ if (dto === 'no') { _%>
                     <div *ngIf="<%= entityInstance + "." + relationshipFieldName %>">
-                        <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %>, 'view' ]" >{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</a>
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "?.id" %>, 'view' ]" >{{<%= entityInstance + "." + relationshipFieldName + "?." + otherEntityField %>}}</a>
                     </div>
                         <%_ } else { _%>
                     <div *ngIf="<%= entityInstance + "." + relationshipFieldName + "Id" %>">
-                        <a [routerLink]="['../<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %>, 'view' ]" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                        <a [routerLink]="['/<%= otherEntityStateName %>', <%= entityInstance + "." + relationshipFieldName + "Id" %> %>, 'view' ]" >{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
                     </div>
                             <%_ } _%>
                         <%_ } _%>
@@ -157,7 +157,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', '<%= entityUrl %>', { outlets: { popup: <%= entityInstance %>.id + '/delete'} }]"
+                                [routerLink]="['/<%= entityUrl %>', { outlets: { popup: <%= entityInstance %>.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
@@ -184,7 +184,7 @@
     <%_ } else if (pagination === 'pagination') { _%>
     <div [hidden]="<%=entityInstancePlural %>?.length === 0">
         <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="totalItems" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
         <div class="row justify-content-center">
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>

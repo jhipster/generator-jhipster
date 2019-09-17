@@ -145,6 +145,9 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
+
+    moveEntity MapsIdUserProfileWithDTO
+
 fi
 
 #-------------------------------------------------------------------------------

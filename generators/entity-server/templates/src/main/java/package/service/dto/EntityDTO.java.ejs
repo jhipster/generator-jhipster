@@ -22,6 +22,7 @@ let importJsonIgnore = false;
 let importJsonIgnoreProperties = false;
 let importSet = false;
 const uniqueEnums = {};
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 %><%- include ../../domain/imports -%>
 <%_ if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
@@ -61,9 +62,9 @@ import java.util.UUID;
 <%_ if (fieldsContainBlob && databaseType === 'sql') { _%>
 import javax.persistence.Lob;
 <%_ } _%>
-<%_ for (idx in fields) { if (fields[idx].fieldIsEnum) { _%>
-import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
-<%_ } } _%>
+<%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
+import <%=packageName%>.domain.enumeration.<%= element %>;
+<%_ }); _%>
 
 /**
  * A DTO for the {@link <%=packageName%>.domain.<%= asEntity(entityClass) %>} entity.
@@ -73,7 +74,7 @@ import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } _%>
 public class <%= asDto(entityClass) %> implements Serializable {
 
-    private <%= pkType %> id;
+    private <%= primaryKeyType %> id;
 
     <%_ for (idx in fields) {
         if (typeof fields[idx].javadoc !== 'undefined') { _%>
@@ -131,17 +132,17 @@ public class <%= asDto(entityClass) %> implements Serializable {
     private Set<<%= asDto(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
-    private <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= pkType %><% } %> <%= relationshipFieldName %>Id;
+    private <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> <%= relationshipFieldName %>Id;
     <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
 
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
 
-    public <%= pkType %> getId() {
+    public <%= primaryKeyType %> getId() {
         return id;
     }
 
-    public void setId(<%= pkType %> id) {
+    public void setId(<%= primaryKeyType %> id) {
         this.id = id;
     }
     <%_ for (idx in fields) {
@@ -200,19 +201,19 @@ public class <%= asDto(entityClass) %> implements Serializable {
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     <%_ if (relationshipNameCapitalized.length > 1) { _%>
-    public <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= pkType %><% } %> get<%= relationshipNameCapitalized %>Id() {
+    public <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> get<%= relationshipNameCapitalized %>Id() {
         return <%= relationshipFieldName %>Id;
     }
 
-    public void set<%= relationshipNameCapitalized %>Id(<% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= pkType %><% } %> <%= otherEntityName %>Id) {
+    public void set<%= relationshipNameCapitalized %>Id(<% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
     <%_ } else { // special case when the entity name has one character _%>
-    public <%= pkType %> get<%= relationshipNameCapitalized.toLowerCase() %>Id() {
+    public <%= primaryKeyType %> get<%= relationshipNameCapitalized.toLowerCase() %>Id() {
         return <%= relationshipFieldName %>Id;
     }
 
-    public void set<%= relationshipNameCapitalized.toLowerCase() %>Id(<%= pkType %> <%= otherEntityName %>Id) {
+    public void set<%= relationshipNameCapitalized.toLowerCase() %>Id(<%= primaryKeyType %> <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
     <%_ } _%>

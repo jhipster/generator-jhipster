@@ -27,7 +27,14 @@ import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
 import { VERSION } from 'app/app.constants';
-import { <% if (enableTranslation) { %>JhiLanguageHelper, <% } %>AccountService, <% if (authenticationType !== 'oauth2') { %>LoginModalService, <% } %>LoginService } from 'app/core';
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
+<%_ } _%>
+import { AccountService } from 'app/core/auth/account.service';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { LoginModalService } from 'app/core/login/login-modal.service';
+<%_ } _%>
+import { LoginService } from 'app/core/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 
 @Component({
@@ -61,7 +68,7 @@ export class NavbarComponent implements OnInit {
         private profileService: ProfileService,
         private router: Router
     ) {
-        this.version = VERSION ? 'v' + VERSION : '';
+        this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
         this.isNavbarCollapsed = true;
     }
 

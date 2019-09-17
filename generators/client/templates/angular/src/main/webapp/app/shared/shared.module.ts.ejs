@@ -16,20 +16,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {
-    <%=angularXAppName%>SharedCommonModule,
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    <%=jhiPrefixCapitalized%>LoginModalComponent,
-    <%_ } _%>
-    HasAnyAuthorityDirective
-} from './';
+import { NgModule } from '@angular/core';
+import { <%=angularXAppName%>SharedLibsModule } from './shared-libs.module';
+<%_ if (enableTranslation) { _%>
+import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
+<%_ } _%>
+import { <%=jhiPrefixCapitalized%>AlertComponent } from './alert/alert.component';
+import { <%=jhiPrefixCapitalized%>AlertErrorComponent } from './alert/alert-error.component';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { <%=jhiPrefixCapitalized%>LoginModalComponent } from './login/login.component';
+<%_ } _%>
+import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 
 @NgModule({
     imports: [
-        <%=angularXAppName%>SharedCommonModule
+        <%=angularXAppName%>SharedLibsModule
     ],
     declarations: [
+        <%_ if (enableTranslation) { _%>
+        FindLanguageFromKeyPipe,
+        <%_ } _%>
+        <%=jhiPrefixCapitalized%>AlertComponent,
+        <%=jhiPrefixCapitalized%>AlertErrorComponent,
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
@@ -39,19 +47,16 @@ import {
     entryComponents: [<%=jhiPrefixCapitalized%>LoginModalComponent],
     <%_ } _%>
     exports: [
-        <%=angularXAppName%>SharedCommonModule,
+        <%=angularXAppName%>SharedLibsModule,
+        <%_ if (enableTranslation) { _%>
+        FindLanguageFromKeyPipe,
+        <%_ } _%>
+        <%=jhiPrefixCapitalized%>AlertComponent,
+        <%=jhiPrefixCapitalized%>AlertErrorComponent,
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
         HasAnyAuthorityDirective
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
-
+    ]
 })
-export class <%=angularXAppName%>SharedModule {
-    static forRoot() {
-        return {
-            ngModule: <%=angularXAppName%>SharedModule
-        };
-    }
-}
+export class <%=angularXAppName%>SharedModule {}

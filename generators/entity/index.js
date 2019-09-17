@@ -150,8 +150,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.authenticationType = configuration.get('authenticationType');
                 context.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
                 context.enableHibernateCache =
-                    configuration.get('enableHibernateCache') ||
-                    (configuration.get('hibernateCache') !== undefined && configuration.get('hibernateCache') !== 'no');
+                    configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(context.cacheProvider);
                 context.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
                 context.databaseType = configuration.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
                 context.prodDatabaseType = configuration.get('prodDatabaseType') || this.options.db;
@@ -167,6 +166,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.jhiPrefixDashed = _.kebabCase(context.jhiPrefix);
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
                 context.testFrameworks = configuration.get('testFrameworks');
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 // backward compatibility on testing frameworks
                 if (context.testFrameworks === undefined) {
                     context.testFrameworks = ['gatling'];
@@ -583,7 +584,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
 
                 // Validate root entity json content
-                if (_.isUndefined(context.changelogDate) && (context.databaseType === 'sql' || context.databaseType === 'cassandra')) {
+                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
                     const currentDate = this.dateFormatForLiquibase();
                     this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
                     context.changelogDate = currentDate;
@@ -618,7 +619,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     return; // do not update if regenerating entity
                 }
                 // store information in a file for further use.
-                if (!context.useConfigurationFile && ['sql', 'cassandra'].includes(context.databaseType)) {
+                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
                     context.changelogDate = this.dateFormatForLiquibase();
                 }
                 this.data = {};
@@ -642,7 +643,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.entityAngularJSSuffix) {
                     this.data.angularJSSuffix = context.entityAngularJSSuffix;
                 }
-                if (context.applicationType === 'microservice') {
+                if (context.applicationType === 'microservice' || context.applicationType === 'uaa') {
                     this.data.microserviceName = context.baseName;
                 }
                 if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
@@ -721,7 +722,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.fieldsIsReactAvField = true;
                     }
 
-                    const nonEnumType = [
+                    field.fieldIsEnum = ![
                         'String',
                         'Integer',
                         'Long',
@@ -737,11 +738,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'byte[]',
                         'ByteBuffer'
                     ].includes(fieldType);
-                    if (['sql', 'mongodb', 'couchbase', 'no'].includes(context.databaseType) && !nonEnumType) {
-                        field.fieldIsEnum = true;
-                    } else {
-                        field.fieldIsEnum = false;
-                    }
 
                     if (field.fieldIsEnum === true) {
                         context.i18nToLoad.push(field.enumInstance);
@@ -1091,6 +1087,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityName = context.name;
                 if (this.isJhipsterVersionLessThan('5.0.0')) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
+                }
+                if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === 'angularX') {
+                    this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
                 }
             },
 

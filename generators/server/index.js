@@ -116,6 +116,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
                 this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
                 this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+                this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
 
                 this.JAVA_VERSION = constants.JAVA_VERSION;
 
@@ -162,11 +163,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
-                this.enableHibernateCache =
-                    configuration.get('enableHibernateCache') ||
-                    (configuration.get('hibernateCache') !== undefined &&
-                        configuration.get('hibernateCache') !== 'no' &&
-                        configuration.get('hibernateCache') !== 'memcached');
+                this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
 
                 this.databaseType = configuration.get('databaseType');
                 if (this.databaseType === 'mongodb') {
@@ -199,6 +196,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = configuration.get('jhipsterVersion');
                 }
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 this.authenticationType = configuration.get('authenticationType');
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
@@ -210,7 +209,15 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (uaaBaseName) {
                     this.uaaBaseName = uaaBaseName;
                 }
+                const embeddableLaunchScript = configuration.get('embeddableLaunchScript');
+                if (embeddableLaunchScript) {
+                    this.embeddableLaunchScript = embeddableLaunchScript;
+                }
                 this.clientFramework = configuration.get('clientFramework');
+                this.clientTheme = configuration.get('clientTheme');
+                if (!this.clientTheme) {
+                    this.clientTheme = 'none';
+                }
                 const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
@@ -367,7 +374,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
-                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(this.cacheProvider);
+                this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(this.cacheProvider);
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
@@ -400,7 +407,8 @@ module.exports = class extends BaseBlueprintGenerator {
                     enableSwaggerCodegen: this.enableSwaggerCodegen,
                     jwtSecretKey: this.jwtSecretKey,
                     rememberMeKey: this.rememberMeKey,
-                    enableTranslation: this.enableTranslation
+                    enableTranslation: this.enableTranslation,
+                    embeddableLaunchScript: this.embeddableLaunchScript
                 };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     config.nativeLanguage = this.nativeLanguage;

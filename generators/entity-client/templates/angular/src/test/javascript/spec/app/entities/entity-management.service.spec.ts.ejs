@@ -17,28 +17,23 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
-const variablesWithTypes = generateEntityClientFields(pkType, fields, relationships, dto);
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const tsKeyId = generateTestEntityId(primaryKeyType);
+const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
+const enumImports = generateEntityClientEnumImports(fields);
 _%>
-/* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 <%_ if (fieldsContainDate) { _%>
 import * as moment from 'moment';
 import { <%_ if (fieldsContainLocalDate) { _%>DATE_FORMAT,<%_ } if (fieldsContainInstant || fieldsContainZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from 'app/shared/constants/input.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.service';
-import { I<%= entityAngularName %>, <%= entityAngularName %>, <%_ const enumsAlreadyDeclared = [];
-fields.forEach(field => {
-if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
-    enumsAlreadyDeclared.push(field.fieldType); _%>
-<%=field.fieldType%>,
-<%_ }
-}) _%>
-} from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
 
 describe('Service Tests', () => {
 
@@ -66,7 +61,7 @@ describe('Service Tests', () => {
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (pkType === 'String') { _%>
+                <%_ if (primaryKeyType === 'String' || primaryKeyType === 'UUID') { _%>
                 'ID',
                 <%_ } else { _%>
                 0,
@@ -94,7 +89,7 @@ describe('Service Tests', () => {
         });
 
         describe('Service methods', () => {
-            it('should find an element', async () => {
+            it('should find an element', () => {
                 const returnedFromService = Object.assign({
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
@@ -114,9 +109,9 @@ describe('Service Tests', () => {
                 expect(expectedResult).toMatchObject({body: elemDefault});
             });
 
-            it('should create a <%= entityAngularName %>', async () => {
+            it('should create a <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
-<%_ if (pkType === 'String') { _%>
+<%_ if (pkType === 'String' || pkType === 'UUID') { _%>
                     id: 'ID',
 <%_ } else { _%>
                     id: 0,
@@ -148,7 +143,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toMatchObject({body: expected});
             });
 
-            it('should update a <%= entityAngularName %>', async () => {
+            it('should update a <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
@@ -186,7 +181,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toMatchObject({body: expected});
             });
 
-            it('should return a list of <%= entityAngularName %>', async () => {
+            it('should return a list of <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
 <%_ fields.forEach((field) => {
     const fieldType = field.fieldType; _%>
@@ -227,9 +222,8 @@ describe('Service Tests', () => {
                 expect(expectedResult).toContainEqual(expected);
             });
 
-            it('should delete a <%= entityAngularName %>', async () => {
-                const rxPromise = service
-                    .delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
+            it('should delete a <%= entityAngularName %>', () => {
+                service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
 
                 const req  = httpMock.expectOne({ method: 'DELETE' });
                 req.flush({ status: 200 });

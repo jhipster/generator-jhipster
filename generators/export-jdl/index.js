@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const JCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
+const { logger } = require('../utils');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
@@ -31,7 +33,6 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
-        this.jdlFile = this.options.jdlFile;
     }
 
     get default() {
@@ -44,21 +45,17 @@ module.exports = class extends BaseGenerator {
                 statistics.sendSubGenEvent('generator', 'export-jdl');
             },
 
-            parseJson() {
-                this.log('Parsing entities from .jhipster dir...');
-                this.jdl = this.generateJDLFromEntities();
+            convertToJDL() {
+                try {
+                    JCore.convertToJDL();
+                } catch (error) {
+                    logger.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
+                }
             }
         };
     }
 
-    writing() {
-        const content = `// JDL definition for application '${
-            this.baseName
-        }' generated with command 'jhipster export-jdl'\n\n${this.jdl.toString()}`;
-        this.fs.write(this.jdlFile, content);
-    }
-
     end() {
-        this.log(chalk.green.bold('\nEntities successfully exported to JDL file\n'));
+        this.log(chalk.green.bold('\nThe JDL export is complete!\n'));
     }
 };

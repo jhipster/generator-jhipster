@@ -52,12 +52,11 @@
         [requestMetrics]="metrics['http.server.requests']">
     </jhi-metrics-request>
 
-    <div >
-        <jhi-metrics-endpoints-requests
-            *ngIf="isObjectExisting(metrics, 'services')"
-            [updating]="updatingMetrics"
-            [endpointsRequestsMetrics]="metrics.services">
-        </jhi-metrics-endpoints-requests>
+    <jhi-metrics-endpoints-requests
+        *ngIf="isObjectExisting(metrics, 'services')"
+        [updating]="updatingMetrics"
+        [endpointsRequestsMetrics]="metrics.services">
+    </jhi-metrics-endpoints-requests>
 
     <jhi-metrics-cache
         *ngIf="isObjectExisting(metrics, 'cache')"

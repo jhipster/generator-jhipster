@@ -64,6 +64,7 @@ function rewriteFile(args, generator) {
     args.haystack = generator.fs.read(fullPath);
     const body = rewrite(args);
     generator.fs.write(fullPath, body);
+    return args.haystack !== body;
 }
 
 /**
@@ -77,9 +78,10 @@ function replaceContent(args, generator) {
 
     const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 
-    let body = generator.fs.read(fullPath);
-    body = body.replace(re, args.content);
-    generator.fs.write(fullPath, body);
+    const currentBody = generator.fs.read(fullPath);
+    const newBody = currentBody.replace(re, args.content);
+    generator.fs.write(fullPath, newBody);
+    return newBody !== currentBody;
 }
 
 /**
@@ -426,16 +428,8 @@ function getAllJhipsterConfig(generator, force, basePath = '') {
         configuration = yoRc['generator-jhipster'];
 
         // merge the blueprint configs if available
-        const oldBlueprintName = configuration.blueprint;
-        const blueprints = configuration.blueprints || [];
-        if (oldBlueprintName && blueprints.indexOf(oldBlueprintName) === -1) {
-            const oldBlueprintVersion = configuration.blueprintVersion || 'latest';
-            blueprints.push({
-                name: oldBlueprintName,
-                version: oldBlueprintVersion
-            });
-        }
-        const blueprintConfigs = blueprints.map(bp => yoRc[bp.name]).filter(el => el !== null && el !== undefined);
+        configuration.blueprints = loadBlueprintsFromConfiguration(configuration);
+        const blueprintConfigs = configuration.blueprints.map(bp => yoRc[bp.name]).filter(el => el !== null && el !== undefined);
         if (blueprintConfigs.length > 0) {
             const mergedConfigs = Object.assign(...blueprintConfigs);
             configuration = { ...configuration, ...mergedConfigs };
@@ -491,13 +485,15 @@ function checkStringInFile(path, search, generator) {
  * @param config - the generator's configuration object.
  * @returns {Array} an array that contains the info for each blueprint
  */
-function loadBlueprintsFromConfiguration(generator) {
+function loadBlueprintsFromConfiguration(config) {
+    // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
+    const configuration = config && (config.getAll && typeof config.getAll === 'function') ? config.getAll() || {} : config;
     // load blueprints from config file
-    const blueprints = generator.config.get('blueprints') || [];
+    const blueprints = configuration.blueprints || [];
 
-    const oldBlueprintName = generator.config.get('blueprint');
+    const oldBlueprintName = configuration.blueprint;
     if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
-        const version = generator.config.get('blueprintVersion') || 'latest';
+        const version = configuration.blueprintVersion || 'latest';
         blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
     }
     return blueprints;

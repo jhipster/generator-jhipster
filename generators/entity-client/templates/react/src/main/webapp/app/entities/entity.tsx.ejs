@@ -26,7 +26,6 @@ import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
-// tslint:disable-next-line:no-unused-variable
 import {
   <%_ if (blobFields.length > 0) { _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
@@ -55,8 +54,7 @@ import {
   <%_ } _%>
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
- // tslint:disable-next-line:no-unused-variable
-import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+ import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ if (pagination !== 'no') { _%>
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
 <%_ } _%>
@@ -197,7 +195,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
             <FontAwesomeIcon icon="plus" />&nbsp;
             <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
-              Create new <%= entityClassHumanized %>
+              Create a new <%= entityClassHumanized %>
             </Translate>
           </Link>
         </h2>
@@ -232,7 +230,7 @@ export class <%= entityReactName %> extends React.Component<I<%= entityReactName
           <%_ } _%>
           {
             <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?(
-              <Table responsive>
+              <Table responsive aria-describedby="<%= entityFileName %>-heading">
                 <thead>
                   <tr>
                     <th<% if (pagination !== 'no') { %> className="hand" onClick={this.sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>

@@ -47,7 +47,6 @@ describe('private-route component', () => {
     const renderedRoute = route.find(Route);
     expect(renderedRoute.length).toEqual(1);
     expect(renderedRoute.props().path).toEqual('/');
-    // tslint:disable-next-line:no-unused-expression
     expect(renderedRoute.props().render).toBeDefined();
     const renderFn: Function = renderedRoute.props().render;
     const comp = shallow(
