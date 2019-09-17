@@ -24,12 +24,6 @@ import java.time.Duration;
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
 
-    <%_ if (enableHibernateCache) { _%>
-import org.hibernate.cache.jcache.ConfigSettings;
-    <%_ } _%>
-import io.github.jhipster.config.JHipsterProperties;
-
-<%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
 import com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration;
 import java.util.OptionalLong;
