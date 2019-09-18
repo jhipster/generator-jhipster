@@ -53,6 +53,7 @@ module.exports = class extends BaseDockerGenerator {
             askForDockerPushCommand: prompts.askForDockerPushCommand,
             askForIstioSupport: prompts.askForIstioSupport,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
+            askForIngressType: prompts.askForIngressType,
             askForIngressDomain: prompts.askForIngressDomain
         };
     }
@@ -94,7 +95,7 @@ module.exports = class extends BaseDockerGenerator {
         }
 
         this.log(
-            `${chalk.yellow.bold(
+            `\n${chalk.yellow.bold(
                 'WARNING!'
             )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
         );
@@ -105,6 +106,22 @@ module.exports = class extends BaseDockerGenerator {
                 this.log(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
             }
             this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
+        }
+
+        if (this.dockerRepositoryName) {
+            this.log(
+                `\n${chalk.green.bold('INFO!')} Alternatively, you can use Jib to build and push image directly to a remote registry:`
+            );
+            this.appsFolders.forEach((appsFolder, index) => {
+                const appConfig = this.appConfigs[index];
+                let runCommand = '';
+                if (appConfig.buildTool === 'maven') {
+                    runCommand = `./mvnw -ntp -Pprod verify jib:build -Djib.to.image=${appConfig.targetImageName}`;
+                } else {
+                    runCommand = `./gradlew bootJar -Pprod jibBuild -Djib.to.image=${appConfig.targetImageName}`;
+                }
+                this.log(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
+            });
         }
 
         this.log('\nYou can deploy all your apps by running the following script:');
