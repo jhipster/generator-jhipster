@@ -105,11 +105,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.jhipster.config.JHipsterProperties;
 import java.util.concurrent.TimeUnit;
+import org.hibernate.cfg.AvailableSettings;
 import org.infinispan.eviction.EvictionType;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.infinispan.spring.starter.embedded.InfinispanCacheConfigurer;
 import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import java.util.stream.Stream;
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -564,6 +566,17 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
             setCacheManager(manager);
         };
     }
+        <%_ if (enableHibernateCache) { _%>
+    /**
+    * Hibernate property customizer. <br/>
+    * This component ensures that Hibernate L2 cache region factory uses, as cache manager, the
+    * same instance already configured in Spring Context with {@link CacheConfiguration}
+    */
+    @Bean
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(CacheFactoryConfiguration cacheFactoryConfiguration) {
+        return hibernateProperties -> hibernateProperties.put(AvailableSettings.CACHE_REGION_FACTORY, cacheFactoryConfiguration);
+    }
+    <%_ } _%>
 
         <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
     /**
