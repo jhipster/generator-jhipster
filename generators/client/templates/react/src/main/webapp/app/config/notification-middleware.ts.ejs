@@ -130,6 +130,9 @@ export default () => next => action => {
               }
           }
         }
+      } else if (error && error.config.url === 'api/account' && error.config.method === 'get') {
+        /* eslint-disable no-console */
+        console.log(error.message);
       } else if (error && error.message) {
         toast.error(error.message);
       } else {
