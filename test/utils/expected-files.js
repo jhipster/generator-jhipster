@@ -237,6 +237,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/AuditEventServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`
     ],
@@ -336,6 +337,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-update.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management-update.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/user-management/user-management.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/user/user.model.ts`,

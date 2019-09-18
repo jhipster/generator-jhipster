@@ -584,7 +584,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 });
 
                 // Validate root entity json content
-                if (_.isUndefined(context.changelogDate) && (context.databaseType === 'sql' || context.databaseType === 'cassandra')) {
+                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
                     const currentDate = this.dateFormatForLiquibase();
                     this.warning(`changelogDate is missing in .jhipster/${entityName}.json, using ${currentDate} as fallback`);
                     context.changelogDate = currentDate;
@@ -619,7 +619,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     return; // do not update if regenerating entity
                 }
                 // store information in a file for further use.
-                if (!context.useConfigurationFile && ['sql', 'cassandra'].includes(context.databaseType)) {
+                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
                     context.changelogDate = this.dateFormatForLiquibase();
                 }
                 this.data = {};
@@ -643,7 +643,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.entityAngularJSSuffix) {
                     this.data.angularJSSuffix = context.entityAngularJSSuffix;
                 }
-                if (context.applicationType === 'microservice') {
+                if (context.applicationType === 'microservice' || context.applicationType === 'uaa') {
                     this.data.microserviceName = context.baseName;
                 }
                 if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
@@ -722,7 +722,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.fieldsIsReactAvField = true;
                     }
 
-                    const nonEnumType = [
+                    field.fieldIsEnum = ![
                         'String',
                         'Integer',
                         'Long',
@@ -738,11 +738,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'byte[]',
                         'ByteBuffer'
                     ].includes(fieldType);
-                    if (['sql', 'mongodb', 'couchbase', 'no'].includes(context.databaseType) && !nonEnumType) {
-                        field.fieldIsEnum = true;
-                    } else {
-                        field.fieldIsEnum = false;
-                    }
 
                     if (field.fieldIsEnum === true) {
                         context.i18nToLoad.push(field.enumInstance);

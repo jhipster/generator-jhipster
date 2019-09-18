@@ -30,13 +30,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jhipster-console.<%= kubernetesNamespace %><%= ingressDomain %>
+    - jhipster-console.<%= kubernetesNamespace %>.<%= ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jhipster-console.<%= kubernetesNamespace %><%= ingressDomain %>
+    - jhipster-console.<%= kubernetesNamespace %>.<%= ingressDomain %>
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -45,7 +45,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   hosts:
-  - jhipster-console.<%= kubernetesNamespace %><%= ingressDomain %>
+  - jhipster-console.<%= kubernetesNamespace %>.<%= ingressDomain %>
   gateways:
   - jhipster-console-gateway
   http:

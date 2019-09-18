@@ -620,9 +620,10 @@ module.exports = class extends PrivateBase {
      *
      * @param {string} id - id of the repository
      * @param {string} url - url of the repository
+     * @param  {string} other - (optional) explicit other thing: name, releases, snapshots, ...
      */
-    addMavenRepository(id, url) {
-        this.needleApi.serverMaven.addRepository(id, url);
+    addMavenRepository(id, url, other = '') {
+        this.needleApi.serverMaven.addRepository(id, url, other);
     }
 
     /**
@@ -692,6 +693,18 @@ module.exports = class extends PrivateBase {
      */
     addMavenPlugin(groupId, artifactId, version, other) {
         this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
+    }
+
+    /**
+     * Add a new Maven plugin management.
+     *
+     * @param {string} groupId - plugin groupId
+     * @param {string} artifactId - plugin artifactId
+     * @param {string} version - explicit plugin version number
+     * @param {string} other - explicit other thing: executions, configuration...
+     */
+    addMavenPluginManagement(groupId, artifactId, version, other) {
+        this.needleApi.serverMaven.addPluginManagement(groupId, artifactId, version, other);
     }
 
     /**
@@ -942,10 +955,11 @@ module.exports = class extends PrivateBase {
      * @param {string} filePath - path of the source file to rewrite
      * @param {string} needle - needle to look for where content will be inserted
      * @param {string} content - content to be written
+     * @returns {boolean} true if the body has changed.
      */
     rewriteFile(filePath, needle, content) {
         const rewriteFileModel = this.needleApi.base.generateFileModel(filePath, needle, content);
-        this.needleApi.base.addBlockContentToFile(rewriteFileModel);
+        return this.needleApi.base.addBlockContentToFile(rewriteFileModel);
     }
 
     /**
@@ -955,10 +969,11 @@ module.exports = class extends PrivateBase {
      * @param {string} pattern - pattern to look for where content will be replaced
      * @param {string} content - content to be written
      * @param {string} regex - true if pattern is regex
+     * @returns {boolean} true if the body has changed.
      */
     replaceContent(filePath, pattern, content, regex) {
         try {
-            jhipsterUtils.replaceContent(
+            return jhipsterUtils.replaceContent(
                 {
                     file: filePath,
                     pattern,
@@ -972,6 +987,7 @@ module.exports = class extends PrivateBase {
                 chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e
             );
             this.debug('Error:', e);
+            return false;
         }
     }
 

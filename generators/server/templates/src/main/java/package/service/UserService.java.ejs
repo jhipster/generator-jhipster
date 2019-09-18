@@ -796,7 +796,7 @@ public class UserService {
         <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = getUser(attributes);
         user.setAuthorities(authToken.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
-            <%_ if (databaseType !== 'no') { _%>
+            <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
             .map(authority -> {
                 Authority auth = new Authority();
                 auth.setName(authority);

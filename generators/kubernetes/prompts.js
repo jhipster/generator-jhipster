@@ -181,7 +181,7 @@ function askForIngressDomain() {
         if (props.ingressDomain === 'none') {
             this.ingressDomain = '';
         } else {
-            this.ingressDomain = props.ingressDomain ? '.'.concat(props.ingressDomain) : '';
+            this.ingressDomain = props.ingressDomain ? props.ingressDomain : '';
         }
         done();
     });

@@ -16,15 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HTTP_INTERCEPTORS, <% if (enableTranslation) { %>HttpClient<% } %> } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-<%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
-<%_ } _%>
-import { NgxWebstorageModule } from 'ngx-webstorage';
-import { NgJhipsterModule, <% if (enableTranslation) { %>translatePartialLoader, missingTranslationHandler, JhiConfigService<% } %> } from 'ng-jhipster';
 
 import './vendor';
 <%_ if (authenticationType === 'jwt') { _%>
@@ -37,11 +31,7 @@ import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 import { <%=angularXAppName%>CoreModule } from 'app/core/core.module';
 import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
 import { <%=angularXAppName%>HomeModule } from './home/home.module';
-<%_ if (!skipUserManagement) { _%>
-import { <%=angularXAppName%>AccountModule } from './account/account.module';
-<%_ } _%>
 import { <%=angularXAppName%>EntityModule } from './entities/entity.module';
-import * as moment from 'moment';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import { <%=jhiPrefixCapitalized%>MainComponent } from './layouts/main/main.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
@@ -55,36 +45,9 @@ import { ErrorComponent } from './layouts/error/error.component';
 @NgModule({
     imports: [
         BrowserModule,
-        NgxWebstorageModule.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
-        NgJhipsterModule.forRoot({
-            // set below to true to make alerts look like toast
-            alertAsToast: false,
-            alertTimeout: 5000,
-            <%_ if (enableTranslation) { _%>
-            i18nEnabled: true,
-            defaultI18nLang: '<%= nativeLanguage %>'
-            <%_ } _%>
-        }),
-        <%_ if (enableTranslation) { _%>
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: translatePartialLoader,
-                deps: [HttpClient]
-            },
-            missingTranslationHandler: {
-                provide: MissingTranslationHandler,
-                useFactory: missingTranslationHandler,
-                deps: [JhiConfigService]
-            }
-        }),
-        <%_ } _%>
         <%=angularXAppName%>SharedModule,
         <%=angularXAppName%>CoreModule,
         <%=angularXAppName%>HomeModule,
-        <%_ if (!skipUserManagement) { _%>
-        <%=angularXAppName%>AccountModule,
-        <%_ } _%>
         // jhipster-needle-angular-add-module JHipster will add new module here
         <%=angularXAppName%>EntityModule,
         <%=angularXAppName%>AppRoutingModule
@@ -125,8 +88,4 @@ import { ErrorComponent } from './layouts/error/error.component';
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })
-export class <%=angularXAppName%>AppModule {
-    constructor(private dpConfig: NgbDatepickerConfig) {
-        this.dpConfig.minDate = {year: moment().year() - 100, month: 1, day: 1};
-    }
-}
+export class <%=angularXAppName%>AppModule {}

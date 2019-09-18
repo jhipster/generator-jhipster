@@ -32,9 +32,6 @@ import { gatewayRoute } from './gateway/gateway.route';
 <%_ if (websocket === 'spring-websocket') { _%>
 import { trackerRoute } from './tracker/tracker.route';
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
-import { userMgmtRoute } from './user-management/user-management.route';
-<%_ } _%>
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
@@ -52,17 +49,27 @@ const ADMIN_ROUTES = [
     <%_ if (websocket === 'spring-websocket') { _%>
     trackerRoute,
     <%_ } _%>
-    <%_ if (!skipUserManagement) { _%>
-    ...userMgmtRoute,
-    <%_ } _%>
     metricsRoute
 ];
 
-export const adminState: Routes = [{
+export const adminState: Routes = [
+<%_ if (!skipUserManagement) { _%>
+  {
+    path: 'user-management',
+    data: {
+      authorities: ['ROLE_ADMIN']
+    },
+    canActivate: [UserRouteAccessService],
+    loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule)
+  },
+<%_ } _%>
+  {
     path: '',
     data: {
-        authorities: ['ROLE_ADMIN']
+      authorities: ['ROLE_ADMIN']
     },
     canActivate: [UserRouteAccessService],
     children: ADMIN_ROUTES
-}];
+  }
+/* jhipster-needle-add-admin-route - JHipster will add admin routes here */
+];

@@ -71,6 +71,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.reactiveController = false;
                 this.applicationType = configuration.get('applicationType');
+                this.authenticationType = configuration.get('authenticationType');
                 this.reactive = configuration.get('reactive');
                 this.reactiveController = this.reactive;
                 this.controllerActions = [];

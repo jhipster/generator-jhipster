@@ -24,7 +24,7 @@ metadata:
 spec:
   rules:
   <%_ if (ingressDomain) { _%>
-  - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>
+  - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
   <%_ } else { _%>
   - http:
@@ -35,7 +35,7 @@ spec:
           serviceName: <%= app.baseName.toLowerCase() %>
           servicePort: <%= app.serverPort %>
       <%_ if (!app.serviceDiscoveryType) { _%>
-        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(function(config) { _%>
+        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
       - path: /services/<%= config.baseName.toLowerCase() %>/<%= ingressType === "nginx" ? ".*" : "*" %>
         backend:
           serviceName: <%= config.baseName.toLowerCase() %>
