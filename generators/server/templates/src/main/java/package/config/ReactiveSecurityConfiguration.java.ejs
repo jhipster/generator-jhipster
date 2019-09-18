@@ -24,6 +24,7 @@ import <%= packageName %>.security.jwt.JWTFilter;
 import <%= packageName %>.security.jwt.TokenProvider;
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
+import <%= packageName %>.service.AuditEventService;
 import io.github.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
@@ -41,8 +42,17 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+<%_ if (authenticationType === 'session') { _%>
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+<%_ } _%>
 <%_ if (!skipUserManagement) { _%>
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+<%_ } _%>
+<%_ if (authenticationType === 'session') { _%>
+import org.springframework.security.core.userdetails.User;
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
@@ -76,14 +86,21 @@ public class SecurityConfiguration {
     private final TokenProvider tokenProvider;
 
     <%_ } _%>
+    <%_ if (authenticationType === 'session') { _%>
+    private final AuditEventService auditEventService;
+
+    <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider,  <% } %>SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider,  <% } %><% if (authenticationType === 'session') { %>AuditEventService auditEventService,  <% } %>SecurityProblemSupport problemSupport) {
         <%_ if (!skipUserManagement) { _%>
         this.userDetailsService = userDetailsService;
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         this.tokenProvider = tokenProvider;
+        <%_ } _%>
+        <%_ if (authenticationType === 'session') { _%>
+        this.auditEventService = auditEventService;
         <%_ } _%>
         this.problemSupport = problemSupport;
     }
@@ -132,8 +149,8 @@ public class SecurityConfiguration {
             .formLogin()
             .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
             .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
-            .authenticationSuccessHandler((exchange, authentication) -> setStatusCode(exchange, HttpStatus.OK))
-            .authenticationFailureHandler((exchange, exception) -> setStatusCode(exchange, HttpStatus.UNAUTHORIZED))
+            .authenticationSuccessHandler(this::onAuthenticationSuccess)
+            .authenticationFailureHandler(this::onAuthenticationError)
         .and()
             .logout()
             .logoutUrl("/api/logout")
@@ -165,8 +182,24 @@ public class SecurityConfiguration {
     }
     <%_ if (authenticationType === 'session') { _%>
 
-    private static Mono<Void> setStatusCode(WebFilterExchange exchange, HttpStatus status) {
-        return Mono.fromRunnable(() -> exchange.getExchange().getResponse().setStatusCode(status));
+    private Mono<Void> onAuthenticationError(WebFilterExchange exchange, AuthenticationException e) {
+        exchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        return exchange.getExchange()
+                .getFormData()
+                .map(data -> data.getFirst("username"))
+                .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
+                .flatMap(login -> auditEventService.saveAuthenticationError(login, e))
+                .then();
+    }
+
+    private Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
+        exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
+        return Mono.just(authentication.getPrincipal())
+                .filter(principal -> principal instanceof User)
+                .map(principal -> ((User) principal).getUsername())
+                .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
+                .flatMap(auditEventService::saveAuthenticationSuccess)
+                .then();
     }
     <%_ } _%>
 }
