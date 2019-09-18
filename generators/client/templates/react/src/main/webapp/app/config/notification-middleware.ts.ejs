@@ -132,7 +132,7 @@ export default () => next => action => {
         }
       } else if (error && error.config && error.config.url === 'api/account' && error.config.method === 'get') {
         /* eslint-disable no-console */
-        console.log(error.message);
+        console.log("Authentication Error: Trying to access url api/account with GET.");
       } else if (error && error.message) {
         toast.error(error.message);
       } else {
