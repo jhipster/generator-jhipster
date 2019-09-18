@@ -17,52 +17,16 @@
  limitations under the License.
 -%>
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 /* jhipster-needle-add-admin-module-import - JHipster will add admin modules imports here */
 
-import { adminState } from './admin.route';
-<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-import { AuditsComponent } from './audits/audits.component';
-<%_ } _%>
-import { LogsComponent } from './logs/logs.component';
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics/metrics.component';
-import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health/health-modal.component';
-import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health/health.component';
-import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration/configuration.component';
-import { <%=jhiPrefixCapitalized%>DocsComponent } from './docs/docs.component';
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway/gateway.component';
-<%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker/tracker.component';
-<%_ } _%>
+import { AdminRoutingModule } from './admin-routing.module'
 
 @NgModule({
     imports: [
         <%=angularXAppName%>SharedModule,
         /* jhipster-needle-add-admin-module - JHipster will add admin modules here */
-        RouterModule.forChild(adminState)
-    ],
-    declarations: [
-        <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
-        AuditsComponent,
-        <%_ } _%>
-        LogsComponent,
-        <%=jhiPrefixCapitalized%>ConfigurationComponent,
-        <%=jhiPrefixCapitalized%>HealthCheckComponent,
-        <%=jhiPrefixCapitalized%>HealthModalComponent,
-        <%=jhiPrefixCapitalized%>DocsComponent,
-        <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-        <%=jhiPrefixCapitalized%>GatewayComponent,
-        <%_ } _%>
-        <%_ if (websocket === 'spring-websocket') { _%>
-        <%=jhiPrefixCapitalized%>TrackerComponent,
-        <%_ } _%>
-        <%=jhiPrefixCapitalized%>MetricsMonitoringComponent
-    ],
-    entryComponents: [
-        <%=jhiPrefixCapitalized%>HealthModalComponent
+        AdminRoutingModule
     ]
 })
 export class <%=angularXAppName%>AdminModule {
