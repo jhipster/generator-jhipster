@@ -282,6 +282,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/user-management/user-management.route.ts', method: 'processJs' },
+                { file: 'admin/user-management/user-management.module.ts', method: 'processJs' },
                 { file: 'admin/user-management/user-management.component.ts', method: 'processJs' },
                 { file: 'admin/user-management/user-management.component.html', method: 'processHtml' },
                 { file: 'admin/user-management/user-management-detail.component.ts', method: 'processJs' },
