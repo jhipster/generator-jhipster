@@ -23,12 +23,12 @@ import { JhiResolvePagingParams } from 'ng-jhipster';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
-import { UserMgmtComponent } from './user-management.component';
-import { UserMgmtDetailComponent } from './user-management-detail.component';
-import { UserMgmtUpdateComponent } from './user-management-update.component';
+import { UserManagementComponent } from './user-management.component';
+import { UserManagementDetailComponent } from './user-management-detail.component';
+import { UserManagementUpdateComponent } from './user-management-update.component';
 
 @Injectable({providedIn: 'root'})
-export class UserMgmtResolve implements Resolve<any> {
+export class UserManagementResolve implements Resolve<any> {
 
     constructor(private service: UserService) {
     }
@@ -45,7 +45,7 @@ export class UserMgmtResolve implements Resolve<any> {
 export const userManagementRoute: Routes = [
     {
         path: '',
-        component: UserMgmtComponent,
+        component: UserManagementComponent,
         resolve: {
             'pagingParams': JhiResolvePagingParams
         },
@@ -57,9 +57,9 @@ export const userManagementRoute: Routes = [
     },
     {
         path: ':login/view',
-        component: UserMgmtDetailComponent,
+        component: UserManagementDetailComponent,
         resolve: {
-            user: UserMgmtResolve
+            user: UserManagementResolve
         },
         data: {
             pageTitle: 'userManagement.home.title'
@@ -68,17 +68,17 @@ export const userManagementRoute: Routes = [
     },
     {
         path: 'new',
-        component: UserMgmtUpdateComponent,
+        component: UserManagementUpdateComponent,
         resolve: {
-            user: UserMgmtResolve
+            user: UserManagementResolve
         },
         canActivate: [UserRouteAccessService]
     },
     {
         path: ':login/edit',
-        component: UserMgmtUpdateComponent,
+        component: UserManagementUpdateComponent,
         resolve: {
-            user: UserMgmtResolve
+            user: UserManagementResolve
         },
         canActivate: [UserRouteAccessService]
     }
