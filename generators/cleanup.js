@@ -88,6 +88,10 @@ function cleanupOldFiles(generator) {
     if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'react') {
         generator.removeFile('tslint.json');
     }
+
+    if (generator.isJhipsterVersionLessThan('6.4.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+        generator.removeFile(`${ANGULAR_DIR}admin/admin.route.ts`);
+    }
 }
 
 /**
