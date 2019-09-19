@@ -754,7 +754,6 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
 
     <%_ if (cacheProvider === 'redis') { _%>
     @Bean
-    @DependsOn({"testContainerRedis"})
     public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         Config config = new Config();
@@ -799,10 +798,5 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
         cm.createCache(cacheName, jcacheConfiguration);
     }
 
-    @Profile("!default")
-    @Bean(name = "testContainerRedis")
-    public Object emptyTestContainerRedis() {
-        return null;
-    }
     <%_ } _%>
 }

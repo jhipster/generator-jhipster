@@ -873,8 +873,8 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/RedisTestContainerConfiguration.java',
-                    renameTo: generator => `${generator.testDir}config/RedisTestContainerConfiguration.java`
+                    file: 'package/RedisTestContainerExtension.java',
+                    renameTo: generator => `${generator.testDir}RedisTestContainerExtension.java`
                 }
             ]
         },

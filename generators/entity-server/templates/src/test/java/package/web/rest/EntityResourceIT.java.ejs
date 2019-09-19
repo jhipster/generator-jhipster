@@ -38,6 +38,9 @@ package <%=packageName%>.web.rest;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%=packageName%>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 import <%=packageName%>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa') { _%>
 import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
@@ -84,6 +87,9 @@ import <%=packageName%>.service.<%= entityClass %>QueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import org.mockito.Mock;
 <%_ } _%>
@@ -167,6 +173,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 <%_
