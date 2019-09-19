@@ -232,6 +232,9 @@ liquibase {
 }
 
 <%_ } _%>
+checkstyle {
+    toolVersion '${checkstyle_version}'
+}
 nohttp {
     source.include "build.gradle", "README.md"
 }
