@@ -35,7 +35,9 @@ logging:
     level:
         ROOT: DEBUG
         io.github.jhipster: DEBUG
+        <%_ if (packageName !== 'io.github.jhipster') { _%>
         <%=packageName%>: DEBUG
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
