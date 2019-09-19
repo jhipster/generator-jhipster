@@ -131,6 +131,7 @@ const expectedFiles = {
     },
 
     gradle: [
+        'config/checkstyle/checkstyle.xml',
         'gradle.properties',
         'build.gradle',
         'settings.gradle',
@@ -144,7 +145,14 @@ const expectedFiles = {
         'gradle/wrapper/gradle-wrapper.properties'
     ],
 
-    maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
+    maven: [
+        'pom.xml',
+        'mvnw',
+        'mvnw.cmd',
+        '.mvn/wrapper/maven-wrapper.jar',
+        '.mvn/wrapper/maven-wrapper.properties',
+        'config/checkstyle/checkstyle.xml'
+    ],
 
     common: ['.prettierignore', '.prettierrc', 'README.md', '.gitignore', '.gitattributes', '.editorconfig'],
 
