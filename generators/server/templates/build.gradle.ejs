@@ -51,6 +51,7 @@ plugins {
     id "org.liquibase.gradle"
     <%_ } _%>
     id "org.sonarqube"
+    id "io.spring.nohttp"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -231,6 +232,10 @@ liquibase {
 }
 
 <%_ } _%>
+nohttp {
+    source.include "build.gradle", "README.md"
+}
+
 configurations {
     providedRuntime
     implementation.exclude module: "spring-boot-starter-tomcat"
