@@ -16,15 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { browser, ExpectedConditions as ec, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor, <% } %>promise } from 'protractor';
-import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { <%= entityClass %>ComponentsPage, <%= entityClass %>DeleteDialog, <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
-<%_ if (fieldsContainBlobOrImage) { _%>
-import * as path from 'path';
-<%_ } _%>
 <%_
 let elementGetter = `getText()`;
 let openBlockComment = ``;
@@ -39,6 +30,15 @@ for (let relationship of relationships) {
         break;
     }
 } _%>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { browser, ExpectedConditions as ec, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor, <% } %>promise } from 'protractor';
+import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { <%= entityClass %>ComponentsPage,<%= openBlockComment %><%= entityClass %>DeleteDialog,<%= closeBlockComment %> <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
+<%_ if (fieldsContainBlobOrImage) { _%>
+import * as path from 'path';
+<%_ } _%>
 
 const expect = chai.expect;
 
