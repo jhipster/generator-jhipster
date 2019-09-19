@@ -20,6 +20,15 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     cd "$JHI_FOLDER_APP"
     jhipster import-jdl *.jdl --no-insight
 
+elif [[ "$JHI_ENTITY" == "other" ]]; then
+    #-------------------------------------------------------------------------------
+    # Just copy templates.
+    #-------------------------------------------------------------------------------
+    mkdir -p "$JHI_FOLDER_APP"
+    if [[ -d "$JHI_SAMPLES/$JHI_APP" ]]; then
+        cp -f "$JHI_SAMPLES"/"$JHI_APP"/* "$JHI_FOLDER_APP"/
+    fi
+
 else
     #-------------------------------------------------------------------------------
     # Generate UAA project with jhipster
