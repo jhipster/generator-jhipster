@@ -91,6 +91,7 @@ function cleanupOldFiles(generator) {
 
     if (generator.isJhipsterVersionLessThan('6.4.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
         generator.removeFile(`${ANGULAR_DIR}admin/admin.route.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/admin.module.ts`);
     }
 }
 

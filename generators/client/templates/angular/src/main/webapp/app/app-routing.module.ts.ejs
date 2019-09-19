@@ -39,7 +39,7 @@ const LAYOUT_ROUTES = [
                         authorities: ['ROLE_ADMIN']
                     },
                     canActivate: [UserRouteAccessService],
-                    loadChildren: () => import('./admin/admin.module').then(m => m.<%=angularXAppName%>AdminModule)
+                    loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule)
                 },
                 <%_ if (!skipUserManagement) { _%>
                 {

@@ -366,7 +366,6 @@ const expectedFiles = {
         'postcss.config.js',
         'proxy.conf.json',
         `${CLIENT_MAIN_SRC_DIR}404.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audit-data.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audit.model.ts`,

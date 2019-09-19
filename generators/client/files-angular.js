@@ -228,7 +228,6 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/admin-routing.module.ts', method: 'processJs' },
-                'admin/admin.module.ts',
                 // admin modules
                 { file: 'admin/configuration/configuration.route.ts', method: 'processJs' },
                 { file: 'admin/configuration/configuration.module.ts', method: 'processJs' },
