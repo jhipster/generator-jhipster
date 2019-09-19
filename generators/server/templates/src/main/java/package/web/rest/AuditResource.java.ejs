@@ -21,11 +21,15 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.service.AuditEventService;
 
 import io.github.jhipster.web.util.PaginationUtil;
+<%_ if (!reactive) { _%>
 import io.github.jhipster.web.util.ResponseUtil;
+<%_ } _%>
 import org.springframework.boot.actuate.audit.AuditEvent;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Page<% if (reactive) { %>Impl<% } %>;
 import org.springframework.data.domain.Pageable;
+<%_ if (!reactive) { _%>
 import org.springframework.http.HttpHeaders;
+<%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 <%_ if (reactive) { _%>
@@ -35,12 +39,21 @@ import org.springframework.web.bind.annotation.*;
 <%_ if (!reactive) { _%>
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 <%_ } else { _%>
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 <%_ } _%>
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+<%_ if (reactive) { _%>
+import java.util.ArrayList;
+<%_ } _%>
+<%_ if (!reactive) { _%>
 import java.util.List;
+<%_ } _%>
 
 /**
  * REST controller for getting the {@link AuditEvent}s.
@@ -65,10 +78,18 @@ public class AuditResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of {@link AuditEvent}s in body.
      */
     @GetMapping
-    public ResponseEntity<List<AuditEvent>> getAll(<% if (reactive) { %>ServerHttpRequest request, <% } %>Pageable pageable) {
+    <%_ if (!reactive) { _%>
+    public ResponseEntity<List<AuditEvent>> getAll(Pageable pageable) {
         Page<AuditEvent> page = auditEventService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    <%_ } else { _%>
+    public Mono<ResponseEntity<Flux<AuditEvent>>> getAll(ServerHttpRequest request, Pageable pageable) {
+        return auditEventService.count()
+            .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
+            .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
+            .map(headers -> ResponseEntity.ok().headers(headers).body(auditEventService.findAll(pageable)));
+    <%_ } _%>
     }
 
     /**
@@ -83,7 +104,7 @@ public class AuditResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of {@link AuditEvent} in body.
      */
     @GetMapping(params = {"fromDate", "toDate"})
-    public ResponseEntity<List<AuditEvent>> getByDates(
+    public <% if (!reactive) { %>ResponseEntity<List<AuditEvent>><% } else { %>Mono<ResponseEntity<Flux<AuditEvent>>><% } %> getByDates(
         @RequestParam(value = "fromDate") LocalDate fromDate,
         @RequestParam(value = "toDate") LocalDate toDate,
         <%_ if (reactive) { _%>
@@ -91,12 +112,20 @@ public class AuditResource {
         <%_ } _%>
         Pageable pageable) {
 
-        Page<AuditEvent> page = auditEventService.findByDates(
-            fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant(),
-            toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant(),
-            pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
+        Instant from = fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Instant to = toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant();
+
+        <%_ if (!reactive) { _%>
+        Page<AuditEvent> page = auditEventService.findByDates(from, to, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        <%_ } else { _%>
+        Flux<AuditEvent> events = auditEventService.findByDates(from, to, pageable);
+        return auditEventService.countByDates(from, to)
+            .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
+            .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
+            .map(headers -> ResponseEntity.ok().headers(headers).body(events));
+        <%_ } _%>
     }
 
     /**
@@ -106,7 +135,13 @@ public class AuditResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the {@link AuditEvent} in body, or status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id:.+}")
+    <%_ if (!reactive) { _%>
     public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String <% } %>id) {
         return ResponseUtil.wrapOrNotFound(auditEventService.find(id));
+    <%_ } else { _%>
+    public Mono<AuditEvent> get(@PathVariable String id) {
+        return auditEventService.find(id)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
+    <%_ } _%>
     }
 }

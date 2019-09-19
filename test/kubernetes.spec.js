@@ -7,12 +7,7 @@ const expectedFiles = {
     eurekaregistry: ['./registry/jhipster-registry.yml', './registry/application-configmap.yml'],
     consulregistry: ['./registry/consul.yml', './registry/consul-config-loader.yml', './registry/application-configmap.yml'],
     jhgate: ['./jhgate/jhgate-deployment.yml', './jhgate/jhgate-mysql.yml', './jhgate/jhgate-service.yml'],
-    jhgateingress: [
-        './jhgate/jhgate-deployment.yml',
-        './jhgate/jhgate-mysql.yml',
-        './jhgate/jhgate-service.yml',
-        './jhgate/jhgate-ingress.yml'
-    ],
+    jhgateingress: ['./jhgate/jhgate-ingress.yml'],
     customnamespace: ['./namespace.yml'],
     jhconsole: [
         './console/jhipster-console.yml',
@@ -190,9 +185,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected gateway files', () => {
             assert.file(expectedFiles.jhgate);
-        });
-        it('creates expected ingress files', () => {
-            assert.file(expectedFiles.jhgateingress);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -400,7 +392,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerRepositoryName: 'jhipster',
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'default',
-                    kubernetesServiceType: 'Ingress',
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
                     istio: true

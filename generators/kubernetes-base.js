@@ -48,6 +48,7 @@ function loadConfig() {
     loadFromYoRc.call(this);
     this.kubernetesNamespace = this.config.get('kubernetesNamespace');
     this.kubernetesServiceType = this.config.get('kubernetesServiceType');
+    this.ingressType = this.config.get('ingressType');
     this.ingressDomain = this.config.get('ingressDomain');
     this.istio = this.config.get('istio');
     this.dbRandomPassword = crypto.randomBytes(128).toString('hex');
@@ -64,6 +65,7 @@ function saveConfig() {
         dockerPushCommand: this.dockerPushCommand,
         kubernetesNamespace: this.kubernetesNamespace,
         kubernetesServiceType: this.kubernetesServiceType,
+        ingressType: this.ingressType,
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring,
         istio: this.istio

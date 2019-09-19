@@ -34,8 +34,10 @@
 logging:
     level:
         ROOT: INFO
-        <%=packageName%>: INFO
         io.github.jhipster: INFO
+        <%_ if (packageName !== 'io.github.jhipster') { _%>
+        <%=packageName%>: INFO
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
