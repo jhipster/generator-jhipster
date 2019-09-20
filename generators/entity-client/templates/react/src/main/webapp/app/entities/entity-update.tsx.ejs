@@ -130,6 +130,32 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   <%_ }) _%>
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
+  const { <%= entityInstance %>Entity,<%
+  uniqueRealtionFields.forEach(rel => {
+  %> <%= rel %>,<% }) %> loading, updating } = props;
+
+  <%_ for (var i = 0; i < blobFields.length; i++) { _%>
+  <%_
+    const b = blobFields[i];
+    if (i === 0) {
+  _%>
+    const {
+    <%_ } _%>
+    <%= b.fieldName %>
+    <%_ if (b.fieldTypeBlobContent !== 'text') { _%>
+    , <%= b.fieldName %>ContentType
+    <%_ } _%>
+    <%_ if (i+1 === blobFields.length) { _%>
+    } = <%= entityInstance %>Entity;
+    <%_ } else { _%>
+    ,
+    <%_ } _%>
+  <%_ } _%>
+
+  const handleClose = () => {
+    props.history.push('/entity/<%= entityFileName %>');
+  }
+
   useEffect(() => {
     <%_ if (pagination === 'infinite-scroll') { _%>
     if (!isNew) {
@@ -190,32 +216,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
       }
     }
   }
-
-  const handleClose = () => {
-    props.history.push('/entity/<%= entityFileName %>');
-  }
-
-  const { <%= entityInstance %>Entity,<%
-  uniqueRealtionFields.forEach(rel => {
-  %> <%= rel %>,<% }) %> loading, updating } = props;
-
-  <%_ for (var i = 0; i < blobFields.length; i++) { _%>
-  <%_
-    const b = blobFields[i];
-    if (i === 0) {
-  _%>
-    const {
-    <%_ } _%>
-    <%= b.fieldName %>
-    <%_ if (b.fieldTypeBlobContent !== 'text') { _%>
-    , <%= b.fieldName %>ContentType
-    <%_ } _%>
-    <%_ if (i+1 === blobFields.length) { _%>
-    } = <%= entityInstance %>Entity;
-    <%_ } else { _%>
-    ,
-    <%_ } _%>
-  <%_ } _%>
 
   return (
     <div>

@@ -34,15 +34,15 @@ export const <%= entityReactName %>DeleteDialog = (props: I<%= entityReactName %
     props.getEntity(props.match.params.id);
   }, []);
 
-  const confirmDelete = event => {
-    props.deleteEntity(props.<%= entityInstance %>Entity.id);
-    handleClose(event);
-  }
-
   const handleClose = event => {
     event.stopPropagation();
     props.history.goBack();
   };
+
+  const confirmDelete = event => {
+    props.deleteEntity(props.<%= entityInstance %>Entity.id);
+    handleClose(event);
+  }
 
   const { <%= entityInstance %>Entity } = props;
   return (
