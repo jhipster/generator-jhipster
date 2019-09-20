@@ -21,7 +21,7 @@ import { Injectable } from '@angular/core';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { shareReplay, tap } from 'rxjs/operators';
 
@@ -33,7 +33,7 @@ import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.serv
 
 @Injectable({providedIn: 'root'})
 export class AccountService  {
-    private userIdentity: any;
+    private userIdentity: Account;
     private authenticated = false;
     private authenticationState = new Subject<any>();
     private accountCache$: Observable<Account>;
@@ -50,8 +50,8 @@ export class AccountService  {
         return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
     }
 
-    save(account: any): Observable<HttpResponse<any>> {
-        return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account, {observe: 'response'});
+    save(account: Account): Observable<Account> {
+        return this.http.post<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
     }
 
     authenticate(identity) {
