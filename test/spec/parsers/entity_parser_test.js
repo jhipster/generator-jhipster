@@ -158,6 +158,11 @@ describe('EntityParser', () => {
           name: UnaryOptions.SKIP_CLIENT,
           entityNames: [entityA.name]
         });
+        const readOnlyOption = new JDLUnaryOption({
+          name: UnaryOptions.READ_ONLY,
+          entityNames: [entityA.name],
+          excludedNames: [entityB.name]
+        });
         const paginationOption = new JDLBinaryOption({
           name: BinaryOptions.PAGINATION,
           value: BinaryOptionValues.pagination.PAGER,
@@ -173,6 +178,7 @@ describe('EntityParser', () => {
         jdlObject.addEnum(enumObject);
         jdlObject.addRelationship(oneToOneRelationship);
         jdlObject.addOption(skipClientOption);
+        jdlObject.addOption(readOnlyOption);
         jdlObject.addOption(paginationOption);
         jdlObject.addOption(microserviceOption);
       });
@@ -225,6 +231,7 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'pager',
+              readOnly: true,
               relationships: [
                 {
                   otherEntityField: 'id',
@@ -257,6 +264,7 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'no',
+              readOnly: false,
               relationships: [
                 {
                   otherEntityName: 'entityA',
@@ -310,6 +318,7 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'pager',
+              readOnly: true,
               relationships: [
                 {
                   otherEntityField: 'id',
@@ -342,6 +351,7 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'no',
+              readOnly: false,
               relationships: [
                 {
                   otherEntityName: 'entityA',
@@ -395,6 +405,7 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'pager',
+              readOnly: true,
               relationships: [
                 {
                   otherEntityField: 'id',
@@ -427,6 +438,7 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'no',
+              readOnly: false,
               relationships: [
                 {
                   otherEntityName: 'entityA',
@@ -484,6 +496,7 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'pager',
+              readOnly: true,
               relationships: [],
               service: 'no',
               skipClient: true
@@ -506,6 +519,7 @@ describe('EntityParser', () => {
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
               pagination: 'no',
+              readOnly: false,
               relationships: [],
               service: 'no'
             }
@@ -963,6 +977,7 @@ describe('EntityParser', () => {
             javadoc: undefined,
             jpaMetamodelFiltering: false,
             pagination: 'no',
+            readOnly: false,
             relationships: [],
             service: 'no'
           }
