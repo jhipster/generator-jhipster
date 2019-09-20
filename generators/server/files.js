@@ -158,7 +158,7 @@ const serverFiles = {
     ],
     serverBuild: [
         {
-            templates: [{ file: 'config/checkstyle/checkstyle.xml', method: 'copy', noEjs: true }]
+            templates: [{ file: 'checkstyle.xml', method: 'copy', noEjs: true }]
         },
         {
             condition: generator => generator.buildTool === 'gradle',
