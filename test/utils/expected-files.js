@@ -141,11 +141,10 @@ const expectedFiles = {
         'gradle/profile_prod.gradle',
         'gradle/sonar.gradle',
         'gradle/wrapper/gradle-wrapper.jar',
-        'gradle/wrapper/gradle-wrapper.properties',
-        'checkstyle.xml'
+        'gradle/wrapper/gradle-wrapper.properties'
     ],
 
-    maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties', 'checkstyle.xml'],
+    maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
 
     common: ['.prettierignore', '.prettierrc', 'README.md', '.gitignore', '.gitattributes', '.editorconfig'],
 

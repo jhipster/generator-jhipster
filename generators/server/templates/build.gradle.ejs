@@ -51,7 +51,6 @@ plugins {
     id "org.liquibase.gradle"
     <%_ } _%>
     id "org.sonarqube"
-    id "io.spring.nohttp"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -230,14 +229,7 @@ liquibase {
 
     runList = project.ext.runList
 }
-
 <%_ } _%>
-checkstyle {
-    toolVersion '${checkstyle_version}'
-}
-nohttp {
-    source.include "build.gradle", "README.md"
-}
 
 configurations {
     providedRuntime
