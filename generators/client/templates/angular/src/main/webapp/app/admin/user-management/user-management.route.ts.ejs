@@ -20,7 +20,6 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { JhiResolvePagingParams } from 'ng-jhipster';
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { UserManagementComponent } from './user-management.component';
@@ -52,8 +51,7 @@ export const userManagementRoute: Routes = [
         data: {
             pageTitle: 'userManagement.home.title',
             defaultSort: 'id,asc'
-        },
-        canActivate: [UserRouteAccessService]
+        }
     },
     {
         path: ':login/view',
@@ -63,23 +61,20 @@ export const userManagementRoute: Routes = [
         },
         data: {
             pageTitle: 'userManagement.home.title'
-        },
-        canActivate: [UserRouteAccessService]
+        }
     },
     {
         path: 'new',
         component: UserManagementUpdateComponent,
         resolve: {
             user: UserManagementResolve
-        },
-        canActivate: [UserRouteAccessService]
+        }
     },
     {
         path: ':login/edit',
         component: UserManagementUpdateComponent,
         resolve: {
             user: UserManagementResolve
-        },
-        canActivate: [UserRouteAccessService]
+        }
     }
 ];
