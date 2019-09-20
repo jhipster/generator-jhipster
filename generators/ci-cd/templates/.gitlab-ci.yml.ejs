@@ -91,7 +91,7 @@ frontend-test:
         - ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
     artifacts:
         reports:
-            junit: build/test-results/TESTS-results-jest.xml
+            junit: build/test-results/jest/TESTS-results-sonar.xml
         paths:
             - build/test-results/
             - build/jacoco/
