@@ -111,7 +111,7 @@ if (OperatingSystem.current().isWindows()) {
         archiveName = "runboot-classpath.jar"
         doFirst {
             manifest {
-                def classpath = sourceSets.test.runtimeClasspath.files
+                def classpath = sourceSets.main.runtimeClasspath.files
                 attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
             }
         }
