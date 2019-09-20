@@ -42,7 +42,7 @@ export class SessionsComponent implements OnInit {
     ngOnInit() {
         this.sessionsService.findAll().subscribe((sessions) => this.sessions = sessions);
 
-        this.accountService.identity().then((account) => {
+        this.accountService.identity().subscribe((account) => {
             this.account = account;
         });
     }
