@@ -116,14 +116,6 @@ module.exports = class extends BaseGenerator {
                 this.defaultAppsFolders = this.aws.apps.map(a => a.baseName);
             },
             checkDocker: docker.checkDocker,
-            loadAWS() {
-                if (this.abort) return;
-                const done = this.async();
-                awsClient
-                    .loadAWS(this)
-                    .then(() => done())
-                    .catch(() => done('Error while loading the AWS library'));
-            },
             checkAwsCredentials() {
                 if (this.abort) return;
                 const done = this.async();
