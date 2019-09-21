@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, inject, tick, fakeAsync } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { Session } from 'app/account/sessions/session.model';
@@ -94,9 +94,7 @@ describe('Component Tests', () => {
                         id: 'fuzzer'
                     }));
                     spyOn(service, 'findAll').and.returnValue(of(sessions));
-                    spyOn(service, 'delete').and.returnValue(of({
-                        status: 400
-                    }));
+                    spyOn(service, 'delete').and.returnValue(throwError({}));
 
                     comp.ngOnInit();
                     comp.invalidate('xyz');
@@ -115,9 +113,7 @@ describe('Component Tests', () => {
                         id: 'fuzzer'
                     }));
                     spyOn(service, 'findAll').and.returnValue(of(sessions));
-                    spyOn(service, 'delete').and.returnValue(of({
-                        status: 200
-                    }));
+                    spyOn(service, 'delete').and.returnValue(of({}));
 
                     comp.ngOnInit();
                     comp.invalidate('xyz');
