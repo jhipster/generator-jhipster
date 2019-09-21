@@ -30,7 +30,7 @@ export interface ILogoutProps extends StateProps, DispatchProps {
 export const Logout = (props: ILogoutProps) => {
   useEffect(() => {
     props.logout();
-  }, []);
+  });
 
   const logoutUrl = props.logoutUrl;
   if (logoutUrl) {
