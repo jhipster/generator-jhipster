@@ -163,7 +163,7 @@ const serverFiles = {
     ],
     serverBuild: [
         {
-            templates: [{ file: 'checkstyle.xml', method: 'copy', noEjs: true }]
+            templates: [{ file: 'checkstyle.xml', options: { interpolate: INTERPOLATE_REGEX } }]
         },
         {
             condition: generator => generator.buildTool === 'gradle',
