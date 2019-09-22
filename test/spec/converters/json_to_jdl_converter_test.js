@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable no-unused-expressions */
 
 const fs = require('fs');
 const path = require('path');
@@ -346,6 +347,23 @@ relationship OneToOne {
 noFluentMethod Region, Country, Location
 `);
         });
+      });
+    });
+    context('when passing an output file', () => {
+      let dir;
+      let output;
+
+      before(() => {
+        dir = path.join('test', 'test_files', 'json_to_jdl_converter', 'only_app');
+        output = 'exported.jdl';
+        convertToJDL(dir, output);
+      });
+      after(() => {
+        fs.unlinkSync(path.join(dir, output));
+      });
+
+      it('should output it to the output file', () => {
+        expect(fs.readFileSync(path.join(dir, output), 'utf-8')).not.to.be.null;
       });
     });
   });

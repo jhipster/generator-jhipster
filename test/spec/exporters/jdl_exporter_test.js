@@ -66,7 +66,7 @@ describe('JDLExporter', () => {
         });
       });
       context('without a path', () => {
-        const DEFAULT_PATH = './jhipster-jdl.jh';
+        const DEFAULT_PATH = 'app.jdl';
         let fileExistence = null;
         let jdlContent = '';
 
