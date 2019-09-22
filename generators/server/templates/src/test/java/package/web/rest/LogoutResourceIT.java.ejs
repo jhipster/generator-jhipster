@@ -19,10 +19,16 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.<%= mainClass %>;
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 import <%=packageName%>.config.TestSecurityConfiguration;
 import <%=packageName%>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -52,6 +58,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link LogoutResource} REST controller.
  */
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
+<%_ } _%>
 public class LogoutResourceIT {
 
     @Autowired

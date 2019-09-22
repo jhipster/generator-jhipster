@@ -21,6 +21,9 @@ package <%= packageName %>.security;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.<% if (reactive) { %>reactive.<% } %>UserRepository;
@@ -28,6 +31,9 @@ import <%= packageName %>.repository.<% if (reactive) { %>reactive.<% } %>UserRe
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (reactive) { _%>
@@ -59,6 +65,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
  * Integrations tests for {@link DomainUserDetailsService}.
  */
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 @Transactional
 <%_ } _%>

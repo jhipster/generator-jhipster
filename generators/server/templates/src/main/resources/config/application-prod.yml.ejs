@@ -34,8 +34,10 @@
 logging:
     level:
         ROOT: INFO
-        <%=packageName%>: INFO
         io.github.jhipster: INFO
+        <%_ if (packageName !== 'io.github.jhipster') { _%>
+        <%=packageName%>: INFO
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -303,6 +305,11 @@ jhipster:
             servers: localhost:11211
             expiration: 300
             use-binary-protocol: true
+        <%_ } _%>
+        <%_ if (cacheProvider === 'redis') { _%>
+        redis: # Redis configuration
+            expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+            server: redis://localhost:6379
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>

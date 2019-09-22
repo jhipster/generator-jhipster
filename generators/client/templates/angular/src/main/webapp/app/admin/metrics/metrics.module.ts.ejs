@@ -1,0 +1,16 @@
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
+
+import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
+
+import { metricsRoute } from './metrics.route';
+
+@NgModule({
+  imports: [
+    <%=angularXAppName%>SharedModule,
+    RouterModule.forChild([metricsRoute])
+  ],
+  declarations: [<%=jhiPrefixCapitalized%>MetricsMonitoringComponent]
+})
+export class MetricsModule {}

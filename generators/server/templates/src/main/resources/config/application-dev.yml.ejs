@@ -35,7 +35,9 @@ logging:
     level:
         ROOT: DEBUG
         io.github.jhipster: DEBUG
+        <%_ if (packageName !== 'io.github.jhipster') { _%>
         <%=packageName%>: DEBUG
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -307,6 +309,10 @@ jhipster:
             # Disabled by default in dev mode as Memcached does not work with Spring Boot Devtools
             # If you want to use Memcached, you must also enable it in CacheConfiguration
             enabled: false
+        <%_ } _%>
+        <%_ if (cacheProvider === 'redis') { _%>
+        redis: # Redis configuration
+            expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
         <%_ } _%>
     <%_ } _%>
     <%_ if (applicationType !== 'microservice') { _%>
