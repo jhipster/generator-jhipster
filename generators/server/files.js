@@ -1087,8 +1087,7 @@ const serverFiles = {
                 },
                 {
                     file: 'package/config/KafkaProperties.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}config/KafkaProperties.java`
+                    renameTo: generator => `${generator.javaDir}config/KafkaProperties.java`
                 }
             ]
         }
