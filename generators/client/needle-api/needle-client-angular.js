@@ -54,7 +54,7 @@ module.exports = class extends needleClientBase {
     }
 
     addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`;
+        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
         const importNeedle = 'jhipster-needle-add-admin-module-import';
         const moduleNeedle = 'jhipster-needle-add-admin-module';
 

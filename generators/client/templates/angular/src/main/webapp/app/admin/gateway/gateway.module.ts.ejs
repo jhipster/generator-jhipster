@@ -1,0 +1,16 @@
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
+
+import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway.component';
+
+import { gatewayRoute } from './gateway.route';
+
+@NgModule({
+  imports: [
+    <%=angularXAppName%>SharedModule,
+    RouterModule.forChild([gatewayRoute])
+  ],
+  declarations: [<%=jhiPrefixCapitalized%>GatewayComponent]
+})
+export class GatewayModule {}
