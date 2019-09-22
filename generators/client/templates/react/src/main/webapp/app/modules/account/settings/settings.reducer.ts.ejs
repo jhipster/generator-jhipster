@@ -18,7 +18,7 @@
 -%>
 import axios from 'axios';
 <% if (enableTranslation) { %>import { translate, Storage } from 'react-jhipster';<% } %>
-
+<%_ if (enableTranslation && enableI18nRTL) { _%>import { isRTL } from 'app/config/translation';<%_ } _%>
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { getSession } from 'app/shared/reducers/authentication';
 
