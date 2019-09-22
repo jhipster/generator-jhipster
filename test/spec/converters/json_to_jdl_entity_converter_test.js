@@ -153,6 +153,11 @@ describe('JSONToJDLEntityConverter', () => {
               .getOptions()
               .filter(option => option.name === UnaryOptions.FILTER && option.entityNames.has('Employee')).length
           ).to.eq(1);
+          expect(
+            jdlObject
+              .getOptions()
+              .filter(option => option.name === UnaryOptions.READ_ONLY && option.entityNames.has('Employee')).length
+          ).to.equal(1);
         });
       });
 

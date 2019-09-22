@@ -75,5 +75,6 @@
   "skipClient": true,
   "skipServer": true,
   "clientRootFolder": "toto",
-  "applications": "*"
+  "applications": "*",
+  "readOnly": true
 }
