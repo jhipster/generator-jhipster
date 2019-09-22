@@ -158,7 +158,7 @@ spec:
         - name: KAFKA_CONSUMER_BOOTSTRAP_SERVERS
           value: 'jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
         - name: KAFKA_CONSUMER_GROUP_ID
-          value: '<%= dasherizedBaseName %>'
+          value: '<%= app.baseName.toLowerCase() %>'
         - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
           value: 'earliest'
         - name: KAFKA_PRODUCER_BOOTSTRAP_SERVERS
