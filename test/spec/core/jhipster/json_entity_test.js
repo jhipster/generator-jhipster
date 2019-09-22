@@ -60,6 +60,7 @@ describe('JSONEntity', () => {
           javadoc: undefined,
           jpaMetamodelFiltering: false,
           pagination: 'no',
+          readOnly: false,
           relationships: [],
           service: 'no',
           applications: []
@@ -79,6 +80,7 @@ describe('JSONEntity', () => {
           javadoc: '',
           jpaMetamodelFiltering: true,
           pagination: 'pager',
+          readOnly: true,
           relationships: [42, 43],
           service: 'serviceClass',
           changelogDate: 'aaa',
@@ -101,6 +103,7 @@ describe('JSONEntity', () => {
           javadoc: '',
           jpaMetamodelFiltering: true,
           pagination: 'pager',
+          readOnly: true,
           relationships: [42, 43],
           service: 'serviceClass',
           changelogDate: 'aaa',

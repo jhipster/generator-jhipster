@@ -126,7 +126,7 @@ describe('JDL DSL API', () => {
       });
 
       it('provides suggestions', () => {
-        expect(result).to.have.lengthOf(19);
+        expect(result).to.have.lengthOf(20);
         expect(result).to.have.members([
           tokens.AT,
           tokens.APPLICATION,
@@ -141,6 +141,7 @@ describe('JDL DSL API', () => {
           tokens.MICROSERVICE,
           tokens.JAVADOC,
           tokens.PAGINATE,
+          tokens.READ_ONLY,
           tokens.SKIP_CLIENT,
           tokens.SKIP_SERVER,
           tokens.NO_FLUENT_METHOD,

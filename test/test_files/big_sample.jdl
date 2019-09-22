@@ -106,6 +106,8 @@ service Employee with serviceClass
 
 microservice all with mymicroservice
 
+readOnly JobHistory
+
 search Employee with elasticsearch
 
 skipServer Country
