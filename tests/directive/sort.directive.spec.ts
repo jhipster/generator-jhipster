@@ -15,8 +15,8 @@ import { JhiSortDirective } from '../../src/directive/sort.directive';
     `
 })
 class TestJhiSortDirectiveComponent {
-    predicate: any;
-    reverse: any;
+    predicate: string;
+    reverse: boolean;
     transition() {
     }
 }

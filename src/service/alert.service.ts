@@ -136,7 +136,7 @@ export class JhiAlertService {
         return alert;
     }
 
-    closeAlert(id: number, extAlerts?: JhiAlert[]): any {
+    closeAlert(id: number, extAlerts?: JhiAlert[]): JhiAlert[] {
         const thisAlerts: JhiAlert[] = extAlerts && extAlerts.length > 0 ? extAlerts : this.alerts;
         return this.closeAlertByIndex(thisAlerts.map(e => e.id).indexOf(id), thisAlerts);
     }
