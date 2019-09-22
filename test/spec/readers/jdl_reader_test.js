@@ -136,4 +136,24 @@ describe('JDLReader', () => {
       });
     });
   });
+  describe('::parseFromContent', () => {
+    context('when passing an invalid content', () => {
+      it('fails', () => {
+        expect(() => {
+          JDLReader.parseFromContent('');
+        }).to.throw();
+      });
+    });
+    context('when passing a valid content', () => {
+      let content;
+
+      before(() => {
+        content = JDLReader.parseFromContent('entity A');
+      });
+
+      it('succeeds', () => {
+        expect(content).not.to.be.null;
+      });
+    });
+  });
 });
