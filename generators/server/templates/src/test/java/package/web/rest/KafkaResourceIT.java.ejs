@@ -29,6 +29,11 @@ import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
 import <%=packageName%>.config.TestSecurityConfiguration;
 <%_ } _%>
 import <%= packageName %>.service.<%= upperFirstCamelCase(baseName) %>KafkaProducer;
+import <%= packageName %>.service.<%= upperFirstCamelCase(baseName) %>KafkaConsumer;
+import org.apache.kafka.common.Metric;
+import org.apache.kafka.common.MetricName;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
@@ -36,15 +41,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.testcontainers.containers.KafkaContainer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Map;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@EmbeddedKafka
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
@@ -52,27 +58,75 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
-    @Autowired
-    private <%= upperFirstCamelCase(baseName) %>KafkaProducer kafkaProducer;
-
     private MockMvc restMockMvc;
+
+    private static boolean started = false;
+
+    private static KafkaContainer kafkaContainer;
+
+    @Autowired
+    private <%= upperFirstCamelCase(baseName) %>KafkaProducer producer;
+
+    @Autowired
+    private <%= upperFirstCamelCase(baseName) %>KafkaConsumer consumer;
+
+    private static final int MAX_ATTEMPT = 5;
+
+    @BeforeAll
+    public static void startServer() {
+        if (!started) {
+            startTestcontainer();
+            started = true;
+        }
+    }
+
+    private static void startTestcontainer() {
+        kafkaContainer = new KafkaContainer("<%= KAFKA_VERSION %>");
+        kafkaContainer.start();
+        System.setProperty("kafkaBootstrapServers", kafkaContainer.getBootstrapServers());
+    }
 
     @BeforeEach
     public void setup() {
-        <%= upperFirstCamelCase(baseName) %>KafkaResource kafkaResource = new <%= upperFirstCamelCase(baseName) %>KafkaResource(kafkaProducer);
+        <%= upperFirstCamelCase(baseName) %>KafkaResource kafkaResource = new <%= upperFirstCamelCase(baseName) %>KafkaResource(producer);
 
         this.restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource)
             .build();
+
+        producer.init();
+        consumer.start();
     }
 
     @Test
-    public void sendMessageToKafkaTopic() throws Exception {
-        restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish?message=yolo"))
+    public void producedMessageHasBeenConsumed() throws Exception {
+        restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish?message=test"))
             .andExpect(status().isOk());
+
+        Map<MetricName, ? extends Metric> metrics = consumer.getKafkaConsumer().metrics();
+
+        Metric recordsConsumedTotalMetric = metrics.entrySet().stream()
+            .filter(entry -> "records-consumed-total".equals(entry.getKey().name()))
+            .findFirst()
+            .get()
+            .getValue();
+
+        Double expectedTotalConsumedMessage = 1.0;
+        Double totalConsumedMessage;
+        int attempt = 0;
+        do {
+            totalConsumedMessage = (Double) recordsConsumedTotalMetric.metricValue();
+            Thread.sleep(200);
+        } while (!totalConsumedMessage.equals(expectedTotalConsumedMessage) && attempt++ < MAX_ATTEMPT);
+
+        Assertions.assertThat(attempt).isLessThan(MAX_ATTEMPT);
+        Assertions.assertThat(totalConsumedMessage).isEqualTo(expectedTotalConsumedMessage);
     }
+
 }
+

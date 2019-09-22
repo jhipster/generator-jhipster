@@ -17,7 +17,20 @@
  * limitations under the License.
  */
 
-// version of docker images
+// Version of Java
+const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
+
+// Version of Node, Yarn, NPM
+const NODE_VERSION = '10.16.3';
+const YARN_VERSION = '1.17.3';
+const NPM_VERSION = '6.11.3';
+
+// Libraries version
+const JIB_VERSION = '1.5.1';
+
+const KAFKA_VERSION = '5.3.1';
+
+// Version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v5.0.2';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.17';
@@ -32,8 +45,8 @@ const DOCKER_MEMCACHED = 'memcached:1.5.17-alpine';
 const DOCKER_REDIS = 'redis:5.0.5';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:6.0.1'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.4.3'; // The version should be coerent with the one from spring-data-elasticsearch project
-const DOCKER_KAFKA = 'confluentinc/cp-kafka:5.3.1';
-const DOCKER_ZOOKEEPER = 'confluentinc/cp-zookeeper:5.3.1';
+const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
+const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:7.9.1-community';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.1.0';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v4.1.0';
@@ -61,17 +74,6 @@ const KUBERNETES_STATEFULSET_API_VERSION = 'apps/v1';
 const KUBERNETES_INGRESS_API_VERSION = 'extensions/v1beta1';
 const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1alpha3';
 const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
-
-// Version of Java
-const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
-
-// version of Node, Yarn, NPM
-const NODE_VERSION = '10.16.3';
-const YARN_VERSION = '1.17.3';
-const NPM_VERSION = '6.11.3';
-
-// Libraries version
-const JIB_VERSION = '1.5.1';
 
 // all constants used throughout all generators
 
@@ -300,6 +302,7 @@ const constants = {
     NODE_VERSION,
     YARN_VERSION,
     NPM_VERSION,
+    KAFKA_VERSION,
 
     // Libraries
     JIB_VERSION,
