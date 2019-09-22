@@ -54,6 +54,11 @@
         {
             "fieldName": "operationsFile",
             "fieldType": "ByteBuffer"
+        },
+        {
+            "fieldName": "accountType",
+            "fieldType": "AccountTypeEnum",
+            "fieldValues": "STANDARD,PREMIUM"
         }
     ],
     "changelogDate": "20150805124838",

@@ -30,13 +30,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - grafana.istio-system<%= ingressDomain %>
+    - grafana.istio-system.<%= ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - grafana.istio-system<%= ingressDomain %>
+    - grafana.istio-system.<%= ingressDomain %>
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -45,7 +45,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - grafana.istio-system<%= ingressDomain %>
+  - grafana.istio-system.<%= ingressDomain %>
   gateways:
   - grafana-observability-gateway
   http:

@@ -107,7 +107,7 @@ metadata:
   namespace: <%= kubernetesNamespace %>
 spec:
   rules:
-  - host: jhipster-grafana.<%= kubernetesNamespace %><%= ingressDomain %>
+  - host: jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
       paths:
       - path: /

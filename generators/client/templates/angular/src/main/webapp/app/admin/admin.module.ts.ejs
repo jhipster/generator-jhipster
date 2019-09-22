@@ -25,12 +25,6 @@ import { adminState } from './admin.route';
 <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
 import { AuditsComponent } from './audits/audits.component';
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
-import { UserMgmtComponent } from './user-management/user-management.component';
-import { UserMgmtDetailComponent } from './user-management/user-management-detail.component';
-import { UserMgmtUpdateComponent } from './user-management/user-management-update.component';
-import { UserMgmtDeleteDialogComponent } from './user-management/user-management-delete-dialog.component';
-<%_ } _%>
 import { LogsComponent } from './logs/logs.component';
 import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics/metrics.component';
 import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health/health-modal.component';
@@ -54,12 +48,6 @@ import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker/tracker.com
         <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
         AuditsComponent,
         <%_ } _%>
-        <%_ if (!skipUserManagement) { _%>
-        UserMgmtComponent,
-        UserMgmtDetailComponent,
-        UserMgmtUpdateComponent,
-        UserMgmtDeleteDialogComponent,
-        <%_ } _%>
         LogsComponent,
         <%=jhiPrefixCapitalized%>ConfigurationComponent,
         <%=jhiPrefixCapitalized%>HealthCheckComponent,
@@ -74,9 +62,6 @@ import { <%=jhiPrefixCapitalized%>TrackerComponent } from './tracker/tracker.com
         <%=jhiPrefixCapitalized%>MetricsMonitoringComponent
     ],
     entryComponents: [
-        <%_ if (!skipUserManagement) { _%>
-        UserMgmtDeleteDialogComponent,
-        <%_ } _%>
         <%=jhiPrefixCapitalized%>HealthModalComponent
     ]
 })

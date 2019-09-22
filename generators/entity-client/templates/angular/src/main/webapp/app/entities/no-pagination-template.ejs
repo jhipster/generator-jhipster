@@ -36,8 +36,8 @@
         protected accountService: AccountService
     ) {
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.params['search'] ?
-            this.activatedRoute.snapshot.params['search'] : '';
+        this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
+            this.activatedRoute.snapshot.queryParams['search'] : '';
         <%_ } _%>
     }
 

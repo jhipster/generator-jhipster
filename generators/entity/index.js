@@ -622,34 +622,48 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
                     context.changelogDate = this.dateFormatForLiquibase();
                 }
-                this.data = {};
-                this.data.fluentMethods = context.fluentMethods;
-                this.data.clientRootFolder = context.clientRootFolder;
-                this.data.relationships = context.relationships;
-                this.data.fields = context.fields;
-                this.data.changelogDate = context.changelogDate;
-                this.data.dto = context.dto;
-                this.data.searchEngine = context.searchEngine;
-                this.data.service = context.service;
-                this.data.entityTableName = context.entityTableName;
-                this.data.databaseType = context.databaseType;
-                this.copyFilteringFlag(context, this.data, context);
+
+                // Keep existing config by cloning fileData
+                const storageData = this.context.fileData ? { ...this.context.fileData } : {};
+                storageData.fluentMethods = context.fluentMethods;
+                storageData.clientRootFolder = context.clientRootFolder;
+                storageData.relationships = context.relationships;
+                storageData.fields = context.fields;
+                storageData.changelogDate = context.changelogDate;
+                storageData.dto = context.dto;
+                storageData.searchEngine = context.searchEngine;
+                storageData.service = context.service;
+                storageData.entityTableName = context.entityTableName;
+                storageData.databaseType = context.databaseType;
+                this.copyFilteringFlag(context, storageData, context);
                 if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
-                    this.data.pagination = context.pagination;
+                    storageData.pagination = context.pagination;
                 } else {
-                    this.data.pagination = 'no';
+                    storageData.pagination = 'no';
                 }
-                this.data.javadoc = context.javadoc;
+                storageData.javadoc = context.javadoc;
                 if (context.entityAngularJSSuffix) {
-                    this.data.angularJSSuffix = context.entityAngularJSSuffix;
+                    storageData.angularJSSuffix = context.entityAngularJSSuffix;
                 }
-                if (context.applicationType === 'microservice') {
-                    this.data.microserviceName = context.baseName;
+                if (context.applicationType === 'microservice' || context.applicationType === 'uaa') {
+                    storageData.microserviceName = context.baseName;
                 }
                 if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
-                    this.data.microserviceName = context.microserviceName;
+                    storageData.microserviceName = context.microserviceName;
                 }
-                this.fs.writeJSON(context.filename, this.data, null, 4);
+
+                if (this.storageData) {
+                    // Override storageData configs with existing this.storageData
+                    // So that blueprints can create it and override fields.
+                    this.storageData = { ...storageData, ...this.storageData };
+                } else {
+                    this.storageData = storageData;
+                }
+
+                this.fs.writeJSON(context.filename, this.storageData, null, 4);
+
+                // Keep this.data for compatibility with existing blueprints
+                this.data = this.storageData;
             },
 
             loadInMemoryData() {
@@ -722,7 +736,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.fieldsIsReactAvField = true;
                     }
 
-                    const nonEnumType = [
+                    field.fieldIsEnum = ![
                         'String',
                         'Integer',
                         'Long',
@@ -738,11 +752,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'byte[]',
                         'ByteBuffer'
                     ].includes(fieldType);
-                    if (['sql', 'mongodb', 'couchbase', 'no'].includes(context.databaseType) && !nonEnumType) {
-                        field.fieldIsEnum = true;
-                    } else {
-                        field.fieldIsEnum = false;
-                    }
 
                     if (field.fieldIsEnum === true) {
                         context.i18nToLoad.push(field.enumInstance);
@@ -1156,7 +1165,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         this.log(`\n${chalk.bold.green('Running post run module hooks\n')}`);
                         // form the data to be passed to modules
                         const context = this.context;
-                        context.data = context.data || context.fileData;
+
+                        // Keep context.data for unexpected compatibility issue.
+                        context.data = context.data || this.storageData || context.fileData;
+
                         // run through all post entity creation module hooks
                         this.callHooks(
                             'entity',

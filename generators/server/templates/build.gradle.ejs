@@ -23,7 +23,7 @@ buildscript {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -111,7 +111,7 @@ if (OperatingSystem.current().isWindows()) {
         archiveName = "runboot-classpath.jar"
         doFirst {
             manifest {
-                def classpath = sourceSets.test.runtimeClasspath.files
+                def classpath = sourceSets.main.runtimeClasspath.files
                 attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
             }
         }
@@ -130,7 +130,7 @@ springBoot {
 
 test {
     useJUnitPlatform()
-    exclude "**/*IT*", "**/*IntTest*"<%_ if (cucumberTests) { _%>, "**/*CucumberIT*"<%_ } _%>
+    exclude "**/*IT*", "**/*IntTest*"
 
     testLogging {
         events 'FAILED', 'SKIPPED'
@@ -229,8 +229,8 @@ liquibase {
 
     runList = project.ext.runList
 }
-
 <%_ } _%>
+
 configurations {
     providedRuntime
     implementation.exclude module: "spring-boot-starter-tomcat"
@@ -251,8 +251,6 @@ repositories {
         }
     }
     <%_ } _%>
-    // TODO To remove after final JHipster release
-    maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -345,7 +343,6 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     implementation "org.hibernate:hibernate-entitymanager"
-    implementation "org.hibernate:hibernate-envers"
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase:liquibase-core"
@@ -377,7 +374,7 @@ dependencies {
     implementation "org.springframework.kafka:spring-kafka"
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
-    implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
+    implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
         exclude module: "spring-boot-starter-tomcat"
     }
     <%_ if (!reactive) { _%>

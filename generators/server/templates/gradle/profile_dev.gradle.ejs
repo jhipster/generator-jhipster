@@ -54,7 +54,7 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
+task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
     <%_ if (clientPackageManager==='npm') { _%>
     inputs.files("package-lock.json")
     <%_ } else { _%>
@@ -99,6 +99,6 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-processResources.dependsOn webpackBuildDev
+processResources.dependsOn webpack
 bootJar.dependsOn processResources
 <%_ } _%>

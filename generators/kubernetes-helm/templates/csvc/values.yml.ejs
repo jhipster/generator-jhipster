@@ -72,7 +72,7 @@ grafana:
   ingress:
     enabled: true
     hosts:
-    - jhipster-grafana.<%= kubernetesNamespace %><%= ingressDomain %>
+    - jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
   <%_ } _%>
   datasources:
     datasources.yaml:

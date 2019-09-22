@@ -18,6 +18,7 @@
  */
 const shelljs = require('shelljs');
 const chalk = require('chalk');
+const crypto = require('crypto');
 const { loadFromYoRc } = require('./docker-base');
 const constants = require('./generator-constants');
 
@@ -47,11 +48,10 @@ function loadConfig() {
     loadFromYoRc.call(this);
     this.kubernetesNamespace = this.config.get('kubernetesNamespace');
     this.kubernetesServiceType = this.config.get('kubernetesServiceType');
+    this.ingressType = this.config.get('ingressType');
     this.ingressDomain = this.config.get('ingressDomain');
     this.istio = this.config.get('istio');
-    this.dbRandomPassword = Math.random()
-        .toString(36)
-        .slice(-8);
+    this.dbRandomPassword = crypto.randomBytes(128).toString('hex');
 }
 
 function saveConfig() {
@@ -65,6 +65,7 @@ function saveConfig() {
         dockerPushCommand: this.dockerPushCommand,
         kubernetesNamespace: this.kubernetesNamespace,
         kubernetesServiceType: this.kubernetesServiceType,
+        ingressType: this.ingressType,
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring,
         istio: this.istio

@@ -30,7 +30,7 @@ spec:
     <%_ if (kubernetesServiceType !== 'Ingress') { _%>
   type: <%= kubernetesServiceType %>
     <%_ } else { _%>
-  type: ClusterIP
+  type: <%= ingressType === 'gke' ? 'NodePort' : 'ClusterIP' %>
     <%_ } _%>
   <%_ } _%>
   ports:

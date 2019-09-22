@@ -208,7 +208,7 @@ module.exports = class extends BaseGenerator {
         if (blueprints) {
             blueprints = jhipsterUtils.parseBluePrints(blueprints);
         } else {
-            blueprints = jhipsterUtils.loadBlueprintsFromConfiguration(this);
+            blueprints = jhipsterUtils.loadBlueprintsFromConfiguration(this.config);
         }
 
         this.blueprints = this.configOptions.blueprints = blueprints;
