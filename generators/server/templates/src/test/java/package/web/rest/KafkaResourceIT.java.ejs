@@ -19,6 +19,9 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 <%_ if (authenticationType === 'uaa') { _%>
 import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
@@ -28,6 +31,9 @@ import <%=packageName%>.config.TestSecurityConfiguration;
 import <%= packageName %>.service.<%= upperFirstCamelCase(baseName) %>KafkaProducer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
@@ -45,6 +51,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 

@@ -246,6 +246,10 @@ function askForServerSideOpts(meta) {
                         'Yes, with Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
                 },
                 {
+                    value: 'redis',
+                    name: 'Yes, with the Redis implementation (single server)'
+                },
+                {
                     value: 'no',
                     name: 'No - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
                 }

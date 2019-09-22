@@ -202,6 +202,11 @@ jhipster:
         logs: # Reports metrics in the logs
             enabled: true
             report-frequency: 60 # in seconds
+<%_ if (cacheProvider === 'redis') { _%>
+    cache:
+        redis:
+            server: ${redis.test.server}
+<%_ } _%>
 
 # ===================================================================
 # Application specific properties
