@@ -26,8 +26,12 @@ let generator;
 
 const AwsFactory = (module.exports = function AwsFactory(generatorRef, cb) {
     generator = generatorRef;
-    Aws = require('aws-sdk'); // eslint-disable-line
-    cb();
+    try {
+        Aws = require('aws-sdk'); // eslint-disable-line
+        cb();
+    } catch (e) {
+        generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
+    }
 });
 
 AwsFactory.prototype.init = function initAws(options) {
