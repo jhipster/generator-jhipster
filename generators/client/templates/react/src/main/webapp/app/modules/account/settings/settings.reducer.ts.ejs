@@ -86,7 +86,7 @@ export const saveAccountSettings = account => async <% if (enableTranslation) { 
     }
     <% } %>  
   await dispatch(getSession());
-  <% if (enableTranslation) { %>
+  <% if (enableTranslation && enableI18nRTL) { %>
     document.querySelector('html').setAttribute('dir', isRTL(account.langKey) ? 'rtl' : 'ltr');
   <% } %>
 };
