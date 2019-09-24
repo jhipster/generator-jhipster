@@ -24,6 +24,7 @@ import io.github.jhipster.config.JHipsterProperties;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
@@ -82,12 +83,8 @@ public class MailService {
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);
-        } catch (Exception e) {
-            if (log.isDebugEnabled()) {
-                log.warn("Email could not be sent to user '{}'", to, e);
-            } else {
-                log.warn("Email could not be sent to user '{}': {}", to, e.getMessage());
-            }
+        }  catch (MessagingException e) {
+            log.warn("Email could not be sent to user '{}'", to, e);
         }
     }
 
