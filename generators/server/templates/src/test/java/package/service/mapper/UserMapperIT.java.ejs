@@ -19,7 +19,11 @@
 package <%= packageName %>.service.mapper;
 
 <% if (databaseType === 'cassandra') { %>
-import <%=packageName%>.AbstractCassandraTest;<% } %>
+import <%=packageName%>.AbstractCassandraTest;
+<% } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.config.TestSecurityConfiguration;
@@ -31,11 +35,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (messageBroker === 'kafka') { _%>
-import org.springframework.kafka.test.context.EmbeddedKafka;
-<%_ } _%>
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,13 +51,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for {@link UserMapper}.
  */
-<%_ if (messageBroker === 'kafka') { _%>
-@EmbeddedKafka
-<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class UserMapperIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 

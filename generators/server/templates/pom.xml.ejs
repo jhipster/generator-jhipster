@@ -275,6 +275,23 @@
             <scope>test</scope>
             <!-- parent POM declares this dependency in default (compile) scope -->
         </dependency>
+<%_ if (cacheProvider === 'redis' && enableHibernateCache) { _%>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>database-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
 <%_ if (!reactive) { _%>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -611,14 +628,18 @@
             <scope>test</scope>
         </dependency>
 <%_ if (messageBroker === 'kafka') { _%>
-        <!-- Kafka support -->
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-		</dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+        </dependency>
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>database-commons</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>kafka</artifactId>
             <scope>test</scope>
         </dependency>
 <%_ } _%>
@@ -1040,7 +1061,7 @@
                         </to>
                         <container>
                             <entrypoint>
-                                <shell>sh</shell>
+                                <shell>bash</shell>
                                 <option>-c</option>
                                 <arg>chmod +x /entrypoint.sh &amp;&amp; sync &amp;&amp; /entrypoint.sh</arg>
                             </entrypoint>

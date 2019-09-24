@@ -21,6 +21,9 @@ package <%= packageName %>.web.rest.errors;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
@@ -30,11 +33,11 @@ import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (messageBroker === 'kafka') { _%>
-import org.springframework.kafka.test.context.EmbeddedKafka;
-<%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -50,15 +53,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
-<%_ if (messageBroker === 'kafka') { _%>
-@EmbeddedKafka
-<%_ } _%>
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 @SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
 <%_ } else if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
@@ -170,9 +173,6 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 import org.springframework.boot.web.codec.CodecCustomizer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-<%_ if (messageBroker === 'kafka') { _%>
-import org.springframework.kafka.test.context.EmbeddedKafka;
-<%_ } _%>
 import org.springframework.test.web.reactive.server.MockServerConfigurer;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.server.WebExceptionHandler;
@@ -183,9 +183,6 @@ import java.util.List;
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
-<%_ if (messageBroker === 'kafka') { _%>
-@EmbeddedKafka
-<%_ } _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 

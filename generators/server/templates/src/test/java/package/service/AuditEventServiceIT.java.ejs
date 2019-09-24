@@ -18,12 +18,18 @@
 -%>
 package <%= packageName %>.service;
 
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.domain.PersistentAuditEvent;
 import <%= packageName %>.repository.PersistenceAuditEventRepository;
 import <%=packageName%>.<%= mainClass %>;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (databaseType === 'sql') { _%>
@@ -31,9 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
-<%_ } _%>
-<%_ if (messageBroker === 'kafka') { _%>
-import org.springframework.kafka.test.context.EmbeddedKafka;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
@@ -46,13 +49,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for {@link AuditEventService}.
  */
-<%_ if (messageBroker === 'kafka') { _%>
-@EmbeddedKafka
-<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 @Transactional

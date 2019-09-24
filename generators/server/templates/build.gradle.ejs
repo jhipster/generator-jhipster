@@ -111,7 +111,7 @@ if (OperatingSystem.current().isWindows()) {
         archiveName = "runboot-classpath.jar"
         doFirst {
             manifest {
-                def classpath = sourceSets.test.runtimeClasspath.files
+                def classpath = sourceSets.main.runtimeClasspath.files
                 attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
             }
         }
@@ -303,7 +303,13 @@ dependencies {
     implementation "com.google.code.simple-spring-memcached:xmemcached-provider"
     implementation "com.googlecode.xmemcached:xmemcached"
     <%_ } _%>
-    <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
+    <%_ if (cacheProvider === 'redis') { _%>
+    implementation "org.redisson:redisson"
+        <%_ if (enableHibernateCache) { _%>
+    implementation "org.hibernate:hibernate-jcache"
+        <%_ } _%>
+    <%_ } _%>
+    <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'redis'].includes(cacheProvider) || applicationType === 'gateway') { _%>
     implementation "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
@@ -366,7 +372,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
-    implementation "org.springframework.kafka:spring-kafka"
+    implementation "org.apache.kafka:kafka-clients"
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
@@ -519,7 +525,8 @@ dependencies {
     liquibaseRuntime "com.oracle.jdbc:ojdbc8"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
-    testImplementation "org.springframework.kafka:spring-kafka-test"
+    testImplementation "org.testcontainers:database-commons"
+    testImplementation "org.testcontainers:kafka"
     <%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }

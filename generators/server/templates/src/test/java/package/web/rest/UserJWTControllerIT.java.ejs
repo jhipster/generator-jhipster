@@ -21,6 +21,9 @@ package <%= packageName %>.web.rest;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (!skipUserManagement) { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
@@ -34,11 +37,11 @@ import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 import <%= packageName %>.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (messageBroker === 'kafka') { _%>
-import org.springframework.kafka.test.context.EmbeddedKafka;
-<%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 <%_ } _%>
@@ -76,10 +79,10 @@ import static org.hamcrest.Matchers.not;
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
  */
-<%_ if (messageBroker === 'kafka') { _%>
-@EmbeddedKafka
-<%_ } _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
+<%_ } _%>
 public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired

@@ -65,6 +65,9 @@
     <logger name="com.google.code.ssm" level="WARN"/>
     <logger name="com.google.code.yanf4j" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { _%>
+    <logger name="org.redisson" level="WARN" />
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || serviceDiscoveryType === 'eureka') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
@@ -89,6 +92,7 @@
     <logger name="com.github.benmanes.caffeine" level="WARN"/>
     <%_ } _%>
     <logger name="org.apache" level="WARN"/>
+    <logger name="org.apache.kafka" level="INFO"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/><% if (searchEngine === 'elasticsearch') { %>
     <logger name="org.elasticsearch" level="WARN"/><% } %>
@@ -122,10 +126,6 @@
     <%_ } _%>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
-    <%_ if (messageBroker === 'kafka') { _%>
-    <logger name="kafka" level="WARN"/>
-    <logger name="org.I0Itec" level="WARN"/>
-    <%_ } _%>
     <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
     <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
     <%_ } _%>
