@@ -43,6 +43,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -228,7 +229,7 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
 
     @Test
     public void testSendEmailWithException() throws Exception {
-        doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
+        doThrow(MessagingException.class).when(javaMailSender).send(any(MimeMessage.class));
         mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
     }
 
