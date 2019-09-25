@@ -63,6 +63,13 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
+        
+         // This adds support for a `--skip-more-modules` flag
+        this.option('skip-more-modules', {
+            desc: 'Skip the additional more modules question',
+            type: Boolean,
+            defaults: false
+        });
 
         // This adds support for a `--skip-git` flag
         this.option('skip-git', {
@@ -194,6 +201,7 @@ module.exports = class extends BaseGenerator {
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipI18n = this.configOptions.skipI18n = this.options['skip-i18n'] || this.config.get('skipI18n');
         this.skipTestOpts = this.configOptions.skipTestOpts = this.options['skip-test-opts'] || this.config.get('skipTestOpts');
+        this.skipMoreModules = this.configOptions.skipMoreModules = this.options['skip-more-modules'] || this.config.get('skipMoreModules');
         this.skipUserManagement = this.configOptions.skipUserManagement =
             this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
@@ -465,6 +473,7 @@ module.exports = class extends BaseGenerator {
                 this.skipServer && (config.skipServer = true);
                 this.skipI18n && (config.skipI18n = true);
                 this.skipTestOpts && (config.skipTestOpts = true);
+                this.skipMoreModules && (config.skipMoreModules = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.config.set(config);
             },
