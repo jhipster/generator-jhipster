@@ -319,8 +319,11 @@ module.exports = class extends BaseGenerator {
                     this.otherModules = this.otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
                     this.otherModules.push(...this.blueprints);
                 }
-                this.testFrameworks = this.config.get('testFrameworks');
+                this.testFrameworks = this.config.get('testFrameworks') || [];
                 this.enableTranslation = this.config.get('enableTranslation');
+                if (this.skipI18n) {
+                    this.enableTranslation = false;
+                }
                 this.nativeLanguage = this.config.get('nativeLanguage');
                 this.languages = this.config.get('languages');
                 const configFound = this.baseName !== undefined && this.applicationType !== undefined;
