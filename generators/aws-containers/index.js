@@ -208,6 +208,7 @@ module.exports = class extends BaseGenerator {
                 });
             },
             finishMicroServiceFlow() {
+                if (this.deploymentApplicationType === 'monolith') return;
                 const done = this.async();
                 this.log.ok(chalk.green('EKS and ECRs created. Please use the Kubernetes Sub-generator (jhipster kubernetes) to deploy.`'));
                 this.abort = true;
