@@ -346,7 +346,7 @@ function promptScaling(config, awsConfig = { scaling: 'low' }) {
  * Ask user to select target Virtual Private Network
  */
 function askVPC() {
-    if (this.abort || this.deploymentApplicationType === 'microservice') return null;
+    if (this.abort) return null;
     const done = this.async();
 
     const vpcList = this.awsFacts.availableVpcs.map(vpc => {
@@ -385,7 +385,7 @@ function askVPC() {
  * Ask user to select availability information (availability, zones)/
  */
 function askForSubnets() {
-    if (this.abort || this.deploymentApplicationType === 'microservice') return null;
+    if (this.abort) return null;
     const done = this.async();
 
     const subnetList = _.map(this.awsFacts.availableSubnets, sn => {
@@ -450,7 +450,7 @@ function askForSubnets() {
 }
 
 function askForDBPasswords() {
-    if (this.abort || this.deploymentApplicationType === 'microservice') return null;
+    if (this.abort) return null;
     const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
@@ -501,7 +501,7 @@ function promptEKSClusterCreation() {
             type: 'input',
             name: 'clusterName',
             message: 'Name of the EKS Cluster?',
-            default: 'jhipster'
+            default: this.aws.clusterName || 'jhipster'
         },
         {
             type: 'list',
@@ -521,7 +521,7 @@ function promptEKSClusterCreation() {
                     name: '1.14'
                 }
             ],
-            default: 1
+            default: this.aws.kubernetesVersion || 1
         },
         {
             type: 'input',
@@ -551,13 +551,13 @@ function promptEKSClusterCreation() {
                 'us-west-1',
                 'us-west-2'
             ],
-            default: 15
+            default: this.aws.clusterRegion || 15
         },
         {
             type: 'input',
             name: 'totalNumberOfNodes',
             message: 'Total number of nodes (for a static ASG)?',
-            default: '4',
+            default: this.aws.totalNumberOfNodes || '4',
             validate: input => {
                 if (input.length === 0) {
                     return 'Instances cannot be empty';
@@ -573,10 +573,15 @@ function promptEKSClusterCreation() {
 
     return this.prompt(prompts).then(props => {
         this.clusterName = props.clusterName;
+        this.aws.clusterName = props.clusterName;
         this.kubernetesVersion = props.kubernetesVersion;
+        this.aws.kubernetesVersion = props.kubernetesVersion;
         this.nodegroupName = props.nodegroupName;
+        this.aws.nodegroupName = props.nodegroupName;
         this.clusterRegion = props.clusterRegion;
+        this.aws.clusterRegion = props.clusterRegion;
         this.totalNumberOfNodes = props.totalNumberOfNodes;
+        this.aws.totalNumberOfNodes = props.totalNumberOfNodes;
         done();
     });
 }
@@ -585,7 +590,7 @@ function promptEKSClusterCreation() {
  * Ask user if they would like to deploy now?
  */
 function askDeployNow() {
-    if (this.abort || this.deploymentApplicationType === 'microservice') return null;
+    if (this.abort) return null;
     const done = this.async();
     const prompts = [
         {

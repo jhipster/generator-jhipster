@@ -173,9 +173,48 @@ module.exports = class extends BaseGenerator {
             askDirectoryPath: dockerPrompts.askForPath,
             askForApps: dockerPrompts.askForApps,
             getAppConfig: dockerPrompts.loadConfigs,
+            promptEKSClusterCreation: prompts.promptEKSClusterCreation,
+            createEKSCluster() {
+                if (this.deploymentApplicationType === 'monolith') return;
+                const done = this.async();
+                this.log.ok('Initialising Elastic Kubernetes Service (EKS)️ ...');
+                shelljs.exec(
+                    `eksctl create cluster --name=${this.clusterName} --nodes=${this.totalNumberOfNodes}` +
+                        ` --version=${this.kubernetesVersion} --region=${this.clusterRegion} --nodegroup-name=${this.nodegroupName}`,
+                    { silent: false },
+                    (code, stdout, stderr) => {
+                        if (stderr) {
+                            this.log(stderr);
+                        }
+                        done();
+                    }
+                );
+            },
+            createECR() {
+                if (this.deploymentApplicationType === 'monolith') return;
+                const done = this.async();
+                this.log.ok('Initialising Elastic Repository Service (ERS) ...');
+                this.appConfigs.forEach(app => {
+                    shelljs.exec(
+                        `aws ecr create-repository --repository-name=${app.baseName} --region=${this.clusterRegion}`,
+                        { silent: false },
+                        (code, stdout, stderr) => {
+                            if (stderr) {
+                                this.log(stderr);
+                            }
+                            done();
+                        }
+                    );
+                });
+            },
+            finishMicroServiceFlow() {
+                const done = this.async();
+                this.log.ok(chalk.green('EKS and ECRs created. Please use the Kubernetes Sub-generator (jhipster kubernetes) to deploy.`'));
+                this.abort = true;
+                done();
+            },
             askRegion: prompts.askRegion,
             initAwsAndLoadVPCs() {
-                if (this.deploymentApplicationType === 'microservice') return {};
                 awsClient.initAwsStuff(this.aws.region);
                 return awsClient.listVpcs().then(listOfVpcs => {
                     this.awsFacts.availableVpcs = listOfVpcs;
@@ -183,7 +222,6 @@ module.exports = class extends BaseGenerator {
             },
             askVPC: prompts.askVPC,
             initSubnets() {
-                if (this.abort || this.deploymentApplicationType === 'microservice') return {};
                 const done = this.async;
                 return awsClient
                     .listSubnets(this.aws.vpc.id)
@@ -201,7 +239,6 @@ module.exports = class extends BaseGenerator {
             askPerformances: prompts.askPerformances,
             askScaling: prompts.askScaling,
             retrievePassword() {
-                if (this.abort || this.deploymentApplicationType === 'microservice') return {};
                 const done = this.async;
                 // Attempts to retrieve a previously set database password from SSM.
                 const promises = this.aws.apps.map(app =>
@@ -235,22 +272,6 @@ module.exports = class extends BaseGenerator {
                     });
             },
             askForDBPassword: prompts.askForDBPasswords,
-            promptEKSClusterCreation: prompts.promptEKSClusterCreation,
-            createEKSCluster() {
-                if (this.deploymentApplicationType === 'monolith') return;
-                const done = this.async;
-                shelljs.exec(
-                    `eksctl create cluster --name=${this.clusterName} --version=${this.kubernetesVersion} 
-                        --nodes=${this.totalNumberOfNodes} --region=${this.clusterRegion} --nodegroup-name=${this.nodegroupName}`,
-                    { silent: false },
-                    (code, stdout, stderr) => {
-                        if (stderr) {
-                            this.log(stderr);
-                        }
-                        done();
-                    }
-                );
-            },
             askDeployNow: prompts.askDeployNow
         };
     }
@@ -258,13 +279,15 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             bonjour() {
-                if (this.abort || this.deploymentApplicationType === 'microservice') return;
+                if (this.abort) return;
                 this.log(chalk.bold('🔧🛠️ AWS configuring'));
             },
             purgeAwsApps() {
+                if (this.abort) return;
                 this.aws.apps = this.aws.apps.filter(app => this.appConfigs.find(conf => conf.baseName === app.baseName));
             },
             setBucketName() {
+                if (this.abort) return;
                 this.aws.s3BucketName =
                     this.aws.s3BucketName || awsClient.sanitizeBucketName(`${this.aws.cloudFormationName}_${new Date().getTime()}`);
             },
@@ -290,7 +313,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             bonjour() {
-                if (this.abort || this.deploymentApplicationType === 'microservice') return;
+                if (this.abort) return;
                 this.log(chalk.bold('AWS default'));
             },
             updateBaseName() {
@@ -387,7 +410,7 @@ module.exports = class extends BaseGenerator {
     }
 
     _uploadTemplateToAWS(filename, path) {
-        if (this.abort || this.deploymentApplicationType === 'microservice') return null;
+        if (this.abort) return null;
         const done = this.async;
 
         return awsClient
@@ -409,7 +432,7 @@ module.exports = class extends BaseGenerator {
     get end() {
         return {
             checkAndBuildImages() {
-                if (this.abort || !this.deployNow || this.skipBuild || this.deploymentApplicationType === 'microservice') return null;
+                if (this.abort || !this.deployNow || this.skipBuild) return null;
                 const done = this.async();
                 const cwd = process.cwd();
                 const promises = this.appConfigs.map(config =>
@@ -430,7 +453,7 @@ module.exports = class extends BaseGenerator {
                     });
             },
             createS3Bucket() {
-                if (this.abort || !this.deployNow || this.deploymentApplicationType === 'microservice') return null;
+                if (this.abort || !this.deployNow) return null;
                 const done = this.async;
                 return awsClient
                     .createS3Bucket(this.aws.s3BucketName, this.aws.region)
@@ -446,7 +469,7 @@ module.exports = class extends BaseGenerator {
                     });
             },
             uploadBaseTemplate() {
-                if (this.abort || !this.deployNow || this.deploymentApplicationType === 'microservice') return null;
+                if (this.abort || !this.deployNow) return null;
                 const done = this.async;
                 return this._uploadTemplateToAWS('base.template.yml', BASE_TEMPLATE_PATH).then(result => {
                     this.aws.s3BaseTemplate = result;
@@ -454,7 +477,7 @@ module.exports = class extends BaseGenerator {
                 });
             },
             uploadAppTemplate() {
-                if (this.abort || !this.deployNow || this.deploymentApplicationType === 'microservice') return null;
+                if (this.abort || !this.deployNow) return null;
                 const done = this.async;
                 const promises = this.aws.apps.map(config =>
                     this._uploadTemplateToAWS(APP_TEMPLATE_PATH(config.baseName), APP_TEMPLATE_PATH(config.baseName))
@@ -538,7 +561,7 @@ module.exports = class extends BaseGenerator {
                 return Promise.all(promises).then(() => done());
             },
             setSSMDatabasePassword() {
-                if (this.abort || !this.deployNow || this.deploymentApplicationType === 'microservice') return null;
+                if (this.abort || !this.deployNow) return null;
                 const done = this.async;
 
                 const promises = this.aws.apps.map(app => {
@@ -661,7 +684,7 @@ module.exports = class extends BaseGenerator {
                     });
             },
             updateStack() {
-                if (this.abort || !this.deployNow || this.deploymentApplicationType === 'microservice') return null;
+                if (this.abort || !this.deployNow) return null;
                 const done = this.async;
                 const databasePasswords = this.awsFacts.apps.map(a =>
                     awsClient.CF().cfParameter(`${a.baseName}DBPassword`, a.database_Password)
