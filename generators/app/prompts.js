@@ -151,7 +151,7 @@ function askForTestOpts(meta) {
 }
 
 function askForMoreModules() {
-    if (this.existingProject) {
+    if (this.existingProject || this.skipMoreModules) {
         return;
     }
 
