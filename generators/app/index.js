@@ -49,29 +49,29 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
-        
-         // This adds support for a `--skip-i18n` flag
+
+        // This adds support for a `--skip-i18n` flag
         this.option('skip-i18n', {
             desc: 'Skip the i18n generation',
             type: Boolean,
             defaults: false
         });
-        
+
         // This adds support for a `--skip-test-opts` flag
         this.option('skip-test-opts', {
             desc: 'Skip the additional test opts question',
             type: Boolean,
             defaults: false
         });
-        
-         // This adds support for a `--skip-more-modules` flag
+
+        // This adds support for a `--skip-more-modules` flag
         this.option('skip-more-modules', {
             desc: 'Skip the additional more modules question',
             type: Boolean,
             defaults: false
         });
-        
-         // This adds support for a `--skip-app-type` flag
+
+        // This adds support for a `--skip-app-type` flag
         this.option('skip-app-type', {
             desc: 'Skip the application type question',
             type: Boolean,
@@ -207,7 +207,7 @@ module.exports = class extends BaseGenerator {
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipI18n = this.configOptions.skipI18n = this.options['skip-i18n'] || this.config.get('skipI18n');
-        this.skipAppType = this.configOptions.skipAppType  = this.options['skip-app-type'] || this.config.get('skipAppType');
+        this.skipAppType = this.configOptions.skipAppType = this.options['skip-app-type'] || this.config.get('skipAppType');
         this.skipTestOpts = this.configOptions.skipTestOpts = this.options['skip-test-opts'] || this.config.get('skipTestOpts');
         this.skipMoreModules = this.configOptions.skipMoreModules = this.options['skip-more-modules'] || this.config.get('skipMoreModules');
         this.skipUserManagement = this.configOptions.skipUserManagement =
