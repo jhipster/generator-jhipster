@@ -49,6 +49,13 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
+        
+         // This adds support for a `--skip-i18n` flag
+        this.option('skip-i18n', {
+            desc: 'Skip the i18n generation',
+            type: Boolean,
+            defaults: false
+        });
 
         // This adds support for a `--skip-git` flag
         this.option('skip-git', {
@@ -178,6 +185,7 @@ module.exports = class extends BaseGenerator {
 
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
+        this.skipI18n = this.configOptions.skipServer = this.options['skip-i18n'] || this.config.get('skipI18n');
         this.skipUserManagement = this.configOptions.skipUserManagement =
             this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
@@ -447,6 +455,7 @@ module.exports = class extends BaseGenerator {
                 this.reactive && (config.reactive = this.reactive);
                 this.skipClient && (config.skipClient = true);
                 this.skipServer && (config.skipServer = true);
+                this.skipI18n && (config.skipI18n = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.config.set(config);
             },
