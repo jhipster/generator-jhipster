@@ -120,7 +120,7 @@ function askFori18n() {
 }
 
 function askForTestOpts(meta) {
-    if (!meta && this.existingProject) return;
+    if ((!meta && this.existingProject) || this.skipTestOpts ) return;
 
     const choices = [];
     const defaultChoice = [];
