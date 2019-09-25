@@ -46,7 +46,7 @@ function askForInsightOptIn() {
 }
 
 function askForApplicationType(meta) {
-    if (!meta && this.existingProject) return;
+    if ((!meta && this.existingProject) || this.skipAppType) return;
 
     const DEFAULT_APPTYPE = 'monolith';
 
