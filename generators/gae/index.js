@@ -82,6 +82,7 @@ module.exports = class extends BaseGenerator {
             loadConfig() {
                 this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.baseName = this.config.get('baseName');
+                this.mainClass = this.getMainClassName();
                 this.packageName = this.config.get('packageName');
                 this.packageFolder = this.config.get('packageFolder');
                 this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
@@ -106,6 +107,9 @@ module.exports = class extends BaseGenerator {
                 this.gaeMaxInstances = this.config.get('gaeMaxInstances');
                 this.gaeMinInstances = this.config.get('gaeMinInstances');
                 this.gaeCloudSQLInstanceNeeded = this.config.get('gaeCloudSQLInstanceNeeded');
+                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.config.buildTool) + constants.CLIENT_DIST_DIR;
+                this.skipClient = this.config.get('skipClient');
+                this.clientPackageManager = this.config.get('clientPackageManager');
             }
         };
     }
