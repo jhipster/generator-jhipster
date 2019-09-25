@@ -56,6 +56,13 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false
         });
+        
+        // This adds support for a `--skip-test-opts` flag
+        this.option('skip-test-opts', {
+            desc: 'Skip the additional test opts question',
+            type: Boolean,
+            defaults: false
+        });
 
         // This adds support for a `--skip-git` flag
         this.option('skip-git', {
@@ -185,7 +192,8 @@ module.exports = class extends BaseGenerator {
 
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
-        this.skipI18n = this.configOptions.skipServer = this.options['skip-i18n'] || this.config.get('skipI18n');
+        this.skipI18n = this.configOptions.skipI18n = this.options['skip-i18n'] || this.config.get('skipI18n');
+        this.skipTestOpts = this.configOptions.skipTestOpts = this.options['skip-test-opts'] || this.config.get('skipTestOpts');
         this.skipUserManagement = this.configOptions.skipUserManagement =
             this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
@@ -456,6 +464,7 @@ module.exports = class extends BaseGenerator {
                 this.skipClient && (config.skipClient = true);
                 this.skipServer && (config.skipServer = true);
                 this.skipI18n && (config.skipI18n = true);
+                this.skipTestOpts && (config.skipTestOpts = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.config.set(config);
             },
