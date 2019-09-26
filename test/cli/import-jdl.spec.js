@@ -311,6 +311,44 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
+    describe('imports single app and entities passed with --inline', () => {
+        beforeEach(done => {
+            testInTempDir(dir => {
+                shelljs.rm(`${dir}/.yo-rc.json`);
+                importJdl(
+                    [],
+                    {
+                        skipInstall: true,
+                        noInsight: true,
+                        'skip-git': false,
+                        inline: 'application { config { baseName jhapp }} entity Customer'
+                    },
+                    env,
+                    mockFork(done, 1)
+                );
+            });
+        });
+
+        it('creates the application', () => {
+            assert.file(['.yo-rc.json']);
+        });
+        it('creates the entities', () => {
+            assert.file([path.join('.jhipster', 'Customer.json')]);
+        });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(1);
+            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--skip-install',
+                '--no-insight',
+                '--no-skip-git',
+                '--with-entities',
+                '--force',
+                '--from-cli'
+            ]);
+        });
+    });
+
     describe('imports single app only', () => {
         beforeEach(done => {
             testInTempDir(dir => {
