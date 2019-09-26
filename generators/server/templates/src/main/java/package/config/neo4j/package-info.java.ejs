@@ -16,21 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.cucumber;
-
-import org.junit.runner.RunWith;
-
-<%_ if (databaseType === 'cassandra') { _%>
-import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-import io.cucumber.junit.CucumberOptions;
-import io.cucumber.junit.Cucumber;
-
-@RunWith(Cucumber.class)
-@CucumberOptions(plugin = "pretty", features = "<%= TEST_DIR %>features")
-public class CucumberIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %><% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest<% } %> {
-
-}
+/**
+ * Neo4j specific configuration and required migrations.
+ */
+package <%= packageName %>.config.neo4j;

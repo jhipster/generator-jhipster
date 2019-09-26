@@ -724,6 +724,15 @@ const expectedFiles = {
         `${DOCKER_DIR}couchbase/scripts/configure-node.sh`
     ],
 
+    neo4j: [
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/AbstractNeo4jIT.java`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__admin.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__system.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__user.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__anonymoususer.json`,
+        `${DOCKER_DIR}neo4j.yml`
+    ],
+
     cassandra: [
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`,
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace.cql`,

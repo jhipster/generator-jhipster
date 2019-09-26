@@ -21,6 +21,9 @@ package <%= packageName %>.service;
 import <%= packageName %>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
 import <%= packageName %>.AbstractCassandraTest;<% } %>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
@@ -69,7 +72,7 @@ import static org.mockito.Mockito.*;
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class MailServiceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %><% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String[] languages = {
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array

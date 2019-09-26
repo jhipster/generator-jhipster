@@ -16,21 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.cucumber;
+package <%= packageName %>;
 
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.testcontainers.containers.Neo4jContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
-<%_ if (databaseType === 'cassandra') { _%>
-import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
-import <%= packageName %>.AbstractNeo4jIT;
-<%_ } _%>
-import io.cucumber.junit.CucumberOptions;
-import io.cucumber.junit.Cucumber;
+@Testcontainers
+public class AbstractNeo4jIT {
 
-@RunWith(Cucumber.class)
-@CucumberOptions(plugin = "pretty", features = "<%= TEST_DIR %>features")
-public class CucumberIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %><% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest<% } %> {
+    @Container
+    private static Neo4jContainer neo4jContainer = new Neo4jContainer().withoutAuthentication();
 
+    @BeforeAll
+    public static void beforeAll() {
+        System.setProperty("org.neo4j.driver.uri", "bolt://" + neo4jContainer.getContainerIpAddress() + ":" + neo4jContainer.getMappedPort(7687));
+    }
 }

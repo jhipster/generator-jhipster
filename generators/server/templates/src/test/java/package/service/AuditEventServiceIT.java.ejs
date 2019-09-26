@@ -18,6 +18,9 @@
 -%>
 package <%= packageName %>.service;
 
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
@@ -60,7 +63,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (databaseType === 'sql') { _%>
 @Transactional
 <%_ } _%>
-public class AuditEventServiceIT {
+public class AuditEventServiceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %> {
     @Autowired
     private AuditEventService auditEventService;
 
