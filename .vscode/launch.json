@@ -156,6 +156,7 @@
             "program": "${workspaceFolder}/cli/jhipster.js",
             "args": [
                 "import-jdl",
+                "--inline",
                 "application { config { baseName jhapp }}"
             ],
             "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
