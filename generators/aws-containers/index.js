@@ -177,7 +177,7 @@ module.exports = class extends BaseGenerator {
             createEKSCluster() {
                 if (this.deploymentApplicationType === 'monolith') return;
                 const done = this.async();
-                this.log.ok('Initialising Elastic Kubernetes Service (EKS)️ ...');
+                this.log.ok('Initialising Elastic Kubernetes Service (EKS)️. This can take up to 15 minutes depending on load....');
                 shelljs.exec(
                     `eksctl create cluster --name=${this.clusterName} --nodes=${this.totalNumberOfNodes}` +
                         ` --version=${this.kubernetesVersion} --region=${this.clusterRegion} --nodegroup-name=${this.nodegroupName}`,
