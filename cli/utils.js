@@ -107,7 +107,7 @@ const initHelp = (program, cliName) => {
  */
 const getArgs = opts => {
     if (opts.argument) {
-        return `[${opts.argument.join(' ')}]`;
+        return `[${opts.argument.join('|')}]`;
     }
     return '';
 };
