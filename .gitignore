@@ -1,6 +1,7 @@
 node_modules
 .idea
 test/temp
+test/test_files/**/*.png
 npm-debug.log
 out/
 /.jhipster/
