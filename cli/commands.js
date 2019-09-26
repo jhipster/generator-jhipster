@@ -87,9 +87,9 @@ const defaultCommands = {
         desc: 'Deploy the current application to Heroku'
     },
     'import-jdl': {
-        argument: ['jdlFiles...'],
+        argument: ['jdlFiles...', 'jdlContent'],
         cliOnly: true,
-        desc: `Create entities from the JDL file passed in argument.
+        desc: `Create entities from the JDL file/content passed in argument.
   By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
         help: `
     --skip-install        # Do not automatically install dependencies                              Default: false
@@ -101,12 +101,20 @@ const defaultCommands = {
     --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
 
 Arguments:
-    jdlFiles  # The JDL file names  Type: String[]  Required: true
+    jdlFiles | jdlContent  # The JDL file names Type: String[] or JDL content Type: String  Required: true
 
 Example:
     jhipster import-jdl myfile.jdl
     jhipster import-jdl myfile.jdl --interactive
     jhipster import-jdl myfile1.jdl myfile2.jdl
+    jhipster import-jdl "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster import-jdl \\
+        "application { \\
+            config { \\
+                baseName jhapp, \\
+                testFrameworks [protractor] \\
+            } \\
+        }"
         `
     },
     info: {
