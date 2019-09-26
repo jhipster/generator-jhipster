@@ -35,7 +35,7 @@ import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>

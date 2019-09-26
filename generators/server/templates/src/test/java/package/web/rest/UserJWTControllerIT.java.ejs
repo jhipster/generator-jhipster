@@ -27,7 +27,7 @@ import <%=packageName%>.RedisTestContainerExtension;
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (!skipUserManagement) { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.security.jwt.TokenProvider;
 <%_ if (reactive) { _%>
