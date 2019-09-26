@@ -87,7 +87,7 @@ const defaultCommands = {
         desc: 'Deploy the current application to Heroku'
     },
     'import-jdl': {
-        argument: ['jdlFiles...', 'jdlContent'],
+        argument: ['jdlFiles...'],
         cliOnly: true,
         desc: `Create entities from the JDL file/content passed in argument.
   By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
@@ -99,21 +99,22 @@ const defaultCommands = {
     --ignore-application  # Ignores application generation                                         Default: false
     --ignore-deployments  # Ignores deployments generation                                         Default: false
     --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
+    --inline              # Pass JDL content inline. Argument can be skipped when passing this
 
 Arguments:
-    jdlFiles | jdlContent  # The JDL file names Type: String[] or JDL content Type: String  Required: true
+    jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
 
 Example:
     jhipster import-jdl myfile.jdl
     jhipster import-jdl myfile.jdl --interactive
     jhipster import-jdl myfile1.jdl myfile2.jdl
-    jhipster import-jdl "application { config { baseName jhapp, testFrameworks [protractor] }}"
-    jhipster import-jdl \\
-        "application { \\
-            config { \\
-                baseName jhapp, \\
-                testFrameworks [protractor] \\
-            } \\
+    jhipster import-jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster import-jdl --inline \\
+        "application {
+            config {
+                baseName jhapp,
+                testFrameworks [protractor]
+            }
         }"
         `
     },

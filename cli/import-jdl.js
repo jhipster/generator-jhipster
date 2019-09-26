@@ -425,19 +425,14 @@ class JDLProcessor {
     }
 }
 
-const validateContent = jdlFilesOrContent => {
-    if (jdlFilesOrContent) {
-        if (jdlFilesOrContent.length > 1) {
-            jdlFilesOrContent.forEach(key => {
-                if (!shelljs.test('-f', key)) {
-                    logger.error(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
-                }
-            });
-        } else if (!shelljs.test('-f', jdlFilesOrContent[0])) {
-            return jdlFilesOrContent[0];
-        }
+const validateFiles = jdlFiles => {
+    if (jdlFiles) {
+        jdlFiles.forEach(key => {
+            if (!shelljs.test('-f', key)) {
+                logger.error(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
+            }
+        });
     }
-    return '';
 };
 
 /**
@@ -450,12 +445,15 @@ const validateContent = jdlFilesOrContent => {
 module.exports = (args, options, env, forkProcess = fork) => {
     logger.debug('cmd: import-jdl from ./import-jdl');
     logger.debug(`args: ${toString(args)}`);
-    const jdlFilesOrContent = getOptionsFromArgs(args);
-    const jdlContent = validateContent(jdlFilesOrContent);
-    logger.info(chalk.yellow(`Executing import-jdl ${jdlContent ? 'with inline content' : jdlFilesOrContent.join(' ')}`));
-    logger.info(chalk.yellow(`Options: ${toString(options)}`));
+    let jdlFiles = [];
+    if (!options.inline) {
+        jdlFiles = getOptionsFromArgs(args);
+        validateFiles(jdlFiles);
+    }
+    logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
+    logger.info(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
-        const jdlImporter = new JDLProcessor(jdlFilesOrContent, jdlContent, options);
+        const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
         jdlImporter.getConfig();
         jdlImporter.importJDL();
         jdlImporter.sendInsight();
