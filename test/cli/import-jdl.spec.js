@@ -314,14 +314,13 @@ describe('JHipster generator import jdl', () => {
     describe('imports single app and entities passed with --inline', () => {
         beforeEach(done => {
             testInTempDir(dir => {
-                shelljs.rm(`${dir}/.yo-rc.json`);
                 importJdl(
                     [],
                     {
                         skipInstall: true,
                         noInsight: true,
                         'skip-git': false,
-                        inline: 'application { config { baseName jhapp }} entity Customer'
+                        inline: 'application { config { baseName jhapp } entities * } entity Customer'
                     },
                     env,
                     mockFork(done, 1)
@@ -342,6 +341,17 @@ describe('JHipster generator import jdl', () => {
                 '--skip-install',
                 '--no-insight',
                 '--no-skip-git',
+                '--inline',
+                'application',
+                '{',
+                'config',
+                'baseName',
+                'jhapp',
+                '}',
+                'entities',
+                '*',
+                'entity',
+                'Customer',
                 '--with-entities',
                 '--force',
                 '--from-cli'
