@@ -932,13 +932,11 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/repository/reactive/ReactiveN1qlCouchbaseRepository.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}repository/${generator.reactiveRepository}ReactiveN1qlCouchbaseRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`
                 },
                 {
                     file: 'package/repository/reactive/CustomReactiveN1qlCouchbaseRepository.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}repository/${generator.reactiveRepository}CustomReactiveN1qlCouchbaseRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/CustomReactiveN1qlCouchbaseRepository.java`
                 }
             ]
         },
@@ -1554,8 +1552,7 @@ const serverFiles = {
                 },
                 {
                     file: 'package/repository/PersistenceAuditEventRepository.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}repository/${generator.reactiveRepository}PersistenceAuditEventRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/PersistenceAuditEventRepository.java`
                 },
                 {
                     file: 'package/service/AuditEventService.java',
@@ -1612,12 +1609,11 @@ const serverFiles = {
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 {
                     file: 'package/repository/AuthorityRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}AuthorityRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`
                 },
                 {
                     file: 'package/repository/PersistenceAuditEventRepository.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}repository/${generator.reactiveRepository}PersistenceAuditEventRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/PersistenceAuditEventRepository.java`
                 },
                 {
                     file: 'package/service/AuditEventService.java',
@@ -1648,7 +1644,7 @@ const serverFiles = {
                 },
                 {
                     file: 'package/repository/UserRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}UserRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/UserRepository.java`
                 },
 
                 /* User management java service files */

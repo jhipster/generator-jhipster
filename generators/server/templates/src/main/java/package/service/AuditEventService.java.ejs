@@ -23,7 +23,7 @@ import <%= packageName %>.config.audit.AuditEventConverter;
 <%_ if (reactive) { _%>
 import <%= packageName %>.domain.PersistentAuditEvent;
 <%_ } _%>
-import <%= packageName %>.repository.<% if (reactive) { %>reactive.<% } %>PersistenceAuditEventRepository;
+import <%= packageName %>.repository.PersistenceAuditEventRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.audit.AuditEvent;

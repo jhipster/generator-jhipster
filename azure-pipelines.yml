@@ -82,7 +82,7 @@ jobs:
                   JHI_ENTITY: sql
               webflux-mongodb:
                   JHI_APP: webflux-mongodb
-                  JHI_ENTITY: mongodb
+                  JHI_ENTITY: none
 
       steps:
           #----------------------------------------------------------------------

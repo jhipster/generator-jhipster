@@ -228,6 +228,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
+            validateMvcApp() {
+                if (this.context.reactive) {
+                    this.error(chalk.red("The entity generator doesn't support reactive apps at the moment"));
+                }
+            },
+
             validateDbExistence() {
                 const context = this.context;
                 if (
