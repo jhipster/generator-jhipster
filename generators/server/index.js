@@ -127,15 +127,46 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.JIB_VERSION = constants.JIB_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
+            },
+
+            // App configurations
+            setupAppConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
 
                 this.packagejs = packagejs;
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const testFrameworks = configuration.get('testFrameworks');
+                if (testFrameworks) {
+                    this.testFrameworks = testFrameworks;
+                }
+
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
                 this.reactive = configuration.get('reactive') || this.configOptions.reactive;
                 this.packageName = configuration.get('packageName');
+
+                this.jhiPrefix = this.configOptions.jhiPrefix || configuration.get('jhiPrefix');
+                this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
+
+                this.jhipsterVersion = this.packagejs.version;
+                if (this.jhipsterVersion === undefined) {
+                    this.jhipsterVersion = configuration.get('jhipsterVersion');
+                }
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
+
+                const baseName = configuration.get('baseName');
+                if (baseName) {
+                    // to avoid overriding name from configOptions
+                    this.baseName = baseName;
+                }
+            },
+
+            // Server configurations
+            setupServerConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+
                 this.serverPort = configuration.get('serverPort');
                 if (this.serverPort === undefined) {
                     this.serverPort = '8080';
@@ -148,8 +179,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.searchEngine === undefined) {
                     this.searchEngine = false;
                 }
-                this.jhiPrefix = this.configOptions.jhiPrefix || configuration.get('jhiPrefix');
-                this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
                 this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
                 if (this.messageBroker === undefined) {
                     this.messageBroker = false;
@@ -193,19 +222,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 this.buildTool = configuration.get('buildTool');
-                this.jhipsterVersion = packagejs.version;
-                if (this.jhipsterVersion === undefined) {
-                    this.jhipsterVersion = configuration.get('jhipsterVersion');
-                }
-                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 this.authenticationType = configuration.get('authenticationType');
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
                 }
                 this.jwtSecretKey = configuration.get('jwtSecretKey');
-                this.nativeLanguage = configuration.get('nativeLanguage');
-                this.languages = configuration.get('languages');
                 const uaaBaseName = configuration.get('uaaBaseName');
                 if (uaaBaseName) {
                     this.uaaBaseName = uaaBaseName;
@@ -213,21 +234,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 const embeddableLaunchScript = configuration.get('embeddableLaunchScript');
                 if (embeddableLaunchScript) {
                     this.embeddableLaunchScript = embeddableLaunchScript;
-                }
-                this.clientFramework = configuration.get('clientFramework');
-                this.clientTheme = configuration.get('clientTheme');
-                if (!this.clientTheme) {
-                    this.clientTheme = 'none';
-                }
-                const testFrameworks = configuration.get('testFrameworks');
-                if (testFrameworks) {
-                    this.testFrameworks = testFrameworks;
-                }
-
-                const baseName = configuration.get('baseName');
-                if (baseName) {
-                    // to avoid overriding name from configOptions
-                    this.baseName = baseName;
                 }
 
                 // force variables unused by microservice applications
@@ -272,16 +278,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.jwtSecretKey = getBase64Secret(null, 64);
                     }
 
-                    // If translation is not defined, it is enabled by default
-                    if (this.enableTranslation === undefined) {
-                        this.enableTranslation = true;
-                    }
-                    if (this.nativeLanguage === undefined) {
-                        this.nativeLanguage = 'en';
-                    }
-                    if (this.languages === undefined) {
-                        this.languages = ['en', 'fr'];
-                    }
                     // user-management will be handled by UAA app, oauth expects users to be managed in IpP
                     if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
                         this.skipUserManagement = true;
@@ -295,6 +291,36 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
 
                     this.existingProject = true;
+                }
+            },
+
+            // Client configurations
+            setupClientConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.clientFramework = configuration.get('clientFramework');
+                this.clientTheme = configuration.get('clientTheme');
+                if (!this.clientTheme) {
+                    this.clientTheme = 'none';
+                }
+            },
+
+            // Languages configurations
+            setupLanguagesConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
+
+                if (this.existingProject) {
+                    // If translation is not defined, it is enabled by default
+                    if (this.enableTranslation === undefined) {
+                        this.enableTranslation = true;
+                    }
+                    if (this.nativeLanguage === undefined) {
+                        this.nativeLanguage = 'en';
+                    }
+                    if (this.languages === undefined) {
+                        this.languages = ['en', 'fr'];
+                    }
                 }
             }
         };
@@ -381,6 +407,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
+            },
+
+            // Languages configurations
+            setupLanguagesConfig() {
                 if (!this.nativeLanguage) {
                     // set to english when translation is set to false
                     this.nativeLanguage = 'en';

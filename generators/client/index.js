@@ -83,12 +83,25 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+            },
+
+            // App configurations
+            setupAppConfig() {
                 const configuration = this.getAllJhipsterConfig(this, true);
-                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
+                this.packagejs = packagejs;
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
+                const baseName = configuration.get('baseName');
+                if (baseName) {
+                    this.baseName = baseName;
+                }
+            },
+
+            // Client configurations
+            setupClientConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
                 this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
@@ -105,17 +118,26 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.clientThemeVariant = configuration.get('clientThemeVariant');
 
-                this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-                this.nativeLanguage = configuration.get('nativeLanguage');
-                this.languages = configuration.get('languages');
-                this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
-                this.messageBroker = configuration.get('messageBroker');
-                this.packagejs = packagejs;
-                const baseName = configuration.get('baseName');
-                if (baseName) {
-                    this.baseName = baseName;
+                this.useNpm = this.configOptions.useNpm = !this.options.yarn;
+                this.useYarn = !this.useNpm;
+                if (!this.clientPackageManager) {
+                    if (this.useNpm) {
+                        this.clientPackageManager = 'npm';
+                    } else {
+                        this.clientPackageManager = 'yarn';
+                    }
                 }
+                this.clientConfigFound = configuration.get('enableTranslation') !== undefined;
+                if (this.clientConfigFound) {
+                    this.existingProject = true;
+                }
+            },
 
+            // Server configurations
+            setupServerConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
+                this.messageBroker = configuration.get('messageBroker');
                 this.serviceDiscoveryType =
                     configuration.get('serviceDiscoveryType') === 'no'
                         ? false
@@ -123,9 +145,17 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }
+            },
 
-                const clientConfigFound = this.enableTranslation !== undefined;
-                if (clientConfigFound) {
+            // Languages configurations
+            setupLanguagesConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
+                this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
+
+                if (this.clientConfigFound) {
                     // If translation is not defined, it is enabled by default
                     if (this.enableTranslation === undefined) {
                         this.enableTranslation = true;
@@ -135,17 +165,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                     if (this.languages === undefined) {
                         this.languages = ['en', 'fr'];
-                    }
-
-                    this.existingProject = true;
-                }
-                this.useNpm = this.configOptions.useNpm = !this.options.yarn;
-                this.useYarn = !this.useNpm;
-                if (!this.clientPackageManager) {
-                    if (this.useNpm) {
-                        this.clientPackageManager = 'npm';
-                    } else {
-                        this.clientPackageManager = 'yarn';
                     }
                 }
             },
