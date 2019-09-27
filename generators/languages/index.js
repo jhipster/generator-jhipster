@@ -59,9 +59,6 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
-        this.authenticationType = this.config.get('authenticationType');
-        this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
-        this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         // Validate languages passed as argument
         this.languages = this.options.languages;
         if (this.languages) {
@@ -91,7 +88,18 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.checkInvocationFromCLI();
             },
 
-            setupConsts() {
+            // App configurations
+            setupAppConfigurations() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.applicationType = configuration.get('applicationType');
+                this.baseName = configuration.get('baseName');
+                this.packageFolder = configuration.get('packageFolder');
+                this.capitalizedBaseName = _.upperFirst(this.baseName);
+                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+            },
+
+            // Languages configurations
+            setupLanguagesConfigurations() {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 if (this.languages) {
                     if (this.skipClient) {
@@ -105,23 +113,33 @@ module.exports = class extends BaseBlueprintGenerator {
                 } else {
                     this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
-                this.applicationType = configuration.get('applicationType');
-                this.baseName = configuration.get('baseName');
-                this.packageFolder = configuration.get('packageFolder');
-                this.capitalizedBaseName = _.upperFirst(this.baseName);
+                this.enableTranslation = configuration.get('enableTranslation');
+                this.currentLanguages = configuration.get('languages');
+            },
+
+            // Server configurations
+            setupServerConfigurations() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+
+                this.skipServer = this.options['skip-server'] || configuration.get('skipServer');
+                this.authenticationType = configuration.get('authenticationType');
+
                 this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
                 this.databaseType = configuration.get('databaseType');
                 this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
                 this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-                this.enableTranslation = configuration.get('enableTranslation');
-                this.currentLanguages = configuration.get('languages');
-                this.clientFramework = configuration.get('clientFramework');
                 this.serviceDiscoveryType =
                     configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(configuration.get('buildTool'));
                 this.skipUserManagement = configuration.get('skipUserManagement');
+            },
+
+            // Client configurations
+            setupClientConfigurations() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.skipClient = this.options['skip-client'] || configuration.get('skipClient');
+                this.clientFramework = configuration.get('clientFramework');
             }
         };
     }
