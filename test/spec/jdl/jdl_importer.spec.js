@@ -28,11 +28,11 @@ const JDLImporter = require('../../../lib/jdl/jdl_importer');
 
 describe('JDLImporter', () => {
   describe('::new', () => {
-    context('when not passing files', () => {
+    context('when not passing files or content', () => {
       it('fails', () => {
         expect(() => {
           new JDLImporter();
-        }).to.throw('JDL files must be passed so as to be imported.');
+        }).to.throw('JDL files or content must be passed so as to be imported.');
       });
     });
   });
@@ -494,6 +494,47 @@ describe('JDLImporter', () => {
 
       before(() => {
         const importer = new JDLImporter([path.join('test', 'test_files', 'application_with_entities.jdl')]);
+        returned = importer.import();
+      });
+
+      after(() => {
+        fse.unlinkSync('.yo-rc.json');
+        fse.removeSync('.jhipster');
+      });
+
+      it('returns the import state', () => {
+        expect(returned.exportedEntities).to.have.lengthOf(1);
+        expect(returned.exportedApplications).to.have.lengthOf(1);
+        expect(returned.exportedDeployments).to.have.lengthOf(0);
+      });
+      it('creates the app config file in the same folder', () => {
+        expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
+      });
+      it('creates the entity folder in the same folder', () => {
+        expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
+        expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
+      });
+    });
+    context('when parsing one JDL application and entities passed as string', () => {
+      let returned = null;
+
+      before(() => {
+        const importer = new JDLImporter(
+          [],
+          {},
+          `application {
+            config {
+              baseName MyApp
+              applicationType microservice
+              jwtSecretKey aaa.bbb.ccc
+            }
+            entities * except Customer
+          }
+
+          entity BankAccount
+          entity Customer
+          `
+        );
         returned = importer.import();
       });
 
