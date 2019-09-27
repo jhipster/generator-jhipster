@@ -1,4 +1,25 @@
-# Latest: v4.3.0
+# Latest v5.0.0
+
+## Breaking changes
+  - [BinaryOptions] Replaced `SEARCH_ENGINE` with `SEARCH`
+  - Changed the way commenting works:
+    - Comments must appear before annotations, always
+
+## What's new
+  - Added `redis` and `caffeine` for `cacheProvider` (thanks to @Shaolans and @murdos)
+  - Custom annotations have been implemented (thanks to @yelhouti)
+    - For entities, relationships and fields
+  - Added `jwtSecretKey` to the JDL
+  - Added option `readonly` to declare an entity as read only (@murdos)
+  - Exporting a JDL to a specific file is now possible
+  - Parsing a JDL as a string is possible (thanks to @deepu105)
+
+## Fixed
+  - Fixed detection of changed entities when custom attribute in json file (thanks to @murdos)
+
+---
+
+# v4.3.0
 
 ## What's new
   -  Unset `cacheProvider` option when the application type is `reactive`
