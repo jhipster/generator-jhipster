@@ -191,7 +191,7 @@ function askExistingAvailableDocs() {
     this.prompt(prompts).then(props => {
         if (props.availableDoc !== undefined) {
             this.props.inputSpec = props.availableDoc.url;
-            this.props.cliName = props.availableDoc.name;
+            this.props.cliName = props.availableDoc.name === 'default' ? 'apidocs' : props.availableDoc.name;
         }
         done();
     });
