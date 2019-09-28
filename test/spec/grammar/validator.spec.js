@@ -1667,7 +1667,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   ${type} "test 123"
               }`)
               ).to.throw(
-                `The ${type} property name must match: /^"((?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:\\/?#[\\]@!$&'()*+,;=.]+|[a-zA-Z0-9]+)"$/`
+                `The ${type} property name must match: /^"((?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:\\/?#[\\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/`
               );
             });
           });
