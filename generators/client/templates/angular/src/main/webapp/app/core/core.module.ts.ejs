@@ -100,11 +100,11 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
     ]
 })
 export class <%=angularXAppName%>CoreModule {
-    constructor(iconLibrary: FaIconLibrary, private dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, private languageService: JhiLanguageService<% } %>) {
+    constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
         registerLocaleData(locale);
         iconLibrary.addIconPacks(fas);
         iconLibrary.addIcons(...fontAwesomeIcons);
-        this.dpConfig.minDate = {year: moment().year() - 100, month: 1, day: 1};
+        dpConfig.minDate = {year: moment().year() - 100, month: 1, day: 1};
         <%_ if (enableTranslation) { _%>
         languageService.init();
         <%_ } _%>
