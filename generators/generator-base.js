@@ -1899,25 +1899,40 @@ module.exports = class extends PrivateBase {
      * @param {any} generator - generator instance
      * @param {any} context - context to use default is generator instance
      * @param {any} dest - destination context to use default is context
+     * @param {object} options - allowed options: skipApp, skipClient, skipLanguages, skipServer
      */
-    setupSharedOptions(generator, context = generator, dest = context) {
-        dest.skipClient = context.options['client-hook'] === false || context.configOptions.skipClient || context.config.get('skipClient');
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
-        dest.skipUserManagement =
-            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
-        dest.otherModules = context.configOptions.otherModules || [];
-        dest.baseName = context.configOptions.baseName;
-        dest.logo = context.configOptions.logo;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
-        dest.embeddableLaunchScript = context.configOptions.embeddableLaunchScript || false;
+    setupSharedOptions(generator, context = generator, dest = context, options = {}) {
+        // App configs
+        if (!options.skipApp) {
+            dest.otherModules = context.configOptions.otherModules || [];
+            dest.baseName = context.configOptions.baseName;
+            dest.logo = context.configOptions.logo;
+            dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
+            dest.experimental = context.configOptions.experimental || context.options.experimental;
+            dest.embeddableLaunchScript = context.configOptions.embeddableLaunchScript || false;
 
-        const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
-        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+            const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
+            if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
+                generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+            }
+            dest.uaaBaseName = uaaBaseName;
         }
-        dest.uaaBaseName = uaaBaseName;
+
+        // Client configs
+        if (!options.skipClient) {
+            dest.skipClient =
+                context.options['client-hook'] === false || context.configOptions.skipClient || context.config.get('skipClient');
+            dest.clientPackageManager = context.configOptions.clientPackageManager;
+        }
+
+        // Server configs
+        if (!options.skipServer) {
+            dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
+            dest.skipUserManagement =
+                context.configOptions.skipUserManagement ||
+                context.options['skip-user-management'] ||
+                context.config.get('skipUserManagement');
+        }
     }
 
     /**
@@ -1928,34 +1943,46 @@ module.exports = class extends PrivateBase {
      * @param {any} generator - generator instance
      * @param {any} context - context to use default is generator instance
      * @param {any} dest - destination context to use default is context
+     * @param {object} options - allowed options: skipApp, skipClient, skipLanguages, skipServer
      */
-    setupClientOptions(generator, context = generator, dest = context) {
+    setupClientOptions(generator, context = generator, dest = context, options = {}) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
-        dest.authenticationType =
-            context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
-        dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
-        dest.buildTool = context.configOptions.buildTool;
-        dest.websocket = context.configOptions.websocket;
-        dest.devDatabaseType = context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
-        dest.prodDatabaseType = context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
-        dest.databaseType =
-            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
-            context.configOptions.databaseType ||
-            context.config.get('databaseType');
-        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
-            dest.skipUserManagement = true;
+        // App configs
+        if (!options.skipApp) {
+            dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
+            dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
+            dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
+            dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
+            dest.testFrameworks = context.configOptions.testFrameworks || [];
         }
-        dest.searchEngine = context.config.get('searchEngine');
-        dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
-        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
-        dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
-        dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        dest.testFrameworks = context.configOptions.testFrameworks || [];
 
-        dest.useYarn = context.configOptions.useYarn;
+        // Server configs
+        if (!options.skipServer) {
+            dest.authenticationType =
+                context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
+            dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
+
+            dest.buildTool = context.configOptions.buildTool;
+            dest.websocket = context.configOptions.websocket;
+            dest.devDatabaseType = context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
+            dest.prodDatabaseType = context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
+            dest.databaseType =
+                generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
+                context.configOptions.databaseType ||
+                context.config.get('databaseType');
+            if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
+                dest.skipUserManagement = true;
+            }
+            dest.searchEngine = context.config.get('searchEngine');
+            dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
+            dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
+        }
+
+        // Client configs
+        if (!options.skipClient) {
+            dest.useYarn = context.configOptions.useYarn;
+        }
     }
 
     /**
@@ -1966,11 +1993,20 @@ module.exports = class extends PrivateBase {
      * @param {any} generator - generator instance
      * @param {any} context - context to use default is generator instance
      * @param {any} dest - destination context to use default is context
+     * @param {object} options - allowed options: skipApp, skipClient, skipLanguages, skipServer
      */
-    setupServerOptions(generator, context = generator, dest = context) {
-        this.setupSharedOptions(generator, context, dest);
-        dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
-        dest.testFrameworks = context.configOptions.testFrameworks;
+    setupServerOptions(generator, context = generator, dest = context, options = {}) {
+        this.setupSharedOptions(generator, context, dest, options);
+
+        // Languages config
+        if (!options.skipLanguages) {
+            dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
+        }
+
+        // App config
+        if (!options.skipApp) {
+            dest.testFrameworks = context.configOptions.testFrameworks;
+        }
     }
 
     /**
