@@ -1102,6 +1102,28 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Shortcut to compose passing current shared configs.
+     * @param {string|object|array} generator/generators
+     * @param {object} aditionalOption - aditional options to pass
+     */
+    composeWithSharedOptions(generator, aditionalOptions = {}) {
+        const configOptions = this.configOptions || this.options.configOptions || {};
+        const composeOptions = {
+            configOptions,
+            debug: this.isDebugEnabled,
+            ...aditionalOptions
+        };
+        if (_.isArray(generator)) {
+            generator.forEach(gen => {
+                this.composeWith(gen, composeOptions);
+            });
+            return this;
+        }
+        this.composeWith(generator, composeOptions);
+        return this;
+    }
+
+    /**
      * Compose an external generator with Yeoman.
      * @param {string} npmPackageName - package name
      * @param {string} subGen - sub generator name

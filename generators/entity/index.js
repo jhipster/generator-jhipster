@@ -1127,42 +1127,37 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             composeServer() {
                 const context = this.context;
-                if (context.skipServer) return;
-                const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../entity-server'), {
-                    context,
-                    configOptions,
-                    force: context.options.force,
-                    debug: context.isDebugEnabled
-                });
+                if (!context.skipServer) {
+                    this.composeWithSharedOptions(require.resolve('../entity-server'), {
+                        context,
+                        force: context.options.force,
+                        debug: context.isDebugEnabled
+                    });
+                }
             },
 
             composeClient() {
                 const context = this.context;
-                if (context.skipClient) return;
-                const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../entity-client'), {
-                    context,
-                    configOptions,
-                    'skip-install': context.options['skip-install'],
-                    force: context.options.force,
-                    debug: context.isDebugEnabled
-                });
+                if (!context.skipClient) {
+                    this.composeWithSharedOptions(require.resolve('../entity-client'), {
+                        context,
+                        'skip-install': context.options['skip-install'],
+                        force: context.options.force,
+                        debug: context.isDebugEnabled
+                    });
+                }
             },
 
             composeI18n() {
                 const context = this.context;
-                if (context.skipClient) return;
-                const configOptions = this.configOptions;
-                this.composeWith(require.resolve('../entity-i18n'), {
-                    context,
-                    configOptions,
-                    'skip-install': context.options['skip-install'],
-                    force: context.options.force,
-                    debug: context.isDebugEnabled
-                });
+                if (!context.skipClient) {
+                    this.composeWithSharedOptions(require.resolve('../entity-i18n'), {
+                        context,
+                        'skip-install': context.options['skip-install'],
+                        force: context.options.force,
+                        debug: context.isDebugEnabled
+                    });
+                }
             }
         };
     }

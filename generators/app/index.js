@@ -365,40 +365,19 @@ module.exports = class extends BaseGenerator {
             },
 
             composeServer() {
-                if (this.skipServer) return;
-                const options = this.options;
-                const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../server'), {
-                    ...options,
-                    configOptions,
-                    'client-hook': !this.skipClient,
-                    debug: this.isDebugEnabled
-                });
+                if (!this.skipServer) {
+                    this.composeWithSharedOptions(require.resolve('../server'), { ...this.options, 'client-hook': !this.skipClient });
+                }
             },
 
             composeClient() {
-                if (this.skipClient) return;
-                const options = this.options;
-                const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../client'), {
-                    ...options,
-                    configOptions,
-                    debug: this.isDebugEnabled
-                });
+                if (!this.skipClient) {
+                    this.composeWithSharedOptions(require.resolve('../client'), { ...this.options });
+                }
             },
 
             composeCommon() {
-                const options = this.options;
-                const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../common'), {
-                    ...options,
-                    'client-hook': !this.skipClient,
-                    configOptions,
-                    debug: this.isDebugEnabled
-                });
+                this.composeWithSharedOptions(require.resolve('../common'), { ...this.options, 'client-hook': !this.skipClient });
             },
 
             askFori18n: prompts.askFori18n
