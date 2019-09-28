@@ -22,20 +22,20 @@
         "refresh.button": "Refrescar",
         "stacktrace": "Stacktrace",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
+            "details": "Detalles",
+            "properties": "Propiedades",
+            "name": "Nombre",
+            "value": "Valor",
             "error": "Error"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
-            "binders": "Message broker",
+            "binders": "Agente de mensajes",
             <%_ } _%>
             <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
-            "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
+            "discoveryComposite": "Descubrimiento compuesto",
+            "refreshScope": "Alcance de actualización de microservicios",
+            "configServer": "Servidor de configuración de microservicio",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
