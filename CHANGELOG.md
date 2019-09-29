@@ -5,7 +5,7 @@
   - Changed the way commenting works:
     - Comments must appear before annotations, always
 
-## What's new
+## What's new
   - Added `redis` and `caffeine` for `cacheProvider` (thanks to @Shaolans and @murdos)
   - Custom annotations have been implemented (thanks to @yelhouti)
     - For entities, relationships and fields
