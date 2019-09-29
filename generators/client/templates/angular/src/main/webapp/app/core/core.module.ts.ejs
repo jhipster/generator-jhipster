@@ -20,14 +20,14 @@ import {
 } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDateMomentAdapter } from 'app/shared/util/datepicker-adapter';
+import { NgbDateMomentAdapter } from './date/datepicker-adapter';
 
 <%_ if (authenticationType === 'jwt') { _%>
-import { AuthInterceptor } from 'app/blocks/interceptor/auth.interceptor';
+import { AuthInterceptor } from './interceptor/auth.interceptor';
 <%_ } _%>
-import { AuthExpiredInterceptor } from 'app/blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/errorhandler.interceptor';
-import { NotificationInterceptor } from 'app/blocks/interceptor/notification.interceptor';
+import { AuthExpiredInterceptor } from './interceptor/auth-expired.interceptor';
+import { ErrorHandlerInterceptor } from './interceptor/error-handler.interceptor';
+import { NotificationInterceptor } from './interceptor/notification.interceptor';
 
 import { fontAwesomeIcons } from './icons/font-awesome-icons';
 

@@ -26,6 +26,7 @@ const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const cleanup = require('../cleanup');
 
 let useBlueprints;
 
@@ -148,6 +149,8 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.clientPackageManager = 'yarn';
                     }
                 }
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
             },
 
             validateSkipServer() {
@@ -358,6 +361,8 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             write() {
                 if (this.skipClient) return;
+                cleanup.renameClientFiles(this);
+                cleanup.cleanupOldClientFiles(this);
                 switch (this.clientFramework) {
                     case 'react':
                         return writeReactFiles.call(this, useBlueprints);

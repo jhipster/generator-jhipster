@@ -25,6 +25,7 @@ const chalk = require('chalk');
 const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
+const execSync = require('child_process').execSync;
 const https = require('https');
 const jhiCore = require('jhipster-core');
 const filter = require('gulp-filter');
@@ -32,7 +33,7 @@ const filter = require('gulp-filter');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
-const { prettierTransform, prettierOptions } = require('./generator-transforms');
+const { prettierTransform, prettierFormat, prettierOptions } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
@@ -1411,6 +1412,79 @@ module.exports = class extends Generator {
                     'jhipster <command>'
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
+        }
+    }
+
+    /**
+     * Formats source code so for compare
+     * @param {string} sourceCode - source code to format
+     * @param {string} extension - extension for configuring Prettier properly, for example `.ts` for Typescript files
+     */
+    formatSourceCodeForCompare(sourceCode, extension) {
+        let options = {};
+        if (extension === '.ts') {
+            options = { parser: 'typescript' };
+        }
+        try {
+            // normalize line endings, because for example in Windows this can be in generated content \n and in disk \r\n
+            return prettierFormat(sourceCode, options)
+                .replace(new RegExp('\\r\\n', 'g'), '\n')
+                .replace(new RegExp('\\r', 'g'), '\n');
+        } catch (e) {
+            return sourceCode.replace(new RegExp('\\s', 'g'), '');
+        }
+    }
+
+    /**
+     * On file renaming prints warning if old file and new generated file contents are not equal
+     * @param {string} oldFile - old file path
+     * @param {string} templateFile - template file path
+     * @param {string} newFile - new file path
+     */
+    warnIfFilesNotEqualOnRename(oldFile, templateFile, newFile) {
+        const extension = path.extname(oldFile);
+        const oldFilePath = this.destinationPath(oldFile);
+        const templateFilePath = this.templatePath(templateFile);
+        if (shelljs.test('-f', oldFilePath) && shelljs.test('-f', templateFilePath)) {
+            try {
+                this.render(templateFilePath, newFileContent => {
+                    newFileContent = this.formatSourceCodeForCompare(newFileContent, extension);
+                    const oldFileContent = this.formatSourceCodeForCompare(fs.readFileSync(oldFilePath, 'utf-8').toString(), extension);
+                    if (oldFileContent !== newFileContent) {
+                        this.log(
+                            chalk.red.bold(`WARNING! File moved from ${oldFile} to ${newFile} and new version differs from old version.`)
+                        );
+                    }
+                });
+            } catch (e) {
+                this.warning(`File moved from ${oldFile} to ${newFile} and version comparison failed with error "${e}".`);
+            }
+        }
+    }
+
+    /**
+     * Renames file:
+     *   prints warning if new and old file contents differ
+     *   if Git is used then renames file with `git mv` else just deletes old file
+     * @param {string} oldFile - old file path
+     * @param {string} templateFile - template file path
+     * @param {string} newFile - new file path
+     */
+    renameFile(oldFile, templateFile, newFile) {
+        if (!shelljs.test('-f', oldFile)) {
+            return;
+        }
+
+        this.warnIfFilesNotEqualOnRename(oldFile, templateFile, newFile);
+
+        // Try 'git mv' for renaming, if this fails then just delete old file
+        try {
+            // As parallel Git modification commands give errors (at least in Windows) then we need to use execSync
+            // to handle situation where more than 1 file is renamed by the upgrade process
+            execSync(`git mv ${oldFile} ${newFile}`, { stdio: 'ignore' });
+            this.log(`Renamed ${oldFile} to ${newFile}`);
+        } catch (err) {
+            this.removeFile(oldFile);
         }
     }
 };
