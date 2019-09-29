@@ -32,7 +32,9 @@ import { JhiLanguageHelper } from 'app/core/language/language.helper';
 export class SettingsComponent implements OnInit {
     error: string;
     success: string;
+    <%_ if (enableTranslation) { _%>
     languages: any[];
+    <%_ } _%>
     settingsForm = this.fb.group({
         firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
         lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],

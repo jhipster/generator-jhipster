@@ -33,7 +33,9 @@ import { UserService } from 'app/core/user/user.service';
 export class UserManagementUpdateComponent implements OnInit {
 
     user: User;
+    <%_ if (enableTranslation) { _%>
     languages: any[];
+    <%_ } _%>
     authorities: any[];
     isSaving: boolean;
 
