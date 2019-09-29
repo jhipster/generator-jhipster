@@ -170,9 +170,9 @@ export * from './entityFolderName/entityFileName.state';`;
                 expect(BaseGenerator.generateTestEntityId('String')).to.equal("'123'");
             });
         });
-        describe('when called with String and cassandra', () => {
+        describe('when called with UUID', () => {
             it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
-                expect(BaseGenerator.generateTestEntityId('String', 'cassandra')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
+                expect(BaseGenerator.generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
             });
         });
     });

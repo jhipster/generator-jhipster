@@ -1,0 +1,98 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+kind: Deployment
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mssql
+  namespace: <%= kubernetesNamespace %>
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-mssql
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-mssql
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
+    spec:
+      volumes:
+      - name: mssqldb
+        persistentVolumeClaim:
+          claimName: mssql-data
+      - name: data
+        emptyDir: {}
+      containers:
+      - name: mysql
+        image: <%= DOCKER_MSSQL %>
+        env:
+        - name: MSSQL_PID
+          value: "Developer"
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: MSSQL_SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql
+              key: SA_PASSWORD
+        ports:
+        - containerPort: 1433
+        volumeMounts:
+        - name: mssqldb
+          mountPath: /var/opt/mssql
+
+---
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mssql
+  namespace: <%= kubernetesNamespace %>
+spec:
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-mssql
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: LoadBalancer
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1beta1
+metadata:
+     name: <%= app.baseName.toLowerCase() %>-mssql
+provisioner: kubernetes.io/azure-disk
+parameters:
+  storageaccounttype: Standard_LRS
+  kind: Managed
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mssql-data
+  annotations:
+    volume.beta.kubernetes.io/storage-class: azure-disk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi

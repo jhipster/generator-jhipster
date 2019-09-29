@@ -1,0 +1,121 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.service;
+
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
+import <%= packageName %>.domain.PersistentAuditEvent;
+import <%= packageName %>.repository.PersistenceAuditEventRepository;
+import <%=packageName%>.<%= mainClass %>;
+import io.github.jhipster.config.JHipsterProperties;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%= packageName %>.config.TestSecurityConfiguration;
+<%_ } _%>
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Integration tests for {@link AuditEventService}.
+ */
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
+@SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+@Transactional
+<%_ } _%>
+public class AuditEventServiceIT {
+    @Autowired
+    private AuditEventService auditEventService;
+
+    @Autowired
+    private PersistenceAuditEventRepository persistenceAuditEventRepository;
+
+    @Autowired
+    private JHipsterProperties jHipsterProperties;
+
+    private PersistentAuditEvent auditEventOld;
+
+    private PersistentAuditEvent auditEventWithinRetention;
+
+    private PersistentAuditEvent auditEventNew;
+
+    @BeforeEach
+    public void init() {
+        <%_ if (databaseType === 'couchbase') { _%>
+        mockAuthentication();
+        <%_ } _%>
+        auditEventOld = new PersistentAuditEvent();
+        auditEventOld.setAuditEventDate(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod() + 1, ChronoUnit.DAYS));
+        auditEventOld.setPrincipal("test-user-old");
+        auditEventOld.setAuditEventType("test-type");
+
+        auditEventWithinRetention = new PersistentAuditEvent();
+        auditEventWithinRetention.setAuditEventDate(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod() - 1, ChronoUnit.DAYS));
+        auditEventWithinRetention.setPrincipal("test-user-retention");
+        auditEventWithinRetention.setAuditEventType("test-type");;
+
+        auditEventNew = new PersistentAuditEvent();
+        auditEventNew.setAuditEventDate(Instant.now());
+        auditEventNew.setPrincipal("test-user-new");
+        auditEventNew.setAuditEventType("test-type");
+    }
+
+    @Test
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
+    public void verifyOldAuditEventsAreDeleted() {
+        persistenceAuditEventRepository.deleteAll();
+        persistenceAuditEventRepository.save(auditEventOld);
+        persistenceAuditEventRepository.save(auditEventWithinRetention);
+        persistenceAuditEventRepository.save(auditEventNew);
+        <% if (databaseType === 'sql') { %>
+        persistenceAuditEventRepository.flush();
+        <% } %>
+        auditEventService.removeOldAuditEvents();
+        <% if (databaseType === 'sql') { %>
+        persistenceAuditEventRepository.flush();
+        <% } %>
+        assertThat(persistenceAuditEventRepository.findAll().size()).isEqualTo(2);
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")).isEmpty();
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-retention")).isNotEmpty();
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-new")).isNotEmpty();
+    }
+}

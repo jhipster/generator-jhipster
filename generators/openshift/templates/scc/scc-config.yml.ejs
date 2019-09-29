@@ -20,7 +20,7 @@
 #
 # This defines customized scc and service account to run some of the docker images wherever the 'default' service account privileges are not sufficient.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: scc-config-template
@@ -44,12 +44,12 @@ parameters:
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: ServiceAccount
     metadata:
       name: ${SVC_ID}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: SecurityContextConstraints
     metadata:
       name: jhipster-scc

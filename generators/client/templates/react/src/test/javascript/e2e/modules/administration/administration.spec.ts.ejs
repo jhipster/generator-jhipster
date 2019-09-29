@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* tslint:disable no-unused-expression */
 import { element, by, browser } from 'protractor';
 
 import NavBarPage from '../../page-objects/navbar-page';
@@ -47,7 +46,7 @@ describe('Administration', () => {
     await waitUntilDisplayed(navBarPage.adminMenu);
   });
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
   it('should load user management', async () => {
     await navBarPage.clickOnAdminMenuItem('user-management');
     const heading = element(by.id('user-management-page-heading'));
@@ -72,7 +71,7 @@ describe('Administration', () => {
     expect(await element(by.id('configuration-page-heading')).getText()).to.eq('Configuration');
   });
 
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
   it('should load audits', async () => {
     await navBarPage.clickOnAdminMenuItem('audits');
     expect(await element(by.id('audits-page-heading')).getText()).to.eq('Audits');

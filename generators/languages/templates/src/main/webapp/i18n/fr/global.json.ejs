@@ -47,7 +47,7 @@
                 "health": "Diagnostics",
                 "configuration": "Configuration",
                 "logs": "Logs",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Audits",
                 <%_ } _%>
                 "apidocs": "API",
@@ -61,7 +61,7 @@
             "username.placeholder": "Votre nom d'utilisateur",
             "currentpassword.label": "Mot de passe actuel",
             "currentpassword.placeholder": "Mot de passe actuel",
-            "newpassword": "Nouveau mot de passe",
+            "newpassword.label": "Nouveau mot de passe",
             "newpassword.placeholder": "Nouveau mot de passe",
             "confirmpassword.label": "Confirmation du nouveau mot de passe",
             "confirmpassword.placeholder": "Confirmation du nouveau mot de passe",
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Votre mot de passe est requis.",
-                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères.",
+                    "minlength": "Votre mot de passe doit comporter au moins 4 caractères.",
                     "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères.",
                     "strength": "Robustesse du mot de passe :"
                 },
                 "confirmpassword": {
                     "required": "Votre confirmation du mot de passe est requise.",
-                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères.",
+                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 4 caractères.",
                     "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères."
                 },
                 "email": {

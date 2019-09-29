@@ -20,12 +20,16 @@ version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
     zookeeper:
         image: <%= DOCKER_ZOOKEEPER %>
+        environment:
+            ZOOKEEPER_CLIENT_PORT: 2181
+            ZOOKEEPER_TICK_TIME: 2000
+            ZOOKEEPER_SYNC_LIMIT: 2
     kafka:
         image: <%= DOCKER_KAFKA %>
         environment:
-            KAFKA_ADVERTISED_HOST_NAME: kafka
-            KAFKA_ADVERTISED_PORT: 9092
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
             KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-            KAFKA_CREATE_TOPICS: "topic-jhipster:1:1"
+            KAFKA_BROKER_ID: 2
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
         #ports:
         #    - 9092:9092  # Uncomment to make Kafka available externally

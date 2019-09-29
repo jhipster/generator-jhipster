@@ -23,7 +23,7 @@ import <%=packageName%>.config.Constants;
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%=packageName%>.repository.UserRepository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.UserSearchRepository;
@@ -64,12 +64,17 @@ import org.springframework.http.HttpHeaders;
 <%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+<%_ if (reactive) { _%>
+import org.springframework.http.server.reactive.ServerHttpRequest;
+<%_ } _%>
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+<%_ if (!reactive) { _%>
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -272,21 +277,24 @@ public class UserResource {
     /**
      * {@code GET /users} : get all users.
      *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+        <%_ if (reactive) { _%>
+     * @param request a {@link ServerHttpRequest} request.
+        <%_ } _%>
      * @param pageable the pagination information.<% } %>
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
     @GetMapping("/users")
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
-    public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, Pageable pageable) {
+    public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
         final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         <%_ } else { _%>
-    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(@RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder, Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%= asDto('User') %>>>> getAllUsers(ServerHttpRequest request, Pageable pageable) {
         return userService.countManagedUsers()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
-            .map(page -> PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page))
+            .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
         <%_ } _%>
     }

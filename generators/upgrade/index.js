@@ -22,9 +22,11 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const fs = require('fs');
 const gitignore = require('parse-gitignore');
+const childProcess = require('child_process');
 const BaseGenerator = require('../generator-base');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const utils = require('../utils');
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
@@ -48,9 +50,9 @@ module.exports = class extends BaseGenerator {
             desc: 'Upgrade to a specific version instead of the latest',
             type: String
         });
-        // This adds support for a `--target-blueprint-version` flag
-        this.option('target-blueprint-version', {
-            desc: 'Upgrade to a specific blueprint version instead of the latest',
+        // This adds support for a `--target-blueprint-versions` flag
+        this.option('target-blueprint-versions', {
+            desc: 'Upgrade to specific blueprint versions instead of the latest, e.g. --target-blueprint-versions foo@0.0.1,bar@1.0.2',
             type: String
         });
 
@@ -69,7 +71,7 @@ module.exports = class extends BaseGenerator {
         });
 
         this.targetJhipsterVersion = this.options['target-version'];
-        this.targetBlueprintVersion = this.options['target-blueprint-version'];
+        this.targetBlueprintVersions = utils.parseBluePrints(this.options['target-blueprint-versions']);
         this.skipInstall = this.options['skip-install'];
         this.silent = this.options.silent;
     }
@@ -88,8 +90,7 @@ module.exports = class extends BaseGenerator {
             loadConfig() {
                 this.config = this.getAllJhipsterConfig(this, true);
                 this.currentJhipsterVersion = this.config.get('jhipsterVersion');
-                this.blueprint = this.config.get('blueprint');
-                this.currentBlueprintVersion = this.config.get('blueprintVersion');
+                this.blueprints = this.config.get('blueprints');
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 this.clientFramework = this.config.get('clientFramework');
             }
@@ -116,8 +117,7 @@ module.exports = class extends BaseGenerator {
         this.success('Cleaned up project directory');
     }
 
-    _generate(jhipsterVersion, blueprintVersion, callback) {
-        const blueprintInfo = this.blueprint ? ` and ${this.blueprint} ${blueprintVersion}` : '';
+    _generate(jhipsterVersion, blueprintInfo, callback) {
         this.log(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
         let generatorCommand = 'yo jhipster';
         if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
@@ -129,11 +129,13 @@ module.exports = class extends BaseGenerator {
         }
         const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight`;
         this.info(regenerateCmd);
-        shelljs.exec(regenerateCmd, { silent: this.silent }, (code, msg, err) => {
-            if (code === 0) this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
-            else this.error(`Something went wrong while generating project! ${err}`);
+        try {
+            childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
+            this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
             callback();
-        });
+        } catch (err) {
+            this.error(`Something went wrong while generating project! ${err}`);
+        }
     }
 
     _gitCommitAll(commitMsg, callback) {
@@ -154,12 +156,11 @@ module.exports = class extends BaseGenerator {
         });
     }
 
-    _regenerate(jhipsterVersion, blueprintVersion, callback) {
-        this._generate(jhipsterVersion, blueprintVersion, () => {
+    _regenerate(jhipsterVersion, blueprintInfo, callback) {
+        this._generate(jhipsterVersion, blueprintInfo, () => {
             const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
             this.info(`Removing ${keystore}`);
             shelljs.rm('-Rf', keystore);
-            const blueprintInfo = this.blueprint ? ` and ${this.blueprint} ${blueprintVersion}` : '';
             this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`, () => {
                 callback();
             });
@@ -211,34 +212,58 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
-            checkLatestBlueprintVersion() {
-                if (!this.blueprint) {
-                    this.log('No blueprint detected, skipping check of last blueprint version');
+            checkLatestBlueprintVersions() {
+                if (!this.blueprints || this.blueprints.length < 0) {
+                    this.log('No blueprints detected, skipping check of last blueprint version');
                     return;
                 }
-                if (!this.currentBlueprintVersion) {
-                    this.error('No blueprintVersion defined in .yo-rc.json, unable to upgrade');
-                }
-                if (this.targetBlueprintVersion) {
-                    this.log(`Upgrading to the target blueprint version: ${this.targetBlueprintVersion}`);
-                    this.latestBlueprintVersion = this.targetBlueprintVersion;
-                    return;
-                }
+
+                this.success('Checking for new blueprint versions');
                 const done = this.async();
-                this._retrieveLatestVersion(this.blueprint, latestVersion => {
-                    this.latestBlueprintVersion = latestVersion;
-                    if (semver.lt(this.currentBlueprintVersion, this.latestBlueprintVersion)) {
-                        this.newBlueprintVersionFound = true;
-                        this.success(`New ${this.blueprint} version found: ${this.latestBlueprintVersion}`);
-                    } else if (this.force) {
-                        this.newBlueprintVersionFound = true;
-                        this.log(chalk.yellow('Forced re-generation'));
-                    } else {
-                        this.newBlueprintVersionFound = false;
-                        this.warning(
-                            `${chalk.green('No update available.')} Application has already been generated with latest blueprint version.`
-                        );
-                    }
+                Promise.all(
+                    this.blueprints
+                        .filter(blueprint => {
+                            if (this.targetBlueprintVersions && this.targetBlueprintVersions.length > 0) {
+                                const targetBlueprint = this.targetBlueprintVersions.find(elem => {
+                                    return elem.name === blueprint.name;
+                                });
+                                if (targetBlueprint && targetBlueprint.version && targetBlueprint.version !== 'latest') {
+                                    this.log(
+                                        `Blueprint ${targetBlueprint.name} will be upgraded to target version: ${targetBlueprint.version}`
+                                    );
+                                    blueprint.latestBlueprintVersion = targetBlueprint.version;
+                                    return false;
+                                }
+                            }
+                            return true;
+                        })
+                        .map(blueprint => {
+                            return new Promise(resolve => {
+                                this._retrieveLatestVersion(blueprint.name, latestVersion => {
+                                    blueprint.latestBlueprintVersion = latestVersion;
+                                    if (semver.lt(blueprint.version, blueprint.latestBlueprintVersion)) {
+                                        this.newBlueprintVersionFound = true;
+                                        this.success(`New ${blueprint.name} version found: ${this.latestBlueprintVersion}`);
+                                    } else if (this.force) {
+                                        this.newBlueprintVersionFound = true;
+                                        this.log(chalk.yellow('Forced re-generation'));
+                                    } else {
+                                        if (this.newBlueprintVersionFound === undefined) {
+                                            this.newBlueprintVersionFound = false;
+                                        }
+                                        this.warning(
+                                            `${chalk.green(
+                                                'No update available.'
+                                            )} Application has already been generated with latest version for blueprint: ${blueprint.name}`
+                                        );
+                                    }
+                                    this.success(`Done checking for new version for blueprint ${blueprint.name}`);
+                                    resolve();
+                                });
+                            });
+                        })
+                ).then(() => {
+                    this.success('Done checking for new version of blueprints');
                     done();
                 });
             },
@@ -339,20 +364,38 @@ module.exports = class extends BaseGenerator {
                     this._installNpmPackageLocally(GENERATOR_JHIPSTER, version, callback);
                 };
 
-                const installBlueprintLocally = (version, callback) => {
-                    if (!this.blueprint) {
+                const installBlueprintsLocally = callback => {
+                    if (!this.blueprints || this.blueprints.length < 1) {
                         this.log('Skipping local blueprint installation since no blueprint has been detected');
                         callback();
                         return;
                     }
-                    this._installNpmPackageLocally(this.blueprint, version, callback);
+
+                    this.success('Installing blueprints locally...');
+                    Promise.all(
+                        this.blueprints.map(blueprint => {
+                            return new Promise(resolve => {
+                                this._installNpmPackageLocally(blueprint.name, blueprint.version, () => {
+                                    this.success(`Done installing blueprint: ${blueprint.name}@${blueprint.version}`);
+                                    resolve();
+                                });
+                            });
+                        })
+                    ).then(() => {
+                        this.success('Done installing blueprints locally');
+                        callback();
+                    });
                 };
 
                 const regenerate = () => {
                     this._cleanUp();
                     installJhipsterLocally(this.currentJhipsterVersion, () => {
-                        installBlueprintLocally(this.currentBlueprintVersion, () => {
-                            this._regenerate(this.currentJhipsterVersion, this.currentBlueprintVersion, () => {
+                        installBlueprintsLocally(() => {
+                            const blueprintInfo =
+                                this.blueprints && this.blueprints.length > 0
+                                    ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} `
+                                    : '';
+                            this._regenerate(this.currentJhipsterVersion, blueprintInfo, () => {
                                 this._gitCheckout(this.sourceBranch, () => {
                                     // consider code up-to-date
                                     recordCodeHasBeenGenerated();
@@ -394,19 +437,37 @@ module.exports = class extends BaseGenerator {
                 this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.latestJhipsterVersion, done);
             },
 
-            updateBlueprint() {
-                if (!this.blueprint) {
+            updateBlueprints() {
+                if (!this.blueprints || this.blueprints.length < 1) {
                     this.log('Skipping blueprint update since no blueprint has been detected');
                     return;
                 }
+
+                this.success('Upgrading blueprints...');
                 const done = this.async();
-                this._installNpmPackageLocally(this.blueprint, this.latestBlueprintVersion, done);
+                Promise.all(
+                    this.blueprints.map(blueprint => {
+                        return new Promise(resolve => {
+                            this._installNpmPackageLocally(blueprint.name, blueprint.latestBlueprintVersion, () => {
+                                this.success(`Done upgrading blueprint ${blueprint.name} to version ${blueprint.latestBlueprintVersion}`);
+                                resolve();
+                            });
+                        });
+                    })
+                ).then(() => {
+                    this.success('Done upgrading blueprints');
+                    done();
+                });
             },
 
             generateWithLatestVersion() {
                 const done = this.async();
                 this._cleanUp();
-                this._regenerate(this.latestJhipsterVersion, this.latestBlueprintVersion, done);
+
+                const blueprintInfo = this.blueprints
+                    ? ` and ${this.blueprints.map(bp => bp.name + bp.latestBlueprintVersion).join(', ')} `
+                    : '';
+                this._regenerate(this.latestJhipsterVersion, blueprintInfo, done);
             },
 
             checkoutSourceBranch() {
@@ -422,6 +483,7 @@ module.exports = class extends BaseGenerator {
                     done();
                 });
             },
+
             checkConflictsInPackageJson() {
                 const done = this.async();
                 this.gitExec(['diff', '--name-only', '--diff-filter=U', 'package.json'], { silent: this.silent }, (code, msg, err) => {

@@ -19,7 +19,7 @@
 package <%= packageName %>.security;
 
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +66,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
         log.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
-            return userRepository.<% if (databaseType === 'sql') { %>findOneWithAuthoritiesByEmail<% } else { %>findOneByEmailIgnoreCase<% } %>(login)
+            return userRepository.<% if (databaseType === 'sql') { %>findOneWithAuthoritiesByEmailIgnoreCase<% } else { %>findOneByEmailIgnoreCase<% } %>(login)
                 <%_ if (reactive) { _%>
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException("User with email " + login + " was not found in the database")))
                 <%_ } _%>

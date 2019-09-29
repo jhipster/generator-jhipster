@@ -21,7 +21,9 @@ package <%=packageName%>.service.dto;
 import <%=packageName%>.config.Constants;
 <% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %>
+<%_ if (databaseType !== 'no') { _%>
 import <%=packageName%>.domain.<%= asEntity('User') %>;
+<%_ } _%>
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -56,7 +58,7 @@ public class <%= asDto('User') %> {
     @Email
     @Size(min = 5, max = 254)
     private String email;
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType !== 'cassandra') { _%>
 
     @Size(max = 256)
     private String imageUrl;
@@ -64,7 +66,7 @@ public class <%= asDto('User') %> {
 
     private boolean activated = false;
 
-    @Size(min = 2, max = 6)
+    @Size(min = 2, max = 10)
     private String langKey;
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 
@@ -79,6 +81,7 @@ public class <%= asDto('User') %> {
 
     private Set<String> authorities;
 
+    <%_ if (databaseType !== 'no') { _%>
     public <%= asDto('User') %>() {
         // Empty constructor needed for Jackson.
     }
@@ -90,7 +93,7 @@ public class <%= asDto('User') %> {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.activated = user.getActivated();
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (databaseType !== 'cassandra') { _%>
         this.imageUrl = user.getImageUrl();
         <%_ } _%>
         this.langKey = user.getLangKey();
@@ -109,6 +112,7 @@ public class <%= asDto('User') %> {
         <%_ } _%>
     }
 
+    <%_ } _%>
     public <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> getId() {
         return id;
     }
@@ -148,7 +152,7 @@ public class <%= asDto('User') %> {
     public void setEmail(String email) {
         this.email = email;
     }
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+    <%_ if (databaseType !== 'cassandra') { _%>
 
     public String getImageUrl() {
         return imageUrl;
@@ -223,7 +227,7 @@ public class <%= asDto('User') %> {
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>
+            ", email='" + email + '\'' +<% if (databaseType !== 'cassandra') { %>
             ", imageUrl='" + imageUrl + '\'' +<% } %>
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { %>

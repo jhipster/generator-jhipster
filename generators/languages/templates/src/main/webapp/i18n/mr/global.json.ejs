@@ -47,7 +47,7 @@
                 "health": "आरोग्य",
                 "configuration": "संरचना",
                 "logs": "नोंदी",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "ऑडिट",
                 <%_ } _%>
                 "apidocs": "API",
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "आपला संकेतशब्द आवश्यक आहे.",
-                    "minlength": "आपला संकेतशब्द कमीत कमी 5 वर्ण असणे आवश्यक आहे.",
+                    "minlength": "आपला संकेतशब्द कमीत कमी 4 वर्ण असणे आवश्यक आहे.",
                     "maxlength": "आपला संकेतशब्द 50 वर्ण असू शकत नाही.",
                     "strength": "पासवर्ड सामर्थ्य:"
                 },
                 "confirmpassword": {
                     "required": "आपल्या पुष्टीकरण संकेतशब्द आवश्यक आहे.",
-                    "minlength": "आपल्या पुष्टीकरण पासवर्ड कमीत कमी 5 वर्ण असणे आवश्यक आहे.",
+                    "minlength": "आपल्या पुष्टीकरण पासवर्ड कमीत कमी 4 वर्ण असणे आवश्यक आहे.",
                     "maxlength": "आपल्या पुष्टीकरण संकेतशब्द 50 वर्ण असू शकत नाही."
                 },
                 "email": {

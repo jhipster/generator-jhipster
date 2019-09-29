@@ -1,0 +1,225 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+let table = [];
+
+// Generate CSV header
+let header = [];
+header.push('id');
+for (idx in fields) {
+    header.push(fields[idx].fieldNameAsDatabaseColumn);
+    if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') {
+        header.push(fields[idx].fieldNameAsDatabaseColumn + '_content_type');
+    }
+}
+for (idx in relationships) {
+    const relationshipType = relationships[idx].relationshipType
+    if (
+        (relationshipType === "many-to-one"
+            || (relationshipType === "one-to-one" && relationships[idx].ownerSide === true
+               && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
+        ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
+    ) {
+        header.push(getColumnName(relationships[idx].relationshipName) + "_id");
+    }
+}
+table.push(header);
+
+// Set number of rows to be generated
+let numberOfRows = 10;
+for (idx in relationships) {
+    if ( relationships[idx].useJPADerivedIdentifier === true ) {
+        const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
+        if (otherEntityNameCapitalized === 'User') {
+            // there are only 4 user records by default
+            numberOfRows = 4;
+        }
+        break;
+    }
+}
+
+// store unique values
+const uniqueValues = {};
+for (idx in fields) {
+    if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('unique')) {
+        uniqueValues[idx] = [];
+    }
+}
+
+// Generate CSV rows
+
+for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
+    let line = [ lineNb ];
+    for (idx in fields) {
+        let data = '';
+        let columnType = fields[idx].columnType;
+        if (columnType === 'integer'
+            || columnType === 'bigint'
+            || columnType === 'double'
+            || columnType.startsWith('decimal')) {
+            data = this.faker.random.number({
+                max: fields[idx].fieldValidateRulesMax ? parseInt(fields[idx].fieldValidateRulesMax) : undefined,
+                min: fields[idx].fieldValidateRulesMin ? parseInt(fields[idx].fieldValidateRulesMin) : undefined
+            });
+        } else if (columnType === '${floatType}') {
+            data = this.faker.random.number({
+                max: fields[idx].fieldValidateRulesMax ? parseFloat(fields[idx].fieldValidateRulesMax) : undefined,
+                min: fields[idx].fieldValidateRulesMin ? parseFloat(fields[idx].fieldValidateRulesMin) : undefined
+            });
+        } else if (columnType === '${uuidType}') {
+            data = this.faker.random.uuid();
+        } else if (columnType === 'boolean') {
+            data = this.faker.random.boolean();
+        } else if (columnType === 'date') {
+            data = this.faker.date.recent().toISOString().split('T')[0];
+        } else if (columnType === 'datetime') {
+            // Write the date without milliseconds so Java can parse it
+            // See https://stackoverflow.com/a/34053802/150868
+            data = this.faker.date.recent().toISOString().split('.')[0];
+        } else if (columnType.startsWith('varchar')) {
+            let columnName = fields[idx].fieldNameAsDatabaseColumn;
+            if (columnName === 'first_name') {
+                data = this.faker.name.firstName();
+            } else if (columnName === 'last_name') {
+                data = this.faker.name.lastName();
+            } else if (columnName === 'job_title') {
+                data = this.faker.name.jobTitle();
+            } else if (columnName === 'telephone' || columnName === 'phone') {
+                data = this.faker.phone.phoneNumber();
+            } else if (columnName === 'zip_code' || columnName === 'post_code') {
+                data = this.faker.address.zipCode();
+            } else if (columnName === 'city') {
+                data = this.faker.address.city();
+            } else if (columnName === 'street_name' || columnName === 'street') {
+                data = this.faker.address.streetName();
+            } else if (columnName === 'country') {
+                data = this.faker.address.country();
+            } else if (columnName === 'country_code') {
+                data = this.faker.address.countryCode();
+            } else if (columnName === 'color') {
+                data = this.faker.commerce.color();
+            } else if (columnName === 'account') {
+                data = this.faker.commerce.account();
+            } else if (columnName === 'account_name') {
+                data = this.faker.finance.accountName();
+            } else if (columnName === 'currency_code') {
+                data = this.faker.finance.currencyCode();
+            } else if (columnName === 'currency_name') {
+                data = this.faker.finance.currencyName();
+            } else if (columnName === 'currency_symbol') {
+                data = this.faker.finance.currencySymbol();
+            } else if (columnName === 'iban') {
+                data = this.faker.finance.iban();
+            } else if (columnName === 'bic') {
+                data = this.faker.finance.bic();
+            } else if (columnName === 'email') {
+                data = this.faker.internet.email();
+            } else if (columnName === 'url') {
+                data = this.faker.internet.url();
+            } else {
+                data = this.faker.random.words();
+            }
+        }
+        if (fields[idx].fieldIsEnum) {
+            if (fields[idx].fieldValues.length !== 0) {
+                const enums = fields[idx].fieldValues.split(',');
+                data = enums[Math.floor(Math.random() * Math.floor(enums.length))];
+            } else {
+                data = '';
+            }
+        }
+        if (columnType === 'blob' || columnType === 'longblob') {
+            data = '../fake-data/blob/hipster.png'
+        } else if (columnType === '${clobType}'){
+            data = '../fake-data/blob/hipster.txt'
+        }
+
+        // Validation rules
+        if (fields[idx].fieldValidate === true) {
+            if (fields[idx].fieldValidateRules.includes('pattern')) {
+                data = `"${new this.randexp(fields[idx].fieldValidateRulesPattern).gen()}"`;
+            }
+
+            // manage String max length
+            if (fields[idx].fieldValidateRules.includes('maxlength')) {
+                let maxlength = fields[idx].fieldValidateRulesMaxlength;
+                data = data.substring(0, maxlength);
+            }
+
+            // manage String min length
+            if (fields[idx].fieldValidateRules.includes('minlength')) {
+                let minlength = fields[idx].fieldValidateRulesMinlength;
+                data = data.length > minlength ? data : data + "X".repeat(minlength - data.length);
+            }
+
+            // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
+            if (
+                fields[idx].fieldValidateRules.includes("pattern") &&
+                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data)
+            ) {
+                data = "";
+            }
+
+            // manage uniqueness
+            if (fields[idx].fieldValidateRules.includes('unique')) {
+                if (uniqueValues[idx].indexOf(data) !== -1) {
+                    data = '';
+                } else {
+                    uniqueValues[idx].push(data);
+                }
+            }
+
+            // manage required
+            if (fields[idx].fieldValidateRules.includes('required') && data === '') {
+                line = [];
+                break;
+            }
+        }
+
+        line.push(data);
+        if (columnType === 'blob' || columnType === 'longblob') {
+            line.push('image/png');
+        }
+    }
+
+    for (idx in relationships) {
+        const relationshipType = relationships[idx].relationshipType;
+        if (
+            (relationshipType === "many-to-one"
+                || (relationshipType === "one-to-one" && relationships[idx].ownerSide === true
+                   && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false))
+            ) && (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired)
+        ) {
+            if (relationships[idx].otherEntityNameCapitalized === 'User') {
+                line.push(this.faker.random.number({min: 1, max: 2}));
+            } else {
+                line.push(lineNb);
+            }
+        }
+    }
+    if (line.length === header.length) {
+        table.push(line);
+    }
+}
+
+let result = table
+        .map(line => line.join(';'))
+        .join('\n');
+ _%>
+<%-result%>

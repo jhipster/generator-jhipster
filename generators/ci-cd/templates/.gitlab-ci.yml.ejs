@@ -42,6 +42,9 @@ stages:
 
 <%_ if (buildTool === 'gradle') { _%>
 before_script:
+    <%_ if (clientFramework === 'angularX') { _%>
+    - export NG_CLI_ANALYTICS="false"
+    <%_ } _%>
     - export GRADLE_USER_HOME=`pwd`/.gradle
     <%_ if (!skipClient) { _%>
     - ./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon
@@ -98,6 +101,8 @@ frontend-test:
 <%_ if (cicdIntegrations.includes('sonar')) { _%>
 sonar-analyze:
     stage: analyze
+    except:
+        - merge_requests
     dependencies:
         - gradle-test
         - gradle-integration-test
@@ -116,28 +121,19 @@ gradle-package:
     artifacts:
         paths:
             - build/libs/*.jar
+            - build/classes
         expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
-#    image: docker:latest
-#    services:
-#        - docker:dind
+#    stage: release
 #    variables:
 #        REGISTRY_URL: registry.gitlab.com
-#        DOCKER_HOST: tcp://docker:2375
-#        DOCKER_DRIVER: overlay2
 #        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-#    stage: release
 #    dependencies:
 #        - gradle-package
-#    before_script:
-#        - docker info
-#        - cp build/libs/*.jar src/main/docker
 #    script:
-#        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
-#        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
-#        - docker push $IMAGE_TAG
+#        - ./gradlew jib -Djib.to.image="$IMAGE_TAG" -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password="$CI_BUILD_TOKEN"
 
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
@@ -149,9 +145,11 @@ deploy-to-production:
     when: manual
 <%_ } _%>
 <%_ } _%>
-
 <%_ if (buildTool === 'maven') { _%>
 before_script:
+    <%_ if (clientFramework === 'angularX') { _%>
+    - export NG_CLI_ANALYTICS="false"
+    <%_ } _%>
     - export MAVEN_USER_HOME=`pwd`/.maven
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
@@ -188,7 +186,7 @@ maven-test:
 frontend-test:
     stage: test
     script:
-        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='<%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
             junit: target/test-results/TESTS-results-jest.xml
@@ -207,7 +205,7 @@ sonar-analyze:
         <%_ } _%>
     script:
         - ./mvnw compile -Dmaven.repo.local=$MAVEN_USER_HOME
-        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> -Dsonar.login=$SONAR_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
     allow_failure: true
 <%_ } _%>
 
@@ -218,28 +216,20 @@ maven-package:
     artifacts:
         paths:
             - target/*.jar
+            - target/classes
         expire_in: 1 day
 
 # Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
 #docker-push:
-#    image: docker:latest
-#    services:
-#        - docker:dind
+#    stage: release
 #    variables:
 #        REGISTRY_URL: registry.gitlab.com
-#        DOCKER_HOST: tcp://docker:2375
-#        DOCKER_DRIVER: overlay2
 #        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-#    stage: release
 #    dependencies:
 #        - maven-package
-#    before_script:
-#        - docker info
-#        - cp target/*.jar src/main/docker
 #    script:
-#        - docker login -u "gitlab-ci-token" -p "$CI_BUILD_TOKEN" $REGISTRY_URL
-#        - docker build -f src/main/docker/Dockerfile -t $IMAGE_TAG src/main/docker
-#        - docker push $IMAGE_TAG
+#        - ./mvnw jib:build -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN
+
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
     stage: deploy

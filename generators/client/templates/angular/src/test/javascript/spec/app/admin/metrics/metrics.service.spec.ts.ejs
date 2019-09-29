@@ -26,12 +26,14 @@ describe('Service Tests', () => {
     describe('Logs Service', () => {
         let service: <%=jhiPrefixCapitalized%>MetricsService;
         let httpMock;
+        let expectedResult;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [HttpClientTestingModule]
             });
 
+            expectedResult = {};
             service = TestBed.get(<%=jhiPrefixCapitalized%>MetricsService);
             httpMock = TestBed.get(HttpTestingController);
         });
@@ -53,11 +55,12 @@ describe('Service Tests', () => {
                 const metrics = [];
 
                 service.getMetrics().subscribe(received => {
-                    expect(received.body[0]).toEqual(metrics);
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([metrics]);
+                req.flush(metrics);
+                expect(expectedResult).toEqual(metrics);
             });
 
             it('should return Thread Dump', () => {
@@ -66,11 +69,12 @@ describe('Service Tests', () => {
                 ];
 
                 service.threadDump().subscribe(received => {
-                    expect(received.body[0]).toEqual(dump);
+                    expectedResult = received;
                 });
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush([dump]);
+                req.flush(dump);
+                expect(expectedResult).toEqual(dump);
             });
         });
     });

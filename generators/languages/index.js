@@ -25,7 +25,7 @@ const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
-let useBlueprint;
+let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -69,29 +69,19 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (!this.isSupportedLanguage(language)) {
                     this.log('\n');
                     this.error(
-                        chalk.red(
-                            `Unsupported language "${language}" passed as argument to language generator.` +
-                                `\nSupported languages: ${_.map(
-                                    this.getAllSupportedLanguageOptions(),
-                                    o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`
-                                ).join('')}`
-                        )
+                        `Unsupported language "${language}" passed as argument to language generator.` +
+                            `\nSupported languages: ${_.map(
+                                this.getAllSupportedLanguageOptions(),
+                                o => `\n  ${_.padEnd(o.value, 5)} (${o.name})`
+                            ).join('')}`
                     );
                 }
             });
         }
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        if (!opts.fromBlueprint) {
-            useBlueprint = this.composeBlueprint(blueprint, 'languages', {
-                ...this.options,
-                languages: this.languages,
-                configOptions: this.configOptions,
-                arguments: this.options.languages
-            });
-        } else {
-            useBlueprint = false;
-        }
+
+        useBlueprints =
+            !opts.fromBlueprint &&
+            this.instantiateBlueprints('languages', { languages: this.languages, arguments: this.options.languages });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -117,6 +107,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.applicationType = configuration.get('applicationType');
                 this.baseName = configuration.get('baseName');
+                this.packageFolder = configuration.get('packageFolder');
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
                 this.databaseType = configuration.get('databaseType');
@@ -130,12 +121,13 @@ module.exports = class extends BaseBlueprintGenerator {
                     configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(configuration.get('buildTool'));
+                this.skipUserManagement = configuration.get('skipUserManagement');
             }
         };
     }
 
     get initializing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -147,7 +139,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get prompting() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._prompting();
     }
 
@@ -164,7 +156,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get configuring() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._configuring();
     }
 
@@ -213,7 +205,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get default() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._default();
     }
 
@@ -226,7 +218,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
                     }
                     if (!this.skipServer) {
-                        this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language);
+                        this.installI18nServerFilesByLanguage(this, constants.SERVER_MAIN_RES_DIR, language, constants.SERVER_TEST_RES_DIR);
                     }
                     statistics.sendSubGenEvent('languages/language', language);
                 });
@@ -243,12 +235,15 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
                 }
+                if (!this.skipUserManagement) {
+                    this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
+                }
             }
         };
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 };

@@ -24,6 +24,11 @@ import <%=packageName%>.client.OAuth2InterceptedFeignConfiguration;
 import <%=packageName%>.config.ApplicationProperties;
 import <%=packageName%>.config.DefaultProfileUtil;
 
+<%_ if (messageBroker === 'kafka') { _%>
+import <%=packageName%>.service.<%= upperFirstCamelCase(baseName) %>KafkaConsumer;
+import <%=packageName%>.service.<%= upperFirstCamelCase(baseName) %>KafkaProducer;
+import org.springframework.context.ConfigurableApplicationContext;
+<%_ } _%>
 import io.github.jhipster.config.JHipsterConstants;
 
 import org.apache.commons.lang3.StringUtils;
@@ -104,7 +109,14 @@ public class <%= mainClass %> implements InitializingBean {
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
+<%_ if (messageBroker === 'kafka') { _%>
+        ConfigurableApplicationContext applicationContext = app.run(args);
+        applicationContext.getBean(<%= upperFirstCamelCase(baseName) %>KafkaProducer.class).init();
+        applicationContext.getBean(<%= upperFirstCamelCase(baseName) %>KafkaConsumer.class).start();
+        Environment env = applicationContext.getEnvironment();
+<%_ } else {_%>
         Environment env = app.run(args).getEnvironment();
+<%_ } _%>
         logApplicationStartup(env);
     }
 

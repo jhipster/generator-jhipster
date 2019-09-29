@@ -199,6 +199,17 @@
             ]
         },
         {
+            "fieldName": "durationTom",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredTom",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "booleanTom",
             "fieldType": "Boolean"
         },
@@ -218,6 +229,17 @@
             "fieldName": "enumRequiredTom",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidTom",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredTom",
+            "fieldType": "UUID",
             "fieldValidateRules": [
                 "required"
             ]
@@ -296,24 +318,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "byteTextMinbytesTom",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
-            "fieldValidateRulesMinbytes": 0
-        },
-        {
-            "fieldName": "byteTextMaxbytesTom",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
-            "fieldValidateRulesMaxbytes": 10000
         }
     ],
     "changelogDate": "20160208184031",

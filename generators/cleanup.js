@@ -75,6 +75,24 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.ts`);
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
     }
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+        generator.removeFile(`${ANGULAR_DIR}account/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}core/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}home/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}layouts/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}shared/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}shared/shared-common.module.ts`);
+    }
+
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'react') {
+        generator.removeFile('tslint.json');
+    }
+
+    if (generator.isJhipsterVersionLessThan('6.4.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+        generator.removeFile(`${ANGULAR_DIR}admin/admin.route.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/admin.module.ts`);
+    }
 }
 
 /**
@@ -176,8 +194,22 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         }
     }
     if (generator.isJhipsterVersionLessThan('6.0.0')) {
+        generator.removeFile(`${javaDir}web/rest/errors/CustomParameterizedException.java`);
+        generator.removeFile(`${javaDir}web/rest/errors/InternalServerErrorException.java`);
         generator.removeFile(`${javaDir}web/rest/util/PaginationUtil.java`);
         generator.removeFile(`${javaDir}web/rest/util/HeaderUtil.java`);
         generator.removeFile(`${testDir}web/rest/util/PaginationUtilUnitTest.java`);
+        generator.removeFile(`${javaDir}web/rest/vm/LoggerVM.java`);
+        generator.removeFile(`${javaDir}web/rest/LogsResource.java`);
+        generator.removeFile(`${testDir}web/rest/LogsResourceIT.java`);
+        generator.removeFile(`${javaDir}config/OAuth2Configuration.java`);
+        generator.removeFile(`${javaDir}security/OAuth2AuthenticationSuccessHandler.java`);
+
+        generator.removeFolder(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus`);
+        generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/menus`);
+    }
+    if (generator.isJhipsterVersionLessThan('6.1.0')) {
+        generator.config.delete('blueprint');
+        generator.config.delete('blueprintVersion');
     }
 }

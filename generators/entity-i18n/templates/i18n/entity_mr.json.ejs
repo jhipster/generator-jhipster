@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized  %>",
                 "createLabel": "नवीन <%= entityClassHumanized %> तयार करा",
                 "createOrEditLabel": "<%= entityClassHumanized %> तयार किंवा संपादित करा"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "<%= entityClassHumanized %> शोधा"<% } %>
+                "search": "<%= entityClassHumanized %> शोधा"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "<%= entityClassHumanized %> [identifier: {{ param }}] तयार आहे",
             "updated": "<%= entityClassHumanized %> [identifier: {{ param }}] सुधारित केले आहे",

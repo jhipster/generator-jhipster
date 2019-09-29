@@ -19,31 +19,45 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.PersistentAuditEvent;
+<%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;<% if (databaseType === 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType === 'mongodb') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
+<%_ } _%>
+import org.springframework.data.domain.Pageable;
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.data.jpa.repository.JpaRepository;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 import java.time.Instant;
+<%_ if (!reactive) { _%>
 import java.util.List;
+<%_ } _%>
 
-<% if (databaseType === 'sql') { %>/**
- * Spring Data JPA repository for the {@link PersistentAuditEvent} entity.
- */<% } %><% if (databaseType === 'mongodb') { %>/**
- * Spring Data MongoDB repository for the {@link PersistentAuditEvent} entity.
- */<% } %><% if (databaseType === 'couchbase') { %>/**
- * Spring Data Couchbase repository for the {@link PersistentAuditEvent} entity.
- */<% } %>
-public interface PersistenceAuditEventRepository extends <% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') {
+/**
+ * Spring Data <% if (databaseType === 'sql') { %>JPA<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } %> repository for the {@link PersistentAuditEvent} entity.
+ */
+public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') {
  %><PersistentAuditEvent, String><% } %> {
 
+    <%_ if (!reactive) { _%>
     List<PersistentAuditEvent> findByPrincipal(String principal);
-
-    List<PersistentAuditEvent> findByAuditEventDateAfter(Instant after);
-
-    List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfter(String principal, Instant after);
 
     List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfterAndAuditEventType(String principal, Instant after, String type);
 
-    Page<PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable);
+    <%_ } _%>
+    <% if (reactive) { %>Flux<% } else { %>Page<% } %><PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable);
+
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByAuditEventDateBefore(Instant before);
+    <%_ if (reactive) { _%>
+    
+    Flux<PersistentAuditEvent> findAllBy(Pageable pageable);
+
+    Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate);
+    <%_ } _%>
 }

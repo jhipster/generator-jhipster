@@ -6,7 +6,8 @@
             "otherEntityName": "testMapstruct",
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
-            "ownerSide": true
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyRelPaginDTO"
         }
     ],
     "fields": [],

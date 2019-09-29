@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-
 exports.config = {
     allScriptsTimeout: 20000,
 
@@ -53,7 +52,7 @@ exports.config = {
 
     beforeLaunch: function() {
         require('ts-node').register({
-            project: ''
+            project: 'tsconfig.e2e.json'
         });
     },
 

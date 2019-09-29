@@ -22,9 +22,6 @@ package <%=packageName%>.domain;
 import com.couchbase.client.java.repository.annotation.Field;
 <%_ } _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
-<%_ if (databaseType === 'sql') { _%>
-import org.hibernate.envers.Audited;
-<%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.data.annotation.CreatedBy;
 <%_ } _%>
@@ -54,7 +51,6 @@ import javax.persistence.MappedSuperclass;
  */
 <%_ if (databaseType === 'sql') { _%>
 @MappedSuperclass
-@Audited
 @EntityListeners(AuditingEntityListener.class)
 <%_ } _%>
 public abstract class AbstractAuditingEntity implements Serializable {

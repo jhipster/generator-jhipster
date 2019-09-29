@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "కొత్త <%= entityClassHumanized %>  సృష్టించండి",
                 "createOrEditLabel": "<%= entityClassHumanized %> సృష్టించండి లేదా సవరించండి"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "<%= entityClassHumanized %> కొరకు శోధించండి"<% } %>
+                "search": "<%= entityClassHumanized %> కొరకు శోధించండి"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "{{ param }} ఐడీ తో ఒక కొత్త <%= entityClassHumanized %> సృష్టించబడినది",
             "updated": "{{ param }} ఐడీ తో ఒక కొత్త <%= entityClassHumanized %> సవరించబడినది",

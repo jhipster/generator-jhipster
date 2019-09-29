@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
         const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
         if (fieldType === 'UUID') { %>
-    <%= fieldName %> uuid,<% } else if (fieldType === 'String') { %>
+    <%= fieldName %> uuid,<% } else if (fieldType === 'String' || fields[idx].fieldIsEnum) { %>
     <%= fieldName %> text,<% } else if (fieldType === 'Integer') { %>
     <%= fieldName %> int,<% } else if (fieldType === 'Long') { %>
     <%= fieldName %> bigint,<% } else if (fieldType === 'Float') { %>

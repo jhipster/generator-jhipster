@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-# Sample global config for monitoring JHipster applications
 global:
   scrape_interval:     15s # By default, scrape targets every 15 seconds.
   evaluation_interval: 15s # By default, scrape targets every 15 seconds.
@@ -27,11 +26,16 @@ global:
   external_labels:
       monitor: 'my-project'
 
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - alertmanager:9093
+
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
-  - "alert.rules"
-  # - "first.rules"
-  # - "second.rules"
+  - alert_rules.yml
 
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
@@ -43,6 +47,7 @@ scrape_configs:
     scrape_interval: 5s
 
     # scheme defaults to 'http'.
-    metrics_path: /prometheusMetrics
+    metrics_path: /management/prometheus
     static_configs:
-         - targets: [<%= appsToMonitorList %>]
+    - targets:
+<%= appsToMonitorList %>

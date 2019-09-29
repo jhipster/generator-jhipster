@@ -22,4 +22,57 @@ openapi: "3.0.1"
 info:
     title: "<%= baseName %>"
     version: 0.0.1
+servers:
+    - url: http://localhost:<%= serverPort %>
+      description: Development server
+    - url: https://localhost:<%= serverPort %>
+      description: Development server with TLS Profile
 paths: {}
+<% if(authenticationType === 'jwt') { %>
+components:
+    securitySchemes:
+        jwt:
+            type: http
+            description: JWT Authentication
+            scheme: bearer
+            bearerFormat: JWT
+security:
+    - jwt: []
+<% } %>
+<% if(authenticationType === 'oauth2') { %>
+components:
+    securitySchemes:
+        oauth:
+            type: oauth2
+            description: OAuth2 authentication with KeyCloak
+            flows:
+                authorizationCode:
+                    authorizationUrl: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth
+                    tokenUrl: http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token
+                    scopes:
+                        jhipster: Jhipster specific claims
+                        email: Email claims
+                        profile: Profile claims
+        openId:
+            type: openIdConnect
+            description: OpenID Connect authentication with KeyCloak
+            openIdConnectUrl: http://localhost:9080/auth/realms/jhipster/.well-known/openid-configuration
+security:
+    - oauth: [jhipster, email, profile]
+    - openId: [jhipster, email, profile]
+<% } %>
+<% if(authenticationType === 'session') { %>
+components:
+    securitySchemes:
+        sessionId:
+            type: apiKey
+            name: JSESSIONID
+            in: cookie
+        csrf:
+            type: apiKey
+            name: XSRF-TOKEN
+            in: cookie
+security:
+    - sessionId: []
+    - csrf: []
+<% } %>

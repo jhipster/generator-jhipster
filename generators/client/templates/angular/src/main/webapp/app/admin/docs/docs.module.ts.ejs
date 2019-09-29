@@ -1,0 +1,16 @@
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
+
+import { <%=jhiPrefixCapitalized%>DocsComponent } from './docs.component';
+
+import { docsRoute } from './docs.route';
+
+@NgModule({
+  imports: [
+    <%=angularXAppName%>SharedModule,
+    RouterModule.forChild([docsRoute])
+  ],
+  declarations: [<%=jhiPrefixCapitalized%>DocsComponent]
+})
+export class DocsModule {}

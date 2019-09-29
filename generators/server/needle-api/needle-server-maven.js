@@ -41,20 +41,23 @@ module.exports = class extends needleServer {
         if (other) {
             dependency += `${other}\n`;
         }
-        dependency += '             </dependency>';
-        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-add-dependency-management', dependency);
+        dependency += '            </dependency>';
+        const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-maven-add-dependency-management -->', dependency);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addRepository(id, url) {
+    addRepository(id, url, other = '') {
         const errorMessage = `${chalk.yellow(' Reference to ')}maven repository (id: ${id}, url:${url})${chalk.yellow(' not added.\n')}`;
         // prettier-ignore
-        const repository = `${'<repository>\n'
+        let repository = `${'<repository>\n'
             + '            <id>'}${id}</id>\n`
-            + `            <url>${url}</url>\n`
-            + '        </repository>';
-        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-repository', repository);
+            + `            <url>${url}</url>\n`;
+        if (other) {
+            repository += `${other}\n`;
+        }
+        repository += '        </repository>';
+        const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-maven-repository -->', repository);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
@@ -67,7 +70,7 @@ module.exports = class extends needleServer {
             + '            <id>'}${id}</id>\n`
             + `            <url>${url}</url>\n`
             + '        </pluginRepository>';
-        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-plugin-repository', repository);
+        const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-maven-plugin-repository -->', repository);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
@@ -86,7 +89,7 @@ module.exports = class extends needleServer {
             + `            <url>${releasesUrl}</url>\n`
             + '        </repository>\n'
             + '    </distributionManagement>';
-        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-distribution-management', repository);
+        const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-distribution-management -->', repository);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
@@ -95,7 +98,7 @@ module.exports = class extends needleServer {
         const errorMessage = `${chalk.yellow('Reference to maven property name ')}
             (name: ${name}, value:${value})${chalk.yellow(' not added.\n')}`;
         const property = `<${name}>${value}</${name}>`;
-        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-property', property);
+        const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-maven-property -->', property);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
@@ -114,7 +117,12 @@ module.exports = class extends needleServer {
             dependency += `${other}\n`;
         }
         dependency += '        </dependency>';
-        const rewriteFileModel = this.generateFileModelWithPath(directory, pomPath, 'jhipster-needle-maven-add-dependency', dependency);
+        const rewriteFileModel = this.generateFileModelWithPath(
+            directory,
+            pomPath,
+            '<!-- jhipster-needle-maven-add-dependency -->',
+            dependency
+        );
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
@@ -133,7 +141,46 @@ module.exports = class extends needleServer {
             plugin += `${other}\n`;
         }
         plugin += '            </plugin>';
-        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-add-plugin', plugin);
+        const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-maven-add-plugin -->', plugin);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
+    addPluginManagement(groupId, artifactId, version, other) {
+        const errorMessage = `${chalk.yellow('Reference to maven plugin management ')}
+            (groupId: ${groupId}, artifactId:${artifactId}, version:${version})${chalk.yellow(' not added.\n')}`;
+        // prettier-ignore
+        let plugin = `${'    <plugin>\n'
+            + '                    <groupId>'}${groupId}</groupId>\n`
+            + `                    <artifactId>${artifactId}</artifactId>\n`;
+        if (version) {
+            plugin += `                    <version>${version}</version>\n`;
+        }
+        if (other) {
+            plugin += `${other}\n`;
+        }
+        plugin += '                </plugin>';
+        const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-maven-add-plugin-management -->', plugin);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
+    addAnnotationProcessor(groupId, artifactId, version) {
+        const errorMessage = `${chalk.yellow(
+            ' Reference to '
+        )}maven annotation processor (groupId: ${groupId}, artifactId:${artifactId}, version:${version})
+            ${chalk.yellow(' not added.\n')}`;
+        // prettier-ignore
+        const annotationProcessorPath = `${'<path>\n'
+            + '                            <groupId>'}${groupId}</groupId>\n`
+            + `                            <artifactId>${artifactId}</artifactId>\n`
+            + `                            <version>${version}</version>\n`
+            + '                        </path>';
+        const rewriteFileModel = this.generateFileModel(
+            pomPath,
+            '<!-- jhipster-needle-maven-add-annotation-processor -->',
+            annotationProcessorPath
+        );
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
@@ -148,7 +195,7 @@ module.exports = class extends needleServer {
             profile += `${other}\n`;
         }
         profile += '        </profile>';
-        const rewriteFileModel = this.generateFileModel(pomPath, 'jhipster-needle-maven-add-profile', profile);
+        const rewriteFileModel = this.generateFileModel(pomPath, '<!-- jhipster-needle-maven-add-profile -->', profile);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }

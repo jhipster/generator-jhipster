@@ -36,7 +36,10 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="alert alert-warning" *ngIf="audits?.length === 0">
+        <span jhiTranslate="audits.notFound">No audit found</span>
+    </div>
+    <div class="table-responsive" *ngIf="audits?.length > 0">
         <table class="table table-sm table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
@@ -59,7 +62,7 @@
             </tbody>
         </table>
     </div>
-    <div>
+    <div [hidden]="audits?.length === 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>

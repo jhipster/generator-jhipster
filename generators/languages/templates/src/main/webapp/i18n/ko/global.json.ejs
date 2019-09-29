@@ -46,7 +46,7 @@
                 "health": "상태 확인",
                 "configuration": "설정",
                 "logs": "로그",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Audit",
                 <%_ } _%>
                 "apidocs": "API",
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "비밀번호 입력이 필요합니다.",
-                    "minlength": "비밀번호는 최소 5자 이상이어야 합니다",
+                    "minlength": "비밀번호는 최소 4자 이상이어야 합니다",
                     "maxlength": "비밀번호는 최대 50자 까지입니다.",
                     "strength": "비밀번호 길이:"
                 },
                 "confirmpassword": {
                     "required": "확인할 비밀번호 입력이 필요합니다.",
-                    "minlength": "확인할 비밀번호는 최소 5자 이상이어야 합니다",
+                    "minlength": "확인할 비밀번호는 최소 4자 이상이어야 합니다",
                     "maxlength": "확인할 비밀번호는 최대 50자 까지입니다"
                 },
                 "email": {

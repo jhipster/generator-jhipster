@@ -65,6 +65,9 @@
     <logger name="com.google.code.ssm" level="WARN"/>
     <logger name="com.google.code.yanf4j" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { _%>
+    <logger name="org.redisson" level="WARN" />
+    <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || serviceDiscoveryType === 'eureka') { _%>
     <logger name="com.netflix" level="WARN"/>
     <logger name="com.netflix.discovery" level="INFO"/>
@@ -72,15 +75,24 @@
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>
+    <%_ if (reactive) { _%>
+    <logger name="io.netty" level="WARN"/>
+    <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <logger name="io.searchbox" level="WARN"/>
     <%_ } _%>
+    <%_ if (!reactive) { _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <%_ } _%>
     <%_ if (cacheProvider === 'ehcache') { _%>
     <logger name="org.ehcache" level="WARN"/>
     <%_ } _%>
+    <%_ if (cacheProvider === 'caffeine') { _%>
+    <logger name="com.github.benmanes.caffeine" level="WARN"/>
+    <%_ } _%>
     <logger name="org.apache" level="WARN"/>
+    <logger name="org.apache.kafka" level="INFO"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/><% if (searchEngine === 'elasticsearch') { %>
     <logger name="org.elasticsearch" level="WARN"/><% } %>
@@ -103,20 +115,22 @@
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
     <%_ } _%>
     <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
-    <logger name="org.postgresql.jdbc" level="WARN"/>
+    <logger name="org.postgresql" level="WARN"/>
     <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>
+    <%_ if (reactive) { _%>
+    <logger name="org.synchronoss" level="WARN"/>
+    <%_ } _%>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
-    <%_ if (messageBroker === 'kafka') { _%>
-    <logger name="kafka" level="WARN"/>
-    <logger name="org.I0Itec" level="WARN"/>
-    <%_ } _%>
     <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
     <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+    <logger name="reactor" level="WARN"/>
     <%_ } _%>
     <logger name="springfox" level="WARN"/>
     <logger name="sun.rmi" level="WARN"/><% if (databaseType === 'sql') { %>

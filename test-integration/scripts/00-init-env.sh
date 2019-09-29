@@ -40,3 +40,8 @@ fi
 if [[ "$JHI_FOLDER_UAA" == "" ]]; then
     JHI_FOLDER_UAA="$HOME"/uaa
 fi
+
+# set correct OpenJDK version
+if [[ "$JHI_JDK" == "11" ]]; then
+    JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+fi

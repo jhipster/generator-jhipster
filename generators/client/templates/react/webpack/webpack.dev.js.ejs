@@ -60,7 +60,15 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     contentBase: './<%= DIST_DIR %>',
     proxy: [{
       context: [
-        '/'
+        '/api',
+        '/services',
+        '/management',
+        '/swagger-resources',
+        '/v2/api-docs',
+        '/h2-console',<% if (authenticationType === 'oauth2') { %>
+        '/oauth2',
+        '/login',<% } %>
+        '/auth'
       ],
       target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
       secure: false,
@@ -74,7 +82,9 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
     }<% } %>],
     watchOptions: {
       ignored: /node_modules/
-    }
+    },
+    https: options.tls,
+    historyApiFallback: true
   },
   stats: process.env.JHI_DISABLE_WEBPACK_LOGS ? 'none' : options.stats,
   plugins: [
@@ -85,10 +95,11 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         }),
     new FriendlyErrorsWebpackPlugin(),
     new BrowserSyncPlugin({
+      https: options.tls,
       host: 'localhost',
       port: 9000,
       proxy: {
-        target: 'http://localhost:9060'<% if (websocket === 'spring-websocket') { %>,
+        target: `http${options.tls ? 's' : ''}://localhost:9060`<% if (websocket === 'spring-websocket') { %>,
           ws: true<% } %>,
           proxyOptions: {
               changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430

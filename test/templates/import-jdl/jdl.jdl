@@ -1,5 +1,6 @@
 entity Region {
 	regionName String
+	guid UUID
 }
 
 entity Country {

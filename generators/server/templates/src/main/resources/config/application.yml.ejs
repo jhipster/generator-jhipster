@@ -52,7 +52,7 @@ eureka:
         metadata-map:
             zone: primary # This is needed for the load balancer
             profile: ${spring.profiles.active}
-            version: ${info.project.version:}
+            version: #project.version#
             git-version: ${git.commit.id.describe:}
             git-commit: ${git.commit.id.abbrev:}
             git-branch: ${git.branch:}
@@ -112,10 +112,11 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "threaddump", "logfile", "jhimetrics", "prometheus" ]
+                include: ["configprops", "env", "health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
     endpoint:
         health:
             show-details: when-authorized
+            roles: "ROLE_ADMIN"
         jhimetrics:
             enabled: true
     info:
@@ -130,19 +131,12 @@ management:
             prometheus:
                 enabled: true
                 step: 60
-        binders:
-            jvm:
-                enabled: true
-            processor:
-                enabled: true
-            uptime:
-                enabled: true
-            logback:
-                enabled: true
-            files:
-                enabled: true
-            integration:
-                enabled: true
+        enable:
+            http: true
+            jvm: true
+            logback: true
+            process: true
+            system: true
         distribution:
             percentiles-histogram:
                 all: true
@@ -169,7 +163,8 @@ spring:
         consul:
             discovery:
                 healthCheckPath: /management/health
-                instanceId: ${spring.application.name}:${spring.application.instance-id:${random.value}}
+                instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
+                service-name: <%= baseName.toLowerCase() %>
             config:
                 watch:
                     enabled: false
@@ -205,6 +200,15 @@ spring:
     mvc:
         favicon:
             enabled: false
+    <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
+    security:
+        user:
+            name: admin
+            password: admin
+            roles:
+                - ADMIN
+                - USER
+    <%_ } _%>
     task:
         execution:
             thread-name-prefix: <%= dasherizedBaseName %>-task-
@@ -218,6 +222,9 @@ spring:
                 size: 2
     thymeleaf:
         mode: HTML
+    output:
+        ansi:
+          console-available: true
 <%_ if (authenticationType === 'oauth2') { _%>
     security:
         oauth2:
@@ -296,7 +303,19 @@ jhipster:
         contact-email:
         license:
         license-url:
-
+<%_ if (messageBroker === 'kafka') { _%>
+kafka:
+  consumer:
+    key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    bootstrap.servers: localhost:9092
+    group.id: <%= dasherizedBaseName %>
+    auto.offset.reset: earliest
+  producer:
+    key.serializer: org.apache.kafka.common.serialization.StringSerializer
+    value.serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap.servers: localhost:9092
+<%_ } _%>
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

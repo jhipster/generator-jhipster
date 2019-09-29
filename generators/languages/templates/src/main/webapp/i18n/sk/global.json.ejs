@@ -47,7 +47,7 @@
                 "health": "Stav systému",
                 "configuration": "Konfigurácia",
                 "logs": "Logy",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Audity",
                 <%_ } _%>
                 "apidocs": "API",
@@ -84,13 +84,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Heslo je povinné.",
-                    "minlength": "Vaše heslo musí mať aspoň 5 znakov.",
+                    "minlength": "Vaše heslo musí mať aspoň 4 znakov.",
                     "maxlength": "Vaše heslo nemôže byť dlhšie ako 50 znakov.",
                     "strength": "Sila hesla:"
                 },
                 "confirmpassword": {
                     "required": "Potvrdenie hesla je povinné.",
-                    "minlength": "Vaše potvrdenie hesla musí mať aspoň 5 znakov.",
+                    "minlength": "Vaše potvrdenie hesla musí mať aspoň 4 znakov.",
                     "maxlength": "Vaše potvrdenie hesla nemôže byť dlhšie ako 50 znakov."
                 },
                 "email": {

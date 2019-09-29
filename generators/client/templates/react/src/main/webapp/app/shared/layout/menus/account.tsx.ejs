@@ -1,0 +1,65 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import React from 'react';
+import MenuItem from 'app/shared/layout/menus/menu-item';
+import {
+  DropdownItem
+} from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NavLink as Link } from 'react-router-dom';
+import { Translate, translate } from 'react-jhipster';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
+import { NavDropdown } from './menu-components';
+
+
+const accountMenuItemsAuthenticated = (
+  <>
+  <%_ if (!skipUserManagement) { _%>
+    <MenuItem icon="wrench" to="/account/settings"><Translate contentKey="global.menu.account.settings">Settings</Translate></MenuItem>
+    <MenuItem icon="lock" to="/account/password"><Translate contentKey="global.menu.account.password">Password</Translate></MenuItem>
+    <%_ if (authenticationType === 'session') { _%>
+    <MenuItem icon="cloud" to="/account/sessions"><Translate contentKey="global.menu.account.sessions">Sessions</Translate></MenuItem>
+    <%_ } _%>
+  <%_ } _%>
+    <MenuItem icon="sign-out-alt" to="/logout"><Translate contentKey="global.menu.account.logout">Sign out</Translate></MenuItem>
+  </>
+  );
+
+const accountMenuItems = (
+  <>
+  <%_ if (authenticationType !== 'oauth2') { _%>
+    <MenuItem id="login-item" icon="sign-in-alt" to="/login"><Translate contentKey="global.menu.account.login">Sign in</Translate></MenuItem>
+  <%_ } else { _%>
+    <DropdownItem id="login-item" tag="a" href={getLoginUrl()}><FontAwesomeIcon icon="sign-in-alt" /> <Translate contentKey="global.menu.account.login">Sign in</Translate></DropdownItem>
+  <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
+    <MenuItem icon="sign-in-alt" to="/account/register"><Translate contentKey="global.menu.account.register">Register</Translate></MenuItem>
+  <%_ } _%>
+  </>
+);
+
+export const AccountMenu = ({ isAuthenticated = false }) => (
+  <NavDropdown icon="user" name={translate('global.menu.account.main')} id="account-menu">
+    {isAuthenticated ? accountMenuItemsAuthenticated : accountMenuItems}
+  </NavDropdown>
+);
+
+export default AccountMenu;

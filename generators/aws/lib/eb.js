@@ -31,8 +31,8 @@ const Eb = (module.exports = function Eb(Aws, generator) {
 Eb.prototype.createApplication = function createApplication(params, callback) {
     const applicationName = params.applicationName;
     const bucketName = params.bucketName;
-    const jarKey = params.jarKey;
-    const versionLabel = `${this.jarKey}-${uuidV4()}`;
+    const warKey = params.warKey;
+    const versionLabel = `${this.warKey}-${uuidV4()}`;
     const environmentName = params.environmentName;
     const dbUrl = params.dbUrl;
     const dbUsername = params.dbUsername;
@@ -43,7 +43,7 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
         applicationName,
         versionLabel,
         bucketName,
-        jarKey
+        warKey
     };
 
     createApplicationVersion(applicationParams, err => {
@@ -89,7 +89,7 @@ function createApplicationVersion(params, callback) {
     const applicationName = params.applicationName;
     const versionLabel = params.versionLabel;
     const bucketName = params.bucketName;
-    const jarKey = params.jarKey;
+    const warKey = params.warKey;
 
     const elasticbeanstalk = new aws.ElasticBeanstalk();
 
@@ -99,7 +99,7 @@ function createApplicationVersion(params, callback) {
         AutoCreateApplication: true,
         SourceBundle: {
             S3Bucket: bucketName,
-            S3Key: jarKey
+            S3Key: warKey
         }
     };
 

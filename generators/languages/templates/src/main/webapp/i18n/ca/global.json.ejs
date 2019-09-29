@@ -47,7 +47,7 @@
                 "health": "Salud",
                 "configuration": "Configuració",
                 "logs": "Registres",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Auditories",
                 <%_ } _%>
                 "apidocs": "API",
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "La seva contrasenya és necessaria.",
-                    "minlength": "La seva contrasenya ha de tenir, com a mínim, 5 caràcters",
+                    "minlength": "La seva contrasenya ha de tenir, com a mínim, 4 caràcters",
                     "maxlength": "La seva contrasenya no pot tenir més de 50 caràcters",
                     "strength": "Fortalesa de la contrasenya:"
                 },
                 "confirmpassword": {
                     "required": "És necessari confirmar la seva contrasenya.",
-                    "minlength": "La confirmació de la seva contrasenya ha de tenir, com a mínim, 5 caràcters",
+                    "minlength": "La confirmació de la seva contrasenya ha de tenir, com a mínim, 4 caràcters",
                     "maxlength": "La confirmació de la seva contrasenya no pot tenir més de 50 caràcters"
                 },
                 "email": {

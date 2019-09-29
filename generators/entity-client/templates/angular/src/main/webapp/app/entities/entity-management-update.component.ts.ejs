@@ -23,7 +23,9 @@ const variables = query.variables;
 let hasManyToMany = query.hasManyToMany;
 _%>
 import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -56,10 +58,11 @@ Object.keys(differentRelationships).forEach(key => {
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
             if (uniqueRel.otherEntityAngularName === 'User') {
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName%>Service } from 'app/core';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 <%_         } else { _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
-import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>';
+import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
 <%_         }
         }
     }
@@ -71,7 +74,6 @@ import { <%= uniqueRel.otherEntityAngularName%>Service } from 'app/entities/<%= 
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
 
-    <%= entityInstance %>: I<%= entityAngularName %>;
     isSaving: boolean;
 <%_
 for ( const idx in variables ) { %>
@@ -152,7 +154,6 @@ for ( const idx in variables ) { %>
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
             this.updateForm(<%= entityInstance %>);
-            this.<%= entityInstance %> = <%= entityInstance %>;
         });
 <%_ for (idx in queries) { _%>
         <%- queries[idx] %>
@@ -215,8 +216,8 @@ _%>
     setFileData(event, field: string, isImage) {
         return new Promise((resolve, reject) => {
             if (event && event.target && event.target.files && event.target.files[0]) {
-                const file = event.target.files[0];
-                if (isImage && !/^image\//.test(file.type)) {
+                const file: File = event.target.files[0];
+                if (isImage && !file.type.startsWith('image/')) {
                     reject(`File was expected to be an image but was found to be ${file.type}`);
                 } else {
                     const filedContentType: string = field + 'ContentType';
@@ -230,8 +231,11 @@ _%>
             } else {
                 reject(`Base64 data was not set as file could not be extracted from passed parameter: ${event}`);
             }
-        }).then(() => console.log('blob added'),// sucess
-                this.onError);
+        }).then(
+            // eslint-disable-next-line no-console
+            () => console.log('blob added'),    // success
+            this.onError
+        );
     }
 
     <%_ if (fieldsContainImageBlob) { _%>
@@ -264,7 +268,7 @@ _%>
     }
 
     private createFromForm(): I<%= entityAngularName %> {
-        const entity = {
+        return {
                        ...new <%= entityAngularName %>(),
             id: this.editForm.get(['id']).value,
     <%_ for (idx in fields) {
@@ -305,13 +309,12 @@ _%>
             <%= relationshipFieldNamePlural %>: this.editForm.get(['<%= relationshipFieldNamePlural %>']).value,
         <%_ } _%>
 <%_ } _%>
-        }
-        return entity;
+        };
     }
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>) {
-        result.subscribe((res: HttpResponse<I<%= entityAngularName %>>) =>
-            this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+        result.subscribe(() =>
+            this.onSaveSuccess(), () => this.onSaveError());
     }
 
     protected onSaveSuccess() {
@@ -340,7 +343,7 @@ _%>
 <%_ entitiesSeen.push(otherEntityNameCapitalized); } } _%>
 <%_ if (hasManyToMany) { _%>
 
-    getSelected(selectedVals: Array<any>, option: any) {
+    getSelected(selectedVals: any[], option: any) {
         if (selectedVals) {
             for (let i = 0; i < selectedVals.length; i++) {
                 if (option.id === selectedVals[i].id) {

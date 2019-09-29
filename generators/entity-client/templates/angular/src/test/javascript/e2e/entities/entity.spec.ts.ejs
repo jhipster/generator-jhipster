@@ -16,14 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* tslint:disable no-unused-expression */
-import { browser, ExpectedConditions as ec, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor, <% } %>promise } from 'protractor';
-import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
-
-import { <%= entityClass %>ComponentsPage, <%= entityClass %>DeleteDialog, <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
-<%_ if (fieldsContainBlobOrImage) { _%>
-import * as path from 'path';
-<%_ } _%>
 <%_
 let elementGetter = `getText()`;
 let openBlockComment = ``;
@@ -32,12 +24,21 @@ if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
 }
 for (let relationship of relationships) {
-    if (relationship.relationshipRequired) {
-        openBlockComment = `/*`;
-        closeBlockComment = `*/`;
+    if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
+        openBlockComment = `/* `;
+        closeBlockComment = ` */`;
         break;
     }
 } _%>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { browser, ExpectedConditions as ec, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor, <% } %>promise } from 'protractor';
+import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { <%= entityClass %>ComponentsPage,<%= openBlockComment %><%= entityClass %>DeleteDialog,<%= closeBlockComment %> <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
+<%_ if (fieldsContainBlobOrImage) { _%>
+import * as path from 'path';
+<%_ } _%>
 
 const expect = chai.expect;
 
@@ -109,6 +110,8 @@ describe('<%= entityClass %> e2e test', () => {
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('2000-12-31'),
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            <%_ } else if (fieldType === 'Duration') { _%>
+            <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('PT12S'),
             <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>'),
             <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
@@ -145,6 +148,8 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2000-12-31', 'Expected <%=fieldName%> value to be equals to 2000-12-31');
             <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30', 'Expected <%=fieldName%> value to be equals to 2000-12-31');
+            <%_ } else if (fieldType === 'Duration') { _%>
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('12', 'Expected <%=fieldName%> value to be equals to 12');
             <%_ } else if (fieldType === 'Boolean') { _%>
         const selected<%= fieldNameCapitalized %> = <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input();
         if (await selected<%= fieldNameCapitalized %>.isSelected()) {

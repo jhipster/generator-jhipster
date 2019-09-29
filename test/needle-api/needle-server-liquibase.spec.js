@@ -80,6 +80,12 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                         '        </createTable>\n' +
                         '    </changeSet>'
                 );
+            },
+            addLoadColumnStep() {
+                this.addLoadColumnToLiquibaseEntityChangeSet(
+                    `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+                    '            <column name="loadColumn" type="string" />'
+                );
             }
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
@@ -87,89 +93,90 @@ const mockBlueprintSubGen = class extends ServerGenerator {
 };
 
 describe('needle API server liquibase: JHipster server generator with blueprint', () => {
-    const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
-
-    blueprintNames.forEach(blueprintName => {
-        describe(`generate server with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/server'))
-                    .inTmpDir(dir => {
-                        fse.copySync(
-                            path.join(__dirname, 'templates/src/main/resources/config/liquibase/changelog/'),
-                            `${dir}/templates/src/main/resources/config/liquibase/changelog/`
-                        );
-                    })
-                    .withOptions({
-                        'from-cli': true,
-                        skipInstall: true,
-                        blueprint: blueprintName,
-                        skipChecks: true
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        packageName: 'com.mycompany.myapp',
-                        packageFolder: 'com/mycompany/myapp',
-                        serviceDiscoveryType: false,
-                        authenticationType: 'jwt',
-                        cacheProvider: 'ehcache',
-                        enableHibernateCache: true,
-                        databaseType: 'sql',
-                        devDatabaseType: 'h2Memory',
-                        prodDatabaseType: 'mysql',
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['fr'],
-                        buildTool: 'maven',
-                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
-                    })
-                    .on('end', done);
-            });
-
-            it('Assert changelog is added to master.xml', () => {
-                assert.fileContent(
-                    `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
-                    '<include file="config/liquibase/changelog/aNewChangeLog.xml" relativeToChangelogFile="false"/>'
+    before(done => {
+        helpers
+            .run(path.join(__dirname, '../../generators/server'))
+            .inTmpDir(dir => {
+                fse.copySync(
+                    path.join(__dirname, 'templates/src/main/resources/config/liquibase/changelog/'),
+                    `${dir}/templates/src/main/resources/config/liquibase/changelog/`
                 );
-            });
+            })
+            .withOptions({
+                'from-cli': true,
+                skipInstall: true,
+                blueprint: 'myblueprint',
+                skipChecks: true
+            })
+            .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
+            .withPrompts({
+                baseName: 'jhipster',
+                packageName: 'com.mycompany.myapp',
+                packageFolder: 'com/mycompany/myapp',
+                serviceDiscoveryType: false,
+                authenticationType: 'jwt',
+                cacheProvider: 'ehcache',
+                enableHibernateCache: true,
+                databaseType: 'sql',
+                devDatabaseType: 'h2Memory',
+                prodDatabaseType: 'mysql',
+                enableTranslation: true,
+                nativeLanguage: 'en',
+                languages: ['fr'],
+                buildTool: 'maven',
+                rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                serverSideOptions: []
+            })
+            .on('end', done);
+    });
 
-            it('Assert constraints changelog is added to master.xml', () => {
-                assert.fileContent(
-                    `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
-                    '<include file="config/liquibase/changelog/aNewConstraintsChangeLog.xml" relativeToChangelogFile="false"/>'
-                );
-            });
+    it('Assert changelog is added to master.xml', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
+            '<include file="config/liquibase/changelog/aNewChangeLog.xml" relativeToChangelogFile="false"/>'
+        );
+    });
 
-            it('Assert constraints with needle changelog is added to master.xml', () => {
-                assert.fileContent(
-                    `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
-                    '<include file="config/liquibase/changelog/aNewChangeLogWithNeedle.xml" relativeToChangelogFile="false"/>'
-                );
-            });
+    it('Assert constraints changelog is added to master.xml', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
+            '<include file="config/liquibase/changelog/aNewConstraintsChangeLog.xml" relativeToChangelogFile="false"/>'
+        );
+    });
 
-            it('Assert that column is added to an existing changelog', () => {
-                assert.fileContent(
-                    `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
-                    '            <column name="test" type="varchar(255)">\n' +
-                        '                <constraints nullable="false" />\n' +
-                        '            </column>'
-                );
-            });
+    it('Assert constraints with needle changelog is added to master.xml', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
+            '<include file="config/liquibase/changelog/aNewChangeLogWithNeedle.xml" relativeToChangelogFile="false"/>'
+        );
+    });
 
-            it('Assert that changeSet is added to an existing changelog', () => {
-                assert.fileContent(
-                    `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
-                    '    <changeSet id="20180328000000-2" author="jhipster">\n' +
-                    '        <createTable tableName="test">\n' +
-                    '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
-                        '                <constraints primaryKey="true" nullable="false"/>\n' +
-                        '            </column>\n' +
-                        '        </createTable>\n' +
-                        '    </changeSet>'
-                );
-            });
-        });
+    it('Assert that column is added to an existing changelog', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+            '            <column name="test" type="varchar(255)">\n' +
+                '                <constraints nullable="false" />\n' +
+                '            </column>'
+        );
+    });
+
+    it('Assert that load column is added to an existing changelog', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+            '            <column name="loadColumn" type="string" />'
+        );
+    });
+
+    it('Assert that changeSet is added to an existing changelog', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
+            '    <changeSet id="20180328000000-2" author="jhipster">\n' +
+            '        <createTable tableName="test">\n' +
+            '            <column name="id" type="bigint" autoIncrement="${autoIncrement}">\n' + // eslint-disable-line
+                '                <constraints primaryKey="true" nullable="false"/>\n' +
+                '            </column>\n' +
+                '        </createTable>\n' +
+                '    </changeSet>'
+        );
     });
 });

@@ -22,43 +22,49 @@ import <%=packageName%>.config.Constants;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import <%=packageName%>.domain.Authority;
 <%_ } _%>
+<%_ if (databaseType !== 'no') { _%>
 import <%=packageName%>.domain.<%= asEntity('User') %>;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.AuthorityRepository;
-    <%_ if (authenticationType === 'session' && !reactive) { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+import <%=packageName%>.repository.AuthorityRepository;
+        <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%=packageName%>.repository.PersistentTokenRepository;
+        <%_ } _%>
     <%_ } _%>
-<%_ } _%>
-import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+import <%=packageName%>.repository.UserRepository;
+    <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%=packageName%>.repository.search.UserSearchRepository;
-<%_ } _%>
-<%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.security.AuthoritiesConstants;
-<%_ } _%>
+    <%_ } _%>
 import <%=packageName%>.security.SecurityUtils;
+<%_ } _%>
 import <%=packageName%>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%=packageName%>.service.util.RandomUtil;
-import <%=packageName%>.web.rest.errors.*;
 <%_ } _%>
 
+<%_ if (databaseType !== 'no') { _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<%_ } _%>
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-<%_ if (!reactive) { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
-<%_ } _%>
+    <%_ } _%>
 import org.springframework.data.domain.Pageable;
     <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.scheduling.annotation.Scheduled;
     <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -75,16 +81,15 @@ import reactor.core.publisher.Mono;
 <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && authenticationType === 'session'  && !reactive) { _%>
 import java.time.LocalDate;
 <%_ } _%>
+<%_ if (databaseType !== 'no') { _%>
 import java.time.Instant;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
 <%_ if (!reactive) { _%>
 import java.util.stream.Collectors;
-<%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-import java.util.stream.Stream;
 <%_ } _%>
 
 /**
@@ -93,6 +98,7 @@ import java.util.stream.Stream;
 @Service<% if (databaseType === 'sql') { %>
 @Transactional<% } %>
 public class UserService {
+<%_ if (databaseType !== 'no') { _%>
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -219,7 +225,7 @@ public class UserService {
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
-                throw new LoginAlreadyUsedException();
+                throw new UsernameAlreadyUsedException();
             }
         });
         userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
@@ -271,7 +277,7 @@ public class UserService {
                     <%_ } _%>
                     return userRepository.delete(existingUser);
                 } else {
-                    throw new LoginAlreadyUsedException();
+                    throw new UsernameAlreadyUsedException();
                 }
             })
             .then(userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()))
@@ -399,7 +405,7 @@ public class UserService {
             .doOnNext(user1 -> log.debug("Created Information for User: {}", user1));
     <%_ } _%>
     }
-<%_ } _%>
+<%_ } // authenticationType !== 'oauth2' _%>
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
@@ -645,7 +651,7 @@ public class UserService {
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> getUserWithAuthorities(<%= pkType %> id) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> getUserWithAuthorities(<% if (pkType === 'UUID') { %>String<% } else { %><%= pkType %><% } %> id) {
         <%_ if (databaseType === 'sql') { _%>
         return userRepository.findOneWithAuthoritiesById(id);
         <%_ } else { // MongoDB, Couchbase and and Cassandra _%>
@@ -688,7 +694,7 @@ public class UserService {
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
         userRepository
-            .findAllByActivatedIsFalseAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
+            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
             <%_ if (!reactive) { _%>
             .forEach(user -> {
                 log.debug("Deleting not activated user {}", user.getLogin());
@@ -720,24 +726,6 @@ public class UserService {
     }
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-
-    /**
-     * Returns the user from an OAuth 2.0 login.
-     * Synchronizes the user in the local repository.
-     *
-     * @param authToken OAuth2 authentication.
-     * @return the user from the authentication.
-     */
-    public <%= asDto('User') %> getUserFromAuthentication(OAuth2AuthenticationToken authToken) {
-        Map<String, Object> attributes = authToken.getPrincipal().getAttributes();
-        <%= asEntity('User') %> user = getUser(attributes);
-        user.setAuthorities(authToken.getAuthorities().stream().map(authority -> {
-                Authority auth = new Authority();
-                auth.setName((authority).getAuthority());
-                return auth;
-            }).collect(Collectors.toSet()));
-        return new <%= asDto('User') %>(syncUserWithIdP(attributes, user));
-    }
 
     private <%= asEntity('User') %> syncUserWithIdP(Map<String, Object> details, <%= asEntity('User') %> user) {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
@@ -783,13 +771,54 @@ public class UserService {
         }
         return user;
     }
+    <%_ } _%>
 
-    private static <%= asEntity('User') %> getUser(Map<String, Object> details) {
-        <%= asEntity('User') %> user = new <%= asEntity('User') %>();
-        user.setId((String) details.get("sub"));
+<%_ } // databaseType !== 'no' _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
+    /**
+     * Returns the user from an OAuth 2.0 login or resource server with JWT.
+        <%_ if (databaseType !== 'no') { _%>
+     * Synchronizes the user in the local repository.
+        <%_ } _%>
+     *
+     * @param authToken the authentication token.
+     * @return the user from the authentication.
+     */
+    public UserDTO getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+        Map<String, Object> attributes;
+        if (authToken instanceof OAuth2AuthenticationToken) {
+            attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
+        } else if (authToken instanceof JwtAuthenticationToken) {
+            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
+        } else {
+            throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
+        }
+        <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = getUser(attributes);
+        user.setAuthorities(authToken.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+            .map(authority -> {
+                Authority auth = new Authority();
+                auth.setName(authority);
+                return auth;
+            })
+            <%_ } _%>
+            .collect(Collectors.toSet()));
+        return <% if (databaseType !== 'no') { %>new UserDTO(syncUserWithIdP(attributes, user))<% } else { %>user<% } %>;
+    }
+
+    private static <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> getUser(Map<String, Object> details) {
+        <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = new <%= databaseType === 'no' ? asDto('User') : asEntity('User') %>();
+        // handle resource server JWT, where sub claim is email and uid is ID
+        if (details.get("uid") != null) {
+            user.setId((String) details.get("uid"));
+            user.setLogin((String) details.get("sub"));
+        } else {
+            user.setId((String) details.get("sub"));
+        }
         if (details.get("preferred_username") != null) {
             user.setLogin(((String) details.get("preferred_username")).toLowerCase());
-        } else {
+        } else if (user.getLogin() == null) {
             user.setLogin(user.getId());
         }
         if (details.get("given_name") != null) {
@@ -803,19 +832,18 @@ public class UserService {
         }
         if (details.get("email") != null) {
             user.setEmail(((String) details.get("email")).toLowerCase());
+        } else {
+            user.setEmail((String) details.get("sub"));
         }
         if (details.get("langKey") != null) {
             user.setLangKey((String) details.get("langKey"));
         } else if (details.get("locale") != null) {
-            // For the locale issue, we suggest you adjust the format based on the OAuth server.
-            // Here we can't cater for all the use-cases, see:
-            // https://github.com/jhipster/generator-jhipster/issues/7866
-            // for the en_US or en_** issue.
-            // Since JHipter only has one "en" language, we will handle it here,
-            // for other languages, please handle it accordingly.
+            // trim off country code if it exists
             String locale = (String) details.get("locale");
-            if (locale.startsWith("en_") || locale.startsWith("en-")) {
-                locale = "en";
+            if (locale.contains("_")) {
+                locale = locale.substring(0, locale.indexOf("_"));
+            } else if (locale.contains("-")) {
+                locale = locale.substring(0, locale.indexOf("-"));
             }
             user.setLangKey(locale.toLowerCase());
         } else {
@@ -829,7 +857,7 @@ public class UserService {
         return user;
     }
     <%_ } _%>
-    <%_ if (cacheManagerIsAvailable === true) { _%>
+    <%_ if (cacheManagerIsAvailable === true && databaseType !== 'no') { _%>
 
     private void clearUserCaches(<%= asEntity('User') %> user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());

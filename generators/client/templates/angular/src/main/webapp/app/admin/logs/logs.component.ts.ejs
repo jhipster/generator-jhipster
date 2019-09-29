@@ -41,13 +41,17 @@ export class LogsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.logsService.findAll().subscribe((response) => this.loggers = response.body);
+        this.logsService.findAll().subscribe(response => this.extractLoggers(response));
     }
 
     changeLevel(name: string, level: string) {
-        const log = new Log(name, level);
-        this.logsService.changeLevel(log).subscribe(() => {
-            this.logsService.findAll().subscribe((response) => this.loggers = response.body);
+        this.logsService.changeLevel(name, level).subscribe(() => {
+            this.logsService.findAll().subscribe(response => this.extractLoggers(response));
         });
+    }
+
+    private extractLoggers(response) {
+        this.loggers = Object.entries(response.body.loggers)
+            .map(e => new Log(e[0], e[1]['effectiveLevel']));
     }
 }

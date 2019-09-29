@@ -19,9 +19,10 @@
 import SockJS from 'sockjs-client';
 
 import Stomp from 'webstomp-client';
-import { Observable } from 'rxjs'; // tslint:disable-line
-import { Observer } from 'rxjs/Observer'; // tslint:disable-line
+import { Observable } from 'rxjs';
+<%_ if (authenticationType !== 'session') { _%>
 import { Storage } from 'react-jhipster';
+<%_ } _%>
 
 import { ACTION_TYPES as ADMIN_ACTIONS } from 'app/modules/administration/administration.reducer';
 import { ACTION_TYPES as AUTH_ACTIONS } from 'app/shared/reducers/authentication';
@@ -36,7 +37,7 @@ let subscriber = null;
 let connection: Promise<any>;
 let connectedPromise: any = null;
 let listener: Observable<any>;
-let listenerObserver: Observer<any>;
+let listenerObserver: any;
 let alreadyConnectedOnce = false;
 
 const createConnection = (): Promise<any> => new Promise((resolve, reject) => (connectedPromise = resolve));
@@ -74,13 +75,14 @@ const connect = () => {
 
   // building absolute path so that websocket doesn't fail when deploying with a context path
   const loc = window.location;
+  const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
   const headers = {};
 <%_ if (authenticationType === 'session') { _%>
-  const url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+  const url = '//' + loc.host + baseHref + '/websocket/tracker';
   headers['X-XSRF-TOKEN'] = cookie.read('XSRF-TOKEN');
 <%_ } else { _%>
-  let url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+  let url = '//' + loc.host + baseHref + '/websocket/tracker';
   const authToken = Storage.local.get('jhi-authenticationToken') || Storage.session.get('jhi-authenticationToken');
   if (authToken) {
     url += '?access_token=' + authToken;
@@ -113,7 +115,6 @@ const disconnect = () => {
 };
 
 const receive = () => listener;
-
 
 const unsubscribe = () => {
   if (subscriber !== null) {

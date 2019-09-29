@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized  %>",
                 "createLabel": "建立一筆新的 <%= entityClassHumanized %>",
                 "createOrEditLabel": "建立或編輯 <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "搜尋 <%= entityClassHumanized %>"<% } %>
+                "search": "搜尋 <%= entityClassHumanized %>"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "新的 <%= entityClassHumanized %> 建立成功，識別碼為 {{ param }}",
             "updated": "識別碼為 {{ param }} 的 <%= entityClassHumanized %> 更新成功",

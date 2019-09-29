@@ -23,8 +23,7 @@ import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { LogsComponent } from 'app/admin/logs/logs.component';
 import { LogsService } from 'app/admin/logs/logs.service';
-import { ITEMS_PER_PAGE } from 'app/shared';
-import { Log } from 'app/admin';
+import { Log } from 'app/admin/logs/log.model';
 
 describe('Component Tests', () => {
     describe('LogsComponent', () => {
@@ -61,7 +60,13 @@ describe('Component Tests', () => {
                 spyOn(service, 'findAll').and.returnValue(
                     of(
                         new HttpResponse({
-                            body: [log],
+                            body: {
+                                loggers: {
+                                    main: {
+                                        effectiveLevel: 'WARN'
+                                    }
+                                }
+                            },
                             headers
                         })
                     )
@@ -80,7 +85,17 @@ describe('Component Tests', () => {
                 // GIVEN
                 const log = new Log('main', 'ERROR');
                 spyOn(service, 'changeLevel').and.returnValue(of(new HttpResponse()));
-                spyOn(service, 'findAll').and.returnValue(of(new HttpResponse({ body: [log] })));
+                spyOn(service, 'findAll').and.returnValue(of(
+                    new HttpResponse({
+                        body: {
+                            loggers: {
+                                main: {
+                                    effectiveLevel: 'ERROR'
+                                }
+                            }
+                        }
+                    })
+                ));
 
                 // WHEN
                 comp.changeLevel('main', 'ERROR');

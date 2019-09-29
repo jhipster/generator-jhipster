@@ -27,3 +27,8 @@ fi
 helm dep up ./<%- appConfig.baseName.toLowerCase() %>
 helm upgrade --install <%- appConfig.baseName.toLowerCase() %> ./<%- appConfig.baseName.toLowerCase() %> --namespace <%- kubernetesNamespace %>
 <%_ }) _%>
+
+<%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
+kubectl apply -f istio/
+<%_ } _%>
+

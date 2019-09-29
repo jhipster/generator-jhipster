@@ -26,10 +26,11 @@ let resultEntity;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
 let otherEntityName;
+let dataTypeName = (isUsingMapsId === true && mapsIdAssoc.otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : 'long';
 
 if (isUsingMapsId === true) {
     mapsIdEntityInstance = mapsIdAssoc.otherEntityNameCapitalized.charAt(0).toLowerCase() + mapsIdAssoc.otherEntityNameCapitalized.slice(1);
-    mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`; 
+    mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
     otherEntityName = mapsIdAssoc.otherEntityName;
     if (isController === true) { _%>
         if (Objects.isNull(<%= instanceName%>.get<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ if (dto === 'mapstruct') { _%> Id <%_ } _%>())) {
@@ -42,14 +43,14 @@ if (!viaService) {
         resultEntity = asEntity(entityInstance); _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = <%= dtoToEntity %>(<%= instanceName %>);
         <%_ if (isUsingMapsId === true) { _%>
-        long <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>Id();
-        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance%>::<%= otherEntityName %>);
+        <%= dataTypeName %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>Id();
+        <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= asEntity(entityInstance) %>::<%= mapsIdAssoc.relationshipName %>);
         <%_ } _%>
         <%= asEntity(entityInstance) %> = <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= asEntity(entityInstance) %>);
     <%_ } else { resultEntity = 'result'; _%>
         <%_ if (isUsingMapsId === true) { _%>
-        long <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId();
+        <%= dataTypeName %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= instanceName%>::<%= otherEntityName %>);
         <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
@@ -59,7 +60,7 @@ if (!viaService) {
         return result;
     <%_ }}} else { _%>
         <%_ if (isUsingMapsId === true && isController === false) { _%>
-        long <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId();
+        <%= dataTypeName %> <%= otherEntityName %>Id = <%= entityInstance %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= entityInstance%>::<%= otherEntityName %>);
         <%_ } _%>
         <%= returnPrefix %> <%= entityInstance %>Service.save(<%= instanceName %>);

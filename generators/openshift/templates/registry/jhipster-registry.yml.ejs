@@ -25,7 +25,7 @@
 # template can even be saved in OpenShift namespace as well so that have the flexibility to do any project specific customizations. Pls
 # note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: jhipster-registry-template
@@ -54,7 +54,7 @@ parameters:
     displayName: "*** PLEASE DO NOT CHANGE THIS ***"
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Secret
     metadata:
       name: ${SECRET_REF}
@@ -62,7 +62,7 @@ objects:
     data:
       registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
   -
-    apiVersion: apps/v1beta1
+    apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
     kind: StatefulSet
     metadata:
       name: ${APPLICATION_NAME}
@@ -124,7 +124,7 @@ objects:
             configMap:
               name: application-config
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       name: ${APPLICATION_NAME}
@@ -144,7 +144,7 @@ objects:
       selector:
         app: ${APPLICATION_NAME}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
     metadata:
       name: ${APPLICATION_NAME}

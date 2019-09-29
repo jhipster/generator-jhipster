@@ -26,7 +26,7 @@ import org.apache.cassandra.exceptions.ConfigurationException;
 import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
@@ -55,7 +55,7 @@ public class AbstractCassandraTest {
     public static final int CASSANDRA_TEST_PORT = 9042;
     private static boolean started = false;
 
-    @BeforeClass
+    @BeforeAll
     public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException {
         if (!started) {
             startTestcontainer();

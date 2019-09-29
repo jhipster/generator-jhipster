@@ -106,7 +106,7 @@
                 <%_ } else if (authenticationType === 'jwt') { _%>
                     var authToken = JSON.parse(localStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken") || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
-                    window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
+                    window.swaggerUi.api.clientAuthorizations.add("jwt", apiKeyAuth);
                 <%_ } _%>
                 }
 

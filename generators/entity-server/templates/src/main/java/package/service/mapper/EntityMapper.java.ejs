@@ -59,12 +59,16 @@ _%>
 // DTO -> entity mapping
 var renMapAnotDto = false;  //Render Mapping Annotation during DTO to Entity conversion?
 // var hasOAuthUser = false; // if OAuthUser, use a String id in fromId() method
+let primaryKeyType = pkType;
 for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
     const relationshipName = relationships[idx].relationshipName;
-    // hasOAuthUser = (relationshipName === 'user' && authenticationType === 'oauth2');
+    const otherEntityName = relationships[idx].otherEntityName;
     const relationshipNamePlural = relationships[idx].relationshipNamePlural;
+    const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
     const ownerSide = relationships[idx].ownerSide;
+    const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+    primaryKeyType = (isUsingMapsId === true && otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : primaryKeyType;
     if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
         renMapAnotDto = true;
 _%>
@@ -75,14 +79,17 @@ _%>
     @Mapping(target = "<%= relationshipNamePlural %>", ignore = true)
             <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) { renMapAnotDto = true; _%>
     @Mapping(target = "<%= relationshipName %>", ignore = true)
-            <%_ } _%>
-        <%_ } _%>
+            <%_ }
+    if ((relationshipType === 'one-to-many' || relationshipType === 'many-to-many') && fluentMethods) {_%>
+    @Mapping(target = "remove<%= relationshipNameCapitalized %>", ignore = true)
+    <%_ } _%>
+    <%_ } _%>
     <%_ if (renMapAnotDto === true) { _%>
     <%= asEntity(entityClass) %> toEntity(<%= asDto(entityClass)%> <%= asDto(entityInstance) %>);
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 
-    default <%= asEntity(entityClass) %> fromId(<%= pkType %> id) {
+    default <%= asEntity(entityClass) %> fromId(<%= primaryKeyType %> id) {
         if (id == null) {
             return null;
         }

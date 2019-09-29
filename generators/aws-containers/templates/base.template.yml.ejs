@@ -40,7 +40,7 @@ Resources:
     Properties:
       Parameters:
         parentStackName: !Ref AWS::StackName
-        repositoryName: <%= aws.cloudFormationName%>/<%= app.baseName %>
+        repositoryName: <%= aws.cloudFormationName.toLowerCase() %>/<%= app.baseName.toLowerCase() %>
         shouldDeployService: !Ref shouldDeployService
         databasePassword: !Ref <%= app.baseName %>DBPassword
       TemplateURL: !Join [ '', [ 'https://s3.amazonaws.com/',!Ref applicationStackS3Bucket, '/<%= app.baseName %>.template.yml'] ]

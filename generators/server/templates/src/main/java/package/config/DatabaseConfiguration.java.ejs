@@ -30,10 +30,7 @@ import com.mongodb.MongoClient;
 
 import com.couchbase.client.java.Bucket;
 import com.github.couchmove.Couchmove;
-import <%=packageName%>.repository.CustomN1qlCouchbaseRepository;
-<%_ if (reactive) { _%>
-import <%=packageName%>.repository.reactive.CustomReactiveN1qlCouchbaseRepository;
-<%_ } _%>
+import <%=packageName%>.repository.Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
 import org.apache.commons.codec.binary.Base64;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -62,13 +59,18 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-import org.springframework.core.convert.converter.Converter;<% } %>
+import org.springframework.context.annotation.Profile;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+import org.springframework.core.convert.converter.Converter;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
+    <%_ } _%>
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
@@ -86,7 +88,9 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.BeanNames;
 import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
+    <%_ if (!reactive) { _%>
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
+    <%_ } _%>
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
     <%_ if (reactive) { _%>
 import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
@@ -116,6 +120,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 <%_ } _%>
 
 @Configuration
@@ -128,13 +133,10 @@ import java.util.List;
 @EnableElasticsearchRepositories("<%=packageName%>.repository.search")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
-    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
 @EnableMongoRepositories(basePackages = "<%=packageName%>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
     <%_ } else { _%>
-@EnableMongoRepositories("<%=packageName%>.repository")
-    <%_ } _%>
-    <%_ if (reactive) { _%>
-@EnableReactiveMongoRepositories("<%=packageName%>.repository.reactive")
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%=packageName%>.repository")
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -145,16 +147,17 @@ import java.util.List;
 @Import(value = {MongoAutoConfiguration.class, MongoReactiveAutoConfiguration.class})
     <%_ } else { _%>
 @Import(value = MongoAutoConfiguration.class)
-    <%_ } _%>
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
-@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
     <%_ if (reactive) { _%>
-@EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository.reactive")
+@EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
+    <%_ } else { _%>
+@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
+@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
     <%_ } _%>
 @Import(value = CouchbaseAutoConfiguration.class)
-@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 public class DatabaseConfiguration {
 
@@ -244,6 +247,8 @@ public class DatabaseConfiguration {
         converters.add(BigDecimalToStringConverter.INSTANCE);
         converters.add(StringToBigDecimalConverter.INSTANCE);
         converters.add(StringToByteConverter.INSTANCE);
+        converters.add(UUIDToStringConverter.INSTANCE);
+        converters.add(StringToUUIDConverter.INSTANCE);
         return new CouchbaseCustomConversions(converters);
     }
 
@@ -333,7 +338,7 @@ public class DatabaseConfiguration {
     }
 
     /**
-     * Simple singleton to convert from {@link String} {@link byte[]} representation.
+     * Simple singleton to convert from {@link String} {@code byte[]} representation.
      */
     @ReadingConverter
     public enum StringToByteConverter implements Converter<String, byte[]> {
@@ -343,6 +348,35 @@ public class DatabaseConfiguration {
         public byte[] convert(String source) {
             return Base64.decodeBase64(source);
         }
+    }
+
+    /**
+    * Simple singleton to convert {@link UUID}s to their {@link String} representation.
+    */
+    @WritingConverter
+    public enum UUIDToStringConverter implements Converter<UUID, String> {
+
+        INSTANCE;
+
+        @Override
+        public String convert(UUID source) {
+            return source == null ? null : source.toString();
+        }
+    }
+
+    /**
+    * Simple singleton to convert from {@link String} {@link UUID} representation.
+    */
+    @ReadingConverter
+    public enum StringToUUIDConverter implements Converter<String, UUID> {
+
+        INSTANCE;
+
+        @Override
+        public UUID convert(String source) {
+            return source == null ? null : UUID.fromString(source);
+        }
+
     }
 <%_ } _%>
 }

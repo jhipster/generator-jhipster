@@ -22,6 +22,7 @@
             "data": {
                 "remoteAddress": "Віддалена адреса:"
             }
-        }
+        },
+        "notFound": "No audit found"
     }
 }

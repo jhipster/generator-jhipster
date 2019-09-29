@@ -16,8 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
 dependencies {
-    runtimeOnly "org.springframework.boot:spring-boot-devtools"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     implementation "com.h2database:h2"
     <%_ } _%>
@@ -41,11 +48,19 @@ springBoot {
 
 bootRun {
     args = []
+<%_ if (cacheProvider === 'infinispan') { _%>
+    jvmArgs = ["-Djgroups.tcp.address=NON_LOOPBACK", "-Djava.net.preferIPv4Stack=true"]
+<%_ } _%>
 }
 
 <%_ if (!skipClient) { _%>
-task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
-    inputs.file("package-lock.json")
+task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
+    <%_ if (clientPackageManager==='npm') { _%>
+    inputs.files("package-lock.json")
+    <%_ } else { _%>
+    inputs.files("yarn.lock")
+    <%_ } _%>
+    inputs.files("build.gradle")
     inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
 
     def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>/")
@@ -54,13 +69,16 @@ task webpackBuildDev(type: <%= _.upperFirst(clientPackageManager) %>Task) {
 
     outputs.dir("<%= CLIENT_DIST_DIR %>")
 
-    dependsOn <%= clientPackageManager %>Install
+    dependsOn <%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>
 
     args = ["run", "webpack:build"]
+    environment = [APP_VERSION: project.version]
 }
 <%_ } _%>
 
 processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', profiles)
     filesMatching("**/application.yml") {
         filter {
             it.replace("#project.version#", version)
@@ -81,6 +99,6 @@ processResources {
 }
 
 <%_ if (!skipClient) { _%>
-processResources.dependsOn webpackBuildDev
+processResources.dependsOn webpack
 bootJar.dependsOn processResources
 <%_ } _%>

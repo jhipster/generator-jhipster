@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Аудит",
+        "filter": {
+            "title": "Сана бўйича филтр",
+            "from": "дан",
+            "to": "гача",
+            "button": {
+                "weeks": "Ҳафта",
+                "today": "бугун",
+                "clear": "ўчириш",
+                "close": "ёпиш"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Фойдаланувчи",
+                "date": "Сана",
+                "status": "Ҳолат",
+                "data": "Қўшимча маълумот"
+            },
+            "data": {
+                "remoteAddress": "Масофадаги манзил:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

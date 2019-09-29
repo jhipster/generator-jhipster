@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Thêm mới một <%= entityClassHumanized %>",
                 "createOrEditLabel": "Thêm mới hoặc cập nhật <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "Tìm <%= entityClassHumanized %>"<% } %>
+                "search": "Tìm <%= entityClassHumanized %>"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "Một <%= entityClassHumanized %> mới được tạo với định danh {{ param }}",
             "updated": "Một <%= entityClassHumanized %> cập nhật với định danh {{ param }}",

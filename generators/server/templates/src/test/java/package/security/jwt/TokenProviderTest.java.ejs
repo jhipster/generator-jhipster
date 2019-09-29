@@ -23,8 +23,8 @@ import <%=packageName%>.security.AuthoritiesConstants;
 import java.security.Key;
 import java.util.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,7 +46,7 @@ public class TokenProviderTest {
     private Key key;
     private TokenProvider tokenProvider;
 
-    @Before
+    @BeforeEach
     public void setup() {
         tokenProvider = new TokenProvider( new JHipsterProperties());
         key = Keys.hmacShaKeyFor(Decoders.BASE64

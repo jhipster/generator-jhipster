@@ -17,21 +17,13 @@
 # limitations under the License.
 #
 
-os:
-    - linux
+dist: bionic
 services:
     - docker
+    - xvfb
 language: node_js
 node_js:
-    - '10.15.2'
-jdk:
-    - openjdk11
-addons:
-    apt:
-        sources:
-            - google-chrome
-        packages:
-            - google-chrome-stable
+    - '10.16.3'
 cache:
     directories:
         - $HOME/.m2
@@ -41,6 +33,7 @@ env:
         - JHI_PROFILE=dev
         - JHI_RUN_APP=1
         - JHI_PROTRACTOR=0
+        - JHI_JDK=11
         # if JHI_LIB_BRANCH value is release, use the release from Maven
         - JHI_LIB_REPO=https://github.com/jhipster/jhipster.git
         - JHI_LIB_BRANCH=master
@@ -53,31 +46,28 @@ env:
         - JHI_DISABLE_WEBPACK_LOGS=true
         - JHI_E2E_HEADLESS=true
         - JHI_SCRIPTS=$TRAVIS_BUILD_DIR/test-integration/scripts
+        - NG_CLI_ANALYTICS="false"
     matrix:
-        - JHI_APP=jdl-default JHI_ENTITY=jdl JHI_PROFILE=prod JHI_PROTRACTOR=1
         - JHI_APP=ngx-default JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql JHI_SONAR=1
-        - JHI_APP=ngx-psql-es-noi18n JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sqlfull
+        - JHI_APP=ngx-psql-es-noi18n-mapsid JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sqlfull
         - JHI_APP=ngx-gradle-fr JHI_PROFILE=prod JHI_PROTRACTOR=1 JHI_ENTITY=sql JHI_WAR=1
-        - JHI_APP=ngx-mariadb-oauth2-sass-infinispan JHI_PROTRACTOR=1 JHI_ENTITY=sql
         - JHI_APP=ms-ngx-gateway-eureka JHI_ENTITY=sql JHI_WAR=1
         - JHI_APP=ms-micro-eureka JHI_ENTITY=micro JHI_WAR=1
+        - JHI_APP=ms-micro-consul JHI_ENTITY=micro
         - JHI_APP=ngx-mongodb-kafka-cucumber JHI_ENTITY=mongodb
+        - JHI_APP=ngx-session-cassandra-fr JHI_ENTITY=cassandra
+        - JHI_APP=ngx-couchbase JHI_PROFILE=prod JHI_ENTITY=couchbase
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration
 #----------------------------------------------------------------------
 before_install:
-    - jdk_switcher use oraclejdk8
+    - sudo apt-get install -y google-chrome-stable
     - java -version
     - export TZ=Australia/Canberra
     - date
-    - sudo /etc/init.d/mysql stop
-    - sudo /etc/init.d/postgresql stop
-    # Use this for Protractor
-    - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
-    # Update NPM
-    - npm install -g npm
+    # Install Yarn
+    - npm install -g yarn
     - $JHI_SCRIPTS/04-git-config.sh
 
 #----------------------------------------------------------------------

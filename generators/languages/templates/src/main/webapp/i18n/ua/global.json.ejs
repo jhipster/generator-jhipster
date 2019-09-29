@@ -47,7 +47,7 @@
                 "health": "Стан",
                 "configuration": "Налаштування",
                 "logs": "Логи",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Аудит",
                 <%_ } _%>
                 "apidocs": "API",
@@ -84,13 +84,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Пароль необхідно вказати.",
-                    "minlength": "Довжина пароля повинна бути хоча б 5 символів",
+                    "minlength": "Довжина пароля повинна бути хоча б 4 символів",
                     "maxlength": "Пароль не може бути довшим ніж 50 cимволів",
                     "strength": "Складність пароля:"
                 },
                 "confirmpassword": {
                     "required": "Підтвердження пароля необхідно вказати.",
-                    "minlength": "Довжина підтвердження пароля повинна бути хоча б 5 символів",
+                    "minlength": "Довжина підтвердження пароля повинна бути хоча б 4 символів",
                     "maxlength": "Підтвердження пароля не може бути довшим ніж 50 cимволів"
                 },
                 "email": {

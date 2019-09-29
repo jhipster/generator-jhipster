@@ -47,7 +47,7 @@
                 "health": "Sundheds",
                 "configuration": "Konfiguration",
                 "logs": "Logs",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Audits",
                 <%_ } _%>
                 "apidocs": "API",
@@ -86,14 +86,14 @@
             "validate": {
                 "newpassword": {
                     "required": "Kodeord skal indtastes.",
-                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
-                    "maxlength": "Kodeordet må ikke overskride 20 tegn!",
+                    "minlength": "Kodeordet skal som minimum være på 4 tegn!",
+                    "maxlength": "Kodeordet må ikke overskride 50 tegn!",
                     "strength": "Kodeord strength:"
                 },
                 "confirmpassword": {
                     "required": "Kodeordet skal bekræftes",
-                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
-                    "maxlength": "Kodeordet må ikke overskride 20 tegn!"
+                    "minlength": "Kodeordet skal som minimum være på 4 tegn!",
+                    "maxlength": "Kodeordet må ikke overskride 50 tegn!"
                 },
                 "email": {
                     "required": "Din email adresse er påkrævet.",

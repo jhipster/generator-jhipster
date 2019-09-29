@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>;
+package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 
@@ -124,8 +124,10 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByActivationKey(String activationKey);
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
-    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndCreatedDateBefore(Instant dateTime);
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
+    <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
 
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByResetKey(String resetKey);
@@ -168,7 +170,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
     <%_ } _%>
-    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByEmail(String email);
+    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
     <%_ } _%>
 
     <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asEntity('User') %>> findAllByLoginNot(Pageable pageable, String login);

@@ -87,7 +87,8 @@ describe('Component Tests', () => {
                         rememberMe: true
                     });
                     mockLoginService.setResponse({});
-                    mockStateStorageService.setResponse({redirect: 'dummy'});
+                    mockStateStorageService.setResponse('admin/users?page=0');
+                    mockRouter.url = '/admin/metrics';
 
                     // WHEN/
                     comp.login();
@@ -100,7 +101,7 @@ describe('Component Tests', () => {
                     expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
                     expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);
                     expect(mockStateStorageService.storeUrlSpy).toHaveBeenCalledWith(null);
-                    expect(mockRouter.navigateSpy).toHaveBeenCalledWith([{redirect: 'dummy'}]);
+                    expect(mockRouter.navigateByUrlSpy).toHaveBeenCalledWith('admin/users?page=0');
                 })
             )
         );
@@ -121,6 +122,7 @@ describe('Component Tests', () => {
                     });
                     mockLoginService.setResponse({});
                     mockStateStorageService.setResponse(null);
+                    mockRouter.url = '/admin/metrics';
 
                     // WHEN
                     comp.login();
@@ -149,7 +151,7 @@ describe('Component Tests', () => {
             const expected = {
                 username: '',
                 password: '',
-                rememberMe: true
+                rememberMe: false
             };
 
 
@@ -170,7 +172,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('to state register');
-            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/register']);
+            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/account/register']);
         });
 
         it('should redirect user when request password', () => {
@@ -179,7 +181,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('to state requestReset');
-            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/reset', 'request']);
+            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/account/reset', 'request']);
         });
     });
 });

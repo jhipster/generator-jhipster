@@ -34,8 +34,10 @@
 logging:
     level:
         ROOT: INFO
-        <%=packageName%>: INFO
         io.github.jhipster: INFO
+        <%_ if (packageName !== 'io.github.jhipster') { _%>
+        <%=packageName%>: INFO
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -46,31 +48,38 @@ eureka:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
+management:
+    metrics:
+        export:
+            prometheus:
+                enabled: false
+
 spring:
     devtools:
         restart:
             enabled: false
         livereload:
             enabled: false
-    <%_ if (messageBroker === 'kafka' || serviceDiscoveryType === 'consul') { _%>
+    <%_ if (messageBroker === 'kafka') { _%>
+    kafka:
+        consumer:
+            bootstrap-servers: localhost:9092
+            group-id: group_id
+            auto-offset-reset: earliest
+            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        producer:
+            bootstrap-servers: localhost:9092
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
-        <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             discovery:
                prefer-ip-address: true
             host: localhost
             port: 8500
-        <%_ } _%>
-        <%_ if (messageBroker === 'kafka') { _%>
-        stream:
-            kafka:
-                binder:
-                    brokers: localhost
-                    zk-nodes: localhost
-            bindings:
-                output:
-                    destination: topic-jhipster
-        <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     datasource:
@@ -141,8 +150,7 @@ spring:
             hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
                 <%_ } else if (cacheProvider === 'infinispan') { _%>
-            hibernate.cache.region.factory_class: <%=packageName%>.config.CacheFactoryConfiguration
-            hibernate.cache.inifinispan.statistics: false
+            hibernate.cache.infinispan.statistics: true
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
             hibernate.cache.infinispan.entity.memory.size: 1000
@@ -172,6 +180,10 @@ spring:
     <%_ if (searchEngine === 'elasticsearch') { _%>
         jest:
             uri: http://localhost:9200
+    # see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-nosql.html#boot-features-connecting-to-elasticsearch-jest
+    elasticsearch:
+        rest:
+            uris: http://localhost:9200
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -237,7 +249,7 @@ server:
 # ===================================================================
 
 jhipster:
-    <%_ if (applicationType === 'gateway') { _%>
+    <%_ if (applicationType === 'gateway' && cacheProvider === 'hazelcast' && serviceDiscoveryType) { _%>
     gateway:
         rate-limiting:
             enabled: false
@@ -263,22 +275,27 @@ jhipster:
             time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
             max-entries: 1000 # Number of objects in each cache entry
         <%_ } _%>
+        <%_ if (cacheProvider === 'caffeine') { _%>
+        caffeine: # Caffeine configuration
+            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+            max-entries: 1000 # Number of objects in each cache entry
+        <%_ } _%>
         <%_ if (cacheProvider === 'infinispan') { _%>
         infinispan:
             config-file: default-configs/default-jgroups-tcp.xml
             statsEnabled: true
             # local app cache
             local:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 1000 # Number of objects in each cache entry
             # distributed app cache
             distributed:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 1000 # Number of objects in each cache entry
                 instance-count: 2
             # replicated app cache
             replicated:
-                time-to-live-seconds: 60 # By default objects stay 1 hour (in minutes) in the cache
+                time-to-live-seconds: 3600 # By default objects stay 1 hour (in seconds) in the cache
                 max-entries: 1000 # Number of objects in each cache entry
         <%_ } _%>
         <%_ if (cacheProvider === 'memcached') { _%>
@@ -287,6 +304,11 @@ jhipster:
             servers: localhost:11211
             expiration: 300
             use-binary-protocol: true
+        <%_ } _%>
+        <%_ if (cacheProvider === 'redis') { _%>
+        redis: # Redis configuration
+            expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+            server: redis://localhost:6379
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
@@ -328,18 +350,22 @@ jhipster:
             key: <%= rememberMeKey %>
 <%_ } _%>
     mail: # specific JHipster mail property, for standard properties see MailProperties
-        from: <%= baseName %>@localhost
         base-url: http://my-server-url-to-change # Modify according to your server's URL
     metrics:
         logs: # Reports metrics in the logs
             enabled: false
             report-frequency: 60 # in seconds
     logging:
+        use-json-format: false # By default, logs are not in Json format
         logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
             enabled: false
             host: localhost
             port: 5000
             queue-size: 512
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    audit-events:
+        retention-period: 30 # Number of days before audit events are deleted.
+    <%_ } _%>
 <%_ if (applicationType === 'uaa') { _%>
 uaa:
     #be sure to to change to a different keystore in production!

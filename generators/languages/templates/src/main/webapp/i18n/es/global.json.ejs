@@ -19,7 +19,7 @@
 {
     "global": {
         "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "Está usando un navegador <strong>no actualizado</strong>. Por favor, <a href=\"http://browsehappy.com/?locale=en\">actualice su navegador</a> para mejorar su experiencia.",
+        "browsehappy": "Está usando un navegador <strong>no actualizado</strong>. Por favor, <a href=\"http://browsehappy.com/?locale=es\">actualice su navegador</a> para mejorar su experiencia.",
         "menu": {
             "home": "Inicio",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
@@ -42,12 +42,12 @@
                 "gateway": "Gateway",
                 <%_ } _%>
                 "userManagement": "Gestión de usuarios",
-                "tracker": "Registro de los usuarios",
+                "tracker": "Registro de usuarios",
                 "metrics": "Métricas",
                 "health": "Salud",
                 "configuration": "Configuración",
                 "logs": "Logs",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Auditorías",
                 <%_ } _%>
                 "apidocs": "API",
@@ -59,8 +59,8 @@
         "form": {
             "username.label": "Usuario",
             "username.placeholder": "Nombre de usuario",
-            "currentpassword.label": "Current password",
-            "currentpassword.placeholder": "Current password",
+            "currentpassword.label": "Contraseña actual",
+            "currentpassword.placeholder": "Contraseña actual",
             "newpassword.label": "Nueva contraseña",
             "newpassword.placeholder": "Nueva contraseña",
             "confirmpassword.label": "Confirmación de la nueva contraseña",
@@ -72,11 +72,11 @@
             "info": {
                 "authenticated": {
                     "prefix": "Si desea ",
-                    "link": "iniciar una sesión",
-                    "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrator (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\")."
+                    "link": "iniciar sesión",
+                    "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\")."
                 },
                 "register": {
-                    "noaccount": "¿No tienes una cuenta todavía?",
+                    "noaccount": "¿Aún no tienes una cuenta?",
                     "link": "Crea una cuenta"
                 }
             },
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Se requiere que ingrese una contraseña.",
-                    "minlength": "Se requiere que su contraseña tenga por lo menos 5 caracteres",
+                    "minlength": "Se requiere que su contraseña tenga por lo menos 4 caracteres",
                     "maxlength": "Su contraseña no puede tener más de 50 caracteres",
                     "strength": "Seguridad de la contraseña:"
                 },
                 "confirmpassword": {
                     "required": "Se requiere que confirme la contraseña.",
-                    "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 5 caracteres",
+                    "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 4 caracteres",
                     "maxlength": "Su contraseña de confirmación no puede tener más de 50 caracteres"
                 },
                 "email": {
@@ -109,7 +109,7 @@
         "ribbon": {
             "dev": "Development"
         },
-        "item-count": "Monstrando {{first}} - {{second}} de {{total}} artículos."
+        "item-count": "Mostrando {{first}} - {{second}} de {{total}} elementos."
     },
     "entity": {
         "action": {
@@ -119,7 +119,7 @@
             "cancel": "Cancelar",
             "delete": "Eliminar",
             "edit": "Editar",
-            "open": "Open",
+            "open": "Abrir",
             "save": "Guardar",
             "view": "Vista"
         },
@@ -144,15 +144,15 @@
         }
     },
     "error": {
-        "internalServerError": "Internal server error",
+        "internalServerError": "Error interno en el servidor",
         "server.not.reachable": "Servidor no accesible",
-        "url.not.found": "Not found",
+        "url.not.found": "No existe",
         "NotNull": "¡El campo {{fieldName}} no puede estar vacío!",
         "Size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
-        "userexists": "Login name already used!",
-        "emailexists": "Email is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID",
-        "idnull": "Invalid ID"
+        "userexists": "¡El nombre de usuario ya existe!",
+        "emailexists": "¡La cuenta de correo ya está en uso!",
+        "idexists": "Un/a nuevo/a {{entityName}} no puede tener ID",
+        "idnull": "ID inválido"
     },
-    "footer": "pie de página"
+    "footer": "Pie de página"
 }

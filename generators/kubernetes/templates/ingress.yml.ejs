@@ -16,23 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_INGRESS_API_VERSION %>
 kind: Ingress
 metadata:
   name: <%= app.baseName.toLowerCase() %>
   namespace: <%= kubernetesNamespace %>
 spec:
   rules:
-  - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %><%= ingressDomain %>
+  <%_ if (ingressDomain) { _%>
+  - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
     http:
+  <%_ } else { _%>
+  - http:
+  <%_ } _%>
       paths:
-      - path: /.*
+      - path: /<%= ingressType === "nginx" ? ".*" : "*" %>
         backend:
           serviceName: <%= app.baseName.toLowerCase() %>
           servicePort: <%= app.serverPort %>
       <%_ if (!app.serviceDiscoveryType) { _%>
-        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(function(config) { _%>
-      - path: /<%= config.baseName.toLowerCase() %>/.*
+        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
+      - path: /services/<%= config.baseName.toLowerCase() %>/<%= ingressType === "nginx" ? ".*" : "*" %>
         backend:
           serviceName: <%= config.baseName.toLowerCase() %>
           servicePort: <%= config.serverPort %>

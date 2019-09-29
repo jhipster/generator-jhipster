@@ -19,6 +19,8 @@
 const _ = require('lodash');
 const chalk = require('chalk');
 const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
+const fileUtils = require('jhipster-core').FileUtils;
+const fs = require('fs');
 
 const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
@@ -26,7 +28,6 @@ const dockerCli = require('../docker-cli');
 const dockerUtils = require('../docker-utils');
 const dockerPrompts = require('../docker-prompts');
 const constants = require('../generator-constants');
-const awsConstants = require('./constants');
 
 const prompts = require('./prompts');
 const awsClient = require('./aws-client');
@@ -100,16 +101,18 @@ module.exports = class extends BaseGenerator {
                 this.skipBuild = this.options['skip-build'];
             },
             getConfig() {
-                this.aws = {
-                    apps: [],
-                    vpc: {},
-                    dockerLogin: {
-                        accountId: null,
-                        password: null
-                    },
-                    ...this.config.get('aws')
-                };
-
+                if (fileUtils.doesFileExist('awsConstants.json')) {
+                    this.aws = JSON.parse(fs.readFileSync('awsConstants.json', { encoding: 'utf-8' }));
+                } else {
+                    this.aws = {
+                        apps: [],
+                        vpc: {},
+                        dockerLogin: {
+                            accountId: null,
+                            password: null
+                        }
+                    };
+                }
                 this.defaultAppsFolders = this.aws.apps.map(a => a.baseName);
             },
             checkDocker: docker.checkDocker,
@@ -136,8 +139,7 @@ module.exports = class extends BaseGenerator {
                     })
                     .catch(() => {
                         this.log.error(chalk.red(`No AWS credentials found for profile ${chalk.bold(profile)}`));
-                        this.abort = true;
-                        done();
+                        done('Please setup AWS credentials; https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html');
                     });
             },
             initAwsStuff() {
@@ -174,10 +176,6 @@ module.exports = class extends BaseGenerator {
 
     get prompting() {
         return {
-            bonjour() {
-                if (this.abort) return;
-                this.log(chalk.bold('❓ AWS prompting'));
-            },
             askTypeOfApplication: prompts.askTypeOfApplication,
             askDirectoryPath: dockerPrompts.askForPath,
             askForApps: dockerPrompts.askForApps,
@@ -254,6 +252,10 @@ module.exports = class extends BaseGenerator {
             purgeAwsApps() {
                 this.aws.apps = this.aws.apps.filter(app => this.appConfigs.find(conf => conf.baseName === app.baseName));
             },
+            setBucketName() {
+                this.aws.s3BucketName =
+                    this.aws.s3BucketName || awsClient.sanitizeBucketName(`${this.aws.cloudFormationName}_${new Date().getTime()}`);
+            },
             getDockerLogin() {
                 if (this.abort) return null;
                 const done = this.async;
@@ -269,10 +271,6 @@ module.exports = class extends BaseGenerator {
                         this.abort = true;
                         done();
                     });
-            },
-            setBucketName() {
-                this.aws.s3BucketName =
-                    this.aws.s3BucketName || awsClient.sanitizeBucketName(`${this.aws.cloudFormationName}_${new Date().getTime()}`);
             }
         };
     }
@@ -361,6 +359,16 @@ module.exports = class extends BaseGenerator {
                 });
             }
         };
+    }
+
+    _writeFileErrorHandler(generator) {
+        fs.writeFile('awsConstants.json', JSON.stringify(this.aws), function(error) {
+            if (error) {
+                generator.log.error(`There was an error writing the awsConstants.json file: ${error.message}`);
+            } else {
+                generator.log(chalk.green.bold('Configuration saved at awsConstants.json'));
+            }
+        });
     }
 
     _uploadTemplateToAWS(filename, path) {
@@ -573,7 +581,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async;
 
                 const promises = this.aws.apps.map(app => {
-                    const from = `${app.baseName}:latest`;
+                    const from = `${app.baseName.toLowerCase()}:latest`;
                     const to = `${app.EcrRepositoryUri}:latest`;
                     return dockerCli
                         .tagImage(from, to)
@@ -667,14 +675,16 @@ module.exports = class extends BaseGenerator {
                         done();
                     })
                     .catch(error => {
-                        this.log.error(`There was an error updating the stack: ${error.message}`);
+                        this.log.error(`There was an error updating the stack: ${error.message}\n`);
+                        this.log.error(error);
                         this.abort = true;
                         done();
                     });
             },
             saveConf() {
                 delete this.aws.dockerLogin;
-                this.config.set(awsConstants.conf.aws, this.aws);
+                // eslint-disable-next-line no-undef
+                this._writeFileErrorHandler(this);
             }
         };
     }

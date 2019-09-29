@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-version: '2'
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
     consul:
         image: <%= DOCKER_CONSUL %>
@@ -34,3 +34,7 @@ services:
             - INIT_SLEEP_SECONDS=5
             - CONSUL_URL=consul
             - CONSUL_PORT=8500
+            # Uncomment to load configuration into Consul from a Git repository
+            # as configured in central-server-config/git2consul.json
+            # Also set SPRING_CLOUD_CONSUL_CONFIG_FORMAT=files on your apps
+            # - CONFIG_MODE=git

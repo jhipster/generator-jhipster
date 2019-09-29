@@ -35,6 +35,7 @@ const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 /**
  * This is the Generator base private class.
@@ -66,7 +67,7 @@ module.exports = class extends Generator {
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
+        if ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
         if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
@@ -103,14 +104,24 @@ module.exports = class extends Generator {
      * @param {string} resourceDir - resource directory
      * @param {string} lang - language code
      */
-    installI18nServerFilesByLanguage(_this, resourceDir, lang) {
+    installI18nServerFilesByLanguage(_this, resourceDir, lang, testResourceDir) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
+        // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+        const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langProp}.properties`
+            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langJavaProp}.properties`
+        );
+        generator.template(
+            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langJavaProp}.properties`
+        );
+        generator.template(
+            `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+            `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
     }
 
@@ -214,6 +225,40 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
+                    content
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Update Languages In MailServiceIT
+     *
+     * @param languages
+     */
+    updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
+        const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
+        try {
+            let content = 'private static String languages[] = {\n';
+            languages.forEach((language, i) => {
+                content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
                     content
                 },
                 this
@@ -715,17 +760,6 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Normalize blueprint name: prepend 'generator-jhipster-' if needed
-     * @param {string} blueprint - name of the blueprint
-     */
-    normalizeBlueprintName(blueprint) {
-        if (blueprint && !blueprint.startsWith('generator-jhipster')) {
-            return `generator-jhipster-${blueprint}`;
-        }
-        return blueprint;
-    }
-
-    /**
      * Compose external blueprint module
      * @param {string} blueprint - name of the blueprint
      * @param {string} subGen - sub generator
@@ -733,7 +767,7 @@ module.exports = class extends Generator {
      */
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
-            blueprint = this.normalizeBlueprintName(blueprint);
+            blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
             if (options.skipChecks === undefined || !options.skipChecks) {
                 this.checkBlueprint(blueprint, subGen);
             }
@@ -796,7 +830,11 @@ module.exports = class extends Generator {
             done();
             return;
         }
-        shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
+
+        // Path to the yo cli script in generator-jhipster's node_modules
+        const yoInternalCliPath = require.resolve('yo/lib/cli.js');
+
+        shelljs.exec(`node ${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
             if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
                 this.error(
                     `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
@@ -820,10 +858,11 @@ module.exports = class extends Generator {
             } else {
                 const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                 if (
+                    !javaVersion.match(new RegExp('12'.replace('.', '\\.'))) &&
                     !javaVersion.match(new RegExp('11'.replace('.', '\\.'))) &&
                     !javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))
                 ) {
-                    this.warning(`Java 8 or Java 11 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
+                    this.warning(`Java 8, 11, or 12 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                 }
             }
             done();
@@ -913,9 +952,11 @@ module.exports = class extends Generator {
                 if (variableName === entityInstance) {
                     variableName += 'Collection';
                 }
-                const relationshipFieldName = `this.${entityInstance}.${relationship.relationshipFieldName}`;
+                const relationshipFieldName = `${relationship.relationshipFieldName}`;
                 const relationshipFieldNameIdCheck =
-                    dto === 'no' ? `!${relationshipFieldName} || !${relationshipFieldName}.id` : `!${relationshipFieldName}Id`;
+                    dto === 'no'
+                        ? `!this.editForm.get('${relationshipFieldName}').value || !this.editForm.get('${relationshipFieldName}').value.id`
+                        : `!this.editForm.get('${relationshipFieldName}Id').value`;
 
                 filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
                 if (this.jpaMetamodelFiltering) {
@@ -932,7 +973,9 @@ module.exports = class extends Generator {
                     this.${variableName} = res;
                 } else {
                     this.${relationship.otherEntityName}Service
-                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'}).pipe(
+                        .find(this.editForm.get('${relationshipFieldName}${dto !== 'no' ? 'Id' : ''}').value${
+                    dto === 'no' ? '.id' : ''
+                }).pipe(
                             filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
                             map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
                         )
@@ -1000,7 +1043,7 @@ module.exports = class extends Generator {
     generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
         const variablesWithTypes = [];
         let tsKeyType;
-        if (pkType === 'String') {
+        if (pkType === 'String' || pkType === 'UUID') {
             tsKeyType = 'string';
         } else {
             tsKeyType = 'number';
@@ -1014,7 +1057,7 @@ module.exports = class extends Generator {
                 tsType = fieldType;
             } else if (fieldType === 'Boolean') {
                 tsType = 'boolean';
-            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
                 tsType = 'number';
             } else if (fieldType === 'String' || fieldType === 'UUID') {
                 tsType = 'string';
@@ -1101,6 +1144,28 @@ module.exports = class extends Generator {
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }
+                typeImports.set(importType, importPath);
+            }
+        });
+        return typeImports;
+    }
+
+    /**
+     * Generate Entity Client Enum Imports
+     *
+     * @param {Array|Object} fields - array of the entity fields
+     * @param {string} clientFramework the client framework, 'angularX' or 'react'.
+     * @returns typeImports: Map
+     */
+    generateEntityClientEnumImports(fields, clientFramework = this.clientFramework) {
+        const typeImports = new Map();
+        const uniqueEnums = {};
+        fields.forEach(field => {
+            const fileName = _.kebabCase(field.fieldType);
+            if (field.fieldIsEnum && (!uniqueEnums[field.fieldType] || (uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))) {
+                const importType = `${field.fieldType}`;
+                const importPath = `app/shared/model/enumerations/${fileName}.model`;
+                uniqueEnums[field.fieldType] = field.fieldType;
                 typeImports.set(importType, importPath);
             }
         });
@@ -1203,7 +1268,7 @@ module.exports = class extends Generator {
      * @param {string} fieldType
      */
     getSpecificationBuilder(fieldType) {
-        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant'].includes(fieldType)) {
+        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration'].includes(fieldType)) {
             return 'buildRangeSpecification';
         }
         if (fieldType === 'String') {
@@ -1250,28 +1315,56 @@ module.exports = class extends Generator {
      * Generate a primary key, according to the type
      *
      * @param {any} pkType - the type of the primary key
-     * @param {any} prodDatabaseType - the database type
      */
-    generateTestEntityId(pkType, prodDatabaseType) {
+    generateTestEntityId(pkType) {
         if (pkType === 'String') {
-            if (prodDatabaseType === 'cassandra') {
-                return "'9fec3727-3421-4967-b213-ba36557ca194'";
-            }
             return "'123'";
+        }
+        if (pkType === 'UUID') {
+            return "'9fec3727-3421-4967-b213-ba36557ca194'";
         }
         return 123;
     }
 
     /**
-     * Decide the primary key type based on DB
+     * Return the primary key data type based on DB
      *
      * @param {any} databaseType - the database type
      */
     getPkType(databaseType) {
-        if (['cassandra', 'mongodb', 'couchbase'].includes(databaseType)) {
-            return 'String';
+        let pk = '';
+        switch (databaseType) {
+            case 'mongodb':
+            case 'couchbase':
+                pk = 'String';
+                break;
+            case 'cassandra':
+                pk = 'UUID';
+                break;
+            default:
+                pk = 'Long';
+                break;
         }
-        return 'Long';
+        return pk;
+    }
+
+    /**
+     * Returns the primary key data type based on authentication type, DB and given association
+     *
+     * @param {string} authenticationType - the auth type
+     * @param {string} databaseType - the database type
+     * @param {any} relationships - relationships
+     */
+    getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
+        let hasFound = false;
+        let primaryKeyType = this.getPkType(databaseType);
+        relationships.forEach(relationship => {
+            if (relationship.useJPADerivedIdentifier === true && !hasFound) {
+                primaryKeyType = relationship.otherEntityName === 'user' && authenticationType === 'oauth2' ? 'String' : primaryKeyType;
+                hasFound = true;
+            }
+        });
+        return primaryKeyType;
     }
 
     /**

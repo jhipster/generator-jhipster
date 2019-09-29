@@ -6,7 +6,7 @@
         "packageName": "io.github.jhipster.travis",
         "packageFolder": "io/github/jhipster/travis",
         "authenticationType": "jwt",
-        "cacheProvider": "ehcache",
+        "cacheProvider": "no",
         "enableHibernateCache": false,
         "websocket": false,
         "databaseType": "mongodb",

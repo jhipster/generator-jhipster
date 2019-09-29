@@ -820,6 +820,43 @@ describe('JHipster generator', () => {
             });
         });
 
+        describe('Redis', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'redis',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+            it('creates expected files with "Redis"', () => {
+                assert.file(expectedFiles.common);
+                assert.file(expectedFiles.server);
+                assert.file(expectedFiles.userManagementServer);
+                assert.file(expectedFiles.client);
+                assert.file(expectedFiles.redis);
+                assert.file(expectedFiles.mysql);
+                assert.file(expectedFiles.hibernateTimeZoneConfig);
+            });
+        });
+
         describe('Messaging with Kafka configuration', () => {
             before(done => {
                 helpers
@@ -1466,7 +1503,6 @@ describe('JHipster generator', () => {
                         ['package.json']
                     )
                 );
-                assert.noFile(['gradle/yeoman.gradle']);
             });
             it('generates README with instructions for Gradle', () => {
                 assert.fileContent('README.md', './gradlew');
@@ -1550,6 +1586,45 @@ describe('JHipster generator', () => {
             it('creates expected files with the gateway application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gateway);
+                assert.noFile(expectedFiles.rateLimitingFilesForGateways);
+                assert.file(expectedFiles.feignConfig);
+                assert.file(expectedFiles.eureka);
+                assert.noFile(expectedFiles.consul);
+            });
+        });
+
+        describe('gateway with eureka and rate limiting', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        applicationType: 'gateway',
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: 'eureka',
+                        authenticationType: 'jwt',
+                        cacheProvider: 'hazelcast',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with the gateway application type', () => {
+                assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.gateway);
+                assert.file(expectedFiles.rateLimitingFilesForGateways);
                 assert.file(expectedFiles.feignConfig);
                 assert.file(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
@@ -1741,6 +1816,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files for UAA auth with the Gateway application type', () => {
                 assert.file(expectedFiles.gateway);
+                assert.file(expectedFiles.rateLimitingFilesForGateways);
                 assert.file(expectedFiles.gatewayWithUaa);
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.eureka);
@@ -1781,6 +1857,44 @@ describe('JHipster generator', () => {
             it('creates expected files with the gateway application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.file(expectedFiles.gateway);
+                assert.noFile(expectedFiles.rateLimitingFilesForGateways);
+                assert.noFile(expectedFiles.eureka);
+                assert.file(expectedFiles.consul);
+            });
+        });
+
+        describe('gateway with consul and rate limiting', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        applicationType: 'gateway',
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: 'consul',
+                        authenticationType: 'jwt',
+                        cacheProvider: 'hazelcast',
+                        enableHibernateCache: true,
+                        databaseType: 'sql',
+                        devDatabaseType: 'h2Memory',
+                        prodDatabaseType: 'mysql',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with the gateway application type', () => {
+                assert.file(expectedFiles.jwtServer);
+                assert.file(expectedFiles.gateway);
+                assert.file(expectedFiles.rateLimitingFilesForGateways);
                 assert.noFile(expectedFiles.eureka);
                 assert.file(expectedFiles.consul);
             });
@@ -1855,6 +1969,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the gateway application type', () => {
                 assert.file(expectedFiles.jwtServer);
                 assert.noFile(expectedFiles.gateway);
+                assert.noFile(expectedFiles.rateLimitingFilesForGateways);
                 assert.noFile(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
             });
@@ -1892,6 +2007,7 @@ describe('JHipster generator', () => {
             it('creates expected files with the gateway application type', () => {
                 assert.file(expectedFiles.gatewayWithUaa);
                 assert.noFile(expectedFiles.gateway);
+                assert.noFile(expectedFiles.rateLimitingFilesForGateways);
                 assert.noFile(expectedFiles.eureka);
                 assert.noFile(expectedFiles.consul);
             });

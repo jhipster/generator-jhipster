@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: ds-secret-ref
@@ -26,7 +26,7 @@ data:
   database-admin-user: "YWRtaW4K"
   database-admin-password: "cGFzc3dvcmQK"
 ---
-apiVersion: apps/v1beta1
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: <%= app.baseName.toLowerCase() %>-couchbase
@@ -170,7 +170,7 @@ spec:
         requests:
           storage: 1Gi
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-couchbase
@@ -206,7 +206,7 @@ spec:
   selector:
     app: <%= app.baseName.toLowerCase() %>-couchbase
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-couchbase-discovery

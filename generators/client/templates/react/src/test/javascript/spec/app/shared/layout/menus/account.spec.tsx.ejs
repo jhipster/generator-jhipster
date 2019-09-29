@@ -1,0 +1,75 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import React from 'react';
+import { shallow } from 'enzyme';
+
+
+<%_ if (authenticationType === 'oauth2') { _%>
+import { getLoginUrl } from 'app/shared/util/url-utils';
+<%_ } _%>
+import { NavDropdown } from 'app/shared/layout/menus/menu-components';
+import { AccountMenu } from 'app/shared/layout/menus';
+
+describe('AccountMenu', () => {
+  let mountedWrapper;
+
+  const authenticatedWrapper = () => {
+    if (!mountedWrapper) {
+      mountedWrapper = shallow(
+        <AccountMenu
+          isAuthenticated
+        />
+      );
+    }
+    return mountedWrapper;
+  };
+  const guestWrapper = () => {
+    if (!mountedWrapper) {
+      mountedWrapper = shallow(
+        <AccountMenu/>
+      );
+    }
+    return mountedWrapper;
+  };
+
+  beforeEach(() => {
+    mountedWrapper = undefined;
+  });
+
+  // All tests will go here
+
+  it('Renders a authenticated AccountMenu component', () => {
+    const dropdown = authenticatedWrapper().find(NavDropdown);
+    expect(dropdown).toHaveLength(1);
+    expect(dropdown.find({ to: '/login' })).toHaveLength(0);
+    expect(dropdown.find({ to: '/logout' })).toHaveLength(1);
+  });
+
+  it('Renders a guest AccountMenu component', () => {
+    const dropdown = guestWrapper().find(NavDropdown);
+    expect(dropdown).toHaveLength(1);
+    <%_ if (authenticationType === 'oauth2') { _%>
+    expect(dropdown.find({ href: getLoginUrl() })).toHaveLength(1);
+    <%_ } else { _%>
+    expect(dropdown.find({ to: '/login' })).toHaveLength(1);
+    <%_ } _%>
+    expect(dropdown.find({ to: '/logout' })).toHaveLength(0);
+  });
+
+});

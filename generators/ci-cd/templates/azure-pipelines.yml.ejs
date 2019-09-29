@@ -25,6 +25,7 @@ jobs:
     SPRING_OUTPUT_ANSI_ENABLED: NEVER
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
+    NG_CLI_ANALYTICS: "false"
 
   steps:
   #----------------------------------------------------------------------
@@ -55,7 +56,7 @@ jobs:
   <%_ if (buildTool === 'maven') { _%>
   - script: |
       chmod +x mvnw
-      ./mvnw clean verify
+      ./mvnw -ntp clean verify
   <%_ } else if (buildTool === 'gradle') { _%>
   - script: |
       chmod +x gradlew
@@ -64,14 +65,14 @@ jobs:
     displayName: 'TESTS: backend'
 <%_ if (!skipClient) { _%>
   <%_ if (buildTool === 'maven') { _%>
-  - script: ./mvnw com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'
+  - script: ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'
   <%_ } else if (buildTool === 'gradle') { _%>
   - script: ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
   <%_ } _%>
     displayName: 'TESTS: frontend'
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
-  - script: ./mvnw verify -Pprod -DskipTests
+  - script: ./mvnw -ntp verify -Pprod -DskipTests
 <%_ } else if (buildTool === 'gradle') { _%>
   - script: ./gradlew bootJar -Pprod -x test
 <%_ } _%>

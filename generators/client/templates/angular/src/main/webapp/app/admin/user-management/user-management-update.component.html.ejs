@@ -26,8 +26,7 @@
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
                 <div class="form-group" [hidden]="!user.id">
                     <label jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" name="id"
-                        [ngModel]="user.id" readonly>
+                    <input type="text" class="form-control" name="id" formControlName="id" readonly>
                 </div>
 
                 <div class="form-group">

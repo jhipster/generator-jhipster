@@ -30,13 +30,13 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jaeger.istio-system<%= ingressDomain %>
+    - jaeger.istio-system.<%= ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jaeger.istio-system<%= ingressDomain %>
+    - jaeger.istio-system.<%= ingressDomain %>
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -45,7 +45,7 @@ metadata:
   namespace: istio-system
 spec:
   hosts:
-  - jaeger.istio-system<%= ingressDomain %>
+  - jaeger.istio-system.<%= ingressDomain %>
   gateways:
   - jaeger-observability-gateway
   http:

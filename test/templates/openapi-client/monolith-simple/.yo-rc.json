@@ -1,0 +1,26 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "baseName": "sampleOpenApiClient",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "serverPort": "8081",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "consul",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": true,
+    "jwtSecretKey": "Y2Q4NzYwMzEwMzNiZTExYzI1Y2E2Yjg2MGViNjRjMGE2YjcwNTEzY2ZkMDgxNTYwNTUxZWJjMzJhYjUwY2JiOTBiNjk3YWExMWRiNWM0MDljOTJhN2M2ODBkZDY5MjQ4MTVhYmUyZGUwYjFiODE1YmFhMTE0MjY2NDRiZDI5NDI=",
+    "testFrameworks": [],
+    "enableTranslation": false,
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}

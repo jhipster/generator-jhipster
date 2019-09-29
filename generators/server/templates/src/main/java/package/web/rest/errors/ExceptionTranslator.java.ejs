@@ -43,6 +43,7 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.Status;
 import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.ProblemHandling;
+import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.security.SecurityAdviceTrait;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
@@ -64,7 +65,7 @@ import java.util.stream.Collectors;
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
  */
 @ControllerAdvice
-public class ExceptionTranslator implements ProblemHandling {
+public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
 
 <%_
 let returnType;
@@ -136,7 +137,7 @@ _%>
     public <%- returnType %> handle<%_ if (!reactive) { _%>MethodArgumentNotValid(MethodArgumentNotValidException<% } else { %>BindingResult(WebExchangeBindException<% } %> ex, @Nonnull <%= requestClass %> request) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
-            .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
+            .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), f.getCode()))
             .collect(Collectors.toList());
 
         Problem problem = Problem.builder()
@@ -159,7 +160,24 @@ _%>
         return create(ex, problem, request);
     }
     <%_ } _%>
+    <%_ if (!skipUserManagement) { _%>
+    @ExceptionHandler
+    public <%- returnType %> handleEmailAreadyUsedException(<%=packageName%>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
+        EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    }
 
+    @ExceptionHandler
+    public <%- returnType %> handleUsernameAreadyUsedException(<%=packageName%>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
+        LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    }
+
+    @ExceptionHandler
+    public <%- returnType %> handleInvalidPasswordException(<%=packageName%>.service.InvalidPasswordException ex, <%= requestClass %> request) {
+        return create(new InvalidPasswordException(), request);
+    }
+    <%_ } _%>
     @ExceptionHandler
     public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
         return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));

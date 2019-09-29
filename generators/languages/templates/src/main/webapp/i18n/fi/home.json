@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Tervetuloa, Java Hipsteri!",
+        "subtitle": "Tämä on kotisivusi",
+        "logged": {
+            "message": "Olet kirjautnut käyttäjänä \"{{username}}\"."
+        },
+        "question": "Jos sinulla on kysymyksiä JHipsteristä:",
+        "link": {
+            "homepage": "JHipster kotisivu",
+            "stackoverflow": "JHipster Stack Overflow",
+            "bugtracker": "JHipster bug trakkeri",
+            "chat": "JHipster julkinen chat room",
+            "follow": "seuraa @java_hipster Twitterissä"
+        },
+        "like": "Jos pidät JHipsteristä, anna meille tähti ",
+        "github": "GitHubissa"
+    }
+}

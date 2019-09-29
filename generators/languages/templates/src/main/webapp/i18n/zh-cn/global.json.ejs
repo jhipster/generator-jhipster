@@ -47,7 +47,7 @@
                 "health": "服务状态",
                 "configuration": "配置",
                 "logs": "日志",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "审核",
                 <%_ } _%>
                 "apidocs": "API",
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "您的密码是必填项.",
-                    "minlength": "您的密码长度至少要有5个字符",
+                    "minlength": "您的密码长度至少要有4个字符",
                     "maxlength": "您的密码长度不能超过50个字符",
                     "strength": "密码强度:"
                 },
                 "confirmpassword": {
                     "required": "您的确认密码是必填项.",
-                    "minlength": "您的确认密码长度至少要有5个字符",
+                    "minlength": "您的确认密码长度至少要有4个字符",
                     "maxlength": "您的确认密码长度不能超过50个字符"
                 },
                 "email": {

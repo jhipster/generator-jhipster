@@ -40,15 +40,16 @@
                     <input type="password" class="form-control" name="password" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
                            formControlName="password">
                 </div>
-                <div class="form-check">
+                <div class="form-check"<% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>
                     <label class="form-check-label" for="rememberMe">
-                        <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" checked>
+                        <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe">
                         <span jhiTranslate="login.form.rememberme">Remember me</span>
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary" jhiTranslate="login.form.button">Sign in</button>
             </form>
             <p></p>
+            <%_ if (!skipUserManagement) { _%>
             <div class="alert alert-warning">
                 <a class="alert-link" (click)="requestResetPassword()" jhiTranslate="login.password.forgot">Did you forget your password?</a>
             </div>
@@ -56,6 +57,7 @@
                 <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
                 <a class="alert-link" (click)="register()" jhiTranslate="global.messages.info.register.link">Register a new account</a>
             </div>
+            <%_ } _%>
         </div>
     </div>
 </div>

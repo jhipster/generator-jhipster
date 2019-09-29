@@ -4,6 +4,34 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
+    <property name="now" value="now()" dbms="h2"/>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <property name="now" value="now()" dbms="mysql"/>
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'oracle') { _%>
+    <property name="now" value="sysdate" dbms="oracle"/>
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
+    <property name="now" value="GETDATE()" dbms="mssql"/>
+    <%_ } _%>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
+    <property name="clobType" value="longvarchar" dbms="h2"/>
+    <%_ } else { _%>
+    <property name="clobType" value="clob" dbms="h2"/>
+    <%_ } _%>
+    <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
+    <%_ } else { _%>
+    <property name="uuidType" value="uuid" dbms="h2, <%= prodDatabaseType %>"/>
+    <%_ } _%>
+
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->

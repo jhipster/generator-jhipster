@@ -47,7 +47,7 @@
                 "health": "စနစ်အခြေအနေ",
                 "configuration": "Configuration များ",
                 "logs": "Log များ",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "စာရင်းစစ်ဆေးခြင်း",
                 <%_ } _%>
                 "apidocs": "API",
@@ -92,7 +92,7 @@
                 },
                 "confirmpassword": {
                     "required": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ် လိုအပ်ပါသည်။",
-                    "minlength": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ်သည် အနည်းဆုံးအက္ခရာ ၅ လုံးပါရှိရမည်။ ",
+                    "minlength": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ်သည် အနည်းဆုံးအက္ခရာ ၄ လုံးပါရှိရမည်။ ",
                     "maxlength": "သင်၏ အတည်ပြုမည့်လျှို့ဝှက်ကုဒ်သည် အက္ခရာအလုံး ၅၀ ထက်မပိုရပါ။"
                 },
                 "email": {

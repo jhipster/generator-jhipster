@@ -17,23 +17,30 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
-import { <% if (enableTranslation) { %>JhiLanguageHelper,<% } %> User, UserService } from 'app/core';
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
+<%_ } _%>
+import { User } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
     templateUrl: './user-management-update.component.html'
 })
-export class UserMgmtUpdateComponent implements OnInit {
+export class UserManagementUpdateComponent implements OnInit {
 
     user: User;
+    <%_ if (enableTranslation) { _%>
     languages: any[];
+    <%_ } _%>
     authorities: any[];
     isSaving: boolean;
 
     editForm = this.fb.group({
+        id: [null],
         login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*')]],
         firstName: ['', [Validators.maxLength(50)]],
         lastName: ['', [Validators.maxLength(50)]],
@@ -49,7 +56,6 @@ export class UserMgmtUpdateComponent implements OnInit {
         <%_ } _%>
         private userService: UserService,
         private route: ActivatedRoute,
-        private router: Router,
         private fb: FormBuilder
     ) {}
 
@@ -72,6 +78,7 @@ export class UserMgmtUpdateComponent implements OnInit {
 
     private updateForm(user: User): void {
         this.editForm.patchValue({
+            id: user.id,
             login: user.login,
             firstName: user.firstName,
             lastName: user.lastName,

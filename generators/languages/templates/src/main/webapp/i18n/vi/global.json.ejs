@@ -47,7 +47,7 @@
                 "health": "Tình trạng",
                 "configuration": "Cấu hình",
                 "logs": "Ghi logs",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Kiểm duyệt",
                 <%_ } _%>
                 "apidocs": "API",

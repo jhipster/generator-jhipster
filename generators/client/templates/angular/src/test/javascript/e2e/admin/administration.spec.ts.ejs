@@ -48,7 +48,7 @@ describe('administration', () => {
         await navBarPage.clickOnAdminMenu();
     });
 
-    <%_ if (authenticationType !== 'oauth2') { _%>
+    <%_ if (!skipUserManagement) { _%>
     it('should load user management', async () => {
         await navBarPage.clickOnAdmin('user-management');
         <%_ if (enableTranslation) { _%>
@@ -62,7 +62,7 @@ describe('administration', () => {
     <%_ } _%>
 
     it('should load metrics', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-metrics');
+        await navBarPage.clickOnAdmin('metrics');
         <%_ if (enableTranslation) { _%>
         const expect1 = 'metrics.title';
         <%_ } else { _%>
@@ -73,7 +73,7 @@ describe('administration', () => {
     });
 
     it('should load health', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-health');
+        await navBarPage.clickOnAdmin('health');
         <%_ if (enableTranslation) { _%>
         const expect1 = 'health.title';
         <%_ } else { _%>
@@ -84,7 +84,7 @@ describe('administration', () => {
     });
 
     it('should load configuration', async () => {
-        await navBarPage.clickOnAdmin('<%= jhiPrefixDashed %>-configuration');
+        await navBarPage.clickOnAdmin('configuration');
         await browser.sleep(500);
         <%_ if (enableTranslation) { _%>
         const expect1 = 'configuration.title';
@@ -95,7 +95,7 @@ describe('administration', () => {
         expect(value1).to.eq(expect1);
     });
 
-<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     it('should load audits', async () => {
         await navBarPage.clickOnAdmin('audits');
         await browser.sleep(500);

@@ -8,18 +8,26 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw enforcer:display-info
+    ./mvnw -ntp enforcer:display-info
 elif [ -f "gradlew" ]; then
     ./gradlew -v
+fi
+
+#-------------------------------------------------------------------------------
+# Exclude webpack task from Gradle if not skipping client
+#-------------------------------------------------------------------------------
+JHI_GRADLE_EXCLUDE_WEBPACK="-x webpack"
+if [[ $(grep "\"skipClient\": true" .yo-rc.json) != "" ]]; then
+    JHI_GRADLE_EXCLUDE_WEBPACK=""
 fi
 
 #-------------------------------------------------------------------------------
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
 if [ -f "mvnw" ]; then
-    ./mvnw javadoc:javadoc
+    ./mvnw -ntp javadoc:javadoc
 elif [ -f "gradlew" ]; then
-    ./gradlew javadoc
+    ./gradlew javadoc $JHI_GRADLE_EXCLUDE_WEBPACK
 fi
 
 #-------------------------------------------------------------------------------
@@ -27,7 +35,7 @@ fi
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
     cd "$JHI_FOLDER_UAA"
-    ./mvnw verify
+    ./mvnw -ntp verify
 fi
 
 #-------------------------------------------------------------------------------
@@ -35,7 +43,7 @@ fi
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw verify \
+    ./mvnw -ntp -P-webpack verify \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
@@ -46,7 +54,7 @@ if [ -f "mvnw" ]; then
         -Dlogging.level.org.springframework.security=OFF
 
 elif [ -f "gradlew" ]; then
-    ./gradlew test integrationTest \
+    ./gradlew test integrationTest $JHI_GRADLE_EXCLUDE_WEBPACK \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \

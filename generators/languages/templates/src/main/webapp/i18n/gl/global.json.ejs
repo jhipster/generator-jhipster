@@ -47,7 +47,7 @@
                 "health": "Saúde",
                 "configuration": "Configuración",
                 "logs": "Logs",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Auditorías",
                 <%_ } _%>
                 "apidocs": "API",
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Requírese que ingrese un contrasinal.",
-                    "minlength": "Requírese que o seu contrasinal teña polo menos 5 caracteres",
+                    "minlength": "Requírese que o seu contrasinal teña polo menos 4 caracteres",
                     "maxlength": "O seu contrasinal non pode ter mais de 50 caracteres",
                     "strength": "Seguridade do contrasinal:"
                 },
                 "confirmpassword": {
                     "required": "Requírese que confirme o contrasinal.",
-                    "minlength": "Requírese que o seu contrasinal de confirmación teña polo menos 5 caracteres",
+                    "minlength": "Requírese que o seu contrasinal de confirmación teña polo menos 4 caracteres",
                     "maxlength": "O seu contrasinal de confirmación non pode ter mais de 50 caracteres"
                 },
                 "email": {

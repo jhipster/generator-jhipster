@@ -52,38 +52,32 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 };
 
 describe('needle API Webpack: JHipster client generator with blueprint', () => {
-    const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
+    before(done => {
+        helpers
+            .run(path.join(__dirname, '../../generators/client'))
+            .withOptions({
+                'from-cli': true,
+                build: 'maven',
+                auth: 'jwt',
+                db: 'mysql',
+                skipInstall: true,
+                blueprint: 'myblueprint',
+                skipChecks: true
+            })
+            .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+            .withPrompts({
+                baseName: 'jhipster',
+                clientFramework: 'angularX',
+                enableTranslation: true,
+                nativeLanguage: 'en',
+                languages: ['en', 'fr']
+            })
+            .on('end', done);
+    });
+    it('Assert external asset is added to webpack.common.js', () => {
+        const from = `${CLIENT_MAIN_SRC_DIR}content/${assetFrom}/`;
+        const to = `content/${assetTo}/`;
 
-    blueprintNames.forEach(blueprintName => {
-        describe(`generate client with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/client'))
-                    .withOptions({
-                        'from-cli': true,
-                        build: 'maven',
-                        auth: 'jwt',
-                        db: 'mysql',
-                        skipInstall: true,
-                        blueprint: blueprintName,
-                        skipChecks: true
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        clientFramework: 'angularX',
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['en', 'fr']
-                    })
-                    .on('end', done);
-            });
-            it('Assert external asset is added to webpack.common.js', () => {
-                const from = `${CLIENT_MAIN_SRC_DIR}content/${assetFrom}/`;
-                const to = `content/${assetTo}/`;
-
-                assert.fileContent(`${CLIENT_WEBPACK_DIR}/webpack.common.js`, `{ from: './${from}', to: '${to}' },`);
-            });
-        });
+        assert.fileContent(`${CLIENT_WEBPACK_DIR}/webpack.common.js`, `{ from: './${from}', to: '${to}' },`);
     });
 });

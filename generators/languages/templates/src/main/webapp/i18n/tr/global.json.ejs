@@ -47,7 +47,7 @@
                 "health": "Sağlık",
                 "configuration": "Yapılandırma",
                 "logs": "Kayıtlar",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Denetim",
                 <%_ } _%>
                 "apidocs": "API",
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Şifre zorunlu alandır.",
-                    "minlength": "Şifreniz en az 5 karakter olmak zorundadır",
+                    "minlength": "Şifreniz en az 4 karakter olmak zorundadır",
                     "maxlength": "Şifreniz 50 karakterden uzun olamaz",
                     "strength": "Şifre karmaşıklığı:"
                 },
                 "confirmpassword": {
                     "required": "Tekrar şifresi zorunludur.",
-                    "minlength": "Tekrar şifreniz en az 5 karakter olmalıdır",
+                    "minlength": "Tekrar şifreniz en az 4 karakter olmalıdır",
                     "maxlength": "Tekrar şifreniz 50 karakterden uzun olamaz"
                 },
                 "email": {

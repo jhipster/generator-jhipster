@@ -16,15 +16,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-/* tslint:disable no-unused-expression */
 import { browser, element, by } from 'protractor';
 
 import SignInPage from '../../page-objects/signin-page';
 import NavBarPage from '../../page-objects/navbar-page';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
 import RegisterPage from '../../page-objects/register-page';
 import PasswordPage from '../../page-objects/password-page';
 import SettingsPage from '../../page-objects/settings-page';
+<%_ } _%>
+<%_ if (authenticationType !== 'oauth2') { _%>
 import {
   getToastByInnerText,
   getUserDeactivatedButtonByLogin,
@@ -32,6 +33,9 @@ import {
   getModifiedDateSortButton,
 <%_ } _%>
   waitUntilDisplayed,
+<%_ if (!skipUserManagement) { _%>
+  waitUntilClickable,
+<%_ } _%>
   waitUntilHidden
 } from '../../util/utils';
 <%_ } else { _%>
@@ -43,7 +47,7 @@ const expect = chai.expect;
 describe('Account', () => {
   let navBarPage: NavBarPage;
   let signInPage: SignInPage;
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
   let passwordPage: PasswordPage;
   let settingsPage: SettingsPage;
   let registerPage: RegisterPage;
@@ -105,7 +109,9 @@ describe('Account', () => {
 
     // Login page should close when login success
     expect(await signInPage.isHidden()()).to.be.true;
+      <%_ if (!skipUserManagement) { _%>
     await navBarPage.autoSignOut();
+      <%_ } _%>
     <%_ } else { _%>
     // Keycloak credentials by default, change them to be able to use oauth2 with Okta
     await signInPage.loginWithOAuth('admin', 'admin');
@@ -117,7 +123,7 @@ describe('Account', () => {
     <%_ } _%>
   });
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
   it('should be able to sign up', async () => {
     await waitUntilDisplayed(navBarPage.accountMenu);
 
@@ -160,12 +166,12 @@ describe('Account', () => {
 <%_ if (databaseType !== 'cassandra') { _%>
 
     const modifiedDateSortButton = getModifiedDateSortButton();
-    await waitUntilDisplayed(modifiedDateSortButton);
+    await waitUntilClickable(modifiedDateSortButton);
     await modifiedDateSortButton.click();
 <%_ } _%>
 
     const deactivatedButton = getUserDeactivatedButtonByLogin('user_test');
-    await waitUntilDisplayed(deactivatedButton);
+    await waitUntilClickable(deactivatedButton);
     await deactivatedButton.click();
     await waitUntilHidden(deactivatedButton);
 

@@ -24,7 +24,8 @@ let helpBlocks = 0; %>
                 "title": "<%= entityClassPluralHumanized %>",
                 "createLabel": "Vytvořit <%= entityClassHumanized %>",
                 "createOrEditLabel": "Vytvořit nebo upravit <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "Vyhledat <%= entityClassHumanized %>"<% } %>
+                "search": "Vyhledat <%= entityClassHumanized %>"<% } %>,
+                "notFound": "No <%= entityClassPluralHumanized %> found"
             },<% if (!microserviceAppName) { %>
             "created": "Byl vytvořen potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }}",
             "updated": "Potomek entity <%= entityClassHumanized %> s identifikátorem {{ param }} byl upravený.",

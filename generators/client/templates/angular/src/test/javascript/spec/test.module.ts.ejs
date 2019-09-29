@@ -21,22 +21,25 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgModule, ElementRef, Renderer } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
+
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageService, JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
-
 import { MockLanguageService, MockLanguageHelper } from './helpers/mock-language.service';
-import { JhiLanguageHelper, AccountService<% if (authenticationType !== 'oauth2') { %>, LoginModalService<% } %><% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %> } from 'app/core';
-<%_ } else { _%>
-import { JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
-
-import { AccountService<% if (authenticationType !== 'oauth2') { %>, LoginModalService<% } %><% if (websocket === 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %> } from 'app/core';
+import { JhiLanguageHelper } from 'app/core/language/language.helper';
+<%_ } _%>
+import { AccountService } from 'app/core/auth/account.service';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { LoginModalService } from 'app/core/login/login-modal.service';
+<%_ } _%>
+<%_ if (websocket === 'spring-websocket') { _%>
+import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
 import { MockAccountService } from './helpers/mock-account.service';
 import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service';
 import { MockActiveModal } from './helpers/mock-active-modal.service';
 import { MockEventManager } from './helpers/mock-event-manager.service';
 <%_
-const tsKeyId = generateTestEntityId(pkType, prodDatabaseType);
+const tsKeyId = generateTestEntityId(pkType);
 _%>
 
 @NgModule({

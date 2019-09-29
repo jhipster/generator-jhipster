@@ -1,0 +1,28 @@
+{
+    "generator-jhipster": {
+        "applicationType": "monolith",
+        "baseName": "travisPsqlEsNoi18nMapsIdWithNgx",
+        "packageName": "io.github.jhipster.travis",
+        "packageFolder": "io/github/jhipster/travis",
+        "serverPort": "8080",
+        "authenticationType": "jwt",
+        "cacheProvider": "hazelcast",
+        "enableHibernateCache": true,
+        "websocket": false,
+        "databaseType": "sql",
+        "devDatabaseType": "postgresql",
+        "prodDatabaseType": "postgresql",
+        "searchEngine": "elasticsearch",
+        "buildTool": "maven",
+        "enableSwaggerCodegen": false,
+        "jwtSecretKey": "NDA4MWUyZjMzNDFmYWIxZGRlZTRkZDkzNDJiODM2MTQ4YTE4NTMxMTdhZmFlODg4NTNjYWM4MzZmMmYxN2M0OTUyYzllYjI3NDY4YWM2M2RmN2UyZTExNzA5MDQ5ZDVhN2QzNjNkMzQxZGQwOWZkZGVkYzlkMzU1NzA4MmU3Zjc=",
+        "clientFramework": "angularX",
+        "useSass": true,
+        "clientPackageManager": "npm",
+        "testFrameworks": ["gatling", "protractor"],
+        "jhiPrefix": "jhi",
+        "travis": true,
+        "otherModules": [],
+        "enableTranslation": false
+    }
+}

@@ -23,15 +23,22 @@ package <%=packageName%>.config;
  */
 public final class Constants {
 
+    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     // Regex for acceptable logins
     public static final String LOGIN_REGEX = "^[_.@A-Za-z0-9-]*$";
-
+    
+    <%_ } _%>
+    <%_ if (!skipUserManagement || authenticationType === 'oauth2' || ['sql','mongodb','couchbase'].includes(databaseType)) { _%>
     public static final String SYSTEM_ACCOUNT = "system";
-    public static final String ANONYMOUS_USER = "anonymoususer";
+    <%_ } _%>
+    <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
     public static final String DEFAULT_LANGUAGE = "<%= nativeLanguage %>";
-    <% if (databaseType === 'couchbase') { %>
+    public static final String ANONYMOUS_USER = "anonymoususer";
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
     public static final String ID_DELIMITER = "__";
-    <% } %>
+    <%_ } _%>
+
     private Constants() {
     }
 }

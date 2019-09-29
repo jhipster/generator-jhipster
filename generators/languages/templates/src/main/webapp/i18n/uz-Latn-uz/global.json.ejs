@@ -1,0 +1,158 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Sizning brauzeringiz <strong>eski</strong>. Iltimos, <a href=\"http://browsehappy.com/?locale=ru\">yangilang</a>.",
+        "menu": {
+            "home": "Bosh sahifa",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Ma`lumotlar",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Profil",
+                "settings": "Sozlamalar",
+                "password": "Parol",
+                "sessions": "Sessiyalar",
+                "login": "Kirish",
+                "logout": "Chiqish",
+                "register": "Ro`yhatdan o`tish"
+            },
+            "admin": {
+                "main": "Boshqaruv",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "Shlyuz",
+                <%_ } _%>
+                "userManagement": "Foydalanuvchilar",
+                "tracker": "Foydalauvchi kuzatuvi",
+                "metrics": "Metrikalar",
+                "health": "Holat",
+                "configuration": "Sozlamalar",
+                "logs": "Loglar",
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+                "audits": "Audit",
+                <%_ } _%>
+                "apidocs": "API",
+                "database": "Ma`lumotlar bazasi",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Til"
+        },
+        "form": {
+            "username.label": "Login",
+            "username.placeholder": "Sizning loginingiz",
+            "currentpassword.label": "Parol",
+            "currentpassword.placeholder": "Hozirgi parolingiz",
+            "newpassword.label": "Yangi parol",
+            "newpassword.placeholder": "Yangi parol",
+            "confirmpassword.label": "Yangi parolni tasdig`i",
+            "confirmpassword.placeholder": "Yangi parolni tasdig`i",
+            "email.label": "Email",
+            "email.placeholder": "Sizning email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Agar ",
+                    "link": "avtarizatsiyadan o`tishni",
+                    "suffix": " xohlasangiz, mavjud foydalanuvchini tekshirib ko`ring:<br/>- Ma`mur (login=\"admin\" va parol=\"admin\") <br/>- Oddiy foydalanuvchi (login=\"user\" va parol=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Siz ro`yhatdan o`tmaganmisiz?",
+                    "link": "Yangi foydalanuvchi qo`shing"
+                }
+            },
+            "error": {
+                "dontmatch": "Parol va uning tasdig`i mos kelmadi!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Parol kiritilishi zarur.",
+                    "minlength": "Parol uzunligi kamida 4 harfdan iborat bo`lsin",
+                    "maxlength": "Parol 50 harfdan uzun bo`lmasin",
+                    "strength": "Parol murakkabligi:"
+                },
+                "confirmpassword": {
+                    "required": "Parol tasdig`i kiritilishi zarur.",
+                    "minlength": "Parol tasdig`i uzunligi kamida 4 harfdan iborat bo`lsin",
+                    "maxlength": "Parol tasdig`i 50 harfdan uzun bo`lmasin"
+                },
+                "email": {
+                    "required": "Email kiritilishi zarur.",
+                    "invalid": "Iltimos, to`g`ri Email kiriting.",
+                    "minlength": "Email uzunligi kamida 5 harfdan iborat bo`lsin",
+                    "maxlength": "Email 50 harfdan uzun bo`lmasin"
+                }
+            }
+        },
+        "field": {
+            "id" : "ID"
+        },
+        "ribbon": {
+            "dev": "Yakunlanmadi"
+        },
+        "item-count": "{{total}} tadan {{first}} va {{second}} - lari."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Binar ma`lumot qo`shish",
+            "addimage": "Rasm qo`shish",
+            "back": "Orqaga",
+            "cancel": "Bekor",
+            "delete": "O`chir",
+            "edit": "O`zgartir",
+            "open": "Och",
+            "save": "Saqla",
+            "view": "Ko`rish"
+        },
+        "detail": {
+            "field": "Maydon",
+            "value": "Qiymat"
+        },
+        "delete": {
+            "title": "O`chirish amalini tasdiqlang"
+        },
+        "validation": {
+            "required": "To`ldirish zarur",
+            "minlength": "Kamida {{min}}ta bo`lsin.",
+            "maxlength": "Ko`pi bilan {{max}}ta bo`lsin.",
+            "min": "Kamida {{min}} bo`lsin.",
+            "max": "Ko`pi bilan {{max}} bo`lsin.",
+            "minbytes": "Kamida {{min}}ta bayt bo`lsin.",
+            "maxbytes": "Ko`pi bilan {{max}}ta bayt bo`lsin.",
+            "pattern": "Zarur format {{pattern}}.",
+            "number": "Son bo`lsin.",
+            "datetimelocal": "Sana bo`lsin."
+        }
+    },
+    "error": {
+        "internalServerError": "Ichki xatolik",
+        "server.not.reachable": "Serverga yetishib bo`lmaydi",
+        "url.not.found": "Topilmadi",
+        "NotNull": "{{fieldName}} bo`sh bo`lmasin!",
+        "Size": "{{fieldName}} o`lchami noto`g`ri!",
+        "userexists": "Foydalanuvchi tizimda mavjud!",
+        "emailexists": "Email allaqachon mavjud!",
+        "idexists": "Yangi {{entityName}} IDsi bo`lmasligi kerak",
+        "idnull": "Noto`g`ri ID"
+    },
+    "footer": "Sahifa tag qismi"
+}

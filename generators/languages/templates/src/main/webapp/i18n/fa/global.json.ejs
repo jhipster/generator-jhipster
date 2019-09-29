@@ -47,7 +47,7 @@
                 "health": "سلامتی",
                 "configuration": "پیکربندی",
                 "logs": "وقایع ثبت شده",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "وقایع بازرسی",
                 <%_ } _%>
                 "apidocs": "ای‌پی‌آی",

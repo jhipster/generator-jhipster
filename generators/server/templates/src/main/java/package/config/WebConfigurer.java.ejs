@@ -55,7 +55,9 @@ import org.springframework.core.annotation.Order;
 <%_ if (!reactive) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+    <%_ if (!skipClient) { _%>
 import org.springframework.http.MediaType;
+    <%_ } _%>
 <%_ } _%>
 import org.springframework.web.cors.CorsConfiguration;
 <%_ if (!reactive) { _%>
@@ -79,13 +81,9 @@ import javax.servlet.*;
     <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-    <%_ } _%>
 import java.nio.charset.StandardCharsets;
-    <%_ if (!skipClient) { _%>
 import java.nio.file.Paths;
-    <%_ } _%>
 import java.util.*;
-    <%_ if (!skipClient) { _%>
 
 import static java.net.URLDecoder.decode;
     <%_ } _%>
@@ -103,7 +101,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory><% } %><% if (reactive) { %>WebFluxConfigurer<% } %> {
+public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<% if (!skipClient) { %>, WebServerFactoryCustomizer<WebServerFactory><% } %><% } %><% if (reactive) { %>WebFluxConfigurer<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -126,8 +124,8 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         if (env.getActiveProfiles().length != 0) {
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
-        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         <%_ if (!skipClient) { _%>
+        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_PRODUCTION))) {
             initCachingHttpHeadersFilter(servletContext, disps);
         }
@@ -139,6 +137,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         <%_ } _%>
         log.info("Web application fully configured");
     }
+    <%_ if (!skipClient) { _%>
 
     /**
      * Customize the Servlet engine: Mime types, the document root, the cache.
@@ -146,10 +145,8 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     @Override
     public void customize(WebServerFactory server) {
         setMimeMappings(server);
-        <%_ if (!skipClient) { _%>
         // When running in an IDE or with <% if (buildTool === 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
         setLocationForStaticAssets(server);
-        <%_ } _%>
     }
 
     private void setMimeMappings(WebServerFactory server) {
@@ -163,7 +160,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             servletWebServer.setMimeMappings(mappings);
         }
     }
-        <%_ if (!skipClient) { _%>
 
     private void setLocationForStaticAssets(WebServerFactory server) {
         if (server instanceof ConfigurableServletWebServerFactory) {
@@ -229,6 +225,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             <%_ } _%>
             <%_ if (applicationType === 'gateway') { _%>
             source.registerCorsConfiguration("/*/api/**", config);
+            source.registerCorsConfiguration("/services/*/api/**", config);
             source.registerCorsConfiguration("/*/management/**", config);
                 <%_ if (authenticationType === 'uaa') { _%>
             source.registerCorsConfiguration("/*/oauth/**", config);

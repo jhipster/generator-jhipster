@@ -41,7 +41,7 @@ export class <%=jhiPrefixCapitalized%>AlertComponent implements OnInit, OnDestro
 
     setClasses(alert) {
         return {
-            toast: !!alert.toast,
+            'jhi-toast': alert.toast,
             [alert.position]: true
         };
     }

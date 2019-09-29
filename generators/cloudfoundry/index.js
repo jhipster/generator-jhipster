@@ -42,9 +42,7 @@ module.exports = class extends BaseGenerator {
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
         this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-        this.enableHibernateCache =
-            this.config.get('enableHibernateCache') ||
-            (this.config.get('hibernateCache') !== undefined && this.config.get('hibernateCache') !== 'no');
+        this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
         this.databaseType = this.config.get('databaseType');
         this.devDatabaseType = this.config.get('devDatabaseType');
         this.prodDatabaseType = this.config.get('prodDatabaseType');
@@ -134,7 +132,7 @@ module.exports = class extends BaseGenerator {
 
                 this.log(chalk.bold(`\nBuilding the application with the ${this.cloudfoundryProfile} profile`));
 
-                const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, err => {
+                const child = this.buildApplication(this.buildTool, this.cloudfoundryProfile, false, err => {
                     if (err) {
                         this.log.error(err);
                     }

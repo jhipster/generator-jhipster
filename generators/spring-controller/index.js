@@ -27,7 +27,7 @@ const statistics = require('../statistics');
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
-let useBlueprint;
+let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -48,17 +48,7 @@ module.exports = class extends BaseBlueprintGenerator {
         });
         this.defaultOption = this.options.default;
 
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'spring-controller', {
-                ...this.options,
-                arguments: [this.name],
-                configOptions: this.configOptions
-            });
-        } else {
-            useBlueprint = false;
-        }
+        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('spring-controller', { arguments: [this.name] });
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -75,8 +65,14 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');
                 this.databaseType = configuration.get('databaseType');
+                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
+                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                if (this.messageBroker === undefined) {
+                    this.messageBroker = false;
+                }
                 this.reactiveController = false;
                 this.applicationType = configuration.get('applicationType');
+                this.authenticationType = configuration.get('authenticationType');
                 this.reactive = configuration.get('reactive');
                 this.reactiveController = this.reactive;
                 this.controllerActions = [];
@@ -85,7 +81,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -97,7 +93,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get prompting() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._prompting();
     }
 
@@ -111,7 +107,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get default() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._default();
     }
 
@@ -174,7 +170,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 };
