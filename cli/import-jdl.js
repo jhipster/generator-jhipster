@@ -253,7 +253,9 @@ const isAllCompleted = items => Object.values(items).every(it => it);
 
 class JDLProcessor {
     constructor(jdlFiles, jdlContent, options) {
-        logger.debug(`JDLProcessor started with content: ${jdlFiles} and options: ${toString(options)}`);
+        logger.debug(
+            `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toString(options)}`
+        );
         this.jdlFiles = jdlFiles;
         this.jdlContent = jdlContent;
         this.options = options;
