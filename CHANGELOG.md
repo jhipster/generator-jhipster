@@ -1,4 +1,4 @@
-# Latest v5.0.0
+# Latest v5.0.0
 
 ## Breaking changes
   - [BinaryOptions] Replaced `SEARCH_ENGINE` with `SEARCH`
