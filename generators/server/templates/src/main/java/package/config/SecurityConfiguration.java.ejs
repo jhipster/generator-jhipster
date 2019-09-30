@@ -35,6 +35,7 @@ import io.github.jhipster.security.*;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
     <%_ } _%>
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
     <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
@@ -121,6 +122,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final JwtAuthorityExtractor jwtAuthorityExtractor;
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
+
+    @Value("${spring.profiles.active:}")
+    private String activeProfiles;
 
     public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %><% if (authenticationType === 'oauth2') { %>JwtAuthorityExtractor jwtAuthorityExtractor, <% } %>SecurityProblemSupport problemSupport) {
     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
@@ -237,7 +241,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
         .and()
             .frameOptions()
-            .sameOrigin()
+            .deny()
         .and()
     <%_ if (authenticationType === 'jwt' || (authenticationType === 'oauth2' && applicationType === 'microservice')) { _%>
             .sessionManagement()
@@ -287,6 +291,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .oauth2Client();
     <%_ } _%>
         // @formatter:on
+
+        if (activeProfiles.contains("dev")){
+            http.headers().frameOptions().sameOrigin();
+        }
     }
     <%_ if (authenticationType === 'jwt') { _%>
 
