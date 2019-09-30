@@ -218,7 +218,7 @@ function askGenerationInfos() {
             when: response => this.props.action === 'new' && !response.useServiceDiscovery,
             type: 'input',
             name: 'cliName',
-            message: 'What is the unique name for your API client ?',
+            message: 'What is the unique name for your API client (please avoid using Java keywords) ?',
             default: this.props.cliName || 'petstore',
             validate: input => {
                 if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
