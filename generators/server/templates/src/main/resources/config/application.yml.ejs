@@ -303,6 +303,13 @@ jhipster:
         contact-email:
         license:
         license-url:
+    <%_ if (authenticationType === 'oauth2') { _%>
+    security:
+        oauth2:
+            audience:
+                - account
+                - api://default
+    <%_ } _%>
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
   consumer:
