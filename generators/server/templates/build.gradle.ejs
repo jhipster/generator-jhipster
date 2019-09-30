@@ -240,17 +240,6 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
-    // https://discuss.gradle.org/t/support-for-maven-repositories-that-use-realm-based-sso/14456/5
-    maven {
-        url "https://www.oracle.com/content/secure/maven/content"
-        credentials {
-            username ''
-            password ''
-        }
-    }
-    <%_ } _%>
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
