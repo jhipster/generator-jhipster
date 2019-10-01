@@ -12,7 +12,7 @@ module.exports = class extends LanguagesGenerator {
         if (!jhContext) {
             this.error(
                 `This is a JHipster blueprint and should be used only like ${chalk.yellow(
-                    'jhipster languages --blueprint vuejs'
+                    'jhipster languages --blueprints vuejs'
                 )}`
             );
         }

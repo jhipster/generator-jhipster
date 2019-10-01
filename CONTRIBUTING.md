@@ -202,7 +202,7 @@ Go to the [jhipster-vuejs project](https://github.com/jhipster/jhipster-vuejs) a
 
 In your cloned `jhipster-vuejs` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
 
-This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster --blueprint vuejs`, you will now use the development version of JHipster.
+This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster --blueprints vuejs`, you will now use the development version of JHipster.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
