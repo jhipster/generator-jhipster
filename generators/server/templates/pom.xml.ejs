@@ -28,19 +28,6 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
-<%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
-        <repository>
-            <id>maven.oracle.com</id>
-            <name>oracle-maven-repo</name>
-            <url>https://maven.oracle.com</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-        </repository>
-<%_ } _%>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
@@ -376,9 +363,8 @@
         </dependency>
 <%_ } _%>
 <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-        <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
         <dependency>
-            <groupId>com.oracle.jdbc</groupId>
+            <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
         </dependency>
 <%_ } _%>
