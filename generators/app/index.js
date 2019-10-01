@@ -364,31 +364,8 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
 
-            composeServer() {
-                if (!this.skipServer) {
-                    this.composeWithSharedOptions(require.resolve('../server'), { ...this.options, 'client-hook': !this.skipClient });
-                }
-            },
-
-            composeClient() {
-                if (!this.skipClient) {
-                    this.composeWithSharedOptions(require.resolve('../client'), { ...this.options });
-                }
-            },
-
-            composeCommon() {
-                this.composeWithSharedOptions(require.resolve('../common'), { ...this.options, 'client-hook': !this.skipClient });
-            },
-
-            askFori18n: prompts.askFori18n
-        };
-    }
-
-    get default() {
-        return {
+            askFori18n: prompts.askFori18n,
             askForTestOpts: prompts.askForTestOpts,
-
-            askForMoreModules: prompts.askForMoreModules,
 
             setSharedConfigOptions() {
                 this.configOptions.testFrameworks = this.testFrameworks;
@@ -398,11 +375,20 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.clientPackageManager = this.clientPackageManager;
             },
 
-            composeLanguages() {
-                if (this.skipI18n) return;
-                this.composeLanguagesSub(this, this.configOptions, this.generatorType);
-            },
+            composeModules() {
+                if (!this.skipServer) {
+                    this.composeWithSharedOptions(require.resolve('../server'), { ...this.options, 'client-hook': !this.skipClient });
+                }
+                if (!this.skipClient) {
+                    this.composeWithSharedOptions(require.resolve('../client'), { ...this.options });
+                }
+                this.composeWithSharedOptions(require.resolve('../common'), { ...this.options, 'client-hook': !this.skipClient });
 
+                if (!this.skipI18n) {
+                    this.composeLanguagesSub(this, this.configOptions, this.generatorType);
+                }
+            },
+            askForMoreModules: prompts.askForMoreModules,
             saveConfig() {
                 const config = {
                     jhipsterVersion: packagejs.version,
@@ -428,6 +414,16 @@ module.exports = class extends BaseGenerator {
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.config.set(config);
+                this.storedConfig = config;
+            }
+        };
+    }
+
+    get default() {
+        return {
+            saveConfig() {
+                // Save again to make sure app configs are not overwritten
+                this.config.set(this.storedConfig);
             },
 
             insight() {
