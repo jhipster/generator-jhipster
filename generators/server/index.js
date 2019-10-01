@@ -292,36 +292,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
                     this.existingProject = true;
                 }
-            },
-
-            // Client configurations
-            setupClientConfig() {
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.clientFramework = configuration.get('clientFramework');
-                this.clientTheme = configuration.get('clientTheme');
-                if (!this.clientTheme) {
-                    this.clientTheme = 'none';
-                }
-            },
-
-            // Languages configurations
-            setupLanguagesConfig() {
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.nativeLanguage = configuration.get('nativeLanguage');
-                this.languages = configuration.get('languages');
-
-                if (this.existingProject) {
-                    // If translation is not defined, it is enabled by default
-                    if (this.enableTranslation === undefined) {
-                        this.enableTranslation = true;
-                    }
-                    if (this.nativeLanguage === undefined) {
-                        this.nativeLanguage = 'en';
-                    }
-                    if (this.languages === undefined) {
-                        this.languages = ['en', 'fr'];
-                    }
-                }
             }
         };
     }
@@ -460,6 +430,36 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            // Client configurations
+            setupClientConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.clientFramework = configuration.get('clientFramework');
+                this.clientTheme = configuration.get('clientTheme');
+                if (!this.clientTheme) {
+                    this.clientTheme = 'none';
+                }
+            },
+
+            // Languages configurations
+            setupLanguagesConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
+
+                if (this.existingProject) {
+                    // If translation is not defined, it is enabled by default
+                    if (this.enableTranslation === undefined) {
+                        this.enableTranslation = true;
+                    }
+                    if (this.nativeLanguage === undefined) {
+                        this.nativeLanguage = 'en';
+                    }
+                    if (this.languages === undefined) {
+                        this.languages = ['en', 'fr'];
+                    }
+                }
+            },
+
             getSharedConfigOptions() {
                 if (this.configOptions.enableTranslation !== undefined) {
                     this.enableTranslation = this.configOptions.enableTranslation;

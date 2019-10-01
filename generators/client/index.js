@@ -133,42 +133,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
             },
 
-            // Server configurations
-            setupServerConfig() {
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
-                this.messageBroker = configuration.get('messageBroker');
-                this.serviceDiscoveryType =
-                    configuration.get('serviceDiscoveryType') === 'no'
-                        ? false
-                        : configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = false;
-                }
-            },
-
-            // Languages configurations
-            setupLanguagesConfig() {
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-                this.nativeLanguage = configuration.get('nativeLanguage');
-                this.languages = configuration.get('languages');
-                this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
-
-                if (this.clientConfigFound) {
-                    // If translation is not defined, it is enabled by default
-                    if (this.enableTranslation === undefined) {
-                        this.enableTranslation = true;
-                    }
-                    if (this.nativeLanguage === undefined) {
-                        this.nativeLanguage = 'en';
-                    }
-                    if (this.languages === undefined) {
-                        this.languages = ['en', 'fr'];
-                    }
-                }
-            },
-
             validateSkipServer() {
                 if (this.skipServer && !(this.databaseType && this.devDatabaseType && this.prodDatabaseType && this.authenticationType)) {
                     this.error(
@@ -262,10 +226,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     config.clientTheme = this.clientTheme;
                     config.clientThemeVariant = this.clientThemeVariant;
                 }
-                if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    config.nativeLanguage = this.nativeLanguage;
-                    config.languages = this.languages;
-                }
                 if (this.skipServer) {
                     this.authenticationType && (config.authenticationType = this.authenticationType);
                     this.uaaBaseName && (config.uaaBaseName = this.uaaBaseName);
@@ -291,6 +251,48 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            // Server configurations
+            setupServerConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
+                this.messageBroker = configuration.get('messageBroker');
+                this.serviceDiscoveryType =
+                    configuration.get('serviceDiscoveryType') === 'no'
+                        ? false
+                        : configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
+                if (this.serviceDiscoveryType === undefined) {
+                    this.serviceDiscoveryType = false;
+                }
+            },
+
+            // Languages configurations
+            setupLanguagesConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+                this.nativeLanguage = configuration.get('nativeLanguage');
+                this.languages = configuration.get('languages');
+                this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
+
+                if (this.clientConfigFound) {
+                    // If translation is not defined, it is enabled by default
+                    if (this.enableTranslation === undefined) {
+                        this.enableTranslation = true;
+                    }
+                    if (this.nativeLanguage === undefined) {
+                        this.nativeLanguage = 'en';
+                    }
+                    if (this.languages === undefined) {
+                        this.languages = ['en', 'fr'];
+                    }
+                }
+                if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
+                    this.config.set({
+                        nativeLanguage: this.nativeLanguage,
+                        languages: this.languages
+                    });
+                }
+            },
+
             getSharedConfigOptions() {
                 if (this.configOptions.cacheProvider) {
                     this.cacheProvider = this.configOptions.cacheProvider;

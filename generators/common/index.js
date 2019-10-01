@@ -36,9 +36,6 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
-        this.setupServerOptions(this);
-        this.setupClientOptions(this);
-
         useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('common', { 'client-hook': !this.skipClient });
     }
 
@@ -75,6 +72,9 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             getSharedConfigOptions() {
+                this.setupServerOptions(this);
+                this.setupClientOptions(this);
+
                 this.jhipsterVersion = this.config.get('jhipsterVersion');
                 this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
                 this.enableSwaggerCodegen = this.configOptions.enableSwaggerCodegen;
