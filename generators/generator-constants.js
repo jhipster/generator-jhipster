@@ -22,7 +22,7 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 
 // Version of Node, Yarn, NPM
 const NODE_VERSION = '10.16.3';
-const YARN_VERSION = '1.17.3';
+const YARN_VERSION = '1.19.0';
 const NPM_VERSION = '6.11.3';
 
 // Libraries version
