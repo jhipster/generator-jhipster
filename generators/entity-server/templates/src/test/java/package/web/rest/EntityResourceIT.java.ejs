@@ -788,6 +788,19 @@ _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.notEquals=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.notEquals=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
     public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
@@ -811,6 +824,36 @@ _%>
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is null
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.specified=false");
     }
+<%_
+            }
+            if (searchBy.fieldType === 'String') {
+                _%>
+                @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.contains=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.contains=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+    }
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+    }
+
 <%_
             }
             // the range criteria
