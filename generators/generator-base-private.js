@@ -875,7 +875,7 @@ module.exports = class extends Generator {
             this.error(
                 `The installed ${chalk.yellow(
                     blueprintPkgName
-                )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster.`
+                )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
             );
         }
     }
