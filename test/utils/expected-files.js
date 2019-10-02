@@ -493,6 +493,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}favicon.ico`,
         `${CLIENT_MAIN_SRC_DIR}index.html`,
         `${CLIENT_MAIN_SRC_DIR}manifest.webapp`,
+        `${CLIENT_MAIN_SRC_DIR}env.js`,
         `${CLIENT_MAIN_SRC_DIR}robots.txt`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/dist/images/throbber.gif`,
         `${CLIENT_MAIN_SRC_DIR}swagger-ui/index.html`,

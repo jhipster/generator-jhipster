@@ -108,6 +108,7 @@ const files = {
                 '404.html',
                 'index.html',
                 'manifest.webapp',
+                'env.js',
                 'content/css/loading.css'
             ]
         }
