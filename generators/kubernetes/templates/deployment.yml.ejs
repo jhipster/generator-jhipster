@@ -213,6 +213,6 @@ spec:
           failureThreshold: 6
         livenessProbe:
           httpGet:
-            path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health
+            path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/info
             port: http
           initialDelaySeconds: 120
