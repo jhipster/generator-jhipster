@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: Gateway
 metadata:
   name: <%= app.baseName.toLowerCase() %>-gateway
-  namespace: <%= kubernetesNamespace %>
   labels:
     gateway: <%= app.baseName.toLowerCase() %>-gateway
     istio: ingressgateway
@@ -45,7 +44,6 @@ apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: VirtualService
 metadata:
   name: <%= app.baseName.toLowerCase() %>-gw-virtualservice
-  namespace: <%= kubernetesNamespace %>
   labels:
     service: <%= app.baseName.toLowerCase() %>-gw-virtualservice
 spec:

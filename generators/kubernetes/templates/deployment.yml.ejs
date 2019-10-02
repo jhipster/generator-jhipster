@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>
-  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -72,14 +71,14 @@ spec:
           value: prod
         <%_ if (app.serviceDiscoveryType === 'eureka') { _%>
         - name: SPRING_CLOUD_CONFIG_URI
-          value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/config
+          value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/config
         - name: JHIPSTER_REGISTRY_PASSWORD
           valueFrom:
             secretKeyRef:
               name: registry-secret
               key: registry-admin-password
         - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
-          value: http://admin:${jhipster.registry.password}@jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
+          value: http://admin:${jhipster.registry.password}@jhipster-registry:8761/eureka/
           <%_ if (istio) { _%>
         - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
           value: "false"
@@ -89,7 +88,7 @@ spec:
         <%_ } _%>
         <%_ if (app.serviceDiscoveryType === 'consul') { _%>
         - name: SPRING_CLOUD_CONSUL_HOST
-          value: consul.<%= kubernetesNamespace %>.svc.cluster.local
+          value: consul
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
           <%_ if (istio) { _%>
@@ -110,11 +109,11 @@ spec:
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mysql') { _%>
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://<%= app.baseName.toLowerCase() %>-mysql.<%= kubernetesNamespace %>.svc.cluster.local:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+          value: jdbc:mysql://<%= app.baseName.toLowerCase() %>-mysql:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mariadb') { _%>
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mariadb://<%= app.baseName.toLowerCase() %>-mariadb.<%= kubernetesNamespace %>.svc.cluster.local:3306/<%= app.baseName.toLowerCase() %>
+          value: jdbc:mariadb://<%= app.baseName.toLowerCase() %>-mariadb:3306/<%= app.baseName.toLowerCase() %>
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -123,7 +122,7 @@ spec:
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'postgresql') { _%>
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://<%= app.baseName.toLowerCase() %>-postgresql.<%= kubernetesNamespace %>.svc.cluster.local:5432/<%= app.baseName %>
+          value: jdbc:postgresql://<%= app.baseName.toLowerCase() %>-postgresql:5432/<%= app.baseName %>
         - name: SPRING_DATASOURCE_USERNAME
           value: <%= app.baseName %>
         - name: SPRING_DATASOURCE_PASSWORD
@@ -146,9 +145,9 @@ spec:
         <%_ } _%>
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
         - name: SPRING_DATA_JEST_URI
-          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
+          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch:9200
         - name: SPRING_ELASTICSEARCH_REST_URIS
-          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
+          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch:9200
         <%_ } _%>
         <%_ if (app.messageBroker === 'kafka') { _%>
         - name: KAFKA_CONSUMER_KEY_DESERIALIZER
@@ -156,13 +155,13 @@ spec:
         - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
           value: 'org.apache.kafka.common.serialization.StringDeserializer'
         - name: KAFKA_CONSUMER_BOOTSTRAP_SERVERS
-          value: 'jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
+          value: 'jhipster-kafka:9092'
         - name: KAFKA_CONSUMER_GROUP_ID
           value: '<%= app.baseName.toLowerCase() %>'
         - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
           value: 'earliest'
         - name: KAFKA_PRODUCER_BOOTSTRAP_SERVERS
-          value: 'jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
+          value: 'jhipster-kafka:9092'
         - name: KAFKA_PRODUCER_KEY_DESERIALIZER
           value: 'org.apache.kafka.common.serialization.StringDeserializer'
         - name: KAFKA_PRODUCER_VALUE_DESERIALIZER

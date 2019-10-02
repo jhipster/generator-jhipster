@@ -78,7 +78,6 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.jhgate);
             assert.fileContent('./jhgate/jhgate-deployment.yml', /image: jhipsterrepository\/jhgate/);
-            assert.fileContent('./jhgate/jhgate-deployment.yml', /jhipsternamespace.svc.cluster/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);

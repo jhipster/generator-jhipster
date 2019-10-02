@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_INGRESS_API_VERSION %>
 kind: Ingress
 metadata:
   name: <%= app.baseName.toLowerCase() %>
-  namespace: <%= kubernetesNamespace %>
 spec:
   rules:
   <%_ if (ingressDomain) { _%>

@@ -37,7 +37,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: gossip-key
-  namespace: <%= kubernetesNamespace %>
 type: Opaque
 data:
   gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
@@ -46,7 +45,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: consul
-  namespace: <%= kubernetesNamespace %>
   labels:
     app: consul
   annotations:
@@ -81,7 +79,6 @@ apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: consul
-  namespace: <%= kubernetesNamespace %>
 spec:
   serviceName: consul
   replicas: 3

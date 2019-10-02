@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mysql
-  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -63,7 +62,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mysql
-  namespace: <%= kubernetesNamespace %>
 spec:
   selector:
     app: <%= app.baseName.toLowerCase() %>-mysql

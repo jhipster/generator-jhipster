@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>
-  namespace: <%= kubernetesNamespace %>
   labels:
     app: <%= app.baseName.toLowerCase() %>
 spec:

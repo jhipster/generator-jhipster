@@ -20,7 +20,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: jhipster-console-gateway
-  namespace: <%= kubernetesNamespace %>
 spec:
   selector:
     istio: ingressgateway
@@ -42,7 +41,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: jhipster-console-gw-virtualservice
-  namespace: <%= kubernetesNamespace %>
 spec:
   hosts:
   - jhipster-console.<%= kubernetesNamespace %>.<%= ingressDomain %>

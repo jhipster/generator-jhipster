@@ -34,7 +34,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: registry-secret
-  namespace: <%= kubernetesNamespace %>
 type: Opaque
 data:
   registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
@@ -43,7 +42,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-registry
-  namespace: <%= kubernetesNamespace %>
   labels:
     app: jhipster-registry
   annotations:
@@ -60,7 +58,6 @@ apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-registry
-  namespace: <%= kubernetesNamespace %>
 spec:
   serviceName: jhipster-registry
   replicas: 2

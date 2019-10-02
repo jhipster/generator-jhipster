@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
   name: application-config
-  namespace: <%= kubernetesNamespace %>
 #common configuration shared between all applications
 data:
   application.yml: |-
@@ -51,5 +50,5 @@ data:
     eureka:
       client:
         service-url:
-          defaultZone: http://admin:${spring.security.user.password}@jhipster-registry-0.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/,http://admin:${spring.security.user.password}@jhipster-registry-1.jhipster-registry.<%= kubernetesNamespace %>.svc.cluster.local:8761/eureka/
+          defaultZone: http://admin:${spring.security.user.password}@jhipster-registry-0.jhipster-registry:8761/eureka/,http://admin:${spring.security.user.password}@jhipster-registry-1.jhipster-registry:8761/eureka/
   <%_ } _%>

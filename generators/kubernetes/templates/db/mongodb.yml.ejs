@@ -19,7 +19,6 @@
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
-  namespace: <%= kubernetesNamespace %>
   name: <%= app.baseName.toLowerCase() %>-mongodb-config
 data:
   mongod.conf: |
@@ -33,7 +32,6 @@ data:
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
-  namespace: <%= kubernetesNamespace %>
   name: <%= app.baseName.toLowerCase() %>-mongodb-init
 data:
   on-start.sh: |
@@ -172,7 +170,6 @@ apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mongodb
-  namespace: <%= kubernetesNamespace %>
 spec:
   serviceName: <%= app.baseName.toLowerCase() %>-mongodb
   replicas: <%= app.dbPeerCount %>
@@ -327,7 +324,6 @@ metadata:
   annotations:
     service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   name: <%= app.baseName.toLowerCase() %>-mongodb
-  namespace: <%= kubernetesNamespace %>
 spec:
   type: ClusterIP
   clusterIP: None

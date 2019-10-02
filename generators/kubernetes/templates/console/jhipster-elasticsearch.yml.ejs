@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
   name: es-config
-  namespace: <%= kubernetesNamespace %>
 data:
     discovery.type: zen
     minimum.master.nodes: "1"
@@ -37,7 +36,6 @@ apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-elasticsearch-master
-  namespace: <%= kubernetesNamespace %>
   labels:
     component: jhipster-elasticsearch
     role: master
@@ -187,7 +185,6 @@ apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-elasticsearch-data
-  namespace: <%= kubernetesNamespace %>
   labels:
     component: jhipster-elasticsearch
     role: data
@@ -333,7 +330,6 @@ apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: jhipster-elasticsearch-client
-  namespace: <%= kubernetesNamespace %>
   labels:
     component: jhipster-elasticsearch
     role: client
@@ -465,7 +461,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-elasticsearch-discovery
-  namespace: <%= kubernetesNamespace %>
   labels:
     component: jhipster-elasticsearch
     role: master
@@ -483,7 +478,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-elasticsearch-data
-  namespace: <%= kubernetesNamespace %>
   labels:
     component: jhipster-elasticsearch
     role: data
@@ -501,7 +495,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-elasticsearch
-  namespace: <%= kubernetesNamespace %>
   labels:
     component: jhipster-elasticsearch
     role: client

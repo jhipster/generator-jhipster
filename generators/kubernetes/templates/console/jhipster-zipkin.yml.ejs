@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: jhipster-zipkin
-  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -54,7 +53,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-zipkin
-  namespace: <%= kubernetesNamespace %>
   labels:
     app: jhipster-zipkin
 spec:

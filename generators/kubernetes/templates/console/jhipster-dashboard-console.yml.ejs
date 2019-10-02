@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_BATCH_API_VERSION %>
 kind: Job
 metadata:
   name: jhipster-import-dashboards
-  namespace: <%= kubernetesNamespace %>
   labels:
     job: jhipster-import-dashboards
 spec:

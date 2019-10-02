@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql
-  namespace: <%= kubernetesNamespace %>
   labels:
     app: <%= app.baseName.toLowerCase() %>-postgresql
 type: Opaque
@@ -31,7 +30,6 @@ apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql
-  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -70,7 +68,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-postgresql
-  namespace: <%= kubernetesNamespace %>
 spec:
   selector:
     app: <%= app.baseName.toLowerCase() %>-postgresql

@@ -74,13 +74,11 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ServiceAccount
 metadata:
   name: jhipster-prometheus-operator-sa
-  namespace: <%= kubernetesNamespace %>
 ---
 apiVersion: <%= KUBERNETES_RBAC_API_VERSION %>
 kind: ClusterRoleBinding
 metadata:
   name: jhipster-prometheus-operator-rb
-  namespace: <%= kubernetesNamespace %>
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -88,7 +86,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: jhipster-prometheus-operator-sa
-  namespace: <%= kubernetesNamespace %>
 ---
 apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
@@ -96,7 +93,6 @@ metadata:
   labels:
     k8s-app: prometheus-operator
   name: jhipster-prometheus-operator
-  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   selector:

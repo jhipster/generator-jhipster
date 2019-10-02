@@ -21,7 +21,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: ds-secret-ref
-  namespace: <%= kubernetesNamespace %>
 data:
   database-admin-user: "YWRtaW4K"
   database-admin-password: "cGFzc3dvcmQK"
@@ -30,7 +29,6 @@ apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: <%= app.baseName.toLowerCase() %>-couchbase
-  namespace: <%= kubernetesNamespace %>
 spec:
   serviceName: <%= app.baseName.toLowerCase() %>-couchbase
   replicas: <%= app.dbPeerCount %>
@@ -174,7 +172,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-couchbase
-  namespace: <%= kubernetesNamespace %>
   labels:
     app: <%= app.baseName.toLowerCase() %>-couchbase
   annotations:
@@ -210,7 +207,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-couchbase-discovery
-  namespace: <%= kubernetesNamespace %>
   labels:
     app: <%= app.baseName.toLowerCase() %>-couchbase
 spec:

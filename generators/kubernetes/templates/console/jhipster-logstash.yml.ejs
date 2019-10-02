@@ -38,7 +38,6 @@ apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: jhipster-logstash
-  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -80,7 +79,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-logstash
-  namespace: <%= kubernetesNamespace %>
   labels:
     app: jhipster-logstash
 spec:

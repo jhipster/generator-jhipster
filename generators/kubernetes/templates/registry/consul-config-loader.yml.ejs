@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: consul-config-loader
-  namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -39,7 +38,7 @@ spec:
         - name: INIT_SLEEP_SECONDS
           value: "5"
         - name: CONSUL_URL
-          value: consul.<%= kubernetesNamespace %>.svc.cluster.local
+          value: consul
         - name: CONSUL_PORT
           value: "8500"
         volumeMounts:

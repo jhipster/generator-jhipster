@@ -2,7 +2,6 @@ apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: VirtualService
 metadata:
   name: <%= app.baseName.toLowerCase() %>-virtualservice
-  namespace: <%= kubernetesNamespace %>
 spec:
   hosts:
   - <%= app.baseName.toLowerCase() %>

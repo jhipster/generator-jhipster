@@ -20,7 +20,6 @@ apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
   name: logstash-config
-  namespace: <%= kubernetesNamespace %>
 data:
   logstash.conf: |-
     input {

@@ -20,7 +20,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: <%= app.baseName.toLowerCase() %>-app
-  namespace: <%= kubernetesNamespace %>
   labels:
     team: <%= kubernetesNamespace %>
 spec:

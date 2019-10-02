@@ -14,12 +14,52 @@ $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 ```
 
 ## Deployment
-
+Add the ssh keys for the user
 You can deploy all your apps by running the below bash command:
 
 ```
+export KUBECONFIG=./kubeconfig
 ./kubectl-apply.sh
 ```
+
+example of kubeconfig file
+```
+kind: Config
+preferences: {}
+apiVersion: v1
+current-context: dev
+clusters:
+  - name: dev
+    cluster:
+      certificate-authority: ssl/dev/ca.crt
+      server: https://<dev-cluster-ip>:6443
+  - name: prod
+    cluster:
+      certificate-authority: ssl/prod/ca.crt
+      server: https://<dev-cluster-ip>:6443
+contexts:
+  - name: dev
+    context:
+      cluster: dev
+      user: admin-dev
+  - name: prod
+    context:
+      cluster: prod
+      user: admin-prod
+users:
+  - name: admin-dev
+    user:
+      client-certificate: ssl/dev/user.crt
+      client-key: ssl/dev/user.key
+  - name: admin-prod
+    user:
+      client-certificate: ssl/prod/user.crt
+      client-key: ssl/prod/user.key
+```
+
+to switch from dev to prod edit the kubeconfig file `currentContext` from dev to prod or using
+
+More info here: https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-context-and-configuration
 
 ## Exploring your services
 
