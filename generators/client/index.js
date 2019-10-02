@@ -61,6 +61,12 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        this.option('generator-jhipster-version', {
+            desc: 'Specify the version that should be set in package.json',
+            required: false,
+            type: String
+        });
+
         this.setupClientOptions(this);
 
         useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
@@ -83,6 +89,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+
+                this.packagejs = packagejs;
+                this.generatorJhipsterVersion =
+                    this.options.generatorJhipsterVersion || this.config.get('jhipsterVersion') || packagejs.version;
+
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
@@ -110,7 +121,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.languages = configuration.get('languages');
                 this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
                 this.messageBroker = configuration.get('messageBroker');
-                this.packagejs = packagejs;
                 const baseName = configuration.get('baseName');
                 if (baseName) {
                     this.baseName = baseName;

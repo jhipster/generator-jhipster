@@ -11,7 +11,7 @@ describe('JHipster client generator', () => {
         before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'jwt', experimental: true })
+                .withOptions({ skipInstall: true, auth: 'jwt', experimental: true, generatorJhipsterVersion: 'file:/test' })
                 .withPrompts({
                     baseName: 'jhipster',
                     serviceDiscoveryType: false,
@@ -36,13 +36,16 @@ describe('JHipster client generator', () => {
         it('contains clientFramework with react value', () => {
             assert.fileContent('.yo-rc.json', /"clientFramework": "react"/);
         });
+        it('contains generator-jhipster with test version value', () => {
+            assert.fileContent('package.json', /"generator-jhipster": "file:\/test"/);
+        });
     });
 
     describe('generate client with Angular', () => {
         before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/client'))
-                .withOptions({ skipInstall: true, auth: 'jwt' })
+                .withOptions({ skipInstall: true, auth: 'jwt', generatorJhipsterVersion: 'file:/test' })
                 .withPrompts({
                     baseName: 'jhipster',
                     serviceDiscoveryType: false,
@@ -73,6 +76,9 @@ describe('JHipster client generator', () => {
         });
         it('contains clientPackageManager with npm value', () => {
             assert.fileContent('.yo-rc.json', /"clientPackageManager": "npm"/);
+        });
+        it('contains generator-jhipster with test version value', () => {
+            assert.fileContent('package.json', /"generator-jhipster": "file:\/test"/);
         });
     });
 
