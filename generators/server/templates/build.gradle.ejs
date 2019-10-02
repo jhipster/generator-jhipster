@@ -354,7 +354,7 @@ dependencies {
         exclude module: "commons-logging"
     }
     // log4j2-mock needed to create embedded elasticsearch instance with SLF4J
-    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:0.0.1"
+    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:${log4j2_mock_version}"
     // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
