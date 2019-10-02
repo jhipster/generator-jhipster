@@ -27,6 +27,8 @@ const exec = require('child_process').exec;
 const os = require('os');
 const pluralize = require('pluralize');
 const jhiCore = require('jhipster-core');
+const Generator = require('yeoman-generator');
+
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -1115,14 +1117,31 @@ module.exports = class extends PrivateBase {
                 generatorTocall = path.join(npmPackageName, 'generators', subGen);
             }
             this.debug('Running yeoman compose with options: ', generatorTocall, options);
-            this.composeWith(require.resolve(generatorTocall), options);
+            const generatorPath = require.resolve(generatorTocall);
+            let generator = require(generatorPath); // eslint-disable-line import/no-dynamic-require, global-require
+            if (!(generator.prototype instanceof Generator)) {
+                // Use as plugin
+                if (this._.isFunction(generator)) {
+                    generator = generator(require(`./${subGen}`)); // eslint-disable-line import/no-dynamic-require, global-require
+                } else {
+                    // Add additional plugin structure here.
+                    throw new Error('blueprint is not a generator nor a plugin');
+                }
+            }
+            this.composeWith({ Generator: generator, path: generatorPath }, options);
         } catch (err) {
             this.debug('ERROR:', err);
+            this.debug(`${err}`);
             const generatorName = npmPackageName.replace('generator-', '');
             const generatorCallback = `${generatorName}:${subGen}`;
             // Fallback for legacy modules
-            this.debug('Running yeoman legacy compose with options: ', generatorCallback, options);
-            this.composeWith(generatorCallback, options);
+            this.info('Running yeoman legacy compose with options: ', generatorCallback, options);
+            try {
+                this.composeWith(generatorCallback, options);
+                this.info('Yeoman successfully run');
+            } catch (err) {
+                this.error(`${err}`);
+            }
         }
     }
 
