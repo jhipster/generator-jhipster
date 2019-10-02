@@ -82,6 +82,7 @@ module.exports = class extends BaseGenerator {
             loadConfig() {
                 this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.baseName = this.config.get('baseName');
+                this.mainClass = this.getMainClassName();
                 this.packageName = this.config.get('packageName');
                 this.packageFolder = this.config.get('packageFolder');
                 this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
@@ -106,6 +107,9 @@ module.exports = class extends BaseGenerator {
                 this.gaeMaxInstances = this.config.get('gaeMaxInstances');
                 this.gaeMinInstances = this.config.get('gaeMinInstances');
                 this.gaeCloudSQLInstanceNeeded = this.config.get('gaeCloudSQLInstanceNeeded');
+                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.config.buildTool) + constants.CLIENT_DIST_DIR;
+                this.skipClient = this.config.get('skipClient');
+                this.clientPackageManager = this.config.get('clientPackageManager');
             }
         };
     }
@@ -730,9 +734,7 @@ module.exports = class extends BaseGenerator {
             addGradlePlugin() {
                 if (this.abort) return;
                 if (this.buildTool === 'gradle') {
-                    if (this.gaeCloudSQLInstanceNeeded === 'Y') {
-                        this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.1.0');
-                    }
+                    this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.1.0');
                     this.applyFromGradleScript('gradle/gae');
                 }
             },
@@ -740,13 +742,14 @@ module.exports = class extends BaseGenerator {
             addMavenPlugin() {
                 if (this.abort) return;
                 if (this.buildTool === 'maven') {
-                    if (this.gaeCloudSQLInstanceNeeded === 'Y') {
-                        this.render('pom-plugin.xml.ejs', rendered => {
-                            this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.1.0', rendered.trim());
-                        });
-                    }
+                    this.render('pom-plugin.xml.ejs', rendered => {
+                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.1.0', rendered.trim());
+                    });
                     this.render('pom-profile.xml.ejs', rendered => {
                         this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
+                    });
+                    this.render('pom-gae-build-profile.xml.ejs', rendered => {
+                        this.addMavenProfile('gae', `            ${rendered.trim()}`);
                     });
                 }
             }
@@ -760,10 +763,10 @@ module.exports = class extends BaseGenerator {
 
                 if (this.buildTool === 'maven') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw package appengine:run -DskipTests'));
-                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pprod,prod-gae'));
+                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod-gae'));
                 } else if (this.buildTool === 'gradle') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
-                    this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pprod -Pprod-gae'));
+                    this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pgae -Pprod-gae'));
                 }
                 /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {

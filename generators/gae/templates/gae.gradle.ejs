@@ -20,13 +20,10 @@ apply plugin: "com.google.cloud.tools.appengine"
 
 appengine {
     deploy {
-        project = "<%=gcpProjectId%>"
+        projectId = "<%=gcpProjectId%>"
         version = "1"
+        artifact = "build"
     }
-}
-
-bootWar {
-    webXml = file("${project.rootDir}/<%= CLIENT_MAIN_SRC_DIR %>WEB-INF/web.xml")
 }
 
 processResources {
@@ -38,3 +35,13 @@ processResources {
         }
     }
 }
+
+task unzip(type: Copy) {
+    def jarFile = file("build/libs/" + rootProject.name + "-" + rootProject.version + ".jar")
+    def outputDir = file("build/staged-app")
+
+    from zipTree(jarFile)
+    into outputDir
+}
+
+appengineStage.finalizedBy unzip
