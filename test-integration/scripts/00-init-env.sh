@@ -58,3 +58,15 @@ fi
 if [[ "$JHI_JDK" == "11" ]]; then
     JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 fi
+
+if [[ "$JHI_GEN_VERSION" == "" ]]; then
+    if [[ "$JHI_BUILD_SOURCE" == "generator-jhipster" ]]; then
+        JHI_GEN_VERSION=file:$JHI_HOME
+    elif [[ "$JHI_BUILD_SOURCE" != "generator-jhipster" && "$JHI_GEN_BRANCH" != "release" ]]; then
+        JHI_GEN_VERSION=file:"$HOME"/generator-jhipster
+    fi
+fi
+
+if [ "$JHI_GEN_VERSION" != "" ]; then
+   JHI_PARAMS="$JHI_PARAMS --generator-jhipster-version $JHI_GEN_VERSION"
+fi
