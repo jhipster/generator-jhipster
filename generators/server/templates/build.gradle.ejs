@@ -491,8 +491,8 @@ dependencies {
     <%_ if (cucumberTests) { _%>
     testImplementation "org.junit.vintage:junit-vintage-engine"
     <%_ } _%>
-    testImplementation 'com.tngtech.archunit:archunit-junit5-api:0.11.0'
-    testRuntime 'com.tngtech.archunit:archunit-junit5-engine:0.11.0'
+    testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
+    testRuntime "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     testImplementation "org.assertj:assertj-core"
     testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"
