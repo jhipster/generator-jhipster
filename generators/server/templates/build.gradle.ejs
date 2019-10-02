@@ -324,8 +324,8 @@ dependencies {
         <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider === 'caffeine') { _%>
-    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_cache_version}"
-    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_jcache_version}"
+    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_version}"
+    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_version}"
     implementation "com.typesafe:config:${typesafe_config_version}"
         <%_ if (enableHibernateCache) { _%>
     implementation "org.hibernate:hibernate-jcache"
