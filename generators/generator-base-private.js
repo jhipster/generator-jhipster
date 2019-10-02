@@ -790,11 +790,11 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Try to retrieve the version of the blueprint used.
+     * Try to retrieve the package.json of the blueprint used, as an object.
      * @param {string} blueprintPkgName - generator name
-     * @return {string} version - retrieved version or empty string if not found
+     * @return {object} packageJson - retrieved package.json as an object or undefined if not found
      */
-    findBlueprintVersion(blueprintPkgName) {
+    findBlueprintPackageJson(blueprintPkgName) {
         let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
         try {
             if (!fs.existsSync(packageJsonPath)) {
@@ -802,13 +802,26 @@ module.exports = class extends Generator {
                 packageJsonPath = path.join(blueprintPkgName, 'package.json');
             }
             // eslint-disable-next-line global-require,import/no-dynamic-require
-            const packagejs = require(packageJsonPath);
-            return packagejs.version;
+            return require(packageJsonPath);
         } catch (err) {
             this.debug('ERROR:', err);
+            this.warning(`Could not retrieve package.json of blueprint '${blueprintPkgName}'`);
+            return undefined;
+        }
+    }
+
+    /**
+     * Try to retrieve the version of the blueprint used.
+     * @param {string} blueprintPkgName - generator name
+     * @return {string} version - retrieved version or empty string if not found
+     */
+    findBlueprintVersion(blueprintPkgName) {
+        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
+        if (!blueprintPackageJson || !blueprintPackageJson.version) {
             this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
             return '';
         }
+        return blueprintPackageJson.version;
     }
 
     /**
@@ -844,6 +857,27 @@ module.exports = class extends Generator {
             }
             done();
         });
+    }
+
+    /**
+     * Check if the generator specified as blueprint has a version compatible with current JHipster.
+     * @param {string} blueprintPkgName - generator name
+     */
+    checkJHipsterBlueprintVersion(blueprintPkgName) {
+        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
+        if (!blueprintPackageJson || !blueprintPackageJson.dependencies || !blueprintPackageJson.dependencies['generator-jhipster']) {
+            this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
+            return;
+        }
+        const mainGeneratorJhipsterVersion = packagejs.version;
+        const blueprintJhipsterVersion = blueprintPackageJson.dependencies['generator-jhipster'];
+        if (mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
+            this.error(
+                `The installed ${chalk.yellow(
+                    blueprintPkgName
+                )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster.`
+            );
+        }
     }
 
     /**
