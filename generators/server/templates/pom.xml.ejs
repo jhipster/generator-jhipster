@@ -95,6 +95,7 @@
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 <%_ } _%>
+        <archunit-junit5.version>0.11.0</archunit-junit5.version>
 <%_ if (searchEngine === 'elasticsearch') { _%>
         <log4j2-mock.version>0.0.1</log4j2-mock.version>
 <%_ } _%>
@@ -601,7 +602,7 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
-            <version>0.11.0</version>
+            <version>${archunit-junit5.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
@@ -609,7 +610,7 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-engine</artifactId>
-            <version>0.11.0</version>
+            <version>${archunit-junit5.version}</version>
             <scope>test</scope>
         </dependency>
 <%_ if (messageBroker === 'kafka') { _%>
