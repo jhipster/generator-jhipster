@@ -134,6 +134,8 @@ jobs:
             displayName: 'GENERATION: replace version in generated project'
           - bash: $(JHI_SCRIPTS)/14-jhipster-info.sh
             displayName: 'GENERATION: jhipster info'
+          - bash: $(JHI_SCRIPTS)/15-npm-info.sh
+            displayName: 'GENERATION: npm info'
 
           #----------------------------------------------------------------------
           # Bugs fix
