@@ -43,6 +43,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 [![UX Planet][uxplanet-image]][uxplanet-url]
 
+[![Top Web Design Agencies][top-web-design-agencies-image]][top-web-design-agencies-url]
+
 **Thank you to all our backers!**
 
 [![Backers][backers-image]][backers-url]
@@ -132,6 +134,8 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [clay-url]: https://clay.global/
 [uxplanet-image]: https://www.jhipster.tech/images/open-collective/uxplanet.png
 [uxplanet-url]: https://uxplanet.org/
+[top-web-design-agencies-image]: https://www.jhipster.tech/images/open-collective/top-web-design-agencies.png
+[top-web-design-agencies-url]: https://opencollective.com/top-web-design-agencies
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat
