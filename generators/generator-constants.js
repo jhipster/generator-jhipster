@@ -26,7 +26,7 @@ const YARN_VERSION = '1.17.3';
 const NPM_VERSION = '6.11.3';
 
 // Libraries version
-const JIB_VERSION = '1.5.1';
+const JIB_VERSION = '1.6.1';
 
 const KAFKA_VERSION = '5.3.1';
 
