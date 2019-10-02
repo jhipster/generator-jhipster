@@ -104,7 +104,6 @@
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
         <caffeine.version>2.8.0</caffeine.version>
-        <jcache.version>2.8.0</jcache.version>
         <typesafe.version>1.3.4</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
@@ -428,7 +427,7 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>jcache</artifactId>
-            <version>${jcache.version}</version>
+            <version>${caffeine.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
