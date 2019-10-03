@@ -26,7 +26,7 @@ import <%=packageName%>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.repository.<% if (reactive) { %>reactive.<% } %>UserRepository;
+import <%= packageName %>.repository.UserRepository;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;

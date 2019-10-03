@@ -18,7 +18,7 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from 'app/core/language/language.helper';
@@ -33,7 +33,9 @@ import { UserService } from 'app/core/user/user.service';
 export class UserManagementUpdateComponent implements OnInit {
 
     user: User;
+    <%_ if (enableTranslation) { _%>
     languages: any[];
+    <%_ } _%>
     authorities: any[];
     isSaving: boolean;
 
@@ -54,7 +56,6 @@ export class UserManagementUpdateComponent implements OnInit {
         <%_ } _%>
         private userService: UserService,
         private route: ActivatedRoute,
-        private router: Router,
         private fb: FormBuilder
     ) {}
 

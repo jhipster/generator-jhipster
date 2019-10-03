@@ -42,6 +42,7 @@
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway') { _%>
     <logger name="com.netflix" level="WARN"/>
+    <logger name="com.netflix.config.sources.URLConfigurationSource" level="ERROR"/>
     <logger name="com.netflix.discovery" level="INFO"/>
     <%_ } _%>
     <logger name="com.ryantenney" level="WARN"/>

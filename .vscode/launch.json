@@ -155,7 +155,9 @@
             "name": "jhipster import-jdl",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "args": [
-                "import-jdl"
+                "import-jdl",
+                "--inline",
+                "application { config { baseName jhapp }}"
             ],
             "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"

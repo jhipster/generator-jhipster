@@ -240,17 +240,6 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
-    // https://discuss.gradle.org/t/support-for-maven-repositories-that-use-realm-based-sso/14456/5
-    maven {
-        url "https://www.oracle.com/content/secure/maven/content"
-        credentials {
-            username ''
-            password ''
-        }
-    }
-    <%_ } _%>
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -320,7 +309,7 @@ dependencies {
     implementation "commons-codec:commons-codec"
     <%_ } _%>
     <%_ if (enableSwaggerCodegen) { _%>
-    implementation "org.openapitools:jackson-databind-nullable:0.2.0"
+    implementation "org.openapitools:jackson-databind-nullable:${jackson_databind_nullable_version}"
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io"
@@ -335,8 +324,8 @@ dependencies {
         <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider === 'caffeine') { _%>
-    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_cache_version}"
-    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_jcache_version}"
+    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_version}"
+    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_version}"
     implementation "com.typesafe:config:${typesafe_config_version}"
         <%_ if (enableHibernateCache) { _%>
     implementation "org.hibernate:hibernate-jcache"
@@ -365,7 +354,7 @@ dependencies {
         exclude module: "commons-logging"
     }
     // log4j2-mock needed to create embedded elasticsearch instance with SLF4J
-    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:0.0.1"
+    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:${log4j2_mock_version}"
     // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
@@ -502,8 +491,8 @@ dependencies {
     <%_ if (cucumberTests) { _%>
     testImplementation "org.junit.vintage:junit-vintage-engine"
     <%_ } _%>
-    testImplementation 'com.tngtech.archunit:archunit-junit5-api:0.11.0'
-    testRuntime 'com.tngtech.archunit:archunit-junit5-engine:0.11.0'
+    testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
+    testRuntime "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     testImplementation "org.assertj:assertj-core"
     testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"
@@ -521,8 +510,8 @@ dependencies {
     liquibaseRuntime "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    implementation "com.oracle.jdbc:ojdbc8"
-    liquibaseRuntime "com.oracle.jdbc:ojdbc8"
+    implementation "com.oracle.ojdbc:ojdbc8"
+    liquibaseRuntime "com.oracle.ojdbc:ojdbc8"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testImplementation "org.testcontainers:database-commons"

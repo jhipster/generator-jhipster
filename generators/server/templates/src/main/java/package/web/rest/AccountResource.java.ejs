@@ -150,7 +150,7 @@ import <%=packageName%>.repository.PersistentTokenRepository;
 <%_ if (!reactive) { _%>
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 <%_ } _%>
-import <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;

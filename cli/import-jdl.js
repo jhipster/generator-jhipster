@@ -60,13 +60,17 @@ const updateDeploymentState = importState =>
  */
 function importJDL() {
     logger.info('The JDL is being parsed.');
-    const jdlImporter = new jhiCore.JDLImporter(this.jdlFiles, {
-        databaseType: this.prodDatabaseType,
-        applicationType: this.applicationType,
-        applicationName: this.baseName,
-        generatorVersion: packagejs.version,
-        forceNoFiltering: this.options.force
-    });
+    const jdlImporter = new jhiCore.JDLImporter(
+        this.jdlFiles,
+        {
+            databaseType: this.prodDatabaseType,
+            applicationType: this.applicationType,
+            applicationName: this.baseName,
+            generatorVersion: packagejs.version,
+            forceNoFiltering: this.options.force
+        },
+        this.jdlContent
+    );
     let importState = {
         exportedEntities: [],
         exportedApplications: [],
@@ -248,21 +252,14 @@ const shouldTriggerInstall = (generator, index) =>
 const isAllCompleted = items => Object.values(items).every(it => it);
 
 class JDLProcessor {
-    constructor(jdlFiles, options) {
-        logger.debug(`JDLProcessor started with jdlFiles: ${jdlFiles} and options: ${toString(options)}`);
+    constructor(jdlFiles, jdlContent, options) {
+        logger.debug(
+            `JDLProcessor started with ${jdlContent ? `content: ${jdlContent}` : `files: ${jdlFiles}`} and options: ${toString(options)}`
+        );
         this.jdlFiles = jdlFiles;
+        this.jdlContent = jdlContent;
         this.options = options;
         this.pwd = process.cwd();
-    }
-
-    validate() {
-        if (this.jdlFiles) {
-            this.jdlFiles.forEach(key => {
-                if (!shelljs.test('-f', key)) {
-                    logger.error(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
-                }
-            });
-        }
     }
 
     getConfig() {
@@ -430,6 +427,16 @@ class JDLProcessor {
     }
 }
 
+const validateFiles = jdlFiles => {
+    if (jdlFiles) {
+        jdlFiles.forEach(key => {
+            if (!shelljs.test('-f', key)) {
+                logger.error(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
+            }
+        });
+    }
+};
+
 /**
  * Import-JDL sub generator
  * @param {any} args arguments passed for import-jdl
@@ -440,12 +447,15 @@ class JDLProcessor {
 module.exports = (args, options, env, forkProcess = fork) => {
     logger.debug('cmd: import-jdl from ./import-jdl');
     logger.debug(`args: ${toString(args)}`);
-    const jdlFiles = getOptionsFromArgs(args);
-    logger.info(chalk.yellow(`Executing import-jdl ${jdlFiles.join(' ')}`));
-    logger.info(chalk.yellow(`Options: ${toString(options)}`));
+    let jdlFiles = [];
+    if (!options.inline) {
+        jdlFiles = getOptionsFromArgs(args);
+        validateFiles(jdlFiles);
+    }
+    logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
+    logger.info(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
-        const jdlImporter = new JDLProcessor(jdlFiles, options);
-        jdlImporter.validate();
+        const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
         jdlImporter.getConfig();
         jdlImporter.importJDL();
         jdlImporter.sendInsight();

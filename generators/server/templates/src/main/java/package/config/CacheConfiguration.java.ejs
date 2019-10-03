@@ -203,8 +203,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
             createCache(cm, "oAuth2Authentication");
             <%_ } _%>
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
-            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE);
+            createCache(cm, <%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, <%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
                 <%_ if (enableHibernateCache) { _%>
             createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName());
             createCache(cm, <%=packageName%>.domain.Authority.class.getName());
@@ -568,9 +568,12 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     }
         <%_ if (enableHibernateCache) { _%>
     /**
-    * Hibernate property customizer. <br/>
+    * Hibernate properties customizer.
     * This component ensures that Hibernate L2 cache region factory uses, as cache manager, the
     * same instance already configured in Spring Context with {@link CacheConfiguration}
+    *
+    * @param cacheFactoryConfiguration custom infinispan region factory
+    * @return hibernate properties with custom cache region factory
     */
     @Bean
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(CacheFactoryConfiguration cacheFactoryConfiguration) {

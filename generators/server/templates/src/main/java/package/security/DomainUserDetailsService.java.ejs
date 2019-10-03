@@ -19,7 +19,7 @@
 package <%= packageName %>.security;
 
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

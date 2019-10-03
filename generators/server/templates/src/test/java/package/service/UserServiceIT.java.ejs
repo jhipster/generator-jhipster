@@ -42,7 +42,7 @@ import <%= packageName %>.repository.PersistentTokenRepository;
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 <%_ if (databaseType !== 'no') { _%>
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.AuthoritiesConstants;

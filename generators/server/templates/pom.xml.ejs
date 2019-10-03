@@ -28,19 +28,6 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
-<%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
-        <repository>
-            <id>maven.oracle.com</id>
-            <name>oracle-maven-repo</name>
-            <url>https://maven.oracle.com</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-        </repository>
-<%_ } _%>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
@@ -80,17 +67,17 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>3.0.5</jhipster-dependencies.version>
+        <jhipster-dependencies.version>3.0.6-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.1.8.RELEASE</spring-boot.version>
+        <spring-boot.version>2.1.9.RELEASE</spring-boot.version>
 <%_ if (databaseType === 'sql') { _%>
         <!-- The spring framework version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <spring.version>5.1.9.RELEASE</spring.version>
+        <spring.version>5.1.10.RELEASE</spring.version>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <hibernate.version>5.3.11.Final</hibernate.version>
+        <hibernate.version>5.3.12.Final</hibernate.version>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
         <javassist.version>3.23.2-GA</javassist.version>
@@ -108,16 +95,16 @@
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 <%_ } _%>
+        <archunit-junit5.version>0.11.0</archunit-junit5.version>
 <%_ if (searchEngine === 'elasticsearch') { _%>
         <log4j2-mock.version>0.0.1</log4j2-mock.version>
 <%_ } _%>
-        <mapstruct.version>1.3.0.Final</mapstruct.version>
+        <mapstruct.version>1.3.1.Final</mapstruct.version>
 <%_ if (enableSwaggerCodegen) { _%>
         <jackson-databind-nullable.version>0.2.0</jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
         <caffeine.version>2.8.0</caffeine.version>
-        <jcache.version>2.8.0</jcache.version>
         <typesafe.version>1.3.4</typesafe.version>
 <%_ } _%>
         <!-- Plugin versions -->
@@ -142,7 +129,7 @@
         <openapi-generator-maven-plugin.version>4.1.2</openapi-generator-maven-plugin.version>
 <%_ } _%>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
-        <sonar-maven-plugin.version>3.6.1.1688</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <jacoco.utReportFolder>${project.build.directory}/jacoco/test</jacoco.utReportFolder>
         <jacoco.utReportFile>${jacoco.utReportFolder}/test.exec</jacoco.utReportFile>
         <jacoco.itReportFolder>${project.build.directory}/jacoco/integrationTest</jacoco.itReportFolder>
@@ -376,9 +363,8 @@
         </dependency>
 <%_ } _%>
 <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-        <!-- more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc -->
         <dependency>
-            <groupId>com.oracle.jdbc</groupId>
+            <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
         </dependency>
 <%_ } _%>
@@ -442,7 +428,7 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>jcache</artifactId>
-            <version>${jcache.version}</version>
+            <version>${caffeine.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -616,7 +602,7 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
-            <version>0.11.0</version>
+            <version>${archunit-junit5.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- Adding the engine dependency to the surefire-plugin unfortunately does not work in the current version. -->
@@ -624,7 +610,7 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-engine</artifactId>
-            <version>0.11.0</version>
+            <version>${archunit-junit5.version}</version>
             <scope>test</scope>
         </dependency>
 <%_ if (messageBroker === 'kafka') { _%>

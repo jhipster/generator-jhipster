@@ -217,12 +217,12 @@ import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.AuthorityRepository;
+import <%= packageName %>.repository.AuthorityRepository;
 <%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.MailService;
 import <%= packageName %>.service.UserService;

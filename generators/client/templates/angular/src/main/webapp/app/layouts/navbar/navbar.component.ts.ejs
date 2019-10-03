@@ -47,7 +47,9 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 export class NavbarComponent implements OnInit {
     inProduction: boolean;
     isNavbarCollapsed: boolean;
+    <%_ if (enableTranslation) { _%>
     languages: any[];
+    <%_ } _%>
     swaggerEnabled: boolean;
     <%_ if (authenticationType !== 'oauth2') { _%>
     modalRef: NgbModalRef;
