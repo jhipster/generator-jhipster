@@ -20,19 +20,13 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-<%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
-    <%_ if (authenticationType === 'uaa') { _%>
 import { Router } from '@angular/router';
 
-import { LoginModalService } from 'app/core/login/login-modal.service';
-    <%_ } _%>
 import { LoginService } from 'app/core/login/login.service';
-<%_ } _%>
-<%_ if (['session', 'oauth2'].includes(authenticationType)) { _%>
-    <%_ if (authenticationType === 'session') { _%>
-import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+<%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
 import { LoginModalService } from 'app/core/login/login-modal.service';
-    <%_ } _%>
+<%_ } _%>
+<%_ if (['session', 'oauth2', 'jwt'].includes(authenticationType)) { _%>
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 <%_ } _%>
 
@@ -40,31 +34,21 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 export class AuthExpiredInterceptor implements HttpInterceptor {
 
     constructor(
-        <%_ if (authenticationType === 'session') { _%>
+        private loginService: LoginService,
+        <%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
         private loginModalService: LoginModalService,
-        private authServerProvider: AuthServerProvider,
-        private stateStorageService: StateStorageService
         <%_ } _%>
-        <%_ if (['oauth2', 'jwt', 'uaa'].includes(authenticationType)) { _%>
-            <%_ if (authenticationType === 'uaa') { _%>
-        private loginModalService: LoginModalService,
-        private router: Router,
-            <%_ } _%>
-            <%_ if (authenticationType === 'oauth2') { _%>
+        <%_ if (['session', 'oauth2', 'jwt'].includes(authenticationType)) { _%>
         private stateStorageService: StateStorageService,
-            <%_ } _%>
-        private loginService: LoginService
         <%_ } _%>
+        private router: Router
     ) {}
 
-<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(tap(() => {}, (err: any) => {
+        return next.handle(request).pipe(tap(null, (err: any) => {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401) {
-<%_ if (authenticationType === 'jwt') { _%>
-                    this.loginService.logout();
-<% } if (authenticationType === 'uaa') { %>
                     if (this.loginService.isAuthenticated()) {
                         this.loginService.logoutDirectly();
                         this.loginModalService.open();
@@ -72,32 +56,23 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
                         this.loginService.logout();
                         this.router.navigate(['/']);
                     }
-<%_ } _%>
                 }
             }
         }));
     }
-<%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+<%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'jwt') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(tap(() => {}, (err: any) => {
+        return next.handle(request).pipe(tap(null, (err: any) => {
             if (err instanceof HttpErrorResponse) {
                 if (err.status === 401 && err.url && !err.url.includes('api/account')) {
-                    const destination = this.stateStorageService.getDestinationState();
-                    if (destination !== null) {
-                        const to = destination.destination;
-                        const toParams = destination.params;
-                        if (to.name === 'accessdenied') {
-                            this.stateStorageService.storePreviousState(to.name, toParams);
-                        }
-                    } else {
-                        this.stateStorageService.storeUrl('/');
-                    }
-<% if (authenticationType === 'session') { %>
-                    this.authServerProvider.logout();
+                    this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
+<%_ if (authenticationType === 'jwt' || authenticationType === 'session') { _%>
+                    this.loginService.logout();
+                    this.router.navigate(['']);
                     this.loginModalService.open();
-<% } else { %>
+<%_ } else { _%>
                     this.loginService.login();
-<% } %>
+<%_ } _%>
                 }
             }
         }));
