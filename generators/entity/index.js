@@ -106,6 +106,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-db-changelog` flag
+        this.option('skip-db-changelog', {
+            desc: 'Skip the generation of database changelog (liquibase for sql databases)',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--db` flag
         this.option('db', {
             desc: 'Provide DB option for the application when using skip-server flag',
@@ -192,6 +199,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.skipClient =
                     context.applicationType === 'microservice' || this.options['skip-client'] || configuration.get('skipClient');
                 context.skipServer = this.options['skip-server'] || configuration.get('skipServer');
+                context.skipDbChangelog = this.options['skip-db-changelog'] || configuration.get('skipDbChangelog');
 
                 context.angularAppName = this.getAngularAppName(context.baseName);
                 context.angularXAppName = this.getAngularXAppName(context.baseName);
