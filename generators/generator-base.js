@@ -1123,6 +1123,14 @@ module.exports = class extends PrivateBase {
                 // Use as plugin
                 if (this._.isFunction(generator)) {
                     generator = generator(require(`./${subGen}`)); // eslint-disable-line import/no-dynamic-require, global-require
+                } else if (this._.isFunction(generator.plugin)) {
+                    if (generator.subGen) {
+                        // eslint-disable-next-line import/no-dynamic-require, global-require
+                        generator = generator.plugin(require(`./${generator.subGen}`));
+                    } else {
+                        // eslint-disable-next-line import/no-dynamic-require, global-require
+                        generator = generator.plugin(require(`./${subGen}`));
+                    }
                 } else {
                     // Add additional plugin structure here.
                     throw new Error('blueprint is not a generator nor a plugin');
