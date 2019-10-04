@@ -54,9 +54,6 @@ env:
         - JHI_APP=ms-ngx-gateway-eureka JHI_ENTITY=sql JHI_WAR=1
         - JHI_APP=ms-micro-eureka JHI_ENTITY=micro JHI_WAR=1
         - JHI_APP=ms-micro-consul JHI_ENTITY=micro
-        - JHI_APP=ngx-mongodb-kafka-cucumber JHI_ENTITY=mongodb
-        # - JHI_APP=ngx-session-cassandra-fr JHI_ENTITY=cassandra
-        - JHI_APP=ngx-couchbase JHI_PROFILE=prod JHI_ENTITY=couchbase
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration

@@ -1,7 +1,6 @@
 name: Generated Applications CI
 on: [push, pull_request]
 env:
-    JHI_PROFILE: dev
     JHI_RUN_APP: 1
     JHI_PROTRACTOR: 0
     JHI_JDK: 11
@@ -17,20 +16,36 @@ env:
     NG_CLI_ANALYTICS: 'false'
 jobs:
     applications:
-        name: ngx-session-cassandra-fr test suite
-        env:
-            JHI_ENTITY: cassandra
-            JHI_APP: ngx-session-cassandra-fr
+        name: ${{ matrix.app-type }} application test suite
         runs-on: ${{ matrix.os }}
         strategy:
+            fail-fast: false
             matrix:
                 node_version: [10.x]
                 os: [ubuntu-latest]
+                app-type: [ngx-session-cassandra-fr, ngx-mongodb-kafka-cucumber, ngx-couchbase]
+                include:
+                    - app-type: ngx-session-cassandra-fr
+                      entity: cassandra
+                      profile: dev
+                    - app-type: ngx-mongodb-kafka-cucumber
+                      entity: mongodb
+                      profile: dev
+                    - app-type: ngx-couchbase
+                      entity: couchbase
+                      profile: prod
+        env:
+            JHI_ENTITY: ${{ matrix.entity }}
+            JHI_APP: ${{ matrix.app-type }}
+            JHI_PROFILE: ${{ matrix.profile }}
         steps:
             - uses: actions/checkout@v1
             - uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node_version }}
+            - uses: actions/setup-java@v1
+              with:
+                  java-version: '11.0.3'
             - name: Config git variables
               run: $JHI_SCRIPTS/04-git-config.sh
             - name: Install Jhipster
