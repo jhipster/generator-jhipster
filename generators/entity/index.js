@@ -286,6 +286,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.dto = 'no';
                     context.service = 'no';
                     context.jpaMetamodelFiltering = false;
+                    context.readOnly = false;
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);

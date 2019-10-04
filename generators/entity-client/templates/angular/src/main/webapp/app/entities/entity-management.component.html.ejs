@@ -19,12 +19,14 @@
 <div>
     <h2 id="page-heading">
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></span>
+        <%_ if (!readOnly) { _%>
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
             <span <% if (searchEngine === 'elasticsearch') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
             Create a new <%= entityClassHumanized %>
             </span>
         </button>
+        <%_ } _%>
     </h2>
     <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
@@ -151,6 +153,7 @@
                             <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
+                        <%_ if (!readOnly) { _%>
                         <button type="submit"
                                 [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'edit']"
                                 class="btn btn-primary btn-sm">
@@ -165,6 +168,7 @@
                             <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
+                        <%_ } _%>
                     </div>
                 </td>
             </tr>

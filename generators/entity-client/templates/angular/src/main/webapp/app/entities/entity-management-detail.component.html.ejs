@@ -104,11 +104,13 @@
                 <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
             </button>
 
+            <%_ if (!readOnly) { _%>
             <button type="button"
                     [routerLink]="['/<%= entityUrl %>', <%= entityInstance %>.id, 'edit']"
                     class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
             </button>
+            <%_ } _%>
         </div>
     </div>
 </div>
