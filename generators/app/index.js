@@ -32,6 +32,13 @@ module.exports = class extends BaseGenerator {
         // Preload configOptions with all configs.
         this.configOptions = this.config.getAll();
 
+        this._.defaults(this.configOptions, {
+            // If applicationType is not defined, set it monolith as default
+            applicationType: 'monolith',
+            // If translation is not defined, it is enabled by default
+            enableTranslation: true
+        });
+
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -265,16 +272,13 @@ module.exports = class extends BaseGenerator {
             },
 
             validate() {
-                if (this.skipServer && this.skipClient) {
+                if (this.configOptions.skipServer && this.configOptions.skipClient) {
                     this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
                 }
             },
 
             setupconsts() {
-                this.applicationType = this.config.get('applicationType');
-                if (!this.applicationType) {
-                    this.applicationType = 'monolith';
-                }
+                this.applicationType = this.configOptions.applicationType;
                 this.baseName = this.config.get('baseName');
                 this.jhipsterVersion = packagejs.version;
                 if (this.jhipsterVersion === undefined) {
@@ -295,11 +299,13 @@ module.exports = class extends BaseGenerator {
                 }
                 this.otherModules = this.configOptions.otherModules = otherModules;
 
+                // Keep for api compatibility
                 this.testFrameworks = this.config.get('testFrameworks');
-                this.enableTranslation = this.config.get('enableTranslation');
+
+                this.enableTranslation = this.configOptions.enableTranslation;
                 this.nativeLanguage = this.config.get('nativeLanguage');
                 this.languages = this.config.get('languages');
-                const configFound = this.baseName !== undefined && this.applicationType !== undefined;
+                const configFound = this.configOptions.baseName !== undefined && this.configOptions.applicationType !== undefined;
                 if (configFound) {
                     this.existingProject = true;
                     // If translation is not defined, it is enabled by default
@@ -307,6 +313,7 @@ module.exports = class extends BaseGenerator {
                         this.enableTranslation = true;
                     }
                 }
+
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 if (!this.clientPackageManager) {
                     if (this.useNpm) {
@@ -357,21 +364,21 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.logo = false;
                 this.generatorType = 'app';
                 if (this.configOptions.applicationType === 'microservice') {
-                    this.skipClient = this.configOptions.skipClient = true;
+                    this.configOptions.skipClient = true;
                     this.generatorType = 'server';
                     this.skipUserManagement = this.configOptions.skipUserManagement = true;
                 }
-                if (this.applicationType === 'uaa') {
-                    this.skipClient = this.configOptions.skipClient = true;
+                if (this.configOptions.applicationType === 'uaa') {
+                    this.configOptions.skipClient = true;
                     this.generatorType = 'server';
                     this.skipUserManagement = this.configOptions.skipUserManagement = false;
                     this.authenticationType = this.configOptions.authenticationType = 'uaa';
                 }
-                if (this.skipClient) {
+                if (this.configOptions.skipClient) {
                     // defaults to use when skipping client
                     this.generatorType = 'server';
                 }
-                if (this.skipServer) {
+                if (this.configOptions.skipServer) {
                     // defaults to use when skipping server
                     this.generatorType = 'client';
                     this.configOptions.databaseType = this.getDBTypeFromDBValue(this.options.db);
@@ -388,20 +395,20 @@ module.exports = class extends BaseGenerator {
             },
 
             composeServer() {
-                if (this.skipServer) return;
+                if (this.configOptions.skipServer) return;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
                 this.composeWith(require.resolve('../server'), {
                     ...options,
                     configOptions,
-                    'client-hook': !this.skipClient,
+                    'client-hook': !this.configOptions.skipClient,
                     debug: this.isDebugEnabled
                 });
             },
 
             composeClient() {
-                if (this.skipClient) return;
+                if (this.configOptions.skipClient) return;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -418,7 +425,7 @@ module.exports = class extends BaseGenerator {
 
                 this.composeWith(require.resolve('../common'), {
                     ...options,
-                    'client-hook': !this.skipClient,
+                    'client-hook': !this.configOptions.skipClient,
                     configOptions,
                     debug: this.isDebugEnabled
                 });
@@ -436,26 +443,26 @@ module.exports = class extends BaseGenerator {
             saveConfig() {
                 const config = {
                     jhipsterVersion: packagejs.version,
-                    applicationType: this.configOptions.applicationType || this.applicationType,
-                    baseName: this.configOptions.baseName || this.baseName,
-                    testFrameworks: this.configOptions.testFrameworks || this.testFrameworks,
-                    jhiPrefix: this.jhiPrefix,
-                    entitySuffix: this.entitySuffix,
-                    dtoSuffix: this.dtoSuffix,
+                    applicationType: this.configOptions.applicationType,
+                    baseName: this.configOptions.baseName,
+                    testFrameworks: this.configOptions.testFrameworks,
+                    jhiPrefix: this.configOptions.jhiPrefix,
+                    entitySuffix: this.configOptions.entitySuffix,
+                    dtoSuffix: this.configOptions.dtoSuffix,
                     skipCheckLengthOfIdentifier: this.skipCheckLengthOfIdentifier,
                     otherModules: this.configOptions.otherModules || this.otherModules,
-                    enableTranslation: this.configOptions.enableTranslation || this.enableTranslation,
-                    clientPackageManager: this.clientPackageManager
+                    enableTranslation: this.configOptions.enableTranslation,
+                    clientPackageManager: this.configOptions.clientPackageManager
                 };
-                if (this.enableTranslation) {
-                    config.nativeLanguage = this.configOptions.nativeLanguage || this.nativeLanguage;
-                    config.languages = this.configOptions.languages || this.languages;
+                if (this.configOptions.enableTranslation) {
+                    config.nativeLanguage = this.configOptions.nativeLanguage;
+                    config.languages = this.configOptions.languages;
                 }
                 this.blueprints && (config.blueprints = this.blueprints);
                 this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
                 this.configOptions.reactive && (config.reactive = this.configOptions.reactive);
-                this.skipClient && (config.skipClient = true);
-                this.skipServer && (config.skipServer = true);
+                this.configOptions.skipClient && (config.skipClient = true);
+                this.configOptions.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.config.set(config);
             },
@@ -471,7 +478,7 @@ module.exports = class extends BaseGenerator {
                         'rememberMeKey'
                     ])
                 };
-                yorc.applicationType = this.applicationType;
+                yorc.applicationType = this.configOptions.applicationType;
                 statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
             }
         };
