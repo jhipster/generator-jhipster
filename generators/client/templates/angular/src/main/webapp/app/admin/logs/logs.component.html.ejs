@@ -26,8 +26,8 @@
     <table class="table table-sm table-striped table-bordered" aria-describedby="logs-page-heading">
         <thead>
         <tr title="click to order">
-            <th (click)="orderProp = 'name'; reverse=!reverse"><span jhiTranslate="logs.table.name">Name</span></th>
-            <th (click)="orderProp = 'level'; reverse=!reverse"><span jhiTranslate="logs.table.level">Level</span></th>
+            <th scope="col" (click)="orderProp = 'name'; reverse=!reverse"><span jhiTranslate="logs.table.name">Name</span></th>
+            <th scope="col" (click)="orderProp = 'level'; reverse=!reverse"><span jhiTranslate="logs.table.level">Level</span></th>
         </tr>
         </thead>
 
