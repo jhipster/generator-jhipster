@@ -316,6 +316,19 @@ module.exports = class extends BaseGenerator {
                 if (!this.embeddableLaunchScript) {
                     this.embeddableLaunchScript = true;
                 }
+            },
+            composeConfig() {
+                const options = this.options;
+                const configOptions = this.configOptions;
+                let configPrompts;
+
+                this.composeWith(require.resolve('../config'), {
+                    ...options,
+                    configOptions,
+                    configPrompts,
+                    generatorSource: this,
+                    debug: this.isDebugEnabled
+                });
             }
         };
     }

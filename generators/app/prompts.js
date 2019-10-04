@@ -29,6 +29,8 @@ module.exports = {
 };
 
 function askForInsightOptIn() {
+    if (this.skipInsightPrompt) return;
+
     const done = this.async();
 
     this.prompt({
@@ -46,7 +48,7 @@ function askForInsightOptIn() {
 }
 
 function askForApplicationType(meta) {
-    if (!meta && this.existingProject) return;
+    if (this.skipApplicationTypePrompt || (!meta && this.existingProject)) return;
 
     const DEFAULT_APPTYPE = 'monolith';
 
@@ -109,18 +111,18 @@ function askForApplicationType(meta) {
 }
 
 function askForModuleName() {
-    if (this.existingProject) return;
+    if (this.skipModuleNamePrompt || this.existingProject) return;
 
     this.askModuleName(this);
 }
 
 function askFori18n() {
-    if (this.skipI18n || this.existingProject) return;
+    if (this.skipI18n || this.skipI18nPrompt || this.existingProject) return;
     this.aski18n(this);
 }
 
 function askForTestOpts(meta) {
-    if (!meta && this.existingProject) return;
+    if (this.skipTestOptsPrompt || (!meta && this.existingProject)) return;
 
     const choices = [];
     const defaultChoice = [];
@@ -151,7 +153,7 @@ function askForTestOpts(meta) {
 }
 
 function askForMoreModules() {
-    if (this.existingProject) {
+    if (this.skipMoreModulesPrompt || this.existingProject) {
         return;
     }
 
