@@ -33,10 +33,13 @@ for (let relationship of relationships) {
     }
 } _%>
 export class <%= entityClass %>ComponentsPage {
+    <%_ if (!readOnly) { _%>
     createButton = element(by.id('jh-create-entity'));
     deleteButtons = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div table .btn-danger'));
+    <%_ } _%>
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
+<%_ if (!readOnly) { _%>
     async clickOnCreateButton(timeout?: number) {
         await this.createButton.click();
     }
@@ -48,12 +51,14 @@ export class <%= entityClass %>ComponentsPage {
     async countDeleteButtons() {
         return this.deleteButtons.count();
     }
+<%_ } _%>
 
     async getTitle() {
         return this.title.<%- elementGetter %>;
     }
 }
 
+<%_ if (!readOnly) { _%>
 export class <%= entityClass %>UpdatePage {
     pageTitle = element(by.id('<%= jhiPrefixDashed %>-<%= entityFileName %>-heading'));
     saveButton = element(by.id('save-entity'));
@@ -186,3 +191,4 @@ export class <%= entityClass %>DeleteDialog {
         await this.confirmButton.click();
     }
 }
+<%_ } _%>

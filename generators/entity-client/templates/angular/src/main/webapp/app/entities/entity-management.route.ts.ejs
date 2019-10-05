@@ -29,6 +29,7 @@ import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileNa
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
+<%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 <%_ if (entityFileName.length <= 30) { _%>
 import { <%= entityAngularName %>DeletePopupComponent } from './<%= entityFileName %>-delete-dialog.component';
@@ -36,6 +37,7 @@ import { <%= entityAngularName %>DeletePopupComponent } from './<%= entityFileNa
 import {
     <%= entityAngularName %>DeletePopupComponent
 } from './<%= entityFileName %>-delete-dialog.component';
+<%_ } _%>
 <%_ } _%>
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
@@ -87,6 +89,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         canActivate: [UserRouteAccessService]
     },
+    <%_ if (!readOnly) { _%>
     {
         path: 'new',
         component: <%= entityAngularName %>UpdateComponent,
@@ -111,9 +114,11 @@ export const <%= entityInstance %>Route: Routes = [
         },
         canActivate: [UserRouteAccessService]
     },
+    <%_ } _%>
 ];
 
 export const <%= entityInstance %>PopupRoute: Routes = [
+    <%_ if (!readOnly) { _%>
     {
         path: ':id/delete',
         component: <%= entityAngularName %>DeletePopupComponent,
@@ -127,4 +132,5 @@ export const <%= entityInstance %>PopupRoute: Routes = [
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
     }
+    <%_ } _%>
 ];
