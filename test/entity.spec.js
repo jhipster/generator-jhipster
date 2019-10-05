@@ -621,6 +621,62 @@ describe('JHipster generator for entity', () => {
             });
         });
 
+        describe('with --skip-db-changelog', () => {
+            describe('SQL database', () => {
+                before(done => {
+                    helpers
+                        .run(require.resolve('../generators/entity'))
+                        .inTmpDir(dir => {
+                            fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                            fse.copySync(
+                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Country.json'),
+                                path.join(dir, '.jhipster/Foo.json')
+                            );
+                        })
+                        .withArguments(['Foo'])
+                        .withOptions({ regenerate: true, force: true, skipDbChangelog: true })
+                        .on('end', done);
+                });
+
+                it('creates expected default files', () => {
+                    assert.file(expectedFiles.server);
+                    assert.file(expectedFiles.clientNg2);
+                    assert.file(expectedFiles.gatling);
+                });
+                it("doesn't creates database changelogs", () => {
+                    assert.noFile([
+                        `${constants.SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_Foo.xml`,
+                        `${constants.SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_constraints_Foo.xml`
+                    ]);
+                });
+            });
+
+            describe('Cassandra database', () => {
+                before(done => {
+                    helpers
+                        .run(require.resolve('../generators/entity'))
+                        .inTmpDir(dir => {
+                            fse.copySync(path.join(__dirname, '../test/templates/compose/05-cassandra'), dir);
+                            fse.copySync(
+                                path.join(__dirname, '../test/templates/export-jdl/.jhipster/Country.json'),
+                                path.join(dir, '.jhipster/Foo.json')
+                            );
+                        })
+                        .withArguments(['Foo'])
+                        .withOptions({ regenerate: true, force: true, skipDbChangelog: true })
+                        .on('end', done);
+                });
+
+                it('creates expected default files', () => {
+                    assert.file(expectedFiles.server);
+                    assert.file(expectedFiles.gatling);
+                });
+                it("doesn't creates database changelogs", () => {
+                    assert.noFile([`${constants.SERVER_MAIN_RES_DIR}config/cql/changelog/20160926101210_added_entity_Foo.cql`]);
+                });
+            });
+        });
+
         context('microservice', () => {
             describe('with dto, service, pagination', () => {
                 before(done => {
