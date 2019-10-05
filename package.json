@@ -20,8 +20,8 @@
     "release-patch": "npm run commit-dist && npm version patch -a -m \"Update to %s\" && npm run release",
     "release-minor": "npm run commit-dist && npm version minor -a -m \"Update to %s\" && npm run release",
     "release-major": "npm run commit-dist && npm version major -a -m \"Update to %s\" && npm run release",
-    "test": "npm run lint && nyc mocha test",
-    "test:watch": "mocha test --watch --reporter min"
+    "test": "npm run lint && nyc mocha",
+    "test:watch": "mocha --watch --reporter min"
   },
   "husky": {
     "hooks": {
