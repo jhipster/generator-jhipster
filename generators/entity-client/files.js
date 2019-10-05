@@ -162,19 +162,9 @@ const reactFiles = {
             path: REACT_DIR,
             templates: [
                 {
-                    file: 'entities/entity-delete-dialog.tsx',
-                    method: 'processJsx',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`
-                },
-                {
                     file: 'entities/entity-detail.tsx',
                     method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-detail.tsx`
-                },
-                {
-                    file: 'entities/entity-update.tsx',
-                    method: 'processJsx',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.tsx`
                 },
                 {
                     file: 'entities/entity.tsx',
@@ -193,6 +183,22 @@ const reactFiles = {
                     file: 'entities/index.tsx',
                     method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.readOnly,
+            path: REACT_DIR,
+            templates: [
+                {
+                    file: 'entities/entity-delete-dialog.tsx',
+                    method: 'processJsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-delete-dialog.tsx`
+                },
+                {
+                    file: 'entities/entity-update.tsx',
+                    method: 'processJsx',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.tsx`
                 }
             ]
         }
@@ -218,7 +224,13 @@ const reactFiles = {
                 {
                     file: 'e2e/entities/entity.spec.ts',
                     renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`
-                },
+                }
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests && !generator.readOnly,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
                 {
                     file: 'e2e/entities/entity-update-page-object.ts',
                     renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts`
