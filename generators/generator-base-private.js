@@ -335,7 +335,45 @@ module.exports = class JHipsterBasePrivateGenerator extends Generator {
      *
      * @param languages
      */
-    updateLanguagesInWebpack(languages) {
+    updateLanguagesInWebpackAngular(languages) {
+        const fullPath = 'webpack/webpack.custom.js';
+        try {
+            let content = 'groupBy: [\n';
+            languages.forEach((language, i) => {
+                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                    i !== languages.length - 1 ? ',' : ''
+                }\n`;
+            });
+            content +=
+                '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
+                '                ]';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
+                    content,
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
+     * Update Languages In Webpack React
+     *
+     * @param languages
+     */
+    updateLanguagesInWebpackReact(languages) {
         const fullPath = 'webpack/webpack.common.js';
         try {
             let content = 'groupBy: [\n';
