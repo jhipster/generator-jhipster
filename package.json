@@ -70,7 +70,6 @@
     "husky": "3.0.7",
     "lint-staged": "9.4.0",
     "mocha": "6.2.0",
-    "mocha-clean": "1.0.0",
     "nyc": "14.1.1",
     "prettier": "1.18.2",
     "sinon": "7.5.0",
