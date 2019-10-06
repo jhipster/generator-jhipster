@@ -52,7 +52,23 @@ import { translationStore } from '@/shared/config/store/translation-store';
 
 <%_ if (enableTranslation) { _%>
 const dateTimeFormats = {
+<<<<<<< HEAD
   // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object
+=======
+  'default': {
+    short: {
+      year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'
+    },
+    medium: {
+      year: 'numeric', month: 'short', day: 'numeric',
+      weekday: 'short', hour: 'numeric', minute: 'numeric'
+    },
+    long: {
+      year: 'numeric', month: 'long', day: 'numeric',
+      weekday: 'long', hour: 'numeric', minute: 'numeric'
+    }
+  },
+>>>>>>> use i18n date time formatting in user management details view
   '<%= nativeLanguage %>': {
     short: {
       year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'
