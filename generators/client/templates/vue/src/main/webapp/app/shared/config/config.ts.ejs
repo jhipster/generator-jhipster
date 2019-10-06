@@ -50,6 +50,37 @@ import { alertStore } from '@/shared/config/store/alert-store';
 import { translationStore } from '@/shared/config/store/translation-store';
 <%_ } _%>
 
+<%_ if (enableTranslation) { _%>
+const dateTimeFormats = {
+  'default': {
+    short: {
+      year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'
+    },
+    medium: {
+      year: 'numeric', month: 'short', day: 'numeric',
+      weekday: 'short', hour: 'numeric', minute: 'numeric'
+    },
+    long: {
+      year: 'numeric', month: 'long', day: 'numeric',
+      weekday: 'long', hour: 'numeric', minute: 'numeric'
+    }
+  },
+  '<%= nativeLanguage %>': {
+    short: {
+      year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'
+    },
+    medium: {
+      year: 'numeric', month: 'short', day: 'numeric',
+      weekday: 'short', hour: 'numeric', minute: 'numeric'
+    },
+    long: {
+      year: 'numeric', month: 'long', day: 'numeric',
+      weekday: 'long', hour: 'numeric', minute: 'numeric'
+    }
+  }
+}
+<%_ } _%>
+
 export function initVueApp(vue) {
   vue.use(VueCookie);
   vue.use(Vuelidate);
@@ -99,6 +130,7 @@ export function initFortAwesome(vue) {
 export function initI18N(vue) {
   vue.use(VueI18n);
   return new VueI18n({
+    dateTimeFormats,
     silentTranslationWarn: true,
     formatter: new <%=jhiPrefixCapitalized%>Formatter()
   });
