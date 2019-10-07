@@ -1,7 +1,6 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const fse = require('fs-extra');
 const expectedFiles = require('../utils/expected-files');
 const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
@@ -9,24 +8,14 @@ const angularFiles = require('../../generators/client/files-angular').files;
 describe('JHipster application generator with blueprint', () => {
     describe('generate monolith application with blueprint', () => {
         before(done => {
-            let fakeBlueprintModuleDir;
             helpers
                 .run(path.join(__dirname, '../../generators/app'))
-                .inTmpDir(dir => {
-                    // Fake the presence of the blueprint in node_modules
-                    const packagejs = {
-                        name: 'generator-jhipster-myblueprint',
-                        version: '9.9.9'
-                    };
-                    fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
-                    fse.ensureDirSync(fakeBlueprintModuleDir);
-                    fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
-                })
                 .withGenerators([
                     [
-                        helpers.createDummyGenerator(), // eslint-disable-line global-require
+                        // eslint-disable-next-line import/no-dynamic-require,global-require
+                        require(path.join(__dirname, '../templates/fake-blueprint/generators/server')),
                         'jhipster-myblueprint:server',
-                        path.join(fakeBlueprintModuleDir, 'generators/server/index.js')
+                        path.join(__dirname, '../templates/fake-blueprint/generators/server/index.js')
                     ]
                 ])
                 .withOptions({

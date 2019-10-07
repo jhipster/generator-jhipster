@@ -1,7 +1,6 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const fse = require('fs-extra');
 const expectedFiles = require('../utils/expected-files');
 const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
@@ -11,16 +10,14 @@ describe('JHipster application generator with scoped blueprint', () => {
         before(done => {
             helpers
                 .run(path.join(__dirname, '../../generators/app'))
-                .inTmpDir(dir => {
-                    // Fake the presence of the blueprint in node_modules
-                    const packagejs = {
-                        name: '@jhipster/generator-jhipster-scoped-blueprint',
-                        version: '9.9.9'
-                    };
-                    const fakeBlueprintModuleDir = path.join(dir, 'node_modules/@jhipster/generator-jhipster-scoped-blueprint');
-                    fse.ensureDirSync(fakeBlueprintModuleDir);
-                    fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
-                })
+                .withGenerators([
+                    [
+                        // eslint-disable-next-line import/no-dynamic-require,global-require
+                        require(path.join(__dirname, '../templates/fake-blueprint/generators/server')),
+                        '@jhipster/jhipster-scoped-blueprint:server',
+                        path.join(__dirname, '../templates/fake-blueprint/generators/server/index.js')
+                    ]
+                ])
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,
