@@ -95,7 +95,13 @@ const files = {
     swagger: [
         {
             path: MAIN_SRC_DIR,
-            templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
+            templates: [
+                'swagger-ui/index.html',
+                { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' },
+                { file: 'swagger-ui/dist/swagger-ui-bundle.js', method: 'copy' },
+                { file: 'swagger-ui/dist/swagger-ui-standalone-preset.js', method: 'copy' },
+                { file: 'swagger-ui/dist/swagger-ui.css', method: 'copy' }
+            ]
         }
     ],
     commonWeb: [
