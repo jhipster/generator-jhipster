@@ -68,7 +68,7 @@ export class <%=jhiPrefixCapitalized%>LoginModalComponent implements AfterViewIn
             username: this.loginForm.get('username').value,
             password: this.loginForm.get('password').value,
             rememberMe: this.loginForm.get('rememberMe').value
-        }).then(() => {
+        }).subscribe(() => {
             this.authenticationError = false;
             this.activeModal.dismiss('login success');
             if (this.router.url === '/account/register' || this.router.url.startsWith('/account/activate') ||
@@ -88,9 +88,7 @@ this.router.url.startsWith('/account/reset/')) {
                 this.stateStorageService.storeUrl(null);
                 this.router.navigateByUrl(redirect);
             }
-        }).catch(() => {
-            this.authenticationError = true;
-        });
+        }, () => this.authenticationError = true);
     }
 
     register() {

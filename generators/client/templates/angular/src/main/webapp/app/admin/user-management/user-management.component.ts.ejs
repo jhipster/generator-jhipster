@@ -80,7 +80,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.accountService.identity().then((account) => {
+        this.accountService.identity().subscribe((account) => {
             this.currentAccount = account;
             this.loadAll();
             this.registerChangeInUsers();
@@ -105,14 +105,12 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
         this.userService.update(user).subscribe(
             (response) => {
-                if (response.status === 200) {
-                    this.error = null;
-                    this.success = 'OK';
-                    this.loadAll();
-                } else {
-                    this.success = null;
-                    this.error = 'ERROR';
-                }
+                this.error = null;
+                this.success = 'OK';
+                this.loadAll();
+            }, () => {
+                this.success = null;
+                this.error = 'ERROR';
             });
     }
 
@@ -162,14 +160,6 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     deleteUser(user: User) {
         const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.user = user;
-        modalRef.result.then(
-            result => {
-            // Left blank intentionally, nothing to do here
-            },
-            reason => {
-            // Left blank intentionally, nothing to do here
-            }
-        );
     }
 
     private onSuccess(data, headers) {
