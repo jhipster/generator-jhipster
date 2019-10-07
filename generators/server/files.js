@@ -152,16 +152,6 @@ const serverFiles = {
             templates: ['swagger-editor.yml']
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/apidoc/SwaggerSecurityCustomizer.java',
-                    renameTo: generator => `${generator.javaDir}config/apidoc/SwaggerSecurityCustomizer.java`
-                }
-            ]
-        },
-        {
             condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
             path: DOCKER_DIR,
             templates: [
@@ -387,6 +377,10 @@ const serverFiles = {
                 {
                     file: 'package/security/jwt/JWTConfigurer.java',
                     renameTo: generator => `${generator.javaDir}security/jwt/JWTConfigurer.java`
+                },
+                {
+                    file: 'package/config/apidoc/SwaggerSecurityCustomizer.java',
+                    renameTo: generator => `${generator.javaDir}config/apidoc/SwaggerSecurityCustomizer.java`
                 }
             ]
         },
