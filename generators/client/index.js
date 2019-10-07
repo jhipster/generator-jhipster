@@ -149,7 +149,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.clientPackageManager = 'yarn';
                     }
                 }
-                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written
                 this.jhipsterOldVersion = configuration.get('jhipsterVersion');
             },
 

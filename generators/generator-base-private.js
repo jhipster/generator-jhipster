@@ -1421,17 +1421,17 @@ module.exports = class extends Generator {
      * @param {string} extension - extension for configuring Prettier properly, for example `.ts` for Typescript files
      */
     formatSourceCodeForCompare(sourceCode, extension) {
-        let options = {};
+        const options = {};
         if (extension === '.ts') {
-            options = { parser: 'typescript' };
+            options.parser = 'typescript';
         }
         try {
             // normalize line endings, because for example in Windows this can be in generated content \n and in disk \r\n
             return prettierFormat(sourceCode, options)
-                .replace(new RegExp('\\r\\n', 'g'), '\n')
-                .replace(new RegExp('\\r', 'g'), '\n');
+                .replace(/\r\n/g, '\n')
+                .replace(/\r/g, '\n');
         } catch (e) {
-            return sourceCode.replace(new RegExp('\\s', 'g'), '');
+            return sourceCode.replace(/\s/g, '');
         }
     }
 
