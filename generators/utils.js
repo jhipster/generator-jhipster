@@ -58,6 +58,23 @@ function updateLanguagesInTranslationStore(generator) {
             },
             generator
         );
+        // Add i18n config snippets for all languages
+        let i18nConfig = 'const dateTimeFormats = {\n';
+        i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
+        if (generator.enableTranslation) {
+            generator.languages.forEach((ln, i) => {
+                i18nConfig += generateDateTimeFormat(ln, i, generator.languages.length);
+            });
+        }
+        i18nConfig += '}';
+        jhipsterUtils.replaceContent(
+            {
+                file: fullPath,
+                pattern: /const dateTimeFormats.*\{([^\]]*jhipster-needle-i18n-language-date-time-format[^}]*)}/g,
+                content: i18nConfig
+            },
+            generator
+        );
     } catch (e) {
         generator.log(
             chalk.yellow('\nUnable to find ')
@@ -70,6 +87,27 @@ function updateLanguagesInTranslationStore(generator) {
     }
 }
 
+function generateDateTimeFormat(language, index, length) {
+    let config = `  '${language}': {\n`;
+
+    config += '    short: {\n';
+    config += '      year: \'numeric\', month: \'short\', day: \'numeric\', hour: \'numeric\', minute: \'numeric\'\n';
+    config += '    },\n';
+    config += '    medium: {\n';
+    config += '      year: \'numeric\', month: \'short\', day: \'numeric\',\n';
+    config += '      weekday: \'short\', hour: \'numeric\', minute: \'numeric\'\n';
+    config += '    },\n';
+    config += '    long: {\n';
+    config += '      year: \'numeric\', month: \'long\', day: \'numeric\',\n';
+    config += '      weekday: \'long\', hour: \'numeric\', minute: \'numeric\'\n';
+    config += '    }\n';
+    config += '  }';
+    if (index !== length - 1) {
+        config += ',';
+    }
+    config += '\n';
+    return config;
+}
 function updateLanguagesInWebpack(generator) {
     const fullPath = `${CLIENT_WEBPACK_DIR}webpack.common.js`;
     try {
