@@ -61,7 +61,6 @@
                 onComplete: function () {
                     var authToken = JSON.parse(localStorage.getItem("<%=jhiPrefixDashed %>-authenticationToken")
                         || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationToken"));
-                    console.log("authenticating using token" + authToken)
                     if (authToken) {
                         if(ui.specSelectors.isSwagger2()) {
                             ui.preauthorizeApiKey("Bearer", "Bearer " + authToken)
