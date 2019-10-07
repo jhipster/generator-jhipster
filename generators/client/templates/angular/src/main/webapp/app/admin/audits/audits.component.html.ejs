@@ -40,13 +40,13 @@
         <span jhiTranslate="audits.notFound">No audit found</span>
     </div>
     <div class="table-responsive" *ngIf="audits?.length > 0">
-        <table class="table table-sm table-striped">
+        <table class="table table-sm table-striped"  aria-describedby="audits-page-heading">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-                <th jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span><fa-icon [icon]="'sort'"></fa-icon></th>
-                <th jhiSortBy="principal"><span jhiTranslate="audits.table.header.principal">User</span><fa-icon [icon]="'sort'"></fa-icon></th>
-                <th jhiSortBy="auditEventType"><span jhiTranslate="audits.table.header.status">State</span><fa-icon [icon]="'sort'"></fa-icon></th>
-                <th><span jhiTranslate="audits.table.header.data">Extra data</span></th>
+                <th scope="col" jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span><fa-icon [icon]="'sort'"></fa-icon></th>
+                <th scope="col" jhiSortBy="principal"><span jhiTranslate="audits.table.header.principal">User</span><fa-icon [icon]="'sort'"></fa-icon></th>
+                <th scope="col" jhiSortBy="auditEventType"><span jhiTranslate="audits.table.header.status">State</span><fa-icon [icon]="'sort'"></fa-icon></th>
+                <th scope="col" ><span jhiTranslate="audits.table.header.data">Extra data</span></th>
             </tr>
             </thead>
             <tbody>
