@@ -45,21 +45,15 @@
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
-                }).pipe(
-                    filter((res: HttpResponse<I<%= entityAngularName %>[]>) => res.ok),
-                    map((res: HttpResponse<I<%= entityAngularName %>[]>) => res.body),
-                ).subscribe(
-                    (res: I<%= entityAngularName %>[]) => this.<%= entityInstancePlural %> = res
+                }).subscribe(
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body
                 );
             return;
        }
        <%_ } _%>
-        this.<%= entityInstance %>Service.query().pipe(
-            filter((res: HttpResponse<I<%= entityAngularName %>[]>) => res.ok),
-            map((res: HttpResponse<I<%= entityAngularName %>[]>) => res.body),
-        ).subscribe(
-            (res: I<%= entityAngularName %>[]) => {
-                this.<%= entityInstancePlural %> = res;
+        this.<%= entityInstance %>Service.query().subscribe(
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => {
+                this.<%= entityInstancePlural %> = res.body;
             <%_ if (searchEngine === 'elasticsearch') { _%>
                 this.currentSearch = '';
             <%_ } _%>

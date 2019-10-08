@@ -965,7 +965,6 @@ module.exports = class extends Generator {
 
                 query = `this.${relationship.otherEntityName}Service
             .query({${filter}}).pipe(
-                filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
                 map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
             )
             .subscribe((res: I${relationship.otherEntityAngularName}[]) => {
@@ -976,7 +975,6 @@ module.exports = class extends Generator {
                         .find(this.editForm.get('${relationshipFieldName}${dto !== 'no' ? 'Id' : ''}').value${
                     dto === 'no' ? '.id' : ''
                 }).pipe(
-                            filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
                             map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
                         )
                         .subscribe((subRes: I${relationship.otherEntityAngularName}) =>
@@ -990,7 +988,6 @@ module.exports = class extends Generator {
                     variableName += 'Collection';
                 }
                 query = `this.${relationship.otherEntityName}Service.query().pipe(
-                            filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
                             map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
                         )
             .subscribe(
