@@ -109,6 +109,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toMatchObject({body: elemDefault});
             });
 
+        <%_ if (!readOnly) { _%>
             it('should create a <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
 <%_ if (pkType === 'String' || pkType === 'UUID') { _%>
@@ -180,6 +181,7 @@ describe('Service Tests', () => {
                 req.flush(returnedFromService);
                 expect(expectedResult).toMatchObject({body: expected});
             });
+        <%_ } _%>
 
             it('should return a list of <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
@@ -222,6 +224,7 @@ describe('Service Tests', () => {
                 expect(expectedResult).toContainEqual(expected);
             });
 
+        <%_ if (!readOnly) { _%>
             it('should delete a <%= entityAngularName %>', () => {
                 service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
 
@@ -229,6 +232,7 @@ describe('Service Tests', () => {
                 req.flush({ status: 200 });
                 expect(expectedResult);
             });
+        <%_ } _%>
         });
 
         afterEach(() => {

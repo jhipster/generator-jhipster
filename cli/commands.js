@@ -99,6 +99,7 @@ const defaultCommands = {
     --ignore-application  # Ignores application generation                                         Default: false
     --ignore-deployments  # Ignores deployments generation                                         Default: false
     --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
+    --skip-db-changelog   # Disable generation of database changelogs                              Default: false
     --inline              # Pass JDL content inline. Argument can be skipped when passing this
 
 Arguments:

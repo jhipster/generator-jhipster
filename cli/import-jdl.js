@@ -190,6 +190,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         'skip-server': entity.skipServer,
         'no-fluent-methods': entity.noFluentMethod,
         'skip-user-management': entity.skipUserManagement,
+        'skip-db-changelog': generator.options['skip-db-changelog'],
         'skip-ui-grouping': generator.options['skip-ui-grouping']
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;

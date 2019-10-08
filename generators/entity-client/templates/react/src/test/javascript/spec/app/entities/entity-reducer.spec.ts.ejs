@@ -32,7 +32,20 @@ import { parseHeaderForLinks } from 'react-jhipster';
 <%_ } _%>
 
 import reducer, {
-  ACTION_TYPES, createEntity, deleteEntity, getEntities,<% if (searchEngine === 'elasticsearch') { %> getSearchEntities, <% } %>getEntity, updateEntity, reset
+  ACTION_TYPES,
+  <%_ if (!readOnly) { _%>
+  createEntity,
+  deleteEntity,
+  <%_ } _%>
+  getEntities,
+  <%_ if (searchEngine === 'elasticsearch') { _%>
+  getSearchEntities,
+  <%_ } _%>
+  getEntity,
+  <%_ if (!readOnly) { _%>
+  updateEntity,
+  <%_ } _%>
+  reset
 } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.reducer';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
@@ -108,6 +121,7 @@ describe('Entities reducer tests', () => {
       );
     });
 
+    <%_ if (!readOnly) { _%>
     it('should set state to updating', () => {
       testMultipleTypes(
         [
@@ -125,6 +139,7 @@ describe('Entities reducer tests', () => {
         }
       );
     });
+    <%_ } _%>
 
     it('should reset the state', () => {
       expect(
@@ -146,9 +161,11 @@ describe('Entities reducer tests', () => {
           FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>),
           <%_ } _%>
           FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>),
+          <%_ if (!readOnly) { _%>
           FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>),
           FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>)
+          <%_ } _%>
         ],
         'error message',
         state => {
@@ -220,6 +237,7 @@ describe('Entities reducer tests', () => {
       });
     });
 
+  <%_ if (!readOnly) { _%>
     it('should create/update entity', () => {
       const payload = { data: 'fake payload' };
       expect(reducer(undefined, {
@@ -245,6 +263,7 @@ describe('Entities reducer tests', () => {
         updateSuccess: true
       });
     });
+  <%_ } _%>
   });
 
   describe('Actions', () => {
@@ -300,6 +319,7 @@ describe('Entities reducer tests', () => {
       await store.dispatch(getEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
 
+  <%_ if (!readOnly) { _%>
     it('dispatches ACTION_TYPES.CREATE_<%= entityActionName %> actions', async () => {
       const expectedActions = [
         {
@@ -362,6 +382,7 @@ describe('Entities reducer tests', () => {
       ];
       await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
+  <%_ } _%>
 
     it('dispatches ACTION_TYPES.RESET actions', async () => {
       const expectedActions = [
@@ -374,7 +395,7 @@ describe('Entities reducer tests', () => {
     });
   });
 
-  <%_ if (fieldsContainBlob) { _%>
+  <%_ if (fieldsContainBlob && !readOnly) { _%>
   describe('blobFields', () => {
     it('should properly set a blob in state.', () => {
       const payload = { name: 'fancyBlobName', data: 'fake data', contentType: 'fake dataType' };

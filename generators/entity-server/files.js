@@ -41,7 +41,7 @@ faker.seed(42);
 const serverFiles = {
     db: [
         {
-            condition: generator => generator.databaseType === 'sql',
+            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog,
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -65,6 +65,7 @@ const serverFiles = {
         {
             condition: generator =>
                 generator.databaseType === 'sql' &&
+                !generator.skipDbChangelog &&
                 (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne),
             path: SERVER_MAIN_RES_DIR,
             templates: [
@@ -78,17 +79,20 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.databaseType === 'sql' && (generator.fieldsContainImageBlob === true || generator.fieldsContainBlob === true),
+                generator.databaseType === 'sql' &&
+                !generator.skipDbChangelog &&
+                (generator.fieldsContainImageBlob === true || generator.fieldsContainBlob === true),
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'config/liquibase/fake-data/blob/hipster.png', method: 'copy', noEjs: true }]
         },
         {
-            condition: generator => generator.databaseType === 'sql' && generator.fieldsContainTextBlob === true,
+            condition: generator =>
+                generator.databaseType === 'sql' && !generator.skipDbChangelog && generator.fieldsContainTextBlob === true,
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'config/liquibase/fake-data/blob/hipster.txt', method: 'copy' }]
         },
         {
-            condition: generator => generator.databaseType === 'cassandra',
+            condition: generator => generator.databaseType === 'cassandra' && !generator.skipDbChangelog,
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {

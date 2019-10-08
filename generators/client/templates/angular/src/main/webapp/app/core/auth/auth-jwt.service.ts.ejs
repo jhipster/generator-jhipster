@@ -72,15 +72,6 @@ export class AuthServerProvider {
 <%_ } _%>
     }
 
-    loginWithToken(jwt, rememberMe) {
-        if (jwt) {
-            this.storeAuthenticationToken(jwt, rememberMe);
-            return Promise.resolve(jwt);
-        } else {
-            return Promise.reject('auth-jwt-service Promise reject'); // Put appropriate error message here
-        }
-    }
-
     storeAuthenticationToken(jwt, rememberMe) {
 <%_ if (authenticationType !== 'uaa') { _%>
         if (rememberMe) {

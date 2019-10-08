@@ -24,5 +24,6 @@
     "dto": "no",
     "pagination": "pagination",
     "service": "serviceClass",
-    "clientRootFolder": "test-root"
+    "clientRootFolder": "test-root",
+    "readOnly": true
 }
