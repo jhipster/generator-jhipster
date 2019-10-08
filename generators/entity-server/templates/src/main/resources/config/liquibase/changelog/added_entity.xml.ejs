@@ -217,7 +217,8 @@
             <%_ } _%>
             <%_ for (idx in relationships) {
                     let loadColumnType = 'numeric';
-                    if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
+                    if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired
+                        && relationships[idx].relationshipType !== 'many-to-many') {
                         let baseColumnName = getColumnName(relationships[idx].relationshipName) + '_id';
                         if (relationships[idx].otherEntityNameCapitalized === 'User' && authenticationType === 'oauth2') {
                             loadColumnType = 'varchar(100)';
