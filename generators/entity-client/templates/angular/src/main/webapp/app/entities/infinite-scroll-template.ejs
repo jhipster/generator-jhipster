@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>: I<%= entityAngularName %>[];
-    currentAccount: any;
     eventSubscriber: Subscription;
     itemsPerPage: number;
     links: any;
@@ -39,7 +38,6 @@
         <%_ if (searchEngine === 'elasticsearch') { _%>
         protected activatedRoute: ActivatedRoute,
         <%_ } _%>
-        protected accountService: AccountService
     ) {
         this.<%= entityInstancePlural %> = [];
         this.itemsPerPage = ITEMS_PER_PAGE;

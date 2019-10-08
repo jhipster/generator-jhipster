@@ -29,7 +29,6 @@ import { filter, map } from 'rxjs/operators';
 import { JhiEventManager <% if (pagination !== 'no') { %>, JhiParseLinks <% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { AccountService } from 'app/core/auth/account.service';
 <%_ if (pagination !== 'no') { %>
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 <%_ } _%>
@@ -50,9 +49,6 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.loadAll();
-        this.accountService.identity().subscribe((account) => {
-            this.currentAccount = account;
-        });
         this.registerChangeIn<%= entityClassPlural %>();
     }
 
