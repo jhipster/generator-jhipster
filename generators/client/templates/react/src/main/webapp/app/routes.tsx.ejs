@@ -66,8 +66,8 @@ const Routes = () => (
     <%_ if (!skipUserManagement) { _%>
       <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
     <%_ } _%>
-      <PrivateRoute path="/entity" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
       <ErrorBoundaryRoute path="/" exact component={Home}/>
+      <PrivateRoute path="/" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
       <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>
   </div>
