@@ -148,9 +148,12 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             saveConfig() {
                 if (this.enableTranslation) {
-                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
+                    this.languages = _.union(this.currentLanguages, this.languagesToApply, this.configOptions.languages);
+                    // Update configOptions with additional languages.
+                    this.configOptions.languages = this.languages;
                     this.config.set('languages', this.languages);
                 }
+                this.languages = this.languages || [];
             }
         };
     }
@@ -213,7 +216,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _writing() {
         return {
             translateFile() {
-                this.languagesToApply.forEach(language => {
+                this.languages.forEach(language => {
                     if (!this.skipClient) {
                         this.installI18nClientFilesByLanguage(this, constants.CLIENT_MAIN_SRC_DIR, language);
                     }

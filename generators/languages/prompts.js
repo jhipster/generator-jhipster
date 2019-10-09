@@ -24,7 +24,6 @@ module.exports = {
 
 function askForLanguages() {
     if (this.languages) return;
-    const done = this.async();
     const languageOptions = this.getAllSupportedLanguageOptions();
     const prompts = [
         {
@@ -35,6 +34,7 @@ function askForLanguages() {
         }
     ];
     if (this.enableTranslation || this.configOptions.enableTranslation) {
+        const done = this.async();
         this.prompt(prompts).then(props => {
             this.languagesToApply = props.languages || [];
             done();
