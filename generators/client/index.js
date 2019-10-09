@@ -269,8 +269,8 @@ module.exports = class extends BaseBlueprintGenerator {
             setupLanguagesConfig() {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-                this.nativeLanguage = configuration.get('nativeLanguage');
-                this.languages = configuration.get('languages');
+                this.nativeLanguage = this.configOptions.nativeLanguage || configuration.get('nativeLanguage');
+                this.languages = this.configOptions.languages || configuration.get('languages');
                 this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
 
                 if (this.clientConfigFound) {
