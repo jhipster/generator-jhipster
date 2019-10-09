@@ -114,7 +114,7 @@ export function initVueXStore(vue) {
       ribbonOnProfiles: '',
       activeProfiles: '',
       <%_ if (enableTranslation) { _%>
-      currentLanguage: '<%= nativeLanguage %>',
+      currentLanguage: localStorage.getItem("currentLanguage") || '<%= nativeLanguage %>',
       languages: {
         // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
       }
@@ -141,6 +141,7 @@ export function initVueXStore(vue) {
       <%_ if (enableTranslation) { _%>
       currentLanguage(state, newLanguage) {
         state.currentLanguage = newLanguage;
+        localStorage.setItem("currentLanguage", newLanguage);
       },
       <%_ } _%>
       authenticate(state) {
