@@ -279,7 +279,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     if (this.nativeLanguage === undefined) {
                         this.nativeLanguage = 'en';
                     }
-                    if (this.languages === undefined) {
+                    if (this.enableTranslation && this.languages === undefined) {
                         this.languages = ['en', 'fr'];
                     }
                     // user-management will be handled by UAA app, oauth expects users to be managed in IpP
@@ -430,6 +430,12 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            composeLanguages() {
+                if (this.configOptions.skipI18nQuestion) return;
+
+                this.composeLanguagesSub(this, this.configOptions, 'server');
+            },
+
             getSharedConfigOptions() {
                 if (this.configOptions.enableTranslation !== undefined) {
                     this.enableTranslation = this.configOptions.enableTranslation;
@@ -455,12 +461,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');
-            },
-
-            composeLanguages() {
-                if (this.configOptions.skipI18nQuestion) return;
-
-                this.composeLanguagesSub(this, this.configOptions, 'server');
             }
         };
     }
