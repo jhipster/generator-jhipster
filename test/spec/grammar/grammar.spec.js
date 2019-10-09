@@ -39,6 +39,81 @@ describe('Grammar tests', () => {
         });
       });
     });
+    context('with annotations', () => {
+      let parsedEntity;
+
+      before(() => {
+        const content = parseFromContent('@dto(mapstruct)\n@service(serviceClass)\n@readOnly\nentity A');
+        parsedEntity = content.entities[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEntity).to.deep.equal({
+          annotations: [
+            {
+              method: 'mapstruct',
+              option: 'dto',
+              type: 'BINARY'
+            },
+            {
+              method: 'serviceClass',
+              option: 'service',
+              type: 'BINARY'
+            },
+            {
+              option: 'readOnly',
+              type: 'UNARY'
+            }
+          ],
+          body: [],
+          javadoc: null,
+          name: 'A',
+          tableName: 'A'
+        });
+      });
+    });
+    context('with comments', () => {
+      context('with single-line comments', () => {
+        let parsedEntity;
+
+        before(() => {
+          const content = parseFromContent('/** A comment */\nentity A');
+          parsedEntity = content.entities[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedEntity).to.deep.equal({
+            annotations: [],
+            body: [],
+            javadoc: ' A comment ',
+            name: 'A',
+            tableName: 'A'
+          });
+        });
+      });
+      context('with multi-line comments', () => {
+        let parsedEntity;
+
+        before(() => {
+          const content = parseFromContent(`/**
+ * Big 
+ * comment.
+ */
+ entity A`);
+          parsedEntity = content.entities[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedEntity).to.deep.equal({
+            annotations: [],
+            body: [],
+            javadoc: '\n * Big \n * comment.\n ',
+            name: 'A',
+            tableName: 'A'
+          });
+        });
+      });
+    });
     context('with annotations and comments', () => {
       context('when comments appear before annotations', () => {
         let parsedEntity;
@@ -81,7 +156,7 @@ describe('Grammar tests', () => {
         });
       });
     });
-    context('with a field', () => {
+    context('with fields', () => {
       context('having annotations and comments', () => {
         context('when comments appear before annotations', () => {
           let parsedEntity;
