@@ -362,6 +362,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             askForService: prompts.askForService,
             askForDTO: prompts.askForDTO,
             askForFiltering: prompts.askForFiltering,
+            askForReadOnly: prompts.askForReadOnly,
             askForPagination: prompts.askForPagination
         };
     }
