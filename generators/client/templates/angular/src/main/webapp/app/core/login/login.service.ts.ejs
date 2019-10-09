@@ -19,9 +19,10 @@
 import { Injectable } from '@angular/core';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { Location } from '@angular/common';
-<%_ } _%>
+<%_ } else { _%>
 import { flatMap } from 'rxjs/operators';
 import { AccountService } from 'app/core/auth/account.service';
+<%_ } _%>
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
@@ -32,9 +33,10 @@ import { AuthServerProvider } from 'app/core/auth/auth-session.service';
 export class LoginService {
 
     constructor(
-        private accountService: AccountService,
         <%_ if (authenticationType === 'oauth2') { _%>
         private location: Location,
+        <%_ } else { _%>
+        private accountService: AccountService,
         <%_ } _%>
         private authServerProvider: AuthServerProvider
     ) {}

@@ -48,7 +48,7 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     }
 
     confirmDelete(id: <% if (primaryKeyType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %>) {
-        this.<%= entityInstance %>Service.delete(id).subscribe((response) => {
+        this.<%= entityInstance %>Service.delete(id).subscribe(() => {
             this.eventManager.broadcast({
                 name: '<%= entityInstance %>ListModification',
                 content: 'Deleted an <%= entityInstance %>'
@@ -77,10 +77,10 @@ export class <%= entityAngularName %>DeletePopupComponent implements OnInit, OnD
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent as Component, { size: 'lg', backdrop: 'static'});
                 this.ngbModalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
-                this.ngbModalRef.result.then((result) => {
+                this.ngbModalRef.result.then(() => {
                     this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
                     this.ngbModalRef = null;
-                }, (reason) => {
+                }, () => {
                     this.router.navigate(['/<%= entityUrl %>', { outlets: { popup: null }}]);
                     this.ngbModalRef = null;
                 });

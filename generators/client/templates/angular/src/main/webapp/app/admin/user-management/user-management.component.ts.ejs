@@ -97,14 +97,14 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     }
 
     registerChangeInUsers() {
-        this.userListSubscription = this.eventManager.subscribe('userListModification', (response) => this.loadAll());
+        this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
     }
 
     setActive(user, isActivated) {
         user.activated = isActivated;
 
         this.userService.update(user).subscribe(
-            (response) => {
+            () => {
                 this.error = null;
                 this.success = 'OK';
                 this.loadAll();
@@ -119,7 +119,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}<% } %>).subscribe(
-                (res: HttpResponse<User[]>) => this.onSuccess(res.body, res.headers),
+                (res: HttpResponse<User[]>) => this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>),
                 (res: HttpResponse<any>) => this.onError(res.body)
         );
     }
@@ -162,7 +162,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         modalRef.componentInstance.user = user;
     }
 
-    private onSuccess(data, headers) {
+    private onSuccess(data<% if (databaseType !== 'cassandra') { %>, headers<% } %>) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
