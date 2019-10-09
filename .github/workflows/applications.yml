@@ -18,6 +18,7 @@ jobs:
     applications:
         name: ${{ matrix.app-type }} application test suite
         runs-on: ${{ matrix.os }}
+        timeout-minutes: 40
         strategy:
             fail-fast: false
             matrix:
