@@ -512,6 +512,7 @@ _%>
         <%_ } _%>
         <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
     }
+<%_ if (!readOnly) { _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
@@ -669,7 +670,9 @@ _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeTest);
     }
-<%  } } } %>
+<%_ } } } _%>
+<%_ } _%>
+
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void getAll<%= entityClassPlural %>() throws Exception {
@@ -1052,6 +1055,7 @@ _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>Long.MAX_VALUE<% } if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
             .andExpect(status().isNotFound());
     }
+<%_ if (!readOnly) { _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
@@ -1171,6 +1175,7 @@ _%>
         verify(mock<%= entityClass %>SearchRepository, times(1)).deleteById(<%= asEntity(entityInstance) %>.getId());
         <%_ } _%>
     }
+<%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     @Test<% if (databaseType === 'sql') { %>
