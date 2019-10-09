@@ -133,7 +133,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     if (this.nativeLanguage === undefined) {
                         this.nativeLanguage = 'en';
                     }
-                    if (this.languages === undefined) {
+                    if (this.enableTranslation && this.languages === undefined) {
                         this.languages = ['en', 'fr'];
                     }
 
@@ -272,6 +272,12 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
+            composeLanguages() {
+                if (this.configOptions.skipI18nQuestion) return;
+
+                this.composeLanguagesSub(this, this.configOptions, 'client');
+            },
+
             getSharedConfigOptions() {
                 if (this.configOptions.cacheProvider) {
                     this.cacheProvider = this.configOptions.cacheProvider;
@@ -338,12 +344,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
                 this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
                 this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-            },
-
-            composeLanguages() {
-                if (this.configOptions.skipI18nQuestion) return;
-
-                this.composeLanguagesSub(this, this.configOptions, 'client');
             }
         };
     }
