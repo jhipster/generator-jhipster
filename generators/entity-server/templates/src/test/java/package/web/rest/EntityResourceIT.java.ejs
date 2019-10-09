@@ -182,6 +182,8 @@ _%>
     const defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     const updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
     const smallerValueName = 'SMALLER_' + fields[idx].fieldNameUnderscored.toUpperCase();
+    const needsSmallerValueName = jpaMetamodelFiltering && isFilterableType(fields[idx].fieldType)
+            && ['BigDecimal', 'Byte', 'Double', 'Duration', 'Float', 'Short', 'Integer', 'Long', 'LocalDate', 'ZonedDateTime'].includes(fields[idx].fieldType);
 
     let defaultValue = 1;
     let updatedValue = 2;
@@ -277,27 +279,37 @@ _%>
 
     private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
     private static final Integer <%=updatedValueName %> = <%= updatedValue %>;
+        <%_ if (needsSmallerValueName) { _%>
     private static final Integer <%=smallerValueName %> = <%= defaultValue %> - 1;
+        <%_ } _%>
     <%_ } else if (fieldType === 'Long') { _%>
 
     private static final Long <%=defaultValueName %> = <%= defaultValue %>L;
     private static final Long <%=updatedValueName %> = <%= updatedValue %>L;
+        <%_ if (needsSmallerValueName) { _%>
     private static final Long <%=smallerValueName %> = <%= defaultValue %>L - 1L;
+        <%_ } _%>
     <%_ } else if (fieldType === 'Float') { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>F;
     private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>F;
+        <%_ if (needsSmallerValueName) { _%>
     private static final <%=fieldType %> <%=smallerValueName %> = <%= defaultValue %>F - 1F;
+        <%_ } _%>
     <%_ } else if (fieldType === 'Double') { _%>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>D;
     private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>D;
+        <%_ if (needsSmallerValueName) { _%>
     private static final <%=fieldType %> <%=smallerValueName %> = <%= defaultValue %>D - 1D;
+        <%_ } _%>
     <%_ } else if (fieldType === 'BigDecimal') { _%>
 
     private static final BigDecimal <%=defaultValueName %> = new BigDecimal(<%= defaultValue %>);
     private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);
+        <%_ if (needsSmallerValueName) { _%>
     private static final BigDecimal <%=smallerValueName %> = new BigDecimal(<%= defaultValue %> - 1);
+        <%_ } _%>
     <%_ } else if (fieldType === 'UUID') { _%>
 
     private static final UUID <%=defaultValueName %> = UUID.randomUUID();
@@ -306,22 +318,30 @@ _%>
 
     private static final LocalDate <%=defaultValueName %> = LocalDate.ofEpochDay(0L);
     private static final LocalDate <%=updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+        <%_ if (needsSmallerValueName) { _%>
     private static final LocalDate <%=smallerValueName %> = LocalDate.ofEpochDay(-1L);
+        <%_ } _%>
     <%_ } else if (fieldType === 'Instant') { _%>
 
     private static final Instant <%=defaultValueName %> = Instant.ofEpochMilli(0L);
     private static final Instant <%=updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        <%_ if (needsSmallerValueName) { _%>
     private static final Instant <%=smallerValueName %> = Instant.ofEpochMilli(-1L);
+        <%_ } _%>
     <%_ } else if (fieldType === 'ZonedDateTime') { _%>
 
     private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime <%=updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+        <%_ if (needsSmallerValueName) { _%>
     private static final ZonedDateTime <%=smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+        <%_ } _%>
     <%_ } else if (fieldType === 'Duration') { _%>
 
     private static final Duration <%=defaultValueName %> = Duration.ofHours(6);
     private static final Duration <%=updatedValueName %> = Duration.ofHours(12);
+        <%_ if (needsSmallerValueName) { _%>
     private static final Duration <%=smallerValueName %> = Duration.ofHours(5);
+        <%_ } _%>
     <%_ } else if (fieldType === 'Boolean') { _%>
 
     private static final Boolean <%=defaultValueName %> = false;
@@ -512,6 +532,7 @@ _%>
         <%_ } _%>
         <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
     }
+<%_ if (!readOnly) { _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
@@ -669,7 +690,9 @@ _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeTest);
     }
-<%  } } } %>
+<%_ } } } _%>
+<%_ } _%>
+
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void getAll<%= entityClassPlural %>() throws Exception {
@@ -1052,6 +1075,7 @@ _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>Long.MAX_VALUE<% } if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
             .andExpect(status().isNotFound());
     }
+<%_ if (!readOnly) { _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
@@ -1171,6 +1195,7 @@ _%>
         verify(mock<%= entityClass %>SearchRepository, times(1)).deleteById(<%= asEntity(entityInstance) %>.getId());
         <%_ } _%>
     }
+<%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     @Test<% if (databaseType === 'sql') { %>
