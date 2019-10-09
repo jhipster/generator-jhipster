@@ -211,4 +211,42 @@ describe('Grammar tests', () => {
       });
     });
   });
+  context('when parsing an option', () => {
+    context('being clientRootFolder', () => {
+      context('in the regular form', () => {
+        let parsedOption;
+
+        before(() => {
+          const content = parseFromContent('clientRootFolder * with client');
+          parsedOption = content.clientRootFolder;
+        });
+
+        it('should parse it', () => {
+          expect(parsedOption).to.deep.equal({
+            client: {
+              excluded: [],
+              list: ['*']
+            }
+          });
+        });
+      });
+      context('in the path form', () => {
+        let parsedOption;
+
+        before(() => {
+          const content = parseFromContent('clientRootFolder * with "../../toto"');
+          parsedOption = content.clientRootFolder;
+        });
+
+        it('should parse it', () => {
+          expect(parsedOption).to.deep.equal({
+            '"../../toto"': {
+              excluded: [],
+              list: ['*']
+            }
+          });
+        });
+      });
+    });
+  });
 });
