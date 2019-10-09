@@ -1758,8 +1758,14 @@ module.exports = class extends PrivateBase {
 
         generator.prompt(prompts).then(prompt => {
             generator.enableTranslation = generator.configOptions.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = generator.configOptions.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = generator.configOptions.languages = [prompt.nativeLanguage].concat(prompt.languages);
+            if (prompt.nativeLanguage) {
+                generator.nativeLanguage = generator.configOptions.nativeLanguage = prompt.nativeLanguage;
+                let languages = [prompt.nativeLanguage];
+                if (prompt.languages) {
+                    languages = languages.concat(prompt.languages);
+                }
+                generator.languages = generator.configOptions.languages = languages;
+            }
             done();
         });
     }

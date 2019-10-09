@@ -63,7 +63,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         // Validate languages passed as argument
-        this.languages = this.options.languages;
+        this.languages = this.options.languages || this.configOptions.languages;
         if (this.languages) {
             this.languages.forEach(language => {
                 if (!this.isSupportedLanguage(language)) {
