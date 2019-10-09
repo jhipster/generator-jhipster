@@ -133,7 +133,7 @@ const LANGUAGES = [
         momentLocaleId: 'hy-am'
     },
     {
-        name: 'Belorussian',
+        name: 'Belarusian',
         dispName: 'Беларускі',
         value: 'by',
         momentLocaleId: 'be-by'
