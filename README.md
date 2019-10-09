@@ -120,7 +120,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [octoconsulting-url]: http://www.octoconsulting.com/
 [bizequity-image]: https://www.jhipster.tech/images/open-collective/bizequity.png
 [bizequity-url]: https://www.bizequity.com/
-[forsyslab-image]: https://www.jhipster.tech/images/open-collective/forsyslab.jpg
+[forsyslab-image]: https://www.jhipster.tech/images/open-collective/forsyslab.png
 [forsyslab-url]: https://forsyslab.com/
 [cubaplatform-image]: https://www.jhipster.tech/images/open-collective/cubaplatform.png
 [cubaplatform-url]: https://www.cuba-platform.com/
