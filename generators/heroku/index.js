@@ -93,15 +93,15 @@ module.exports = class extends BaseGenerator {
                                 herokuDeployType: this.herokuDeployType
                             });
                             this.abort = true;
-                            this.log.error(`Could not find app: ${chalk.cyan(this.herokuAppName)}`);
-                            this.log.error('Run the generator again to create a new app.');
+                            this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
+                            this.log.error('Run the generator again to create a new application.');
                         } else {
                             const json = JSON.parse(stdout);
                             this.herokuAppName = json.app.name;
                             if (json.dynos.length > 0) {
                                 this.dynoSize = json.dynos[0].size;
                             }
-                            this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
+                            this.log(`Deploying as existing application: ${chalk.bold(this.herokuAppName)}`);
                             this.herokuAppExists = true;
                             this.config.set({
                                 herokuAppName: this.herokuAppName,
@@ -258,7 +258,7 @@ module.exports = class extends BaseGenerator {
                                 {
                                     type: 'list',
                                     name: 'herokuForceName',
-                                    message: `The Heroku app "${chalk.cyan(this.herokuAppName)}" already exists! Use it anyways?`,
+                                    message: `The Heroku application "${chalk.cyan(this.herokuAppName)}" already exists! Use it anyways?`,
                                     choices: [
                                         {
                                             value: 'Yes',
@@ -397,7 +397,7 @@ module.exports = class extends BaseGenerator {
                         {
                             type: 'input',
                             name: 'herokuJHipsterRegistryApp',
-                            message: 'What is the name of your JHipster Registry Heroku app?'
+                            message: 'What is the name of your JHipster Registry Heroku application?'
                         },
                         {
                             type: 'input',
