@@ -36,7 +36,7 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
         this.option('skip-build', {
-            desc: 'Skips building the app',
+            desc: 'Skips building the application',
             type: Boolean,
             defaults: false
         });
