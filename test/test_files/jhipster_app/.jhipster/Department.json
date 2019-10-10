@@ -16,6 +16,14 @@
       "otherEntityName": "employee",
       "javadoc": "A relationship",
       "otherEntityRelationshipName": "department"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "jobHistory",
+      "otherEntityRelationshipName": "department",
+      "ownerSide": false,
+      "relationshipName": "jobHistory",
+      "relationshipType": "many-to-many"
     }
   ],
   "fields": [

@@ -115,6 +115,14 @@ describe('JDLImporter', () => {
               relationshipName: 'employee',
               otherEntityName: 'employee',
               otherEntityRelationshipName: 'department'
+            },
+            {
+              otherEntityField: 'id',
+              otherEntityName: 'jobHistory',
+              otherEntityRelationshipName: 'department',
+              ownerSide: false,
+              relationshipName: 'jobHistory',
+              relationshipType: 'many-to-many'
             }
           ],
           name: 'Department',
@@ -163,6 +171,14 @@ describe('JDLImporter', () => {
             }
           ],
           relationships: [
+            {
+              otherEntityField: 'id',
+              otherEntityName: 'jobHistory',
+              otherEntityRelationshipName: 'employee',
+              ownerSide: false,
+              relationshipName: 'jobHistory',
+              relationshipType: 'many-to-many'
+            },
             {
               relationshipType: 'one-to-many',
               relationshipName: 'job',
