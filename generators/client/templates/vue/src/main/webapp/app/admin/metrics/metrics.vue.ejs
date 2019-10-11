@@ -215,7 +215,7 @@
         </tr>
         </thead>
         <tbody>
-        <template v-for="(entry, entryKey) of metrics.endpointsRequests">
+        <template v-for="(entry, entryKey) of metrics.services">
           <tr v-for="(method, methodKey) of entry" :key="entryKey + '-' + methodKey">
             <td>{{methodKey}}</td>
             <td>{{entryKey}}</td>
