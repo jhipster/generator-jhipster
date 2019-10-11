@@ -82,7 +82,6 @@ public class DatabaseConfigurationIT extends AbstractCouchbaseConfiguration {
         couchbaseContainer = new CouchbaseContainer("<%= DOCKER_COUCHBASE %>");
         couchbaseContainer
             .withNewBucket(DefaultBucketSettings.builder()
-                .enableFlush(true)
                 .name(getBucketName())
                 .password(getBucketPassword())
                 .type(BucketType.COUCHBASE)
