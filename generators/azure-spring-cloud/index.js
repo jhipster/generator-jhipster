@@ -84,9 +84,7 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
                 if (this.buildTool !== 'maven') {
-                    this.log.error(
-                        'Sorry, this sub-generator only work with Maven projects for the moment.'
-                    );
+                    this.log.error('Sorry, this sub-generator only works with Maven projects for the moment.');
                     this.abort = true;
                 }
                 done();
@@ -202,7 +200,6 @@ ${chalk.red(
 
             askForAzureDeployType() {
                 if (this.abort) return;
-                //if (this.azureSpringCloudDeploymentType) return;
                 const done = this.async();
                 const prompts = [
                     {
@@ -262,8 +259,7 @@ ${chalk.red(
                 this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
                 if (this.azureSpringCloudDeploymentType === 'github-action') {
-                    this.template('github/workflow/azure-spring-cloud.yml.ejs',
-                    '.github/workflow/azure-spring-cloud.yml');
+                    this.template('github/workflow/azure-spring-cloud.yml.ejs', '.github/workflow/azure-spring-cloud.yml');
                 }
                 this.conflicter.resolve(err => {
                     done();
