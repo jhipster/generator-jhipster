@@ -126,6 +126,19 @@ ${chalk.red(
                 });
             },
 
+            checkClusterAvailability() {
+                if (this.abort) return;
+                const done = this.async();
+
+                exec('az spring-cloud app list', err => {
+                    if (err) {
+                        this.log.error(`${chalk.red('Your Azure Spring Cloud cluster is not available!')}\n ${err}`);
+                        this.abort = true;
+                    }
+                    done();
+                });
+            },
+
             getAzureSpringCloudDefaults() {
                 if (this.abort) return;
                 const done = this.async();
@@ -249,8 +262,31 @@ ${chalk.red(
             azureSpringCloudAppCreate() {
                 if (this.abort) return;
                 const done = this.async();
-                // TODO
-                done();
+                exec(
+                    `az spring-cloud app show --resource-group ${this.azureSpringCloudResourceGroupName} \
+--service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName}`,
+                    (err, stdout) => {
+                        if (err) {
+                            this.log(chalk.bold('Application does not exist yet, creating it...'));
+                            exec(
+                                `az spring-cloud app create --resource-group ${this.azureSpringCloudResourceGroupName} \
+            --service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName}`,
+                                (err, stdout) => {
+                                    if (err) {
+                                        this.abort = true;
+                                        this.log.error(`Application creation failed! Here is the error: ${err}`);
+                                    } else {
+                                        // const json = JSON.parse(stdout);
+                                    }
+                                    done();
+                                }
+                            );
+                        } else {
+                            this.log(chalk.bold('Deploying a new version of an existing application'));
+                            done();
+                        }
+                    }
+                );
             },
 
             copyAzureSpringCloudFiles() {
@@ -283,6 +319,8 @@ ${chalk.red(
         return {
             productionBuild() {
                 if (this.abort) return;
+                if (this.azureSpringCloudDeploymentType === 'github-action') return;
+                if (this.azureSpringCloudSkipBuild) return;
 
                 const done = this.async();
                 this.log(chalk.bold('\nBuilding application'));
@@ -302,7 +340,29 @@ ${chalk.red(
                 });
             },
 
-            productionDeploy() {}
+            productionDeploy() {
+                if (this.abort) return;
+                if (this.azureSpringCloudDeploymentType === 'github-action') return;
+                if (this.azureSpringCloudSkipDeploy) return;
+
+                const done = this.async();
+                this.log(chalk.bold('\nDeploying application'));
+
+                exec(
+                    `az spring-cloud app deploy --resource-group ${this.azureSpringCloudResourceGroupName} \
+--service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName} \
+--jar-path target/*.jar`,
+                    (err, stdout) => {
+                        if (err) {
+                            this.abort = true;
+                            this.log.error(`Deployment failed!\n ${err}`);
+                        } else {
+                            // const json = JSON.parse(stdout);
+                        }
+                        done();
+                    }
+                );
+            }
         };
     }
 };
