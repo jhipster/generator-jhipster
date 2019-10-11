@@ -44,6 +44,6 @@ if [[ "$JHI_FOLDER_UAA" == "" ]]; then
 fi
 
 # set correct OpenJDK version
-if [[ "$JHI_JDK" == "11" ]]; then
-    JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
-fi
+#if [[ "$JHI_JDK" == "11" ]]; then
+#    JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+#fi
