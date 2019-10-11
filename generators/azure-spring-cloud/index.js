@@ -72,13 +72,49 @@ module.exports = class extends BaseGenerator {
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-        this.azureSpringCloudResourceGroupName = null; // This is not saved, as it is better to get the Azure default variable
-        this.azureSpringCloudServiceName = null; // This is not saved, as it is better to get the Azure default variable
+        this.azureSpringCloudResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
+        this.azureSpringCloudServiceName = ''; // This is not saved, as it is better to get the Azure default variable
         this.azureSpringCloudAppName = this.config.get('azureSpringCloudAppName');
     }
 
     get prompting() {
         return {
+            checkInstallation() {
+                if (this.abort) return;
+                const done = this.async();
+
+                exec('az --version', err => {
+                    if (err) {
+                        this.log.error(
+                            `You don't have the Azure CLI installed.
+Download it from:
+${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc_id=generator-jhipster-judubois')}`
+                        );
+                        this.abort = true;
+                    }
+                    done();
+                });
+            },
+
+            checkExtensionInstallation() {
+                if (this.abort) return;
+                const done = this.async();
+
+                exec('az extension show --name spring-cloud', err => {
+                    if (err) {
+                        this.log.error(
+                            `You don't have the Azure Spring Cloud extension installed in your Azure CLI.
+Install it by running:
+${chalk.red(
+    'az extension add -y --source https://azureclitemp.blob.core.windows.net/spring-cloud/spring_cloud-0.1.0-py2.py3-none-any.whl'
+)}`
+                        );
+                        this.abort = true;
+                    }
+                    done();
+                });
+            },
+
             getAzureSpringCloudDefaults() {
                 if (this.abort) return;
                 const done = this.async();
@@ -88,10 +124,7 @@ module.exports = class extends BaseGenerator {
                             azureSpringCloudResourceGroup: null
                         });
                         this.abort = true;
-                        this.log.error(
-                            'Could not retrieve your Azure default configuration. ' +
-                                'Is the Azure CLI installed and configured on your system?'
-                        );
+                        this.log.error('Could not retrieve your Azure default configuration.');
                     } else {
                         const json = JSON.parse(stdout);
                         Object.keys(json).forEach(key => {
@@ -102,19 +135,17 @@ module.exports = class extends BaseGenerator {
                                 this.azureSpringCloudServiceName = json[key].value;
                             }
                         });
-                        if (this.azureSpringCloudResourceGroup == null) {
+                        if (this.azureSpringCloudResourceGroup === '') {
                             this.log.info(
-                                "Your default Azure resource group is not set up. We recommend doing it using the command '" +
-                                    chalk.yellow('az configure --defaults group=<resource group name>') +
-                                    "'"
+                                `Your default Azure resource group is not set up. We recommend doing it using the command 
+                                '${chalk.yellow('az configure --defaults group=<resource group name>')}`
                             );
                             this.azureSpringCloudResourceGroup = '';
                         }
-                        if (this.azureSpringCloudServiceName == null) {
+                        if (this.azureSpringCloudServiceName === '') {
                             this.log.info(
-                                "Your default Azure Spring Cloud service name is not set up. We recommend doing it using the command '" +
-                                    chalk.yellow('az configure --defaults spring-cloud=<service instance name>') +
-                                    "'"
+                                `Your default Azure Spring Cloud service name is not set up. We recommend doing it using the command 
+                                '${chalk.yellow('az configure --defaults spring-cloud=<service instance name>')}`
                             );
                             this.azureSpringCloudServiceName = '';
                         }
@@ -144,12 +175,14 @@ module.exports = class extends BaseGenerator {
                         type: 'input',
                         name: 'azureSpringCloudAppName',
                         message: 'Azure Spring Cloud application name:',
-                        default: this.baseName
+                        default: this.azureSpringCloudAppName || this.baseName
                     }
                 ];
 
                 this.prompt(prompts).then(props => {
                     this.azureSpringCloudResourceGroupName = props.azureSpringCloudResourceGroupName;
+                    this.azureSpringCloudServiceName = props.azureSpringCloudServiceName;
+                    this.azureSpringCloudAppName = props.azureSpringCloudAppName;
                     done();
                 });
             }
@@ -158,7 +191,12 @@ module.exports = class extends BaseGenerator {
 
     get configuring() {
         return {
-
+            saveConfig() {
+                if (this.abort) return;
+                this.config.set({
+                    azureSpringCloudAppName: this.azureSpringCloudAppName
+                });
+            }
         };
     }
 
@@ -171,6 +209,8 @@ module.exports = class extends BaseGenerator {
             azureSpringCloudAppCreate() {
                 if (this.abort) return;
                 const done = this.async();
+                // TODO
+                done();
             },
 
             copyAzureSpringCloudFiles() {
@@ -184,11 +224,14 @@ module.exports = class extends BaseGenerator {
             },
 
             addAzureSpringCloudMavenProfile() {
+                if (this.abort) return;
+                const done = this.async();
                 if (this.buildTool === 'maven') {
                     this.render('pom-profile.xml.ejs', profile => {
                         this.addMavenProfile('azure', `            ${profile.toString().trim()}`);
                     });
                 }
+                done();
             }
         };
     }
@@ -216,10 +259,7 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
-            productionDeploy() {
-                if (this.abort) return;
-
-            }
+            productionDeploy() {}
         };
     }
 };
