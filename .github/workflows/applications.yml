@@ -26,14 +26,14 @@ jobs:
                 os: [ubuntu-latest]
                 app-type: [ngx-session-cassandra-fr, ngx-mongodb-kafka-cucumber, ngx-couchbase]
                 include:
+                    - app-type: ngx-couchbase
+                      entity: couchbase
+                      profile: prod
                     - app-type: ngx-session-cassandra-fr
                       entity: cassandra
                       profile: dev
                     - app-type: ngx-mongodb-kafka-cucumber
                       entity: mongodb
-                      profile: prod
-                    - app-type: ngx-couchbase
-                      entity: couchbase
                       profile: dev
         env:
             JHI_ENTITY: ${{ matrix.entity }}
