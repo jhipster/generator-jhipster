@@ -24,11 +24,11 @@ fi
 #-------------------------------------------------------------------------------
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
-if [ -f "mvnw" ]; then
-    ./mvnw -ntp javadoc:javadoc
-elif [ -f "gradlew" ]; then
-    ./gradlew javadoc $JHI_GRADLE_EXCLUDE_WEBPACK
-fi
+#if [ -f "mvnw" ]; then
+#    ./mvnw -ntp javadoc:javadoc
+#elif [ -f "gradlew" ]; then
+#    ./gradlew javadoc $JHI_GRADLE_EXCLUDE_WEBPACK
+#fi
 
 #-------------------------------------------------------------------------------
 # Launch UAA tests
