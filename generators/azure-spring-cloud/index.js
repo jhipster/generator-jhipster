@@ -75,6 +75,7 @@ module.exports = class extends BaseGenerator {
         this.azureSpringCloudResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
         this.azureSpringCloudServiceName = ''; // This is not saved, as it is better to get the Azure default variable
         this.azureSpringCloudAppName = this.config.get('azureSpringCloudAppName');
+        this.azureSpringCloudDeploymentType = this.config.get('azureSpringCloudDeploymentType');
     }
 
     get prompting() {
@@ -133,7 +134,7 @@ ${chalk.red(
                 exec('az configure --list-defaults true', (err, stdout) => {
                     if (err) {
                         this.config.set({
-                            azureSpringCloudResourceGroup: null
+                            azureSpringCloudResourceGroupName: null
                         });
                         this.abort = true;
                         this.log.error('Could not retrieve your Azure default configuration.');
@@ -141,18 +142,18 @@ ${chalk.red(
                         const json = JSON.parse(stdout);
                         Object.keys(json).forEach(key => {
                             if (json[key].name === 'group') {
-                                this.azureSpringCloudResourceGroup = json[key].value;
+                                this.azureSpringCloudResourceGroupName = json[key].value;
                             }
                             if (json[key].name === 'spring-cloud') {
                                 this.azureSpringCloudServiceName = json[key].value;
                             }
                         });
-                        if (this.azureSpringCloudResourceGroup === '') {
+                        if (this.azureSpringCloudResourceGroupName === '') {
                             this.log.info(
                                 `Your default Azure resource group is not set up. We recommend doing it using the command 
                                 '${chalk.yellow('az configure --defaults group=<resource group name>')}`
                             );
-                            this.azureSpringCloudResourceGroup = '';
+                            this.azureSpringCloudResourceGroupName = '';
                         }
                         if (this.azureSpringCloudServiceName === '') {
                             this.log.info(
@@ -173,9 +174,9 @@ ${chalk.red(
                 const prompts = [
                     {
                         type: 'input',
-                        name: 'azureSpringCloudResourceGroup',
+                        name: 'azureSpringCloudResourceGroupName',
                         message: 'Azure resource group name:',
-                        default: this.azureSpringCloudResourceGroup
+                        default: this.azureSpringCloudResourceGroupName
                     },
                     {
                         type: 'input',
@@ -197,6 +198,35 @@ ${chalk.red(
                     this.azureSpringCloudAppName = props.azureSpringCloudAppName;
                     done();
                 });
+            },
+
+            askForAzureDeployType() {
+                if (this.abort) return;
+                //if (this.azureSpringCloudDeploymentType) return;
+                const done = this.async();
+                const prompts = [
+                    {
+                        type: 'list',
+                        name: 'azureSpringCloudDeploymentType',
+                        message: 'Which type of deployment do you want ?',
+                        choices: [
+                            {
+                                value: 'local',
+                                name: 'Build and deploy locally'
+                            },
+                            {
+                                value: 'github-action',
+                                name: 'Build and deploy using GitHub Actions'
+                            }
+                        ],
+                        default: 0
+                    }
+                ];
+
+                this.prompt(prompts).then(props => {
+                    this.azureSpringCloudDeploymentType = props.azureSpringCloudDeploymentType;
+                    done();
+                });
             }
         };
     }
@@ -206,7 +236,8 @@ ${chalk.red(
             saveConfig() {
                 if (this.abort) return;
                 this.config.set({
-                    azureSpringCloudAppName: this.azureSpringCloudAppName
+                    azureSpringCloudAppName: this.azureSpringCloudAppName,
+                    azureSpringCloudDeploymentType: this.azureSpringCloudDeploymentType
                 });
             }
         };
@@ -230,6 +261,10 @@ ${chalk.red(
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
+                if (this.azureSpringCloudDeploymentType === 'github-action') {
+                    this.template('github/workflow/azure-spring-cloud.yml.ejs',
+                    '.github/workflow/azure-spring-cloud.yml');
+                }
                 this.conflicter.resolve(err => {
                     done();
                 });
