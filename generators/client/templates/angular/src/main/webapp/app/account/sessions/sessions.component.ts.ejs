@@ -21,6 +21,7 @@ import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'app/core/auth/account.service';
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
+import { Account } from 'app/core/user/account.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-sessions',
@@ -28,7 +29,7 @@ import { SessionsService } from './sessions.service';
 })
 export class SessionsComponent implements OnInit {
 
-    account: any;
+    account: Account;
     error: string;
     success: string;
     sessions: Session[];
@@ -47,7 +48,7 @@ export class SessionsComponent implements OnInit {
         });
     }
 
-    invalidate(series) {
+    invalidate(series: string) {
         this.sessionsService.delete(encodeURIComponent(series)).subscribe(
             () => {
                 this.error = null;

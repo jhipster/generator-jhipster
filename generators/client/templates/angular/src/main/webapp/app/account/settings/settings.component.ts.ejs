@@ -34,7 +34,7 @@ export class SettingsComponent implements OnInit {
     error: string;
     success: string;
     <%_ if (enableTranslation) { _%>
-    languages: any[];
+    languages: string[];
     <%_ } _%>
     settingsForm = this.fb.group({
         firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -86,9 +86,8 @@ export class SettingsComponent implements OnInit {
         });
     }
 
-    private accountFromForm(): any {
-        const account = {};
-        return {...account,
+    private accountFromForm(): Account {
+        return {
             firstName: this.settingsForm.get('firstName').value,
             lastName: this.settingsForm.get('lastName').value,
             email: this.settingsForm.get('email').value,
