@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
@@ -57,7 +58,6 @@ module.exports = class extends BaseGenerator {
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
         }
-
         this.log(chalk.bold('Azure Spring Cloud configuration is starting'));
         this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
         this.baseName = this.config.get('baseName');
@@ -317,6 +317,56 @@ ${chalk.red(
 
     get end() {
         return {
+            gitHubAction() {
+                if (this.abort) return;
+                if (this.azureSpringCloudDeploymentType === 'local') return;
+
+                try {
+                    this.log('Test if Git is configured on your project...');
+                    fs.lstatSync('.git');
+                    this.log(chalk.bold('\nUsing existing Git repository'));
+                } catch (e) {
+                    // An exception is thrown if the folder doesn't exist
+                    this.log.error(
+                        `${chalk.red('Git is not set up on your project!')}
+You need a GitHub project correctly configured in order to use GitHub Actions.`
+                    );
+                    this.abort = true;
+                    return;
+                }
+                const gitAddCmd = 'git add .';
+                this.log(chalk.bold('\nAdding Azure Spring Cloud files to the Git repository'));
+                this.log(chalk.cyan(gitAddCmd));
+                exec(gitAddCmd, (err, stdout, stderr) => {
+                    if (err) {
+                        this.abort = true;
+                        this.log.error(err);
+                    } else {
+                        const line = stderr.toString().trimRight();
+                        if (line.trim().length !== 0) this.log(line);
+                        const gitCommitCmd = 'git commit -m "Add Azure Spring Cloud files with automated GitHub Action deployment"';
+                        this.log(chalk.cyan(gitCommitCmd));
+                        exec(gitCommitCmd, (err, stdout, stderr) => {
+                            if (err) {
+                                this.abort = true;
+                                this.log.error(err);
+                            } else {
+                                const line = stderr.toString().trimRight();
+                                if (line.trim().length !== 0) this.log(line);
+                                this.log(chalk.bold(chalk.green('Congratulations, automated deployment with GitHub Action is set up!')));
+                                this.log(
+                                    `For the deployment to succeed, you will need to configure a ${chalk.bold(
+                                        'AZURE_CREDENTIALS'
+                                    )} secret in GitHub.
+Read the documentation at https://github.com/microsoft/azure-spring-cloud-training/11-configure-ci-cd/README.md
+for more detailed information.`
+                                );
+                            }
+                        });
+                    }
+                });
+            },
+
             productionBuild() {
                 if (this.abort) return;
                 if (this.azureSpringCloudDeploymentType === 'github-action') return;
