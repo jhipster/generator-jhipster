@@ -16,11 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const fs = require('fs');
 const exec = require('child_process').exec;
 const chalk = require('chalk');
-const _ = require('lodash');
-const glob = require('glob');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
 
@@ -75,52 +72,58 @@ module.exports = class extends BaseGenerator {
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-        this.azureSpringCloudResourceGroupName = this.config.get('azureSpringCloudResourceGroupName');
-        this.azureSpringCloudServiceName = this.config.get('azureSpringCloudServiceName');
+        this.azureSpringCloudResourceGroupName = null; // This is not saved, as it is better to get the Azure default variable
+        this.azureSpringCloudServiceName = null; // This is not saved, as it is better to get the Azure default variable
         this.azureSpringCloudAppName = this.config.get('azureSpringCloudAppName');
     }
 
     get prompting() {
         return {
-
-            getDefaultAzureSpringCloudDefaults() {
+            getAzureSpringCloudDefaults() {
                 if (this.abort) return;
                 const done = this.async();
-
                 exec('az configure --list-defaults true', (err, stdout) => {
                     if (err) {
                         this.config.set({
                             azureSpringCloudResourceGroup: null
                         });
                         this.abort = true;
-                        this.log.error(`Could not retrieve your Azure default configuration. Is the Azure CLI installed and configured on your system?`);
+                        this.log.error(
+                            'Could not retrieve your Azure default configuration. ' +
+                                'Is the Azure CLI installed and configured on your system?'
+                        );
                     } else {
                         const json = JSON.parse(stdout);
-                        for (const defaultProp in json) {
-                            if (json[defaultProp].name === 'group') {
-                                this.azureSpringCloudResourceGroup = json[defaultProp].value;
+                        Object.keys(json).forEach(key => {
+                            if (json[key].name === 'group') {
+                                this.azureSpringCloudResourceGroup = json[key].value;
                             }
-                            if (json[defaultProp].name === 'spring-cloud') {
-                                this.azureSpringCloudServiceName = json[defaultProp].value;
+                            if (json[key].name === 'spring-cloud') {
+                                this.azureSpringCloudServiceName = json[key].value;
                             }
-                        }
+                        });
                         if (this.azureSpringCloudResourceGroup == null) {
-                            this.log.info(`Your default Azure resource group is not set up. We recommend doing it using the command '` +
-                            chalk.yellow(`az configure --defaults group=<resource group name>`) + `'`);
+                            this.log.info(
+                                "Your default Azure resource group is not set up. We recommend doing it using the command '" +
+                                    chalk.yellow('az configure --defaults group=<resource group name>') +
+                                    "'"
+                            );
                             this.azureSpringCloudResourceGroup = '';
                         }
                         if (this.azureSpringCloudServiceName == null) {
-                            this.log.info(`Your default Azure Spring Cloud service name is not set up. We recommend doing it using the command '` +
-                            chalk.yellow(`az configure --defaults spring-cloud=<service instance name>`) + `'`);
+                            this.log.info(
+                                "Your default Azure Spring Cloud service name is not set up. We recommend doing it using the command '" +
+                                    chalk.yellow('az configure --defaults spring-cloud=<service instance name>') +
+                                    "'"
+                            );
                             this.azureSpringCloudServiceName = '';
                         }
                     }
                     done();
                 });
-
             },
 
-            askForazureSpringCloudResourceGroup() {
+            askForazureSpringCloudVariables() {
                 if (this.abort) return;
                 const done = this.async();
 
@@ -134,8 +137,14 @@ module.exports = class extends BaseGenerator {
                     {
                         type: 'input',
                         name: 'azureSpringCloudServiceName',
-                        message: 'Azure Spring Cloud service name:',
+                        message: 'Azure Spring Cloud service name (the name of your cluster):',
                         default: this.azureSpringCloudServiceName
+                    },
+                    {
+                        type: 'input',
+                        name: 'azureSpringCloudAppName',
+                        message: 'Azure Spring Cloud application name:',
+                        default: this.baseName
                     }
                 ];
 
@@ -143,9 +152,7 @@ module.exports = class extends BaseGenerator {
                     this.azureSpringCloudResourceGroupName = props.azureSpringCloudResourceGroupName;
                     done();
                 });
-            },
-
-            
+            }
         };
     }
 
@@ -164,7 +171,6 @@ module.exports = class extends BaseGenerator {
             azureSpringCloudAppCreate() {
                 if (this.abort) return;
                 const done = this.async();
-
             },
 
             copyAzureSpringCloudFiles() {
