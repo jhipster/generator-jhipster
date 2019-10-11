@@ -34,7 +34,7 @@ jobs:
                       profile: dev
                     - app-type: ngx-couchbase
                       entity: couchbase
-                      profile: dev
+                      profile: prod
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
