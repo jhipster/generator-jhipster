@@ -52,6 +52,12 @@ function askPipeline() {
         return;
     }
 
+    if (this.autoconfigureGithub) {
+        this.log('Auto-configuring GitHub CI');
+        this.pipeline = 'github';
+        return;
+    }
+
     const done = this.async();
     const prompts = [
         {
@@ -63,6 +69,7 @@ function askPipeline() {
                 { name: 'Jenkins pipeline', value: 'jenkins' },
                 { name: 'Azure Pipelines', value: 'azure' },
                 { name: 'GitLab CI', value: 'gitlab' },
+                { name: 'GitHub CI', value: 'github' },
                 { name: 'Travis CI', value: 'travis' }
             ]
         }
@@ -74,7 +81,7 @@ function askPipeline() {
 }
 
 function askIntegrations() {
-    if (this.abort || !this.pipeline || this.pipeline === 'azure') return;
+    if (this.abort || !this.pipeline || this.pipeline === 'azure' || this.pipeline === 'github') return;
     if (this.autoconfigureTravis) {
         this.cicdIntegrations = [];
         return;
@@ -96,6 +103,12 @@ function askIntegrations() {
     if (this.autoconfigureAzure) {
         this.log('Auto-configuring Azure');
         this.pipeline = 'azure';
+        return;
+    }
+
+    if (this.autoconfigureGithub) {
+        this.log('Auto-configuring GitHub CI');
+        this.pipeline = 'github';
         return;
     }
 
