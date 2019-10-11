@@ -79,6 +79,18 @@ module.exports = class extends BaseGenerator {
 
     get prompting() {
         return {
+            checkBuildTool() {
+                if (this.abort) return;
+                const done = this.async();
+                if (this.buildTool !== 'maven') {
+                    this.log.error(
+                        'Sorry, this sub-generator only work with Maven projects for the moment.'
+                    );
+                    this.abort = true;
+                }
+                done();
+            },
+
             checkInstallation() {
                 if (this.abort) return;
                 const done = this.async();
