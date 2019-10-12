@@ -26,9 +26,7 @@ if [ -a src/main/docker/mongodb.yml ]; then
     docker-compose -f src/main/docker/mongodb.yml up -d
 fi
 if [ -a src/main/docker/couchbase.yml ]; then
-    # this container can't be started otherwise, it will be conflict with tests
-    # so here, only prepare the image
-    docker-compose -f src/main/docker/couchbase.yml build
+    docker-compose -f src/main/docker/couchbase.yml up -d
 fi
 if [ -a src/main/docker/mysql.yml ]; then
     docker-compose -f src/main/docker/mysql.yml up -d
