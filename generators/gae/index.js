@@ -407,7 +407,7 @@ module.exports = class extends BaseGenerator {
                         } else {
                             _.forEach(stdout.toString().split(os.EOL), instance => {
                                 if (!instance) return;
-                                cloudSqlInstances.push({ value: instance, name: instance });
+                                cloudSqlInstances.push({ value: instance.trim(), name: instance });
                             });
                         }
 
