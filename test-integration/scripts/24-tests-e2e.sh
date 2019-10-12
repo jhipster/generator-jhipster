@@ -3,16 +3,6 @@
 source $(dirname $0)/00-init-env.sh
 
 #-------------------------------------------------------------------------------
-# Specific for couchbase
-#-------------------------------------------------------------------------------
-cd "$JHI_FOLDER_APP"
-if [ -a src/main/docker/couchbase.yml ]; then
-    docker-compose -f src/main/docker/couchbase.yml up -d
-    sleep 20
-    docker ps -a
-fi
-
-#-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
 launchCurlOrProtractor() {
