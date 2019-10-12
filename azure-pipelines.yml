@@ -101,7 +101,12 @@ jobs:
                     sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
                     java -version
                 else
-                    echo '*** Using OpenJDK 8 by default'
+                    echo '*** Using OpenJDK 8'
+                    sudo add-apt-repository ppa:openjdk-r/ppa
+                    sudo apt-get update
+                    sudo apt-get install -y openjdk-8-jdk
+                    sudo update-java-alternatives -s java-1.8.0-openjdk-amd64
+                    java -version
                 fi
             displayName: 'TOOLS: configuring OpenJDK'
           - script: |
