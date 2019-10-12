@@ -24,19 +24,26 @@ const { expect } = require('chai');
 
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
-const JDLImporter = require('../../../lib/jdl/jdl_importer');
+const { createImporterFromFiles, createImporterFromContent } = require('../../../lib/jdl/jdl_importer');
 
 describe('JDLImporter', () => {
-  describe('::new', () => {
-    context('when not passing files or content', () => {
-      it('fails', () => {
-        expect(() => {
-          new JDLImporter();
-        }).to.throw('JDL files or content must be passed so as to be imported.');
+  describe('createImporterFromFiles', () => {
+    context('when not passing files', () => {
+      it('should fail', () => {
+        expect(() => createImporterFromFiles()).to.throw(/^Files must be passed to create a new JDL importer\.$/);
       });
     });
   });
-  describe('#import', () => {
+  describe('createImporterFromContent', () => {
+    context('when not passing any content', () => {
+      it('should fail', () => {
+        expect(() => createImporterFromContent()).to.throw(
+          /^A JDL content must be passed to create a new JDL importer\.$/
+        );
+      });
+    });
+  });
+  describe('import', () => {
     context('when not parsing applications', () => {
       const ENTITY_NAMES = ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'];
       let filesExist = true;
@@ -447,7 +454,7 @@ describe('JDLImporter', () => {
       };
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'big_sample.jdl')], {
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'big_sample.jdl')], {
           applicationName: 'MyApp',
           applicationType: ApplicationTypes.MONOLITH,
           databaseType: DatabaseTypes.SQL
@@ -509,7 +516,7 @@ describe('JDLImporter', () => {
       let returned = null;
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'application_with_entities.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'application_with_entities.jdl')]);
         returned = importer.import();
       });
 
@@ -535,9 +542,7 @@ describe('JDLImporter', () => {
       let returned = null;
 
       before(() => {
-        const importer = new JDLImporter(
-          [],
-          {},
+        const importer = createImporterFromContent(
           `application {
             config {
               baseName MyApp
@@ -549,7 +554,8 @@ describe('JDLImporter', () => {
 
           entity BankAccount
           entity Customer
-          `
+          `,
+          {}
         );
         returned = importer.import();
       });
@@ -577,7 +583,9 @@ describe('JDLImporter', () => {
       let content = null;
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'application_with_entity_dto_suffixes.jdl')]);
+        const importer = createImporterFromFiles([
+          path.join('test', 'test_files', 'application_with_entity_dto_suffixes.jdl')
+        ]);
         returned = importer.import();
 
         content = JSON.parse(fse.readFileSync('.yo-rc.json', 'utf-8'));
@@ -740,7 +748,7 @@ describe('JDLImporter', () => {
       const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'applications2.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'applications2.jdl')]);
         importer.import();
         APPLICATION_NAMES.forEach(applicationName => {
           contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
@@ -924,7 +932,7 @@ describe('JDLImporter', () => {
       ];
       let importState;
       before(() => {
-        const importer = new JDLImporter([
+        const importer = createImporterFromFiles([
           path.join('test', 'test_files', 'integration', 'file1.jdl'),
           path.join('test', 'test_files', 'integration', 'file2.jdl')
         ]);
@@ -992,7 +1000,7 @@ describe('JDLImporter', () => {
       let importer = null;
 
       before("importing a JDL file with the 'no' database type", () => {
-        importer = new JDLImporter([path.join('test', 'test_files', 'simple.jdl')], {
+        importer = createImporterFromFiles([path.join('test', 'test_files', 'simple.jdl')], {
           applicationName: 'MyApp',
           applicationType: ApplicationTypes.MONOLITH,
           databaseType: DatabaseTypes.NO
@@ -1011,7 +1019,7 @@ describe('JDLImporter', () => {
       let returned = null;
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'annotations.jdl')], {
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'annotations.jdl')], {
           databaseType: DatabaseTypes.SQL
         });
         returned = importer.import();
@@ -1043,7 +1051,7 @@ describe('JDLImporter', () => {
       let entityContent;
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'regex_validation.jdl')], {
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'regex_validation.jdl')], {
           applicationName: 'MyApp',
           applicationType: ApplicationTypes.MONOLITH,
           databaseType: DatabaseTypes.SQL
@@ -1069,11 +1077,14 @@ describe('JDLImporter', () => {
       let returned = null;
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'pattern_validation_with_quote.jdl')], {
-          applicationName: 'MyApp',
-          applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL
-        });
+        const importer = createImporterFromFiles(
+          [path.join('test', 'test_files', 'pattern_validation_with_quote.jdl')],
+          {
+            applicationName: 'MyApp',
+            applicationType: ApplicationTypes.MONOLITH,
+            databaseType: DatabaseTypes.SQL
+          }
+        );
         returned = importer.import();
       });
 
@@ -1089,7 +1100,7 @@ describe('JDLImporter', () => {
       let returned = null;
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'underscore_application_name.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'underscore_application_name.jdl')]);
         returned = importer.import();
       });
 
@@ -1262,7 +1273,7 @@ describe('JDLImporter', () => {
       const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'applications3.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'applications3.jdl')]);
         importer.import();
         APPLICATION_NAMES.forEach(applicationName => {
           contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
@@ -1346,7 +1357,7 @@ describe('JDLImporter', () => {
       const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift'];
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'deployments.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'deployments.jdl')]);
         importer.import();
         DEPLOYMENT_NAMES.forEach(name => {
           contents.push(JSON.parse(fse.readFileSync(path.join(name, '.yo-rc.json'), 'utf-8')));
@@ -1542,7 +1553,7 @@ describe('JDLImporter', () => {
       const FOLDER_NAMES = ['store', 'product', 'invoice', 'notification', 'docker-compose', 'kubernetes'];
 
       before(() => {
-        const importer = new JDLImporter([path.join('test', 'test_files', 'realistic_sample.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'realistic_sample.jdl')]);
         importer.import();
         FOLDER_NAMES.forEach(applicationName => {
           contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));

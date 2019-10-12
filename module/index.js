@@ -42,7 +42,7 @@ const JDLUnaryOption = require('../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../lib/core/jdl_binary_option');
 const JDLOptions = require('../lib/core/jdl_options');
 
-const JDLImporter = require('../lib/jdl/jdl_importer');
+const { createImporterFromFiles, createImporterFromContent } = require('../lib/jdl/jdl_importer');
 const JDLLinter = require('../lib/linter/jdl_linter');
 const JDLReader = require('../lib/readers/jdl_reader');
 const JsonReader = require('../lib/readers/json_reader');
@@ -92,7 +92,10 @@ module.exports = {
   JDLBinaryOption,
   JDLOptions,
   /* JDL Importer */
-  JDLImporter,
+  JDLImporter: {
+    createImporterFromContent,
+    createImporterFromFiles
+  },
   /* JDL Linting */
   JDLLinter,
   LintRules,
