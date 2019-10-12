@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const shelljs = require('shelljs');
 const S3 = require('./s3.js');
 const Rds = require('./rds.js');
 const Eb = require('./eb.js');
@@ -31,16 +30,7 @@ const AwsFactory = (module.exports = function AwsFactory(generatorRef, cb) {
         Aws = require('aws-sdk'); // eslint-disable-line
         cb();
     } catch (e) {
-        generator.log('Installing AWS dependencies');
-        let installCommand = 'yarn add aws-sdk progress uuid';
-        if (generator.config.get('clientPackageManager') === 'npm') {
-            installCommand = 'npm install aws-sdk progress uuid --save';
-        }
-        shelljs.exec(installCommand, { silent: false }, code => {
-            if (code !== 0) generator.error('Something went wrong while installing the aws-sdk\n');
-            Aws = require('aws-sdk'); // eslint-disable-line
-            cb();
-        });
+        generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }
 });
 

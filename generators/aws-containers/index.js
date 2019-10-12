@@ -21,6 +21,7 @@ const chalk = require('chalk');
 const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
 const fileUtils = require('jhipster-core').FileUtils;
 const fs = require('fs');
+const shelljs = require('shelljs');
 
 const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
@@ -116,14 +117,6 @@ module.exports = class extends BaseGenerator {
                 this.defaultAppsFolders = this.aws.apps.map(a => a.baseName);
             },
             checkDocker: docker.checkDocker,
-            loadAWS() {
-                if (this.abort) return;
-                const done = this.async();
-                awsClient
-                    .loadAWS(this)
-                    .then(() => done())
-                    .catch(() => done('Error while loading the AWS library'));
-            },
             checkAwsCredentials() {
                 if (this.abort) return;
                 const done = this.async();
@@ -180,6 +173,47 @@ module.exports = class extends BaseGenerator {
             askDirectoryPath: dockerPrompts.askForPath,
             askForApps: dockerPrompts.askForApps,
             getAppConfig: dockerPrompts.loadConfigs,
+            promptEKSClusterCreation: prompts.promptEKSClusterCreation,
+            createEKSCluster() {
+                if (this.deploymentApplicationType === 'monolith') return;
+                const done = this.async();
+                this.log.ok('Initialising Elastic Kubernetes Service (EKS)️. This can take up to 15 minutes depending on load....');
+                shelljs.exec(
+                    `eksctl create cluster --name=${this.clusterName} --nodes=${this.totalNumberOfNodes}` +
+                        ` --version=${this.kubernetesVersion} --region=${this.clusterRegion} --nodegroup-name=${this.nodegroupName}`,
+                    { silent: false },
+                    (code, stdout, stderr) => {
+                        if (stderr) {
+                            this.log(stderr);
+                        }
+                        done();
+                    }
+                );
+            },
+            createECR() {
+                if (this.deploymentApplicationType === 'monolith') return;
+                const done = this.async();
+                this.log.ok('Initialising Elastic Repository Service (ERS) ...');
+                this.appConfigs.forEach(app => {
+                    shelljs.exec(
+                        `aws ecr create-repository --repository-name=${app.baseName} --region=${this.clusterRegion}`,
+                        { silent: false },
+                        (code, stdout, stderr) => {
+                            if (stderr) {
+                                this.log(stderr);
+                            }
+                            done();
+                        }
+                    );
+                });
+            },
+            finishMicroServiceFlow() {
+                if (this.deploymentApplicationType === 'monolith') return;
+                const done = this.async();
+                this.log.ok(chalk.green('EKS and ECRs created. Please use the Kubernetes Sub-generator (jhipster kubernetes) to deploy.`'));
+                this.abort = true;
+                done();
+            },
             askRegion: prompts.askRegion,
             initAwsAndLoadVPCs() {
                 awsClient.initAwsStuff(this.aws.region);
@@ -250,9 +284,11 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('🔧🛠️ AWS configuring'));
             },
             purgeAwsApps() {
+                if (this.abort) return;
                 this.aws.apps = this.aws.apps.filter(app => this.appConfigs.find(conf => conf.baseName === app.baseName));
             },
             setBucketName() {
+                if (this.abort) return;
                 this.aws.s3BucketName =
                     this.aws.s3BucketName || awsClient.sanitizeBucketName(`${this.aws.cloudFormationName}_${new Date().getTime()}`);
             },
@@ -282,11 +318,13 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('AWS default'));
             },
             updateBaseName() {
+                if (this.abort) return;
                 this.appConfigs.forEach(config => {
                     config.awsBaseName = config.baseName.toLowerCase().replace(/[^a-z^\d]/, '');
                 });
             },
             showAwsCacheWarning() {
+                if (this.abort) return;
                 this.appConfigs.forEach(config => {
                     if (config.cacheProvider !== 'no') {
                         this.log(
@@ -300,6 +338,7 @@ module.exports = class extends BaseGenerator {
                 });
             },
             addAWSSpringDependencies() {
+                if (this.abort) return;
                 this.appConfigs.forEach(config => {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     if (config.buildTool === 'maven') {
