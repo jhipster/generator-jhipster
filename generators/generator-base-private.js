@@ -865,19 +865,32 @@ module.exports = class extends Generator {
      */
     checkJHipsterBlueprintVersion(blueprintPkgName) {
         const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
-        if (!blueprintPackageJson || !blueprintPackageJson.dependencies || !blueprintPackageJson.dependencies['generator-jhipster']) {
+        if (!blueprintPackageJson) {
             this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
             return;
         }
         const mainGeneratorJhipsterVersion = packagejs.version;
-        const blueprintJhipsterVersion = blueprintPackageJson.dependencies['generator-jhipster'];
-        if (mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
+        const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
+        if (blueprintJhipsterVersion && mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
             this.error(
                 `The installed ${chalk.yellow(
                     blueprintPkgName
                 )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
             );
         }
+        const blueprintPeerJhipsterVersion =
+            blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
+        if (blueprintPeerJhipsterVersion) {
+            if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion)) {
+                return;
+            }
+            this.error(
+                `The installed ${chalk.yellow(
+                    blueprintPkgName
+                )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+            );
+        }
+        this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
     }
 
     /**
