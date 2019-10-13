@@ -276,13 +276,13 @@ ${chalk.red(
                                         this.abort = true;
                                         this.log.error(`Application creation failed! Here is the error: ${err}`);
                                     } else {
-                                        // const json = JSON.parse(stdout);
+                                        this.log(`${chalk.green(chalk.bold('Success!'))} Your application has been created.`);
                                     }
                                     done();
                                 }
                             );
                         } else {
-                            this.log(chalk.bold('Deploying a new version of an existing application'));
+                            this.log(chalk.bold('Application already exists, using it.'));
                             done();
                         }
                     }
@@ -295,7 +295,7 @@ ${chalk.red(
                 this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
                 if (this.azureSpringCloudDeploymentType === 'github-action') {
-                    this.template('github/workflow/azure-spring-cloud.yml.ejs', '.github/workflow/azure-spring-cloud.yml');
+                    this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
                 }
                 this.conflicter.resolve(err => {
                     done();
@@ -320,6 +320,7 @@ ${chalk.red(
             gitHubAction() {
                 if (this.abort) return;
                 if (this.azureSpringCloudDeploymentType === 'local') return;
+                const done = this.async();
 
                 try {
                     this.log('Test if Git is configured on your project...');
@@ -344,7 +345,10 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                     } else {
                         const line = stderr.toString().trimRight();
                         if (line.trim().length !== 0) this.log(line);
-                        const gitCommitCmd = 'git commit -m "Add Azure Spring Cloud files with automated GitHub Action deployment"';
+                        this.log(chalk.bold('\nCommitting Azure Spring Cloud files'));
+                        const gitCommitCmd =
+                            'git commit -m "Add Azure Spring Cloud files with automated GitHub Action deployment" --allow-empty';
+
                         this.log(chalk.cyan(gitCommitCmd));
                         exec(gitCommitCmd, (err, stdout, stderr) => {
                             if (err) {
@@ -353,14 +357,29 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                             } else {
                                 const line = stderr.toString().trimRight();
                                 if (line.trim().length !== 0) this.log(line);
-                                this.log(chalk.bold(chalk.green('Congratulations, automated deployment with GitHub Action is set up!')));
-                                this.log(
-                                    `For the deployment to succeed, you will need to configure a ${chalk.bold(
-                                        'AZURE_CREDENTIALS'
-                                    )} secret in GitHub.
+                                this.log(chalk.bold('\nPushing Azure Spring Cloud files'));
+                                const gitPushCmd = 'git push';
+                                this.log(chalk.cyan(gitPushCmd));
+                                exec(gitPushCmd, (err, stdout, stderr) => {
+                                    if (err) {
+                                        this.abort = true;
+                                        this.log.error(err);
+                                    } else {
+                                        const line = stderr.toString().trimRight();
+                                        if (line.trim().length !== 0) this.log(line);
+                                        this.log(
+                                            chalk.bold(chalk.green('Congratulations, automated deployment with GitHub Action is set up!'))
+                                        );
+                                        this.log(
+                                            `For the deployment to succeed, you will need to configure a ${chalk.bold(
+                                                'AZURE_CREDENTIALS'
+                                            )} secret in GitHub.
 Read the documentation at https://github.com/microsoft/azure-spring-cloud-training/11-configure-ci-cd/README.md
 for more detailed information.`
-                                );
+                                        );
+                                        done();
+                                    }
+                                });
                             }
                         });
                     }
@@ -396,7 +415,7 @@ for more detailed information.`
                 if (this.azureSpringCloudSkipDeploy) return;
 
                 const done = this.async();
-                this.log(chalk.bold('\nDeploying application'));
+                this.log(chalk.bold('\nDeploying application...'));
 
                 exec(
                     `az spring-cloud app deploy --resource-group ${this.azureSpringCloudResourceGroupName} \
@@ -407,7 +426,10 @@ for more detailed information.`
                             this.abort = true;
                             this.log.error(`Deployment failed!\n ${err}`);
                         } else {
-                            // const json = JSON.parse(stdout);
+                            const json = JSON.parse(stdout);
+                            this.log(`${chalk.green(chalk.bold('Success!'))} Your application has been deployed.`);
+                            this.log(`Provisitioning state: ${chalk.bold(json.properties.provisioningState)}`);
+                            this.log(`Application status  : ${chalk.bold(json.properties.status)}`);
                         }
                         done();
                     }
