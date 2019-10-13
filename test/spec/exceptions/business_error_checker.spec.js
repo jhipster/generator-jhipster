@@ -96,7 +96,7 @@ describe('BusinessErrorChecker', () => {
         });
         const enumObject = new JDLEnum({
           name: 'MyEnum',
-          values: ['A', 'B']
+          values: [{ key: 'A' }, { key: 'B' }]
         });
         field.addValidation(validation);
         entity.addField(field);

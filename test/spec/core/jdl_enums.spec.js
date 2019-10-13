@@ -181,8 +181,8 @@ describe('JDLEnums', () => {
     });
     context('when there is at least one enum', () => {
       before(() => {
-        jdlEnums.add(new JDLEnum({ name: 'A', values: ['AA', 'AB'] }));
-        jdlEnums.add(new JDLEnum({ name: 'B', values: ['BA', 'BB', 'BC'] }));
+        jdlEnums.add(new JDLEnum({ name: 'A', values: ['AA', 'AB'].map(value => ({ key: value })) }));
+        jdlEnums.add(new JDLEnum({ name: 'B', values: ['BA', 'BB', 'BC'].map(value => ({ key: value })) }));
       });
 
       it('returns a stringified version of enums', () => {

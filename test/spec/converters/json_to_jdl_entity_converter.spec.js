@@ -88,6 +88,7 @@ describe('JSONToJDLEntityConverter', () => {
           const languageEnum = jdlObject.getEnum('Language');
           expect(languageEnum.name).eq('Language');
           expect(languageEnum.values.has('FRENCH')).to.be.true;
+          expect(languageEnum.values.get('FRENCH').value).to.equal('french');
           expect(languageEnum.values.has('ENGLISH')).to.be.true;
           expect(languageEnum.values.has('SPANISH')).to.be.true;
         });

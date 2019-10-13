@@ -1576,5 +1576,29 @@ describe('JDLImporter', () => {
         expect(contents).to.deep.equal(expectedContents);
       });
     });
+    context('when parsing entities and enums with custom values', () => {
+      let exported;
+
+      before(() => {
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'enum_with_values.jdl')], {
+          applicationName: 'toto',
+          applicationType: 'monolith',
+          databaseType: 'sql',
+          generatorVersion: '6.4.1'
+        });
+        importer.import();
+        exported = JSON.parse(fse.readFileSync(path.join('.jhipster', 'Environment.json'), 'utf-8'));
+      });
+
+      after(() => {
+        fse.removeSync('.jhipster');
+      });
+
+      it('should export them', () => {
+        expect(exported.fields[0].fieldValues).to.equal(
+          'ARCHIVE (archive),DEV (development),INTEGRATION (integration),PROD (production),TEST (test),UAT (uat),NON_PROD (nonProd)'
+        );
+      });
+    });
   });
 });

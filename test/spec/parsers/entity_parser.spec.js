@@ -135,7 +135,7 @@ describe('EntityParser', () => {
         });
         const enumObject = new JDLEnum({
           name: 'EnumA',
-          values: ['A', 'B', 'C']
+          values: ['A', 'B', 'C'].map(value => ({ key: value }))
         });
         const entityB = new JDLEntity({
           name: 'EntityB',

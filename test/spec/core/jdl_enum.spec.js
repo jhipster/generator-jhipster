@@ -39,31 +39,7 @@ describe('JDLEnum', () => {
     });
     context('when passing arguments', () => {
       it('uses them', () => {
-        new JDLEnum({ name: 'MyEnum', values: ['ABC'] });
-      });
-    });
-  });
-  describe('#addValue', () => {
-    let jdlEnum = null;
-
-    before(() => {
-      jdlEnum = new JDLEnum({ name: 'MyEnum' });
-    });
-
-    context('when not passing a value', () => {
-      it('fails', () => {
-        expect(() => {
-          jdlEnum.addValue(null);
-        }).to.throw('A valid value must be passed to be added to the enum, got nil');
-      });
-    });
-    context('when passing a value', () => {
-      before(() => {
-        jdlEnum.addValue(42);
-      });
-
-      it('adds it', () => {
-        expect(jdlEnum.toString()).to.equal('enum MyEnum {\n  42\n}');
+        new JDLEnum({ name: 'MyEnum', values: [{ key: 'ABC' }] });
       });
     });
   });
@@ -71,12 +47,12 @@ describe('JDLEnum', () => {
     let result;
 
     before(() => {
-      const jdlEnum = new JDLEnum({ name: 'Toto', values: ['A', 'B'] });
+      const jdlEnum = new JDLEnum({ name: 'Toto', values: [{ key: 'A', value: 'aaaa' }, { key: 'B' }] });
       result = jdlEnum.getValuesAsString();
     });
 
     it('returns the values separated by a comma', () => {
-      expect(result).to.equal('A,B');
+      expect(result).to.equal('A (aaaa),B');
     });
   });
   describe('::isValid', () => {
@@ -89,27 +65,55 @@ describe('JDLEnum', () => {
     });
   });
   describe('#toString', () => {
-    let values = [];
-    let jdlEnum = null;
+    context('with simple enum values', () => {
+      let values = [];
+      let jdlEnum;
 
-    before(() => {
-      values = ['FRENCH', 'ENGLISH', 'ICELANDIC'];
-      jdlEnum = new JDLEnum({
-        name: 'Language',
-        values,
-        comment: 'The language enumeration.'
+      before(() => {
+        values = [{ key: 'FRENCH' }, { key: 'ENGLISH' }, { key: 'ICELANDIC' }];
+        jdlEnum = new JDLEnum({
+          name: 'Language',
+          values,
+          comment: 'The language enumeration.'
+        });
       });
-    });
 
-    it('stringifies the enum', () => {
-      expect(jdlEnum.toString()).to.eq(
-        `/**
+      it('should stringify the enum', () => {
+        expect(jdlEnum.toString()).to.eq(
+          `/**
  * ${jdlEnum.comment}
  */
 enum ${jdlEnum.name} {
-  ${values.join(',\n  ')}
+  ${values.map(value => value.key).join(',\n  ')}
 }`
-      );
+        );
+      });
+    });
+    context('with explicit enum values', () => {
+      let values = [];
+      let jdlEnum;
+
+      before(() => {
+        values = [{ key: 'FRENCH', value: 'french' }, { key: 'ENGLISH', value: 'english' }, { key: 'ICELANDIC' }];
+        jdlEnum = new JDLEnum({
+          name: 'Language',
+          values,
+          comment: 'The language enumeration.'
+        });
+      });
+
+      it('should stringify the enum', () => {
+        expect(jdlEnum.toString()).to.equal(
+          `/**
+ * ${jdlEnum.comment}
+ */
+enum ${jdlEnum.name} {
+  FRENCH (french),
+  ENGLISH (english),
+  ICELANDIC
+}`
+        );
+      });
     });
   });
 });

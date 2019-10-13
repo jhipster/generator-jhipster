@@ -42,7 +42,7 @@
     {
       "fieldName": "language",
       "fieldType": "Language",
-      "fieldValues": "FRENCH,ENGLISH,SPANISH"
+      "fieldValues": "FRENCH (french),ENGLISH,SPANISH"
     }
   ],
   "changelogDate": "20160924092444",

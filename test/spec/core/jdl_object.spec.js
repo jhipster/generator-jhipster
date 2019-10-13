@@ -419,12 +419,12 @@ describe('JDLObject', () => {
         object = new JDLObject();
         enumObject = new JDLEnum({ name: 'Valid' });
         object.addEnum(enumObject);
-        enumObject2 = new JDLEnum({ name: 'Valid', values: ['A', 'B'] });
+        enumObject2 = new JDLEnum({ name: 'Valid', values: [{ key: 'A' }, { key: 'B' }] });
         object.addEnum(enumObject2);
       });
 
       it('replaces the old one', () => {
-        expect(object.getEnum(enumObject.name)).to.deep.eq(enumObject2);
+        expect(object.getEnum(enumObject.name)).to.deep.equal(enumObject2);
       });
     });
   });
@@ -877,15 +877,15 @@ describe('JDLObject', () => {
     });
   });
   describe('#toString', () => {
-    let application = null;
-    let deployment = null;
-    let object = null;
-    let entityA = null;
-    let entityB = null;
-    let enumObject = null;
-    let relationship = null;
-    let option = null;
-    let option2 = null;
+    let application;
+    let deployment;
+    let object;
+    let entityA;
+    let entityB;
+    let enumObject;
+    let relationship;
+    let option;
+    let option2;
 
     before(() => {
       object = new JDLObject();
@@ -904,7 +904,7 @@ describe('JDLObject', () => {
       object.addEntity(entityA);
       entityB = new JDLEntity({ name: 'EntityB', tableName: 't_entity_b' });
       object.addEntity(entityB);
-      enumObject = new JDLEnum({ name: 'MyEnum', values: ['A', 'B'] });
+      enumObject = new JDLEnum({ name: 'MyEnum', values: [{ key: 'A' }, { key: 'B', value: 'bb' }] });
       object.addEnum(enumObject);
       relationship = new JDLRelationship({
         from: entityA.name,
@@ -926,7 +926,7 @@ describe('JDLObject', () => {
     });
 
     it('stringifies the JDL object', () => {
-      expect(object.toString()).to.eq(
+      expect(object.toString()).to.equal(
         `${application.toString()}
 
 ${deployment.toString()}
