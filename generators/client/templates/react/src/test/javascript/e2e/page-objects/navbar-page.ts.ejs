@@ -84,7 +84,7 @@ export default class NavBarPage extends BasePage {
   }
 
   async clickOnEntity(entityName: string) {
-    await this.selector.$(`.dropdown-item[href="/entity/${entityName}"]`).click();
+    await this.selector.$(`.dropdown-item[href="/${entityName}"]`).click();
   }
 
   async autoSignIn() {
