@@ -63,6 +63,8 @@ module.exports = class extends BaseGenerator {
         this.baseName = this.config.get('baseName');
         this.packageName = this.config.get('packageName');
         this.packageFolder = this.config.get('packageFolder');
+        this.authenticationType = this.config.get('authenticationType');
+        this.jwtSecretKey = this.config.get('jwtSecretKey');
         this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
         this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
         this.databaseType = this.config.get('databaseType');
@@ -394,7 +396,7 @@ for more detailed information.`
                 const done = this.async();
                 this.log(chalk.bold('\nBuilding application'));
 
-                const child = this.buildApplication(this.buildTool, 'prod,azure', false, err => {
+                const child = this.buildApplication(this.buildTool, 'azure', false, err => {
                     if (err) {
                         this.abort = true;
                         this.log.error(err);
