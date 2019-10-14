@@ -91,7 +91,7 @@ Run the following commands in two separate terminals to create a blissful develo
 auto-refreshes when files change on your hard drive.
 <% if (buildTool === 'maven') { %>
     ./mvnw<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew<% } %>
+    ./gradlew -x webpack<% } %>
     <%= clientPackageManager %> start
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
