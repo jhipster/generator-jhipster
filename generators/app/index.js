@@ -233,7 +233,10 @@ module.exports = class extends BaseGenerator {
 
             validateBlueprint() {
                 if (this.blueprints && !this.skipChecks) {
-                    this.blueprints.forEach(e => this.checkBlueprint(e.name));
+                    this.blueprints.forEach(blueprint => {
+                        this.checkJHipsterBlueprintVersion(blueprint.name);
+                        this.checkBlueprint(blueprint.name);
+                    });
                 }
             },
 

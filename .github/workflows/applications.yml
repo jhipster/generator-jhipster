@@ -14,10 +14,12 @@ env:
     JHI_E2E_HEADLESS: true
     JHI_SCRIPTS: ./test-integration/scripts
     NG_CLI_ANALYTICS: 'false'
+    JHI_GITHUB_CI: true
 jobs:
     applications:
         name: ${{ matrix.app-type }} application test suite
         runs-on: ${{ matrix.os }}
+        timeout-minutes: 40
         strategy:
             fail-fast: false
             matrix:
