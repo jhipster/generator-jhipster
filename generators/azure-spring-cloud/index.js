@@ -296,6 +296,7 @@ ${chalk.red(
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Azure Spring Cloud deployment files'));
                 this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
+                this.template('bootstrap-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
                 if (this.azureSpringCloudDeploymentType === 'github-action') {
                     this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
                 }
@@ -396,7 +397,7 @@ for more detailed information.`
                 const done = this.async();
                 this.log(chalk.bold('\nBuilding application'));
 
-                const child = this.buildApplication(this.buildTool, 'azure', false, err => {
+                const child = this.buildApplication(this.buildTool, 'prod,azure', false, err => {
                     if (err) {
                         this.abort = true;
                         this.log.error(err);

@@ -14,7 +14,7 @@ jobs:
     - name: Test with Maven
       run: mvn test
     - name: Build with Maven
-      run: mvn package -DskipTests -Pazure
+      run: mvn package -DskipTests -Pprod,azure
     - name: Login to Azure Spring Cloud
       uses: azure/actions/login@v1
       with:
