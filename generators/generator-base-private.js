@@ -866,7 +866,6 @@ module.exports = class extends Generator {
     checkJHipsterBlueprintVersion(blueprintPkgName) {
         const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
         if (!blueprintPackageJson) {
-            this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
             return;
         }
         const mainGeneratorJhipsterVersion = packagejs.version;
