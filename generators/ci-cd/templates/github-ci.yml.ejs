@@ -21,28 +21,24 @@ on: [push, pull_request]
 jobs:
     applications:
         name: <%= baseName %> test suite
-        runs-on: ${{ matrix.os }}
+        runs-on: ubuntu-latest
         timeout-minutes: 40
-        strategy:
-            fail-fast: false
-            matrix:
-                node_version: [<%= NODE_VERSION %>]
-                os: [ubuntu-latest]
-                java_version: ['8.x', '11.x']
         env:
-            NODE_VERSION: ${{ matrix.node_version }}
-            SPRING_OUTPUT_ANSI_ENABLED: NEVER
+            NODE_VERSION: <%= NODE_VERSION %>
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
             SPRING_JPA_SHOW_SQL: false
             JHI_DISABLE_WEBPACK_LOGS: true
+            <%_ if (clientFramework === 'angularX') { _%>
             NG_CLI_ANALYTICS: false
+            <%_ } _%>
         steps:
             - uses: actions/checkout@v1
             - uses: actions/setup-node@v1
               with:
-                  node-version: ${{ matrix.node_version }}
+                  node-version: <%= NODE_VERSION %>
             - uses: actions/setup-java@v1
               with:
-                  java-version: ${{ matrix.java_version }}
+                  java-version: '11.x'
             - name: Stop MySQL server
               run: sudo /etc/init.d/mysql stop
             - name: Install node.js packages
@@ -63,7 +59,7 @@ jobs:
             <%_ } _%>
             - name: Package application
               <%_ if (buildTool === 'maven') { _%>
-              run: ./mvnw -ntp package -Pprod -DskipTests -DskipIT
+              run: ./mvnw -ntp package -Pprod -DskipTests
               <%_ } else if (buildTool === 'gradle') { _%>
               run: ./gradlew bootJar -Pprod -x test -x integrationTest
               <%_ } _%>
