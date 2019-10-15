@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-    currentAccount: any;
     <%= entityInstancePlural %>: I<%= entityAngularName %>[];
     error: any;
     success: any;
@@ -38,7 +37,6 @@
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         protected parseLinks: JhiParseLinks,
-        protected accountService: AccountService,
         protected activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: JhiDataUtils,
