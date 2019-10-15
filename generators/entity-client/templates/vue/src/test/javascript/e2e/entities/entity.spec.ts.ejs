@@ -21,7 +21,9 @@ import { browser<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import <%= entityClass %>ComponentsPage, { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
+<%_ if (!readOnly) { _%>
 import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
+<%_ } _%>
 import <%= entityClass %>DetailsPage from './<%= entityFileName%>-details.page-object';
 
 import {
@@ -59,7 +61,9 @@ const expect = chai.expect;
 
 describe('<%= entityClass %> e2e test', () => {
   let navBarPage: NavBarPage;
+  <%_ if (!readOnly) { _%>
   let updatePage: <%= entityClass %>UpdatePage;
+  <%_ } _%>
   let detailsPage: <%= entityClass %>DetailsPage;
   let listPage: <%= entityClass %>ComponentsPage;
   <%= openBlockComment %>let deleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
@@ -87,12 +91,14 @@ describe('<%= entityClass %> e2e test', () => {
     await waitUntilAllDisplayed([listPage.title, listPage.footer]);
 
     expect(await listPage.title.getText()).not.to.be.empty;
+    <%_ if (!readOnly) { _%>
     expect(await listPage.createButton.isEnabled()).to.be.true;
+    <%_ } _%>
 
     await waitUntilAnyDisplayed([listPage.noRecords, listPage.table]);
     beforeRecordsCount = await isVisible(listPage.noRecords) ? 0 : await getRecordsCount(listPage.table);
   });
-
+<%_ if (!readOnly) { _%>
   describe('Create flow', () => {
     it('should load create <%= entityClass %> page', async () => {
 
@@ -304,4 +310,5 @@ describe('<%= entityClass %> e2e test', () => {
       });
     });
   });
+<%_ } _%>
 });

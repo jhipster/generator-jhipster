@@ -25,7 +25,9 @@ export default class <%= entityClass %>ComponentsPage extends AlertPage {
   title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
 
   footer: ElementFinder = element(by.id('footer'));
+<%_ if (!readOnly) { _%>
   createButton: ElementFinder = element(by.id('jh-create-entity'));
+<%_ } _%>
 
   noRecords: ElementFinder = element(by.css('#page-heading ~ div.alert.alert-warning'));
   table: ElementFinder = element(by.css('#page-heading ~ div.table-responsive > table'));
@@ -35,7 +37,7 @@ export default class <%= entityClass %>ComponentsPage extends AlertPage {
   getDetailsButton(record: ElementFinder) {
     return record.element(by.css('.btn-info.details'));
   }
-
+<%_ if (!readOnly) { _%>
   getEditButton(record: ElementFinder) {
     return record.element(by.css('.btn-primary.edit'));
   }
@@ -43,10 +45,13 @@ export default class <%= entityClass %>ComponentsPage extends AlertPage {
   getDeleteButton(record: ElementFinder) {
     return record.element(by.css('div table .btn-danger'));
   }
+<%_ } _%>
 }
 
 export class <%= entityClass %>DeleteDialog {
   dialog: ElementFinder = element(by.id('removeEntity'));
   title: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
+<%_ if (!readOnly) { _%>
   confirmButton: ElementFinder = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
+<%_ } _%>
 }

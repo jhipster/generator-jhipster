@@ -179,7 +179,7 @@ describe('Component Tests', () => {
     });
     <%_ } _%>
 <%_ } _%>
-
+<%_ if (!readOnly) { _%>
     it('Should call delete service on confirmDelete', async () => {
       // GIVEN
       <%= entityInstance %>ServiceStub.delete.resolves({});
@@ -193,5 +193,6 @@ describe('Component Tests', () => {
       expect(<%= entityInstance %>ServiceStub.delete.called).toBeTruthy();
       expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(2);
     });
+<%_ } _%>
   });
 });

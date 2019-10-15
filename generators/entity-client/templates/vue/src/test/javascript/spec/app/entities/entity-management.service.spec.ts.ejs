@@ -106,7 +106,7 @@ describe('Service Tests', () => {
             expect(res).toMatchObject(elemDefault);
         });
       });
-
+<%_ if (!readOnly) { _%>
       it('should create a <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
   <%_ if (pkType === 'String'  || pkType === 'UUID') { _%>
@@ -176,7 +176,7 @@ describe('Service Tests', () => {
             expect(res).toMatchObject(expected);
         });
       });
-
+<%_ } _%>
       it('should return a list of <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
     <%_ fields.forEach((field) => {
@@ -211,13 +211,14 @@ describe('Service Tests', () => {
           expect(res).toContainEqual(expected);
         });
       });
-
+<%_ if (!readOnly) { _%>
       it('should delete a <%= entityAngularName %>', async () => {
           mockedAxios.delete.mockReturnValue(Promise.resolve({ok: true}));
           return service.delete(<%- tsKeyId %>).then((res) => {
               expect(res.ok).toBeTruthy();
           });
       });
+<%_ } _%>
     });
   });
 });
