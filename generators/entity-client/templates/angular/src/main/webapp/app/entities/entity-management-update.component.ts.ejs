@@ -29,9 +29,6 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-<%_ if (queries && queries.length > 0) { _%>
-import { filter, map } from 'rxjs/operators';
-<%_ } _%>
 <%_ if ( fieldsContainDate ) { _%>
 import * as moment from 'moment';
     <%_ if ( fieldsContainInstant || fieldsContainZonedDateTime ) { _%>

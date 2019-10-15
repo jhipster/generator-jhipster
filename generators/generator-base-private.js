@@ -998,23 +998,15 @@ module.exports = class extends Generator {
                 }
 
                 query = `this.${relationship.otherEntityName}Service
-            .query({${filter}}).pipe(
-                filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
-                map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
-            )
-            .subscribe((res: I${relationship.otherEntityAngularName}[]) => {
+            .query({${filter}}).subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
                 if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res;
+                    this.${variableName} = res.body;
                 } else {
                     this.${relationship.otherEntityName}Service
                         .find(this.editForm.get('${relationshipFieldName}${dto !== 'no' ? 'Id' : ''}').value${
                     dto === 'no' ? '.id' : ''
-                }).pipe(
-                            filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
-                            map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
-                        )
-                        .subscribe((subRes: I${relationship.otherEntityAngularName}) =>
-                            this.${variableName} = [subRes].concat(res)
+                }).subscribe((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) =>
+                            this.${variableName} = [subRes.body].concat(res.body)
                         , (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
             }, (res: HttpErrorResponse) => this.onError(res.message));`;
@@ -1023,12 +1015,8 @@ module.exports = class extends Generator {
                 if (variableName === entityInstance) {
                     variableName += 'Collection';
                 }
-                query = `this.${relationship.otherEntityName}Service.query().pipe(
-                            filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
-                            map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
-                        )
-            .subscribe(
-                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res,
+                query = `this.${relationship.otherEntityName}Service.query().subscribe(
+                (res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body,
                 (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {

@@ -24,7 +24,7 @@ import { JhiResolvePagingParams } from 'ng-jhipster';
 <%_ } _%>
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
@@ -51,7 +51,6 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
         const id = route.params['id'];
         if (id) {
             return this.service.find(id).pipe(
-                filter((response: HttpResponse<<%= entityAngularName %>>) => response.ok),
                 map((<%= entityInstance %>: HttpResponse<<%= entityAngularName %>>) => <%= entityInstance %>.body)
             );
         }
