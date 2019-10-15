@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by, ElementFinder } from 'protractor';
+import { element, by<% if (!readOnly) { %>, ElementFinder<% } %> } from 'protractor';
 
 <%_
 let elementGetter = `getText()`;
@@ -40,11 +40,11 @@ export class <%= entityClass %>ComponentsPage {
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
 <%_ if (!readOnly) { _%>
-    async clickOnCreateButton(timeout?: number) {
+    async clickOnCreateButton() {
         await this.createButton.click();
     }
 
-    async clickOnLastDeleteButton(timeout?: number) {
+    async clickOnLastDeleteButton() {
         await this.deleteButtons.last().click();
     }
 
@@ -104,7 +104,7 @@ export class <%= entityClass %>UpdatePage {
             let ngModelOption = '';
     _%>
             <%_ if (fieldType === 'Boolean') { _%>
-    get<%= fieldNameCapitalized %>Input(timeout?: number) {
+    get<%= fieldNameCapitalized %>Input() {
         return this.<%= fieldName %>Input;
     }
             <%_ } else if (fieldIsEnum) { _%>
@@ -116,7 +116,7 @@ export class <%= entityClass %>UpdatePage {
         return await this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
     }
 
-    async <%=fieldName %>SelectLastOption(timeout?: number) {
+    async <%=fieldName %>SelectLastOption() {
         await this.<%=fieldName %>Select.all(by.tagName('option')).last().click();
     }
 
@@ -148,7 +148,7 @@ export class <%= entityClass %>UpdatePage {
         const relationshipNameCapitalized = relationship.relationshipNameCapitalized; _%>
 
     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-    async <%=relationshipName %>SelectLastOption(timeout?: number) {
+    async <%=relationshipName %>SelectLastOption() {
         await this.<%=relationshipName %>Select.all(by.tagName('option')).last().click();
     }
 
@@ -166,11 +166,11 @@ export class <%= entityClass %>UpdatePage {
 
     <%_ } _%>
     <%_ }); _%>
-    async save(timeout?: number) {
+    async save() {
         await this.saveButton.click();
     }
 
-    async cancel(timeout?: number) {
+    async cancel() {
         await this.cancelButton.click();
     }
 
@@ -187,7 +187,7 @@ export class <%= entityClass %>DeleteDialog {
         return this.dialogTitle.<%- elementGetter %>;
     }
 
-    async clickOnConfirmButton(timeout?: number) {
+    async clickOnConfirmButton() {
         await this.confirmButton.click();
     }
 }

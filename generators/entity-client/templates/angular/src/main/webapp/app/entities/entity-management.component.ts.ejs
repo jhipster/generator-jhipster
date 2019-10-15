@@ -74,7 +74,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     } _%>
 
     registerChangeIn<%= entityClassPlural %>() {
-        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', (response) => <%= eventCallBack %>);
+        this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', () => <%= eventCallBack %>);
     }
     <%_ if (pagination !== 'no') { _%>
         <%_ if (databaseType !== 'cassandra') { _%>

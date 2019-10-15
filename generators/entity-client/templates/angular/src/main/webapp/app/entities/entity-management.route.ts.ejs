@@ -18,7 +18,7 @@
 -%>
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
 <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
 import { JhiResolvePagingParams } from 'ng-jhipster';
 <%_ } _%>
@@ -47,7 +47,7 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
     constructor(private service: <%= entityAngularName %>Service) {
     }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<I<%= entityAngularName %>> {
+    resolve(route: ActivatedRouteSnapshot): Observable<I<%= entityAngularName %>> {
         const id = route.params['id'];
         if (id) {
             return this.service.find(id).pipe(
