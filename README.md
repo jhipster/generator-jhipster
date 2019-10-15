@@ -58,7 +58,7 @@ yarn global upgrade generator-jhipster-vuejs
 To use this blueprint, run 
 
 ```bash
-jhipster --blueprint vuejs
+jhipster --blueprints vuejs
 ```
 
 
@@ -96,7 +96,7 @@ Then, about **jhipster-vuejs** :
 mkdir my-app
 cd my-app
 npm link generator-jhipster-vuejs
-jhipster -d --blueprint vuejs
+jhipster -d --blueprints vuejs
 ```
 
 # License

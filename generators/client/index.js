@@ -15,7 +15,7 @@ module.exports = class extends ClientGenerator {
         if (!jhContext) {
             this.error(
                 `This is a JHipster blueprint and should be used only like ${chalk.yellow(
-                    'jhipster --blueprint vuejs'
+                    'jhipster --blueprints vuejs'
                 )}`
             );
         }
