@@ -133,60 +133,103 @@ function addEntityToMenu(generator, entityName, translationKey, className) {
 }
 
 function addEntityToRouterImport(generator, entityAngularName, fileName, folderName) {
-    jhipsterUtils.rewriteFile(
-        {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
-            needle: 'jhipster-needle-add-entity-to-router-import',
-            splicable: [generator.stripMargin(
-                // prettier-ignore
-                `|// prettier-ignore
-                |const ${entityAngularName} = () => import('../entities/${folderName}/${fileName}.vue');
-                |// prettier-ignore
-                |const ${entityAngularName}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
-                |// prettier-ignore
-                |const ${entityAngularName}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
-            )]
-        },
-        generator
-    );
+    if (!generator.readOnly) {
+        jhipsterUtils.rewriteFile(
+            {
+                file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+                needle: 'jhipster-needle-add-entity-to-router-import',
+                splicable: [generator.stripMargin(
+                    // prettier-ignore
+                    `|// prettier-ignore
+                    |const ${entityAngularName} = () => import('../entities/${folderName}/${fileName}.vue');
+                    |// prettier-ignore
+                    |const ${entityAngularName}Update = () => import('../entities/${folderName}/${fileName}-update.vue');
+                    |// prettier-ignore
+                    |const ${entityAngularName}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
+                )]
+            },
+            generator
+        );
+    } else {
+        jhipsterUtils.rewriteFile(
+            {
+                file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+                needle: 'jhipster-needle-add-entity-to-router-import',
+                splicable: [generator.stripMargin(
+                    // prettier-ignore
+                    `|// prettier-ignore
+                    |const ${entityAngularName} = () => import('../entities/${folderName}/${fileName}.vue');
+                    |// prettier-ignore
+                    |const ${entityAngularName}Details = () => import('../entities/${folderName}/${fileName}-details.vue');`
+                )]
+            },
+            generator
+        );
+    }
 }
 
 function addEntityToRouter(generator, entityName, entityFileName, entityAngularName) {
-    jhipsterUtils.rewriteFile(
-        {
-            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
-            needle: 'jhipster-needle-add-entity-to-router',
-            splicable: [generator.stripMargin(
-                // prettier-ignore
-                `|,
-                |    {
-                |      path: '/entity/${entityFileName}',
-                |      name: '${entityAngularName}',
-                |      component: ${entityAngularName},
-                |      meta: { authorities: ['ROLE_USER'] }
-                |    },
-                |    {
-                |      path: '/entity/${entityFileName}/new',
-                |      name: '${entityAngularName}Create',
-                |      component: ${entityAngularName}Update,
-                |      meta: { authorities: ['ROLE_USER'] }
-                |    },
-                |    {
-                |      path: '/entity/${entityFileName}/:${entityName}Id/edit',
-                |      name: '${entityAngularName}Edit',
-                |      component: ${entityAngularName}Update,
-                |      meta: { authorities: ['ROLE_USER'] }
-                |    },
-                |    {
-                |      path: '/entity/${entityFileName}/:${entityName}Id/view',
-                |      name: '${entityAngularName}View',
-                |      component: ${entityAngularName}Details,
-                |      meta: { authorities: ['ROLE_USER'] }
-                |    }`
-            )]
-        },
-        generator
-    );
+    if (!generator.readOnly) {
+        jhipsterUtils.rewriteFile(
+            {
+                file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+                needle: 'jhipster-needle-add-entity-to-router',
+                splicable: [generator.stripMargin(
+                    // prettier-ignore
+                    `|,
+                        |    {
+                        |      path: '/entity/${entityFileName}',
+                        |      name: '${entityAngularName}',
+                        |      component: ${entityAngularName},
+                        |      meta: { authorities: ['ROLE_USER'] }
+                        |    },
+                        |    {
+                        |      path: '/entity/${entityFileName}/new',
+                        |      name: '${entityAngularName}Create',
+                        |      component: ${entityAngularName}Update,
+                        |      meta: { authorities: ['ROLE_USER'] }
+                        |    },
+                        |    {
+                        |      path: '/entity/${entityFileName}/:${entityName}Id/edit',
+                        |      name: '${entityAngularName}Edit',
+                        |      component: ${entityAngularName}Update,
+                        |      meta: { authorities: ['ROLE_USER'] }
+                        |    },
+                        |    {
+                        |      path: '/entity/${entityFileName}/:${entityName}Id/view',
+                        |      name: '${entityAngularName}View',
+                        |      component: ${entityAngularName}Details,
+                        |      meta: { authorities: ['ROLE_USER'] }
+                        |    }`
+                )]
+            },
+            generator
+        );
+    } else {
+        jhipsterUtils.rewriteFile(
+            {
+                file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+                needle: 'jhipster-needle-add-entity-to-router',
+                splicable: [generator.stripMargin(
+                    // prettier-ignore
+                    `|,
+                        |    {
+                        |      path: '/entity/${entityFileName}',
+                        |      name: '${entityAngularName}',
+                        |      component: ${entityAngularName},
+                        |      meta: { authorities: ['ROLE_USER'] }
+                        |    },
+                        |    {
+                        |      path: '/entity/${entityFileName}/:${entityName}Id/view',
+                        |      name: '${entityAngularName}View',
+                        |      component: ${entityAngularName}Details,
+                        |      meta: { authorities: ['ROLE_USER'] }
+                        |    }`
+                )]
+            },
+            generator
+        );
+    }
 }
 
 function addEntityServiceToMainImport(generator, className, fileName, folderName) {

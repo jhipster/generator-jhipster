@@ -39,6 +39,7 @@ export default class <%= entityAngularName %>Service {
       });
     });
   }
+  <%_ if (!readOnly) { _%>
 
   public delete(id: <% if (pkType === 'String'  || pkType === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<any> {
     return new Promise<any>(resolve => {
@@ -63,4 +64,5 @@ export default class <%= entityAngularName %>Service {
       });
     });
   }
+  <%_ } _%>
 }

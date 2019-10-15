@@ -43,14 +43,6 @@ const vueFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.ts`
                 },
                 {
-                    file: 'entities/entity-update.vue',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.vue`
-                },
-                {
-                    file: 'entities/entity-update.component.ts',
-                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.ts`
-                },
-                {
                     file: 'entities/entity.vue',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.vue`
                 },
@@ -68,6 +60,20 @@ const vueFiles = {
                     renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
                 }
             ]
+        },
+        {
+            condition: generator => !generator.readOnly,
+            path: VUE_DIR,
+            templates: [
+                {
+                    file: 'entities/entity-update.vue',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.vue`
+                },
+                {
+                    file: 'entities/entity-update.component.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.ts`
+                }
+            ]
         }
     ],
     test: [
@@ -83,12 +89,18 @@ const vueFiles = {
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-details.component.spec.ts`
                 },
                 {
-                    file: 'spec/app/entities/entity-management-update.component.spec.ts',
-                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`
-                },
-                {
                     file: 'spec/app/entities/entity-management.service.spec.ts',
                     renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}.service.spec.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.readOnly,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'spec/app/entities/entity-management-update.component.spec.ts',
+                    renameTo: generator => `spec/app/entities/${generator.entityFolderName}/${generator.entityFileName}-update.component.spec.ts`
                 }
             ]
         },
@@ -107,7 +119,13 @@ const vueFiles = {
                 {
                     file: 'e2e/entities/entity-details-page-object.ts',
                     renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-details.page-object.ts`
-                },
+                }
+            ]
+        },
+        {
+            condition: generator => generator.protractorTests && !generator.readOnly,
+            path: CLIENT_TEST_SRC_DIR,
+            templates: [
                 {
                     file: 'e2e/entities/entity-update-page-object.ts',
                     renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-update.page-object.ts`
@@ -142,10 +160,17 @@ function writeFiles() {
     utils.addEntityServiceToMain(this, entityName, className);
 
     if (!this.enableTranslation) {
-        utils.replaceTranslation(this, [
-            `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
-            `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
-            `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
-        ]);
+        if (!this.readOnly) {
+            utils.replaceTranslation(this, [
+                `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+                `app/entities/${this.entityFolderName}/${this.entityFileName}-update.vue`,
+                `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+            ]);
+        } else {
+            utils.replaceTranslation(this, [
+                `app/entities/${this.entityFolderName}/${this.entityFileName}.vue`,
+                `app/entities/${this.entityFolderName}/${this.entityFileName}-details.vue`
+            ]);
+        }
     }
 }
