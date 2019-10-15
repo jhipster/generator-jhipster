@@ -145,6 +145,7 @@ function loadFromYoRc() {
     this.consoleOptions = this.config.get('consoleOptions');
     this.useKafka = false;
     this.useMemcached = false;
+    this.useRedis = false;
     this.dockerRepositoryName = this.config.get('dockerRepositoryName');
     this.dockerPushCommand = this.config.get('dockerPushCommand');
     this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
