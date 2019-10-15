@@ -13,7 +13,7 @@ if [[ "$JHI_REPO" == *"/jhipster" ]]; then
     cd "$JHI_HOME"
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
-    ./mvnw clean install -Dgpg.skip=true
+    ./mvnw -ntp clean install -Dgpg.skip=true
 
 elif [[ "$JHI_LIB_BRANCH" == "release" ]]; then
     echo "*** jhipster: use release version"
@@ -93,6 +93,7 @@ npm install -g yo
 # Install JHipster Vue.js
 #-------------------------------------------------------------------------------
 cd "$JHI_CLONED"/
+git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 npm ci
 npm link
 npm link generator-jhipster
