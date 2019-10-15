@@ -190,6 +190,15 @@ module.exports = class extends BaseDockerGenerator {
                         delete memcachedConfig.ports;
                         parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
                     }
+
+                    // Add Redis support
+                    if (cacheProvider === 'redis') {
+                        this.useRedis = true;
+                        const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
+                        const redisConfig = redisYaml.services[`${lowercaseBaseName}-redis`];
+                        delete redisConfig.ports;
+                        parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
+                    }
                     // Expose authenticationType
                     this.authenticationType = appConfig.authenticationType;
 
