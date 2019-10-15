@@ -198,9 +198,10 @@ describe('<%= entityClass %> e2e test', () => {
       expect(await listPage.records.count()).to.eq(beforeRecordsCount + 1);
     });<%= closeBlockComment %>
 
+    <%= openBlockComment %>
     describe('Details, Update, Delete flow', () => {
 
-      <%= openBlockComment %>after(async () => {
+      after(async () => {
 
         const deleteButton = listPage.getDeleteButton(listPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no') { _%>last()<%_ } else {_%>first()<%_ } _%>);
         await click(deleteButton);
@@ -218,7 +219,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         await waitUntilCount(listPage.records, beforeRecordsCount);
         expect(await listPage.records.count()).to.eq(beforeRecordsCount);
-      });<%= closeBlockComment %>
+      });
 
       it('should load details <%= entityClass %> page and fetch data', async () => {
 
@@ -309,6 +310,7 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       });
     });
+    <%= closeBlockComment %>
   });
 <%_ } _%>
 });
