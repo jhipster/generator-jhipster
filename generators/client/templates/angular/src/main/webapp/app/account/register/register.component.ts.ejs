@@ -19,12 +19,13 @@
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
+<%_ } _%>
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/constants/error.constants';
 import { LoginModalService } from 'app/core/login/login-modal.service';
-import { Register } from './register.service';
+import { RegisterService } from './register.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-register',
@@ -37,7 +38,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     errorEmailExists: string;
     errorUserExists: string;
     success: boolean;
-    modalRef: NgbModalRef;
 
     registerForm = this.fb.group({
         login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*$')]],
@@ -47,24 +47,26 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     });
 
     constructor(
+<%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
+<%_ } _%>
         private loginModalService: LoginModalService,
-        private registerService: Register,
+        private registerService: RegisterService,
         private elementRef: ElementRef,
         private renderer: Renderer,
         private fb: FormBuilder
     ) {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.success = false;
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
     }
 
-    register() {
+    register(): void {
         const password = this.registerForm.get(['password']).value;
         if (password !== this.registerForm.get(['confirmPassword']).value) {
             this.doNotMatch = 'ERROR';
@@ -92,11 +94,11 @@ export class RegisterComponent implements OnInit, AfterViewInit {
         }
     }
 
-    openLogin() {
-        this.modalRef = this.loginModalService.open();
+    openLogin(): void {
+        this.loginModalService.open();
     }
 
-    private processError(response: HttpErrorResponse) {
+    private processError(response: HttpErrorResponse): void {
         this.success = null;
         if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
             this.errorUserExists = 'ERROR';

@@ -18,7 +18,9 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
+<%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
@@ -55,7 +57,7 @@ export class SettingsComponent implements OnInit {
     ) {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.accountService.identity().subscribe((account) => {
             this.updateForm(account);
         });
@@ -65,7 +67,7 @@ export class SettingsComponent implements OnInit {
 
     }
 
-    save() {
+    save(): void {
         const settingsAccount = this.accountFromForm();
         this.accountService.save(settingsAccount).subscribe(() => {
             this.error = null;

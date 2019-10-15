@@ -38,7 +38,7 @@ export class ActivateComponent implements OnInit {
     ) {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.route.queryParams.pipe(flatMap(params => this.activateService.get(params.key))).subscribe(
             () => {
                 this.error = null;
@@ -51,7 +51,7 @@ export class ActivateComponent implements OnInit {
         );
     }
 
-    login() {
+    login(): void {
         this.loginModalService.open();
     }
 }

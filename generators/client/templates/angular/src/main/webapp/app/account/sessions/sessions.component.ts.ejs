@@ -40,7 +40,7 @@ export class SessionsComponent implements OnInit {
     ) {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.sessionsService.findAll().subscribe((sessions) => this.sessions = sessions);
 
         this.accountService.identity().subscribe((account) => {
@@ -48,7 +48,7 @@ export class SessionsComponent implements OnInit {
         });
     }
 
-    invalidate(series: string) {
+    invalidate(series: string): void {
         this.sessionsService.delete(encodeURIComponent(series)).subscribe(
             () => {
                 this.error = null;
