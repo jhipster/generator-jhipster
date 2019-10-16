@@ -28,7 +28,7 @@ describe('Configuration Component', () => {
     mockedAxios.get.mockReturnValue(Promise.resolve({ data: { contexts: [
       { beans: [{prefix: 'A'}, {prefix: 'B'}] }
     ], propertySources: [{ properties: { key1: {value: 'value'} }}] } }));
-    wrapper = shallowMount<ConfigurationClass>(Configuration, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: {configurationService : () => new ConfigurationService() } });
+    wrapper = shallowMount<ConfigurationClass>(Configuration, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: {configurationService: () => new ConfigurationService() } });
     configuration = wrapper.vm;
   });
 

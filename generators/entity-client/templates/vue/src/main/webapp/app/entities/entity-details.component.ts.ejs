@@ -8,7 +8,7 @@ import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
 @Component
 export default class <%= entityAngularName %>Details extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
-  @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service : () => <%= entityAngularName %>Service;
+  @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   public <%= entityInstance %>: I<%= entityAngularName %> = {};
 
   beforeRouteEnter(to, from, next) {
