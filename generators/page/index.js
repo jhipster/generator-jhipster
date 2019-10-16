@@ -2,6 +2,7 @@ const EntityClientGenerator = require('generator-jhipster/generators/entity-clie
 const jhipsterUtils = require('generator-jhipster/generators/utils');
 const prompts = require('./prompts');
 const chalk = require('chalk');
+const writeFiles = require('./files').writeFiles;
 
 module.exports = class extends EntityClientGenerator {
     constructor(args, opts) {
@@ -24,6 +25,7 @@ module.exports = class extends EntityClientGenerator {
     get writing() {
         return {
             writeAdditionalFile() {
+                writeFiles.call(this);
             }
         };
     }

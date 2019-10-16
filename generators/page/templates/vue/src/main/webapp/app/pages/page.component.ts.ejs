@@ -1,0 +1,18 @@
+import { mixins } from 'vue-class-component';
+
+import { Component, Inject } from 'vue-property-decorator';
+import Vue2Filters from 'vue2-filters';
+import <%= pageName %>Service from './<%= pageFolderName %>.service';
+
+@Component
+export default class <%= pageName %> extends mixins(Vue2Filters.mixin) {
+  @Inject('<%= pageInstance %>Service') private <%= pageInstance %>Service: () => <%= pageName %>Service;
+
+  public mounted(): void {
+    this.init();
+  }
+
+  public init(): void {
+    this.<%= pageInstance %>Service().method();
+  }
+}

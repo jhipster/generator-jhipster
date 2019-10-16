@@ -22,6 +22,7 @@ const chalk = require('chalk');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
+const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
 module.exports = {
     updateLanguagesInConfig,
@@ -31,7 +32,12 @@ module.exports = {
     addEntityToRouterImport,
     addEntityToRouter,
     addEntityServiceToMainImport,
-    addEntityServiceToMain
+    addEntityServiceToMain,
+    addPageToRouterImport,
+    addPageToRouter,
+    addPageServiceToMainImport,
+    addPageServiceToMain,
+    addPageProtractorConf
 };
 
 function updateLanguagesInConfig(generator) {
@@ -212,6 +218,80 @@ function addEntityServiceToMain(generator, entityName, className) {
                 // prettier-ignore
                 `|    ${entityName}Service: () => new ${className}Service(),`
             )]
+        },
+        generator
+    );
+}
+
+function addPageToRouterImport(generator, pageName, pageFolderName) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+            needle: 'jhipster-needle-add-entity-to-router-import',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|// prettier-ignore
+                |const ${pageName} = () => import('../pages/${pageFolderName}/${pageFolderName}.vue');`
+            )]
+        },
+        generator
+    );
+}
+
+function addPageToRouter(generator, pageName, pageFolderName) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/router/index.ts`,
+            needle: 'jhipster-needle-add-entity-to-router',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|,
+                |    {
+                |      path: '/pages/${pageFolderName}',
+                |      name: '${pageName}',
+                |      component: ${pageName},
+                |      meta: { authorities: ['ROLE_USER'] }
+                |    }`
+            )]
+        },
+        generator
+    );
+}
+
+function addPageServiceToMainImport(generator, pageName, pageFolderName) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main-import',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|import ${pageName}Service from '@/pages/${pageFolderName}/${pageFolderName}.service';`
+            )]
+        },
+        generator
+    );
+}
+
+function addPageServiceToMain(generator, pageName, pageInstance) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_MAIN_SRC_DIR}/app/main.ts`,
+            needle: 'jhipster-needle-add-entity-service-to-main',
+            splicable: [generator.stripMargin(
+                // prettier-ignore
+                `|${pageInstance}Service: () => new ${pageName}Service(),`
+            )]
+        },
+        generator
+    );
+}
+
+function addPageProtractorConf(generator, pageFolderName) {
+    jhipsterUtils.rewriteFile(
+        {
+            file: `${CLIENT_TEST_SRC_DIR}/protractor.conf.js`,
+            needle: 'jhipster-needle-add-protractor-tests',
+            splicable: [generator.stripMargin(`'./e2e/pages/**/*.spec.ts',`)]
         },
         generator
     );
