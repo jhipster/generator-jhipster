@@ -370,11 +370,9 @@ module.exports = class extends BaseGenerator {
             composeServer() {
                 if (this.skipServer) return;
                 const options = this.options;
-                const configOptions = this.configOptions;
 
-                this.composeWith(require.resolve('../server'), {
+                this.composeWithConfigOptions(require.resolve('../server'), {
                     ...options,
-                    configOptions,
                     'client-hook': !this.skipClient,
                     debug: this.isDebugEnabled
                 });
@@ -383,23 +381,19 @@ module.exports = class extends BaseGenerator {
             composeClient() {
                 if (this.skipClient) return;
                 const options = this.options;
-                const configOptions = this.configOptions;
 
-                this.composeWith(require.resolve('../client'), {
+                this.composeWithConfigOptions(require.resolve('../client'), {
                     ...options,
-                    configOptions,
                     debug: this.isDebugEnabled
                 });
             },
 
             composeCommon() {
                 const options = this.options;
-                const configOptions = this.configOptions;
 
-                this.composeWith(require.resolve('../common'), {
+                this.composeWithConfigOptions(require.resolve('../common'), {
                     ...options,
                     'client-hook': !this.skipClient,
-                    configOptions,
                     debug: this.isDebugEnabled
                 });
             },
@@ -480,11 +474,9 @@ module.exports = class extends BaseGenerator {
             regenerateEntities() {
                 if (this.withEntities) {
                     const options = this.options;
-                    const configOptions = this.configOptions;
                     this.getExistingEntities().forEach(entity => {
-                        this.composeWith(require.resolve('../entity'), {
+                        this.composeWithConfigOptions(require.resolve('../entity'), {
                             ...options,
-                            configOptions,
                             regenerate: true,
                             'skip-install': true,
                             debug: this.isDebugEnabled,

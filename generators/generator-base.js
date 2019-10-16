@@ -1101,6 +1101,18 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Shortcut to yeoman's composeWith with configOptions.
+     * @param  {String|Object} generator  The path to the generator module or an object
+     * @param  {Object} options    The options passed to the Generator
+     * @return {this}    This generator
+     */
+    composeWithConfigOptions(generator, options) {
+        options.configOptions = options.configOptions || this.configOptions || this.options.configOptions;
+        this.composeWith(generator, options);
+        return this;
+    }
+
+    /**
      * Compose an external generator with Yeoman.
      * @param {string} npmPackageName - package name
      * @param {string} subGen - sub generator name
