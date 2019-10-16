@@ -29,7 +29,9 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = {};
+        // Preload configOptions with all configs.
+        this.configOptions = this.config.getAll();
+
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -280,16 +282,19 @@ module.exports = class extends BaseGenerator {
                 }
                 // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
                 this.jhipsterOldVersion = this.config.get('jhipsterVersion');
-                this.otherModules = this.config.get('otherModules') || [];
+
+                let otherModules = this.config.get('otherModules') || [];
                 if (this.blueprints && this.blueprints.length > 0) {
                     this.blueprints.forEach(blueprint => {
                         blueprint.version = this.findBlueprintVersion(blueprint.name) || 'latest';
                     });
 
                     // Remove potential previous value to avoid duplicates
-                    this.otherModules = this.otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
-                    this.otherModules.push(...this.blueprints);
+                    otherModules = otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
+                    otherModules.push(...this.blueprints);
                 }
+                this.otherModules = this.configOptions.otherModules = otherModules;
+
                 this.testFrameworks = this.config.get('testFrameworks');
                 this.enableTranslation = this.config.get('enableTranslation');
                 this.nativeLanguage = this.config.get('nativeLanguage');
@@ -322,6 +327,11 @@ module.exports = class extends BaseGenerator {
                 const configOptions = this.configOptions;
                 let configPrompts;
 
+                // BaseName already saved to the configuration
+                if (this.config.existed && this.config.get('baseName') !== undefined) {
+                    configPrompts = { initializingPrompts: { askForInsightOptIn: prompts.askForInsightOptIn } };
+                }
+
                 this.composeWith(require.resolve('../config'), {
                     ...options,
                     configOptions,
@@ -333,29 +343,26 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get prompting() {
-        return {
-            askForInsightOptIn: prompts.askForInsightOptIn,
-            askForApplicationType: prompts.askForApplicationType,
-            askForModuleName: prompts.askForModuleName
-        };
-    }
-
     get configuring() {
         return {
             setup() {
+                // Keep exposed variables till next major release.
+                this.applicationType = this.configOptions.applicationType;
+                this.baseName = this.configOptions.baseName;
+                this.enableTranslation = this.configOptions.enableTranslation;
+                this.nativeLanguage = this.configOptions.nativeLanguage;
+                this.languages = this.configOptions.languages;
+
                 this.configOptions.skipI18nQuestion = true;
-                this.configOptions.baseName = this.baseName;
                 this.configOptions.logo = false;
-                this.configOptions.otherModules = this.otherModules;
                 this.generatorType = 'app';
-                if (this.applicationType === 'microservice') {
-                    this.skipClient = true;
+                if (this.configOptions.applicationType === 'microservice') {
+                    this.skipClient = this.configOptions.skipClient = true;
                     this.generatorType = 'server';
                     this.skipUserManagement = this.configOptions.skipUserManagement = true;
                 }
                 if (this.applicationType === 'uaa') {
-                    this.skipClient = true;
+                    this.skipClient = this.configOptions.skipClient = true;
                     this.generatorType = 'server';
                     this.skipUserManagement = this.configOptions.skipUserManagement = false;
                     this.authenticationType = this.configOptions.authenticationType = 'uaa';
@@ -415,26 +422,12 @@ module.exports = class extends BaseGenerator {
                     configOptions,
                     debug: this.isDebugEnabled
                 });
-            },
-
-            askFori18n: prompts.askFori18n
+            }
         };
     }
 
     get default() {
         return {
-            askForTestOpts: prompts.askForTestOpts,
-
-            askForMoreModules: prompts.askForMoreModules,
-
-            setSharedConfigOptions() {
-                this.configOptions.testFrameworks = this.testFrameworks;
-                this.configOptions.enableTranslation = this.enableTranslation;
-                this.configOptions.nativeLanguage = this.nativeLanguage;
-                this.configOptions.languages = this.languages;
-                this.configOptions.clientPackageManager = this.clientPackageManager;
-            },
-
             composeLanguages() {
                 if (this.skipI18n) return;
                 this.composeLanguagesSub(this, this.configOptions, this.generatorType);
@@ -443,24 +436,24 @@ module.exports = class extends BaseGenerator {
             saveConfig() {
                 const config = {
                     jhipsterVersion: packagejs.version,
-                    applicationType: this.applicationType,
-                    baseName: this.baseName,
-                    testFrameworks: this.testFrameworks,
+                    applicationType: this.configOptions.applicationType || this.applicationType,
+                    baseName: this.configOptions.baseName || this.baseName,
+                    testFrameworks: this.configOptions.testFrameworks || this.testFrameworks,
                     jhiPrefix: this.jhiPrefix,
                     entitySuffix: this.entitySuffix,
                     dtoSuffix: this.dtoSuffix,
                     skipCheckLengthOfIdentifier: this.skipCheckLengthOfIdentifier,
-                    otherModules: this.otherModules,
-                    enableTranslation: this.enableTranslation,
+                    otherModules: this.configOptions.otherModules || this.otherModules,
+                    enableTranslation: this.configOptions.enableTranslation || this.enableTranslation,
                     clientPackageManager: this.clientPackageManager
                 };
                 if (this.enableTranslation) {
-                    config.nativeLanguage = this.nativeLanguage;
-                    config.languages = this.languages;
+                    config.nativeLanguage = this.configOptions.nativeLanguage || this.nativeLanguage;
+                    config.languages = this.configOptions.languages || this.languages;
                 }
                 this.blueprints && (config.blueprints = this.blueprints);
                 this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
-                this.reactive && (config.reactive = this.reactive);
+                this.configOptions.reactive && (config.reactive = this.configOptions.reactive);
                 this.skipClient && (config.skipClient = true);
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);

@@ -20,6 +20,18 @@ const chalk = require('chalk');
 const statistics = require('../statistics');
 
 module.exports = {
+    configModule: {
+        initializingPrompts: {
+            askForInsightOptIn,
+            askForApplicationType,
+            askForModuleName
+        },
+        configuringPrompts: {
+            askFori18n,
+            askForTestOpts,
+            askForMoreModules
+        }
+    },
     askForInsightOptIn,
     askForApplicationType,
     askForModuleName,
@@ -71,7 +83,7 @@ function askForApplicationType(meta) {
         }
     ];
 
-    if (this.experimental) {
+    if (this.experimental || this.configOptions.experimental) {
         applicationTypeChoices.push({
             value: 'reactive',
             name: '[Alpha] Reactive monolithic application'
@@ -94,7 +106,8 @@ function askForApplicationType(meta) {
 
     const done = this.async();
 
-    const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
+    const promise =
+        this.skipServer || this.configOptions.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
     promise.then(prompt => {
         if (prompt.applicationType === 'reactive') {
             this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
@@ -126,11 +139,11 @@ function askForTestOpts(meta) {
 
     const choices = [];
     const defaultChoice = [];
-    if (meta || !this.skipServer) {
+    if (meta || !(this.skipServer || this.configOptions.skipServer)) {
         // all server side test frameworks should be added here
         choices.push({ name: 'Gatling', value: 'gatling' }, { name: 'Cucumber', value: 'cucumber' });
     }
-    if (meta || !this.skipClient) {
+    if (meta || !(this.skipClient || this.configOptions.skipClient)) {
         // all client side test frameworks should be added here
         choices.push({ name: 'Protractor', value: 'protractor' });
     }
@@ -147,7 +160,7 @@ function askForTestOpts(meta) {
     const done = this.async();
 
     this.prompt(PROMPT).then(prompt => {
-        this.testFrameworks = prompt.testFrameworks;
+        this.testFrameworks = this.configOptions.testFrameworks = prompt.testFrameworks;
         done();
     });
 }

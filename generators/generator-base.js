@@ -1693,6 +1693,7 @@ module.exports = class extends PrivateBase {
     askModuleName(generator) {
         const done = generator.async();
         const defaultAppBaseName = this.getDefaultAppName();
+        const applicationType = generator.applicationType || generator.configOptions.applicationType;
         generator
             .prompt({
                 type: 'input',
@@ -1701,10 +1702,10 @@ module.exports = class extends PrivateBase {
                     if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
                         return 'Your base name cannot contain special characters or a blank space';
                     }
-                    if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+                    if ((applicationType === 'microservice' || applicationType === 'uaa') && /_/.test(input)) {
                         return 'Your base name cannot contain underscores as this does not meet the URI spec';
                     }
-                    if (generator.applicationType === 'uaa' && input === 'auth') {
+                    if (applicationType === 'uaa' && input === 'auth') {
                         return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
                     }
                     if (input === 'application') {
@@ -1716,7 +1717,7 @@ module.exports = class extends PrivateBase {
                 default: defaultAppBaseName
             })
             .then(prompt => {
-                generator.baseName = prompt.baseName;
+                generator.baseName = generator.configOptions.baseName = prompt.baseName;
                 done();
             });
     }
@@ -1756,9 +1757,9 @@ module.exports = class extends PrivateBase {
         ];
 
         generator.prompt(prompts).then(prompt => {
-            generator.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
+            generator.enableTranslation = generator.configOptions.enableTranslation = prompt.enableTranslation;
+            generator.nativeLanguage = generator.configOptions.nativeLanguage = prompt.nativeLanguage;
+            generator.languages = generator.configOptions.languages = [prompt.nativeLanguage].concat(prompt.languages);
             done();
         });
     }
