@@ -318,8 +318,6 @@ module.exports = class extends BaseGenerator {
                 }
             },
             composeConfig() {
-                if (!this.experimental) return;
-
                 const options = this.options;
                 const configOptions = this.configOptions;
                 let configPrompts;
