@@ -33,8 +33,7 @@ import { JhiLanguageHelper } from 'app/core/language/language.helper';
     templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
-    error: string;
-    success: string;
+    success = false;
     <%_ if (enableTranslation) { _%>
     languages: string[];
     <%_ } _%>
@@ -68,10 +67,11 @@ export class SettingsComponent implements OnInit {
     }
 
     save(): void {
+        this.success = false;
+
         const settingsAccount = this.accountFromForm();
         this.accountService.save(settingsAccount).subscribe(() => {
-            this.error = null;
-            this.success = 'OK';
+            this.success = true;
             this.accountService.identity(true).subscribe((account) => {
                 this.updateForm(account);
             });
@@ -82,9 +82,6 @@ export class SettingsComponent implements OnInit {
                 }
             });
             <%_ } _%>
-        }, () => {
-            this.success = null;
-            this.error = 'ERROR';
         });
     }
 

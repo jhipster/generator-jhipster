@@ -48,7 +48,6 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(RegisterComponent);
             comp = fixture.componentInstance;
-            comp.ngOnInit();
         });
 
         it('should ensure the two passwords entered match', () => {
@@ -59,10 +58,10 @@ describe('Component Tests', () => {
 
             comp.register();
 
-            expect(comp.doNotMatch).toEqual('ERROR');
+            expect(comp.doNotMatch).toBe(true);
         });
 
-        it('should update success to OK after creating an account',
+        it('should update success to true after creating an account',
             inject([RegisterService<% if (enableTranslation) { %>, JhiLanguageService<% } %>],
                 fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockTranslate: MockLanguageService<% } %>) => {
                     spyOn(service, 'save').and.returnValue(of({}));
@@ -80,13 +79,13 @@ describe('Component Tests', () => {
                         login: '',
                         langKey: '<%= nativeLanguage %>'
                     });
-                    expect(comp.success).toEqual(true);
+                    expect(comp.success).toBe(true);
                     <%_ if (enableTranslation) { _%>
                     expect(mockTranslate.getCurrentSpy).toHaveBeenCalled();
                     <%_ } _%>
-                    expect(comp.errorUserExists).toBeNull();
-                    expect(comp.errorEmailExists).toBeNull();
-                    expect(comp.error).toBeNull();
+                    expect(comp.errorUserExists).toBe(false);
+                    expect(comp.errorEmailExists).toBe(false);
+                    expect(comp.error).toBe(false);
                 })
             )
         );
@@ -106,9 +105,9 @@ describe('Component Tests', () => {
                     comp.register();
                     tick();
 
-                    expect(comp.errorUserExists).toEqual('ERROR');
-                    expect(comp.errorEmailExists).toBeNull();
-                    expect(comp.error).toBeNull();
+                    expect(comp.errorUserExists).toBe(true);
+                    expect(comp.errorEmailExists).toBe(false);
+                    expect(comp.error).toBe(false);
                 })
             )
         );
@@ -128,9 +127,9 @@ describe('Component Tests', () => {
                     comp.register();
                     tick();
 
-                    expect(comp.errorEmailExists).toEqual('ERROR');
-                    expect(comp.errorUserExists).toBeNull();
-                    expect(comp.error).toBeNull();
+                    expect(comp.errorEmailExists).toBe(true);
+                    expect(comp.errorUserExists).toBe(false);
+                    expect(comp.error).toBe(false);
                 })
             )
         );
@@ -149,9 +148,9 @@ describe('Component Tests', () => {
                     comp.register();
                     tick();
 
-                    expect(comp.errorUserExists).toBeNull();
-                    expect(comp.errorEmailExists).toBeNull();
-                    expect(comp.error).toEqual('ERROR');
+                    expect(comp.errorUserExists).toBe(false);
+                    expect(comp.errorEmailExists).toBe(false);
+                    expect(comp.error).toBe(true);
                 })
             )
         );

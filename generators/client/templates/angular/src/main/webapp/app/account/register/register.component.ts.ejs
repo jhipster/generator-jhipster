@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, Renderer, ElementRef } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
@@ -31,13 +31,12 @@ import { RegisterService } from './register.service';
     selector: '<%= jhiPrefixDashed %>-register',
     templateUrl: './register.component.html'
 })
-export class RegisterComponent implements OnInit, AfterViewInit {
-
-    doNotMatch: string;
-    error: string;
-    errorEmailExists: string;
-    errorUserExists: string;
-    success: boolean;
+export class RegisterComponent implements AfterViewInit {
+    doNotMatch = false;
+    error = false;
+    errorEmailExists = false;
+    errorUserExists = false;
+    success = false;
 
     registerForm = this.fb.group({
         login: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), Validators.pattern('^[_.@A-Za-z0-9-]*$')]],
@@ -58,23 +57,20 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     ) {
     }
 
-    ngOnInit(): void {
-        this.success = false;
-    }
-
     ngAfterViewInit(): void {
         this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
     }
 
     register(): void {
+        this.doNotMatch = false;
+        this.error = false;
+        this.errorEmailExists = false;
+        this.errorUserExists = false;
+
         const password = this.registerForm.get(['password']).value;
         if (password !== this.registerForm.get(['confirmPassword']).value) {
-            this.doNotMatch = 'ERROR';
+            this.doNotMatch = true;
         } else {
-            this.doNotMatch = null;
-            this.error = null;
-            this.errorUserExists = null;
-            this.errorEmailExists = null;
 <%_ if (enableTranslation) { _%>
             this.languageService.getCurrent().then((langKey) => {
                 const login = this.registerForm.get(['login']).value;
@@ -99,13 +95,12 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     }
 
     private processError(response: HttpErrorResponse): void {
-        this.success = null;
         if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
-            this.errorUserExists = 'ERROR';
+            this.errorUserExists = true;
         } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
-            this.errorEmailExists = 'ERROR';
+            this.errorEmailExists = true;
         } else {
-            this.error = 'ERROR';
+            this.error = true;
         }
     }
 }
