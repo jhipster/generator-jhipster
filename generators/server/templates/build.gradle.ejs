@@ -434,7 +434,7 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     implementation "com.github.differentway:couchmove"
-    implementation "com.couchbase.client:java-client"
+    implementation "com.couchbase.client:java-client:${couchbase_java_client_version}"
     implementation "com.couchbase.client:encryption"
     <%_ } _%>
     <%_ if (!reactive) { _%>
