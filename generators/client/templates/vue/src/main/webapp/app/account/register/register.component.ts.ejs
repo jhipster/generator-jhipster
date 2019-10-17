@@ -36,8 +36,8 @@ const validations: any = {
   validations
 })
 export default class Register extends Vue {
-  @Inject('registerService') private registerService : () => RegisterService;
-  @Inject('loginService') private loginService : () => LoginService;
+  @Inject('registerService') private registerService: () => RegisterService;
+  @Inject('loginService') private loginService: () => LoginService;
   public registerAccount: any = {
     login: undefined,
     email: undefined,
