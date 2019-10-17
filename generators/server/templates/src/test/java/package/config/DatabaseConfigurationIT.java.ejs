@@ -81,7 +81,6 @@ public class DatabaseConfigurationIT extends AbstractCouchbaseConfiguration {
         }
         couchbaseContainer = new CouchbaseContainer("<%= DOCKER_COUCHBASE %>");
         couchbaseContainer
-            .withMemoryQuota("8000")
             .withNewBucket(DefaultBucketSettings.builder()
                 .name(getBucketName())
                 .password(getBucketPassword())
