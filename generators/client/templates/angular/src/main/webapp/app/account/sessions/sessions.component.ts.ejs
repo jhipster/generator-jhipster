@@ -28,10 +28,10 @@ import { Account } from 'app/core/user/account.model';
     templateUrl: './sessions.component.html'
 })
 export class SessionsComponent implements OnInit {
-    account: Account;
+    account: Account | undefined;
     error = false;
     success = false;
-    sessions: Session[];
+    sessions: Session[] = [];
 
     constructor(
         private sessionsService: SessionsService,
@@ -42,9 +42,7 @@ export class SessionsComponent implements OnInit {
     ngOnInit(): void {
         this.sessionsService.findAll().subscribe((sessions) => this.sessions = sessions);
 
-        this.accountService.identity().subscribe((account) => {
-            this.account = account;
-        });
+        this.accountService.identity().subscribe((account) => this.account = account);
     }
 
     invalidate(series: string): void {
