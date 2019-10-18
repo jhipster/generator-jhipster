@@ -1,0 +1,35 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { FormGroup, AbstractControl } from '@angular/forms';
+
+/**
+ * Retrieves a child control from form group by the control's name or path.
+ * Same as `FormGroup.get` except that returns `AbstractControl` instead of `AbstractControl | null`
+ * This function can be used if it's absolutely sure that form control with a given path exists in a given form group.
+ *
+ * @param formGroup A form group were to search for control.
+ * @param path A dot-delimited string or array of string/number values that define the path to the
+ * control.
+ *
+ * @returns form control
+ */
+export const getFormControlUnchecked = (formGroup: FormGroup, path: Array<string | number> | string): AbstractControl => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return formGroup.get(path)!;
+};

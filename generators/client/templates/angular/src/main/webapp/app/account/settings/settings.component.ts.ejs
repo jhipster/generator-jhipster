@@ -27,6 +27,7 @@ import { Account } from 'app/core/user/account.model';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from 'app/core/language/language.helper';
 <%_ } _%>
+import { getFormControlUnchecked } from 'app/core/form/form-util';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-settings',
@@ -65,10 +66,10 @@ export class SettingsComponent implements OnInit {
     save(): void {
         this.success = false;
 
-        this.account.firstName = this.settingsForm.get('firstName')!.value;
-        this.account.lastName = this.settingsForm.get('lastName')!.value;
-        this.account.email = this.settingsForm.get('email')!.value;
-        this.account.langKey = this.settingsForm.get('langKey')!.value;
+        this.account.firstName = getFormControlUnchecked(this.settingsForm, 'firstName').value;
+        this.account.lastName = getFormControlUnchecked(this.settingsForm, 'lastName').value;
+        this.account.email = getFormControlUnchecked(this.settingsForm, 'email').value;
+        this.account.langKey = getFormControlUnchecked(this.settingsForm, 'langKey').value;
 
         this.accountService.save(this.account).subscribe(() => {
             this.success = true;

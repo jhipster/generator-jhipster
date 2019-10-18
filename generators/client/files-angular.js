@@ -320,9 +320,10 @@ const files = {
                 // login
                 'core/login/login.service.ts',
                 'core/user/account.model.ts',
-
                 // icons
-                'core/icons/font-awesome-icons.ts'
+                'core/icons/font-awesome-icons.ts',
+                // form
+                'core/form/form-util.ts'
             ]
         },
         {

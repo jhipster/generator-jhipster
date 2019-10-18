@@ -26,6 +26,7 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/constants/error.constants';
 import { LoginModalService } from 'app/core/login/login-modal.service';
 import { RegisterService } from './register.service';
+import { getFormControlUnchecked } from 'app/core/form/form-util';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-register',
@@ -67,21 +68,21 @@ export class RegisterComponent implements AfterViewInit {
         this.errorEmailExists = false;
         this.errorUserExists = false;
 
-        const password = this.registerForm.get(['password'])!.value;
-        if (password !== this.registerForm.get(['confirmPassword'])!.value) {
+        const password = getFormControlUnchecked(this.registerForm, 'password').value;
+        if (password !== getFormControlUnchecked(this.registerForm, 'confirmPassword').value) {
             this.doNotMatch = true;
         } else {
 <%_ if (enableTranslation) { _%>
             this.languageService.getCurrent().then((langKey) => {
-                const login = this.registerForm.get(['login'])!.value;
-                const email = this.registerForm.get(['email'])!.value;
+                const login = getFormControlUnchecked(this.registerForm, 'login').value;
+                const email = getFormControlUnchecked(this.registerForm, 'email').value;
                 this.registerService.save({ login, email, password, langKey }).subscribe(() => {
                     this.success = true;
                 }, (response) => this.processError(response));
             });
 <%_ } else { _%>
-            const login = this.registerForm.get(['login'])!.value;
-            const email = this.registerForm.get(['email'])!.value;
+            const login = getFormControlUnchecked(this.registerForm, 'login').value;
+            const email = getFormControlUnchecked(this.registerForm, 'email').value;
             const langKey = 'en';
             this.registerService.save({ login, email, password, langKey }).subscribe(() => {
                 this.success = true;
