@@ -125,6 +125,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.NPM_VERSION = constants.NPM_VERSION;
 
                 this.JIB_VERSION = constants.JIB_VERSION;
+                this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
 
