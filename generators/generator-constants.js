@@ -28,6 +28,8 @@ const NPM_VERSION = '6.12.0';
 // Libraries version
 const JIB_VERSION = '1.6.1';
 
+const JACOCO_VERSION = '0.8.5';
+
 const KAFKA_VERSION = '5.3.1';
 
 // Version of docker images
@@ -306,6 +308,7 @@ const constants = {
 
     // Libraries
     JIB_VERSION,
+    JACOCO_VERSION,
 
     DOCKER_JENKINS,
     DOCKER_SWAGGER_EDITOR,
