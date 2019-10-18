@@ -5,7 +5,7 @@
     - Previously, it was a class that could be instanciated from either JDL files or string, and a configuration object.
     - Now, in order to create a JDL importer, one must use createImporterFromContent or createImporterFromFiles.
 
-## What's new
+## What's new
   - Passing a path to the `clientRootFolder` is now possible
   - Custom enum values are now possible:
   ```
@@ -15,7 +15,7 @@
   }
   ```
 
-## Fixed
+## Fixed
   - Added missing many-to-many side when needed
     - Related issue: #352
     - This snippet didn't work before as it broke the fluent methods:
