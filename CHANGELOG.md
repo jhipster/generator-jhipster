@@ -17,13 +17,15 @@
 
 ## Fixed
   - Added missing many-to-many side when needed
-    - Related issue: #352
+    - Related issue: [#352](https://github.com/jhipster/jhipster-core/issues/352)
     - This snippet didn't work before as it broke the fluent methods:
     ```
     relationship ManyToMany {
         A{b) to B
     }
     ```
+  - Fixed parsing the jpaDerivedIdentifier option
+    - Related issue [#388](https://github.com/jhipster/jhipster-core/issues/388)
 
 ---
 
