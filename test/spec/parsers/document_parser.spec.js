@@ -1013,7 +1013,7 @@ describe('DocumentParser', () => {
         });
 
         it('sets it', () => {
-          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.useJPADerivedIdentifier).to.be.true;
+          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.jpaDerivedIdentifier).to.be.true;
         });
       });
     });
