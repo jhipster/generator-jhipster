@@ -26,7 +26,7 @@ const YARN_VERSION = '1.19.0';
 const NPM_VERSION = '6.12.0';
 
 // Libraries version
-const JIB_VERSION = '1.6.1';
+const JIB_VERSION = '1.7.0';
 
 const JACOCO_VERSION = '0.8.5';
 
