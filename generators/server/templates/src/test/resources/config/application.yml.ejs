@@ -93,6 +93,11 @@ spring:
             properties:
                 path:
                     home: <%= BUILD_DIR %>elasticsearch
+                <%_ if (cucumberTests) { _%>
+                # See https://github.com/jhipster/generator-jhipster/issues/10302
+                node:
+                    max_local_storage_nodes: 2
+                <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
