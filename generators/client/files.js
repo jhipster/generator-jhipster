@@ -163,6 +163,7 @@ const vueFiles = {
                 'shared/date/filters.ts',
                 'shared/sort/sorts.ts',
                 'shared/alert/alert.service.ts',
+                'shared/alert/alert.mixin.ts',
                 'shared/data/data-utils.service.ts',
                 'shared/jhi-item-count.component.ts',
                 'shared/jhi-item-count.vue',
