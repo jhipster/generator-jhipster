@@ -116,7 +116,7 @@ function writeFiles() {
         writeObservabilityGatewayFiles() {
             if (!this.istio) return;
             this.template('istio/gateway/grafana-gateway.yml.ejs', 'istio/grafana-gateway.yml');
-            this.template('istio/gateway/jaeger-gateway.yml.ejs', 'istio/jaeger-gateway.yml');
+            this.template('istio/gateway/zipkin-gateway.yml.ejs', 'istio/zipkin-gateway.yml');
             this.template('istio/gateway/kiali-gateway.yml.ejs', 'istio/kiali-gateway.yml');
         }
     };

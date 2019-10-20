@@ -19,7 +19,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: jaeger-observability-gateway
+  name: zipkin-observability-gateway
   namespace: istio-system
 spec:
   selector:
@@ -30,28 +30,28 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jaeger.istio-system.<%= ingressDomain %>
+    - zipkin.istio-system.<%= ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jaeger.istio-system.<%= ingressDomain %>
+    - zipkin.istio-system.<%= ingressDomain %>
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: jaeger-gw-virtualservice
+  name: zipkin-gw-virtualservice
   namespace: istio-system
 spec:
   hosts:
-  - jaeger.istio-system.<%= ingressDomain %>
+  - zipkin.istio-system.<%= ingressDomain %>
   gateways:
-  - jaeger-observability-gateway
+  - zipkin-observability-gateway
   http:
   - match:
     - uri:
         prefix: /
     route:
     - destination:
-        host: jaeger-query
+        host: zipkin
