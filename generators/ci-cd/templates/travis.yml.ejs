@@ -42,6 +42,9 @@ env:
     - SPRING_JPA_SHOW_SQL=false
     - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
+<%_ if (buildTool === 'maven') { _%>
+    - MAVEN_USER_HOME=$HOME/.m2/repository/
+<%_ } _%>
 before_install:
   -
     if [[ $JHI_JDK = '8' ]]; then
