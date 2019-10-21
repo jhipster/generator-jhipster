@@ -450,18 +450,18 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                     .allowDuplicateDomains(true).build();
             } else if (discoveryClient.getInstances(registration.getServiceId()).size() == 0) {
                 return () -> GlobalConfigurationBuilder
-                .defaultClusteredBuilder().defaultCacheName("infinispan-store-cluster-cache").transport()
-                .transport(new JGroupsTransport())
-                .clusterName("infinispan-store-cluster").globalJmxStatistics()
-                .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                .allowDuplicateDomains(true).build();
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-store-cluster-cache").transport()
+                    .transport(new JGroupsTransport())
+                    .clusterName("infinispan-store-cluster").globalJmxStatistics()
+                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .allowDuplicateDomains(true).build();
             } else {
                 return () -> GlobalConfigurationBuilder
-                .defaultClusteredBuilder().defaultCacheName("infinispan-store-cluster-cache").transport()
-                .transport(new JGroupsTransport(getTransportChannel()))
-                .clusterName("infinispan-store-cluster").globalJmxStatistics()
-                .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                .allowDuplicateDomains(true).build();
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-store-cluster-cache").transport()
+                    .transport(new JGroupsTransport(getTransportChannel()))
+                    .clusterName("infinispan-store-cluster").globalJmxStatistics()
+                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .allowDuplicateDomains(true).build();
             }
         <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
