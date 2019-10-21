@@ -3,15 +3,14 @@ import { mixins } from 'vue-class-component';
 import { Component, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
-import AlertService from '@/shared/alert/alert.service';
+import AlertMixin from '@/shared/alert/alert.mixin';
 <% if (fieldsContainBlob) { %>
 import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
 @Component
-export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils, Vue2Filters.mixin)<% } else { %> mixins(Vue2Filters.mixin)<% } %> {
-  @Inject('alertService') private alertService: () => AlertService;
+export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils, Vue2Filters.mixin, AlertMixin)<% } else { %> mixins(Vue2Filters.mixin, AlertMixin)<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public currentSearch = '';
@@ -29,22 +28,6 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
 
   public isFetching = false;
-  public dismissCountDown: number = this.$store.getters.dismissCountDown;
-  public dismissSecs: number = this.$store.getters.dismissSecs;
-  public alertType: string = this.$store.getters.alertType;
-  public alertMessage: any = this.$store.getters.alertMessage;
-
-  public getAlertFromStore() {
-    this.dismissCountDown = this.$store.getters.dismissCountDown;
-    this.dismissSecs = this.$store.getters.dismissSecs;
-    this.alertType = this.$store.getters.alertType;
-    this.alertMessage = this.$store.getters.alertMessage;
-  }
-
-  public countDownChanged(dismissCountDown: number) {
-    this.alertService().countDownChanged(dismissCountDown);
-    this.getAlertFromStore();
-  }
 
   public mounted(): void {
     this.retrieveAll<%= entityAngularName %>s();
