@@ -86,6 +86,13 @@ module.exports = class extends BaseGenerator {
 
         // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
         this.jhipsterOldVersion = this.config.get('jhipsterVersion');
+
+        // Verify 6.6.0 app blueprint bug
+        if (!this.config.existed && !this.options.blueprints) {
+            this.error(
+                'This seems to be an app blueprinted project with jhipster 6.6.0 bug (https://github.com/jhipster/generator-jhipster/issues/11045), you should pass --blueprints to jhipster upgrade commmand.'
+            );
+        }
     }
 
     get initializing() {
@@ -99,10 +106,14 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.green('This will upgrade your current application codebase to the latest JHipster version'));
             },
 
+            parseBlueprints() {
+                this.blueprints = utils.parseBluePrints(
+                    this.options.blueprints || this.config.get('blueprints') || this.config.get('blueprint')
+                );
+            },
+
             loadConfig() {
-                this.config = this.getAllJhipsterConfig(this, true);
                 this.currentJhipsterVersion = this.config.get('jhipsterVersion');
-                this.blueprints = this.config.get('blueprints');
                 this.clientPackageManager = this.config.get('clientPackageManager');
             }
         };
@@ -230,7 +241,7 @@ module.exports = class extends BaseGenerator {
         return {
             assertJHipsterProject() {
                 const done = this.async();
-                if (!this.config.baseName) {
+                if (!this.config.get('baseName')) {
                     this.error('Current directory does not contain a JHipster project.');
                 }
                 done();
@@ -360,6 +371,20 @@ module.exports = class extends BaseGenerator {
                     this.sourceBranch = msg.replace('\n', '');
                     done();
                 });
+            },
+
+            async upgradeConfig() {
+                return this.prompt({
+                    type: 'confirm',
+                    name: 'upgradeConfig',
+                    message: 'Unify blueprints configurations?'
+                }).then(
+                    function(answer) {
+                        if (answer.upgradeConfig) {
+                            this.composeWith(require.resolve('../upgrade-config'), this.options);
+                        }
+                    }.bind(this)
+                );
             },
 
             prepareUpgradeBranch() {
