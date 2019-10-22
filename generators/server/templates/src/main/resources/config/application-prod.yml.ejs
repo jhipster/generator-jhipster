@@ -116,8 +116,10 @@ spring:
                 useServerPrepStmts: true
         <%_ } _%>
     jpa:
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        <%_ if (prodDatabaseType === 'mysql') { _%>
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+        database-platform: org.hibernate.dialect.MariaDB103Dialect
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
         <%_ } else if (prodDatabaseType === 'oracle') { _%>
@@ -154,7 +156,7 @@ spring:
             hibernate.jdbc.fetch_size: 250
             hibernate.criteria.literal_handling_mode: BIND
             <%_ } _%>
-			hibernate.query.fail_on_pagination_over_collection_fetch: true
+            hibernate.query.fail_on_pagination_over_collection_fetch: true
             hibernate.query.in_clause_parameter_padding: true
             <%_ if (enableHibernateCache) { _%>
                 <%_ if (cacheProvider === 'hazelcast') { _%>
