@@ -18,8 +18,8 @@
  */
 const EntityClientGenerator = require('generator-jhipster/generators/entity-client');
 const jhipsterUtils = require('generator-jhipster/generators/utils');
-const prompts = require('./prompts');
 const chalk = require('chalk');
+const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 
 module.exports = class extends EntityClientGenerator {
@@ -52,11 +52,7 @@ module.exports = class extends EntityClientGenerator {
         return {
             end() {
                 if (!this.options['skip-install'] && !this.skipClient) {
-                    try{
-                        this.rebuildClient();
-                    } catch(e) {
-                        console.log(e);
-                    }
+                    this.rebuildClient();
                 }
                 this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
             }

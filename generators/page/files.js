@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 const constants = require('generator-jhipster/generators/generator-constants');
-const utils = require('../utils');
 const _ = require('lodash');
+const utils = require('../utils');
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;

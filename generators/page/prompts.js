@@ -31,7 +31,7 @@ function askForPage(meta) {
         validate: input => (/^([A-Z][a-zA-Z]*)$/.test(input) ? true : 'This is not a valid page name (ex: MyPage).'),
     };
 
-    if (meta) return prompts;
+    if (meta) return prompts; // eslint-disable-line consistent-return
 
     const done = this.async();
 
