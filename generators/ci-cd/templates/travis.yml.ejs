@@ -43,7 +43,7 @@ env:
     - JHI_DISABLE_WEBPACK_LOGS=true
     - NG_CLI_ANALYTICS="false"
 before_install:
-  -
+  - |
     if [[ $JHI_JDK = '8' ]]; then
       echo '*** Using OpenJDK 8'
     else
