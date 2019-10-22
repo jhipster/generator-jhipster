@@ -17,7 +17,7 @@ describe('JHipster generator languages', () => {
                         .inTmpDir(dir => {
                             fse.copySync(path.join(__dirname, '../test/templates/default'), dir);
                         })
-                        .withOptions({ 'skip-install': true })
+                        .withOptions({ 'skip-install': true, configOptions: { enableTranslation: true } })
                         .withPrompts({
                             languages: [language.value]
                         })

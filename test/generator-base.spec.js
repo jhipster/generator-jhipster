@@ -1,7 +1,12 @@
 const expect = require('chai').expect;
 const jhiCore = require('jhipster-core');
+const Environment = require('yeoman-environment');
+
+const BaseGeneratorClass = require('../generators/generator-base');
 const expectedFiles = require('./utils/expected-files');
-const BaseGenerator = require('../generators/generator-base').prototype;
+
+// using base generator which extends the private base
+const BaseGenerator = BaseGeneratorClass.prototype;
 
 BaseGenerator.log = msg => {
     // eslint-disable-next-line no-console
@@ -344,6 +349,27 @@ describe('Generator Base', () => {
                 filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
+            });
+        });
+    });
+
+    describe('api test', () => {
+        describe('isI18nRTLSupportNecessary', () => {
+            before(function() {
+                this.env = Environment.createEnv();
+                this.generator = new BaseGeneratorClass({
+                    env: this.env,
+                    resolved: 'test'
+                });
+            });
+            it('returns false', function() {
+                expect(this.generator.isI18nRTLSupportNecessary()).to.equal(false);
+                expect(this.generator.isI18nRTLSupportNecessary(['en', 'fr'])).to.equal(false);
+            });
+            it('returns true', function() {
+                expect(this.generator.isI18nRTLSupportNecessary(['ar-ly'])).to.equal(true);
+                expect(this.generator.isI18nRTLSupportNecessary(['en', 'ar-ly'])).to.equal(true);
+                expect(this.generator.isI18nRTLSupportNecessary(['ar-ly', 'en'])).to.equal(true);
             });
         });
     });

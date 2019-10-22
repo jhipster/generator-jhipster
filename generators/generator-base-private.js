@@ -35,7 +35,6 @@ const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 /**
  * This is the Generator base private class.
@@ -51,82 +50,23 @@ module.exports = class extends Generator {
         this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         // expose lodash to templates
         this._ = _;
+
         // expose constants to templates and sub generators
         this.constants = constants;
+        // Make constants available in templates
+        this.MAIN_DIR = constants.MAIN_DIR;
+        this.TEST_DIR = constants.TEST_DIR;
+
+        this.existingProject = this.config.existed;
+
+        this.jhipsterVersion = packagejs.version;
+        // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+        this.jhipsterOldVersion = this.config.get('jhipsterVersion') || this.jhipsterVersion;
     }
 
     /* ======================================================================== */
     /* private methods use within generator (not exposed to modules) */
     /* ======================================================================== */
-
-    /**
-     * Install I18N Client Files By Language
-     *
-     * @param {any} _this reference to generator
-     * @param {string} webappDir web app directory
-     * @param {string} lang language code
-     */
-    installI18nClientFilesByLanguage(_this, webappDir, lang) {
-        const generator = _this || this;
-        const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        if ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra') {
-            generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
-        }
-        if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
-            generator.copyI18nFilesByName(generator, webappDir, 'gateway.json', lang);
-        }
-        generator.copyI18nFilesByName(generator, webappDir, 'configuration.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'error.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'login.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'home.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'metrics.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'logs.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'password.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'register.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'sessions.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'settings.json', lang);
-        generator.copyI18nFilesByName(generator, webappDir, 'user-management.json', lang);
-
-        // tracker.json for Websocket
-        if (this.websocket === 'spring-websocket') {
-            generator.copyI18nFilesByName(generator, webappDir, 'tracker.json', lang);
-        }
-
-        // Templates
-        generator.template(`${prefix}/${webappDir}i18n/${lang}/activate.json.ejs`, `${webappDir}i18n/${lang}/activate.json`);
-        generator.template(`${prefix}/${webappDir}i18n/${lang}/global.json.ejs`, `${webappDir}i18n/${lang}/global.json`);
-        generator.template(`${prefix}/${webappDir}i18n/${lang}/health.json.ejs`, `${webappDir}i18n/${lang}/health.json`);
-        generator.template(`${prefix}/${webappDir}i18n/${lang}/reset.json.ejs`, `${webappDir}i18n/${lang}/reset.json`);
-    }
-
-    /**
-     * Install I18N Server Files By Language
-     *
-     * @param {any} _this - reference to generator
-     * @param {string} resourceDir - resource directory
-     * @param {string} lang - language code
-     */
-    installI18nServerFilesByLanguage(_this, resourceDir, lang, testResourceDir) {
-        const generator = _this || this;
-        const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        // Template the message server side properties
-        const langProp = lang.replace(/-/g, '_');
-        // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-        const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
-        generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langJavaProp}.properties`
-        );
-        generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langJavaProp}.properties`
-        );
-        generator.template(
-            `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
-            `${testResourceDir}i18n/messages_${langJavaProp}.properties`
-        );
-    }
-
     /**
      * Copy I18N
      *
@@ -168,258 +108,6 @@ module.exports = class extends Generator {
             this.debug('Error:', e);
             // An exception is thrown if the folder doesn't exist
             // do nothing
-        }
-    }
-
-    /**
-     * Update Languages In Language Constant
-     *
-     * @param languages
-     */
-    updateLanguagesInLanguageConstant(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
-        try {
-            let content = ".constant('LANGUAGES', [\n";
-            languages.forEach((language, i) => {
-                content += `            '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content +=
-                '            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n        ]';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Update Languages In Language Constant NG2
-     *
-     * @param languages
-     */
-    updateLanguagesInLanguageConstantNG2(languages) {
-        if (this.clientFramework !== 'angularX') {
-            return;
-        }
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
-        try {
-            let content = 'export const LANGUAGES: string[] = [\n';
-            languages.forEach((language, i) => {
-                content += `    '${language}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content += '    // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n];';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Update Languages In MailServiceIT
-     *
-     * @param languages
-     */
-    updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
-        const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
-        try {
-            let content = 'private static String languages[] = {\n';
-            languages.forEach((language, i) => {
-                content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Update Languages In Language Pipe
-     *
-     * @param languages
-     */
-    updateLanguagesInLanguagePipe(languages) {
-        const fullPath =
-            this.clientFramework === 'angularX'
-                ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
-                : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
-        try {
-            let content = '{\n';
-            this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
-                content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    };';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Update Languages In Webpack
-     *
-     * @param languages
-     */
-    updateLanguagesInWebpack(languages) {
-        const fullPath = 'webpack/webpack.common.js';
-        try {
-            let content = 'groupBy: [\n';
-            languages.forEach((language, i) => {
-                content += `                    { pattern: "./src/main/webapp/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
-                    i !== languages.length - 1 ? ',' : ''
-                }\n`;
-            });
-            content +=
-                '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
-                '                ]';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Update Moment Locales to keep in webpack prod build
-     *
-     * @param languages
-     */
-    updateLanguagesInMomentWebpackNgx(languages) {
-        const fullPath = 'webpack/webpack.prod.js';
-        try {
-            let content = 'localesToKeep: [\n';
-            languages.forEach((language, i) => {
-                content += `                    '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content +=
-                '                    // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n' +
-                '                ]';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
-        }
-    }
-
-    /**
-     * Update Moment Locales to keep in webpack prod build
-     *
-     * @param languages
-     */
-    updateLanguagesInMomentWebpackReact(languages) {
-        const fullPath = 'webpack/webpack.prod.js';
-        try {
-            let content = 'localesToKeep: [\n';
-            languages.forEach((language, i) => {
-                content += `        '${this.getMomentLocaleId(language)}'${i !== languages.length - 1 ? ',' : ''}\n`;
-            });
-            content +=
-                '        // jhipster-needle-i18n-language-moment-webpack - JHipster will add/remove languages in this array\n      ]';
-
-            jhipsterUtils.replaceContent(
-                {
-                    file: fullPath,
-                    pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
-                },
-                this
-            );
-        } catch (e) {
-            this.log(
-                chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow(' or missing required jhipster-needle. Webpack language task not updated with languages: ') +
-                    languages +
-                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
-            );
-            this.debug('Error:', e);
         }
     }
 
@@ -1435,6 +1123,49 @@ module.exports = class extends Generator {
                     'jhipster <command>'
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
+        }
+    }
+
+    loadOptions(scope, name) {
+        const self = this;
+        if (scope === undefined) {
+            Object.keys(self._options).forEach(key => {
+                const config = self._options[key];
+                if (!config.scope) return;
+                if (config.defaults !== undefined) self.warn('Scoped option should not have a default value');
+                self.loadOptions(config.scope, key);
+            });
+            return;
+        }
+        if (!['generator', 'shared', 'storage'].includes(scope)) {
+            self.warn(`Scope not available ${scope}`);
+        }
+
+        if (Array.isArray(name)) {
+            name.forEach(key => self.loadOptions(scope, key));
+            return;
+        }
+        const camelName = self._.camelCase(name);
+        let value = self.options[camelName];
+        if (value === undefined) {
+            value = self.options[name];
+        }
+        if (value === undefined && self._options[name] === undefined) {
+            const aliasName = Object.keys(self._options).find(key => self._options[key].alias === name) || name;
+            const aliasCamelName = self._.camelCase(aliasName);
+
+            value = self.options[aliasCamelName];
+
+            if (value === undefined) {
+                value = self.options[aliasCamelName];
+            }
+        }
+        if (value !== undefined) {
+            self[camelName] = value;
+            if (scope === 'generator') return;
+            self.configOptions[camelName] = value;
+            if (scope === 'shared') return;
+            self.storedConfig[camelName] = value;
         }
     }
 };

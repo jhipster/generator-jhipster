@@ -1128,7 +1128,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const context = this.context;
                 if (context.skipServer) return;
 
-                this.composeWithConfigOptions(require.resolve('../entity-server'), {
+                this.composeWithShared(require.resolve('../entity-server'), {
                     context,
                     force: context.options.force,
                     debug: context.isDebugEnabled
@@ -1139,7 +1139,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const context = this.context;
                 if (context.skipClient) return;
 
-                this.composeWithConfigOptions(require.resolve('../entity-client'), {
+                this.composeWithShared(require.resolve('../entity-client'), {
                     context,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
@@ -1150,7 +1150,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             composeI18n() {
                 const context = this.context;
                 if (context.skipClient) return;
-                this.composeWithConfigOptions(require.resolve('../entity-i18n'), {
+                this.composeWithShared(require.resolve('../entity-i18n'), {
                     context,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,

@@ -18,6 +18,7 @@
  */
 /* eslint-disable consistent-return */
 const jhipsterUtils = require('./utils');
+const constants = require('./generator-constants');
 const BaseGenerator = require('./generator-base');
 
 /**
@@ -29,14 +30,23 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = opts.configOptions || {};
-
-        this.fromBlueprint = opts.fromBlueprint != undefined ? opts.fromBlueprint : this.rootGeneratorName() !== 'generator-jhipster';
+        this.fromBlueprint = opts.fromBlueprint !== undefined ? opts.fromBlueprint : this.rootGeneratorName() !== 'generator-jhipster';
         if (this.fromBlueprint) {
             this.blueprintConfig = this.config;
             this.config = this._getStorage('generator-jhipster');
             this.removeConfigDuplicates();
         }
+
+        this.configOptions = opts.configOptions || {
+            ...constants.REQUIRED_VARIABLES_EJS,
+            experimental: this.options.experimental,
+            isDebugEnabled: this.options.debug
+        };
+        this.isRootGenerator = opts.storedConfig === undefined;
+        this.storedConfig = opts.storedConfig || this.config.getAll();
+        // this.queueInstallShared();
+
+        this.skipClient = this.options['client-hook'] === false || this.storedConfig.skipClient;
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -95,7 +105,8 @@ module.exports = class extends BaseGenerator {
             blueprints.forEach(blueprint => {
                 let bpOptions = {
                     ...this.options,
-                    configOptions: this.configOptions
+                    configOptions: this.configOptions,
+                    storedConfig: this.storedConfig
                 };
                 if (extraOptions) {
                     bpOptions = { ...bpOptions, ...extraOptions };

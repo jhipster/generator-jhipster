@@ -30,7 +30,7 @@ module.exports = {
 };
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.storedConfig.baseName) return;
 
     this.askModuleName(this);
 }
@@ -326,7 +326,7 @@ function askForServerSideOpts(meta) {
         this.prodDatabaseType = props.prodDatabaseType;
         this.searchEngine = props.searchEngine;
         this.buildTool = props.buildTool;
-        this.uaaBaseName = this.getUaaAppName(props.uaaBaseName).baseName;
+        const uaaBaseName = this.getUaaAppName(props.uaaBaseName).baseName;
 
         if (this.databaseType === 'no') {
             this.devDatabaseType = 'no';
@@ -348,6 +348,25 @@ function askForServerSideOpts(meta) {
             this.prodDatabaseType = 'cassandra';
             this.enableHibernateCache = false;
         }
+
+        this.storedConfig.authenticationType = this.authenticationType;
+        this.storedConfig.buildTool = this.buildTool;
+        this.storedConfig.cacheProvider = this.cacheProvider;
+        this.storedConfig.databaseType = this.databaseType;
+        this.storedConfig.devDatabaseType = this.devDatabaseType;
+        this.storedConfig.enableHibernateCache = this.enableHibernateCache;
+        this.storedConfig.packageName = this.packageName;
+        this.storedConfig.prodDatabaseType = this.prodDatabaseType;
+        this.storedConfig.rememberMeKey = this.rememberMeKey;
+        this.storedConfig.searchEngine = this.searchEngine;
+        this.storedConfig.serverPort = this.serverPort;
+        this.storedConfig.serviceDiscoveryType = this.serviceDiscoveryType;
+        this.storedConfig.skipUserManagement = this.skipUserManagement;
+        this.storedConfig.jwtSecretKey = this.jwtSecretKey;
+        if (uaaBaseName) {
+            this.uaaBaseName = this.storedConfig.uaaBaseName = uaaBaseName;
+        }
+
         done();
     });
 }
@@ -399,9 +418,17 @@ function askForOptionalItems(meta) {
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
             this.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
+
+            this.storedConfig.serverSideOptions = this.serverSideOptions;
+            this.storedConfig.websocket = this.websocket;
+            this.storedConfig.searchEngine = this.searchEngine;
+            this.storedConfig.messageBroker = this.messageBroker;
+            this.storedConfig.enableSwaggerCodegen = this.enableSwaggerCodegen;
+
             // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
             if (!this.serviceDiscoveryType) {
                 this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
+                this.storedConfig.serviceDiscoveryType = this.serviceDiscoveryType;
             }
             done();
         });

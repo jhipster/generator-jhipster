@@ -66,9 +66,9 @@ function askForClient(meta) {
     const done = this.async();
 
     this.prompt(PROMPT).then(prompt => {
-        this.clientFramework = prompt.clientFramework;
+        this.clientFramework = this.storedConfig.clientFramework = prompt.clientFramework;
         if (this.clientFramework === 'no') {
-            this.skipClient = true;
+            this.skipClient = this.storedConfig.skipClient = true;
         }
         done();
     });
@@ -158,7 +158,7 @@ function askForClientTheme(meta) {
 
 function promptQuestion(PROMPT, done, generator) {
     generator.prompt(PROMPT).then(prompt => {
-        generator.clientTheme = prompt.clientTheme;
+        generator.clientTheme = generator.storedConfig.clientTheme = prompt.clientTheme;
         done();
     });
 }
@@ -168,7 +168,7 @@ function askForClientThemeVariant(meta) {
         return;
     }
     if (this.clientTheme === 'none') {
-        this.clientThemeVariant = '';
+        this.clientThemeVariant = this.storedConfig.clientThemeVariant = '';
         return;
     }
 
@@ -190,7 +190,7 @@ function askForClientThemeVariant(meta) {
     const done = this.async();
 
     this.prompt(PROMPT).then(prompt => {
-        this.clientThemeVariant = prompt.clientThemeVariant;
+        this.clientThemeVariant = this.storedConfig.clientThemeVariant = prompt.clientThemeVariant;
         done();
     });
 }

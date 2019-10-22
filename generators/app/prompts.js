@@ -95,14 +95,14 @@ function askForApplicationType(meta) {
     const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
     promise.then(prompt => {
         if (prompt.applicationType === 'reactive') {
-            this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
-            this.reactive = this.configOptions.reactive = true;
+            this.storedConfig.applicationType = DEFAULT_APPTYPE;
+            this.storedConfig.reactive = true;
         } else if (prompt.applicationType === 'reactive-micro') {
-            this.applicationType = this.configOptions.applicationType = 'microservice';
-            this.reactive = this.configOptions.reactive = true;
+            this.storedConfig.applicationType = 'microservice';
+            this.storedConfig.reactive = true;
         } else {
-            this.applicationType = this.configOptions.applicationType = prompt.applicationType;
-            this.reactive = this.configOptions.reactive = false;
+            this.storedConfig.applicationType = prompt.applicationType;
+            this.storedConfig.reactive = false;
         }
         done();
     });
@@ -145,7 +145,7 @@ function askForTestOpts(meta) {
     const done = this.async();
 
     this.prompt(PROMPT).then(prompt => {
-        this.testFrameworks = prompt.testFrameworks;
+        this.storedConfig.testFrameworks = prompt.testFrameworks;
         done();
     });
 }
@@ -197,7 +197,7 @@ function askModulesToBeInstalled(done, generator) {
                             prompt.otherModules.forEach(module => {
                                 generator.otherModules.push({ name: module.name, version: module.version });
                             });
-                            generator.configOptions.otherModules = generator.otherModules;
+                            generator.storedConfig.otherModules = generator.otherModules;
                             done();
                         });
                 } else {

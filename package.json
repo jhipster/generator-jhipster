@@ -54,6 +54,7 @@
         "chalk": "2.4.2",
         "commander": "2.19.0",
         "conf": "2.2.0",
+        "debug": "^4.1.1",
         "didyoumean": "1.2.1",
         "ejs": "2.6.1",
         "faker": "4.1.0",

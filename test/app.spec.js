@@ -1362,14 +1362,21 @@ describe('JHipster generator', () => {
         before(done => {
             helpers
                 .run(path.join(__dirname, '../generators/app'))
-                .withOptions({ 'from-cli': true, skipInstall: true, skipServer: true, db: 'mysql', auth: 'jwt', skipChecks: true })
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    skipServer: true,
+                    db: 'mysql',
+                    auth: 'jwt',
+                    authenticationType: 'jwt',
+                    serviceDiscoveryType: false,
+                    packageFolder: 'com/mycompany/myapp',
+                    skipChecks: true
+                })
                 .withPrompts({
                     baseName: 'jhipster',
                     clientFramework: 'angularX',
                     packageName: 'com.mycompany.myapp',
-                    packageFolder: 'com/mycompany/myapp',
-                    serviceDiscoveryType: false,
-                    authenticationType: 'jwt',
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
@@ -1751,7 +1758,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, uaaBaseName: 'jhipster-uaa' })
                     .withPrompts({
                         applicationType: 'uaa',
                         baseName: 'jhipster-uaa',

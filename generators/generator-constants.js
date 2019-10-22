@@ -89,6 +89,40 @@ const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxleng
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
+// Variables require by ejs templates.
+const REQUIRED_VARIABLES_EJS = {
+    // COMMON
+    applicationType: undefined,
+    baseName: undefined,
+    skipUserManagement: undefined,
+    otherModules: [],
+    testFrameworks: [],
+    languages: [],
+
+    // CLIENT
+    clientFramework: undefined,
+    clientPackageManager: undefined,
+    skipCommitHook: undefined,
+    skipClient: undefined,
+
+    // SERVER
+    authenticationType: undefined,
+    buildTool: undefined,
+    cacheProvider: undefined,
+    databaseType: undefined,
+    devDatabaseType: undefined,
+    embeddableLaunchScript: undefined,
+    enableSwaggerCodegen: undefined,
+    prodDatabaseType: undefined,
+    messageBrokker: undefined,
+    reactive: undefined,
+    serverPort: undefined,
+    searchEngine: undefined,
+    serviceDiscoveryType: undefined,
+    skipServer: undefined,
+    websocket: undefined
+};
+
 const SQL_DB_OPTIONS = [
     {
         value: 'mysql',
@@ -243,10 +277,27 @@ const LANGUAGES = [
 ];
 
 const constants = {
+    // Example filter(/^SERVER_*/, /^DOCKER_*/)
+    filter(...regex) {
+        if (Array.isArray(regex) && regex.length === 1) {
+            regex = regex[0];
+        }
+        if (Array.isArray(regex)) {
+            return regex.map(item => constants.filter(item)).reduce(Object.assign, {});
+        }
+
+        return Object.keys(constants)
+            .filter(key => key.match(regex))
+            .reduce((obj, key) => {
+                obj[key] = constants[key];
+                return obj;
+            }, {});
+    },
     INTERPOLATE_REGEX: /<%:([\s\S]+?)%>/g, // so that tags in templates do not get mistreated as _ templates
     DOCKER_DIR: `${MAIN_DIR}docker/`,
     LINE_LENGTH: 180,
     LANGUAGES,
+    REQUIRED_VARIABLES_EJS,
 
     MAIN_DIR,
     TEST_DIR,

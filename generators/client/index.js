@@ -19,6 +19,8 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
+const debug = require('debug')('jhipster:client');
+
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
@@ -27,11 +29,26 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
-let useBlueprints;
+const defaultConfig = {
+    jhipsterVersion: packagejs.version,
+    jhiPrefix: 'jhi',
+    clientFramework: 'angularX',
+    clientTheme: 'none',
+    applicationType: 'monolith',
+    useSass: true
+};
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        debug(`Initializing ${this.rootGeneratorName()}:client generator`);
+
+        this._.defaults(this.storedConfig, defaultConfig, { clientPackageManager: this.options.yarn ? 'yarn' : 'npm' });
+        this._.defaults(this.configOptions, {
+            useNpm: !this.options.yarn,
+            useYarn: this.options.yarn
+        });
 
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
@@ -40,7 +57,8 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
         // This adds support for a `--auth` flag
-        this.option('auth', {
+        this.option('authentication-type', {
+            alias: 'auth',
             desc: 'Provide authentication type for the application',
             type: String
         });
@@ -60,14 +78,29 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
-        this.setupClientOptions(this);
+        this.loadOptions();
+        this.loadOptions('storage', [
+            'base-name',
+            'uaa-base-name',
+            'jhi-prefix',
+            'skip-user-management',
+            'skip-commit-hook',
+            'authentication-type'
+        ]);
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
+        // Make constants available in templates
+        this._.defaults(this, constants.filter(/^CLIENT_*/));
+
+        this.useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
     }
 
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
+            loadSharedData() {
+                this.installShared();
+            },
+
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
@@ -82,123 +115,54 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
-                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
-                if (!this.applicationType) {
-                    this.applicationType = 'monolith';
-                }
-                this.clientFramework = configuration.get('clientFramework');
-                if (!this.clientFramework) {
-                    /* for backward compatibility */
-                    this.clientFramework = 'angularX';
-                }
+
+                this.packagejs = packagejs;
                 if (this.clientFramework === 'angular' || this.clientFramework === 'angular2') {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
-                }
-
-                this.clientTheme = configuration.get('clientTheme');
-                if (!this.clientTheme) {
-                    this.clientTheme = 'none';
-                }
-                this.clientThemeVariant = configuration.get('clientThemeVariant');
-
-                this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-                this.nativeLanguage = configuration.get('nativeLanguage');
-                this.languages = configuration.get('languages');
-                this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
-                this.messageBroker = configuration.get('messageBroker');
-                this.packagejs = packagejs;
-                const baseName = configuration.get('baseName');
-                if (baseName) {
-                    this.baseName = baseName;
-                }
-
-                this.serviceDiscoveryType =
-                    configuration.get('serviceDiscoveryType') === 'no'
-                        ? false
-                        : configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = false;
-                }
-
-                const clientConfigFound = this.enableTranslation !== undefined;
-                if (clientConfigFound) {
-                    // If translation is not defined, it is enabled by default
-                    if (this.enableTranslation === undefined) {
-                        this.enableTranslation = true;
-                    }
-                    if (this.nativeLanguage === undefined) {
-                        this.nativeLanguage = 'en';
-                    }
-                    if (this.languages === undefined) {
-                        this.languages = ['en', 'fr'];
-                    }
-
-                    this.existingProject = true;
-                }
-                this.useNpm = this.configOptions.useNpm = !this.options.yarn;
-                this.useYarn = !this.useNpm;
-                if (!this.clientPackageManager) {
-                    if (this.useNpm) {
-                        this.clientPackageManager = 'npm';
-                    } else {
-                        this.clientPackageManager = 'yarn';
-                    }
-                }
-            },
-
-            validateSkipServer() {
-                if (this.skipServer && !(this.databaseType && this.devDatabaseType && this.prodDatabaseType && this.authenticationType)) {
-                    this.error(
-                        `When using skip-server flag, you must pass a database option and authentication type using ${chalk.yellow(
-                            '--db'
-                        )} and ${chalk.yellow('--auth')} flags`
-                    );
-                }
-                if (this.skipServer && this.authenticationType === 'uaa' && !this.uaaBaseName) {
-                    this.error(
-                        `When using skip-server flag and UAA as authentication method, you must pass a UAA base name using ${chalk.yellow(
-                            '--uaa-base-name'
-                        )} flag`
-                    );
+                    this.clientFramework = this.storedConfig.clientFramework = 'angularX';
                 }
             }
         };
     }
 
     get initializing() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._initializing();
     }
 
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
+            loadSharedData() {
+                this.installShared();
+            },
+
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
             askFori18n: prompts.askFori18n,
             askForClientTheme: prompts.askForClientTheme,
             askForClientThemeVariant: prompts.askForClientThemeVariant,
 
-            setSharedConfigOptions() {
-                this.configOptions.skipClient = this.skipClient;
-                this.configOptions.clientFramework = this.clientFramework;
-                this.configOptions.clientTheme = this.clientTheme;
-                this.configOptions.clientThemeVariant = this.clientThemeVariant;
+            composeLanguages() {
+                if (this.configOptions.skipI18nQuestion) return;
+
+                this.composeLanguagesSub(this, this.configOptions, 'client');
             }
         };
     }
 
     get prompting() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._prompting();
     }
 
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
+            loadSharedData() {
+                this.installShared();
+            },
+
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {
                     app: {
@@ -219,136 +183,97 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
-                if (!this.nativeLanguage) {
-                    // set to english when translation is set to false
-                    this.nativeLanguage = 'en';
-                }
-            },
-
-            saveConfig() {
-                const config = {
-                    jhipsterVersion: packagejs.version,
-                    applicationType: this.applicationType,
-                    baseName: this.baseName,
-                    useSass: true,
-                    enableTranslation: this.enableTranslation,
-                    skipCommitHook: this.skipCommitHook,
-                    clientPackageManager: this.clientPackageManager
-                };
-                if (this.skipClient) {
-                    config.skipClient = true;
-                } else {
-                    config.clientFramework = this.clientFramework;
-                    config.clientTheme = this.clientTheme;
-                    config.clientThemeVariant = this.clientThemeVariant;
-                }
-                if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    config.nativeLanguage = this.nativeLanguage;
-                    config.languages = this.languages;
-                }
-                if (this.skipServer) {
-                    this.authenticationType && (config.authenticationType = this.authenticationType);
-                    this.uaaBaseName && (config.uaaBaseName = this.uaaBaseName);
-                    this.cacheProvider && (config.cacheProvider = this.cacheProvider);
-                    this.enableHibernateCache && (config.enableHibernateCache = this.enableHibernateCache);
-                    this.websocket && (config.websocket = this.websocket);
-                    this.databaseType && (config.databaseType = this.databaseType);
-                    this.devDatabaseType && (config.devDatabaseType = this.devDatabaseType);
-                    this.prodDatabaseType && (config.prodDatabaseType = this.prodDatabaseType);
-                    this.searchEngine && (config.searchEngine = this.searchEngine);
-                    this.buildTool && (config.buildTool = this.buildTool);
-                }
-                this.config.set(config);
             }
         };
     }
 
     get configuring() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._configuring();
     }
 
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            getSharedConfigOptions() {
-                if (this.configOptions.cacheProvider) {
-                    this.cacheProvider = this.configOptions.cacheProvider;
-                }
-                if (this.configOptions.enableHibernateCache) {
-                    this.enableHibernateCache = this.configOptions.enableHibernateCache;
-                }
-                if (this.configOptions.websocket !== undefined) {
-                    this.websocket = this.configOptions.websocket;
-                }
-                if (this.configOptions.clientFramework) {
-                    this.clientFramework = this.configOptions.clientFramework;
-                }
-                if (this.configOptions.databaseType) {
-                    this.databaseType = this.configOptions.databaseType;
-                }
-                if (this.configOptions.devDatabaseType) {
-                    this.devDatabaseType = this.configOptions.devDatabaseType;
-                }
-                if (this.configOptions.prodDatabaseType) {
-                    this.prodDatabaseType = this.configOptions.prodDatabaseType;
-                }
-                if (this.configOptions.messageBroker !== undefined) {
-                    this.messageBroker = this.configOptions.messageBroker;
-                }
-                if (this.configOptions.searchEngine !== undefined) {
-                    this.searchEngine = this.configOptions.searchEngine;
-                }
-                if (this.configOptions.buildTool) {
-                    this.buildTool = this.configOptions.buildTool;
-                }
-                if (this.configOptions.authenticationType) {
-                    this.authenticationType = this.configOptions.authenticationType;
-                }
-                if (this.configOptions.otherModules) {
-                    this.otherModules = this.configOptions.otherModules;
-                }
-                if (this.configOptions.testFrameworks) {
-                    this.testFrameworks = this.configOptions.testFrameworks;
-                }
+            loadSharedData() {
+                this.installShared();
+                debug('%o', this.storedConfig);
+            },
+
+            setupShared() {
                 this.protractorTests = this.testFrameworks.includes('protractor');
 
-                if (this.configOptions.enableTranslation !== undefined) {
-                    this.enableTranslation = this.configOptions.enableTranslation;
+                if (this.authenticationType === 'oauth2' || (this.databaseType === 'no' && this.authenticationType !== 'uaa')) {
+                    this.skipUserManagement = true;
                 }
-                if (this.configOptions.nativeLanguage !== undefined) {
-                    this.nativeLanguage = this.configOptions.nativeLanguage;
-                }
-                if (this.configOptions.languages !== undefined) {
-                    this.languages = this.configOptions.languages;
-                    this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
-                }
-
-                if (this.configOptions.uaaBaseName !== undefined) {
-                    this.uaaBaseName = this.configOptions.uaaBaseName;
-                }
+                this.cacheProvider = this.cacheProvider || this.hibernateCache || 'no';
+                this.enableHibernateCache = this.enableHibernateCache && !['no', 'memcached'].includes(this.cacheProvider);
+                this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
+                this.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
 
                 // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.configOptions.buildTool);
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 
                 this.styleSheetExt = 'scss';
                 this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
                 this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
-                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
-            composeLanguages() {
-                if (this.configOptions.skipI18nQuestion) return;
+            validate() {
+                if (this.storedConfig.authenticationType === 'uaa' && _.isNil(this.storedConfig.uaaBaseName)) {
+                    this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+                }
+            },
 
-                this.composeLanguagesSub(this, this.configOptions, 'client');
+            validateTranslation() {
+                debug('%o', this.languages);
+                this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
+                debug('%o', this.enableI18nRTL);
+
+                if (this.nativeLanguage === undefined) {
+                    this.nativeLanguage = 'en';
+                }
+                if (this.enableTranslation === undefined || this.enableTranslation === true) {
+                    this.enableTranslation = true;
+                    if (this.languages === undefined) {
+                        this.languages = ['en', 'fr'];
+                    }
+                }
+            },
+
+            validateServer() {
+                if (this.serviceDiscoveryType === 'no') {
+                    this.serviceDiscoveryType = false;
+                }
+
+                if (this.skipServer && !(this.databaseType && this.devDatabaseType && this.prodDatabaseType && this.authenticationType)) {
+                    this.error(
+                        `When using skip-server flag, you must pass a database option and authentication type using ${chalk.yellow(
+                            '--db'
+                        )} and ${chalk.yellow('--auth')} flags`
+                    );
+                }
+                if (this.skipServer && this.authenticationType === 'uaa' && !this.uaaBaseName) {
+                    this.error(
+                        `When using skip-server flag and UAA as authentication method, you must pass a UAA base name using ${chalk.yellow(
+                            '--uaa-base-name'
+                        )} flag`
+                    );
+                }
+            },
+
+            saveConfig() {
+                if (!this.isRootGenerator) return;
+
+                this.config.set(this.storedConfig);
             }
         };
     }
 
     get default() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._default();
     }
 
@@ -359,16 +284,16 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.skipClient) return;
                 switch (this.clientFramework) {
                     case 'react':
-                        return writeReactFiles.call(this, useBlueprints);
+                        return writeReactFiles.call(this, this.useBlueprints);
                     default:
-                        return writeAngularFiles.call(this, useBlueprints);
+                        return writeAngularFiles.call(this, this.useBlueprints);
                 }
             }
         };
     }
 
     get writing() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._writing();
     }
 
@@ -400,7 +325,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get install() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._install();
     }
 
@@ -422,7 +347,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get end() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._end();
     }
 };

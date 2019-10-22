@@ -20,6 +20,8 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const os = require('os');
+const debug = require('debug')('jhipster:server');
+
 const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const writeFiles = require('./files').writeFiles;
@@ -28,11 +30,21 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 
-let useBlueprints;
+const defaultConfig = {
+    jhipsterVersion: packagejs.version,
+    applicationType: 'monolith',
+    serverPort: '8080',
+    entitySuffix: '',
+    dtoSuffix: 'DTO'
+};
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
+
+        debug(`Initializing ${this.rootGeneratorName()}:server generator`);
+
+        this._.defaults(this.storedConfig, defaultConfig);
 
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
@@ -55,18 +67,25 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
-        this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
+        this.loadOptions('storage', ['base-name', 'uaa-base-name', 'skip-user-management']);
 
-        this.setupServerOptions(this);
+        // Make constants available in templates
+        this._.defaults(this, constants.filter(/^CLIENT_*/, /^SERVER_*/, /^DOCKER_*/));
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
+        this.useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
 
         this.registerPrettierTransform();
+
+        debug('%o', this.storedConfig);
     }
 
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
+            loadSharedData() {
+                this.installShared();
+            },
+
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
@@ -81,41 +100,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
-                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-                this.CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
-                this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
-                this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
-                this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
-                this.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-                this.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
-
-                this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
-                this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
-                this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
-                this.DOCKER_MARIADB = constants.DOCKER_MARIADB;
-                this.DOCKER_POSTGRESQL = constants.DOCKER_POSTGRESQL;
-                this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
-                this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
-                this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
-                this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
-                this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
-                this.DOCKER_REDIS = constants.DOCKER_REDIS;
-                this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
-                this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
-                this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
-                this.DOCKER_KAFKA = constants.DOCKER_KAFKA;
-                this.DOCKER_ZOOKEEPER = constants.DOCKER_ZOOKEEPER;
-                this.DOCKER_SONAR = constants.DOCKER_SONAR;
-                this.DOCKER_JHIPSTER_CONSOLE = constants.DOCKER_JHIPSTER_CONSOLE;
-                this.DOCKER_JHIPSTER_ELASTICSEARCH = constants.DOCKER_JHIPSTER_ELASTICSEARCH;
-                this.DOCKER_JHIPSTER_LOGSTASH = constants.DOCKER_JHIPSTER_LOGSTASH;
-                this.DOCKER_TRAEFIK = constants.DOCKER_TRAEFIK;
-                this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
-                this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
-                this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
-                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
-                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
-                this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
 
                 this.JAVA_VERSION = constants.JAVA_VERSION;
 
@@ -128,225 +112,128 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
 
                 this.packagejs = packagejs;
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
-                if (!this.applicationType) {
-                    this.applicationType = 'monolith';
-                }
-                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
-                this.packageName = configuration.get('packageName');
-                this.serverPort = configuration.get('serverPort');
-                if (this.serverPort === undefined) {
-                    this.serverPort = '8080';
-                }
-                this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
-                if (this.websocket === undefined) {
-                    this.websocket = false;
-                }
-                this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
-                if (this.searchEngine === undefined) {
-                    this.searchEngine = false;
-                }
-                this.jhiPrefix = this.configOptions.jhiPrefix || configuration.get('jhiPrefix');
-                this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
-                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                if (this.messageBroker === undefined) {
-                    this.messageBroker = false;
-                }
-
-                this.enableSwaggerCodegen = configuration.get('enableSwaggerCodegen');
-
-                this.serviceDiscoveryType =
-                    configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = false;
-                }
-
-                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
-                this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-
-                this.databaseType = configuration.get('databaseType');
-                if (this.databaseType === 'mongodb') {
-                    this.devDatabaseType = 'mongodb';
-                    this.prodDatabaseType = 'mongodb';
-                    this.enableHibernateCache = false;
-                } else if (this.databaseType === 'couchbase') {
-                    this.devDatabaseType = 'couchbase';
-                    this.prodDatabaseType = 'couchbase';
-                    this.enableHibernateCache = false;
-                } else if (this.databaseType === 'cassandra') {
-                    this.devDatabaseType = 'cassandra';
-                    this.prodDatabaseType = 'cassandra';
-                    this.enableHibernateCache = false;
-                } else if (this.databaseType === 'no') {
-                    this.devDatabaseType = 'no';
-                    this.prodDatabaseType = 'no';
-                    this.enableHibernateCache = false;
-                    if (this.authenticationType !== 'uaa') {
-                        this.skipUserManagement = true;
-                    }
-                } else {
-                    // sql
-                    this.devDatabaseType = configuration.get('devDatabaseType');
-                    this.prodDatabaseType = configuration.get('prodDatabaseType');
-                }
-
-                this.buildTool = configuration.get('buildTool');
-                this.jhipsterVersion = packagejs.version;
-                if (this.jhipsterVersion === undefined) {
-                    this.jhipsterVersion = configuration.get('jhipsterVersion');
-                }
-                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
-                this.authenticationType = configuration.get('authenticationType');
-                if (this.authenticationType === 'session') {
-                    this.rememberMeKey = configuration.get('rememberMeKey');
-                }
-                this.jwtSecretKey = configuration.get('jwtSecretKey');
-                this.nativeLanguage = configuration.get('nativeLanguage');
-                this.languages = configuration.get('languages');
-                const uaaBaseName = configuration.get('uaaBaseName');
-                if (uaaBaseName) {
-                    this.uaaBaseName = uaaBaseName;
-                }
-                const embeddableLaunchScript = configuration.get('embeddableLaunchScript');
-                if (embeddableLaunchScript) {
-                    this.embeddableLaunchScript = embeddableLaunchScript;
-                }
-                this.clientFramework = configuration.get('clientFramework');
-                this.clientTheme = configuration.get('clientTheme');
-                if (!this.clientTheme) {
-                    this.clientTheme = 'none';
-                }
-                const testFrameworks = configuration.get('testFrameworks');
-                if (testFrameworks) {
-                    this.testFrameworks = testFrameworks;
-                }
-
-                const baseName = configuration.get('baseName');
-                if (baseName) {
-                    // to avoid overriding name from configOptions
-                    this.baseName = baseName;
-                }
-
-                // force variables unused by microservice applications
-                if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
-                    this.websocket = false;
-                }
-
-                this.entitySuffix = configuration.get('entitySuffix');
-                if (_.isNil(this.entitySuffix)) {
-                    this.entitySuffix = '';
-                }
-
-                this.dtoSuffix = configuration.get('dtoSuffix');
-                if (_.isNil(this.dtoSuffix)) {
-                    this.dtoSuffix = 'DTO';
-                }
-
-                if (this.entitySuffix === this.dtoSuffix) {
-                    this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
-                }
-
-                const serverConfigFound =
-                    this.packageName !== undefined &&
-                    this.authenticationType !== undefined &&
-                    this.cacheProvider !== undefined &&
-                    this.enableHibernateCache !== undefined &&
-                    this.websocket !== undefined &&
-                    this.databaseType !== undefined &&
-                    this.devDatabaseType !== undefined &&
-                    this.prodDatabaseType !== undefined &&
-                    this.searchEngine !== undefined &&
-                    this.buildTool !== undefined;
-
-                if (this.baseName !== undefined && serverConfigFound) {
-                    // Generate remember me key if key does not already exist in config
-                    if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
-                        this.rememberMeKey = getRandomHex();
-                    }
-
-                    // Generate JWT secret key if key does not already exist in config
-                    if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = getBase64Secret(null, 64);
-                    }
-
-                    // If translation is not defined, it is enabled by default
-                    if (this.enableTranslation === undefined) {
-                        this.enableTranslation = true;
-                    }
-                    if (this.nativeLanguage === undefined) {
-                        this.nativeLanguage = 'en';
-                    }
-                    if (this.languages === undefined) {
-                        this.languages = ['en', 'fr'];
-                    }
-                    // user-management will be handled by UAA app, oauth expects users to be managed in IpP
-                    if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
-                        this.skipUserManagement = true;
-                    }
-
-                    this.log(
-                        chalk.green(
-                            'This is an existing project, using the configuration from your .yo-rc.json file \n' +
-                                'to re-generate the project...\n'
-                        )
-                    );
-
-                    this.existingProject = true;
-                }
             }
         };
     }
 
     get initializing() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._initializing();
     }
 
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
+            loadSharedData() {
+                this.installShared();
+                debug('%o', this.storedConfig);
+            },
+
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
             askForOptionalItems: prompts.askForOptionalItems,
             askFori18n: prompts.askFori18n,
 
-            setSharedConfigOptions() {
-                this.configOptions.packageName = this.packageName;
-                this.configOptions.cacheProvider = this.cacheProvider;
-                this.configOptions.enableHibernateCache = this.enableHibernateCache;
-                this.configOptions.websocket = this.websocket;
-                this.configOptions.databaseType = this.databaseType;
-                this.configOptions.devDatabaseType = this.devDatabaseType;
-                this.configOptions.prodDatabaseType = this.prodDatabaseType;
-                this.configOptions.searchEngine = this.searchEngine;
-                this.configOptions.messageBroker = this.messageBroker;
-                this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
-                this.configOptions.buildTool = this.buildTool;
-                this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
-                this.configOptions.authenticationType = this.authenticationType;
-                const uaaBaseName = this.uaaBaseName;
-                if (uaaBaseName) {
-                    this.configOptions.uaaBaseName = this.uaaBaseName;
-                }
-                this.configOptions.serverPort = this.serverPort;
+            composeLanguages() {
+                if (this.configOptions.skipI18nQuestion) return;
 
-                // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
+                this.composeLanguagesSub(this, this.configOptions, 'server');
             }
         };
     }
 
     get prompting() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._prompting();
     }
 
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
+            loadSharedData() {
+                this.installShared();
+                debug('%o', this.storedConfig);
+            },
+
+            configure() {
+                if (this.websocket === 'no') {
+                    this.storedConfig.websocket = false;
+                }
+                if (this.searchEngine === 'no') {
+                    this.storedConfig.searchEngine = false;
+                }
+                this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
+                if (this.messageBroker === 'no') {
+                    this.storedConfig.messageBrokker = false;
+                }
+
+                if (this.serviceDiscoveryType === 'no') {
+                    this.storedConfig.serviceDiscoveryType = false;
+                }
+
+                this.cacheProvider = this.cacheProvider || this.hibernateCache || 'no';
+                this.enableHibernateCache = this.enableHibernateCache && !['no', 'memcached'].includes(this.cacheProvider);
+
+                if (this.databaseType === 'mongodb') {
+                    this.storedConfig.devDatabaseType = 'mongodb';
+                    this.storedConfig.prodDatabaseType = 'mongodb';
+                    this.storedConfig.enableHibernateCache = false;
+                } else if (this.databaseType === 'couchbase') {
+                    this.storedConfig.devDatabaseType = 'couchbase';
+                    this.storedConfig.prodDatabaseType = 'couchbase';
+                    this.storedConfig.enableHibernateCache = false;
+                } else if (this.databaseType === 'cassandra') {
+                    this.storedConfig.devDatabaseType = 'cassandra';
+                    this.storedConfig.prodDatabaseType = 'cassandra';
+                    this.storedConfig.enableHibernateCache = false;
+                } else if (this.databaseType === 'no') {
+                    this.storedConfig.devDatabaseType = 'no';
+                    this.storedConfig.prodDatabaseType = 'no';
+                    this.storedConfig.enableHibernateCache = false;
+                    if (this.authenticationType !== 'uaa') {
+                        this.storedConfig.skipUserManagement = true;
+                    }
+                }
+
+                if (this.authenticationType !== 'session') {
+                    delete this.rememberMeKey;
+                    delete this.storedConfig.rememberMeKey;
+                }
+
+                // force variables unused by microservice applications
+                if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
+                    this.storedConfig.websocket = false;
+                }
+
+                if (this.entitySuffix === this.dtoSuffix) {
+                    this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+                }
+
+                // Generate remember me key if key does not already exist in config
+                if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
+                    this.rememberMeKey = getRandomHex();
+                }
+
+                // Generate JWT secret key if key does not already exist in config
+                if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
+                    this.jwtSecretKey = getBase64Secret(null, 64);
+                }
+
+                // user-management will be handled by UAA app, oauth expects users to be managed in IpP
+                if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
+                    this.skipUserManagement = true;
+                }
+
+                this.storedConfig.packageFolder = this.packageFolder = this.packageName.replace(/\./g, '/');
+
+                this.log(
+                    chalk.green(
+                        'This is an existing project, using the configuration from your .yo-rc.json file \n' +
+                            'to re-generate the project...\n'
+                    )
+                );
+            },
+
             insight() {
                 statistics.sendSubGenEvent('generator', 'server', {
                     app: {
@@ -364,9 +251,53 @@ module.exports = class extends BaseBlueprintGenerator {
                         enableSwaggerCodegen: this.enableSwaggerCodegen
                     }
                 });
+            }
+        };
+    }
+
+    get configuring() {
+        if (this.useBlueprints) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            loadSharedData() {
+                this.installShared();
+                debug('%o', this.storedConfig);
+            },
+
+            validate() {
+                if (this.storedConfig.authenticationType === 'uaa' && _.isNil(this.storedConfig.uaaBaseName)) {
+                    this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+                }
+            },
+
+            validateClient() {
+                if (!this.clientTheme) {
+                    this.clientTheme = this.storedConfig.clientTheme = 'none';
+                }
+            },
+
+            validateI18n() {
+                // If translation is not defined, it is enabled by default
+                if (this.enableTranslation === undefined) {
+                    this.enableTranslation = true;
+                }
+                if (this.nativeLanguage === undefined) {
+                    this.nativeLanguage = 'en';
+                }
+                if (this.enableTranslation && this.languages === undefined) {
+                    this.languages = ['en', 'fr'];
+                }
             },
 
             configureGlobal() {
+                // Make dist dir available in templates
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
+
                 // Application name modified, using each technology's conventions
                 this.angularAppName = this.getAngularAppName();
                 this.camelizedBaseName = _.camelCase(this.baseName);
@@ -379,93 +310,22 @@ module.exports = class extends BaseBlueprintGenerator {
                 );
                 this.pkType = this.getPkType(this.databaseType);
 
-                this.packageFolder = this.packageName.replace(/\./g, '/');
-                if (!this.nativeLanguage) {
-                    // set to english when translation is set to false
-                    this.nativeLanguage = 'en';
-                }
-            },
-
-            saveConfig() {
-                const config = {
-                    jhipsterVersion: packagejs.version,
-                    applicationType: this.applicationType,
-                    baseName: this.baseName,
-                    packageName: this.packageName,
-                    packageFolder: this.packageFolder,
-                    serverPort: this.serverPort,
-                    authenticationType: this.authenticationType,
-                    uaaBaseName: this.uaaBaseName,
-                    cacheProvider: this.cacheProvider,
-                    enableHibernateCache: this.enableHibernateCache,
-                    websocket: this.websocket,
-                    databaseType: this.databaseType,
-                    devDatabaseType: this.devDatabaseType,
-                    prodDatabaseType: this.prodDatabaseType,
-                    searchEngine: this.searchEngine,
-                    messageBroker: this.messageBroker,
-                    serviceDiscoveryType: this.serviceDiscoveryType,
-                    buildTool: this.buildTool,
-                    enableSwaggerCodegen: this.enableSwaggerCodegen,
-                    jwtSecretKey: this.jwtSecretKey,
-                    rememberMeKey: this.rememberMeKey,
-                    enableTranslation: this.enableTranslation,
-                    embeddableLaunchScript: this.embeddableLaunchScript
-                };
-                if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    config.nativeLanguage = this.nativeLanguage;
-                    config.languages = this.languages;
-                }
-                this.config.set(config);
-            }
-        };
-    }
-
-    get configuring() {
-        if (useBlueprints) return;
-        return this._configuring();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return {
-            getSharedConfigOptions() {
-                if (this.configOptions.enableTranslation !== undefined) {
-                    this.enableTranslation = this.configOptions.enableTranslation;
-                }
-                if (this.configOptions.nativeLanguage !== undefined) {
-                    this.nativeLanguage = this.configOptions.nativeLanguage;
-                }
-                if (this.configOptions.languages !== undefined) {
-                    this.languages = this.configOptions.languages;
-                }
-                this.testFrameworks = [];
-                if (this.configOptions.testFrameworks) {
-                    this.testFrameworks = this.configOptions.testFrameworks;
-                }
-                if (this.configOptions.clientFramework) {
-                    this.clientFramework = this.configOptions.clientFramework;
-                }
-                if (this.configOptions.skipClient) {
-                    this.skipClient = this.configOptions.skipClient;
-                }
-                if (this.configOptions.uaaBaseName !== undefined) {
-                    this.uaaBaseName = this.configOptions.uaaBaseName;
-                }
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');
             },
 
-            composeLanguages() {
-                if (this.configOptions.skipI18nQuestion) return;
-
-                this.composeLanguagesSub(this, this.configOptions, 'server');
+            saveConfig() {
+                if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
+                    this.storedConfig.nativeLanguage = this.nativeLanguage;
+                    this.storedConfig.languages = this.languages;
+                }
+                this.config.set(this.storedConfig);
             }
         };
     }
 
     get default() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._default();
     }
 
@@ -475,7 +335,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._writing();
     }
 
@@ -498,7 +358,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get install() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._install();
     }
 
@@ -530,7 +390,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get end() {
-        if (useBlueprints) return;
+        if (this.useBlueprints) return;
         return this._end();
     }
 };

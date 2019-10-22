@@ -61,12 +61,10 @@ describe('JHipster common generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:common']])
-                    .withPrompts({
+                        skipChecks: true,
                         baseName: 'jhipster'
                     })
+                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:common']])
                     .on('end', done);
             });
 

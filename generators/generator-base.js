@@ -1106,8 +1106,9 @@ module.exports = class extends PrivateBase {
      * @param  {Object} options    The options passed to the Generator
      * @return {this}    This generator
      */
-    composeWithConfigOptions(generator, options) {
+    composeWithShared(generator, options) {
         options.configOptions = options.configOptions || this.configOptions || this.options.configOptions;
+        options.storedConfig = options.storedConfig || this.storedConfig || this.options.storedConfig;
         this.composeWith(generator, options);
         return this;
     }
@@ -1262,20 +1263,6 @@ module.exports = class extends PrivateBase {
                 return acc;
             }, entities)
             .sort(isBefore);
-    }
-
-    /**
-     * Copy i18 files for given language
-     *
-     * @param {object} generator - context that can be used as the generator instance or data to process template
-     * @param {string} webappDir - webapp directory path
-     * @param {string} fileToCopy - file name to copy
-     * @param {string} lang - language for which file needs to be copied
-     */
-    copyI18nFilesByName(generator, webappDir, fileToCopy, lang) {
-        const _this = generator || this;
-        const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        _this.copy(`${prefix}/${webappDir}i18n/${lang}/${fileToCopy}`, `${webappDir}i18n/${lang}/${fileToCopy}`);
     }
 
     /**
@@ -1728,7 +1715,7 @@ module.exports = class extends PrivateBase {
                 default: defaultAppBaseName
             })
             .then(prompt => {
-                generator.baseName = prompt.baseName;
+                generator.baseName = generator.storedConfig.baseName = prompt.baseName;
                 done();
             });
     }
@@ -1768,9 +1755,9 @@ module.exports = class extends PrivateBase {
         ];
 
         generator.prompt(prompts).then(prompt => {
-            generator.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
+            generator.enableTranslation = generator.storedConfig.enableTranslation = prompt.enableTranslation;
+            generator.nativeLanguage = generator.storedConfig.nativeLanguage = prompt.nativeLanguage;
+            generator.languages = generator.storedConfig.languages = [prompt.nativeLanguage].concat(prompt.languages);
             done();
         });
     }
@@ -1790,6 +1777,7 @@ module.exports = class extends PrivateBase {
             const skipClient = type && type === 'server';
             generator.composeWith(require.resolve('./languages'), {
                 configOptions,
+                storedConfig: generator.storedConfig,
                 'skip-install': true,
                 'skip-server': skipServer,
                 'skip-client': skipClient,
@@ -1911,25 +1899,7 @@ module.exports = class extends PrivateBase {
      * @param {any} context - context to use default is generator instance
      * @param {any} dest - destination context to use default is context
      */
-    setupSharedOptions(generator, context = generator, dest = context) {
-        dest.skipClient = context.options['client-hook'] === false || context.configOptions.skipClient || context.config.get('skipClient');
-        dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
-        dest.skipUserManagement =
-            context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
-        dest.otherModules = context.configOptions.otherModules || [];
-        dest.baseName = context.configOptions.baseName;
-        dest.logo = context.configOptions.logo;
-        dest.clientPackageManager = context.configOptions.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
-        dest.embeddableLaunchScript = context.configOptions.embeddableLaunchScript || false;
-
-        const uaaBaseName = context.configOptions.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
-        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        dest.uaaBaseName = uaaBaseName;
-    }
+    setupSharedOptions(generator, context = generator, dest = context) {}
 
     /**
      * Setup client instance level options from context.
@@ -1942,31 +1912,6 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
-        dest.authenticationType =
-            context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
-        dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
-
-        dest.buildTool = context.configOptions.buildTool;
-        dest.websocket = context.configOptions.websocket;
-        dest.devDatabaseType = context.configOptions.devDatabaseType || context.config.get('devDatabaseType');
-        dest.prodDatabaseType = context.configOptions.prodDatabaseType || context.config.get('prodDatabaseType');
-        dest.databaseType =
-            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
-            context.configOptions.databaseType ||
-            context.config.get('databaseType');
-        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
-            dest.skipUserManagement = true;
-        }
-        dest.searchEngine = context.config.get('searchEngine');
-        dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
-        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
-        dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
-        dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        dest.testFrameworks = context.configOptions.testFrameworks || [];
-
-        dest.useYarn = context.configOptions.useYarn;
     }
 
     /**
@@ -1980,8 +1925,6 @@ module.exports = class extends PrivateBase {
      */
     setupServerOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.enableTranslation = context.configOptions.enableTranslation || context.config.get('enableTranslation');
-        dest.testFrameworks = context.configOptions.testFrameworks;
     }
 
     /**
@@ -2068,5 +2011,16 @@ module.exports = class extends PrivateBase {
             this._needleApi = new NeedleApi(this);
         }
         return this._needleApi;
+    }
+
+    queueInstallShared() {
+        this.queueMethod(this.installShared, 'installShared', 'prompting');
+        this.queueMethod(this.installShared, 'installShared', 'configuring');
+        this.queueMethod(this.installShared, 'installShared', 'default');
+    }
+
+    installShared() {
+        Object.assign(this.configOptions, this.storedConfig);
+        Object.assign(this, this.configOptions);
     }
 };
