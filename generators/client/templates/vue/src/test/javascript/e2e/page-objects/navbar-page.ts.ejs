@@ -88,7 +88,7 @@ async getRegisterPage() {
   }
 
   async clickOnEntity(entityName: string) {
-    await click(this.selector.$(`.dropdown-item[href="/entity/${entityName}"]`));
+    await click(this.selector.$(`.dropdown-item[href="/${entityName}"]`));
   }
 
   async getEntityPage(entityName: string) {
