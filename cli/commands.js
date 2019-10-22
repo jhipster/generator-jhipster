@@ -129,11 +129,16 @@ Example:
         desc: 'Display information about your current project and system'
     },
     kubernetes: {
+        alias: 'k8s',
         desc: 'Deploy the current application to Kubernetes'
     },
     'kubernetes-helm': {
         alias: 'k8s-helm',
         desc: 'Deploy the current application to Kubernetes using Helm package manager'
+    },
+    'kubernetes-knative': {
+        alias: 'k8s-knative',
+        desc: 'Deploy the current application to Kubernetes using knative constructs'
     },
     languages: {
         argument: ['languages...'],
