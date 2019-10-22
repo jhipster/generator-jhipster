@@ -47,7 +47,7 @@ jobs:
                   node-version: ${{ matrix.node_version }}
             - uses: actions/setup-java@v1
               with:
-                  java-version: '11.0.3'
+                  java-version: '11.x'
             - name: Config git variables
               run: $JHI_SCRIPTS/04-git-config.sh
             - name: Install Jhipster
