@@ -46,14 +46,14 @@ env:
     - MAVEN_USER_HOME=$HOME/.m2/repository/
 <%_ } _%>
 before_install:
-  -
+  - |
     if [[ $JHI_JDK = '8' ]]; then
       echo '*** Using OpenJDK 8'
     else
       echo '*** Using OpenJDK 11 by default'
-      sudo add-apt-repository ppa:openjdk-r/ppa
-      sudo apt-get update
-      sudo apt-get install -y openjdk-11-jdk
+      sudo add-apt-repository ppa:openjdk-r/ppa -y
+      sudo apt-get update -q
+      sudo apt-get install -y openjdk-11-jdk -y
       sudo update-java-alternatives -s java-1.11.0-openjdk-amd64
       java -version
     fi
