@@ -162,6 +162,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.databaseType = configuration.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
                 context.prodDatabaseType = configuration.get('prodDatabaseType') || this.options.db;
                 context.devDatabaseType = configuration.get('devDatabaseType') || this.options.db;
+                context.skipFakeData = configuration.get('skipFakeData');
                 context.searchEngine = configuration.get('searchEngine');
                 context.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
                 context.enableTranslation = configuration.get('enableTranslation');
