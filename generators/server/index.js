@@ -164,7 +164,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
                 if (this.messageBroker === 'no') {
-                    this.storedConfig.messageBrokker = false;
+                    this.storedConfig.messageBroker = false;
                 }
 
                 if (this.serviceDiscoveryType === 'no') {

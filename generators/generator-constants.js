@@ -114,7 +114,7 @@ const REQUIRED_VARIABLES_EJS = {
     embeddableLaunchScript: undefined,
     enableSwaggerCodegen: undefined,
     prodDatabaseType: undefined,
-    messageBrokker: undefined,
+    messageBroker: undefined,
     reactive: undefined,
     serverPort: undefined,
     searchEngine: undefined,
