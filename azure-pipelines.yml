@@ -28,5 +28,5 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install
+    npm ci
   displayName: 'npm run tests'
