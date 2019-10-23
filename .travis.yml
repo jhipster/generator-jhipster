@@ -28,6 +28,8 @@ cache:
     directories:
         - $HOME/.m2
         - $HOME/.gradle
+addons:
+  chrome: stable
 env:
     global:
         - JHI_PROFILE=dev
