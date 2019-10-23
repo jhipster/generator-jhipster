@@ -20,7 +20,7 @@
 jobs:
     - job: Test
       pool:
-          vmImage: 'Ubuntu 16.04'
+          vmImage: 'ubuntu-18.04'
       variables:
           JHI_PROFILE: dev
           JHI_RUN_APP: 1
