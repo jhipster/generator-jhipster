@@ -6,6 +6,13 @@
     - Now, in order to create a JDL importer, one must use createImporterFromContent or createImporterFromFiles.
 
 ## What's new
+  - Introduced new API, which will be the future API (for v7)
+    - Used by doing `require('jhipster-core').PACKAGE`
+    - The packages are as follows:
+      - **jdl**: concerns the JDL (conversion, export, import, objects, linting, etc.)
+      - **jhipster**: concerns JHipster as a whole (reserved keywords, application types, etc.)
+      - **json**: concerns JSON-file handling (export)
+        - Will be deprecated and remove if and when JHipster goes full JDL-centric
   - Passing a path to the `clientRootFolder` is now possible
   - Custom enum values are now possible:
   ```
