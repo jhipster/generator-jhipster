@@ -159,7 +159,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             loadSharedData() {
-                this.installShared();
+                this.loadShared();
             },
 
             setupShared() {

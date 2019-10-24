@@ -96,7 +96,7 @@ module.exports = class extends BaseGenerator {
     get initializing() {
         return {
             loadSharedData() {
-                this.installShared();
+                this.loadShared();
             },
 
             validateFromCli() {
@@ -130,6 +130,9 @@ module.exports = class extends BaseGenerator {
 
             validateYarn() {
                 this.checkYarn();
+                // Export useYarn
+                this.configOptions.useYarn = this.useYarn;
+                this.configOptions.useNpm = this.useNpm;
             },
 
             checkForNewJHVersion() {
@@ -139,7 +142,7 @@ module.exports = class extends BaseGenerator {
             },
 
             validate() {
-                if (this.skipServer && this.skipClient) {
+                if (this.storedConfig.skipServer && this.storedConfig.skipClient) {
                     this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
                 }
             },
@@ -167,26 +170,20 @@ module.exports = class extends BaseGenerator {
             },
 
             compose() {
-                const options = this.options;
+                const generators = [require.resolve('../config'), require.resolve('../common')];
 
-                if (!this.skipServer) {
-                    this.composeWithShared(require.resolve('../server'), {
-                        ...options,
-                        'client-hook': !this.skipClient,
-                        debug: this.isDebugEnabled
-                    });
+                if (!this.storedConfig.skipServer) {
+                    generators.push(require.resolve('../server'));
                 }
 
-                if (!this.skipClient) {
-                    this.composeWithShared(require.resolve('../client'), {
-                        ...options,
-                        debug: this.isDebugEnabled
-                    });
+                if (!this.storedConfig.skipClient) {
+                    generators.push(require.resolve('../client'));
                 }
 
-                this.composeWithShared(require.resolve('../common'), {
-                    ...options,
-                    'client-hook': !this.skipClient,
+                this.composeWithShared(generators, {
+                    ...this.options,
+                    'client-hook': !this.storedConfig.skipClient,
+                    generatorSource: this,
                     debug: this.isDebugEnabled
                 });
             }
@@ -196,7 +193,7 @@ module.exports = class extends BaseGenerator {
     get default() {
         return {
             loadSharedData() {
-                this.installShared();
+                this.loadShared();
             }
         };
     }

@@ -101,7 +101,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _initializing() {
         return {
             loadSharedData() {
-                this.installShared();
+                this.loadShared();
             },
 
             validateFromCli() {
@@ -137,7 +137,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _prompting() {
         return {
             loadSharedData() {
-                this.installShared();
+                this.loadShared();
             },
 
             askForModuleName: prompts.askForModuleName,
@@ -163,7 +163,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             loadSharedData() {
-                this.installShared();
+                this.loadShared();
             },
 
             insight() {
@@ -199,7 +199,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             loadSharedData() {
-                this.installShared();
+                this.loadShared();
                 debug('%o', this.storedConfig);
             },
 

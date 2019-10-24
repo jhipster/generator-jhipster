@@ -44,7 +44,7 @@ module.exports = class extends BaseGenerator {
         };
         this.isRootGenerator = opts.storedConfig === undefined;
         this.storedConfig = opts.storedConfig || this.config.getAll();
-        // this.queueInstallShared();
+        // this.queueLoadShared();
 
         this.skipClient = this.options['client-hook'] === false || this.storedConfig.skipClient;
     }

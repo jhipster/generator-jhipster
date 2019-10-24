@@ -1106,7 +1106,7 @@ module.exports = class extends PrivateBase {
      * @param  {Object} options    The options passed to the Generator
      * @return {this}    This generator
      */
-    composeWithShared(generator, options) {
+    composeWithShared(generator, options = { ...this.options }) {
         options.configOptions = options.configOptions || this.configOptions || this.options.configOptions;
         options.storedConfig = options.storedConfig || this.storedConfig || this.options.storedConfig;
         this.composeWith(generator, options);
@@ -2013,13 +2013,14 @@ module.exports = class extends PrivateBase {
         return this._needleApi;
     }
 
-    queueInstallShared() {
-        this.queueMethod(this.installShared, 'installShared', 'prompting');
-        this.queueMethod(this.installShared, 'installShared', 'configuring');
-        this.queueMethod(this.installShared, 'installShared', 'default');
+    queueLoadShared() {
+        this.queueMethod(this.loadShared, 'loadShared', 'initializing');
+        this.queueMethod(this.loadShared, 'loadShared', 'prompting');
+        this.queueMethod(this.loadShared, 'loadShared', 'configuring');
+        this.queueMethod(this.loadShared, 'loadShared', 'default');
     }
 
-    installShared() {
+    loadShared() {
         Object.assign(this.configOptions, this.storedConfig);
         Object.assign(this, this.configOptions);
     }
