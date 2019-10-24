@@ -1126,14 +1126,15 @@ module.exports = class extends Generator {
         }
     }
 
-    loadOptions(scope, name) {
+    loadOptions(scope, name, _option) {
         const self = this;
         if (scope === undefined) {
             Object.keys(self._options).forEach(key => {
                 const config = self._options[key];
                 if (!config.scope) return;
-                if (config.defaults !== undefined) self.warn('Scoped option should not have a default value');
-                self.loadOptions(config.scope, key);
+                if (config.defaults !== undefined && config.scope === 'storage')
+                    self.warn('Scoped with storage option should not have a default value');
+                self.loadOptions(config.scope, key, config);
             });
             return;
         }
@@ -1145,20 +1146,31 @@ module.exports = class extends Generator {
             name.forEach(key => self.loadOptions(scope, key));
             return;
         }
+        if (_option === undefined) {
+            _option = self._options[name];
+        }
         const camelName = self._.camelCase(name);
         let value = self.options[camelName];
         if (value === undefined) {
             value = self.options[name];
         }
-        if (value === undefined && self._options[name] === undefined) {
-            const aliasName = Object.keys(self._options).find(key => self._options[key].alias === name) || name;
-            const aliasCamelName = self._.camelCase(aliasName);
+        if (value === undefined && _option === undefined) {
+            const optionName = Object.keys(self._options).find(key => self._options[key].alias === name);
+            if (optionName === undefined) {
+                return;
+            }
+            _option = self._options[optionName];
+            const optionCamelName = self._.camelCase(optionName);
 
-            value = self.options[aliasCamelName];
+            value = self.options[optionCamelName];
 
             if (value === undefined) {
-                value = self.options[aliasCamelName];
+                value = self.options[optionName];
             }
+        }
+        if (_option) {
+            if (_option.defaults !== undefined && _option.scope === 'storage')
+                self.warn('Scoped with storage option should not have a default value');
         }
         if (value !== undefined) {
             self[camelName] = value;

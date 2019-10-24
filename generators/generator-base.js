@@ -1960,7 +1960,7 @@ module.exports = class extends PrivateBase {
         dest.skipUiGrouping = context.options['skip-ui-grouping'];
         dest.clientRootFolder = context.options['skip-ui-grouping'] ? '' : context.options['client-root-folder'];
         dest.isDebugEnabled = context.options.debug;
-        dest.experimental = context.options.experimental;
+        dest.experimental = context.options.experimental || context.configOptions.experimental;
         if (dest.entityAngularJSSuffix && !dest.entityAngularJSSuffix.startsWith('-')) {
             dest.entityAngularJSSuffix = `-${dest.entityAngularJSSuffix}`;
         }

@@ -122,7 +122,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false
+            defaults: false,
+            scope: 'shared'
         });
 
         this.context = {};

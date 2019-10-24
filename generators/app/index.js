@@ -52,7 +52,6 @@ module.exports = class extends BaseGenerator {
         // Shared data.
         this.configOptions = {
             ...constants.REQUIRED_VARIABLES_EJS,
-            experimental: this.options.experimental,
             isDebugEnabled: this.options.debug,
             useNpm: !this.options.yarn,
             useYarn: this.options.yarn,
