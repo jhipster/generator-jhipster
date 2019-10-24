@@ -1718,7 +1718,14 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withOptions({
+                        'from-cli': true,
+                        skipInstall: true,
+                        skipChecks: true,
+                        skipUserManagement: true,
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: true
+                    })
                     .withPrompts({
                         applicationType: 'microservice',
                         baseName: 'jhipster',
@@ -1735,10 +1742,7 @@ describe('JHipster generator', () => {
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         buildTool: 'gradle',
-                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: [],
-                        skipClient: true,
-                        skipUserManagement: true
+                        serverSideOptions: []
                     })
                     .on('end', done);
             });

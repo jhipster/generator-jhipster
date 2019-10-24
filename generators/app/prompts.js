@@ -47,6 +47,7 @@ function askForInsightOptIn() {
 
 function askForApplicationType(meta) {
     if (!meta && this.existingProject) return;
+    const config = this.storedConfig || this;
 
     const DEFAULT_APPTYPE = 'monolith';
 
@@ -69,7 +70,7 @@ function askForApplicationType(meta) {
         }
     ];
 
-    if (this.experimental) {
+    if (this.configOptions.experimental) {
         applicationTypeChoices.push({
             value: 'reactive',
             name: '[Alpha] Reactive monolithic application'
@@ -92,17 +93,17 @@ function askForApplicationType(meta) {
 
     const done = this.async();
 
-    const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
+    const promise = config.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
     promise.then(prompt => {
         if (prompt.applicationType === 'reactive') {
-            this.storedConfig.applicationType = DEFAULT_APPTYPE;
-            this.storedConfig.reactive = true;
+            config.applicationType = DEFAULT_APPTYPE;
+            config.reactive = true;
         } else if (prompt.applicationType === 'reactive-micro') {
-            this.storedConfig.applicationType = 'microservice';
-            this.storedConfig.reactive = true;
+            config.applicationType = 'microservice';
+            config.reactive = true;
         } else {
-            this.storedConfig.applicationType = prompt.applicationType;
-            this.storedConfig.reactive = false;
+            config.applicationType = prompt.applicationType;
+            config.reactive = false;
         }
         done();
     });
@@ -121,14 +122,15 @@ function askFori18n() {
 
 function askForTestOpts(meta) {
     if (!meta && this.existingProject) return;
+    const config = this.storedConfig || this;
 
     const choices = [];
     const defaultChoice = [];
-    if (meta || !this.skipServer) {
+    if (meta || !config.skipServer) {
         // all server side test frameworks should be added here
         choices.push({ name: 'Gatling', value: 'gatling' }, { name: 'Cucumber', value: 'cucumber' });
     }
-    if (meta || !this.skipClient) {
+    if (meta || !config.skipClient) {
         // all client side test frameworks should be added here
         choices.push({ name: 'Protractor', value: 'protractor' });
     }
@@ -145,7 +147,7 @@ function askForTestOpts(meta) {
     const done = this.async();
 
     this.prompt(PROMPT).then(prompt => {
-        this.storedConfig.testFrameworks = prompt.testFrameworks;
+        config.testFrameworks = prompt.testFrameworks;
         done();
     });
 }
@@ -171,6 +173,7 @@ function askForMoreModules() {
 }
 
 function askModulesToBeInstalled(done, generator) {
+    const config = generator.storedConfig || generator;
     generator.httpsGet(
         'https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-5&from=0&size=50',
         body => {
@@ -195,9 +198,8 @@ function askModulesToBeInstalled(done, generator) {
                         .then(prompt => {
                             // [ {name: [moduleName], version:[version]}, ...]
                             prompt.otherModules.forEach(module => {
-                                generator.otherModules.push({ name: module.name, version: module.version });
+                                config.otherModules.push({ name: module.name, version: module.version });
                             });
-                            generator.storedConfig.otherModules = generator.otherModules;
                             done();
                         });
                 } else {

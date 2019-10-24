@@ -55,6 +55,8 @@ module.exports = class extends BaseBlueprintGenerator {
         this._serverExistingProject();
 
         this.useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('config', { generatorSource: this.generatorSource });
+
+        this.loadOptions('storage', ['base-name', 'uaa-base-name', 'skip-user-management', 'rememberMeKey']);
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -73,6 +75,16 @@ module.exports = class extends BaseBlueprintGenerator {
 
             validateFromCli() {
                 this.checkInvocationFromCLI();
+            },
+
+            loadDBFromOptions() {
+                // Override existing db by the one from cli arguments.
+                if (this.options.db) {
+                    const config = this.storedConfig;
+                    config.databaseType = this.getDBTypeFromDBValue(this.options.db);
+                    config.devDatabaseType = this.options.db;
+                    config.prodDatabaseType = this.options.db;
+                }
             }
         };
     }
@@ -83,21 +95,27 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     _prompting() {
-        const clientSteps = {
-            askForModuleName: clientPrompts.askForModuleName,
-            askForClient: clientPrompts.askForClient,
-            askFori18n: clientPrompts.askFori18n,
-            askForClientTheme: clientPrompts.askForClientTheme,
-            askForClientThemeVariant: clientPrompts.askForClientThemeVariant
-        };
+        const config = this.storedConfig;
 
-        const serverSteps = {
-            askForModuleName: serverPrompts.askForModuleName,
-            askForServerSideOpts: serverPrompts.askForServerSideOpts,
-            configureServerPrompt: this._configureServerPrompt,
-            askForOptionalItems: serverPrompts.askForOptionalItems,
-            askFori18n: serverPrompts.askFori18n
-        };
+        let clientSteps;
+        if (!config.skipServer)
+            clientSteps = {
+                askForModuleName: clientPrompts.askForModuleName,
+                askForClient: clientPrompts.askForClient,
+                askFori18n: clientPrompts.askFori18n,
+                askForClientTheme: clientPrompts.askForClientTheme,
+                askForClientThemeVariant: clientPrompts.askForClientThemeVariant
+            };
+
+        let serverSteps;
+        if (!config.skipServer)
+            serverSteps = {
+                askForModuleName: serverPrompts.askForModuleName,
+                askForServerSideOpts: serverPrompts.askForServerSideOpts,
+                configureServerPrompt: this._configureServerPrompt,
+                askForOptionalItems: serverPrompts.askForOptionalItems,
+                askFori18n: serverPrompts.askFori18n
+            };
 
         let steps;
 
@@ -152,7 +170,7 @@ module.exports = class extends BaseBlueprintGenerator {
         let steps;
 
         // App configuration steps
-        if (!this.isClientConfiguration) {
+        if (!this.isClientConfiguration && !this.storedConfig.skipServer) {
             steps = {
                 configureServer: this._configureServer
             };
@@ -198,7 +216,7 @@ module.exports = class extends BaseBlueprintGenerator {
     /* ======================================================================== */
     /* private methods use within generator (not queued for execution) */
     /* ======================================================================== */
-    _parseApplicationType() {
+    _parseApplicationTypeApp() {
         const config = this.storedConfig;
         if (config.applicationType === 'microservice') {
             config.skipClient = true;
@@ -208,12 +226,6 @@ module.exports = class extends BaseBlueprintGenerator {
             config.skipClient = true;
             config.skipUserManagement = false;
             config.authenticationType = 'uaa';
-        }
-        // Override existing db by the one from cli arguments.
-        if (this.options.db) {
-            config.databaseType = this.getDBTypeFromDBValue(this.options.db);
-            config.devDatabaseType = this.options.db;
-            config.prodDatabaseType = this.options.db;
         }
     }
 
