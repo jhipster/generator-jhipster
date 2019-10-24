@@ -45,17 +45,14 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common', { 'client-hook': !this.skipClient });
 
-        debug(`${this.existingProject}`);
-        debug('%o', this.storedConfig);
+        if (!this.options.skipLoadShared) {
+            this.queueLoadShared();
+        }
     }
 
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
-
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
@@ -85,10 +82,6 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
-
             getSharedConfigOptions() {
                 this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');

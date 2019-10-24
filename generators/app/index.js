@@ -19,7 +19,6 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const debug = require('debug')('jhipster:app');
-const trace = require('debug')('jhipster:app:trace');
 
 const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
@@ -89,16 +88,13 @@ module.exports = class extends BaseGenerator {
 
         this.registerPrettierTransform();
 
-        debug(`${this.existingProject}`);
-        trace('%o', this.storedConfig);
+        if (!this.options.skipLoadShared) {
+            this.queueLoadShared();
+        }
     }
 
     get initializing() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
-
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
@@ -192,20 +188,8 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get default() {
-        return {
-            loadSharedData() {
-                this.loadShared();
-            }
-        };
-    }
-
     get writing() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
-
             saveConfig() {
                 this.config.set(this.storedConfig);
             },
