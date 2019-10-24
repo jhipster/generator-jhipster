@@ -41,34 +41,20 @@ module.exports = class extends BaseBlueprintGenerator {
             this.isAppConfiguration = true;
         } else if (this.generatorSource.options.namespace.endsWith(':client')) {
             this.generatorType = 'client';
-            this.isAppConfiguration = true;
+            this.isClientConfiguration = true;
         } else if (this.generatorSource.options.namespace.endsWith(':server')) {
             this.generatorType = 'server';
-            this.isAppConfiguration = true;
+            this.isServerConfiguration = true;
         } else {
             this.error(`Config module not implemented for ${this.generatorSource.options.namespace}.`);
         }
-        debug(`Executing config for generator ${this.generatorType}`);
-
-        this.configOptions = this.options.configOptions || {};
+        debug(`Executing config for ${this.generatorType}`);
 
         this.useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('config', { generatorSource: this.generatorSource });
     }
 
     // Public API method used by the getter and also by Blueprints
     _initializing() {
-        let steps;
-
-        // App configuration steps
-        if (this.isAppConfiguration) {
-            steps = {
-                setup() {
-                    this.configOptions.skipI18nQuestion = true;
-                    this.configOptions.logo = false;
-                }
-            };
-        }
-
         return {
             loadSharedData() {
                 this.loadShared();
@@ -83,8 +69,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             validateFromCli() {
                 this.checkInvocationFromCLI();
-            },
-            ...steps
+            }
         };
     }
 
@@ -127,14 +112,16 @@ module.exports = class extends BaseBlueprintGenerator {
             ...steps,
 
             composeLanguages() {
-               // Update generatorType for languages generators
+                // Update generatorType for languages generators
                 let generatorType = this.generatorType;
-                if (this.storedConfig.skipClient) {
-                    generatorType = 'server';
-                } else if (this.storedConfig.skipServer) {
-                    generatorType = 'client';
-                } else {
-                    this._validateSkip();
+                if (generatorType === 'app') {
+                    if (this.storedConfig.skipClient) {
+                        generatorType = 'server';
+                    } else if (this.storedConfig.skipServer) {
+                        generatorType = 'client';
+                    } else {
+                        this._validateSkip();
+                    }
                 }
                 this.composeLanguagesSub(this, this.configOptions, generatorType);
             }
@@ -194,7 +181,8 @@ module.exports = class extends BaseBlueprintGenerator {
     /* ======================================================================== */
     /* private methods use within generator (not queued for execution) */
     /* ======================================================================== */
-    _parseApplicationType(config = this.storedConfig) {
+    _parseApplicationType() {
+        const config = this.storedConfig;
         if (config.applicationType === 'microservice') {
             config.skipClient = true;
             config.skipUserManagement = true;
@@ -204,15 +192,16 @@ module.exports = class extends BaseBlueprintGenerator {
             config.skipUserManagement = false;
             config.authenticationType = 'uaa';
         }
-        if (config.skipServer && this.options.db) {
-            // defaults to use when skipping server
+        // Override existing db by the one from cli arguments.
+        if (this.options.db) {
             config.databaseType = this.getDBTypeFromDBValue(this.options.db);
             config.devDatabaseType = this.options.db;
             config.prodDatabaseType = this.options.db;
         }
     }
 
-    _validateSkip(generator = this) {
+    _validateSkip() {
+        const generator = this;
         if (generator.storedConfig.skipServer && generator.storedConfig.skipClient) {
             generator.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }

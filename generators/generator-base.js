@@ -1535,6 +1535,14 @@ module.exports = class extends PrivateBase {
      * Prints a JHipster logo.
      */
     printJHipsterLogo() {
+        const config = this.configOptions;
+        if (config) {
+            if (config.logo !== undefined && !config.logo) {
+                // Logo already shown.
+                return;
+            }
+            config.logo = false;
+        }
         this.log('\n');
         this.log(`${chalk.green('        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}`);
         this.log(`${chalk.green('        ██║')}${chalk.red(' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗')}`);

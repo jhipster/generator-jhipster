@@ -167,6 +167,8 @@ module.exports = class extends BaseGenerator {
                 if (this.storedConfig.embeddableLaunchScript === undefined) {
                     this.storedConfig.embeddableLaunchScript = true;
                 }
+
+                this.configOptions.skipI18nQuestion = true;
             },
 
             compose() {
@@ -200,6 +202,10 @@ module.exports = class extends BaseGenerator {
 
     get writing() {
         return {
+            loadSharedData() {
+                this.loadShared();
+            },
+
             saveConfig() {
                 this.config.set(this.storedConfig);
             },
