@@ -242,6 +242,7 @@ module.exports = class extends BaseBlueprintGenerator {
             config.baseName !== undefined;
 
         if (serverConfigFound) {
+            this.serverExistingProject = true;
             this.log(
                 chalk.green(
                     'This is an existing project, using the configuration from your .yo-rc.json file \nto re-generate the project...\n'
