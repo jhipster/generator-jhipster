@@ -42,6 +42,9 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
+        // eslint-disable-next-line global-require
+        require('../interceptor').registerDiff(this);
+
         debug(`Initializing ${this.rootGeneratorName()}:server generator`);
 
         this._.defaults(this.storedConfig, defaultConfig);
