@@ -22,6 +22,7 @@ const debug = require('debug')('jhipster:config');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const appPrompts = require('../app/prompts');
+const clientPrompts = require('../client/prompts');
 
 // Migrate to local variables with yeoman-generator 4.1.1 | 4.2.0
 module.exports = class extends BaseBlueprintGenerator {
@@ -61,24 +62,9 @@ module.exports = class extends BaseBlueprintGenerator {
         // App configuration steps
         if (this.isAppConfiguration) {
             steps = {
-                askForInsightOptIn: appPrompts.askForInsightOptIn,
-                askForApplicationType: appPrompts.askForApplicationType,
-                askForModuleName: appPrompts.askForModuleName,
-
                 setup() {
                     this.configOptions.skipI18nQuestion = true;
                     this.configOptions.logo = false;
-
-                    this._parseApplicationType();
-
-                    // Update generatorType for languages generators
-                    if (this.storedConfig.skipClient) {
-                        this.generatorType = 'server';
-                    } else if (this.storedConfig.skipServer) {
-                        this.generatorType = 'client';
-                    } else {
-                        this._validateSkip();
-                    }
                 }
             };
         }
@@ -86,6 +72,13 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             loadSharedData() {
                 this.loadShared();
+            },
+
+            updateAngularName() {
+                if (this.storedConfig.clientFramework === 'angular' || this.storedConfig.clientFramework === 'angular2') {
+                    /* for backward compatibility */
+                    this.storedConfig.clientFramework = 'angularX';
+                }
             },
 
             validateFromCli() {
@@ -101,22 +94,50 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     _prompting() {
+        const clientSteps = {
+            askForModuleName: clientPrompts.askForModuleName,
+            askForClient: clientPrompts.askForClient,
+            askFori18n: clientPrompts.askFori18n,
+            askForClientTheme: clientPrompts.askForClientTheme,
+            askForClientThemeVariant: clientPrompts.askForClientThemeVariant
+        };
+
         let steps;
 
         // App configuration steps
         if (this.isAppConfiguration) {
             steps = {
+                askForInsightOptIn: appPrompts.askForInsightOptIn,
+                askForApplicationType: appPrompts.askForApplicationType,
+                parseApplicationType: this._parseApplicationType,
+                askForModuleName: appPrompts.askForModuleName,
+                ...clientSteps,
                 askFori18n: appPrompts.askFori18n,
                 askForTestOpts: appPrompts.askForTestOpts,
                 askForMoreModules: appPrompts.askForMoreModules
             };
+        } else if (this.isClientConfiguration) {
+            steps = clientSteps;
         }
 
         return {
             loadSharedData() {
                 this.loadShared();
             },
-            ...steps
+            ...steps,
+
+            composeLanguages() {
+               // Update generatorType for languages generators
+                let generatorType = this.generatorType;
+                if (this.storedConfig.skipClient) {
+                    generatorType = 'server';
+                } else if (this.storedConfig.skipServer) {
+                    generatorType = 'client';
+                } else {
+                    this._validateSkip();
+                }
+                this.composeLanguagesSub(this, this.configOptions, generatorType);
+            }
         };
     }
 
@@ -140,10 +161,27 @@ module.exports = class extends BaseBlueprintGenerator {
 
             ...steps,
 
-            composeLanguages() {
-                this.composeLanguagesSub(this, this.configOptions, this.generatorType);
+            configuringAuthenticationType() {
+                const config = this.storedConfig;
+                if (config.authenticationType === 'oauth2' || (config.databaseType === 'no' && config.authenticationType !== 'uaa')) {
+                    config.skipUserManagement = true;
+                }
             },
 
+            validateTranslation() {
+                const config = this.storedConfig;
+                config.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
+
+                if (config.nativeLanguage === undefined) {
+                    config.nativeLanguage = 'en';
+                }
+                if (config.enableTranslation === undefined) {
+                    config.enableTranslation = true;
+                }
+                if (config.enableTranslation && config.languages === undefined) {
+                    config.languages = ['en', 'fr'];
+                }
+            },
             validateSkip: this._validateSkip
         };
     }

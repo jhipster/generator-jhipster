@@ -27,7 +27,8 @@ module.exports = {
 };
 
 function askForModuleName() {
-    if (this.baseName) return;
+    const config = this.storedConfig || this;
+    if (config.baseName) return;
 
     this.askModuleName(this);
 }
@@ -35,7 +36,8 @@ function askForModuleName() {
 function askForClient(meta) {
     if (!meta && this.existingProject) return;
 
-    const applicationType = this.applicationType;
+    const config = this.storedConfig || this;
+    const applicationType = config.applicationType;
 
     const choices = [
         {
@@ -66,9 +68,9 @@ function askForClient(meta) {
     const done = this.async();
 
     this.prompt(PROMPT).then(prompt => {
-        this.clientFramework = this.storedConfig.clientFramework = prompt.clientFramework;
-        if (this.clientFramework === 'no') {
-            this.skipClient = this.storedConfig.skipClient = true;
+        config.clientFramework = prompt.clientFramework;
+        if (config.clientFramework === 'no') {
+            config.skipClient = true;
         }
         done();
     });
@@ -85,7 +87,8 @@ function askForClientTheme(meta) {
         return;
     }
 
-    const skipClient = this.skipClient;
+    const config = this.storedConfig || this;
+    const skipClient = config.skipClient;
     const done = this.async();
     const defaultChoices = [
         {
@@ -157,8 +160,9 @@ function askForClientTheme(meta) {
 }
 
 function promptQuestion(PROMPT, done, generator) {
+    const config = generator.storedConfig || generator;
     generator.prompt(PROMPT).then(prompt => {
-        generator.clientTheme = generator.storedConfig.clientTheme = prompt.clientTheme;
+        config.clientTheme = prompt.clientTheme;
         done();
     });
 }
@@ -167,12 +171,13 @@ function askForClientThemeVariant(meta) {
     if (!meta && this.existingProject) {
         return;
     }
-    if (this.clientTheme === 'none') {
-        this.clientThemeVariant = this.storedConfig.clientThemeVariant = '';
+    const config = this.storedConfig || this;
+    if (config.clientTheme === 'none') {
+        config.clientThemeVariant = '';
         return;
     }
 
-    const skipClient = this.skipClient;
+    const skipClient = config.skipClient;
 
     const choices = [{ value: 'primary', name: 'Primary' }, { value: 'dark', name: 'Dark' }, { value: 'light', name: 'Light' }];
 
@@ -190,7 +195,7 @@ function askForClientThemeVariant(meta) {
     const done = this.async();
 
     this.prompt(PROMPT).then(prompt => {
-        this.clientThemeVariant = this.storedConfig.clientThemeVariant = prompt.clientThemeVariant;
+        config.clientThemeVariant = prompt.clientThemeVariant;
         done();
     });
 }

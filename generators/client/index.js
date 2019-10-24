@@ -22,7 +22,6 @@ const _ = require('lodash');
 const debug = require('debug')('jhipster:client');
 
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
-const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
@@ -94,7 +93,18 @@ module.exports = class extends BaseBlueprintGenerator {
         // Make constants available in templates
         this._.defaults(this, constants.filter(/^CLIENT_*/));
 
-        this.useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
+        this.useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('client');
+
+        // For blueprint, let the original generator call the config.
+        // For derivated generator, the main generator already called config.
+        // Add option to skip config, use only saved resource.
+        if (!this.fromBlueprint && this.isRootGenerator && !this.options.skipConfig) {
+            this.composeWithShared(require.resolve('../config'), {
+                ...this.options,
+                generatorSource: this,
+                debug: this.isDebugEnabled
+            });
+        }
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -109,9 +119,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             displayLogo() {
-                if (this.logo) {
-                    this.printJHipsterLogo();
-                }
+                this.printJHipsterLogo();
             },
 
             setupClientconsts() {
@@ -120,10 +128,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
                 this.packagejs = packagejs;
-                if (this.clientFramework === 'angular' || this.clientFramework === 'angular2') {
-                    /* for backward compatibility */
-                    this.clientFramework = this.storedConfig.clientFramework = 'angularX';
-                }
             }
         };
     }
@@ -138,18 +142,6 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             loadSharedData() {
                 this.loadShared();
-            },
-
-            askForModuleName: prompts.askForModuleName,
-            askForClient: prompts.askForClient,
-            askFori18n: prompts.askFori18n,
-            askForClientTheme: prompts.askForClientTheme,
-            askForClientThemeVariant: prompts.askForClientThemeVariant,
-
-            composeLanguages() {
-                if (this.configOptions.skipI18nQuestion) return;
-
-                this.composeLanguagesSub(this, this.configOptions, 'client');
             }
         };
     }
@@ -161,6 +153,20 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _configuring() {
+        return {
+            loadSharedData() {
+                this.loadShared();
+            }
+        };
+    }
+
+    get configuring() {
+        if (this.useBlueprints) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
         return {
             loadSharedData() {
                 this.loadShared();
@@ -186,29 +192,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
-            }
-        };
-    }
-
-    get configuring() {
-        if (this.useBlueprints) return;
-        return this._configuring();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return {
-            loadSharedData() {
-                this.loadShared();
-                debug('%o', this.storedConfig);
             },
 
             setupShared() {
                 this.protractorTests = this.testFrameworks.includes('protractor');
 
-                if (this.authenticationType === 'oauth2' || (this.databaseType === 'no' && this.authenticationType !== 'uaa')) {
-                    this.skipUserManagement = true;
-                }
                 this.cacheProvider = this.cacheProvider || this.hibernateCache || 'no';
                 this.enableHibernateCache = this.enableHibernateCache && !['no', 'memcached'].includes(this.cacheProvider);
                 this.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
@@ -222,28 +210,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
                 this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
-            },
-
-            validate() {
-                if (this.storedConfig.authenticationType === 'uaa' && _.isNil(this.storedConfig.uaaBaseName)) {
-                    this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-                }
-            },
-
-            validateTranslation() {
-                debug('%o', this.languages);
-                this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
-                debug('%o', this.enableI18nRTL);
-
-                if (this.nativeLanguage === undefined) {
-                    this.nativeLanguage = 'en';
-                }
-                if (this.enableTranslation === undefined || this.enableTranslation === true) {
-                    this.enableTranslation = true;
-                    if (this.languages === undefined) {
-                        this.languages = ['en', 'fr'];
-                    }
-                }
             },
 
             validateServer() {
