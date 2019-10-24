@@ -160,10 +160,11 @@ module.exports = class extends BaseGenerator {
 
                 // Set embeddableLaunchScript to true if not defined, for backward compatibility
                 // See https://github.com/jhipster/generator-jhipster/issues/10255
-                if (this.storedConfig.embeddableLaunchScript === undefined) {
+                if (this.isJhipsterVersionLessThan('6.3.0')) {
                     this.storedConfig.embeddableLaunchScript = true;
+                } else {
+                    this.storedConfig.embeddableLaunchScript = false;
                 }
-
                 this.configOptions.skipI18nQuestion = true;
             },
 
