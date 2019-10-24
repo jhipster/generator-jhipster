@@ -121,6 +121,7 @@ const REQUIRED_VARIABLES_EJS = {
     searchEngine: undefined,
     serviceDiscoveryType: undefined,
     skipServer: undefined,
+    uaaBaseName: undefined,
     websocket: undefined
 };
 
