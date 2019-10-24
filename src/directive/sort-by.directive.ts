@@ -44,7 +44,7 @@ export class JhiSortByDirective implements AfterContentInit {
 
     ngAfterContentInit(): void {
         if (this.jhiSort.predicate && this.jhiSort.predicate !== '_score' && this.jhiSort.predicate === this.jhiSortBy) {
-            this.updateIconDefinition(this.iconComponent, this.jhiSort.ascending ? this.sortDescIcon : this.sortAscIcon);
+            this.updateIconDefinition(this.iconComponent, this.jhiSort.ascending ? this.sortAscIcon : this.sortDescIcon);
             this.jhiSort.activeIconComponent = this.iconComponent;
         }
     }
@@ -54,7 +54,7 @@ export class JhiSortByDirective implements AfterContentInit {
         if (this.jhiSort.predicate && this.jhiSort.predicate !== '_score') {
             this.jhiSort.sort(this.jhiSortBy);
             this.updateIconDefinition(this.jhiSort.activeIconComponent, this.sortIcon);
-            this.updateIconDefinition(this.iconComponent, this.jhiSort.ascending ? this.sortDescIcon : this.sortAscIcon);
+            this.updateIconDefinition(this.iconComponent, this.jhiSort.ascending ? this.sortAscIcon : this.sortDescIcon);
             this.jhiSort.activeIconComponent = this.iconComponent;
         }
     }
