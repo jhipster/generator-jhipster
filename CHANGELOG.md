@@ -21,7 +21,7 @@
   enum Language {
     FRENCH (frenchy),
     ICELANDIC (viking)
-  }t pul
+  }
   ```
 
 ## Fixed
