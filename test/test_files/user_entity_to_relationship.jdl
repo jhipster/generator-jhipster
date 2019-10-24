@@ -2,7 +2,7 @@ entity A
 entity B
 
 relationship ManyToOne {
-  A{user} to User{a}
+  A{user} to User
 }
 
 relationship OneToOne {

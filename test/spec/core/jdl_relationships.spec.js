@@ -244,6 +244,7 @@ describe('JDLRelationships', () => {
             from: 'Abc',
             to: 'Abc2',
             injectedFieldInFrom: 'something',
+            injectedFieldInTo: 'somethingElse',
             type: RelationshipTypes.MANY_TO_MANY
           });
           relationships.add(relationship);
@@ -378,6 +379,7 @@ describe('JDLRelationships', () => {
             from: 'Abc',
             to: 'Abc2',
             injectedFieldInFrom: 'something',
+            injectedFieldInTo: 'somethingElse',
             type: RelationshipTypes.MANY_TO_MANY
           })
         );
@@ -478,11 +480,13 @@ describe('JDLRelationships', () => {
           from: 'Abc',
           to: 'Abc2',
           injectedFieldInFrom: 'something',
+          injectedFieldInTo: 'somethingElse',
           type: RelationshipTypes.ONE_TO_ONE
         });
         oneToManyRelationship = new JDLRelationship({
           from: 'Abc',
           to: 'Abc2',
+          injectedFieldInFrom: 'something',
           injectedFieldInTo: 'somethingElse',
           type: RelationshipTypes.ONE_TO_MANY
         });
@@ -491,11 +495,11 @@ describe('JDLRelationships', () => {
       });
 
       it('uses the standard string form', () => {
-        expect(relationships.toString()).to.eq(`relationship ${oneToOneRelationship.type} {
-  ${oneToOneRelationship.from}{${oneToOneRelationship.injectedFieldInFrom}} to ${oneToOneRelationship.to}
+        expect(relationships.toString()).to.equal(`relationship ${oneToOneRelationship.type} {
+  ${oneToOneRelationship.from}{${oneToOneRelationship.injectedFieldInFrom}} to ${oneToOneRelationship.to}{${oneToOneRelationship.injectedFieldInTo}}
 }
 relationship ${oneToManyRelationship.type} {
-  ${oneToManyRelationship.from} to ${oneToManyRelationship.to}{${oneToManyRelationship.injectedFieldInTo}}
+  ${oneToManyRelationship.from}{${oneToManyRelationship.injectedFieldInFrom}} to ${oneToManyRelationship.to}{${oneToManyRelationship.injectedFieldInTo}}
 }`);
       });
     });
@@ -510,11 +514,13 @@ relationship ${oneToManyRelationship.type} {
           from: 'Abc',
           to: 'Abc2',
           injectedFieldInFrom: 'something',
+          injectedFieldInTo: 'somethingElse',
           type: RelationshipTypes.ONE_TO_ONE
         });
         oneToOneRelationship2 = new JDLRelationship({
           from: 'Abc2',
           to: 'Abc3',
+          injectedFieldInFrom: 'something',
           injectedFieldInTo: 'somethingElse',
           type: RelationshipTypes.ONE_TO_ONE
         });
@@ -524,8 +530,8 @@ relationship ${oneToManyRelationship.type} {
 
       it('uses the new string form', () => {
         expect(relationships.toString()).to.eq(`relationship ${oneToOneRelationship1.type} {
-  ${oneToOneRelationship1.from}{${oneToOneRelationship1.injectedFieldInFrom}} to ${oneToOneRelationship1.to},
-  ${oneToOneRelationship2.from} to ${oneToOneRelationship2.to}{${oneToOneRelationship2.injectedFieldInTo}}
+  ${oneToOneRelationship1.from}{${oneToOneRelationship1.injectedFieldInFrom}} to ${oneToOneRelationship1.to}{${oneToOneRelationship1.injectedFieldInTo}},
+  ${oneToOneRelationship2.from}{${oneToOneRelationship2.injectedFieldInFrom}} to ${oneToOneRelationship2.to}{${oneToOneRelationship2.injectedFieldInTo}}
 }`);
       });
     });

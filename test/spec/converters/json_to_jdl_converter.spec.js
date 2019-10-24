@@ -70,7 +70,7 @@ describe('JSONToJDLConverter', () => {
     jwtSecretKey HIDDEN
     entitySuffix 
     dtoSuffix DTO
-    otherModules 
+    otherModules []
     clientPackageManager npm
     skipUserManagement true
   }
@@ -120,7 +120,7 @@ describe('JSONToJDLConverter', () => {
     jwtSecretKey HIDDEN
     entitySuffix 
     dtoSuffix DTO
-    otherModules 
+    otherModules []
     clientPackageManager npm
     skipUserManagement true
   }
@@ -250,7 +250,7 @@ noFluentMethod Country, Department, Employee, Job, JobHistory, Location, Region,
     jwtSecretKey HIDDEN
     entitySuffix 
     dtoSuffix DTO
-    otherModules 
+    otherModules []
     clientPackageManager npm
     skipUserManagement true
   }
@@ -286,7 +286,7 @@ application {
     jwtSecretKey HIDDEN
     entitySuffix 
     dtoSuffix DTO
-    otherModules 
+    otherModules []
     clientPackageManager npm
     skipUserManagement true
   }
@@ -322,7 +322,7 @@ application {
     jwtSecretKey HIDDEN
     entitySuffix 
     dtoSuffix DTO
-    otherModules 
+    otherModules []
     clientPackageManager npm
     skipUserManagement true
   }

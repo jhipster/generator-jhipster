@@ -81,41 +81,6 @@ describe('JDLUnaryOption', () => {
       expect(option.entityNames.has('A')).to.be.true;
     });
   });
-  describe('::isValid', () => {
-    context('when passing a nil object', () => {
-      it('returns false', () => {
-        expect(JDLUnaryOption.isValid()).to.be.false;
-      });
-    });
-    context('when passing an object with no name', () => {
-      it('returns false', () => {
-        expect(JDLUnaryOption.isValid({})).to.be.false;
-      });
-    });
-    context('when passing an object with a name', () => {
-      it('returns false', () => {
-        expect(JDLUnaryOption.isValid({ name: UnaryOptions.SKIP_CLIENT })).to.be.false;
-      });
-    });
-    context('when passing an object with a name, entity names and excluded names', () => {
-      let emptyOption = null;
-
-      before(() => {
-        emptyOption = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-      });
-
-      it('returns true', () => {
-        expect(
-          JDLUnaryOption.isValid({
-            name: UnaryOptions.SKIP_CLIENT,
-            entityNames: emptyOption.entityNames,
-            excludedNames: emptyOption.excludedNames,
-            getType: () => 'UNARY'
-          })
-        ).to.be.true;
-      });
-    });
-  });
   describe('#addEntityName', () => {
     context('when passing a nil name', () => {
       let option = null;

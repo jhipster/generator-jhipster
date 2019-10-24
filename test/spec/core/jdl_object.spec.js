@@ -43,7 +43,7 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addApplication(null);
-          }).to.throw('The application must be valid in order to be added to the JDL object.\nErrors: No application');
+          }).to.throw(/^Can't add invalid application\. Error: No application\.$/);
         });
       });
       context('such as an incomplete application', () => {
@@ -55,8 +55,7 @@ describe('JDLObject', () => {
               }
             });
           }).to.throw(
-            'The application must be valid in order to be added to the JDL object.\n' +
-              'Errors: No authentication type, No build tool'
+            /Can't add invalid application\. Error: The application attributes authenticationType, buildTool were not found\./
           );
         });
       });
@@ -107,7 +106,7 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addDeployment(null);
-          }).to.throw('The deployment must be valid in order to be added to the JDL object.\nErrors: No deployment');
+          }).to.throw(/^Can't add invalid deployment\. Error: No deployment\.$/);
         });
       });
       context('such as an incomplete deployment', () => {
@@ -117,8 +116,7 @@ describe('JDLObject', () => {
               directoryPath: '../'
             });
           }).to.throw(
-            'The deployment must be valid in order to be added to the JDL object.\n' +
-              'Errors: No deployment type, No applications, No Docker repository'
+            /^Can't add invalid deployment\. Error: The deployment attributes deploymentType, appsFolders, dockerRepositoryName were not found\.$/
           );
         });
       });
@@ -207,25 +205,24 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addEntity(null);
-          }).to.throw('The entity must be valid in order to be added to the JDL object.\nErrors: No entity');
+          }).to.throw(/^Can't add invalid entity\. Error: No entity\.$/);
         });
       });
       context('such as an incomplete entity', () => {
-        expect(() => {
-          object.addEntity({
-            name: 'Something',
-            tableName: 't_something',
-            fields: [
-              {
-                type: 'String',
-                comment: 'comment',
-                validations: []
-              }
-            ]
+        let entity;
+
+        beforeEach(() => {
+          entity = new JDLEntity({
+            name: 'TSomething'
           });
-        }).to.throw(
-          'The entity must be valid in order to be added to the JDL object.\nErrors: For field #1: No field name'
-        );
+          delete entity.tableName;
+        });
+
+        it('should fail', () => {
+          expect(() => {
+            object.addEntity(entity);
+          }).to.throw(/^Can't add invalid entity\. Error: The entity attribute tableName was not found\.$/);
+        });
       });
     });
     context('when adding a valid entity', () => {
@@ -385,14 +382,14 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addEnum(null);
-          }).to.throw('The enum must be valid in order to be added to the JDL object.\nErrors: No enumeration');
+          }).to.throw(/^Can't add invalid enum\. Error: No enum\.$/);
         });
       });
       context('such as an incomplete enum', () => {
         it('fails', () => {
           expect(() => {
             object.addEnum({ values: ['A', 'B'] });
-          }).to.throw('The enum must be valid in order to be added to the JDL object.\nErrors: No enumeration name');
+          }).to.throw(/^Can't add invalid enum\. Error: The enum attribute name was not found\.$/);
         });
       });
     });
@@ -541,9 +538,7 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addRelationship(null);
-          }).to.throw(
-            'The relationship must be valid in order to be added to the JDL object.\nErrors: No relationship'
-          );
+          }).to.throw(/^Can't add invalid relationship\. Error: No relationship\.$/);
         });
       });
       context('such as an incomplete relationship', () => {
@@ -570,7 +565,8 @@ describe('JDLObject', () => {
           from: 'Valid2',
           to: 'Valid',
           type: RelationshipTypes.MANY_TO_MANY,
-          injectedFieldInFrom: 'something'
+          injectedFieldInFrom: 'something',
+          injectedFieldInTo: 'somethingElse'
         });
         object.addRelationship(relationship);
       });
@@ -588,7 +584,8 @@ describe('JDLObject', () => {
           from: 'Valid2',
           to: 'Valid',
           type: RelationshipTypes.MANY_TO_MANY,
-          injectedFieldInFrom: 'something'
+          injectedFieldInFrom: 'something',
+          injectedFieldInTo: 'somethingElse'
         });
         object.addRelationship(relationship);
         object.addRelationship(relationship);
@@ -679,30 +676,14 @@ describe('JDLObject', () => {
         it('fails', () => {
           expect(() => {
             object.addOption(null);
-          }).to.throw('The option must be valid in order to be added to the JDL object.\nErrors: No option');
+          }).to.throw(/^Can't add nil option\.$/);
         });
       });
       context('such as an empty object', () => {
         it('fails', () => {
           expect(() => {
             object.addOption({});
-          }).to.throw(
-            'The option must be valid in order to be added to the JDL object.\n' +
-              'Errors: No option name, No entity names, No excluded names, No type'
-          );
-        });
-      });
-      context('such as a wrong option/value', () => {
-        it('fails', () => {
-          expect(() => {
-            object.addOption({
-              name: UnaryOptions.SKIP_CLIENT,
-              type: 'WrongType'
-            });
-          }).to.throw(
-            'The option must be valid in order to be added to the JDL object.\n' +
-              'Errors: No entity names, No excluded names, No type'
-          );
+          }).to.throw(/^Can't add nil option\.$/);
         });
       });
     });

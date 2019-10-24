@@ -20,6 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
+const { matchField } = require('../../matchers/field_matcher');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
 const Validations = require('../../../lib/core/jhipster/validations');
@@ -62,10 +63,7 @@ describe('JDLField', () => {
       });
 
       it('creates a new instance', () => {
-        expect(field.name).to.eq(args.name);
-        expect(field.type).to.eq(args.type);
-        expect(field.comment).to.eq(args.comment);
-        expect(field.validations).to.deep.eq(args.validations);
+        expect(field).to.satisfy(matchField);
       });
     });
     context('when passing a reserved keyword as name', () => {
@@ -73,51 +71,6 @@ describe('JDLField', () => {
         expect(() => {
           new JDLField({ name: 'class', type: 'String' });
         }).to.throw('The field name cannot be a reserved keyword, got: class.');
-      });
-    });
-  });
-  describe('::isValid', () => {
-    context('when checking the validity of an invalid object', () => {
-      context('because it is nil or undefined', () => {
-        it('returns false', () => {
-          expect(JDLField.isValid(null)).to.be.false;
-          expect(JDLField.isValid(undefined)).to.be.false;
-        });
-      });
-      context('without a name attribute', () => {
-        it('returns false', () => {
-          expect(JDLField.isValid({ type: 'String' })).to.be.false;
-        });
-      });
-      context('without a type attribute', () => {
-        it('returns false', () => {
-          expect(JDLField.isValid({ name: 'myField' })).to.be.false;
-        });
-      });
-      context('with a reserved keyword as name', () => {
-        it('returns false', () => {
-          expect(JDLField.isValid({ name: 'class', type: 'String' })).to.be.false;
-        });
-      });
-      context('because its validations are invalid', () => {
-        it('returns false', () => {
-          expect(
-            JDLField.isValid({
-              name: 'myField',
-              type: 'String',
-              validations: [
-                {
-                  value: 42
-                }
-              ]
-            })
-          ).to.be.false;
-        });
-      });
-    });
-    context('when checking the validity of a valid object', () => {
-      it('returns true', () => {
-        expect(JDLField.isValid({ name: 'myField', type: 'String' })).to.be.true;
       });
     });
   });
@@ -137,14 +90,14 @@ describe('JDLField', () => {
         it('fails', () => {
           expect(() => {
             field.addValidation(null);
-          }).to.throw('The passed validation must be valid to be added to the field.\nErrors: No validation');
+          }).to.throw(/^Can't add invalid validation\. Error: No validation\.$/);
         });
       });
       context('because there is no value where it should', () => {
         it('fails', () => {
           expect(() => {
             field.addValidation({ name: Validations.MIN });
-          }).to.throw("The passed validation 'min' must be valid to be added to the field.\nErrors: No value");
+          }).to.throw(/^Can't add invalid validation\. Error: The validation min requires a value\.$/);
         });
       });
     });
@@ -157,7 +110,51 @@ describe('JDLField', () => {
       });
 
       it('works', () => {
-        expect(field.validations).to.deep.eq({ min: validation });
+        field.forEachValidation(validation => {
+          expect(validation.name).to.equal(Validations.MIN);
+          expect(validation.value).to.equal(42);
+        });
+      });
+    });
+  });
+  describe('#forEachValidation', () => {
+    context('when not passing a function', () => {
+      let field;
+
+      before(() => {
+        field = new JDLField({
+          name: 'toto',
+          type: 'String'
+        });
+      });
+
+      it('should fail', () => {
+        expect(() => field.forEachValidation()).to.throw();
+      });
+    });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        const field = new JDLField({
+          name: 'toto',
+          type: 'String'
+        });
+        field.addValidation({
+          name: 'required'
+        });
+        field.addValidation({
+          name: 'min',
+          value: 0
+        });
+        result = '';
+        field.forEachValidation(validation => {
+          result += `${validation.name}`;
+        });
+      });
+
+      it('should iterate over the fields', () => {
+        expect(result).to.equal('requiredmin');
       });
     });
   });

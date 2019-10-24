@@ -86,14 +86,14 @@ relationship OneToMany {
 }
 
 relationship ManyToOne {
-  Employee{user(login)} to User{employee},
+  Employee{user(login)} to User,
   Employee{manager(lastName)} to Employee
 }
 
 relationship ManyToMany {
-  JobHistory{department} to Department,
-  JobHistory to Job{history},
-  JobHistory{emp(employee)} to Employee,
+  JobHistory{department} to Department{jobHistory},
+  JobHistory{job} to Job{history},
+  JobHistory{emp(employee)} to Employee{jobHistory},
   Job{chore(title)} to Task{linkedJob(JobTitle)}
 }
 

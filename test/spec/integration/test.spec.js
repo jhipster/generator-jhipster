@@ -49,7 +49,7 @@ describe('integration tests', () => {
     });
 
     it('keeps the same JDL content', () => {
-      expect(writtenContent).to.deep.equal(originalContent);
+      expect(writtenContent.toString()).to.equal(originalContent.toString());
     });
   });
 });

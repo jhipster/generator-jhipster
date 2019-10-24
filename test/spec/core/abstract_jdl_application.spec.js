@@ -255,32 +255,4 @@ describe('AbstractJDLApplication', () => {
       });
     });
   });
-  describe('::isValid', () => {
-    context('when checking the validity of an invalid object', () => {
-      context('because it is nil', () => {
-        it('returns false', () => {
-          expect(AbstractJDLApplication.isValid()).to.be.false;
-        });
-      });
-      context('when not having a config attribute', () => {
-        it('returns false', () => {
-          expect(AbstractJDLApplication.isValid({})).to.be.false;
-        });
-      });
-      context('when having translations', () => {
-        context('and no native language', () => {
-          let jdlApplication = null;
-
-          before(() => {
-            jdlApplication = new AbstractJDLApplication({});
-            delete jdlApplication.config.nativeLanguage;
-          });
-
-          it('returns false', () => {
-            expect(AbstractJDLApplication.isValid(jdlApplication)).to.be.false;
-          });
-        });
-      });
-    });
-  });
 });

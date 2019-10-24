@@ -79,53 +79,6 @@ describe('JDLEntity', () => {
       });
     });
   });
-  describe('::isValid', () => {
-    context('when checking the validity of an invalid object', () => {
-      context('because it is nil or invalid', () => {
-        it('returns false', () => {
-          expect(JDLEntity.isValid(null)).to.be.false;
-          expect(JDLEntity.isValid(undefined)).to.be.false;
-        });
-      });
-      context('without a name attribute', () => {
-        it('returns false', () => {
-          expect(JDLEntity.isValid({ tableName: 'Something', fields: [] })).to.be.false;
-        });
-      });
-      context('with a reserved keyword as name', () => {
-        it('returns false', () => {
-          expect(JDLEntity.isValid({ name: 'class' })).to.be.false;
-        });
-      });
-      context('without a table name', () => {
-        it('returns false', () => {
-          expect(JDLEntity.isValid({ name: 'Something', fields: [] })).to.be.false;
-        });
-      });
-      context('because its fields are invalid', () => {
-        it('returns false', () => {
-          expect(
-            JDLEntity.isValid({
-              name: 'Something',
-              tableName: 't_something',
-              fields: [
-                {
-                  type: 'String',
-                  comment: 'comment',
-                  validations: []
-                }
-              ]
-            })
-          ).to.be.false;
-        });
-      });
-    });
-    context('when checking the validity of a valid object', () => {
-      it('returns true', () => {
-        expect(JDLEntity.isValid({ name: 'Valid', tableName: 't_valid', fields: [] })).to.be.true;
-      });
-    });
-  });
   describe('#addField', () => {
     let entity = null;
 
@@ -137,15 +90,19 @@ describe('JDLEntity', () => {
     });
 
     context('when adding an invalid field', () => {
-      it('fails', () => {
-        expect(() => {
-          entity.addField(null);
-        }).to.throw(`The passed field '' must be valid to be added in entity '${entity.name}'.\nErrors: No field`);
-        expect(() => {
-          entity.addField({ name: 'myField' });
-        }).to.throw(
-          `The passed field 'myField' must be valid to be added in entity '${entity.name}'.\nErrors: No field type`
-        );
+      context('because it is nil', () => {
+        it('should fail', () => {
+          expect(() => {
+            entity.addField(null);
+          }).to.throw(/^Can't add invalid field\. Error: No field\.$/);
+        });
+      });
+      context('because it does not have a type', () => {
+        it('should fail', () => {
+          expect(() => {
+            entity.addField({ name: 'myField' });
+          }).to.throw(/^Can't add invalid field\. Error: The field attribute type was not found\.$/);
+        });
       });
     });
     context('when adding a valid field', () => {
@@ -158,6 +115,50 @@ describe('JDLEntity', () => {
       it('works', () => {
         entity.addField(validField);
         expect(entity.fields).to.deep.eq({ myField: validField });
+      });
+    });
+  });
+  describe('#forEachField', () => {
+    context('when not passing a function', () => {
+      let entity;
+
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Toto'
+        });
+      });
+
+      it('should fail', () => {
+        expect(() => entity.forEachField()).to.throw();
+      });
+    });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        const entity = new JDLEntity({
+          name: 'Toto'
+        });
+        entity.addField(
+          new JDLField({
+            name: 'a',
+            type: 'String'
+          })
+        );
+        entity.addField(
+          new JDLField({
+            name: 'b',
+            type: 'String'
+          })
+        );
+        result = '';
+        entity.forEachField(field => {
+          result += `${field.name}`;
+        });
+      });
+
+      it('should iterate over the fields', () => {
+        expect(result).to.equal('ab');
       });
     });
   });

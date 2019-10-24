@@ -55,15 +55,6 @@ describe('JDLEnum', () => {
       expect(result).to.equal('A (aaaa),B');
     });
   });
-  describe('::isValid', () => {
-    context('when validating an invalid object', () => {
-      context('with no name', () => {
-        it('returns false', () => {
-          expect(JDLEnum.isValid({ values: ['A', 'B'] })).to.be.false;
-        });
-      });
-    });
-  });
   describe('#toString', () => {
     context('with simple enum values', () => {
       let values = [];

@@ -201,45 +201,6 @@ describe('JDLBinaryOption', () => {
       });
     });
   });
-  describe('::isValid', () => {
-    context('when passing a nil object', () => {
-      it('returns false', () => {
-        expect(JDLBinaryOption.isValid()).to.be.false;
-      });
-    });
-    context('when passing an object with no name', () => {
-      it('returns false', () => {
-        expect(JDLBinaryOption.isValid({})).to.be.false;
-      });
-    });
-    context('when passing an object with a name', () => {
-      it('returns false', () => {
-        expect(JDLBinaryOption.isValid({ name: BinaryOptions.Options.DTO })).to.be.false;
-      });
-    });
-    context('when passing an object with a name, entity names, excluded names and a type', () => {
-      let emptyOption = null;
-
-      before(() => {
-        emptyOption = new JDLBinaryOption({
-          name: BinaryOptions.Options.DTO,
-          value: BinaryOptions.Values.dto.MAPSTRUCT
-        });
-      });
-
-      it('returns true', () => {
-        expect(
-          JDLBinaryOption.isValid({
-            name: BinaryOptions.Options.DTO,
-            value: BinaryOptions.Values.dto.MAPSTRUCT,
-            entityNames: emptyOption.entityNames,
-            excludedNames: emptyOption.excludedNames,
-            getType: () => 'BINARY'
-          })
-        ).to.be.true;
-      });
-    });
-  });
   describe('#addEntitiesFromAnotherOption', () => {
     const option = new JDLBinaryOption({
       name: BinaryOptions.Options.DTO,

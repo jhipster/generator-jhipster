@@ -38,7 +38,7 @@ describe('JDLOptions', () => {
       it('fails', () => {
         expect(() => {
           options.addOption(null);
-        }).to.throw("The passed option is invalid and can't be added.\nErrors: No option");
+        }).to.throw(/^Can't add nil option.$/);
       });
     });
     context('when passing a valid option', () => {

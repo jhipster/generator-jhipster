@@ -20,6 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
+const { matchEntity } = require('../../matchers/entity_matcher');
 const JDLReader = require('../../../lib/readers/jdl_reader');
 const DocumentParser = require('../../../lib/parsers/document_parser');
 const JDLEntity = require('../../../lib/core/jdl_entity');
@@ -251,7 +252,7 @@ describe('DocumentParser', () => {
         });
 
         it('is processed', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User{a}').to).to.eq('User');
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User').to).to.eq('User');
           expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User').to).to.eq('User');
         });
       });
@@ -361,142 +362,8 @@ describe('DocumentParser', () => {
 
         context('checking the entities', () => {
           it('parses them', () => {
-            expect(jdlObject.entities.A).to.deep.eq({
-              name: 'A',
-              tableName: 'A',
-              fields: {},
-              comment: undefined,
-              options: []
-            });
-            expect(jdlObject.entities.B).to.deep.eq({
-              name: 'B',
-              tableName: 'B',
-              fields: {},
-              comment: undefined,
-              options: []
-            });
-            expect(jdlObject.entities.C).to.deep.eq({
-              name: 'C',
-              tableName: 'C',
-              fields: {
-                name: {
-                  comment: undefined,
-                  name: 'name',
-                  type: 'String',
-                  validations: {
-                    required: {
-                      name: 'required',
-                      value: ''
-                    }
-                  },
-                  options: {}
-                }
-              },
-              comment: undefined,
-              options: []
-            });
-            expect(jdlObject.entities.D).to.deep.eq({
-              name: 'D',
-              tableName: 'D',
-              fields: {
-                name: {
-                  comment: undefined,
-                  name: 'name',
-                  type: 'String',
-                  validations: {
-                    required: {
-                      name: 'required',
-                      value: ''
-                    },
-                    minlength: {
-                      name: 'minlength',
-                      value: 1
-                    },
-                    maxlength: {
-                      name: 'maxlength',
-                      value: 42
-                    }
-                  },
-                  options: {}
-                },
-                count: {
-                  comment: undefined,
-                  name: 'count',
-                  type: 'Integer',
-                  validations: {},
-                  options: {}
-                }
-              },
-              comment: undefined,
-              options: []
-            });
-            expect(jdlObject.entities.E).to.deep.eq({
-              name: 'E',
-              tableName: 'E',
-              fields: {},
-              comment: undefined,
-              options: []
-            });
-            expect(jdlObject.entities.F).to.deep.eq({
-              name: 'F',
-              tableName: 'F',
-              fields: {
-                name: {
-                  comment: 'My comment for name of F.',
-                  name: 'name',
-                  type: 'String',
-                  validations: {},
-                  options: {}
-                },
-                count: {
-                  comment: undefined,
-                  name: 'count',
-                  type: 'Integer',
-                  validations: {},
-                  options: {}
-                },
-                flag: {
-                  comment: 'My comment for flag of F.',
-                  name: 'flag',
-                  type: 'Boolean',
-                  validations: {
-                    required: {
-                      name: 'required',
-                      value: ''
-                    }
-                  },
-                  options: {}
-                }
-              },
-              comment: 'My comment for F.',
-              options: []
-            });
-            expect(jdlObject.entities.G).to.deep.eq({
-              name: 'G',
-              tableName: 'G',
-              fields: {
-                name: {
-                  comment: 'xyz',
-                  name: 'name',
-                  type: 'String',
-                  validations: {
-                    required: {
-                      name: 'required',
-                      value: ''
-                    }
-                  },
-                  options: {}
-                },
-                count: {
-                  comment: 'def',
-                  name: 'count',
-                  type: 'Integer',
-                  validations: {},
-                  options: {}
-                }
-              },
-              comment: undefined,
-              options: []
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
+              expect(jdlObject.entities[entityName]).to.satisfy(matchEntity);
             });
           });
         });
@@ -529,57 +396,10 @@ describe('DocumentParser', () => {
         });
 
         it('assigns them correctly', () => {
-          expect(jdlObject.entities.TestEntity.fields).to.deep.eq({
-            first: {
-              name: 'first',
-              comment: 'first comment',
-              type: 'String',
-              validations: {},
-              options: {}
-            },
-            second: {
-              name: 'second',
-              comment: 'second comment',
-              type: 'String',
-              validations: {},
-              options: {}
-            },
-            third: {
-              name: 'third',
-              comment: undefined,
-              type: 'Integer',
-              validations: {},
-              options: {}
-            },
-            fourth: {
-              name: 'fourth',
-              comment: undefined,
-              type: 'String',
-              validations: {},
-              options: {}
-            }
-          });
-          expect(jdlObject.entities.TestEntity2.fields).to.deep.eq({
-            first: {
-              name: 'first',
-              comment: 'first comment',
-              type: 'String',
-              validations: {
-                required: {
-                  name: 'required',
-                  value: ''
-                }
-              },
-              options: {}
-            },
-            second: {
-              name: 'second',
-              comment: 'second comment',
-              type: 'String',
-              validations: {},
-              options: {}
-            }
-          });
+          expect(jdlObject.entities.TestEntity.fields.first.comment).to.equal('first comment');
+          expect(jdlObject.entities.TestEntity.fields.second.comment).to.equal('second comment');
+          expect(jdlObject.entities.TestEntity2.fields.first.comment).to.equal('first comment');
+          expect(jdlObject.entities.TestEntity2.fields.second.comment).to.equal('second comment');
         });
       });
       context('when having constants', () => {
@@ -593,54 +413,34 @@ describe('DocumentParser', () => {
         });
 
         it("assigns the constants' value when needed", () => {
-          expect(jdlObject.entities.A.fields).to.deep.eq({
-            name: {
-              name: 'name',
-              comment: undefined,
-              type: 'String',
-              validations: {
-                minlength: {
-                  name: 'minlength',
-                  value: 1
-                },
-                maxlength: {
-                  name: 'maxlength',
-                  value: 42
-                }
-              },
-              options: {}
+          expect(jdlObject.entities.A.fields.name.validations).to.deep.equal({
+            minlength: {
+              name: 'minlength',
+              value: 1
             },
-            content: {
-              name: 'content',
-              comment: undefined,
-              type: 'TextBlob',
-              validations: {
-                minbytes: {
-                  name: 'minbytes',
-                  value: 20
-                },
-                maxbytes: {
-                  name: 'maxbytes',
-                  value: 40
-                }
-              },
-              options: {}
+            maxlength: {
+              name: 'maxlength',
+              value: 42
+            }
+          });
+          expect(jdlObject.entities.A.fields.content.validations).to.deep.equal({
+            minbytes: {
+              name: 'minbytes',
+              value: 20
             },
-            count: {
-              name: 'count',
-              comment: undefined,
-              type: 'Integer',
-              validations: {
-                min: {
-                  name: 'min',
-                  value: 0
-                },
-                max: {
-                  name: 'max',
-                  value: 41
-                }
-              },
-              options: {}
+            maxbytes: {
+              name: 'maxbytes',
+              value: 40
+            }
+          });
+          expect(jdlObject.entities.A.fields.count.validations).to.deep.equal({
+            min: {
+              name: 'min',
+              value: 0
+            },
+            max: {
+              name: 'max',
+              value: 41
             }
           });
         });

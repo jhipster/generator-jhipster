@@ -42,8 +42,7 @@ describe('JHipsterApplicationExporter', () => {
               config: {}
             });
           }).to.throw(
-            'The application must be valid in order to be exported.\n' +
-              'Errors: No name, No authentication type, No build tool'
+            /^Can't export invalid application\. Error: The application attributes baseName, authenticationType, buildTool were not found\.$/
           );
         });
       });

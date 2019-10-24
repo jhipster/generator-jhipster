@@ -41,7 +41,7 @@ describe('JDLEnums', () => {
       it('fails', () => {
         expect(() => {
           jdlEnums.add();
-        }).to.throw('The enum must be valid in order to be added to the enums.\nErrors: No enumeration');
+        }).to.throw('The enum must be valid in order to be added to the enums.\nError: No enum.');
       });
     });
     context('when adding a valid enum', () => {

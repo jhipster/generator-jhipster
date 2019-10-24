@@ -58,15 +58,16 @@ describe('JDLImporter', () => {
           ],
           relationships: [
             {
-              relationshipName: 'location',
-              otherEntityName: 'location',
-              relationshipType: 'many-to-one',
-              otherEntityField: 'id'
-            },
-            {
               relationshipType: 'one-to-many',
               relationshipName: 'area',
               otherEntityName: 'region',
+              otherEntityRelationshipName: 'country'
+            },
+            {
+              relationshipName: 'location',
+              otherEntityName: 'location',
+              relationshipType: 'many-to-one',
+              otherEntityField: 'id',
               otherEntityRelationshipName: 'country'
             }
           ],
@@ -179,14 +180,6 @@ describe('JDLImporter', () => {
           ],
           relationships: [
             {
-              otherEntityField: 'id',
-              otherEntityName: 'jobHistory',
-              otherEntityRelationshipName: 'employee',
-              ownerSide: false,
-              relationshipName: 'jobHistory',
-              relationshipType: 'many-to-many'
-            },
-            {
               relationshipType: 'one-to-many',
               relationshipName: 'job',
               otherEntityName: 'job',
@@ -213,6 +206,14 @@ describe('JDLImporter', () => {
               otherEntityName: 'department',
               otherEntityRelationshipName: 'employee',
               otherEntityField: 'id'
+            },
+            {
+              otherEntityField: 'id',
+              otherEntityName: 'jobHistory',
+              otherEntityRelationshipName: 'emp',
+              ownerSide: false,
+              relationshipName: 'jobHistory',
+              relationshipType: 'many-to-many'
             }
           ],
           name: 'Employee',
@@ -400,6 +401,7 @@ describe('JDLImporter', () => {
             {
               relationshipName: 'country',
               otherEntityName: 'country',
+              otherEntityRelationshipName: 'area',
               relationshipType: 'many-to-one',
               otherEntityField: 'id'
             }

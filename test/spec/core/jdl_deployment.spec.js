@@ -57,38 +57,6 @@ describe('JDLDeployment', () => {
       });
     });
   });
-  describe('::isValid', () => {
-    context('when checking the validity of an invalid object', () => {
-      context('because it is nil or invalid', () => {
-        it('returns false', () => {
-          expect(JDLDeployment.isValid(null)).to.be.false;
-          expect(JDLDeployment.isValid(undefined)).to.be.false;
-        });
-      });
-      context('without a deploymentType attribute', () => {
-        it('returns false', () => {
-          expect(JDLDeployment.isValid({ appsFolders: '../', dockerRepositoryName: 'test' })).to.be.false;
-        });
-      });
-      context('without appsFolders', () => {
-        it('returns false', () => {
-          expect(JDLDeployment.isValid({ deploymentType: 'kubernetes', dockerRepositoryName: 'test' })).to.be.false;
-        });
-      });
-      context('without dockerRepositoryName', () => {
-        it('returns false', () => {
-          expect(JDLDeployment.isValid({ deploymentType: 'kubernetes', appsFolders: '../' })).to.be.false;
-        });
-      });
-    });
-    context('when checking the validity of a valid object', () => {
-      it('returns true', () => {
-        expect(
-          JDLDeployment.isValid({ deploymentType: 'kubernetes', appsFolders: '../', dockerRepositoryName: 'test' })
-        ).to.be.true;
-      });
-    });
-  });
   describe('#toString', () => {
     context('with some default options', () => {
       let deployment = null;
