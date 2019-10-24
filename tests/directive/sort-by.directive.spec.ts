@@ -11,7 +11,7 @@ import { JhiSortByDirective, JhiSortDirective } from '../../src/directive';
     template: `
         <table>
             <thead>
-                <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)">
                     <th jhiSortBy="name">ID<fa-icon [icon]="'sort'"></fa-icon></th>
                 </tr>
             </thead>
@@ -20,7 +20,7 @@ import { JhiSortByDirective, JhiSortDirective } from '../../src/directive';
 })
 class TestJhiSortByDirectiveComponent {
     predicate: string;
-    reverse: boolean;
+    ascending: boolean;
     constructor(library: FaIconLibrary) {
         library.addIconPacks(fas);
         library.addIcons(faSort, faSortDown, faSortUp);
@@ -87,7 +87,7 @@ describe('Directive: JhiSortByDirective', () => {
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = 'name';
-        component.reverse = true;
+        component.ascending = true;
         const sortDirective = tableRow.injector.get(JhiSortDirective);
         const sortByDirective = tableHead.injector.get(JhiSortByDirective);
 
@@ -97,11 +97,11 @@ describe('Directive: JhiSortByDirective', () => {
         // THEN
         expect(sortByDirective.jhiSortBy).toEqual('name');
         expect(component.predicate).toEqual('name');
-        expect(component.reverse).toEqual(true);
+        expect(component.ascending).toEqual(true);
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortDown);
+        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortUp);
         expect(sortDirective.activeIconComponent).toBeDefined();
-        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortDown);
+        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortUp);
         expect(component.transition).toHaveBeenCalledTimes(0);
     });
 
@@ -109,7 +109,7 @@ describe('Directive: JhiSortByDirective', () => {
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = '_score';
-        component.reverse = true;
+        component.ascending = true;
         const sortDirective = tableRow.injector.get(JhiSortDirective);
         const sortByDirective = tableHead.injector.get(JhiSortByDirective);
 
@@ -121,7 +121,7 @@ describe('Directive: JhiSortByDirective', () => {
         // THEN
         expect(sortByDirective.jhiSortBy).toEqual('name');
         expect(component.predicate).toEqual('_score');
-        expect(component.reverse).toEqual(true);
+        expect(component.ascending).toEqual(true);
         expect(sortByDirective.iconComponent).toBeDefined();
         expect(sortByDirective.iconComponent.iconProp).toEqual('sort');
         expect(sortDirective.activeIconComponent).toBeUndefined();
@@ -132,7 +132,7 @@ describe('Directive: JhiSortByDirective', () => {
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = 'name';
-        component.reverse = true;
+        component.ascending = true;
         const sortDirective = tableRow.injector.get(JhiSortDirective);
         const sortByDirective = tableHead.injector.get(JhiSortByDirective);
 
@@ -143,11 +143,11 @@ describe('Directive: JhiSortByDirective', () => {
 
         // THEN
         expect(component.predicate).toEqual('name');
-        expect(component.reverse).toEqual(false);
+        expect(component.ascending).toEqual(false);
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortUp);
+        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortDown);
         expect(sortDirective.activeIconComponent).toBeDefined();
-        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortUp);
+        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortDown);
         expect(component.transition).toHaveBeenCalledTimes(1);
     });
 
@@ -155,7 +155,7 @@ describe('Directive: JhiSortByDirective', () => {
         // GIVEN
         spyOn(component, 'transition').and.callThrough();
         component.predicate = 'name';
-        component.reverse = true;
+        component.ascending = true;
         const sortDirective = tableRow.injector.get(JhiSortDirective);
         const sortByDirective = tableHead.injector.get(JhiSortByDirective);
 
@@ -171,11 +171,11 @@ describe('Directive: JhiSortByDirective', () => {
 
         // THEN
         expect(component.predicate).toEqual('name');
-        expect(component.reverse).toEqual(true);
+        expect(component.ascending).toEqual(true);
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortDown);
+        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortUp);
         expect(sortDirective.activeIconComponent).toBeDefined();
-        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortDown);
+        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortUp);
         expect(component.transition).toHaveBeenCalledTimes(2);
     });
 });
