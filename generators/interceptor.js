@@ -5,6 +5,7 @@ const printDiff = function() {
     const self = this;
     const initialSelf = this.initialSelf;
     const diff = Object.getOwnPropertyNames(this)
+        .filter(key => !key.startsWith('_'))
         .sort()
         .reduce((diff, key) => {
             if (['args', 'arguments', 'async', 'initialSelf'].includes(key)) return diff;
@@ -16,6 +17,7 @@ const printDiff = function() {
             }
             return diff;
         }, {});
+    debug('Namespace: %O', this.options.namespace);
     debug('%O', diff);
 };
 
