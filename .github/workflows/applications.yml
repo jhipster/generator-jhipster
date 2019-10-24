@@ -15,6 +15,7 @@ env:
     JHI_SCRIPTS: ./test-integration/scripts
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
+    DEBUG: interceptor:diff
 jobs:
     applications:
         name: ${{ matrix.app-type }} application test suite
