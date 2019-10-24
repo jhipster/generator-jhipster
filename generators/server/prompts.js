@@ -20,7 +20,6 @@
 const chalk = require('chalk');
 
 const constants = require('../generator-constants');
-const { getBase64Secret, getRandomHex } = require('../utils');
 
 module.exports = {
     askForModuleName,
@@ -36,10 +35,12 @@ function askForModuleName() {
 }
 
 function askForServerSideOpts(meta) {
-    if (!meta && this.existingProject) return;
+    if (!meta && this.serverExistingProject) return;
 
-    const applicationType = this.applicationType;
-    const reactive = this.reactive;
+    const config = this.storedConfig;
+
+    const applicationType = config.applicationType;
+    const reactive = config.reactive;
     let defaultPort = applicationType === 'gateway' ? '8080' : '8081';
     if (applicationType === 'uaa') {
         defaultPort = '9999';
@@ -288,83 +289,22 @@ function askForServerSideOpts(meta) {
     const done = this.async();
 
     this.prompt(prompts).then(props => {
-        this.serviceDiscoveryType = props.serviceDiscoveryType;
-        this.authenticationType = props.authenticationType;
+        config.serviceDiscoveryType = props.serviceDiscoveryType;
+        config.authenticationType = props.authenticationType;
 
-        // JWT authentication is mandatory with Eureka, so the JHipster Registry
-        // can control the applications
-        if (this.serviceDiscoveryType === 'eureka' && this.authenticationType !== 'uaa' && this.authenticationType !== 'oauth2') {
-            this.authenticationType = 'jwt';
-        }
+        config.packageName = props.packageName;
+        config.serverPort = props.serverPort;
+        config.cacheProvider = props.cacheProvider;
+        config.enableHibernateCache = props.enableHibernateCache;
+        config.databaseType = props.databaseType;
+        config.devDatabaseType = props.devDatabaseType;
+        config.prodDatabaseType = props.prodDatabaseType;
+        config.searchEngine = props.searchEngine;
+        config.buildTool = props.buildTool;
 
-        if (this.authenticationType === 'session') {
-            this.rememberMeKey = getRandomHex();
-        }
-
-        if (this.authenticationType === 'jwt' || this.applicationType === 'microservice') {
-            this.jwtSecretKey = getBase64Secret(null, 64);
-        }
-
-        // user-management will be handled by UAA app, oauth expects users to be managed in IpP
-        if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
-            this.skipUserManagement = true;
-        }
-
-        if (this.applicationType === 'uaa') {
-            this.authenticationType = 'uaa';
-        }
-
-        this.packageName = props.packageName;
-        this.serverPort = props.serverPort;
-        if (this.serverPort === undefined) {
-            this.serverPort = '8080';
-        }
-        this.cacheProvider = !reactive ? props.cacheProvider : 'no';
-        this.enableHibernateCache = props.enableHibernateCache;
-        this.databaseType = props.databaseType;
-        this.devDatabaseType = props.devDatabaseType;
-        this.prodDatabaseType = props.prodDatabaseType;
-        this.searchEngine = props.searchEngine;
-        this.buildTool = props.buildTool;
         const uaaBaseName = this.getUaaAppName(props.uaaBaseName).baseName;
-
-        if (this.databaseType === 'no') {
-            this.devDatabaseType = 'no';
-            this.prodDatabaseType = 'no';
-            this.enableHibernateCache = false;
-            if (this.authenticationType !== 'uaa') {
-                this.skipUserManagement = true;
-            }
-        } else if (this.databaseType === 'mongodb') {
-            this.devDatabaseType = 'mongodb';
-            this.prodDatabaseType = 'mongodb';
-            this.enableHibernateCache = false;
-        } else if (this.databaseType === 'couchbase') {
-            this.devDatabaseType = 'couchbase';
-            this.prodDatabaseType = 'couchbase';
-            this.enableHibernateCache = false;
-        } else if (this.databaseType === 'cassandra') {
-            this.devDatabaseType = 'cassandra';
-            this.prodDatabaseType = 'cassandra';
-            this.enableHibernateCache = false;
-        }
-
-        this.storedConfig.authenticationType = this.authenticationType;
-        this.storedConfig.buildTool = this.buildTool;
-        this.storedConfig.cacheProvider = this.cacheProvider;
-        this.storedConfig.databaseType = this.databaseType;
-        this.storedConfig.devDatabaseType = this.devDatabaseType;
-        this.storedConfig.enableHibernateCache = this.enableHibernateCache;
-        this.storedConfig.packageName = this.packageName;
-        this.storedConfig.prodDatabaseType = this.prodDatabaseType;
-        this.storedConfig.rememberMeKey = this.rememberMeKey;
-        this.storedConfig.searchEngine = this.searchEngine;
-        this.storedConfig.serverPort = this.serverPort;
-        this.storedConfig.serviceDiscoveryType = this.serviceDiscoveryType;
-        this.storedConfig.skipUserManagement = this.skipUserManagement;
-        this.storedConfig.jwtSecretKey = this.jwtSecretKey;
         if (uaaBaseName) {
-            this.uaaBaseName = this.storedConfig.uaaBaseName = uaaBaseName;
+            config.uaaBaseName = uaaBaseName;
         }
 
         done();
@@ -372,13 +312,15 @@ function askForServerSideOpts(meta) {
 }
 
 function askForOptionalItems(meta) {
-    if (!meta && this.existingProject) return;
+    if (!meta && this.serverExistingProject) return;
 
-    const applicationType = this.applicationType;
+    const config = this.storedConfig;
+
+    const applicationType = config.applicationType;
     const choices = [];
     const defaultChoice = [];
-    if (!this.reactive) {
-        if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
+    if (!config.reactive) {
+        if (config.databaseType === 'sql' || config.databaseType === 'mongodb') {
             choices.push({
                 name: 'Search engine using Elasticsearch',
                 value: 'searchEngine:elasticsearch'
@@ -414,21 +356,14 @@ function askForOptionalItems(meta) {
     if (choices.length > 0) {
         this.prompt(PROMPTS).then(prompt => {
             this.serverSideOptions = prompt.serverSideOptions;
-            this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
-            this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
-            this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
-            this.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
-
-            this.storedConfig.serverSideOptions = this.serverSideOptions;
-            this.storedConfig.websocket = this.websocket;
-            this.storedConfig.searchEngine = this.searchEngine;
-            this.storedConfig.messageBroker = this.messageBroker;
-            this.storedConfig.enableSwaggerCodegen = this.enableSwaggerCodegen;
+            config.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
+            config.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
+            config.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
+            config.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
 
             // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
-            if (!this.serviceDiscoveryType) {
-                this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
-                this.storedConfig.serviceDiscoveryType = this.serviceDiscoveryType;
+            if (!config.serviceDiscoveryType) {
+                config.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
             }
             done();
         });
@@ -438,7 +373,7 @@ function askForOptionalItems(meta) {
 }
 
 function askFori18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
+    if (this.serverExistingProject || this.configOptions.skipI18nQuestion) return;
 
     this.aski18n(this);
 }

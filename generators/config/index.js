@@ -23,6 +23,8 @@ const debug = require('debug')('jhipster:config');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const appPrompts = require('../app/prompts');
 const clientPrompts = require('../client/prompts');
+const serverPrompts = require('../server/prompts');
+const { getBase64Secret, getRandomHex } = require('../utils');
 
 // Migrate to local variables with yeoman-generator 4.1.1 | 4.2.0
 module.exports = class extends BaseBlueprintGenerator {
@@ -49,6 +51,8 @@ module.exports = class extends BaseBlueprintGenerator {
             this.error(`Config module not implemented for ${this.generatorSource.options.namespace}.`);
         }
         debug(`Executing config for ${this.generatorType}`);
+
+        this._serverExistingProject();
 
         this.useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('config', { generatorSource: this.generatorSource });
     }
@@ -87,6 +91,14 @@ module.exports = class extends BaseBlueprintGenerator {
             askForClientThemeVariant: clientPrompts.askForClientThemeVariant
         };
 
+        const serverSteps = {
+            askForModuleName: serverPrompts.askForModuleName,
+            askForServerSideOpts: serverPrompts.askForServerSideOpts,
+            configureServerPrompt: this._configureServerPrompt,
+            askForOptionalItems: serverPrompts.askForOptionalItems,
+            askFori18n: serverPrompts.askFori18n
+        };
+
         let steps;
 
         // App configuration steps
@@ -96,6 +108,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 askForApplicationType: appPrompts.askForApplicationType,
                 parseApplicationType: this._parseApplicationType,
                 askForModuleName: appPrompts.askForModuleName,
+                ...serverSteps,
                 ...clientSteps,
                 askFori18n: appPrompts.askFori18n,
                 askForTestOpts: appPrompts.askForTestOpts,
@@ -103,6 +116,8 @@ module.exports = class extends BaseBlueprintGenerator {
             };
         } else if (this.isClientConfiguration) {
             steps = clientSteps;
+        } else if (this.isServerConfiguration) {
+            steps = serverSteps;
         }
 
         return {
@@ -137,8 +152,10 @@ module.exports = class extends BaseBlueprintGenerator {
         let steps;
 
         // App configuration steps
-        if (this.isAppConfiguration) {
-            steps = {};
+        if (!this.isClientConfiguration) {
+            steps = {
+                configureServer: this._configureServer
+            };
         }
 
         return {
@@ -205,5 +222,154 @@ module.exports = class extends BaseBlueprintGenerator {
         if (generator.storedConfig.skipServer && generator.storedConfig.skipClient) {
             generator.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
         }
+    }
+
+    _serverExistingProject() {
+        const config = this.storedConfig;
+        // Keep old existingProject logic.
+        const serverConfigFound =
+            config.packageName !== undefined &&
+            config.authenticationType !== undefined &&
+            config.cacheProvider !== undefined &&
+            config.enableHibernateCache !== undefined &&
+            config.websocket !== undefined &&
+            config.databaseType !== undefined &&
+            config.devDatabaseType !== undefined &&
+            config.prodDatabaseType !== undefined &&
+            config.searchEngine !== undefined &&
+            config.buildTool !== undefined &&
+            config.baseName !== undefined;
+
+        if (serverConfigFound) {
+            this.log(
+                chalk.green(
+                    'This is an existing project, using the configuration from your .yo-rc.json file \nto re-generate the project...\n'
+                )
+            );
+        } else {
+            this.serverExistingProject = false;
+        }
+    }
+
+    _configureServerPrompt() {
+        if (this.serverExistingProject) return;
+        const config = this.storedConfig;
+
+        // JWT authentication is mandatory with Eureka, so the JHipster Registry
+        // can control the applications
+        if (config.serviceDiscoveryType === 'eureka' && config.authenticationType !== 'uaa' && config.authenticationType !== 'oauth2') {
+            config.authenticationType = 'jwt';
+        }
+
+        if (config.authenticationType === 'session') {
+            config.rememberMeKey = getRandomHex();
+        }
+
+        if (config.authenticationType === 'jwt' || config.applicationType === 'microservice') {
+            config.jwtSecretKey = getBase64Secret(null, 64);
+        }
+
+        // user-management will be handled by UAA app, oauth expects users to be managed in IpP
+        if ((config.applicationType === 'gateway' && config.authenticationType === 'uaa') || config.authenticationType === 'oauth2') {
+            config.skipUserManagement = true;
+        }
+
+        if (config.applicationType === 'uaa') {
+            config.authenticationType = 'uaa';
+        }
+
+        if (config.reactive) {
+            config.cacheProvider = 'no';
+        }
+        if (config.serverPort === undefined) {
+            config.serverPort = '8080';
+        }
+        if (config.databaseType === 'no') {
+            config.devDatabaseType = 'no';
+            config.prodDatabaseType = 'no';
+            config.enableHibernateCache = false;
+            if (config.authenticationType !== 'uaa') {
+                config.skipUserManagement = true;
+            }
+        } else if (config.databaseType === 'mongodb') {
+            config.devDatabaseType = 'mongodb';
+            config.prodDatabaseType = 'mongodb';
+            config.enableHibernateCache = false;
+        } else if (config.databaseType === 'couchbase') {
+            config.devDatabaseType = 'couchbase';
+            config.prodDatabaseType = 'couchbase';
+            config.enableHibernateCache = false;
+        } else if (config.databaseType === 'cassandra') {
+            config.devDatabaseType = 'cassandra';
+            config.prodDatabaseType = 'cassandra';
+            config.enableHibernateCache = false;
+        }
+    }
+
+    _configureServer() {
+        const config = this.storedConfig;
+        if (config.websocket === 'no') {
+            config.websocket = false;
+        }
+        if (config.searchEngine === 'no') {
+            config.searchEngine = false;
+        }
+        if (config.messageBroker === 'no') {
+            config.messageBroker = false;
+        }
+
+        if (config.serviceDiscoveryType === 'no') {
+            config.serviceDiscoveryType = false;
+        }
+
+        config.cacheProvider = config.cacheProvider || config.hibernateCache || 'no';
+        config.enableHibernateCache = config.enableHibernateCache && !['no', 'memcached'].includes(config.cacheProvider);
+
+        if (config.databaseType === 'mongodb') {
+            config.devDatabaseType = 'mongodb';
+            config.prodDatabaseType = 'mongodb';
+            config.enableHibernateCache = false;
+        } else if (config.databaseType === 'couchbase') {
+            config.devDatabaseType = 'couchbase';
+            config.prodDatabaseType = 'couchbase';
+            config.enableHibernateCache = false;
+        } else if (config.databaseType === 'cassandra') {
+            config.devDatabaseType = 'cassandra';
+            config.prodDatabaseType = 'cassandra';
+            config.enableHibernateCache = false;
+        } else if (config.databaseType === 'no') {
+            config.devDatabaseType = 'no';
+            config.prodDatabaseType = 'no';
+            config.enableHibernateCache = false;
+            if (config.authenticationType !== 'uaa') {
+                config.skipUserManagement = true;
+            }
+        }
+
+        // force variables unused by microservice applications
+        if (config.applicationType === 'microservice' || config.applicationType === 'uaa') {
+            config.websocket = false;
+        }
+
+        if (config.entitySuffix === config.dtoSuffix) {
+            this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+        }
+
+        // Generate remember me key if key does not already exist in config
+        if (config.authenticationType === 'session' && config.rememberMeKey === undefined) {
+            config.rememberMeKey = getRandomHex();
+        }
+
+        // Generate JWT secret key if key does not already exist in config
+        if (config.authenticationType === 'jwt' && config.jwtSecretKey === undefined) {
+            config.jwtSecretKey = getBase64Secret(null, 64);
+        }
+
+        // user-management will be handled by UAA app, oauth expects users to be managed in IpP
+        if ((config.applicationType === 'gateway' && config.authenticationType === 'uaa') || config.authenticationType === 'oauth2') {
+            config.skipUserManagement = true;
+        }
+
+        config.packageFolder = config.packageName.replace(/\./g, '/');
     }
 };
