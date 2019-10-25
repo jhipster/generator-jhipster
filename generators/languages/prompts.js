@@ -23,7 +23,7 @@ module.exports = {
 };
 
 function askForLanguages() {
-    if (this.languages) return;
+    if (this.optLanguages) return;
     const languageOptions = this.getAllSupportedLanguageOptions();
     const prompts = [
         {

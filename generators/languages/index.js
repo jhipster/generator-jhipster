@@ -37,7 +37,7 @@ module.exports = class extends BaseBlueprintGenerator {
         // eslint-disable-next-line global-require
         require('../interceptor').registerDiff(this);
 
-        debug(`Initializing ${this.rootGeneratorName()}:languages generator`);
+        debug(`Initializing ${this.rootGeneratorName()}:languages generator with %o`, this.options.languages);
 
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
@@ -67,15 +67,13 @@ module.exports = class extends BaseBlueprintGenerator {
         });
 
         // Enable translation by default
-        this.enableTranslation = true;
-        this.authenticationType = this.config.get('authenticationType');
         this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         // Validate languages passed as argument
-        this.languages = this.options.languages;
-        if (this.languages) {
-            this.languages = this.languages.filter(language => language);
-            this.languages.forEach(language => {
+        this.optLanguages = this.options.languages;
+        if (this.optLanguages) {
+            this.optLanguages = this.optLanguages.filter(language => language);
+            this.optLanguages.forEach(language => {
                 if (!this.isSupportedLanguage(language)) {
                     this.log('\n');
                     this.error(
@@ -91,7 +89,11 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.useBlueprints =
             !this.fromBlueprint &&
-            this.instantiateBlueprints('languages', { languages: this.languages, arguments: this.options.languages });
+            this.instantiateBlueprints('languages', { languages: this.optLanguages, arguments: this.options.languages });
+
+        if (!this.options.skipLoadShared) {
+            this.queueLoadShared();
+        }
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -102,15 +104,15 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             setupConsts() {
-                if (this.languages) {
+                if (this.optLanguages) {
                     if (this.skipClient) {
-                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
+                        this.log(chalk.bold(`\nInstalling languages: ${this.optLanguages.join(', ')} for server`));
                     } else if (this.skipServer) {
-                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for client`));
+                        this.log(chalk.bold(`\nInstalling languages: ${this.optLanguages.join(', ')} for client`));
                     } else {
-                        this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')}`));
+                        this.log(chalk.bold(`\nInstalling languages: ${this.optLanguages.join(', ')}`));
                     }
-                    this.languagesToApply = this.languages || [];
+                    this.languagesToApply = this.optLanguages || [];
                 } else {
                     this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
@@ -141,7 +143,7 @@ module.exports = class extends BaseBlueprintGenerator {
             saveConfig() {
                 if (this.enableTranslation) {
                     this.storedConfig.languages = _.union(this.currentLanguages, this.languagesToApply);
-                    this.config.set('languages', this.languages);
+                    this.config.set('languages', this.storedConfig.languages);
                 }
             }
         };

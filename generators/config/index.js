@@ -138,17 +138,20 @@ module.exports = class extends BaseBlueprintGenerator {
             ...steps,
 
             composeLanguages() {
+                const config = this.storedConfig;
                 // Update generatorType for languages generators
                 let generatorType = this.generatorType;
                 if (generatorType === 'app') {
-                    if (this.storedConfig.skipClient) {
+                    if (config.skipClient) {
                         generatorType = 'server';
-                    } else if (this.storedConfig.skipServer) {
+                    } else if (config.skipServer) {
                         generatorType = 'client';
                     } else {
                         this._validateSkip();
                     }
                 }
+                this.languages = config.languages;
+                this.enableTranslation = config.enableTranslation;
                 this.composeLanguagesSub(this, this.configOptions, generatorType);
             }
         };
@@ -181,7 +184,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             validateTranslation() {
                 const config = this.storedConfig;
-                config.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
+                config.enableI18nRTL = this.isI18nRTLSupportNecessary(config.languages);
 
                 if (config.nativeLanguage === undefined) {
                     config.nativeLanguage = 'en';
@@ -211,7 +214,7 @@ module.exports = class extends BaseBlueprintGenerator {
             config.skipClient = true;
             config.skipUserManagement = true;
         }
-        if (this.applicationType === 'uaa') {
+        if (config.applicationType === 'uaa') {
             config.skipClient = true;
             config.skipUserManagement = false;
             config.authenticationType = 'uaa';
