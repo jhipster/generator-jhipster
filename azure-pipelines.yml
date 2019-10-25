@@ -128,9 +128,9 @@ jobs:
           - bash: $(JHI_SCRIPTS)/10-install-jhipster.sh
             displayName: 'GENERATION: install JHipster'
           - bash: $(JHI_SCRIPTS)/11-generate-entities.sh
-            displayName: 'GENERATION: entities'
+            displayName: 'GENERATION: base entities'
           - bash: $(JHI_SCRIPTS)/11.9-generate-project-base.sh
-            displayName: 'GENERATION: project'
+            displayName: 'GENERATION: base project'
           - bash: $(JHI_SCRIPTS)/11-generate-entities.sh
             displayName: 'GENERATION: entities'
           - bash: $(JHI_SCRIPTS)/12-generate-project.sh

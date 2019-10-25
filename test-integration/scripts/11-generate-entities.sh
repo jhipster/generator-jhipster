@@ -16,7 +16,6 @@ moveEntity() {
 }
 
 prepareFolder() {
-    rm -rf "$JHI_FOLDER_APP"
     mkdir -p "$JHI_FOLDER_APP"/.jhipster/
 }
 #-------------------------------------------------------------------------------

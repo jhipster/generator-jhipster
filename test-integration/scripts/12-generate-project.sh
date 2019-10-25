@@ -33,6 +33,7 @@ else
         ls -al "$JHI_FOLDER_UAA"
 
         echo "========= Start git diff ========="
+        git add * || true
         git --no-pager diff HEAD -- . ':(exclude)package-lock.json'
         echo "========= End git diff ========="
     fi
@@ -52,6 +53,7 @@ fi
 # Check folder where the app is generated
 #-------------------------------------------------------------------------------
 echo "========= Start git diff ========="
+git add * || true
 git --no-pager diff HEAD -- . ':(exclude)package-lock.json'
 echo "========= End git diff ========="
 

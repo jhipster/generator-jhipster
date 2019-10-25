@@ -53,9 +53,9 @@ jobs:
               run: $JHI_SCRIPTS/04-git-config.sh
             - name: Install Jhipster
               run: $JHI_SCRIPTS/10-install-jhipster.sh
-            - name: Generate entities
+            - name: Generate base entities
               run: $JHI_SCRIPTS/11-generate-entities.sh
-            - name: Generate project
+            - name: Generate base project
               run: $JHI_SCRIPTS/11.9-generate-project-base.sh
             - name: Generate entities
               run: $JHI_SCRIPTS/11-generate-entities.sh
