@@ -11,7 +11,7 @@ if [ "$JHI_FOLDER_APP" == "$HOME/app" ]; then
     cp "$JHI_INTEG"/configstore/*.json "$HOME"/.config/configstore/
 fi
 
-export DIVERGE_VERSION="jhipster/generator-jhipster#3b9bedb132e394e0d9ad995c93da7846c10cd0a6"
+export DIVERGE_VERSION="mshima/generator-jhipster#before_jhipster7"
 
 if [[ "$JHI_ENTITY" == "jdl" ]]; then
     #-------------------------------------------------------------------------------
@@ -22,12 +22,12 @@ if [[ "$JHI_ENTITY" == "jdl" ]]; then
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl ./
 
     npm install "$DIVERGE_VERSION"
-    jhipster import-jdl *.jdl --no-insight
+    jhipster import-jdl *.jdl --no-insight --creation-timestamp 2019-10-25
     rm -rf src/ webpack/ .jhipster/ .mvn/ node_modules/
     rm * .* || true
 
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl ./
-    jhipster import-jdl *.jdl --no-insight
+    jhipster import-jdl *.jdl --no-insight --creation-timestamp 2019-10-25
 
 else
     #-------------------------------------------------------------------------------
@@ -37,13 +37,14 @@ else
         mkdir -p "$JHI_FOLDER_UAA"
         cd "$JHI_FOLDER_UAA"
 
+        cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json ./
         npm install "$DIVERGE_VERSION"
-        jhipster --force --no-insight --with-entities --skip-checks --from-cli
+        jhipster --force --no-insight --with-entities --skip-checks --from-cli --creation-timestamp 2019-10-25
         rm -rf src/ webpack/ .jhipster/ .mvn/ node_modules/
         rm * .* || true
 
         cp -f "$JHI_SAMPLES"/uaa/.yo-rc.json ./
-        jhipster --force --no-insight --with-entities --skip-checks --from-cli
+        jhipster --force --no-insight --with-entities --skip-checks --from-cli --creation-timestamp 2019-10-25
         ls -al "$JHI_FOLDER_UAA"
 
         echo "========= Start git diff ========="
@@ -59,11 +60,12 @@ else
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json ./
 
     npm install "$DIVERGE_VERSION"
-    jhipster --force --no-insight --skip-checks --with-entities --from-cli
+    jhipster --force --no-insight --skip-checks --with-entities --from-cli --creation-timestamp 2019-10-25
     rm -rf src/ webpack/ .jhipster/ .mvn/ node_modules/
     rm * .* || true
 
-    jhipster --force --no-insight --skip-checks --with-entities --from-cli
+    cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json ./
+    jhipster --force --no-insight --skip-checks --with-entities --from-cli --creation-timestamp 2019-10-25
 
 fi
 
