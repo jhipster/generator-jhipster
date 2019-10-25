@@ -56,6 +56,10 @@ jobs:
             - name: Generate entities
               run: $JHI_SCRIPTS/11-generate-entities.sh
             - name: Generate project
+              run: $JHI_SCRIPTS/11.9-generate-project-base.sh
+            - name: Generate entities
+              run: $JHI_SCRIPTS/11-generate-entities.sh
+            - name: Generate project
               run: $JHI_SCRIPTS/12-generate-project.sh
             - name: Replace version in generated project
               run: $JHI_SCRIPTS/13-replace-version-generated-project.sh

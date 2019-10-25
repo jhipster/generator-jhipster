@@ -129,6 +129,10 @@ jobs:
             displayName: 'GENERATION: install JHipster'
           - bash: $(JHI_SCRIPTS)/11-generate-entities.sh
             displayName: 'GENERATION: entities'
+          - bash: $(JHI_SCRIPTS)/11.9-generate-project-base.sh
+            displayName: 'GENERATION: project'
+          - bash: $(JHI_SCRIPTS)/11-generate-entities.sh
+            displayName: 'GENERATION: entities'
           - bash: $(JHI_SCRIPTS)/12-generate-project.sh
             displayName: 'GENERATION: project'
           - bash: $(JHI_SCRIPTS)/13-replace-version-generated-project.sh
