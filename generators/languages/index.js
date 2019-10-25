@@ -140,7 +140,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             saveConfig() {
                 if (this.enableTranslation) {
-                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
+                    this.storedConfig.languages = _.union(this.currentLanguages, this.languagesToApply);
                     this.config.set('languages', this.languages);
                 }
             }
@@ -156,23 +156,6 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'languages');
-            },
-
-            loadSharedData() {
-                this.loadShared();
-            },
-
-            setupShared() {
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.capitalizedBaseName = _.upperFirst(this.baseName);
-                this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
-                this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
-                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-                this.serviceDiscoveryType =
-                    configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
-                // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(configuration.get('buildTool'));
             }
         };
     }
@@ -185,6 +168,19 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _writing() {
         return {
+            setupShared() {
+                const config = this.storedConfig;
+                this.capitalizedBaseName = _.upperFirst(config.baseName);
+                // this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+                // Make dist dir available in templates
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(config.buildTool);
+
+                this.websocket = config.websocket === 'no' ? false : config.websocket;
+                this.searchEngine = config.searchEngine === 'no' ? false : config.searchEngine;
+                this.messageBroker = config.messageBroker === 'no' ? false : config.messageBroker;
+                this.serviceDiscoveryType = config.serviceDiscoveryType === 'no' ? false : config.serviceDiscoveryType;
+            },
+
             translateFile() {
                 this.languagesToApply.forEach(language => {
                     if (!this.skipClient) {

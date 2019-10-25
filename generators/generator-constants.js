@@ -94,7 +94,7 @@ const REQUIRED_VARIABLES_EJS = {
     // COMMON
     applicationType: undefined,
     baseName: undefined,
-    skipUserManagement: undefined,
+    skipUserManagement: false,
     otherModules: [],
     testFrameworks: [],
     languages: [],
@@ -103,7 +103,7 @@ const REQUIRED_VARIABLES_EJS = {
     clientFramework: undefined,
     clientPackageManager: undefined,
     skipCommitHook: undefined,
-    skipClient: undefined,
+    skipClient: false,
 
     // SERVER
     authenticationType: undefined,
@@ -120,7 +120,7 @@ const REQUIRED_VARIABLES_EJS = {
     serverPort: undefined,
     searchEngine: undefined,
     serviceDiscoveryType: undefined,
-    skipServer: undefined,
+    skipServer: false,
     uaaBaseName: undefined,
     websocket: undefined
 };
