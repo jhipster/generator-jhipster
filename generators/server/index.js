@@ -78,6 +78,10 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.registerPrettierTransform();
 
+        if (!this.options.skipLoadShared) {
+            this.queueLoadShared();
+        }
+
         // For blueprint, let the original generator call the config.
         // For derivated generator, the main generator already called config.
         // Add option to skip config, use only saved resource.
@@ -93,10 +97,6 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
-
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
@@ -132,11 +132,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _prompting() {
-        return {
-            loadSharedData() {
-                this.loadShared();
-            }
-        };
+        return {};
     }
 
     get prompting() {
@@ -146,11 +142,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _configuring() {
-        return {
-            loadSharedData() {
-                this.loadShared();
-            }
-        };
+        return {};
     }
 
     get configuring() {
@@ -161,10 +153,6 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
-
             configure() {
                 this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
             },
@@ -238,8 +226,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (!this.isRootGenerator) return;
 
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    this.storedConfig.nativeLanguage = this.nativeLanguage;
-                    this.storedConfig.languages = this.languages;
+                    const config = this.storedConfig;
+                    if (!config.nativeLanguage) config.nativeLanguage = this.nativeLanguage;
+                    if (!config.languages) config.languages = this.nativeLanguage;
                 }
                 this.config.set(this.storedConfig);
             }
