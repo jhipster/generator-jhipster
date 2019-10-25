@@ -60,12 +60,12 @@ function updateLanguagesInTranslationStore(generator) {
         );
         // Add i18n config snippets for all languages
         let i18nConfig = 'const dateTimeFormats = {\n';
-        i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
         if (generator.enableTranslation) {
             generator.languages.forEach((ln, i) => {
                 i18nConfig += generateDateTimeFormat(ln, i, generator.languages.length);
             });
         }
+        i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
         i18nConfig += '}';
         jhipsterUtils.replaceContent(
             {
@@ -88,7 +88,7 @@ function updateLanguagesInTranslationStore(generator) {
 }
 
 function generateDateTimeFormat(language, index, length) {
-    let config = `  '${language}': {\n`;
+    let config = `  ${language}: {\n`;
 
     config += '    short: {\n';
     config += '      year: \'numeric\', month: \'short\', day: \'numeric\', hour: \'numeric\', minute: \'numeric\'\n';
