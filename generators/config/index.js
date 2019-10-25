@@ -376,5 +376,10 @@ module.exports = class extends BaseBlueprintGenerator {
         }
 
         config.packageFolder = config.packageName.replace(/\./g, '/');
+
+        if (config.authenticationType === 'uaa' && !config.uaaBaseName) {
+            const uaaAppData = this.getUaaAppName('../uaa');
+            config.uaaBaseName = uaaAppData ? uaaAppData.baseName : undefined;
+        }
     }
 };
