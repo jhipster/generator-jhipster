@@ -23,6 +23,7 @@
         "nativeLanguage": "en",
         "languages": ["en"],
         "travis": true,
+        "skipUserManagement": true,
         "clientPackageManager": "npm",
         "clientFramework": "angularX"
     }
