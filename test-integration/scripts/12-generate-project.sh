@@ -65,13 +65,16 @@ git add * || true
 git --no-pager diff HEAD -- . ':(exclude)package-lock.json'
 echo "========= End git diff ========="
 
-echo "========= Verifing diff ========="
-git --no-pager diff --exit-code HEAD -- . ':(exclude)package-lock.json' ':(exclude).yo-rc.json' \
-        ':(exclude).editorconfig' \
-        ':(exclude)README.md' \
-        ':(exclude)src/test/resources/config/application*.yml'\
-        ':(exclude)src/main/resources/config/tls/keystore.p12'
-echo "========= Done verifing diff ========="
+if [[ "$JHI_ENTITY" != "jdl" ]]; then
+    echo "========= Verifing diff ========="
+    git --no-pager diff --exit-code HEAD -- . ':(exclude)package-lock.json' ':(exclude).yo-rc.json' \
+            ':(exclude).editorconfig' \
+            ':(exclude)README.md' \
+            ':(exclude)src/*/resources/config/application*.yml'\
+            ':(exclude)src/main/webapp/app/layouts/profiles/page-ribbon.component.ts'\
+            ':(exclude)src/main/resources/config/tls/keystore.p12'
+    echo "========= Done verifing diff ========="
+fi
 
 ls -al "$JHI_FOLDER_APP"
 git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
