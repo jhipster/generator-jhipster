@@ -36,6 +36,14 @@ else
         git add * || true
         git --no-pager diff HEAD -- . ':(exclude)package-lock.json'
         echo "========= End git diff ========="
+
+        echo "========= Verifing diff ========="
+        git --no-pager diff --exit-code HEAD -- . ':(exclude)package-lock.json' ':(exclude).yo-rc.json' \
+                ':(exclude).editorconfig' \
+                ':(exclude)README.md' \
+                ':(exclude)src/test/resources/config/application*.yml'\
+                ':(exclude)src/main/resources/config/tls/keystore.p12'
+        echo "========= Done verifing diff ========="
     fi
 
     #-------------------------------------------------------------------------------
@@ -56,6 +64,14 @@ echo "========= Start git diff ========="
 git add * || true
 git --no-pager diff HEAD -- . ':(exclude)package-lock.json'
 echo "========= End git diff ========="
+
+echo "========= Verifing diff ========="
+git --no-pager diff --exit-code HEAD -- . ':(exclude)package-lock.json' ':(exclude).yo-rc.json' \
+        ':(exclude).editorconfig' \
+        ':(exclude)README.md' \
+        ':(exclude)src/test/resources/config/application*.yml'\
+        ':(exclude)src/main/resources/config/tls/keystore.p12'
+echo "========= Done verifing diff ========="
 
 ls -al "$JHI_FOLDER_APP"
 git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
