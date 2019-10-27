@@ -153,7 +153,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   <%_ } _%>
 
   const handleClose = () => {
-    props.history.push('/entity/<%= entityFileName %>');
+    props.history.push('/<%= entityFileName %>');
   }
 
   useEffect(() => {
@@ -551,7 +551,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
           </AvGroup>
           <%_ } _%>
         <%_ }) _%>
-          <Button tag={Link} id="cancel-save" to="/entity/<%= entityFileName %>" replace color="info">
+          <Button tag={Link} id="cancel-save" to="/<%= entityFileName %>" replace color="info">
             <FontAwesomeIcon icon="arrow-left" />&nbsp;
             <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
           </Button>
