@@ -80,8 +80,8 @@
         "tabtab": "2.2.2",
         "through2": "3.0.1",
         "uuid": "3.3.3",
-        "yeoman-environment": "github:yeoman/environment#master",
-        "yeoman-generator": "github:yeoman/generator#master",
+        "yeoman-environment": "2.6.0",
+        "yeoman-generator": "4.2.0",
         "yo": "3.1.0"
     },
     "devDependencies": {
