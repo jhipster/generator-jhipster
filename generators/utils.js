@@ -88,7 +88,7 @@ function updateLanguagesInTranslationStore(generator) {
 }
 
 function generateDateTimeFormat(language, index, length) {
-    let config = `  ${language}: {\n`;
+    let config = `  '${language}': {\n`;
 
     config += '    short: {\n';
     config += '      year: \'numeric\', month: \'short\', day: \'numeric\', hour: \'numeric\', minute: \'numeric\'\n';
