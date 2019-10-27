@@ -61,6 +61,14 @@ To use this blueprint, run
 jhipster --blueprint vuejs
 ```
 
+## Create a new component page
+
+To create a new Vue.js empty page, run
+
+```bash
+jhipster --blueprint vuejs page
+```
+
 
 ## Running local Blueprint version for development
 
