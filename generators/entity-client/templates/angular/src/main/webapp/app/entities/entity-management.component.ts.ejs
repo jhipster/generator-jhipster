@@ -25,12 +25,16 @@ import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 import { Subscription } from 'rxjs';
 import { JhiEventManager <% if (pagination !== 'no') { %>, JhiParseLinks <% } %><% if (fieldsContainBlob) { %>, JhiDataUtils<% } %> } from 'ng-jhipster';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 <%_ if (pagination !== 'no') { %>
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 <%_ } _%>
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+<%_ if (!readOnly) { _%>
+import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
@@ -76,6 +80,13 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     registerChangeIn<%= entityClassPlural %>() {
         this.eventSubscriber = this.eventManager.subscribe('<%= entityInstance %>ListModification', () => <%= eventCallBack %>);
     }
+    <%_ if (!readOnly) { _%>
+
+    delete(<%= entityInstance %>: I<%= entityAngularName %>) {
+        const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
+    }
+    <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
         <%_ if (databaseType !== 'cassandra') { _%>
 
