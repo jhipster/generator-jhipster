@@ -112,7 +112,7 @@ function writeFiles() {
         },
 
         writeConfigRunFile() {
-            this.template('kubectl-apply.sh.ejs', 'kubectl-apply.sh');
+            this.template('kubectl-apply.sh.ejs', 'kubectl-knative-apply.sh');
         }
     };
 }

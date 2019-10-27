@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const shelljs = require('shelljs');
 const fs = require('fs');
 const prompts = require('../kubernetes/prompts');
 const writeFiles = require('./files').writeFiles;
@@ -25,16 +26,32 @@ const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths 
 const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
-
 module.exports = class extends BaseDockerGenerator {
     get initializing() {
         return {
             sayHello() {
                 this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('⎈')}`));
-                this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
+                this.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
             },
             ...super.initializing,
             checkKubernetes,
+            checkKnative() {
+                if (this.skipChecks) return;
+                const done = this.async();
+                shelljs.exec(
+                    'kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -i "v0.8.*" | grep -v "grep"',
+                    { silent: true },
+                    (code, stdout, stderr) => {
+                        if (stderr) {
+                            this.log(
+                                `${chalk.yellow.bold('WARNING!')} Knative 0.8 or later is not installed on your computer.\n` +
+                                    'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n'
+                            );
+                        }
+                        done();
+                    }
+                );
+            },
             loadConfig,
             localInit() {
                 this.istio = true;
@@ -88,11 +105,11 @@ module.exports = class extends BaseDockerGenerator {
 
     end() {
         if (this.warning) {
-            this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes configuration generated, but no Jib cache found`);
+            this.log(`\n${chalk.yellow.bold('WARNING!')} Kubernetes Knative configuration generated, but no Jib cache found`);
             this.log('If you forgot to generate the Docker image for this application, please run:');
             this.log(this.warningMessage);
         } else {
-            this.log(`\n${chalk.bold.green('Kubernetes configuration successfully generated!')}`);
+            this.log(`\n${chalk.bold.green('Kubernetes Knative configuration successfully generated!')}`);
         }
 
         this.log(
@@ -126,7 +143,7 @@ module.exports = class extends BaseDockerGenerator {
         }
 
         this.log('\nYou can deploy all your apps by running the following script:');
-        this.log(`  ${chalk.cyan('bash kubectl-apply.sh')}`);
+        this.log(`  ${chalk.cyan('bash kubectl-knative-apply.sh')}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log("\nUse these commands to find your application's IP addresses:");
@@ -139,12 +156,12 @@ module.exports = class extends BaseDockerGenerator {
         }
         // Make the apply script executable
         try {
-            fs.chmodSync('kubectl-apply.sh', '755');
+            fs.chmodSync('kubectl-knative-apply.sh', '755');
         } catch (err) {
             this.log(
                 `${chalk.yellow.bold(
                     'WARNING!'
-                )}Failed to make 'kubectl-apply.sh' executable, you may need to run 'chmod +x kubectl-apply.sh'`
+                )}Failed to make 'kubectl-knative-apply.sh' executable, you may need to run 'chmod +x kubectl-knative-apply.sh'`
             );
         }
     }
