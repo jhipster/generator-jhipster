@@ -57,7 +57,7 @@ module.exports = class extends Generator {
         this.MAIN_DIR = constants.MAIN_DIR;
         this.TEST_DIR = constants.TEST_DIR;
 
-        this.existingProject = this.config.existed;
+        this.configExisted = this.config.existed;
 
         this.jhipsterVersion = packagejs.version;
         // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk

@@ -19,23 +19,12 @@
 const chalk = require('chalk');
 
 module.exports = {
-    askForModuleName,
     askForClient,
-    askFori18n,
     askForClientTheme,
     askForClientThemeVariant
 };
 
-function askForModuleName() {
-    const config = this.storedConfig || this;
-    if (config.baseName) return;
-
-    this.askModuleName(this);
-}
-
 function askForClient(meta) {
-    if (!meta && this.existingProject) return;
-
     const config = this.storedConfig || this;
     const applicationType = config.applicationType;
 
@@ -63,7 +52,7 @@ function askForClient(meta) {
         default: 'angularX'
     };
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
+    if (meta) return PROMPT;
 
     const done = this.async();
 
@@ -74,19 +63,10 @@ function askForClient(meta) {
         }
         done();
     });
-}
-
-function askFori18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
-
-    this.aski18n(this);
+    return undefined;
 }
 
 function askForClientTheme(meta) {
-    if (!meta && this.existingProject) {
-        return;
-    }
-
     const config = this.storedConfig || this;
     const skipClient = config.skipClient;
     const done = this.async();
@@ -168,9 +148,6 @@ function promptQuestion(PROMPT, done, generator) {
 }
 
 function askForClientThemeVariant(meta) {
-    if (!meta && this.existingProject) {
-        return;
-    }
     const config = this.storedConfig || this;
     if (config.clientTheme === 'none') {
         config.clientThemeVariant = '';

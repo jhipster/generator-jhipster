@@ -22,21 +22,11 @@ const chalk = require('chalk');
 const constants = require('../generator-constants');
 
 module.exports = {
-    askForModuleName,
     askForServerSideOpts,
-    askForOptionalItems,
-    askFori18n
+    askForOptionalItems
 };
 
-function askForModuleName() {
-    if (this.storedConfig.baseName) return;
-
-    this.askModuleName(this);
-}
-
 function askForServerSideOpts(meta) {
-    if (!meta && this.serverExistingProject) return;
-
     const config = this.storedConfig;
 
     const applicationType = config.applicationType;
@@ -284,7 +274,7 @@ function askForServerSideOpts(meta) {
         }
     ];
 
-    if (meta) return prompts; // eslint-disable-line consistent-return
+    if (meta) return prompts;
 
     const done = this.async();
 
@@ -309,11 +299,10 @@ function askForServerSideOpts(meta) {
 
         done();
     });
+    return undefined;
 }
 
 function askForOptionalItems(meta) {
-    if (!meta && this.serverExistingProject) return;
-
     const config = this.storedConfig;
 
     const applicationType = config.applicationType;
@@ -350,7 +339,7 @@ function askForOptionalItems(meta) {
         default: defaultChoice
     };
 
-    if (meta) return PROMPTS; // eslint-disable-line consistent-return
+    if (meta) return PROMPTS;
 
     const done = this.async();
     if (choices.length > 0) {
@@ -370,10 +359,5 @@ function askForOptionalItems(meta) {
     } else {
         done();
     }
-}
-
-function askFori18n() {
-    if (this.serverExistingProject || this.configOptions.skipI18nQuestion) return;
-
-    this.aski18n(this);
+    return undefined;
 }

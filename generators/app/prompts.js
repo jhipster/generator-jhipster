@@ -22,8 +22,6 @@ const statistics = require('../statistics');
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
-    askForModuleName,
-    askFori18n,
     askForTestOpts,
     askForMoreModules
 };
@@ -46,7 +44,6 @@ function askForInsightOptIn() {
 }
 
 function askForApplicationType(meta) {
-    if (!meta && this.existingProject) return;
     const config = this.storedConfig || this;
 
     const DEFAULT_APPTYPE = 'monolith';
@@ -89,7 +86,7 @@ function askForApplicationType(meta) {
         default: DEFAULT_APPTYPE
     };
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
+    if (meta) return PROMPT;
 
     const done = this.async();
 
@@ -107,21 +104,10 @@ function askForApplicationType(meta) {
         }
         done();
     });
-}
-
-function askForModuleName() {
-    if (this.existingProject) return;
-
-    this.askModuleName(this);
-}
-
-function askFori18n() {
-    if (this.skipI18n || this.existingProject) return;
-    this.aski18n(this);
+    return undefined;
 }
 
 function askForTestOpts(meta) {
-    if (!meta && this.existingProject) return;
     const config = this.storedConfig || this;
 
     const choices = [];
@@ -142,7 +128,7 @@ function askForTestOpts(meta) {
         default: defaultChoice
     };
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
+    if (meta) return PROMPT;
 
     const done = this.async();
 
@@ -150,13 +136,10 @@ function askForTestOpts(meta) {
         config.testFrameworks = prompt.testFrameworks;
         done();
     });
+    return undefined;
 }
 
 function askForMoreModules() {
-    if (this.existingProject) {
-        return;
-    }
-
     const done = this.async();
     this.prompt({
         type: 'confirm',

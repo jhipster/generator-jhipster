@@ -52,7 +52,7 @@ module.exports = class extends BaseBlueprintGenerator {
         }
         debug(`Executing config for ${this.generatorType}`);
 
-        this._serverExistingProject();
+        this.serverExistingProject = this._serverExistingProject();
 
         this.useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('config', { generatorSource: this.generatorSource });
 
@@ -96,9 +96,9 @@ module.exports = class extends BaseBlueprintGenerator {
         let clientSteps;
         if (!config.skipServer)
             clientSteps = {
-                askForModuleName: clientPrompts.askForModuleName,
+                askForModuleName: this.storedConfig.baseName ? undefined : this.askModuleName,
                 askForClient: clientPrompts.askForClient,
-                askFori18n: clientPrompts.askFori18n,
+                askFori18n: this.isClientConfiguration ? this.aski18n : undefined,
                 askForClientTheme: clientPrompts.askForClientTheme,
                 askForClientThemeVariant: clientPrompts.askForClientThemeVariant
             };
@@ -106,32 +106,42 @@ module.exports = class extends BaseBlueprintGenerator {
         let serverSteps;
         if (!config.skipServer)
             serverSteps = {
-                askForModuleName: serverPrompts.askForModuleName,
+                askForModuleName: this.storedConfig.baseName ? undefined : this.askModuleName,
                 askForServerSideOpts: serverPrompts.askForServerSideOpts,
                 configureServerPrompt: this._configureServerPrompt,
                 askForOptionalItems: serverPrompts.askForOptionalItems,
-                askFori18n: serverPrompts.askFori18n
+                askFori18n: this.isServerConfiguration ? this.aski18n : undefined
             };
 
         let steps;
 
         // App configuration steps
-        if (this.isAppConfiguration) {
-            steps = {
-                askForInsightOptIn: appPrompts.askForInsightOptIn,
-                askForApplicationType: appPrompts.askForApplicationType,
-                parseApplicationType: this._parseApplicationType,
-                askForModuleName: appPrompts.askForModuleName,
-                ...serverSteps,
-                ...clientSteps,
-                askFori18n: appPrompts.askFori18n,
-                askForTestOpts: appPrompts.askForTestOpts,
-                askForMoreModules: appPrompts.askForMoreModules
-            };
-        } else if (this.isClientConfiguration) {
-            steps = clientSteps;
-        } else if (this.isServerConfiguration) {
-            steps = serverSteps;
+        if (!this.configExisted) {
+            if (this.isAppConfiguration) {
+                steps = {
+                    askForInsightOptIn: appPrompts.askForInsightOptIn,
+                    askForApplicationType: appPrompts.askForApplicationType,
+                    parseApplicationType: this._parseApplicationType,
+                    askForModuleName: this.askModuleName,
+                    ...serverSteps,
+                    ...clientSteps,
+                    askFori18n: this.skipI18n ? undefined : this.aski18n,
+                    askForTestOpts: appPrompts.askForTestOpts,
+                    askForMoreModules: appPrompts.askForMoreModules
+                };
+            } else if (this.isClientConfiguration) {
+                steps = clientSteps;
+            } else if (this.isServerConfiguration) {
+                steps = serverSteps;
+            }
+        } else if (this.isAppConfiguration) {
+            steps = { askForInsightOptIn: appPrompts.askForInsightOptIn };
+            if (!this.serverExistingProject) {
+                steps = {
+                    ...steps,
+                    ...serverSteps
+                };
+            }
         }
 
         return {
@@ -245,15 +255,14 @@ module.exports = class extends BaseBlueprintGenerator {
             config.baseName !== undefined;
 
         if (serverConfigFound) {
-            this.serverExistingProject = true;
             this.log(
                 chalk.green(
                     'This is an existing project, using the configuration from your .yo-rc.json file \nto re-generate the project...\n'
                 )
             );
-        } else {
-            this.serverExistingProject = false;
+            return true;
         }
+        return false;
     }
 
     _configureServerPrompt() {

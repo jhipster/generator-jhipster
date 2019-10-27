@@ -181,7 +181,6 @@ module.exports = class extends BaseGenerator {
                 } else {
                     this.storedConfig.embeddableLaunchScript = false;
                 }
-                this.configOptions.skipI18nQuestion = true;
             },
 
             compose() {

@@ -1718,8 +1718,9 @@ module.exports = class extends PrivateBase {
      *
      * @param {object} generator - generator instance to use
      */
-    askModuleName(generator) {
+    askModuleName(generator = this) {
         const done = generator.async();
+        const config = generator.storedConfig || generator;
         const defaultAppBaseName = this.getDefaultAppName();
         generator
             .prompt({
@@ -1729,10 +1730,10 @@ module.exports = class extends PrivateBase {
                     if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
                         return 'Your base name cannot contain special characters or a blank space';
                     }
-                    if ((generator.applicationType === 'microservice' || generator.applicationType === 'uaa') && /_/.test(input)) {
+                    if ((config.applicationType === 'microservice' || config.applicationType === 'uaa') && /_/.test(input)) {
                         return 'Your base name cannot contain underscores as this does not meet the URI spec';
                     }
-                    if (generator.applicationType === 'uaa' && input === 'auth') {
+                    if (config.applicationType === 'uaa' && input === 'auth') {
                         return "Your UAA base name cannot be named 'auth' as it conflicts with the gateway login routes";
                     }
                     if (input === 'application') {
@@ -1744,7 +1745,7 @@ module.exports = class extends PrivateBase {
                 default: defaultAppBaseName
             })
             .then(prompt => {
-                generator.baseName = generator.storedConfig.baseName = prompt.baseName;
+                config.baseName = prompt.baseName;
                 done();
             });
     }
@@ -1754,8 +1755,9 @@ module.exports = class extends PrivateBase {
      *
      * @param {object} generator - generator instance to use
      */
-    aski18n(generator) {
+    aski18n(generator = this) {
         const languageOptions = this.getAllSupportedLanguageOptions();
+        const config = generator.storedConfig || generator;
 
         const done = generator.async();
         const prompts = [
@@ -1784,9 +1786,9 @@ module.exports = class extends PrivateBase {
         ];
 
         generator.prompt(prompts).then(prompt => {
-            generator.enableTranslation = generator.storedConfig.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = generator.storedConfig.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = generator.storedConfig.languages = [prompt.nativeLanguage].concat(prompt.languages);
+            config.enableTranslation = prompt.enableTranslation;
+            config.nativeLanguage = prompt.nativeLanguage;
+            config.languages = [prompt.nativeLanguage].concat(prompt.languages);
             done();
         });
     }
