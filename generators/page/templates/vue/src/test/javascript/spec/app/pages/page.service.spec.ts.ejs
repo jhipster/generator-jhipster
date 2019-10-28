@@ -16,19 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* tslint:disable max-line-length */
 import <%= pageName %>Service from '@/pages/<%= pageFolderName %>/<%= pageFolderName %>.service';
 
-describe('Service Tests', () => {
-  describe('<%= pageName %> Service', () => {
-    let service: <%= pageName %>Service;
-    beforeEach(() => {
-      service = new <%= pageName %>Service();
-    });
-    describe('Service methods', () => {
-      it('should call "method"', async () => {
-        expect(service.method()).toBeTruthy();
-      });
+describe('<%= pageName %> Service', () => {
+  let service: <%= pageName %>Service;
+  beforeEach(() => {
+    service = new <%= pageName %>Service();
+  });
+
+  describe('Service methods', () => {
+    it('should call "method"', async () => {
+      expect(service.method()).toBeTruthy();
     });
   });
 });

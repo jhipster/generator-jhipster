@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 
 import * as config from '@/shared/config/config';
@@ -32,12 +31,6 @@ config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 <%_ } _%>
 const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-alert', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
 
 describe('Component Tests', () => {
   describe('<%= pageName %> Component', () => {
@@ -67,7 +60,7 @@ describe('Component Tests', () => {
 
     it('Should call "method" on init', async () => {
       // THEN
-      expect(<%= pageInstance %>ServiceStub.method.callCount).toEqual(1);
+      expect(<%= pageInstance %>ServiceStub. method.called).toBeTruthy();
     });
   });
 });
