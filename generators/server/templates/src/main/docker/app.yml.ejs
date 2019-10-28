@@ -76,9 +76,14 @@ services:
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
                 <%_ if (authenticationType === 'uaa') { _%>
             - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
-                <%_ } _%>
-            <%_ } _%>
+                <%_ } else { _%>
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+                <%_ } _%>
+            <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+            - JHIPSTER_SLEEP=90 # gives time for mariadb server to start
+            <%_ } else { _%>
+            - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+            <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
