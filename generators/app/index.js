@@ -22,7 +22,6 @@ const debug = require('debug')('jhipster:app');
 
 const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
-const options = require('./options');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const jhipsterUtils = require('../utils');
@@ -58,9 +57,157 @@ module.exports = class extends BaseGenerator {
             ...this.storedConfig
         };
 
-        const self = this;
-        Object.keys(options).forEach(key => {
-            self.option(key, options[key]);
+        // This adds support for a `--from-cli` flag
+        this.option('from-cli', {
+            desc: 'Indicates the command is run from JHipster CLI',
+            type: Boolean,
+            defaults: false
+        });
+        // This adds support for a `--skip-client` flag
+        this.option('skip-client', {
+            desc: 'Skip the client-side application generation',
+            type: Boolean,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--skip-server` flag
+        this.option('skip-server', {
+            desc: 'Skip the server-side application generation',
+            type: Boolean,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--skip-git` flag
+        this.option('skip-git', {
+            desc: 'Skip the git initialization',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-commit-hook` flag
+        this.option('skip-commit-hook', {
+            desc: 'Skip adding husky commit hooks',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-user-management` flag
+        this.option('skip-user-management', {
+            desc: 'Skip the user management module during app generation',
+            type: Boolean,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--skip-check-length-of-identifier` flag
+        this.option('skip-check-length-of-identifier', {
+            desc: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
+            type: Boolean,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--with-entities` flag
+        this.option('with-entities', {
+            desc: 'Regenerate the existing entities if any',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
+            desc: 'Check the status of the required tools',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--jhi-prefix` flag
+        this.option('jhi-prefix', {
+            desc: 'Add prefix before services, controllers and states name',
+            type: String,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--entity-suffix` flag
+        this.option('entity-suffix', {
+            desc: 'Add suffix after entities name',
+            type: String,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--dto-suffix` flag
+        this.option('dto-suffix', {
+            desc: 'Add suffix after dtos name',
+            type: String,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--yarn` flag
+        this.option('yarn', {
+            desc: 'Use yarn instead of npm',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--auth` flag
+        this.option('authentication-type', {
+            alias: 'auth',
+            desc: 'Provide authentication type for the application when skipping server side generation',
+            type: String
+        });
+
+        // This adds support for a `--db` flag
+        this.option('db', {
+            desc: 'Provide DB name for the application when skipping server side generation',
+            type: String
+        });
+
+        // This adds support for a `--uaa-base-name` flag
+        this.option('uaa-base-name', {
+            desc: 'Provide the name of UAA server, when using --auth uaa and skipping server side generation',
+            type: String,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--build` flag
+        this.option('build-tool', {
+            alias: 'build',
+            desc: 'Provide build tool for the application when skipping server side generation',
+            type: String,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--websocket` flag
+        this.option('websocket', {
+            desc: 'Provide websocket option for the application when skipping server side generation',
+            type: String,
+            scope: 'storage'
+        });
+
+        // This adds support for a `--search-engine` flag
+        this.option('search-engine', {
+            desc: 'Provide search engine for the application when skipping server side generation',
+            type: String,
+            scope: 'storage'
+        });
+
+        // NOTE: Deprecated!!! Use --blueprints instead
+        this.option('blueprint', {
+            desc: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
+            type: String
+        });
+        // This adds support for a `--blueprints` flag which can be used to specify one or more blueprints to use for generation
+        this.option('blueprints', {
+            desc:
+                'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
+            type: String
+        });
+
+        // This adds support for a `--experimental` flag which can be used to enable experimental features
+        this.option('experimental', {
+            desc:
+                'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
+            type: Boolean,
+            defaults: false,
+            scope: 'shared'
         });
 
         // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
