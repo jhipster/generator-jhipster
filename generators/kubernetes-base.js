@@ -26,7 +26,8 @@ module.exports = {
     checkKubernetes,
     loadConfig,
     saveConfig,
-    setupKubernetesConstants
+    setupKubernetesConstants,
+    setupHelmConstants
 };
 
 function checkKubernetes() {
@@ -81,4 +82,15 @@ function setupKubernetesConstants() {
     this.KUBERNETES_INGRESS_API_VERSION = constants.KUBERNETES_INGRESS_API_VERSION;
     this.KUBERNETES_ISTIO_NETWORKING_API_VERSION = constants.KUBERNETES_ISTIO_NETWORKING_API_VERSION;
     this.KUBERNETES_RBAC_API_VERSION = constants.KUBERNETES_RBAC_API_VERSION;
+}
+
+function setupHelmConstants() {
+    this.HELM_KAFKA = constants.HELM_KAFKA;
+    this.HELM_ELASTICSEARCH = constants.HELM_ELASTICSEARCH;
+    this.HELM_PROMETHEUS = constants.HELM_PROMETHEUS;
+    this.HELM_GRAFANA = constants.HELM_GRAFANA;
+    this.HELM_MARIADB = constants.HELM_MARIADB;
+    this.HELM_MYSQL = constants.HELM_MYSQL;
+    this.HELM_POSTGRESQL = constants.HELM_POSTGRESQL;
+    this.HELM_MOGODB_REPLICASET = constants.HELM_MOGODB_REPLICASET;
 }
