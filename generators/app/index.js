@@ -347,7 +347,7 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get writing() {
+    get default() {
         return {
             loadSharedData() {
                 this.loadShared();
@@ -355,8 +355,12 @@ module.exports = class extends BaseGenerator {
 
             saveConfig() {
                 this.config.set(this.storedConfig);
-            },
+            }
+        };
+    }
 
+    get writing() {
+        return {
             insight() {
                 const yorc = {
                     ..._.omit(this.configOptions, [

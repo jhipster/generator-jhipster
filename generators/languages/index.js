@@ -99,6 +99,8 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
+            ...super._initializing(),
+
             validateFromCli() {
                 this.checkInvocationFromCLI();
             },
@@ -128,6 +130,8 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
+            ...super._prompting(),
+
             askForLanguages: prompts.askForLanguages
         };
     }
@@ -137,27 +141,32 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._prompting();
     }
 
-    // Public API method used by the getter and also by Blueprints
-    _configuring() {
+    _default() {
         return {
+            ...super._default(),
+
             saveConfig() {
                 if (this.enableTranslation) {
                     this.storedConfig.languages = _.union(this.currentLanguages, this.languagesToApply);
-                    this.config.set('languages', this.storedConfig.languages);
+                    if (this.isRootGenerator) this.config.set(this.storedConfig);
                 }
-            }
-        };
-    }
+            },
 
-    get configuring() {
-        if (this.useBlueprints) return;
-        return this._configuring();
-    }
-
-    _default() {
-        return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'languages');
+            },
+
+            setupShared() {
+                const config = this.storedConfig;
+                this.capitalizedBaseName = _.upperFirst(config.baseName);
+                // this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+                // Make dist dir available in templates
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(config.buildTool);
+
+                this.websocket = config.websocket === 'no' ? false : config.websocket;
+                this.searchEngine = config.searchEngine === 'no' ? false : config.searchEngine;
+                this.messageBroker = config.messageBroker === 'no' ? false : config.messageBroker;
+                this.serviceDiscoveryType = config.serviceDiscoveryType === 'no' ? false : config.serviceDiscoveryType;
             }
         };
     }
@@ -170,19 +179,6 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _writing() {
         return {
-            setupShared() {
-                const config = this.storedConfig;
-                this.capitalizedBaseName = _.upperFirst(config.baseName);
-                // this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-                // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(config.buildTool);
-
-                this.websocket = config.websocket === 'no' ? false : config.websocket;
-                this.searchEngine = config.searchEngine === 'no' ? false : config.searchEngine;
-                this.messageBroker = config.messageBroker === 'no' ? false : config.messageBroker;
-                this.serviceDiscoveryType = config.serviceDiscoveryType === 'no' ? false : config.serviceDiscoveryType;
-            },
-
             translateFile() {
                 this.languagesToApply.forEach(language => {
                     if (!this.skipClient) {
