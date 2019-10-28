@@ -39,12 +39,12 @@ module.exports = class extends BaseDockerGenerator {
                 if (this.skipChecks) return;
                 const done = this.async();
                 shelljs.exec(
-                    'kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -i "v0.8.*" | grep -v "grep"',
+                    'kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -E "v0\\.[8-9]{1,3}\\.[0-9]*',
                     { silent: true },
                     (code, stdout, stderr) => {
-                        if (stderr) {
+                        if (stderr || code !== 0) {
                             this.log(
-                                `${chalk.yellow.bold('WARNING!')} Knative 0.8 or later is not installed on your computer.\n` +
+                                `${chalk.yellow.bold('WARNING!')} Knative 0.8.* or later is not installed on your computer.\n` +
                                     'Make sure you have Knative and Istio installed. Read https://knative.dev/docs/install/\n'
                             );
                         }
