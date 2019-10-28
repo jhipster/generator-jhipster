@@ -139,7 +139,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         if (fields[idx].fieldIsEnum) {
             if (fields[idx].fieldValues.length !== 0) {
                 const enums = fields[idx].fieldValues.split(',');
-                data = enums[Math.floor(Math.random() * Math.floor(enums.length))];
+                data = enums[this.faker.random.number(enums.length-1)];
             } else {
                 data = '';
             }
