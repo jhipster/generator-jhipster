@@ -111,9 +111,7 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
+            ...super._initializing(),
 
             validateFromCli() {
                 this.checkInvocationFromCLI();
@@ -139,39 +137,9 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     // Public API method used by the getter and also by Blueprints
-    _prompting() {
-        return {
-            loadSharedData() {
-                this.loadShared();
-            }
-        };
-    }
-
-    get prompting() {
-        if (this.useBlueprints) return;
-        return this._prompting();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _configuring() {
-        return {
-            loadSharedData() {
-                this.loadShared();
-            }
-        };
-    }
-
-    get configuring() {
-        if (this.useBlueprints) return;
-        return this._configuring();
-    }
-
-    // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
+            ...super._default(),
 
             insight() {
                 statistics.sendSubGenEvent('generator', 'client', {

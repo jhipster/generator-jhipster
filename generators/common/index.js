@@ -52,9 +52,7 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
+            ...super._initializing(),
 
             validateFromCli() {
                 this.checkInvocationFromCLI();
@@ -85,9 +83,7 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            loadSharedData() {
-                this.loadShared();
-            },
+            ...super._default(),
 
             getSharedConfigOptions() {
                 this.protractorTests = this.testFrameworks.includes('protractor');

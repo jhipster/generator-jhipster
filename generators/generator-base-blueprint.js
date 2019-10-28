@@ -51,22 +51,38 @@ module.exports = class extends BaseGenerator {
 
     // Public API method used by the getter and also by Blueprints
     _initializing() {
-        return {};
+        return {
+            loadSharedData() {
+                this.loadShared();
+            }
+        };
     }
 
     // Public API method used by the getter and also by Blueprints
     _prompting() {
-        return {};
+        return {
+            loadSharedData() {
+                this.loadShared();
+            }
+        };
     }
 
     // Public API method used by the getter and also by Blueprints
     _configuring() {
-        return {};
+        return {
+            loadSharedData() {
+                this.loadShared();
+            }
+        };
     }
 
     // Public API method used by the getter and also by Blueprints
     _default() {
-        return {};
+        return {
+            loadSharedData() {
+                this.loadShared();
+            }
+        };
     }
 
     // Public API method used by the getter and also by Blueprints
