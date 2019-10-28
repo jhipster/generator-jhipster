@@ -1126,7 +1126,7 @@ module.exports = class extends Generator {
         }
     }
 
-    loadOptions(scope, name, _option) {
+    loadScopedOptions(scope, name, _option) {
         const self = this;
         if (scope === undefined) {
             Object.keys(self._options).forEach(key => {
@@ -1134,7 +1134,7 @@ module.exports = class extends Generator {
                 if (!config.scope) return;
                 if (config.defaults !== undefined && config.scope === 'storage')
                     self.warn('Scoped with storage option should not have a default value');
-                self.loadOptions(config.scope, key, config);
+                self.loadScopedOptions(config.scope, key, config);
             });
             return;
         }
@@ -1143,7 +1143,7 @@ module.exports = class extends Generator {
         }
 
         if (Array.isArray(name)) {
-            name.forEach(key => self.loadOptions(scope, key));
+            name.forEach(key => self.loadScopedOptions(scope, key));
             return;
         }
         if (_option === undefined) {

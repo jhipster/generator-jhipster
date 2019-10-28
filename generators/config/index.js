@@ -56,7 +56,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('config', { generatorSource: this.generatorSource });
 
-        this.loadOptions('storage', ['base-name', 'uaa-base-name', 'skip-user-management', 'rememberMeKey']);
+        this.loadScopedOptions('storage', ['base-name', 'uaa-base-name', 'skip-user-management', 'rememberMeKey']);
     }
 
     // Public API method used by the getter and also by Blueprints

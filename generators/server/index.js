@@ -69,7 +69,7 @@ module.exports = class extends BaseBlueprintGenerator {
             scope: 'shared'
         });
 
-        this.loadOptions('storage', ['base-name', 'uaa-base-name', 'skip-user-management']);
+        this.loadScopedOptions('storage', ['base-name', 'uaa-base-name', 'skip-user-management']);
 
         // Make constants available in templates
         this._.defaults(this, constants.filter(/^CLIENT_*/, /^SERVER_*/, /^DOCKER_*/));

@@ -216,7 +216,7 @@ module.exports = class extends BaseGenerator {
             type: String
         });
 
-        this.loadOptions();
+        this.loadScopedOptions();
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];

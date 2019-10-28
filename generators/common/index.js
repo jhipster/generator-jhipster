@@ -40,7 +40,7 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
-        this.loadOptions('storage', ['base-name', 'uaa-base-name', 'skip-user-management']);
+        this.loadScopedOptions('storage', ['base-name', 'uaa-base-name', 'skip-user-management']);
         this.loadShared();
 
         this.useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common', { 'client-hook': !this.skipClient });

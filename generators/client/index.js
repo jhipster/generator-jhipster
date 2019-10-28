@@ -81,8 +81,8 @@ module.exports = class extends BaseBlueprintGenerator {
             scope: 'shared'
         });
 
-        this.loadOptions();
-        this.loadOptions('storage', [
+        this.loadScopedOptions();
+        this.loadScopedOptions('storage', [
             'base-name',
             'uaa-base-name',
             'jhi-prefix',
