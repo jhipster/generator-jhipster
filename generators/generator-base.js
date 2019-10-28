@@ -2045,11 +2045,10 @@ module.exports = class extends PrivateBase {
     }
 
     queueLoadShared() {
-        this.queueMethod(this.loadShared, 'loadSharedInitializing', 'initializing');
-        this.queueMethod(this.loadShared, 'loadSharedPrompting', 'prompting');
-        this.queueMethod(this.loadShared, 'loadSharedConfiguring', 'configuring');
-        this.queueMethod(this.loadShared, 'loadSharedDefault', 'default');
-        this.queueMethod(this.loadShared, 'loadSharedWriting', 'writing');
+        this.queueMethod(this.loadShared, 'loadShared', 'initializing');
+        this.queueMethod(this.loadShared, 'loadShared', 'prompting');
+        this.queueMethod(this.loadShared, 'loadShared', 'configuring');
+        this.queueMethod(this.loadShared, 'loadShared', 'default');
     }
 
     loadShared() {

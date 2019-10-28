@@ -240,10 +240,6 @@ module.exports = class extends BaseGenerator {
 
         this.registerPrettierTransform();
 
-        if (!this.options.skipLoadShared) {
-            this.queueLoadShared();
-        }
-
         let creationTimestamp;
         if (this.options.creationTimestamp) {
             creationTimestamp = Date.parse(this.options.creationTimestamp);
@@ -353,6 +349,10 @@ module.exports = class extends BaseGenerator {
 
     get writing() {
         return {
+            loadSharedData() {
+                this.loadShared();
+            },
+
             saveConfig() {
                 this.config.set(this.storedConfig);
             },
