@@ -3,3 +3,4 @@ generators/**/templates
 node_modules
 travis
 docs
+test/templates
