@@ -24,7 +24,11 @@ import <%= packageName %>.web.rest.TestUtil;
 <%_
 let hasOauthUser = false;
 for (idx in relationships) {
-    hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+    if (isUsingMapsId === true) {
+        hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
+        break;
+    }
 }
 _%>
 <%_ if (databaseType === 'cassandra' || (databaseType === 'sql' && hasOauthUser === true)) { _%>
