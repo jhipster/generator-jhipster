@@ -28,7 +28,7 @@ RUN \
   apt-get install -y openjdk-11-jdk && \
   update-java-alternatives -s java-1.11.0-openjdk-amd64 && \
   # install node.js
-  wget https://nodejs.org/dist/v10.16.3/node-v10.16.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v12.13.0/node-v12.13.0-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \
