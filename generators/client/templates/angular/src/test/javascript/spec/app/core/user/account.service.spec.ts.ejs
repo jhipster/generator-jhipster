@@ -74,6 +74,29 @@ describe('Service Tests', () => {
                 });
             });
 
+            it('should call /account again if user has logged out', () => {
+                // Given the user is authenticated
+                service.identity().subscribe(() => {});
+                const req = httpMock.expectOne({ method: 'GET' });
+                req.flush({
+                    firstName: 'Unimportant'
+                });
+
+                // When I call
+                service.identity().subscribe(() => {});
+
+                // Then there is no second request
+                httpMock.expectNone({ method: 'GET' });
+
+                // When I log out
+                service.authenticate(null);
+                // and then call
+                service.identity().subscribe(() => {});
+
+                // Then there is a new request
+                httpMock.expectOne({ method: 'GET' });
+            });
+
             describe('hasAnyAuthority string parameter', () => {
                 it('should return false if user is not logged', () => {
                     const hasAuthority = service.hasAnyAuthority('ROLE_USER');

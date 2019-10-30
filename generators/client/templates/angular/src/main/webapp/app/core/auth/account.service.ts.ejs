@@ -73,7 +73,7 @@ export class AccountService  {
     }
 
     identity(force?: boolean): Observable<Account> {
-        if (force) {
+        if (force || !this.authenticated) {
             this.accountCache$ = null;
         }
 
