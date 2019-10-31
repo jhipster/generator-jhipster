@@ -2,7 +2,7 @@
 
 ## Breaking changes
   - **JDLImporter**:
-    - Previously, it was a class that could be instanciated from either JDL files or string, and a configuration object.
+    - Previously, it was a class that could be instantiated from either JDL files or string, and a configuration object.
     - Now, in order to create a JDL importer, one must use createImporterFromContent or createImporterFromFiles.
   - **JDL(entity, field, enum, etc.):**
     - Removed validity check methods and moved them to the BusinessErrorChecker or their own validators.
@@ -25,6 +25,10 @@
   ```
 
 ## Fixed
+  - Having a field's name starting with `all...` (like `allowMultiple`) works again
+    - This was fixed by removing the `all` keyword from the parsing system and relying on the existing matchers to
+      notice if the JDL file contains the "all" keyword
+    - Related issue: [#389](https://github.com/jhipster/jhipster-core/issues/389)
   - Added missing many-to-many side when needed
     - Related issue: [#352](https://github.com/jhipster/jhipster-core/issues/352)
     - This snippet didn't work before as it broke the fluent methods:

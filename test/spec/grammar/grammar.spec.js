@@ -248,5 +248,39 @@ describe('Grammar tests', () => {
         });
       });
     });
+    context("using the 'all' keyword", () => {
+      let parsedOption;
+
+      before(() => {
+        const content = parseFromContent('clientRootFolder all with client');
+        parsedOption = content.clientRootFolder;
+      });
+
+      it("should parse it as '*'", () => {
+        expect(parsedOption).to.deep.equal({
+          client: {
+            excluded: [],
+            list: ['*']
+          }
+        });
+      });
+    });
+    context("using the '*' keyword", () => {
+      let parsedOption;
+
+      before(() => {
+        const content = parseFromContent('clientRootFolder * with client');
+        parsedOption = content.clientRootFolder;
+      });
+
+      it('should parse it', () => {
+        expect(parsedOption).to.deep.equal({
+          client: {
+            excluded: [],
+            list: ['*']
+          }
+        });
+      });
+    });
   });
 });
