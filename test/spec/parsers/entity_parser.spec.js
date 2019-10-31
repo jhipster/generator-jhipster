@@ -165,7 +165,7 @@ describe('EntityParser', () => {
         });
         const paginationOption = new JDLBinaryOption({
           name: BinaryOptions.PAGINATION,
-          value: BinaryOptionValues.pagination.PAGER,
+          value: BinaryOptionValues.pagination.PAGINATION,
           excludedNames: [entityB.name]
         });
         const microserviceOption = new JDLBinaryOption({
@@ -230,7 +230,7 @@ describe('EntityParser', () => {
               javadoc: undefined,
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
-              pagination: 'pager',
+              pagination: 'pagination',
               readOnly: true,
               relationships: [
                 {
@@ -317,7 +317,7 @@ describe('EntityParser', () => {
               javadoc: undefined,
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
-              pagination: 'pager',
+              pagination: 'pagination',
               readOnly: true,
               relationships: [
                 {
@@ -404,7 +404,7 @@ describe('EntityParser', () => {
               javadoc: undefined,
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
-              pagination: 'pager',
+              pagination: 'pagination',
               readOnly: true,
               relationships: [
                 {
@@ -495,7 +495,7 @@ describe('EntityParser', () => {
               javadoc: undefined,
               jpaMetamodelFiltering: false,
               microserviceName: 'myMs',
-              pagination: 'pager',
+              pagination: 'pagination',
               readOnly: true,
               relationships: [],
               service: 'no',

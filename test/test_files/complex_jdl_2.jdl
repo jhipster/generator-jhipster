@@ -25,7 +25,7 @@ entity G {
 }
 
 dto * with mapstruct except G
-paginate * with pager except G
+paginate * with infinite-scroll except G
 paginate G with pagination
 service G with serviceImpl
 service A, C, D, C with serviceClass

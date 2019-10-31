@@ -263,9 +263,9 @@ describe('JDLBinaryOption', () => {
       );
       option = new JDLBinaryOption({
         name: BinaryOptions.Options.PAGINATION,
-        value: BinaryOptions.Values.pagination.PAGER
+        value: BinaryOptions.Values.pagination.PAGINATION
       });
-      expect(option.toString()).to.eq(`paginate * with ${BinaryOptions.Values.pagination.PAGER}`);
+      expect(option.toString()).to.eq(`paginate * with ${BinaryOptions.Values.pagination.PAGINATION}`);
     });
   });
 });

@@ -379,7 +379,7 @@ describe('DocumentParser', () => {
             expect(options[4].name).to.equal('service');
             expect(options[4].value).to.equal('serviceClass');
             expect(options[5].name).to.equal('pagination');
-            expect(options[5].value).to.equal('pager');
+            expect(options[5].value).to.equal('infinite-scroll');
             expect(options[6].name).to.equal('pagination');
             expect(options[6].value).to.equal('pagination');
           });
@@ -752,9 +752,8 @@ describe('DocumentParser', () => {
           expect(filterOptions).to.have.length(1);
           expect(filterOptions[0].entityNames).to.deep.equal(new Set(['C']));
 
-          expect(paginationOptions).to.have.length(2);
+          expect(paginationOptions).to.have.length(1);
           expect(paginationOptions[0].entityNames).to.deep.equal(new Set(['B', 'C']));
-          expect(paginationOptions[1].entityNames).to.deep.equal(new Set(['B', 'C']));
 
           expect(serviceOptions).to.have.length(2);
           expect(serviceOptions[0].entityNames).to.deep.equal(new Set(['A', 'B']));

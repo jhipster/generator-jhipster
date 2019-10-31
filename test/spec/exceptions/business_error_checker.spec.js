@@ -701,7 +701,7 @@ describe('BusinessErrorChecker', () => {
           jdlObject.addOption(
             new JDLBinaryOption({
               name: BinaryOptions.Options.PAGINATION,
-              value: BinaryOptions.Values.pagination.PAGER,
+              value: BinaryOptions.Values.pagination.PAGINATION,
               entityNames: ['A']
             })
           );
@@ -721,7 +721,7 @@ describe('BusinessErrorChecker', () => {
           jdlObject.addOption(
             new JDLBinaryOption({
               name: BinaryOptions.Options.PAGINATION,
-              value: BinaryOptions.Values.pagination.PAGER
+              value: BinaryOptions.Values.pagination.PAGINATION
             })
           );
           checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });

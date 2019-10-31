@@ -1037,12 +1037,12 @@ describe('JDLImporter', () => {
         expect(returned.exportedEntities[0].skipClient).to.equal(true);
         expect(returned.exportedEntities[0].myCustomUnaryOption).to.equal(true);
         expect(returned.exportedEntities[0].myCustomBinaryOption).to.equal('customValue');
-        expect(returned.exportedEntities[1].pagination).to.equal('pager');
+        expect(returned.exportedEntities[1].pagination).to.equal('pagination');
         expect(returned.exportedEntities[1].dto).to.equal('mapstruct');
         expect(returned.exportedEntities[1].service).to.equal('serviceClass');
         expect(returned.exportedEntities[2].skipClient).to.equal(true);
         expect(returned.exportedEntities[2].jpaMetamodelFiltering).to.equal(true);
-        expect(returned.exportedEntities[2].pagination).to.equal('pager');
+        expect(returned.exportedEntities[2].pagination).to.equal('pagination');
         expect(returned.exportedEntities[2].myCustomBinaryOption).to.equal('customValue2');
         expect(returned.exportedEntities[0].fields[0].options.id).to.equal(true);
         expect(returned.exportedEntities[0].fields[0].options.multiValue).to.deep.equal(['value1', 'value2', 'value3']);

@@ -516,7 +516,7 @@ describe('ObjectUtils', () => {
         });
         context('when not having the same pagination option value', () => {
           before(() => {
-            secondObject.pagination = 'pager';
+            secondObject.pagination = 'pagination';
           });
           after(() => {
             secondObject.pagination = 'no';
@@ -602,7 +602,7 @@ describe('ObjectUtils', () => {
               }
             ],
             dto: 'mapstruct',
-            pagination: 'pager',
+            pagination: 'pagination',
             service: 'no'
           };
           const secondObject = {
@@ -659,7 +659,7 @@ describe('ObjectUtils', () => {
               }
             ],
             dto: 'mapstruct',
-            pagination: 'pager',
+            pagination: 'pagination',
             service: 'no'
           };
           const secondObject = {
@@ -719,7 +719,7 @@ describe('ObjectUtils', () => {
               }
             ],
             dto: 'mapstruct',
-            pagination: 'pager',
+            pagination: 'pagination',
             service: 'no'
           };
           secondObject = {

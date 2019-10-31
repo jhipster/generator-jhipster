@@ -3,14 +3,14 @@
 @skipClient
 entity A
 
-@paginate(pager)
+@paginate(pagination)
 @dto(mapstruct)
 @service(serviceClass)
 entity B
 
 @skipClient
 @filter
-@paginate(pager)
+@paginate(pagination)
 @readOnly
 entity C
 
