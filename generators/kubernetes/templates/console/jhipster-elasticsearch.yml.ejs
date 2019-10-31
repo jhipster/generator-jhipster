@@ -44,6 +44,10 @@ metadata:
 spec:
   serviceName: jhipster-elasticsearch-master
   replicas: 1
+  selector:
+    matchLabels:
+      component: jhipster-elasticsearch
+      role: master
   template:
     metadata:
       labels:
@@ -194,6 +198,10 @@ metadata:
 spec:
   serviceName: jhipster-elasticsearch-data
   replicas: 1
+  selector:
+    matchLabels:
+      component: jhipster-elasticsearch
+      role: data
   template:
     metadata:
       labels:
