@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 const shelljs = require('shelljs');
 const fs = require('fs');
-const prompts = require('../kubernetes/prompts');
+const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
@@ -30,7 +30,7 @@ module.exports = class extends BaseDockerGenerator {
     get initializing() {
         return {
             sayHello() {
-                this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('⎈')}`));
+                this.log(chalk.white(`${chalk.bold('☸')} Welcome to the JHipster Kubernetes Knative Generator ${chalk.bold('☸')}`));
                 this.log(chalk.white(`Files will be generated in the folder: ${chalk.yellow(this.destinationRoot())}`));
             },
             ...super.initializing,
@@ -54,6 +54,7 @@ module.exports = class extends BaseDockerGenerator {
             },
             loadConfig,
             localInit() {
+                this.deploymentApplicationType = 'microservice';
                 this.istio = true;
             },
             setupKubernetesConstants
@@ -62,9 +63,10 @@ module.exports = class extends BaseDockerGenerator {
 
     get prompting() {
         return {
-            askForApplicationType: prompts.askForApplicationType,
+            // askForApplicationType: prompts.askForApplicationType,
             askForPath: prompts.askForPath,
             askForApps: prompts.askForApps,
+            askForGeneratorType: prompts.askForGeneratorType,
             askForMonitoring: prompts.askForMonitoring,
             askForClustersMode: prompts.askForClustersMode,
             askForServiceDiscovery: prompts.askForServiceDiscovery,
@@ -79,7 +81,7 @@ module.exports = class extends BaseDockerGenerator {
     get configuring() {
         return {
             insight() {
-                statistics.sendSubGenEvent('generator', 'kubernetes');
+                statistics.sendSubGenEvent('generator', 'k8s-knative');
             },
 
             checkImages,
@@ -143,26 +145,36 @@ module.exports = class extends BaseDockerGenerator {
         }
 
         this.log('\nYou can deploy all your apps by running the following script:');
-        this.log(`  ${chalk.cyan('bash kubectl-knative-apply.sh')}`);
-        if (this.gatewayNb + this.monolithicNb >= 1) {
-            const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
-            this.log("\nUse these commands to find your application's IP addresses:");
-            for (let i = 0; i < this.appsFolders.length; i++) {
-                if (this.appConfigs[i].applicationType === 'gateway' || this.appConfigs[i].applicationType === 'monolith') {
-                    this.log(`  ${chalk.cyan(`kubectl get svc ${this.appConfigs[i].baseName.toLowerCase()}${namespaceSuffix}`)}`);
-                }
+
+        if (this.generatorType === 'k8s') {
+            this.log(`  ${chalk.cyan('bash kubectl-knative-apply.sh')}`);
+
+            // Make the apply script executable
+            try {
+                fs.chmodSync('kubectl-knative-apply.sh', '755');
+            } catch (err) {
+                this.log(
+                    `${chalk.yellow.bold(
+                        'WARNING!'
+                    )}Failed to make 'kubectl-knative-apply.sh' executable, you may need to run 'chmod +x kubectl-knative-apply.sh'`
+                );
             }
-            this.log();
-        }
-        // Make the apply script executable
-        try {
-            fs.chmodSync('kubectl-knative-apply.sh', '755');
-        } catch (err) {
-            this.log(
-                `${chalk.yellow.bold(
-                    'WARNING!'
-                )}Failed to make 'kubectl-knative-apply.sh' executable, you may need to run 'chmod +x kubectl-knative-apply.sh'`
-            );
+        } else {
+            this.log(`  ${chalk.cyan('bash helm-apply.sh')}`);
+            this.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
+            this.log(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
+
+            // Make the apply script executable
+            try {
+                fs.chmodSync('helm-apply.sh', '755');
+                fs.chmodSync('helm-upgrade.sh', '755');
+            } catch (err) {
+                this.log(
+                    `${chalk.yellow.bold(
+                        'WARNING!'
+                    )}Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh`
+                );
+            }
         }
     }
 };

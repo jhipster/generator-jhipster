@@ -23,96 +23,146 @@ module.exports = {
 
 function writeFiles() {
     return {
-        writeDeployments() {
+        writeGeneratorFiles() {
             const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
+            const helm = this.fetchFromInstalledJHipster('kubernetes-helm/templates');
             if (this.kubernetesNamespace !== 'default') {
                 this.template(`${k8s}/namespace.yml.ejs`, 'namespace.yml');
             }
-            for (let i = 0; i < this.appConfigs.length; i++) {
-                const appName = this.appConfigs[i].baseName.toLowerCase();
-                this.app = this.appConfigs[i];
-                this.template('service.yml.ejs', `${appName}/${appName}-service.yml`);
-                // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
-                if (this.app.prodDatabaseType !== 'no') {
-                    this.template(
-                        `${k8s}/db/${this.app.prodDatabaseType}.yml.ejs`,
-                        `${appName}/${appName}-${this.app.prodDatabaseType}.yml`
-                    );
-                }
-                if (this.app.searchEngine === 'elasticsearch') {
-                    this.template(`${k8s}/db/elasticsearch.yml.ejs`, `${appName}/${appName}-elasticsearch.yml`);
-                }
-                if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
-                    if (this.istio) {
-                        this.template('istio/gateway.yml.ejs', `${appName}/${appName}-gateway.yml`);
-                    } else if (this.kubernetesServiceType === 'Ingress') {
-                        this.template(`${k8s}/ingress.yml.ejs`, `${appName}/${appName}-ingress.yml`);
+            this.template('README-KUBERNETES-KNATIVE.md.ejs', 'README.md');
+            if (this.generatorType === 'k8s') {
+                for (let i = 0; i < this.appConfigs.length; i++) {
+                    const appName = this.appConfigs[i].baseName.toLowerCase();
+                    this.app = this.appConfigs[i];
+                    this.template('service.yml.ejs', `${appName}/${appName}-service.yml`);
+                    // If we choose microservice with no DB, it is trying to move _no.yml as prodDatabaseType is getting tagged as 'string' type
+                    if (this.app.prodDatabaseType !== 'no') {
+                        this.template(
+                            `${k8s}/db/${this.app.prodDatabaseType}.yml.ejs`,
+                            `${appName}/${appName}-${this.app.prodDatabaseType}.yml`
+                        );
                     }
-                }
-                if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
-                    this.template(`${k8s}/secret/jwt-secret.yml.ejs`, `${appName}/jwt-secret.yml`);
-                }
-                if (this.monitoring === 'prometheus') {
-                    this.template(`${k8s}/monitoring/jhipster-prometheus-sm.yml.ejs`, `${appName}/${appName}-prometheus-sm.yml`);
-                }
-                if (this.istio) {
+                    if (this.app.searchEngine === 'elasticsearch') {
+                        this.template(`${k8s}/db/elasticsearch.yml.ejs`, `${appName}/${appName}-elasticsearch.yml`);
+                    }
+                    if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
+                        this.template('istio/gateway.yml.ejs', `${appName}/${appName}-gateway.yml`);
+                    }
+                    if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
+                        this.template(`${k8s}/secret/jwt-secret.yml.ejs`, `${appName}/jwt-secret.yml`);
+                    }
+                    if (this.monitoring === 'prometheus') {
+                        this.template(`${k8s}/monitoring/jhipster-prometheus-sm.yml.ejs`, `${appName}/${appName}-prometheus-sm.yml`);
+                    }
                     this.template('istio/destination-rule.yml.ejs', `${appName}/${appName}-destination-rule.yml`);
                     this.template('istio/virtual-service.yml.ejs', `${appName}/${appName}-virtual-service.yml`);
                 }
-            }
-        },
 
-        writeServiceFiles() {
-            const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
-            if (this.useKafka) {
-                this.template(`${k8s}/messagebroker/kafka.yml.ejs`, 'messagebroker/kafka.yml');
-            }
-
-            if (this.monitoring === 'elk') {
-                this.template(`${k8s}/console/jhipster-elasticsearch.yml.ejs`, 'console/jhipster-elasticsearch.yml');
-                this.template(`${k8s}/console/jhipster-logstash.yml.ejs`, 'console/jhipster-logstash.yml');
-                this.template(`${k8s}/console/jhipster-console.yml.ejs`, 'console/jhipster-console.yml');
-                this.template(`${k8s}/console/jhipster-dashboard-console.yml.ejs`, 'console/jhipster-dashboard-console.yml');
-                if (this.deploymentApplicationType === 'microservice') {
-                    this.template(`${k8s}/console/jhipster-zipkin.yml.ejs`, 'console/jhipster-zipkin.yml');
+                if (this.useKafka) {
+                    this.template(`${k8s}/messagebroker/kafka.yml.ejs`, 'messagebroker/kafka.yml');
                 }
-                if (this.istio) {
+
+                if (this.monitoring === 'elk') {
+                    this.template(`${k8s}/console/jhipster-elasticsearch.yml.ejs`, 'console/jhipster-elasticsearch.yml');
+                    this.template(`${k8s}/console/jhipster-logstash.yml.ejs`, 'console/jhipster-logstash.yml');
+                    this.template(`${k8s}/console/jhipster-console.yml.ejs`, 'console/jhipster-console.yml');
+                    this.template(`${k8s}/console/jhipster-dashboard-console.yml.ejs`, 'console/jhipster-dashboard-console.yml');
+                    if (this.deploymentApplicationType === 'microservice') {
+                        this.template(`${k8s}/console/jhipster-zipkin.yml.ejs`, 'console/jhipster-zipkin.yml');
+                    }
                     this.template(`${k8s}/istio/gateway/jhipster-console-gateway.yml.ejs`, 'console/jhipster-console-gateway.yml');
                 }
-            }
 
-            if (this.monitoring === 'prometheus') {
-                this.template(`${k8s}/monitoring/jhipster-prometheus-crd.yml.ejs`, 'monitoring/jhipster-prometheus-crd.yml');
-                this.template(`${k8s}/monitoring/jhipster-prometheus-cr.yml.ejs`, 'monitoring/jhipster-prometheus-cr.yml');
-                this.template(`${k8s}/monitoring/jhipster-grafana.yml.ejs`, 'monitoring/jhipster-grafana.yml');
-                this.template(`${k8s}/monitoring/jhipster-grafana-dashboard.yml.ejs`, 'monitoring/jhipster-grafana-dashboard.yml');
-                if (this.istio) {
+                if (this.monitoring === 'prometheus') {
+                    this.template(`${k8s}/monitoring/jhipster-prometheus-crd.yml.ejs`, 'monitoring/jhipster-prometheus-crd.yml');
+                    this.template(`${k8s}/monitoring/jhipster-prometheus-cr.yml.ejs`, 'monitoring/jhipster-prometheus-cr.yml');
+                    this.template(`${k8s}/monitoring/jhipster-grafana.yml.ejs`, 'monitoring/jhipster-grafana.yml');
+                    this.template(`${k8s}/monitoring/jhipster-grafana-dashboard.yml.ejs`, 'monitoring/jhipster-grafana-dashboard.yml');
                     this.template(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, 'monitoring/jhipster-grafana-gateway.yml');
                 }
-            }
 
-            if (this.serviceDiscoveryType === 'eureka') {
-                this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, 'registry/jhipster-registry.yml');
-                this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'registry/application-configmap.yml');
-            } else if (this.serviceDiscoveryType === 'consul') {
-                this.template(`${k8s}/registry/consul.yml.ejs`, 'registry/consul.yml');
-                this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, 'registry/consul-config-loader.yml');
-                this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'registry/application-configmap.yml');
-            }
-
-            if (this.istio) {
+                if (this.serviceDiscoveryType === 'eureka') {
+                    this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, 'registry/jhipster-registry.yml');
+                    this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'registry/application-configmap.yml');
+                } else if (this.serviceDiscoveryType === 'consul') {
+                    this.template(`${k8s}/registry/consul.yml.ejs`, 'registry/consul.yml');
+                    this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, 'registry/consul-config-loader.yml');
+                    this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'registry/application-configmap.yml');
+                }
                 this.template(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, 'istio/grafana-gateway.yml');
-                this.template(`${k8s}/istio/gateway/jaeger-gateway.yml.ejs`, 'istio/jaeger-gateway.yml');
+                this.template(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, 'istio/zipkin-gateway.yml');
                 this.template(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, 'istio/kiali-gateway.yml');
+                this.template('kubectl-apply.sh.ejs', 'kubectl-knative-apply.sh');
+            } else {
+                for (let i = 0; i < this.appConfigs.length; i++) {
+                    const appName = this.appConfigs[i].baseName.toLowerCase();
+                    this.app = this.appConfigs[i];
+
+                    this.template('service.yml.ejs', `${appName}/templates/${appName}-service.yml`);
+                    this.template(`${helm}/app/values.yml.ejs`, `${appName}/values.yaml`);
+                    this.template(`${helm}/app/Chart.yml.ejs`, `${appName}/Chart.yaml`);
+                    this.template(`${helm}/app/requirements.yml.ejs`, `${appName}/requirements.yaml`);
+                    this.template(`${helm}/app/helpers.tpl.ejs`, `${appName}/templates/_helpers.tpl`);
+
+                    if (this.app.prodDatabaseType === 'couchbase') {
+                        this.template(
+                            `${k8s}/db/${this.app.prodDatabaseType}.yml.ejs`,
+                            `${appName}/templates/${appName}-${this.app.prodDatabaseType}.yaml`
+                        );
+                    }
+
+                    if (this.app.searchEngine === 'elasticsearch') {
+                        this.template(`${k8s}/db/elasticsearch.yml.ejs`, `${appName}/templates/${appName}-elasticsearch.yaml`);
+                    }
+                    if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
+                        this.template('istio/gateway.yml.ejs', `${appName}/templates/${appName}-gateway.yaml`);
+                    }
+                    if (!this.app.serviceDiscoveryType && this.app.authenticationType === 'jwt') {
+                        this.template(`${k8s}/secret/jwt-secret.yml.ejs`, `${appName}/templates/jwt-secret.yaml`);
+                    }
+                    this.template('istio/destination-rule.yml.ejs', `${appName}/templates/${appName}-destination-rule.yaml`);
+                    this.template('istio/virtual-service.yml.ejs', `${appName}/templates/${appName}-virtual-service.yaml`);
+                }
+
+                if (
+                    this.useKafka ||
+                    this.monitoring === 'elk' ||
+                    this.monitoring === 'prometheus' ||
+                    this.serviceDiscoveryType === 'eureka' ||
+                    this.serviceDiscoveryType === 'consul'
+                ) {
+                    this.template(`${helm}/csvc/values.yml.ejs`, 'csvc/values.yaml');
+                    this.template(`${helm}/csvc/Chart.yml.ejs`, 'csvc/Chart.yaml');
+                    this.template(`${helm}/csvc/requirements.yml.ejs`, 'csvc/requirements.yaml');
+                    this.template(`${helm}/csvc/helpers.tpl.ejs`, 'csvc/templates/_helpers.tpl');
+                }
+                if (this.monitoring === 'elk') {
+                    this.template(`${k8s}/console/jhipster-logstash.yml.ejs`, 'csvc/templates/jhipster-logstash.yaml');
+                    this.template(`${k8s}/console/jhipster-console.yml.ejs`, 'csvc/templates/jhipster-console.yaml');
+                    this.template(`${k8s}/console/jhipster-dashboard-console.yml.ejs`, 'csvc/templates/jhipster-dashboard-console.yaml');
+                    if (this.deploymentApplicationType === 'microservice') {
+                        this.template(`${k8s}/console/jhipster-zipkin.yml.ejs`, 'csvc/templates/jhipster-zipkin.yaml');
+                    }
+                    this.template(`${k8s}/istio/gateway/jhipster-console-gateway.yml.ejs`, 'csvc/templates/jhipster-console-gateway.yaml');
+                }
+                if (this.monitoring === 'prometheus') {
+                    this.template(`${k8s}/istio/gateway/jhipster-grafana-gateway.yml.ejs`, 'csvc/templates/jhipster-grafana-gateway.yaml');
+                }
+                if (this.serviceDiscoveryType === 'eureka') {
+                    this.template(`${k8s}/registry/jhipster-registry.yml.ejs`, 'csvc/templates/jhipster-registry.yaml');
+                    this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'csvc/templates/application-configmap.yaml');
+                }
+                if (this.serviceDiscoveryType === 'consul') {
+                    this.template(`${k8s}/registry/consul.yml.ejs`, 'csvc/templates/consul.yaml');
+                    this.template(`${k8s}/registry/consul-config-loader.yml.ejs`, 'csvc/templates/consul-config-loader.yaml');
+                    this.template(`${k8s}/registry/application-configmap.yml.ejs`, 'csvc/templates/application-configmap.yaml');
+                }
+                this.template(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, 'csvc/templates/grafana-gateway.yaml');
+                this.template(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, 'csvc/templates/zipkin-gateway.yaml');
+                this.template(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, 'csvc/templates/kiali-gateway.yaml');
+                this.template('helm-apply.sh.ejs', 'helm-apply.sh');
+                this.template('helm-upgrade.sh.ejs', 'helm-upgrade.sh');
             }
-        },
-
-        writeReadme() {
-            this.template('README-KUBERNETES-KNATIVE.md.ejs', 'README.md');
-        },
-
-        writeConfigRunFile() {
-            this.template('kubectl-apply.sh.ejs', 'kubectl-knative-apply.sh');
         }
     };
 }

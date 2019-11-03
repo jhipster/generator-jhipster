@@ -71,6 +71,7 @@ function loadConfig() {
     this.dbRandomPassword = crypto.randomBytes(30).toString('hex');
     this.kubernetesUseDynamicStorage = this.config.get('kubernetesUseDynamicStorage');
     this.kubernetesStorageClassName = this.config.get('kubernetesStorageClassName');
+    this.generatorType = this.config.get('generatorType');
 }
 
 function saveConfig() {
@@ -86,6 +87,7 @@ function saveConfig() {
         kubernetesServiceType: this.kubernetesServiceType,
         kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
         kubernetesStorageClassName: this.kubernetesStorageClassName,
+        generatorType: this.generatorType,
         ingressType: this.ingressType,
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring,
