@@ -21,6 +21,7 @@
 
 const { expect } = require('chai');
 const { parseFromContent } = require('../../../lib/readers/jdl_reader');
+const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../lib/core/jhipster/relationship_types');
 
 describe('Grammar tests', () => {
   context('when parsing an entity', () => {
@@ -233,7 +234,7 @@ describe('Grammar tests', () => {
     });
   });
   context('when parsing a relationship', () => {
-    ['OneToOne', 'OneToMany', 'ManyToOne', 'ManyToMany'].forEach(relationshipType => {
+    [ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY].forEach(relationshipType => {
       context(`for a ${relationshipType} relationship`, () => {
         let relationship;
 
