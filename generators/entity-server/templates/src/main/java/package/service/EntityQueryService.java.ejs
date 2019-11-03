@@ -27,7 +27,8 @@ package <%=packageName%>.service;
     const entityListToDto = mapper + '.' + 'toDto';
     const entityToDtoReference = mapper + '::'+ 'toDto';
     const repository = entityInstance  + 'Repository';
-    const criteria = entityClass + 'Criteria'; _%>
+    const criteria = entityClass + 'Criteria'; 
+    const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships); _%>
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
@@ -120,7 +121,7 @@ public class <%= serviceClassName %> extends QueryService<<%= asEntity(entityCla
         Specification<<%= asEntity(entityClass) %>> specification = Specification.where(null);
         if (criteria != null) {
             if (criteria.getId() != null) {
-                specification = specification.and(buildSpecification(criteria.getId(), <%= asEntity(entityClass) %>_.id));
+                specification = specification.and(<%= getSpecificationBuilder(primaryKeyType) %>(criteria.getId(), <%= asEntity(entityClass) %>_.id));
             }
             <%_
             fields.forEach((field) => {

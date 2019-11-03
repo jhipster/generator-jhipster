@@ -790,7 +790,27 @@ _%>
             <%_ } _%>
             .andExpect(jsonPath("$.<%=fields[idx].fieldName%>").value(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<% } %>;
     }
-<%_ if (jpaMetamodelFiltering) {
+<%_ if (jpaMetamodelFiltering) {  %>
+
+    @Test<% if (databaseType === 'sql') { %>
+    @Transactional<% } %>
+    public void get<%= entityClassPlural %>ByIdFiltering() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
+
+        Long id = <%= asEntity(entityInstance) %>.getId();
+
+        default<%= entityClass %>ShouldBeFound("id.equals=" + id);
+        default<%= entityClass %>ShouldNotBeFound("id.notEquals=" + id);
+
+        default<%= entityClass %>ShouldBeFound("id.greaterThanOrEqual=" + id);
+        default<%= entityClass %>ShouldNotBeFound("id.greaterThan=" + id);
+
+        default<%= entityClass %>ShouldBeFound("id.lessThanOrEqual=" + id);
+        default<%= entityClass %>ShouldNotBeFound("id.lessThan=" + id);
+    }
+
+<%_
         fields.forEach((searchBy) => {
             // we can't filter by all the fields.
             if (isFilterableType(searchBy.fieldType)) {
