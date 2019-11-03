@@ -232,37 +232,206 @@ describe('Grammar tests', () => {
       });
     });
   });
-  context('when parsing an option', () => {
-    context('being clientRootFolder', () => {
-      context('in the regular form', () => {
-        let parsedOption;
+  context('when parsing a relationship', () => {
+    ['OneToOne', 'OneToMany', 'ManyToOne', 'ManyToMany'].forEach(relationshipType => {
+      context(`for a ${relationshipType} relationship`, () => {
+        let relationship;
 
         before(() => {
-          const content = parseFromContent('clientRootFolder * with client');
-          parsedOption = content.clientRootFolder;
+          const content = parseFromContent(`relationship ${relationshipType} { A to B }`);
+          relationship = content.relationships[0];
         });
 
         it('should parse it', () => {
+          expect(relationship.cardinality).to.equal(formatRelationshipType(relationshipType));
+        });
+      });
+
+      function formatRelationshipType(relationshipType) {
+        return relationshipType.replace(
+          /([A-Za-z]+?)To([A-Za-z]+)/,
+          (match, firstGroup, secondGroup) => `${firstGroup.toLowerCase()}-to-${secondGroup.toLowerCase()}`
+        );
+      }
+    });
+    context('with only source & destination entities', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A to B }');
+        relationship = content.relationships[0];
+      });
+
+      it('should parse them', () => {
+        expect(relationship).to.deep.equal({
+          annotations: [],
+          cardinality: 'one-to-one',
+          from: {
+            injectedField: null,
+            javadoc: null,
+            name: 'A'
+          },
+          to: {
+            injectedField: null,
+            javadoc: null,
+            name: 'B'
+          }
+        });
+      });
+    });
+    context('with an injected field in the source', () => {
+      context('that is not required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A{b} to B }');
+          relationship = content.relationships[0];
+        });
+
+        it('should add it', () => {
+          expect(relationship.from.injectedField).to.equal('b');
+        });
+        it('should set the field requirement to false', () => {
+          expect(relationship.from.required).to.be.false;
+        });
+      });
+      context('that is required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A{b required} to B }');
+          relationship = content.relationships[0];
+        });
+
+        it('should add it', () => {
+          expect(relationship.from.injectedField).to.equal('b');
+        });
+        it('should set the field requirement to true', () => {
+          expect(relationship.from.required).to.be.true;
+        });
+      });
+    });
+    context('with an injected field in the destination', () => {
+      context('that is not required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A to B{a} }');
+          relationship = content.relationships[0];
+        });
+
+        it('should add it', () => {
+          expect(relationship.to.injectedField).to.equal('a');
+        });
+        it('should set the field requirement to false', () => {
+          expect(relationship.to.required).to.be.false;
+        });
+      });
+      context('that is required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A to B{a required} }');
+          relationship = content.relationships[0];
+        });
+
+        it('should add it', () => {
+          expect(relationship.to.injectedField).to.equal('a');
+        });
+        it('should set the field requirement to true', () => {
+          expect(relationship.to.required).to.be.true;
+        });
+      });
+    });
+    context('with an injected field in both sides', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A{b} to B{a} }');
+        relationship = content.relationships[0];
+      });
+
+      it('should add it in the source', () => {
+        expect(relationship.from.injectedField).to.equal('b');
+      });
+      it('should set the source field requirement to false', () => {
+        expect(relationship.from.required).to.be.false;
+      });
+      it('should add it in the destination', () => {
+        expect(relationship.to.injectedField).to.equal('a');
+      });
+      it('should set the destination field requirement to false', () => {
+        expect(relationship.to.required).to.be.false;
+      });
+    });
+  });
+  context('when parsing an option', () => {
+    context('being unary', () => {
+      context('with exclusions', () => {
+        let parsedOption;
+
+        before(() => {
+          const content = parseFromContent('skipClient * except A');
+          parsedOption = content.noClient;
+        });
+
+        it('should add the exclusions', () => {
           expect(parsedOption).to.deep.equal({
-            client: {
-              excluded: [],
-              list: ['*']
-            }
+            excluded: ['A'],
+            list: ['*']
           });
         });
       });
-      context('in the path form', () => {
+    });
+    context('being binary', () => {
+      context('being clientRootFolder', () => {
+        context('in the regular form', () => {
+          let parsedOption;
+
+          before(() => {
+            const content = parseFromContent('clientRootFolder * with client');
+            parsedOption = content.clientRootFolder;
+          });
+
+          it('should parse it', () => {
+            expect(parsedOption).to.deep.equal({
+              client: {
+                excluded: [],
+                list: ['*']
+              }
+            });
+          });
+        });
+        context('in the path form', () => {
+          let parsedOption;
+
+          before(() => {
+            const content = parseFromContent('clientRootFolder * with "../../toto"');
+            parsedOption = content.clientRootFolder;
+          });
+
+          it('should parse it', () => {
+            expect(parsedOption).to.deep.equal({
+              '"../../toto"': {
+                excluded: [],
+                list: ['*']
+              }
+            });
+          });
+        });
+      });
+      context('with exclusions', () => {
         let parsedOption;
 
         before(() => {
-          const content = parseFromContent('clientRootFolder * with "../../toto"');
-          parsedOption = content.clientRootFolder;
+          const content = parseFromContent('dto * with mapstruct except A');
+          parsedOption = content.dto;
         });
 
-        it('should parse it', () => {
+        it('should add the exclusions', () => {
           expect(parsedOption).to.deep.equal({
-            '"../../toto"': {
-              excluded: [],
+            mapstruct: {
+              excluded: ['A'],
               list: ['*']
             }
           });
