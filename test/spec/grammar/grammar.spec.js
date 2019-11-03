@@ -344,24 +344,97 @@ describe('Grammar tests', () => {
       });
     });
     context('with an injected field in both sides', () => {
+      context('without them being required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A{b} to B{a} }');
+          relationship = content.relationships[0];
+        });
+
+        it('should add it in the source', () => {
+          expect(relationship.from.injectedField).to.equal('b');
+        });
+        it('should set the source field requirement to false', () => {
+          expect(relationship.from.required).to.be.false;
+        });
+        it('should add it in the destination', () => {
+          expect(relationship.to.injectedField).to.equal('a');
+        });
+        it('should set the destination field requirement to false', () => {
+          expect(relationship.to.required).to.be.false;
+        });
+      });
+      context('with them being required', () => {
+        let relationship;
+
+        before(() => {
+          const content = parseFromContent('relationship OneToOne { A{b required} to B{a required} }');
+          relationship = content.relationships[0];
+        });
+
+        it('should set the source field requirement to true', () => {
+          expect(relationship.from.required).to.be.true;
+        });
+        it('should set the destination field requirement to true', () => {
+          expect(relationship.to.required).to.be.true;
+        });
+      });
+    });
+    context('with an explicit join field in the source', () => {
       let relationship;
 
       before(() => {
-        const content = parseFromContent('relationship OneToOne { A{b} to B{a} }');
+        const content = parseFromContent('relationship OneToOne { A{b(name)} to B }');
+        relationship = content.relationships[0];
+      });
+
+      it('should add it', () => {
+        expect(relationship.from.injectedField).to.equal('b(name)');
+      });
+    });
+    context('with an explicit join field in the destination', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A to B{a(name)} }');
+        relationship = content.relationships[0];
+      });
+
+      it('should add it', () => {
+        expect(relationship.to.injectedField).to.equal('a(name)');
+      });
+    });
+    context('with an explicit join field in both sides', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A{b(name)} to B{a(name)} }');
         relationship = content.relationships[0];
       });
 
       it('should add it in the source', () => {
-        expect(relationship.from.injectedField).to.equal('b');
-      });
-      it('should set the source field requirement to false', () => {
-        expect(relationship.from.required).to.be.false;
+        expect(relationship.from.injectedField).to.equal('b(name)');
       });
       it('should add it in the destination', () => {
-        expect(relationship.to.injectedField).to.equal('a');
+        expect(relationship.to.injectedField).to.equal('a(name)');
       });
-      it('should set the destination field requirement to false', () => {
-        expect(relationship.to.required).to.be.false;
+    });
+    context('with a method', () => {
+      let relationship;
+
+      before(() => {
+        const content = parseFromContent('relationship OneToOne { A to B with jpaDerivedIdentifier }');
+        relationship = content.relationships[0];
+      });
+
+      it('should add it', () => {
+        expect(relationship.annotations).to.deep.equal([
+          {
+            option: 'jpaDerivedIdentifier',
+            type: 'UNARY'
+          }
+        ]);
       });
     });
   });
