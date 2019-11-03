@@ -265,7 +265,7 @@ describe('Grammar tests', () => {
 
       it('should parse them', () => {
         expect(relationship).to.deep.equal({
-          annotations: [],
+          options: [],
           cardinality: 'one-to-one',
           from: {
             injectedField: null,
@@ -430,7 +430,7 @@ describe('Grammar tests', () => {
       });
 
       it('should add it', () => {
-        expect(relationship.annotations).to.deep.equal([
+        expect(relationship.options).to.deep.equal([
           {
             option: 'jpaDerivedIdentifier',
             type: 'UNARY'
