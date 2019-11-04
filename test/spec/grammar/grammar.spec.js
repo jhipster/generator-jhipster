@@ -24,6 +24,175 @@ const { parseFromContent } = require('../../../lib/readers/jdl_reader');
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../lib/core/jhipster/relationship_types');
 
 describe('Grammar tests', () => {
+  context('when parsing constants', () => {
+    let constants;
+
+    before(() => {
+      const content = parseFromContent(`MIN = 42
+MAX = 43`);
+      constants = content.constants;
+    });
+
+    it('should parse them', () => {
+      expect(constants).to.deep.equal({ MIN: 42, MAX: 43 });
+    });
+  });
+  context('when parsing applications', () => {
+    context('with no custom configuration', () => {
+      let application;
+
+      before(() => {
+        const content = parseFromContent('application {}');
+        application = content.applications[0];
+      });
+
+      it('should parse it', () => {
+        expect(application).to.deep.equal({
+          config: {},
+          entities: {
+            entityList: [],
+            excluded: []
+          }
+        });
+      });
+    });
+    context('with a custom configuration', () => {
+      let application;
+
+      before(() => {
+        const content = parseFromContent(`application {
+  config {
+    baseName superApp
+    applicationType monolith
+  }
+}`);
+        application = content.applications[0];
+      });
+
+      it('should parse it', () => {
+        expect(application).to.deep.equal({
+          config: {
+            baseName: 'superApp',
+            applicationType: 'monolith'
+          },
+          entities: {
+            entityList: [],
+            excluded: []
+          }
+        });
+      });
+    });
+    context('with more than one application', () => {
+      let applications;
+
+      before(() => {
+        const content = parseFromContent(`application {
+  config {
+    baseName superApp2
+    applicationType monolith
+  }
+}
+
+application {
+  config {
+    baseName superApp1
+    applicationType monolith
+  }
+}
+`);
+        applications = content.applications;
+      });
+
+      it('should parse them', () => {
+        expect(applications).to.deep.equal([
+          {
+            config: {
+              baseName: 'superApp2',
+              applicationType: 'monolith'
+            },
+            entities: {
+              entityList: [],
+              excluded: []
+            }
+          },
+          {
+            config: {
+              baseName: 'superApp1',
+              applicationType: 'monolith'
+            },
+            entities: {
+              entityList: [],
+              excluded: []
+            }
+          }
+        ]);
+      });
+    });
+    context('when having entities', () => {
+      context('without exclusions', () => {
+        let application;
+
+        before(() => {
+          const content = parseFromContent(`application {
+  config {
+    baseName superApp
+    applicationType monolith
+  }
+  entities A, B, C
+}`);
+          application = content.applications[0];
+        });
+
+        it('should parse them', () => {
+          expect(application.entities.entityList).to.deep.equal(['A', 'B', 'C']);
+        });
+      });
+      context('with exclusions', () => {
+        context("using the 'all' keyword", () => {
+          let application;
+
+          before(() => {
+            const content = parseFromContent(`application {
+  config {
+    baseName superApp
+    applicationType monolith
+  }
+  entities all except A
+}`);
+            application = content.applications[0];
+          });
+
+          it('should parse the list', () => {
+            expect(application.entities.entityList).to.deep.equal(['*']);
+          });
+          it('should parse the list', () => {
+            expect(application.entities.excluded).to.deep.equal(['A']);
+          });
+        });
+        context("using the '*' keyword", () => {
+          let application;
+
+          before(() => {
+            const content = parseFromContent(`application {
+  config {
+    baseName superApp
+    applicationType monolith
+  }
+  entities * except A
+}`);
+            application = content.applications[0];
+          });
+
+          it('should parse the list', () => {
+            expect(application.entities.entityList).to.deep.equal(['*']);
+          });
+          it('should parse the list', () => {
+            expect(application.entities.excluded).to.deep.equal(['A']);
+          });
+        });
+      });
+    });
+  });
   context('when parsing an entity', () => {
     context('with a name', () => {
       let parsedEntity;
