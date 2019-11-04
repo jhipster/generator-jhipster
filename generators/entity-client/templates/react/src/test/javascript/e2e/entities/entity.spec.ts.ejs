@@ -106,6 +106,7 @@ describe('<%= entityClass %> e2e test', () => {
                 const fieldType = field.fieldType;
                 const fieldTypeBlobContent = field.fieldTypeBlobContent;
                 const fieldIsEnum = field.fieldIsEnum;
+                const fieldValidateSampleString = field.fieldValidateSampleString;
             _%>
             <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
@@ -138,6 +139,9 @@ describe('<%= entityClass %> e2e test', () => {
             <%_ } else if (fieldType === 'UUID'){ _%>
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
+            <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldValidateSampleString %>');
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldValidateSampleString %>/);
             <%_ } else { _%>
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
