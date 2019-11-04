@@ -230,6 +230,23 @@ application {
         });
       });
     });
+    context('without fields', () => {
+      context('if using curly braces or not', () => {
+        let firstDeclaration;
+        let secondDeclaration;
+
+        before(() => {
+          const firstContent = parseFromContent('entity A');
+          const secondContent = parseFromContent('entity A {}');
+          firstDeclaration = firstContent.entities[0];
+          secondDeclaration = secondContent.entities[0];
+        });
+
+        it('should produce the same result', () => {
+          expect(firstDeclaration).to.deep.equal(secondDeclaration);
+        });
+      });
+    });
     context('with annotations', () => {
       let parsedEntity;
 
