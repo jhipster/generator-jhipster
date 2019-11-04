@@ -110,6 +110,7 @@ describe('<%= entityClass %> e2e test', () => {
             const fieldType = field.fieldType;
             const fieldTypeBlobContent = field.fieldTypeBlobContent;
             const fieldIsEnum = field.fieldIsEnum;
+            const fieldValidateSampleString = field.fieldValidateSampleString;
             if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5'),
             <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -126,6 +127,8 @@ describe('<%= entityClass %> e2e test', () => {
             <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption(),
             <%_ } else if (fieldType === 'UUID'){ _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974'),
+            <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+            <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldValidateSampleString %>'),
             <%_ } else if (fieldType !== 'Boolean') { _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>'),
             <%_ } _%>
@@ -148,6 +151,7 @@ describe('<%= entityClass %> e2e test', () => {
             const fieldType = field.fieldType;
             const fieldTypeBlobContent = field.fieldTypeBlobContent;
             const fieldIsEnum = field.fieldIsEnum;
+            const fieldValidateSampleString = field.fieldValidateSampleString;
             if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5', 'Expected <%=fieldName%> value to be equals to 5');
             <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -156,6 +160,8 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30', 'Expected <%=fieldName%> value to be equals to 2000-12-31');
             <%_ } else if (fieldType === 'Duration') { _%>
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('12', 'Expected <%=fieldName%> value to be equals to 12');
+            <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldValidateSampleString %>', 'Expected <%=fieldNameCapitalized%> value to be equals to <%= fieldValidateSampleString %>');
             <%_ } else if (fieldType === 'Boolean') { _%>
         const selected<%= fieldNameCapitalized %> = <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input();
         if (await selected<%= fieldNameCapitalized %>.isSelected()) {
