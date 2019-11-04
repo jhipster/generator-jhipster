@@ -54,7 +54,7 @@ const JHipsterDeploymentExporter = require('../lib/exporters/jhipster_deployment
 const JSONToJDLConverter = require('../lib/converters/json_to_jdl_converter');
 
 const LintRules = require('../lib/linter/rules');
-const JDLLinter = require('../lib/linter/jdl_linter');
+const { createJDLLinterFromFile, createJDLLinterFromContent } = require('../lib/linter/jdl_linter');
 
 module.exports = {
   jdl: {
@@ -69,7 +69,10 @@ module.exports = {
     },
     linting: {
       LintRules,
-      JDLLinter
+      JDLLinter: {
+        createJDLLinterFromFile,
+        createJDLLinterFromContent
+      }
     },
     objects: {
       JDLObject,

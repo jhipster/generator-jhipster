@@ -18,31 +18,48 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 
+const { writeFileSync, unlinkSync } = require('fs');
 const path = require('path');
 const { expect } = require('chai');
-const JDLLinter = require('../../../lib/linter/jdl_linter');
+const { createJDLLinterFromFile, createJDLLinterFromContent } = require('../../../lib/linter/jdl_linter');
 
 describe('JDLLinter', () => {
-  describe('::new', () => {
-    context('when not passing a path', () => {
-      it('fails', () => {
-        expect(() => {
-          new JDLLinter();
-        }).to.throw('The JDL file path must be passed.');
+  describe('createJDLLinterFromFile', () => {
+    context('when not passing a file', () => {
+      it('should fail', () => {
+        expect(() => createJDLLinterFromFile(undefined)).to.throw(
+          /^A JDL file must be passed to create a new JDL linter\.$/
+        );
       });
     });
-    context('when passing invalid args', () => {
-      it('fails', () => {
-        expect(() => {
-          new JDLLinter({});
-        }).to.throw('The JDL file path must be passed.');
+    context('when passing a file', () => {
+      let path;
+
+      before(() => {
+        path = 'test.jdl';
+        writeFileSync(path, 'entity A');
+      });
+
+      after(() => {
+        unlinkSync(path);
+      });
+
+      it('should not fail', () => {
+        expect(() => createJDLLinterFromFile(path)).not.to.throw();
       });
     });
-    context('when passing a folder', () => {
-      it('fails', () => {
-        expect(() => {
-          new JDLLinter({ filePath: '.' });
-        }).to.throw("The path to the JDL file doesn't exist, got '.'.");
+  });
+  describe('createJDLLinterFromContent', () => {
+    context('when not passing a content', () => {
+      it('should fail', () => {
+        expect(() => createJDLLinterFromContent(undefined)).to.throw(
+          /^A JDL content must be passed to create a new JDL linter.$/
+        );
+      });
+    });
+    context('when passing a content', () => {
+      it('should not fail', () => {
+        expect(() => createJDLLinterFromContent('entity A')).not.to.throw();
       });
     });
   });
@@ -53,9 +70,7 @@ describe('JDLLinter', () => {
       let reportedIssues;
 
       before(() => {
-        linter = new JDLLinter({
-          filePath: path.join('test', 'test_files', 'lint', 'useless_entity_curly_braces.jdl')
-        });
+        linter = createJDLLinterFromFile(path.join('test', 'test_files', 'lint', 'useless_entity_curly_braces.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
         issue = issues.entities[0];
@@ -74,9 +89,7 @@ describe('JDLLinter', () => {
       let reportedIssues;
 
       before(() => {
-        linter = new JDLLinter({
-          filePath: path.join('test', 'test_files', 'lint', 'useless_table_names.jdl')
-        });
+        linter = createJDLLinterFromFile(path.join('test', 'test_files', 'lint', 'useless_table_names.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
         issueForB = issues.entities[0];
@@ -99,9 +112,7 @@ describe('JDLLinter', () => {
         let issueForB;
 
         before(() => {
-          linter = new JDLLinter({
-            filePath: path.join('test', 'test_files', 'lint', 'duplicate_entities.jdl')
-          });
+          linter = createJDLLinterFromFile(path.join('test', 'test_files', 'lint', 'duplicate_entities.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
           issueForA = issues.entities[0];
@@ -121,9 +132,7 @@ describe('JDLLinter', () => {
         let issueForBb;
 
         before(() => {
-          linter = new JDLLinter({
-            filePath: path.join('test', 'test_files', 'lint', 'duplicate_fields.jdl')
-          });
+          linter = createJDLLinterFromFile(path.join('test', 'test_files', 'lint', 'duplicate_fields.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
           issueForAa = issues.fields[0];
@@ -142,9 +151,7 @@ describe('JDLLinter', () => {
         let issueForA;
 
         before(() => {
-          linter = new JDLLinter({
-            filePath: path.join('test', 'test_files', 'lint', 'duplicate_enums.jdl')
-          });
+          linter = createJDLLinterFromFile(path.join('test', 'test_files', 'lint', 'duplicate_enums.jdl'));
           reportedIssues = linter.check();
           const issues = reportedIssues.getIssues();
           issueForA = issues.enums[0];
@@ -163,9 +170,7 @@ describe('JDLLinter', () => {
       let issueFor3;
 
       before(() => {
-        linter = new JDLLinter({
-          filePath: path.join('test', 'test_files', 'lint', 'unused_enums.jdl')
-        });
+        linter = createJDLLinterFromFile(path.join('test', 'test_files', 'lint', 'unused_enums.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
         issueFor2 = issues.enums[0];
@@ -186,9 +191,7 @@ describe('JDLLinter', () => {
       let issueForAToC;
 
       before(() => {
-        linter = new JDLLinter({
-          filePath: path.join('test', 'test_files', 'lint', 'ungrouped_relationships.jdl')
-        });
+        linter = createJDLLinterFromFile(path.join('test', 'test_files', 'lint', 'ungrouped_relationships.jdl'));
         reportedIssues = linter.check();
         const issues = reportedIssues.getIssues();
         issueForAToB = issues.relationships[0];
