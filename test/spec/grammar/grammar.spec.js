@@ -22,6 +22,17 @@
 const { expect } = require('chai');
 const { parseFromContent } = require('../../../lib/readers/jdl_reader');
 const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../lib/core/jhipster/relationship_types');
+const {
+  MAX,
+  MAXBYTES,
+  MAXLENGTH,
+  MIN,
+  MINBYTES,
+  MINLENGTH,
+  PATTERN,
+  REQUIRED,
+  UNIQUE
+} = require('../../../lib/core/jhipster/validations');
 
 describe('Grammar tests', () => {
   context('when parsing constants', () => {
@@ -414,6 +425,230 @@ application {
 }
 `);
             }).to.throw();
+          });
+        });
+      });
+      context('with validations', () => {
+        context(`with the ${REQUIRED} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name String ${REQUIRED}
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: REQUIRED,
+                value: ''
+              }
+            ]);
+          });
+        });
+        context(`with the ${MINLENGTH} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name String ${MINLENGTH}(0)
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: MINLENGTH,
+                value: 0
+              }
+            ]);
+          });
+        });
+        context(`with the ${MAXLENGTH} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name String ${MAXLENGTH}(42)
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: MAXLENGTH,
+                value: 42
+              }
+            ]);
+          });
+        });
+        context(`with the ${PATTERN} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name String ${PATTERN}(/[A-Za-z]\\d/)
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: PATTERN,
+                value: '[A-Za-z]\\d'
+              }
+            ]);
+          });
+        });
+        context(`with the ${UNIQUE} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name String ${UNIQUE}
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: UNIQUE,
+                value: ''
+              }
+            ]);
+          });
+        });
+        context(`with the ${MIN} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name Integer ${MIN}(0)
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: MIN,
+                value: 0
+              }
+            ]);
+          });
+        });
+        context(`with the ${MAX} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name Integer ${MAX}(0)
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: MAX,
+                value: 0
+              }
+            ]);
+          });
+        });
+        context(`with the ${MINBYTES} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name TextBlob ${MINBYTES}(0)
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: MINBYTES,
+                value: 0
+              }
+            ]);
+          });
+        });
+        context(`with the ${MAXBYTES} validation`, () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `entity A {
+  name TextBlob ${MAXBYTES}(0)
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: MAXBYTES,
+                value: 0
+              }
+            ]);
+          });
+        });
+        context('using constants', () => {
+          let parsedEntity;
+
+          before(() => {
+            const content = parseFromContent(
+              `MAX=42
+entity A {
+  name TextBlob ${MAXBYTES}(MAX)
+}
+`
+            );
+            parsedEntity = content.entities[0];
+          });
+
+          it('should parse it', () => {
+            expect(parsedEntity.body[0].validations).to.deep.equal([
+              {
+                key: MAXBYTES,
+                value: 'MAX',
+                constant: true
+              }
+            ]);
           });
         });
       });
