@@ -128,7 +128,7 @@ function addEntityToMenu(generator, entityName, translationKey, className) {
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                 // prettier-ignore
-                `<b-dropdown-item to="/entity/${entityName}">
+                `<b-dropdown-item to="/${entityName}">
                         <font-awesome-icon icon="asterisk" />
                         <span ${menuI18nTitle}>${className}</span>
                     </b-dropdown-item>`
@@ -184,25 +184,25 @@ function addEntityToRouter(generator, entityName, entityFileName, entityAngularN
                     // prettier-ignore
                     `|,
                         |    {
-                        |      path: '/entity/${entityFileName}',
+                        |      path: '/${entityFileName}',
                         |      name: '${entityAngularName}',
                         |      component: ${entityAngularName},
                         |      meta: { authorities: ['ROLE_USER'] }
                         |    },
                         |    {
-                        |      path: '/entity/${entityFileName}/new',
+                        |      path: '/${entityFileName}/new',
                         |      name: '${entityAngularName}Create',
                         |      component: ${entityAngularName}Update,
                         |      meta: { authorities: ['ROLE_USER'] }
                         |    },
                         |    {
-                        |      path: '/entity/${entityFileName}/:${entityName}Id/edit',
+                        |      path: '/${entityFileName}/:${entityName}Id/edit',
                         |      name: '${entityAngularName}Edit',
                         |      component: ${entityAngularName}Update,
                         |      meta: { authorities: ['ROLE_USER'] }
                         |    },
                         |    {
-                        |      path: '/entity/${entityFileName}/:${entityName}Id/view',
+                        |      path: '/${entityFileName}/:${entityName}Id/view',
                         |      name: '${entityAngularName}View',
                         |      component: ${entityAngularName}Details,
                         |      meta: { authorities: ['ROLE_USER'] }
@@ -220,13 +220,13 @@ function addEntityToRouter(generator, entityName, entityFileName, entityAngularN
                     // prettier-ignore
                     `|,
                         |    {
-                        |      path: '/entity/${entityFileName}',
+                        |      path: '/${entityFileName}',
                         |      name: '${entityAngularName}',
                         |      component: ${entityAngularName},
                         |      meta: { authorities: ['ROLE_USER'] }
                         |    },
                         |    {
-                        |      path: '/entity/${entityFileName}/:${entityName}Id/view',
+                        |      path: '/${entityFileName}/:${entityName}Id/view',
                         |      name: '${entityAngularName}View',
                         |      component: ${entityAngularName}Details,
                         |      meta: { authorities: ['ROLE_USER'] }
