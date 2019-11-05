@@ -104,7 +104,7 @@ function loadConfigs() {
     this.debug(`Apps folders: ${this.appsFolders}`);
     this.appsFolders.forEach(appFolder => {
         const path = this.destinationPath(`${this.directoryPath + appFolder}`);
-        if (this.fs.existsSync(`${path}/.yo-rc.json`)) {
+        if (this.fs.exists(`${path}/.yo-rc.json`)) {
             const config = getAllJhipsterConfig(this, false, path);
 
             if (config.applicationType === 'monolith') {
