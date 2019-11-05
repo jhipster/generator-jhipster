@@ -151,9 +151,9 @@ spring:
             hibernate.jdbc.batch_size: 25
             hibernate.order_inserts: true
             hibernate.order_updates: true
-            <%_ if (prodDatabaseType === 'mssql') { _%>
+            <%_ if (prodDatabaseType === 'mssql' || prodDatabaseType === 'oracle') { _%>
             # modify fetch size as necessary
-            hibernate.jdbc.fetch_size: 250
+            hibernate.jdbc.fetch_size: 150
             hibernate.criteria.literal_handling_mode: BIND
             <%_ } _%>
             hibernate.query.fail_on_pagination_over_collection_fetch: true
