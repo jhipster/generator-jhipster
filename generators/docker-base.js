@@ -19,7 +19,7 @@
 const shelljs = require('shelljs');
 const chalk = require('chalk');
 const dockerUtils = require('./docker-utils');
-const { getBase64Secret } = require('./utils');
+const { getBase64Secret, getAllJhipsterConfig } = require('./utils');
 
 module.exports = {
     checkDocker: dockerUtils.checkDocker,
