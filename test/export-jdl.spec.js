@@ -15,7 +15,7 @@ describe('JHipster generator export jdl', () => {
         });
 
         it('creates the jdl file based on app name', () => {
-            assert.file('app.jdl');
+            assert.file('standard.jdl');
         });
     });
 
@@ -26,12 +26,12 @@ describe('JHipster generator export jdl', () => {
                 .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/export-jdl'), dir);
                 })
-                .withArguments('app.jdl')
+                .withArguments('custom-app.jdl')
                 .on('end', done);
         });
 
         it('creates the jdl file', () => {
-            assert.file('app.jdl');
+            assert.file('custom-app.jdl');
         });
     });
 });
