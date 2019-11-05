@@ -377,7 +377,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                                             `For the deployment to succeed, you will need to configure a ${chalk.bold(
                                                 'AZURE_CREDENTIALS'
                                             )} secret in GitHub.
-Read the documentation at https://github.com/microsoft/azure-spring-cloud-training/11-configure-ci-cd/README.md
+Read the documentation at https://github.com/microsoft/azure-spring-cloud-training/blob/master/11-configure-ci-cd/README.md
 for more detailed information.`
                                         );
                                         done();
