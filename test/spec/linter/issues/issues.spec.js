@@ -40,33 +40,33 @@ describe('Issues', () => {
     });
     describe('when there are issues', () => {
       beforeEach(() => {
-        issues.addEntityIssue(
+        issues.addEntityIssues([
           new EntityIssue({
             ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
             entityName: 'A'
           })
-        );
-        issues.addEnumIssue(
+        ]);
+        issues.addEnumIssues([
           new EnumIssue({
             ruleName: Rules.RuleNames.ENUM_DUPLICATED,
             enumName: 'SuperEnum'
           })
-        );
-        issues.addFieldIssue(
+        ]);
+        issues.addFieldIssues([
           new FieldIssue({
             ruleName: Rules.RuleNames.FLD_DUPLICATED,
             fieldName: 'a',
             entityName: 'A'
           })
-        );
-        issues.addRelationshipIssue(
+        ]);
+        issues.addRelationshipIssues([
           new RelationshipIssue({
             ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
             from: 'A',
             to: 'A',
             type: RelationshipTypes.ONE_TO_ONE
           })
-        );
+        ]);
       });
 
       it('returns the total amount', () => {
@@ -88,12 +88,12 @@ describe('Issues', () => {
     });
     describe('when there are issues', () => {
       beforeEach(() => {
-        issues.addEntityIssue(
+        issues.addEntityIssues([
           new EntityIssue({
             ruleName: Rules.RuleNames.ENT_SHORTER_DECL,
             entityName: 'A'
           })
-        );
+        ]);
       });
 
       it('returns the total amount', () => {
@@ -115,12 +115,12 @@ describe('Issues', () => {
     });
     describe('when there are issues', () => {
       beforeEach(() => {
-        issues.addEnumIssue(
+        issues.addEnumIssues([
           new EnumIssue({
             ruleName: Rules.RuleNames.ENUM_DUPLICATED,
             enumName: 'SuperEnum'
           })
-        );
+        ]);
       });
 
       it('returns the total amount', () => {
@@ -142,13 +142,13 @@ describe('Issues', () => {
     });
     describe('when there are issues', () => {
       beforeEach(() => {
-        issues.addFieldIssue(
+        issues.addFieldIssues([
           new FieldIssue({
             ruleName: Rules.RuleNames.FLD_DUPLICATED,
             fieldName: 'a',
             entityName: 'A'
           })
-        );
+        ]);
       });
 
       it('returns the total amount', () => {
@@ -170,14 +170,14 @@ describe('Issues', () => {
     });
     describe('when there are issues', () => {
       beforeEach(() => {
-        issues.addRelationshipIssue(
+        issues.addRelationshipIssues([
           new RelationshipIssue({
             ruleName: Rules.RuleNames.REL_INDIVIDUAL_DECL,
             from: 'A',
             to: 'A',
             type: RelationshipTypes.ONE_TO_ONE
           })
-        );
+        ]);
       });
 
       it('returns the total amount', () => {
@@ -229,10 +229,10 @@ describe('Issues', () => {
           type: RelationshipTypes.ONE_TO_ONE
         });
 
-        issues.addEntityIssue(entityIssue);
-        issues.addEnumIssue(enumIssue);
-        issues.addFieldIssue(fieldIssue);
-        issues.addRelationshipIssue(relationshipIssue);
+        issues.addEntityIssues([entityIssue]);
+        issues.addEnumIssues([enumIssue]);
+        issues.addFieldIssues([fieldIssue]);
+        issues.addRelationshipIssues([relationshipIssue]);
       });
 
       it('returns the object containing the issues', () => {
