@@ -42,8 +42,8 @@ export class SettingsComponent implements OnInit {
     settingsForm = this.fb.group({
         firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
         lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-        email: [ undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-        langKey: ['en']
+        email: [ undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]]<% if (enableTranslation) { %>,
+        langKey: [ undefined ]<% } %>
     });
 
     constructor(
@@ -69,7 +69,9 @@ export class SettingsComponent implements OnInit {
         this.account.firstName = getFormControlUnchecked(this.settingsForm, 'firstName').value;
         this.account.lastName = getFormControlUnchecked(this.settingsForm, 'lastName').value;
         this.account.email = getFormControlUnchecked(this.settingsForm, 'email').value;
+        <%_ if (enableTranslation) { _%>
         this.account.langKey = getFormControlUnchecked(this.settingsForm, 'langKey').value;
+        <%_ } _%>
 
         this.accountService.save(this.account).subscribe(() => {
             this.success = true;
@@ -92,8 +94,8 @@ export class SettingsComponent implements OnInit {
         this.settingsForm.patchValue({
             firstName: account.firstName,
             lastName: account.lastName,
-            email: account.email,
-            langKey: account.langKey
+            email: account.email<% if (enableTranslation) { %>,
+            langKey: account.langKey<% } %>
         });
 
         this.account = account;

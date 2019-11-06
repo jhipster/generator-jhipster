@@ -76,8 +76,8 @@ describe('Component Tests', () => {
             const settingsFormValues = {
                 firstName: 'John',
                 lastName: 'Doe',
-                email: 'john.doe@mail.com',
-                langKey: '<%= nativeLanguage %>'
+                email: 'john.doe@mail.com'<% if (enableTranslation) { %>,
+                langKey: '<%= nativeLanguage %>'<% } %>
             };
             mockAuth.setIdentityResponse(accountValues);
 
