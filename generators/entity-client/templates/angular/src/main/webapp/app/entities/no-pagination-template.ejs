@@ -28,7 +28,9 @@
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
         protected eventManager: JhiEventManager,
+        <%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
+        <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         protected activatedRoute: ActivatedRoute,
         <%_ } _%>
