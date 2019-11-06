@@ -26,7 +26,7 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.baseName = this.config.get('baseName');
-        this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jh` });
+        this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jdl` });
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -47,7 +47,7 @@ module.exports = class extends BaseGenerator {
 
             convertToJDL() {
                 try {
-                    JCore.convertToJDL();
+                    JCore.convertToJDL('.', this.options.jdlFile);
                 } catch (error) {
                     logger.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
                 }

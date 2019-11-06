@@ -66,19 +66,16 @@ function askForApplicationType(meta) {
         {
             value: 'uaa',
             name: 'JHipster UAA server (for microservice OAuth2 authentication)'
-        }
-    ];
-
-    if (this.experimental) {
-        applicationTypeChoices.push({
+        },
+        {
             value: 'reactive',
             name: '[Alpha] Reactive monolithic application'
-        });
-        applicationTypeChoices.push({
+        },
+        {
             value: 'reactive-micro',
             name: '[Alpha] Reactive microservice application'
-        });
-    }
+        }
+    ];
 
     const PROMPT = {
         type: 'list',

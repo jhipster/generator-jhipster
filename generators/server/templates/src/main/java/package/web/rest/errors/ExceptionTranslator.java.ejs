@@ -162,13 +162,13 @@ _%>
     <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
     @ExceptionHandler
-    public <%- returnType %> handleEmailAreadyUsedException(<%=packageName%>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
+    public <%- returnType %> handleEmailAlreadyUsedException(<%=packageName%>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
-    public <%- returnType %> handleUsernameAreadyUsedException(<%=packageName%>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
+    public <%- returnType %> handleUsernameAlreadyUsedException(<%=packageName%>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }

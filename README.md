@@ -44,6 +44,18 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 [![The Pirate Bay][the-pirate-bay-image]][the-pirate-bay-url]
 
+[![Edusson][edusson-image]][edusson-url]
+
+[![Crosswordsolver][crosswordsolver-image]][crosswordsolver-url]
+
+[![FairLaan][fair-laan-image]][fair-laan-url]
+
+[![SuperKredit][superkredit-image]][superkredit-url]
+
+[![MatchBankerPl][matchbanker-pl-image]][matchbanker-pl-url]
+
+[![matchbankerNo][matchbanker-no-image]][matchbanker-no-url]
+
 **Thank you to all our backers!**
 
 [![Backers][backers-image]][backers-url]
@@ -137,6 +149,18 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [top-web-design-agencies-url]: https://opencollective.com/top-web-design-agencies
 [the-pirate-bay-image]: https://www.jhipster.tech/images/open-collective/the-pirate-bay.png
 [the-pirate-bay-url]: https://piratebay.ink/
+[edusson-image]: https://www.jhipster.tech/images/open-collective/edusson.png
+[edusson-url]: https://edusson.com/
+[crosswordsolver-image]: https://www.jhipster.tech/images/open-collective/crosswordsolver.png
+[crosswordsolver-url]: https://www.crosswordsolver.com/
+[fair-laan-image]: https://www.jhipster.tech/images/open-collective/fair-laan.png
+[fair-laan-url]: https://fair-laan.se/
+[superkredit-image]: https://www.jhipster.tech/images/open-collective/superkredit.png
+[superkredit-url]: https://superkredit.net
+[matchbanker-pl-image]: https://www.jhipster.tech/images/open-collective/matchbanker.png
+[matchbanker-pl-url]: https://matchbanker.pl/
+[matchbanker-no-image]: https://www.jhipster.tech/images/open-collective/matchbanker.png
+[matchbanker-no-url]: https://matchbanker.no/
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat

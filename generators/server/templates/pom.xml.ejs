@@ -95,7 +95,7 @@
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 <%_ } _%>
-        <archunit-junit5.version>0.11.0</archunit-junit5.version>
+        <archunit-junit5.version>0.12.0</archunit-junit5.version>
 <%_ if (searchEngine === 'elasticsearch') { _%>
         <log4j2-mock.version>0.0.1</log4j2-mock.version>
 <%_ } _%>
@@ -118,6 +118,9 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+        <maven-checkstyle.version>3.1.0</maven-checkstyle.version>
+        <checkstyle.version>8.24</checkstyle.version>
+        <spring-nohttp-checkstyle.version>0.0.3.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.8.0</frontend-maven-plugin.version>
 <%_ } _%>
@@ -839,6 +842,36 @@
                         <!-- jhipster-needle-maven-add-annotation-processor -->
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>io.spring.nohttp</groupId>
+                        <artifactId>nohttp-checkstyle</artifactId>
+                        <version>${spring-nohttp-checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <includes>pom.xml,README.md</includes>
+                    <excludes>.git/**/*,target/**/*,node_modules/**/*,node/**/*</excludes>
+                    <sourceDirectories>./</sourceDirectories>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

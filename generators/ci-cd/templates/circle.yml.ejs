@@ -53,9 +53,11 @@ test:
     override:
 <%_ if (buildTool === 'maven') { _%>
         - chmod +x mvnw
+        - ./mvnw -ntp checkstyle:check
         - ./mvnw -ntp clean verify
 <%_ } else if (buildTool === 'gradle') { _%>
         - chmod +x gradlew
+        - ./gradlew checkstyleNohttp --no-daemon
         - ./gradlew clean test integrationTest --no-daemon
 <%_ } _%>
 <%_ if (!skipClient) { _%>

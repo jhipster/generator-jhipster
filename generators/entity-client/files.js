@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const _ = require('lodash');
+const Randexp = require('randexp');
 const utils = require('../utils');
 const constants = require('../generator-constants');
 
@@ -266,11 +267,19 @@ function addEnumerationFiles(generator, templateDir, clientFolder) {
     });
 }
 
+function addSampleRegexTestingStrings(generator) {
+    generator.fields.forEach(field => {
+        if (field.fieldValidateRulesPattern !== undefined) {
+            field.fieldValidateSampleString = new Randexp(field.fieldValidateRulesPattern).gen();
+        }
+    });
+}
+
 function writeFiles() {
     return {
         writeClientFiles() {
             if (this.skipClient) return;
-
+            addSampleRegexTestingStrings(this);
             if (this.clientFramework === 'angularX') {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(

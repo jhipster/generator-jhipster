@@ -547,4 +547,26 @@ describe('JHipster Docker Compose Sub Generator', () => {
             assert.noFileContent('docker-compose.yml', /links:/);
         });
     });
+
+    describe('oracle monolith', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    deploymentApplicationType: 'monolith',
+                    directoryPath: './',
+                    chosenApps: ['12-oracle'],
+                    clusteredDbApps: [],
+                    monitoring: 'no'
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', () => {
+            assert.file(expectedFiles.monolith);
+        });
+    });
 });

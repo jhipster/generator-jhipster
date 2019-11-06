@@ -127,6 +127,7 @@ const expectedFiles = {
             // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
             `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`
         ],
+        fakeData: [`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`],
         gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
     },
 
@@ -141,10 +142,11 @@ const expectedFiles = {
         'gradle/profile_prod.gradle',
         'gradle/sonar.gradle',
         'gradle/wrapper/gradle-wrapper.jar',
-        'gradle/wrapper/gradle-wrapper.properties'
+        'gradle/wrapper/gradle-wrapper.properties',
+        'checkstyle.xml'
     ],
 
-    maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
+    maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties', 'checkstyle.xml'],
 
     common: ['.prettierignore', '.prettierrc', 'README.md', '.gitignore', '.gitattributes', '.editorconfig'],
 

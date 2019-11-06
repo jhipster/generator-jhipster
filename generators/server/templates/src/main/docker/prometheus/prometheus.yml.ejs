@@ -36,7 +36,12 @@ scrape_configs:
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
 
-    # scheme defaults to 'http'.
+    # scheme defaults to 'http' enable https in case your application is server via https
+    #scheme: https
+    # basic auth is not needed by default. See https://www.jhipster.tech/monitoring/#configuring-metrics-forwarding for details
+    #basic_auth:
+    # username: admin
+    # password: admin
     metrics_path: <% if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { %>/services/<%= baseName %><% } %>/management/prometheus
     static_configs:
       - targets:

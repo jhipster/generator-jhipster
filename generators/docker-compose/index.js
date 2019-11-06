@@ -121,12 +121,12 @@ module.exports = class extends BaseDockerGenerator {
 
                     // Add database configuration
                     const database = appConfig.prodDatabaseType;
-                    if (database !== 'no') {
+                    if (database !== 'no' && database !== 'oracle') {
                         const relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
                         const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
                         const databaseServiceName = `${lowercaseBaseName}-${database}`;
                         let databaseYamlConfig = databaseYaml.services[databaseServiceName];
-                        delete databaseYamlConfig.ports;
+                        if (database !== 'mariadb') delete databaseYamlConfig.ports;
 
                         if (database === 'cassandra') {
                             // node config
