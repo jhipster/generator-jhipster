@@ -87,7 +87,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.http.MediaType;
 <%_ } _%>
-import org.springframework.http.ResponseEntity; <%_ if (isUsingMapsId === true && !viaService) { %>
+import org.springframework.http.ResponseEntity; <%_ if (!viaService) { %>
 import org.springframework.transaction.annotation.Transactional; <% } %>
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactiveRepositories) { _%>
@@ -114,7 +114,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
  * REST controller for managing {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>}.
  */
 @RestController
-@RequestMapping("/api")<% if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { %>
+@RequestMapping("/api")<% if (databaseType === 'sql' && !viaService) { %>
 @Transactional <%_ } %>
 public class <%= entityClass %>Resource {
 
