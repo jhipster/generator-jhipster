@@ -56,10 +56,12 @@ jobs:
   <%_ if (buildTool === 'maven') { _%>
   - script: |
       chmod +x mvnw
+      ./mvnw -ntp checkstyle:check
       ./mvnw -ntp clean verify
   <%_ } else if (buildTool === 'gradle') { _%>
   - script: |
       chmod +x gradlew
+      ./gradlew checkstyleNohttp
       ./gradlew clean test integrationTest
   <%_ } _%>
     displayName: 'TESTS: backend'
