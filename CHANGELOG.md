@@ -1,3 +1,10 @@
+# Latest: v6.0.1
+
+## Bug fixes:
+  - During the JDL export, if the `rememberMeKey` option exists in the .yo-rc.json file, then the export failed.
+    - The fix consists in ignoring it, jsut like the `jwtSecretKey` app option.
+---
+
 # v6.0.0
 
 ## Breaking changes
