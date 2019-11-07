@@ -1,4 +1,4 @@
-# Unreleased:
+# v6.0.0
 
 ## Breaking changes
   - **JDLImporter**:
@@ -49,7 +49,7 @@
 
 ---
 
-# Latest v5.0.0
+# v5.0.0
 
 ## Breaking changes
   - [BinaryOptions] Replaced `SEARCH_ENGINE` with `SEARCH`
