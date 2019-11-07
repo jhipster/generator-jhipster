@@ -80,32 +80,33 @@ module.exports = class extends BaseGenerator {
             },
 
             loadConfig() {
-                this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-                this.baseName = this.config.get('baseName');
-                this.packageName = this.config.get('packageName');
-                this.packageFolder = this.config.get('packageFolder');
-                this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-                this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-                this.databaseType = this.config.get('databaseType');
-                this.prodDatabaseType = this.config.get('prodDatabaseType');
-                this.searchEngine = this.config.get('searchEngine');
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+                this.baseName = configuration.get('baseName');
+                this.packageName = configuration.get('packageName');
+                this.packageFolder = configuration.get('packageFolder');
+                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
+                this.databaseType = configuration.get('databaseType');
+                this.prodDatabaseType = configuration.get('prodDatabaseType');
+                this.searchEngine = configuration.get('searchEngine');
                 this.angularAppName = this.getAngularAppName();
-                this.buildTool = this.config.get('buildTool');
-                this.applicationType = this.config.get('applicationType');
-                this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
+                this.buildTool = configuration.get('buildTool');
+                this.applicationType = configuration.get('applicationType');
+                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
 
-                this.gcpProjectId = this.config.get('gcpProjectId');
-                this.gcpCloudSqlInstanceName = this.config.get('gcpCloudSqlInstanceName');
-                this.gcpCloudSqlUserName = this.config.get('gcpCloudSqlUserName');
-                this.gcpCloudSqlDatabaseName = this.config.get('gcpCloudSqlDatabaseName');
-                this.gaeServiceName = this.config.get('gaeServiceName');
-                this.gaeLocation = this.config.get('gaeLocation');
-                this.gaeInstanceClass = this.config.get('gaeInstanceClass');
-                this.gaeScalingType = this.config.get('gaeScalingType');
-                this.gaeInstances = this.config.get('gaeInstances');
-                this.gaeMaxInstances = this.config.get('gaeMaxInstances');
-                this.gaeMinInstances = this.config.get('gaeMinInstances');
-                this.gaeCloudSQLInstanceNeeded = this.config.get('gaeCloudSQLInstanceNeeded');
+                this.gcpProjectId = configuration.get('gcpProjectId');
+                this.gcpCloudSqlInstanceName = configuration.get('gcpCloudSqlInstanceName');
+                this.gcpCloudSqlUserName = configuration.get('gcpCloudSqlUserName');
+                this.gcpCloudSqlDatabaseName = configuration.get('gcpCloudSqlDatabaseName');
+                this.gaeServiceName = configuration.get('gaeServiceName');
+                this.gaeLocation = configuration.get('gaeLocation');
+                this.gaeInstanceClass = configuration.get('gaeInstanceClass');
+                this.gaeScalingType = configuration.get('gaeScalingType');
+                this.gaeInstances = configuration.get('gaeInstances');
+                this.gaeMaxInstances = configuration.get('gaeMaxInstances');
+                this.gaeMinInstances = configuration.get('gaeMinInstances');
+                this.gaeCloudSQLInstanceNeeded = configuration.get('gaeCloudSQLInstanceNeeded');
             }
         };
     }
