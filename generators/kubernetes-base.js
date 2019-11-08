@@ -24,6 +24,7 @@ const constants = require('./generator-constants');
 
 module.exports = {
     checkKubernetes,
+    checkHelm,
     loadConfig,
     saveConfig,
     setupKubernetesConstants,
@@ -39,6 +40,21 @@ function checkKubernetes() {
             this.log(
                 `${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n` +
                     'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n'
+            );
+        }
+        done();
+    });
+}
+
+function checkHelm() {
+    if (this.skipChecks) return;
+    const done = this.async();
+
+    shelljs.exec('helm version --client | grep -E "v2\\.1[2-9]{1,2}\\.[0-9]{1,3}"', { silent: true }, (code, stdout, stderr) => {
+        if (stderr || code !== 0) {
+            this.log(
+                `${chalk.yellow.bold('WARNING!')} helm 2.12.x or later is not installed on your computer.\n` +
+                    'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
             );
         }
         done();
