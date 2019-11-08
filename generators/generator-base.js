@@ -219,8 +219,8 @@ module.exports = class extends PrivateBase {
         } catch (e) {
             this.log(
                 `${chalk.yellow('\nUnable to find ') +
-                fullPath +
-                chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(' not added to global translations.\n')}`
+                    fullPath +
+                    chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(' not added to global translations.\n')}`
             );
             this.debug('Error:', e);
         }
@@ -338,8 +338,8 @@ module.exports = class extends PrivateBase {
         } catch (e) {
             this.log(
                 `${chalk.yellow('\nUnable to find ') +
-                fullPath +
-                chalk.yellow('. Reference to ')}npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
+                    fullPath +
+                    chalk.yellow('. Reference to ')}npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
             );
             this.debug('Error:', e);
         }
@@ -367,8 +367,8 @@ module.exports = class extends PrivateBase {
         } catch (e) {
             this.log(
                 `${chalk.yellow('\nUnable to find ') +
-                fullPath +
-                chalk.yellow('. Reference to ')}npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
+                    fullPath +
+                    chalk.yellow('. Reference to ')}npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
             );
             this.debug('Error:', e);
         }
@@ -396,8 +396,8 @@ module.exports = class extends PrivateBase {
         } catch (e) {
             this.log(
                 `${chalk.yellow('\nUnable to find ') +
-                fullPath +
-                chalk.yellow('. Reference to ')}npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`
+                    fullPath +
+                    chalk.yellow('. Reference to ')}npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`
             );
             this.debug('Error:', e);
         }
@@ -1088,9 +1088,9 @@ module.exports = class extends PrivateBase {
                 } catch (e) {
                     this.log(
                         chalk.red('Could not compose module ') +
-                        chalk.bold.yellow(module.npmPackageName) +
-                        chalk.red('. \nMake sure you have installed the module with ') +
-                        chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`)
+                            chalk.bold.yellow(module.npmPackageName) +
+                            chalk.red('. \nMake sure you have installed the module with ') +
+                            chalk.bold.yellow(`'npm install -g ${module.npmPackageName}'`)
                     );
                     this.debug('ERROR:', e);
                 }
@@ -1595,9 +1595,9 @@ module.exports = class extends PrivateBase {
                     if (!stderr && semver.lt(packagejs.version, stdout)) {
                         this.log(
                             `${chalk.yellow(' ______________________________________________________________________________\n\n') +
-                            chalk.yellow('  JHipster update available: ') +
-                            chalk.green.bold(stdout.replace('\n', '')) +
-                            chalk.gray(` (current: ${packagejs.version})`)}\n`
+                                chalk.yellow('  JHipster update available: ') +
+                                chalk.green.bold(stdout.replace('\n', '')) +
+                                chalk.gray(` (current: ${packagejs.version})`)}\n`
                         );
                         if (this.useNpm) {
                             this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
