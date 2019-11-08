@@ -810,7 +810,7 @@ module.exports = class extends PrivateBase {
     dateFormatForLiquibase() {
         let now = new Date();
         // Run reproducible timestamp when regenerating the project with with-entities option.
-        if (this.options.withEntities) {
+        if (this.options.withEntities || this.options.creationTimestamp) {
             if (this.configOptions.lastLiquibaseTimestamp) {
                 // Counter already started.
                 now = this.configOptions.lastLiquibaseTimestamp;
