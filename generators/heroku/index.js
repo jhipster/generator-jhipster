@@ -36,7 +36,7 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
         this.option('skip-build', {
-            desc: 'Skips building the app',
+            desc: 'Skips building the application',
             type: Boolean,
             defaults: false
         });
@@ -62,22 +62,23 @@ module.exports = class extends BaseGenerator {
         }
 
         this.log(chalk.bold('Heroku configuration is starting'));
-        this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.baseName = this.config.get('baseName');
-        this.packageName = this.config.get('packageName');
-        this.packageFolder = this.config.get('packageFolder');
-        this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-        this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-        this.databaseType = this.config.get('databaseType');
-        this.prodDatabaseType = this.config.get('prodDatabaseType');
-        this.searchEngine = this.config.get('searchEngine');
+        const configuration = this.getAllJhipsterConfig(this, true);
+        this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+        this.baseName = configuration.get('baseName');
+        this.packageName = configuration.get('packageName');
+        this.packageFolder = configuration.get('packageFolder');
+        this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+        this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
+        this.databaseType = configuration.get('databaseType');
+        this.prodDatabaseType = configuration.get('prodDatabaseType');
+        this.searchEngine = configuration.get('searchEngine');
         this.angularAppName = this.getAngularAppName();
-        this.buildTool = this.config.get('buildTool');
-        this.applicationType = this.config.get('applicationType');
-        this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-        this.herokuAppName = this.config.get('herokuAppName');
+        this.buildTool = configuration.get('buildTool');
+        this.applicationType = configuration.get('applicationType');
+        this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
+        this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
-        this.herokuDeployType = this.config.get('herokuDeployType');
+        this.herokuDeployType = configuration.get('herokuDeployType');
     }
 
     get prompting() {
@@ -93,15 +94,15 @@ module.exports = class extends BaseGenerator {
                                 herokuDeployType: this.herokuDeployType
                             });
                             this.abort = true;
-                            this.log.error(`Could not find app: ${chalk.cyan(this.herokuAppName)}`);
-                            this.log.error('Run the generator again to create a new app.');
+                            this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
+                            this.log.error('Run the generator again to create a new application.');
                         } else {
                             const json = JSON.parse(stdout);
                             this.herokuAppName = json.app.name;
                             if (json.dynos.length > 0) {
                                 this.dynoSize = json.dynos[0].size;
                             }
-                            this.log(`Deploying as existing app: ${chalk.bold(this.herokuAppName)}`);
+                            this.log(`Deploying as existing application: ${chalk.bold(this.herokuAppName)}`);
                             this.herokuAppExists = true;
                             this.config.set({
                                 herokuAppName: this.herokuAppName,
@@ -258,7 +259,7 @@ module.exports = class extends BaseGenerator {
                                 {
                                     type: 'list',
                                     name: 'herokuForceName',
-                                    message: `The Heroku app "${chalk.cyan(this.herokuAppName)}" already exists! Use it anyways?`,
+                                    message: `The Heroku application "${chalk.cyan(this.herokuAppName)}" already exists! Use it anyways?`,
                                     choices: [
                                         {
                                             value: 'Yes',
@@ -397,7 +398,7 @@ module.exports = class extends BaseGenerator {
                         {
                             type: 'input',
                             name: 'herokuJHipsterRegistryApp',
-                            message: 'What is the name of your JHipster Registry Heroku app?'
+                            message: 'What is the name of your JHipster Registry Heroku application?'
                         },
                         {
                             type: 'input',
