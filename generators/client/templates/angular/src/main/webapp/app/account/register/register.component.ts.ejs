@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, AfterViewInit, Renderer, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, Renderer, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
@@ -33,6 +33,9 @@ import { getFormControlUnchecked } from 'app/core/form/form-util';
     templateUrl: './register.component.html'
 })
 export class RegisterComponent implements AfterViewInit {
+    @ViewChild('login', { static: false })
+    login: ElementRef | undefined = undefined;
+  
     doNotMatch = false;
     error = false;
     errorEmailExists = false;
@@ -52,14 +55,15 @@ export class RegisterComponent implements AfterViewInit {
 <%_ } _%>
         private loginModalService: LoginModalService,
         private registerService: RegisterService,
-        private elementRef: ElementRef,
         private renderer: Renderer,
         private fb: FormBuilder
     ) {
     }
 
     ngAfterViewInit(): void {
-        this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#login'), 'focus', []);
+        if (this.login) {
+            this.renderer.invokeElementMethod(this.login.nativeElement, 'focus', []);
+        }
     }
 
     register(): void {
