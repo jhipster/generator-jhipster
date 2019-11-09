@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const shelljs = require('shelljs');
 const fs = require('fs');
 const prompts = require('../kubernetes/prompts');
 const writeFiles = require('./files').writeFiles;
