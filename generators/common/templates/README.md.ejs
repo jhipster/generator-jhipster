@@ -66,11 +66,32 @@ You will only need to run this command when dependencies change in [package.json
 
 We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 
+<%_ if(['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
+If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
+To start your cache server, run:
+```
+docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider%>.yml up -d
+```
+<%_ if (cacheProvider === 'redis') { _%>
+
+The cache can also be disabled by adding to the application yaml:
+```
+spring:
+    cache:
+        type: none
+```
+See [here](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-caching.html#boot-features-caching-provider-none) for details.
+
+**WARNING**: If you using second level hibernate cache and disabling the spring cache, you have to disable the second level hibernate cache as well since they are using
+the same CacheManager.
+    <%_ } _%>
+<%_ } _%>
+
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 <% if (buildTool === 'maven') { %>
     ./mvnw<% } %><% if (buildTool === 'gradle') { %>
-    ./gradlew<% } %>
+    ./gradlew -x webpack<% } %>
     <%= clientPackageManager %> start
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
@@ -173,7 +194,7 @@ Edit [<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts](<%= CLIENT_MAIN_SRC_DIR %>app/ven
 import 'leaflet/dist/leaflet.js';
 ~~~
 
-Edit [<%= CLIENT_MAIN_SRC_DIR %>content/css/vendor.css](<%= CLIENT_MAIN_SRC_DIR %>content/css/vendor.css) file:
+Edit [<%= CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss](<%= CLIENT_MAIN_SRC_DIR %>content/scss/vendor.scss) file:
 ~~~
 @import '~leaflet/dist/leaflet.css';
 ~~~
@@ -348,21 +369,21 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Code quality page]: <%= DOCUMENTATION_ARCHIVE_URL %>/code-quality/
 [Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
-<% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>
+<% if (testFrameworks.includes("gatling")) { %>[Gatling]: https://gatling.io/<% } %>
 <%_ if (!skipClient) {_%>
 [Node.js]: https://nodejs.org/
 [Yarn]: https://yarnpkg.org/
 [Webpack]: https://webpack.github.io/
 [Angular CLI]: https://cli.angular.io/
-[BrowserSync]: http://www.browsersync.io/
+[BrowserSync]: https://www.browsersync.io/
 [Jest]: https://facebook.github.io/jest/
-[Jasmine]: http://jasmine.github.io/2.0/introduction.html
+[Jasmine]: https://jasmine.github.io/2.0/introduction.html
 [Protractor]: https://angular.github.io/protractor/
-[Leaflet]: http://leafletjs.com/
-[DefinitelyTyped]: http://definitelytyped.org/
+[Leaflet]: https://leafletjs.com/
+[DefinitelyTyped]: https://definitelytyped.org/
 <%_ } _%>
 <%_ if (enableSwaggerCodegen) { _%>
 [OpenAPI-Generator]: https://openapi-generator.tech
-[Swagger-Editor]: http://editor.swagger.io
+[Swagger-Editor]: https://editor.swagger.io
 [Doing API-First development]: <%= DOCUMENTATION_ARCHIVE_URL %>/doing-api-first-development/
 <%_ } _%>

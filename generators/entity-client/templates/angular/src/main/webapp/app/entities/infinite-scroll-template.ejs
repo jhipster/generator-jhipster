@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
     <%= entityInstancePlural %>: I<%= entityAngularName %>[];
-    currentAccount: any;
     eventSubscriber: Subscription;
     itemsPerPage: number;
     links: any;
@@ -31,7 +30,6 @@
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        protected jhiAlertService: JhiAlertService,
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
@@ -40,7 +38,6 @@
         <%_ if (searchEngine === 'elasticsearch') { _%>
         protected activatedRoute: ActivatedRoute,
         <%_ } _%>
-        protected accountService: AccountService
     ) {
         this.<%= entityInstancePlural %> = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -65,8 +62,7 @@
                 size: this.itemsPerPage,
                 sort: this.sort()
             }).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
-                (res: HttpErrorResponse) => this.onError(res.message)
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers)
             );
             return;
         }
@@ -76,8 +72,7 @@
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers),
-            (res: HttpErrorResponse) => this.onError(res.message)
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => this.paginate<%= entityClassPlural %>(res.body, res.headers)
         );
     }
 

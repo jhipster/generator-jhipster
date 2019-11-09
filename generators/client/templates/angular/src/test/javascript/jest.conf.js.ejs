@@ -18,7 +18,7 @@ module.exports = {
     moduleNameMapper: mapTypescriptAliasToJestAlias(),
     reporters: [
         'default',
-        [ 'jest-junit', { output: './<%= BUILD_DIR %>test-results/TESTS-results-jest.xml' } ]
+        [ 'jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' } ]
     ],
     testResultsProcessor: 'jest-sonar-reporter',
     transformIgnorePatterns: ['node_modules/'],
@@ -29,6 +29,9 @@ module.exports = {
 
 function mapTypescriptAliasToJestAlias(alias = {}) {
     const jestAliases = { ...alias };
+    if (!tsconfig.compilerOptions.paths) {
+      return jestAliases;
+    }
     Object.entries(tsconfig.compilerOptions.paths)
       .filter(([key, value]) => {
         // use Typescript alias in Jest only if this has value

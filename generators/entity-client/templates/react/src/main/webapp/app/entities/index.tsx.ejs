@@ -23,18 +23,24 @@ import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 
 import <%= entityReactName %> from './<%= entityFileName %>';
 import <%= entityReactName %>Detail from './<%= entityFileName %>-detail';
+<%_ if (!readOnly) { _%>
 import <%= entityReactName %>Update from './<%= entityFileName %>-update';
 import <%= entityReactName %>DeleteDialog from './<%= entityFileName %>-delete-dialog';
+<%_ } _%>
 
 const Routes = ({ match }) => (
   <>
     <Switch>
+      <%_ if (!readOnly) { _%>
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={<%= entityReactName %>Update} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={<%= entityReactName %>Update} />
+      <%_ } _%>
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail}  />
       <ErrorBoundaryRoute path={match.url} component={<%= entityReactName %>} />
     </Switch>
+    <%_ if (!readOnly) { _%>
     <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
+    <%_ } _%>
   </>
 );
 

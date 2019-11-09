@@ -1,0 +1,26 @@
+name: Generator CI
+on: [push, pull_request]
+jobs:
+    generator-jhipster:
+        name: JHipster generator unit test suite
+        runs-on: ${{ matrix.os }}
+        timeout-minutes: 20
+        strategy:
+            fail-fast: false
+            matrix:
+                node_version: [10.x, 12.x]
+                os: [ubuntu-latest]
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node_version }}
+            - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
+              shell: bash
+            - name: Config git variables
+              env:
+                  JHI_SCRIPTS: ./test-integration/scripts
+              run: $JHI_SCRIPTS/04-git-config.sh
+              shell: bash
+            - run: npm ci
+            - run: npm test

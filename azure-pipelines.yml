@@ -20,7 +20,7 @@
 jobs:
     - job: Test
       pool:
-          vmImage: 'Ubuntu 16.04'
+          vmImage: 'ubuntu-18.04'
       variables:
           JHI_PROFILE: dev
           JHI_RUN_APP: 1
@@ -28,7 +28,7 @@ jobs:
           JHI_JDK: 11
           # if JHI_LIB_BRANCH value is release, use the release from Maven
           JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-          JHI_LIB_BRANCH: release
+          JHI_LIB_BRANCH: master
           # if JHI_GEN_BRANCH value is release, use the release from NPM
           JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
           JHI_GEN_BRANCH: master
@@ -82,7 +82,7 @@ jobs:
                   JHI_ENTITY: sql
               webflux-mongodb:
                   JHI_APP: webflux-mongodb
-                  JHI_ENTITY: mongodb
+                  JHI_ENTITY: none
 
       steps:
           #----------------------------------------------------------------------
@@ -90,7 +90,7 @@ jobs:
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '10.16.3'
+                versionSpec: '12.13.0'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then

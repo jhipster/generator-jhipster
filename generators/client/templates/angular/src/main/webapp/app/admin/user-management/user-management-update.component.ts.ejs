@@ -18,7 +18,7 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageHelper } from 'app/core/language/language.helper';
@@ -30,10 +30,12 @@ import { UserService } from 'app/core/user/user.service';
     selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
     templateUrl: './user-management-update.component.html'
 })
-export class UserMgmtUpdateComponent implements OnInit {
+export class UserManagementUpdateComponent implements OnInit {
 
     user: User;
+    <%_ if (enableTranslation) { _%>
     languages: any[];
+    <%_ } _%>
     authorities: any[];
     isSaving: boolean;
 
@@ -54,7 +56,6 @@ export class UserMgmtUpdateComponent implements OnInit {
         <%_ } _%>
         private userService: UserService,
         private route: ActivatedRoute,
-        private router: Router,
         private fb: FormBuilder
     ) {}
 
@@ -69,9 +70,7 @@ export class UserMgmtUpdateComponent implements OnInit {
             this.authorities = authorities;
         });
         <%_ if (enableTranslation) { _%>
-        this.languageHelper.getAll().then((languages) => {
-            this.languages = languages;
-        });
+        this.languages = this.languageHelper.getAll();
         <%_ } _%>
     }
 
@@ -96,10 +95,10 @@ export class UserMgmtUpdateComponent implements OnInit {
         this.isSaving = true;
         this.updateUser(this.user);
         if (this.user.id !== null) {
-            this.userService.update(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
+            this.userService.update(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
         } else {<% if (!enableTranslation) { %>
             this.user.langKey = 'en';<% } %>
-            this.userService.create(this.user).subscribe((response) => this.onSaveSuccess(response), () => this.onSaveError());
+            this.userService.create(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
         }
     }
 
@@ -113,7 +112,7 @@ export class UserMgmtUpdateComponent implements OnInit {
         user.authorities = this.editForm.get(['authorities']).value;
     }
 
-    private onSaveSuccess(result) {
+    private onSaveSuccess() {
         this.isSaving = false;
         this.previousState();
     }

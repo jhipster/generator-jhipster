@@ -23,11 +23,13 @@ services:
     - xvfb
 language: node_js
 node_js:
-    - '10.16.3'
+    - '12.13.0'
 cache:
     directories:
         - $HOME/.m2
         - $HOME/.gradle
+addons:
+  chrome: stable
 env:
     global:
         - JHI_PROFILE=dev
@@ -36,7 +38,7 @@ env:
         - JHI_JDK=11
         # if JHI_LIB_BRANCH value is release, use the release from Maven
         - JHI_LIB_REPO=https://github.com/jhipster/jhipster.git
-        - JHI_LIB_BRANCH=release
+        - JHI_LIB_BRANCH=master
         # if JHI_GEN_BRANCH value is release, use the release from NPM
         - JHI_GEN_REPO=https://github.com/jhipster/generator-jhipster.git
         - JHI_GEN_BRANCH=master
@@ -54,9 +56,6 @@ env:
         - JHI_APP=ms-ngx-gateway-eureka JHI_ENTITY=sql JHI_WAR=1
         - JHI_APP=ms-micro-eureka JHI_ENTITY=micro JHI_WAR=1
         - JHI_APP=ms-micro-consul JHI_ENTITY=micro
-        - JHI_APP=ngx-mongodb-kafka-cucumber JHI_ENTITY=mongodb
-        - JHI_APP=ngx-session-cassandra-fr JHI_ENTITY=cassandra
-        - JHI_APP=ngx-couchbase JHI_PROFILE=prod JHI_ENTITY=couchbase
 
 #----------------------------------------------------------------------
 # Install all tools and check configuration

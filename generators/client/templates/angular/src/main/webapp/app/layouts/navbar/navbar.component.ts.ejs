@@ -47,7 +47,9 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 export class NavbarComponent implements OnInit {
     inProduction: boolean;
     isNavbarCollapsed: boolean;
+    <%_ if (enableTranslation) { _%>
     languages: any[];
+    <%_ } _%>
     swaggerEnabled: boolean;
     <%_ if (authenticationType !== 'oauth2') { _%>
     modalRef: NgbModalRef;
@@ -68,18 +70,16 @@ export class NavbarComponent implements OnInit {
         private profileService: ProfileService,
         private router: Router
     ) {
-        this.version = VERSION ? 'v' + VERSION : '';
+        this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
         this.isNavbarCollapsed = true;
     }
 
     ngOnInit() {
         <%_ if (enableTranslation) { _%>
-        this.languageHelper.getAll().then((languages) => {
-            this.languages = languages;
-        });
+        this.languages = this.languageHelper.getAll();
 
         <%_ } _%>
-        this.profileService.getProfileInfo().then((profileInfo) => {
+        this.profileService.getProfileInfo().subscribe((profileInfo) => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });

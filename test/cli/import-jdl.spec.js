@@ -65,6 +65,7 @@ function testDocumentsRelationships() {
             'skip-install': true,
             'skip-server': undefined,
             'skip-ui-grouping': undefined,
+            'skip-db-changelog': undefined,
             'skip-user-management': undefined
         });
     });
@@ -138,6 +139,56 @@ describe('JHipster generator import jdl', () => {
         });
     });
 
+    describe('imports a JDL entity model from single file with --skip-db-changelog', () => {
+        beforeEach(done => {
+            testInTempDir(dir => {
+                fse.copySync(path.join(__dirname, '../templates/import-jdl'), dir);
+                importJdl(['jdl.jdl'], { 'skip-db-changelog': true, skipInstall: true }, env);
+                done();
+            });
+        });
+
+        it('creates entity json files', () => {
+            assert.file([
+                '.jhipster/Department.json',
+                '.jhipster/JobHistory.json',
+                '.jhipster/Job.json',
+                '.jhipster/Employee.json',
+                '.jhipster/Location.json',
+                '.jhipster/Task.json',
+                '.jhipster/Country.json',
+                '.jhipster/Region.json'
+            ]);
+        });
+        it('calls entity subgenerator', () => {
+            expect(subGenCallParams.count).to.equal(8);
+            expect(subGenCallParams.commands).to.eql([
+                'jhipster:entity Region',
+                'jhipster:entity Country',
+                'jhipster:entity Location',
+                'jhipster:entity Department',
+                'jhipster:entity Task',
+                'jhipster:entity Employee',
+                'jhipster:entity Job',
+                'jhipster:entity JobHistory'
+            ]);
+            expect(subGenCallParams.options[0]).to.eql({
+                regenerate: true,
+                force: false,
+                skipInstall: true,
+                'from-cli': true,
+                interactive: true,
+                'no-fluent-methods': undefined,
+                'skip-client': undefined,
+                'skip-install': true,
+                'skip-server': undefined,
+                'skip-ui-grouping': undefined,
+                'skip-db-changelog': true,
+                'skip-user-management': undefined
+            });
+        });
+    });
+
     describe('imports a JDL entity model from single file in interactive mode by default', () => {
         beforeEach(done => {
             testInTempDir(dir => {
@@ -181,6 +232,7 @@ describe('JHipster generator import jdl', () => {
                 'skip-install': true,
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
+                'skip-db-changelog': undefined,
                 'skip-user-management': undefined
             });
         });
@@ -240,6 +292,7 @@ describe('JHipster generator import jdl', () => {
                 'skip-install': true,
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
+                'skip-db-changelog': undefined,
                 'skip-user-management': undefined
             });
         });
@@ -272,6 +325,7 @@ describe('JHipster generator import jdl', () => {
                 'skip-install': true,
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
+                'skip-db-changelog': undefined,
                 'skip-user-management': undefined
             });
         });
@@ -304,6 +358,54 @@ describe('JHipster generator import jdl', () => {
                 '--skip-install',
                 '--no-insight',
                 '--no-skip-git',
+                '--with-entities',
+                '--force',
+                '--from-cli'
+            ]);
+        });
+    });
+
+    describe('imports single app and entities passed with --inline', () => {
+        beforeEach(done => {
+            testInTempDir(dir => {
+                importJdl(
+                    [],
+                    {
+                        skipInstall: true,
+                        noInsight: true,
+                        'skip-git': false,
+                        inline: 'application { config { baseName jhapp } entities * } entity Customer'
+                    },
+                    env,
+                    mockFork(done, 1)
+                );
+            });
+        });
+
+        it('creates the application', () => {
+            assert.file(['.yo-rc.json']);
+        });
+        it('creates the entities', () => {
+            assert.file([path.join('.jhipster', 'Customer.json')]);
+        });
+        it('calls application generator', () => {
+            expect(subGenCallParams.count).to.equal(1);
+            expect(subGenCallParams.commands).to.eql(['jhipster:app']);
+            expect(subGenCallParams.options[0]).to.eql([
+                '--skip-install',
+                '--no-insight',
+                '--no-skip-git',
+                '--inline',
+                'application',
+                '{',
+                'config',
+                'baseName',
+                'jhapp',
+                '}',
+                'entities',
+                '*',
+                'entity',
+                'Customer',
                 '--with-entities',
                 '--force',
                 '--from-cli'

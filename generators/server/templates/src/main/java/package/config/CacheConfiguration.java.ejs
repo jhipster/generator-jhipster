@@ -105,18 +105,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.jhipster.config.JHipsterProperties;
 import java.util.concurrent.TimeUnit;
+import org.hibernate.cfg.AvailableSettings;
 import org.infinispan.eviction.EvictionType;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.infinispan.spring.starter.embedded.InfinispanCacheConfigurer;
-import org.infinispan.spring.starter.embedded.InfinispanEmbeddedCacheManagerAutoConfiguration;
 import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
-import org.infinispan.jcache.embedded.ConfigurationAdapter;
-import org.infinispan.jcache.embedded.JCache;
-import org.infinispan.jcache.embedded.JCacheManager;
-import javax.cache.Caching;
-import javax.cache.spi.CachingProvider;
-import java.net.URI;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import java.util.stream.Stream;
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
@@ -145,12 +141,29 @@ import com.google.code.ssm.spring.SSMCacheManager;
 
 import io.github.jhipster.config.JHipsterProperties;
 <%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import org.redisson.Redisson;
+import org.redisson.config.Config;
+import org.redisson.jcache.configuration.RedissonConfiguration;
+import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+    <%_ if (enableHibernateCache) { _%>
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.hibernate.cache.jcache.ConfigSettings;
+    <%_ } _%>
+
+import java.util.concurrent.TimeUnit;
+
+import javax.cache.configuration.MutableConfiguration;
+import javax.cache.expiry.CreatedExpiryPolicy;
+import javax.cache.expiry.Duration;
+
+import io.github.jhipster.config.JHipsterProperties;
+<%_ } _%>
 
 @Configuration
 @EnableCaching
-<%_ if (cacheProvider === 'infinispan') { _%>
-@Import(InfinispanEmbeddedCacheManagerAutoConfiguration.class)
-<%_ } _%>
 public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implements DisposableBean<% } %> {
     <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'caffeine') { _%>
 
@@ -190,8 +203,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
             createCache(cm, "oAuth2Authentication");
             <%_ } _%>
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
-            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE);
+            createCache(cm, <%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, <%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
                 <%_ if (enableHibernateCache) { _%>
             createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName());
             createCache(cm, <%=packageName%>.domain.Authority.class.getName());
@@ -435,13 +448,21 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
-            }
-            return () -> GlobalConfigurationBuilder
+            } else if (discoveryClient.getInstances(registration.getServiceId()).size() == 0) {
+                return () -> GlobalConfigurationBuilder
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport()
+                    .transport(new JGroupsTransport())
+                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .allowDuplicateDomains(true).build();
+            } else {
+                return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport()
                     .transport(new JGroupsTransport(getTransportChannel()))
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
+            }
         <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport().defaultTransport()
@@ -511,94 +532,62 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getReplicated().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
 
-            // initialize Hibernate L2 cache
+            // initialize Hibernate L2 cache configuration templates
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
+                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("replicated-entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_SYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
+                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("local-query", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
+                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("replicated-query", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_ASYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
+                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("timestamps", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_ASYNC)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).build());
+                .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("pending-puts", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
                 .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
-                .simpleCache(true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).build());
+                .simpleCache(true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).template(true).build());
+
+            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
+            Stream.of(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, <%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE)
+                .forEach(cacheName -> manager.defineConfiguration(cacheName, new ConfigurationBuilder().clustering()
+                    .cacheMode(CacheMode.INVALIDATION_SYNC)
+                    .jmxStatistics()
+                    .enabled(cacheInfo.isStatsEnabled())
+                    .locking()
+                    .concurrencyLevel(1000)
+                    .lockAcquisitionTimeout(15000)
+                    .build()));
+            <%_ } _%>
+            <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
+            manager.defineConfiguration("oAuth2Authentication", new ConfigurationBuilder()
+                .clustering().cacheMode(CacheMode.LOCAL)
+                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
+                .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
+            <%_ } _%>
 
             setCacheManager(manager);
         };
     }
-
+        <%_ if (enableHibernateCache) { _%>
     /**
-     * <p>
-     * Instance of {@link JCacheManager} with cache being managed by the underlying Infinispan layer. This helps to record stats
-     * info if enabled and the same is accessible through {@code MBX:javax.cache,type=CacheStatistics}.
-     *
-     * <p>
-     * jCache stats are at instance level. If you need stats at clustering level, then it needs to be retrieved from {@code MBX:org.infinispan}
-     *
-     * @param cacheManager the embedded cache manager.
-     * @param jHipsterProperties the jhipster properties to configure from.
-     * @return the jcache manager.
-     */
+    * Hibernate properties customizer.
+    * This component ensures that Hibernate L2 cache region factory uses, as cache manager, the
+    * same instance already configured in Spring Context with {@link CacheConfiguration}
+    *
+    * @param cacheFactoryConfiguration custom infinispan region factory
+    * @return hibernate properties with custom cache region factory
+    */
     @Bean
-    public JCacheManager getJCacheManager(EmbeddedCacheManager cacheManager, JHipsterProperties jHipsterProperties){
-        return new InfinispanJCacheManager(Caching.getCachingProvider().getDefaultURI(), cacheManager,
-            Caching.getCachingProvider(), jHipsterProperties);
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(CacheFactoryConfiguration cacheFactoryConfiguration) {
+        return hibernateProperties -> hibernateProperties.put(AvailableSettings.CACHE_REGION_FACTORY, cacheFactoryConfiguration);
     }
-
-    class InfinispanJCacheManager extends JCacheManager {
-
-        public InfinispanJCacheManager(URI uri, EmbeddedCacheManager cacheManager, CachingProvider provider,
-                                       JHipsterProperties jHipsterProperties) {
-            super(uri, cacheManager, provider);
-            // register individual caches to make the stats info available.
-            <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
-            registerPredefinedCache("oAuth2Authentication", new JCache<Object, Object>(
-                cacheManager.getCache("oAuth2Authentication").getAdvancedCache(), this,
-                ConfigurationAdapter.create()));
-            <%_ } _%>
-            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
-            registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE).getAdvancedCache(), this,
-                ConfigurationAdapter.create()));
-            registerPredefinedCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE, new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE).getAdvancedCache(), this,
-                ConfigurationAdapter.create()));
-                <%_ if (enableHibernateCache) { _%>
-            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName()).getAdvancedCache(), this,
-                ConfigurationAdapter.create()));
-            registerPredefinedCache(<%=packageName%>.domain.Authority.class.getName(), new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.Authority.class.getName()).getAdvancedCache(), this,
-                ConfigurationAdapter.create()));
-            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities").getAdvancedCache(), this,
-                ConfigurationAdapter.create()));
-                    <%_ if (authenticationType === 'session') { _%>
-            registerPredefinedCache(<%=packageName%>.domain.PersistentToken.class.getName(), new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.PersistentToken.class.getName()).getAdvancedCache(), this,
-                ConfigurationAdapter.create()));
-            registerPredefinedCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", new JCache<Object, Object>(
-                cacheManager.getCache(<%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens").getAdvancedCache(), this,
-                ConfigurationAdapter.create()));
-                    <%_ } _%>
-                <%_ } _%>
-            <%_ } _%>
-            // jhipster-needle-infinispan-add-entry
-            if (jHipsterProperties.getCache().getInfinispan().isStatsEnabled()) {
-                for (String cacheName : cacheManager.getCacheNames()) {
-                    enableStatistics(cacheName, true);
-                }
-            }
-        }
-    }
+    <%_ } _%>
 
         <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
     /**
@@ -730,5 +719,53 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
 
         return defaultCache;
     }
+    <%_ } _%>
+
+    <%_ if (cacheProvider === 'redis') { _%>
+    @Bean
+    public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
+        MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
+        Config config = new Config();
+        config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer());
+        jcacheConfig.setStatisticsEnabled(true);
+        jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
+        return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
+    }
+
+    <%_ if (enableHibernateCache) { _%>
+    @Bean
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cm) {
+        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cm);
+    }
+    <%_ } _%>
+
+    @Bean
+    public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
+        return cm -> {
+            <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
+            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+                <%_ if (enableHibernateCache) { _%>
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
+            createCache(cm, <%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
+                    <%_ if (authenticationType === 'session') { _%>
+            createCache(cm, <%=packageName%>.domain.PersistentToken.class.getName(), jcacheConfiguration);
+            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
+                    <%_ } _%>
+                <%_ } _%>
+            <%_ } _%>
+            // jhipster-needle-redis-add-entry
+        };
+    }
+
+    private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
+        javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
+        if (cache != null) {
+            cm.destroyCache(cacheName);
+        }
+        cm.createCache(cacheName, jcacheConfiguration);
+    }
+
     <%_ } _%>
 }

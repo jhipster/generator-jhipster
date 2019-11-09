@@ -46,7 +46,7 @@
     <%_ } _%>
     "core-js": "3.2.1",
     "moment": "2.24.0",
-    "ng-jhipster": "0.11.1",
+    "ng-jhipster": "0.11.3",
     "ngx-cookie": "4.0.2",
     "ngx-infinite-scroll": "8.0.0",
     "ngx-webstorage": "4.0.1",
@@ -145,7 +145,7 @@
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     <%_ if (protractorTests) { _%>
-    "webdriver-manager": "12.1.6",
+    "webdriver-manager": "12.1.7",
     <%_ } _%>
     "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
     "webpack": "4.39.3",
@@ -159,7 +159,7 @@
   },
   "engines": {
     "node": ">=8.9.0"<% if (clientPackageManager === 'yarn') { %>,
-    "yarn": ">=1.17.3"<% } %>
+    "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\"",

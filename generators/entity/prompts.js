@@ -33,6 +33,7 @@ module.exports = {
     askForDTO,
     askForService,
     askForFiltering,
+    askForReadOnly,
     askForPagination
 };
 
@@ -320,6 +321,27 @@ function askForFiltering() {
     ];
     this.prompt(prompts).then(props => {
         context.jpaMetamodelFiltering = props.filtering === 'jpaMetamodel';
+        done();
+    });
+}
+
+function askForReadOnly() {
+    const context = this.context;
+    // don't prompt if data is imported from a file
+    if (context.useConfigurationFile) {
+        return;
+    }
+    const done = this.async();
+    const prompts = [
+        {
+            type: 'confirm',
+            name: 'readOnly',
+            message: 'Is this entity read-only?',
+            default: false
+        }
+    ];
+    this.prompt(prompts).then(props => {
+        context.readOnly = props.readOnly;
         done();
     });
 }

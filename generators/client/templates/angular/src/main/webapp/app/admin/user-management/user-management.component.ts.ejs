@@ -32,13 +32,13 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { AccountService } from 'app/core/auth/account.service';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.model';
-import { UserMgmtDeleteDialogComponent } from './user-management-delete-dialog.component';
+import { UserManagementDeleteDialogComponent } from './user-management-delete-dialog.component';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-user-mgmt',
     templateUrl: './user-management.component.html'
 })
-export class UserMgmtComponent implements OnInit, OnDestroy {
+export class UserManagementComponent implements OnInit, OnDestroy {
 
     currentAccount: any;
     users: User[];
@@ -80,7 +80,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.accountService.identity().then((account) => {
+        this.accountService.identity().subscribe((account) => {
             this.currentAccount = account;
             this.loadAll();
             this.registerChangeInUsers();
@@ -97,22 +97,20 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     registerChangeInUsers() {
-        this.userListSubscription = this.eventManager.subscribe('userListModification', (response) => this.loadAll());
+        this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
     }
 
     setActive(user, isActivated) {
         user.activated = isActivated;
 
         this.userService.update(user).subscribe(
-            (response) => {
-                if (response.status === 200) {
-                    this.error = null;
-                    this.success = 'OK';
-                    this.loadAll();
-                } else {
-                    this.success = null;
-                    this.error = 'ERROR';
-                }
+            () => {
+                this.error = null;
+                this.success = 'OK';
+                this.loadAll();
+            }, () => {
+                this.success = null;
+                this.error = 'ERROR';
             });
     }
 
@@ -121,7 +119,7 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}<% } %>).subscribe(
-                (res: HttpResponse<User[]>) => this.onSuccess(res.body, res.headers),
+                (res: HttpResponse<User[]>) => this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>),
                 (res: HttpResponse<any>) => this.onError(res.body)
         );
     }
@@ -147,7 +145,8 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     }
 
     transition() {
-        this.router.navigate(['/admin/user-management'], {
+        this.router.navigate(['./'], {
+            relativeTo: this.activatedRoute.parent,
             queryParams: {
                 page: this.page,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
@@ -159,19 +158,11 @@ export class UserMgmtComponent implements OnInit, OnDestroy {
     <%_ } _%>
 
     deleteUser(user: User) {
-        const modalRef = this.modalService.open(UserMgmtDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.user = user;
-        modalRef.result.then(
-            result => {
-            // Left blank intentionally, nothing to do here
-            },
-            reason => {
-            // Left blank intentionally, nothing to do here
-            }
-        );
     }
 
-    private onSuccess(data, headers) {
+    private onSuccess(data<% if (databaseType !== 'cassandra') { %>, headers<% } %>) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');

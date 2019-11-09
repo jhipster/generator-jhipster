@@ -191,7 +191,7 @@ function askExistingAvailableDocs() {
     this.prompt(prompts).then(props => {
         if (props.availableDoc !== undefined) {
             this.props.inputSpec = props.availableDoc.url;
-            this.props.cliName = props.availableDoc.name;
+            this.props.cliName = props.availableDoc.name === 'default' ? 'apidocs' : props.availableDoc.name; // "default" cannot be used as it's a keyword in java
         }
         done();
     });
@@ -218,7 +218,7 @@ function askGenerationInfos() {
             when: response => this.props.action === 'new' && !response.useServiceDiscovery,
             type: 'input',
             name: 'cliName',
-            message: 'What is the unique name for your API client ?',
+            message: 'What is the unique name for your API client (please avoid using Java keywords) ?',
             default: this.props.cliName || 'petstore',
             validate: input => {
                 if (!/^([a-zA-Z0-9_]*)$/.test(input)) {

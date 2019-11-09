@@ -19,9 +19,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import {map} from 'rxjs/operators';
 <%_ if (authenticationType !== 'uaa') { _%>
+import {map} from 'rxjs/operators';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
@@ -71,25 +70,16 @@ export class AuthServerProvider {
         return this.http.post(SERVER_API_URL + 'api/authenticate', data, {observe : 'response'}).pipe(map(authenticateSuccess.bind(this)));
 <%_ } _%>
     }
-
-    loginWithToken(jwt, rememberMe) {
-        if (jwt) {
-            this.storeAuthenticationToken(jwt, rememberMe);
-            return Promise.resolve(jwt);
-        } else {
-            return Promise.reject('auth-jwt-service Promise reject'); // Put appropriate error message here
-        }
-    }
+<%_ if (authenticationType !== 'uaa') { _%>
 
     storeAuthenticationToken(jwt, rememberMe) {
-<%_ if (authenticationType !== 'uaa') { _%>
         if (rememberMe) {
             this.$localStorage.store('authenticationToken', jwt);
         } else {
             this.$sessionStorage.store('authenticationToken', jwt);
         }
-<%_ } _%>
     }
+<%_ } _%>
 
     logout(): Observable<any> {
 <%_ if (authenticationType === 'uaa') { _%>

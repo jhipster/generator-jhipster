@@ -14,12 +14,29 @@ elif [ -f "gradlew" ]; then
 fi
 
 #-------------------------------------------------------------------------------
+# Exclude webpack task from Gradle if not skipping client
+#-------------------------------------------------------------------------------
+JHI_GRADLE_EXCLUDE_WEBPACK="-x webpack"
+if [[ $(grep "\"skipClient\": true" .yo-rc.json) != "" ]]; then
+    JHI_GRADLE_EXCLUDE_WEBPACK=""
+fi
+
+#-------------------------------------------------------------------------------
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
 if [ -f "mvnw" ]; then
     ./mvnw -ntp javadoc:javadoc
 elif [ -f "gradlew" ]; then
-    ./gradlew javadoc
+    ./gradlew javadoc $JHI_GRADLE_EXCLUDE_WEBPACK
+fi
+
+#-------------------------------------------------------------------------------
+# Check no-http
+#-------------------------------------------------------------------------------
+if [ -f "mvnw" ]; then
+    ./mvnw -ntp checkstyle:check
+elif [ -f "gradlew" ]; then
+    ./gradlew checkstyleNohttp $JHI_GRADLE_EXCLUDE_WEBPACK
 fi
 
 #-------------------------------------------------------------------------------
@@ -46,7 +63,7 @@ if [ -f "mvnw" ]; then
         -Dlogging.level.org.springframework.security=OFF
 
 elif [ -f "gradlew" ]; then
-    ./gradlew test -P-webpack integrationTest \
+    ./gradlew test integrationTest $JHI_GRADLE_EXCLUDE_WEBPACK \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \

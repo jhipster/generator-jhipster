@@ -101,6 +101,11 @@ const serverFiles = {
             templates: ['memcached.yml']
         },
         {
+            condition: generator => generator.cacheProvider === 'redis',
+            path: DOCKER_DIR,
+            templates: ['redis.yml']
+        },
+        {
             condition: generator => generator.searchEngine === 'elasticsearch',
             path: DOCKER_DIR,
             templates: ['elasticsearch.yml']
@@ -157,6 +162,9 @@ const serverFiles = {
         }
     ],
     serverBuild: [
+        {
+            templates: [{ file: 'checkstyle.xml', options: { interpolate: INTERPOLATE_REGEX } }]
+        },
         {
             condition: generator => generator.buildTool === 'gradle',
             templates: [
@@ -312,7 +320,8 @@ const serverFiles = {
     serverJavaAuthConfig: [
         {
             condition: generator =>
-                generator.databaseType === 'sql' || generator.databaseType === 'mongodb' || generator.databaseType === 'couchbase',
+                !generator.reactive &&
+                (generator.databaseType === 'sql' || generator.databaseType === 'mongodb' || generator.databaseType === 'couchbase'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -843,7 +852,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached'].includes(generator.cacheProvider) ||
+                ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(generator.cacheProvider) ||
                 generator.applicationType === 'gateway',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -860,6 +869,16 @@ const serverFiles = {
                 {
                     file: 'package/config/CacheFactoryConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/CacheFactoryConfiguration.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.cacheProvider === 'redis',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/RedisTestContainerExtension.java',
+                    renameTo: generator => `${generator.testDir}RedisTestContainerExtension.java`
                 }
             ]
         },
@@ -916,13 +935,11 @@ const serverFiles = {
             templates: [
                 {
                     file: 'package/repository/reactive/ReactiveN1qlCouchbaseRepository.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}repository/${generator.reactiveRepository}ReactiveN1qlCouchbaseRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/ReactiveN1qlCouchbaseRepository.java`
                 },
                 {
                     file: 'package/repository/reactive/CustomReactiveN1qlCouchbaseRepository.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}repository/${generator.reactiveRepository}CustomReactiveN1qlCouchbaseRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/CustomReactiveN1qlCouchbaseRepository.java`
                 }
             ]
         },
@@ -1068,6 +1085,10 @@ const serverFiles = {
                     file: 'package/service/KafkaProducer.java',
                     renameTo: generator =>
                         `${generator.javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`
+                },
+                {
+                    file: 'package/config/KafkaProperties.java',
+                    renameTo: generator => `${generator.javaDir}config/KafkaProperties.java`
                 }
             ]
         }
@@ -1529,10 +1550,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/CustomAuditEventRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/CustomAuditEventRepository.java`
-                },
-                {
                     file: 'package/repository/AuthorityRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`
                 },
@@ -1548,16 +1565,34 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator =>
+                !generator.reactive && generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/CustomAuditEventRepository.java',
+                    renameTo: generator => `${generator.javaDir}repository/CustomAuditEventRepository.java`
+                }
+            ]
+        },
+        {
             condition: generator => generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/AuditResourceIT.java',
+                    renameTo: generator => `${generator.testDir}web/rest/AuditResourceIT.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
+                !generator.reactive && generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
                     file: 'package/repository/CustomAuditEventRepositoryIT.java',
                     renameTo: generator => `${generator.testDir}repository/CustomAuditEventRepositoryIT.java`
-                },
-                {
-                    file: 'package/web/rest/AuditResourceIT.java',
-                    renameTo: generator => `${generator.testDir}web/rest/AuditResourceIT.java`
                 }
             ]
         },
@@ -1576,12 +1611,8 @@ const serverFiles = {
             templates: [
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },
                 {
-                    file: 'package/repository/CustomAuditEventRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/CustomAuditEventRepository.java`
-                },
-                {
                     file: 'package/repository/AuthorityRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}AuthorityRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/AuthorityRepository.java`
                 },
                 {
                     file: 'package/repository/PersistenceAuditEventRepository.java',
@@ -1595,6 +1626,17 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator =>
+                !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/CustomAuditEventRepository.java',
+                    renameTo: generator => `${generator.javaDir}repository/CustomAuditEventRepository.java`
+                }
+            ]
+        },
+        {
             condition: generator => !generator.skipUserManagement,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -1605,7 +1647,7 @@ const serverFiles = {
                 },
                 {
                     file: 'package/repository/UserRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/${generator.reactiveRepository}UserRepository.java`
+                    renameTo: generator => `${generator.javaDir}repository/UserRepository.java`
                 },
 
                 /* User management java service files */
@@ -1709,7 +1751,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            condition: generator =>
+                !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

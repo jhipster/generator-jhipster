@@ -176,10 +176,10 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
 
     it('admin module contains the import and the module added by needle api', () => {
         assert.fileContent(
-            `${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`,
+            `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
             "import { appNameadminAngularNameModule } from './adminFolderName/adminFileName.module';"
         );
-        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin.module.ts`, 'appNameadminAngularNameModule,');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`, 'appNameadminAngularNameModule,');
     });
 
     it('app module contains the import and the module added by needle api', () => {

@@ -106,6 +106,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-db-changelog` flag
+        this.option('skip-db-changelog', {
+            desc: 'Skip the generation of database changelog (liquibase for sql databases)',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--db` flag
         this.option('db', {
             desc: 'Provide DB option for the application when using skip-server flag',
@@ -155,6 +162,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.databaseType = configuration.get('databaseType') || this.getDBTypeFromDBValue(this.options.db);
                 context.prodDatabaseType = configuration.get('prodDatabaseType') || this.options.db;
                 context.devDatabaseType = configuration.get('devDatabaseType') || this.options.db;
+                context.skipFakeData = configuration.get('skipFakeData');
                 context.searchEngine = configuration.get('searchEngine');
                 context.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
                 context.enableTranslation = configuration.get('enableTranslation');
@@ -192,6 +200,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.skipClient =
                     context.applicationType === 'microservice' || this.options['skip-client'] || configuration.get('skipClient');
                 context.skipServer = this.options['skip-server'] || configuration.get('skipServer');
+                context.skipDbChangelog = this.options['skip-db-changelog'] || configuration.get('skipDbChangelog');
 
                 context.angularAppName = this.getAngularAppName(context.baseName);
                 context.angularXAppName = this.getAngularXAppName(context.baseName);
@@ -226,6 +235,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
 
                 context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+            },
+
+            validateMvcApp() {
+                if (this.context.reactive) {
+                    this.error(chalk.red("The entity generator doesn't support reactive apps at the moment"));
+                }
             },
 
             validateDbExistence() {
@@ -280,6 +295,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.dto = 'no';
                     context.service = 'no';
                     context.jpaMetamodelFiltering = false;
+                    context.readOnly = false;
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
@@ -347,6 +363,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             askForService: prompts.askForService,
             askForDTO: prompts.askForDTO,
             askForFiltering: prompts.askForFiltering,
+            askForReadOnly: prompts.askForReadOnly,
             askForPagination: prompts.askForPagination
         };
     }
@@ -622,34 +639,48 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
                     context.changelogDate = this.dateFormatForLiquibase();
                 }
-                this.data = {};
-                this.data.fluentMethods = context.fluentMethods;
-                this.data.clientRootFolder = context.clientRootFolder;
-                this.data.relationships = context.relationships;
-                this.data.fields = context.fields;
-                this.data.changelogDate = context.changelogDate;
-                this.data.dto = context.dto;
-                this.data.searchEngine = context.searchEngine;
-                this.data.service = context.service;
-                this.data.entityTableName = context.entityTableName;
-                this.data.databaseType = context.databaseType;
-                this.copyFilteringFlag(context, this.data, context);
+
+                // Keep existing config by cloning fileData
+                const storageData = this.context.fileData ? { ...this.context.fileData } : {};
+                storageData.fluentMethods = context.fluentMethods;
+                storageData.clientRootFolder = context.clientRootFolder;
+                storageData.relationships = context.relationships;
+                storageData.fields = context.fields;
+                storageData.changelogDate = context.changelogDate;
+                storageData.dto = context.dto;
+                storageData.searchEngine = context.searchEngine;
+                storageData.service = context.service;
+                storageData.entityTableName = context.entityTableName;
+                storageData.databaseType = context.databaseType;
+                this.copyFilteringFlag(context, storageData, context);
                 if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
-                    this.data.pagination = context.pagination;
+                    storageData.pagination = context.pagination;
                 } else {
-                    this.data.pagination = 'no';
+                    storageData.pagination = 'no';
                 }
-                this.data.javadoc = context.javadoc;
+                storageData.javadoc = context.javadoc;
                 if (context.entityAngularJSSuffix) {
-                    this.data.angularJSSuffix = context.entityAngularJSSuffix;
+                    storageData.angularJSSuffix = context.entityAngularJSSuffix;
                 }
                 if (context.applicationType === 'microservice' || context.applicationType === 'uaa') {
-                    this.data.microserviceName = context.baseName;
+                    storageData.microserviceName = context.baseName;
                 }
                 if (context.applicationType === 'gateway' && context.useMicroserviceJson) {
-                    this.data.microserviceName = context.microserviceName;
+                    storageData.microserviceName = context.microserviceName;
                 }
-                this.fs.writeJSON(context.filename, this.data, null, 4);
+
+                if (this.storageData) {
+                    // Override storageData configs with existing this.storageData
+                    // So that blueprints can create it and override fields.
+                    this.storageData = { ...storageData, ...this.storageData };
+                } else {
+                    this.storageData = storageData;
+                }
+
+                this.fs.writeJSON(context.filename, this.storageData, null, 4);
+
+                // Keep this.data for compatibility with existing blueprints
+                this.data = this.storageData;
             },
 
             loadInMemoryData() {
@@ -990,6 +1021,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             relationship.otherEntityModuleName = `${context.angularXAppName +
                                 relationship.otherEntityNameCapitalized}Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
+                            if (relationship.otherEntityFolderName === undefined) {
+                                relationship.otherEntityFolderName = _.kebabCase(relationship.otherEntityAngularName);
+                            }
                             if (
                                 context.skipUiGrouping ||
                                 otherEntityData === undefined ||
@@ -1002,22 +1036,22 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             }
                             if (otherEntityData !== undefined && otherEntityData.clientRootFolder) {
                                 if (context.clientRootFolder === otherEntityData.clientRootFolder) {
-                                    relationship.otherEntityModulePath = relationship.otherEntityFileName;
+                                    relationship.otherEntityModulePath = relationship.otherEntityFolderName;
                                 } else {
                                     relationship.otherEntityModulePath = `${
                                         context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                    }${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                                    }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                                 }
                                 relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${
                                     relationship.otherEntityFileName
                                 }`;
-                                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
+                                relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                             } else {
                                 relationship.otherEntityModulePath = `${
                                     context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
-                                }${relationship.otherEntityFileName}`;
+                                }${relationship.otherEntityFolderName}`;
                                 relationship.otherEntityModelName = relationship.otherEntityFileName;
-                                relationship.otherEntityPath = relationship.otherEntityFileName;
+                                relationship.otherEntityPath = relationship.otherEntityFolderName;
                             }
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
@@ -1151,7 +1185,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         this.log(`\n${chalk.bold.green('Running post run module hooks\n')}`);
                         // form the data to be passed to modules
                         const context = this.context;
-                        context.data = context.data || context.fileData;
+
+                        // Keep context.data for unexpected compatibility issue.
+                        context.data = context.data || this.storageData || context.fileData;
+
                         // run through all post entity creation module hooks
                         this.callHooks(
                             'entity',

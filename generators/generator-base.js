@@ -620,9 +620,10 @@ module.exports = class extends PrivateBase {
      *
      * @param {string} id - id of the repository
      * @param {string} url - url of the repository
+     * @param  {string} other - (optional) explicit other thing: name, releases, snapshots, ...
      */
-    addMavenRepository(id, url) {
-        this.needleApi.serverMaven.addRepository(id, url);
+    addMavenRepository(id, url, other = '') {
+        this.needleApi.serverMaven.addRepository(id, url, other);
     }
 
     /**
@@ -692,6 +693,18 @@ module.exports = class extends PrivateBase {
      */
     addMavenPlugin(groupId, artifactId, version, other) {
         this.needleApi.serverMaven.addPlugin(groupId, artifactId, version, other);
+    }
+
+    /**
+     * Add a new Maven plugin management.
+     *
+     * @param {string} groupId - plugin groupId
+     * @param {string} artifactId - plugin artifactId
+     * @param {string} version - explicit plugin version number
+     * @param {string} other - explicit other thing: executions, configuration...
+     */
+    addMavenPluginManagement(groupId, artifactId, version, other) {
+        this.needleApi.serverMaven.addPluginManagement(groupId, artifactId, version, other);
     }
 
     /**
@@ -863,8 +876,7 @@ module.exports = class extends PrivateBase {
                         /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
                         /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
                         /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
-                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
-                        /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[['"a-zA-Z0-9\-_,\s]+\]\);[\s]*)/ // jhiLanguageService invocations
+                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/ // ng2 jhiLanguageService constructor argument
                     ]
                         .map(r => r.source)
                         .join('|'),
@@ -1156,6 +1168,7 @@ module.exports = class extends PrivateBase {
         context.skipCheckLengthOfIdentifier = context.fileData.skipCheckLengthOfIdentifier || context.skipCheckLengthOfIdentifier;
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
         context.skipClient = context.fileData.skipClient || context.skipClient;
+        context.readOnly = context.fileData.readOnly || false;
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);

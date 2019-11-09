@@ -16,15 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { browser, ExpectedConditions as ec, <% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>protractor, <% } %>promise } from 'protractor';
-import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { <%= entityClass %>ComponentsPage, <%= entityClass %>DeleteDialog, <%= entityClass %>UpdatePage } from './<%= entityFileName %>.page-object';
-<%_ if (fieldsContainBlobOrImage) { _%>
-import * as path from 'path';
-<%_ } _%>
 <%_
 let elementGetter = `getText()`;
 let openBlockComment = ``;
@@ -39,6 +30,18 @@ for (let relationship of relationships) {
         break;
     }
 } _%>
+import { browser, ExpectedConditions as ec <% if (!readOnly) { %><%= openBlockComment %><% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %>, promise<%= closeBlockComment %><% } %> } from 'protractor';
+import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
+
+import { <%= entityClass %>ComponentsPage,
+    <%_ if (!readOnly) { _%>
+    <%= openBlockComment %><%= entityClass %>DeleteDialog,
+    <%= closeBlockComment %> <%= entityClass %>UpdatePage
+    <%_ } _%>
+} from './<%= entityFileName %>.page-object';
+<%_ if (fieldsContainBlobOrImage) { _%>
+import * as path from 'path';
+<%_ } _%>
 
 const expect = chai.expect;
 
@@ -46,9 +49,11 @@ describe('<%= entityClass %> e2e test', () => {
 
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
-    let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
+    <%_ if (!readOnly) { _%>
+    let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
+    <%_ } _%>
     <%_ if (fieldsContainBlobOrImage) { _%>
     const fileNameToUpload = 'logo-jhipster.png';
     const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/' + fileNameToUpload;
@@ -80,6 +85,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } _%>
     });
 
+<%_ if (!readOnly) { _%>
     it('should load create <%= entityClass %> page', async () => {
         await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
@@ -104,6 +110,7 @@ describe('<%= entityClass %> e2e test', () => {
             const fieldType = field.fieldType;
             const fieldTypeBlobContent = field.fieldTypeBlobContent;
             const fieldIsEnum = field.fieldIsEnum;
+            const fieldValidateSampleString = field.fieldValidateSampleString;
             if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5'),
             <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -120,6 +127,8 @@ describe('<%= entityClass %> e2e test', () => {
             <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption(),
             <%_ } else if (fieldType === 'UUID'){ _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974'),
+            <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+            <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldValidateSampleString %>'),
             <%_ } else if (fieldType !== 'Boolean') { _%>
             <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>'),
             <%_ } _%>
@@ -142,6 +151,7 @@ describe('<%= entityClass %> e2e test', () => {
             const fieldType = field.fieldType;
             const fieldTypeBlobContent = field.fieldTypeBlobContent;
             const fieldIsEnum = field.fieldIsEnum;
+            const fieldValidateSampleString = field.fieldValidateSampleString;
             if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5', 'Expected <%=fieldName%> value to be equals to 5');
             <%_ } else if (fieldType === 'LocalDate') { _%>
@@ -150,6 +160,8 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30', 'Expected <%=fieldName%> value to be equals to 2000-12-31');
             <%_ } else if (fieldType === 'Duration') { _%>
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('12', 'Expected <%=fieldName%> value to be equals to 12');
+            <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('<%= fieldValidateSampleString %>', 'Expected <%=fieldNameCapitalized%> value to be equals to <%= fieldValidateSampleString %>');
             <%_ } else if (fieldType === 'Boolean') { _%>
         const selected<%= fieldNameCapitalized %> = <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input();
         if (await selected<%= fieldNameCapitalized %>.isSelected()) {
@@ -191,6 +203,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });<%= closeBlockComment %>
+<%_ } _%>
 
     after(async () => {
         await navBarPage.autoSignOut();

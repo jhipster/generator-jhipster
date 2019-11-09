@@ -16,17 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import './vendor';
-<%_ if (authenticationType === 'jwt') { _%>
-import { AuthInterceptor } from './blocks/interceptor/auth.interceptor';
-<%_ } _%>
-import { AuthExpiredInterceptor } from './blocks/interceptor/auth-expired.interceptor';
-import { ErrorHandlerInterceptor } from './blocks/interceptor/errorhandler.interceptor';
-import { NotificationInterceptor } from './blocks/interceptor/notification.interceptor';
 import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 import { <%=angularXAppName%>CoreModule } from 'app/core/core.module';
 import { <%=angularXAppName%>AppRoutingModule} from './app-routing.module';
@@ -61,30 +54,6 @@ import { ErrorComponent } from './layouts/error/error.component';
         ActiveMenuDirective,
         <%_ } _%>
         FooterComponent
-    ],
-    providers: [
-        <%_ if (authenticationType === 'jwt') { _%>
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true
-        },
-        <%_ } _%>
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthExpiredInterceptor,
-            multi: true
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: ErrorHandlerInterceptor,
-            multi: true
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: NotificationInterceptor,
-            multi: true
-        }
     ],
     bootstrap: [ <%=jhiPrefixCapitalized%>MainComponent ]
 })

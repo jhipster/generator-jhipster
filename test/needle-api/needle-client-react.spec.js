@@ -92,7 +92,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
     it('Assert entity is added to menu', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`,
-            '<MenuItem icon="asterisk" to="/entity/routerName">\n      Router Name\n    </MenuItem>'
+            '<MenuItem icon="asterisk" to="/routerName">\n      Router Name\n    </MenuItem>'
         );
     });
 
@@ -101,7 +101,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
         const indexReducerPath = `${CLIENT_MAIN_SRC_DIR}app/shared/reducers/index.ts`;
 
         assert.fileContent(indexModulePath, "import entityName from './entityFolderName';");
-        assert.fileContent(indexModulePath, '<ErrorBoundaryRoute path={`${match.url}/entityFileName`} component={entityName} />'); // eslint-disable-line
+        assert.fileContent(indexModulePath, '<ErrorBoundaryRoute path={`${match.url}entityFileName`} component={entityName} />'); // eslint-disable-line
 
         assert.fileContent(
             indexReducerPath,

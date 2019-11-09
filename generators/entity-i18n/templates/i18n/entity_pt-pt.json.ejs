@@ -22,14 +22,14 @@ let helpBlocks = 0; %>
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPluralHumanized  %>",
-                "createLabel": "Criar um(a) novo(a) <%= entityClassHumanized %>",
-                "createOrEditLabel": "Criar ou editar um(a) <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
-                "search": "Search for <%= entityClassHumanized %>"<% } %>,
-                "notFound": "No <%= entityClassPluralHumanized %> found"
+                "createLabel": "Criar novo(a) <%= entityClassHumanized %>",
+                "createOrEditLabel": "Criar ou editar <%= entityClassHumanized %>"<% if (searchEngine === 'elasticsearch') { %>,
+                "search": "Procurar por <%= entityClassHumanized %>"<% } %>,
+                "notFound": "Nenhum <%= entityClassPluralHumanized %> encontrado"
             },<% if (!microserviceAppName) { %>
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}",<% } %>
+            "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
+            "updated": "<%= entityClassHumanized %> com identificador {{ param }} foi actualizado",
+            "deleted": "<%= entityClassHumanized %> com identificador {{ param }} foi eliminado",<% } %>
             "delete": {
                 "question": "Tem a certeza que pretende eliminar o(a) <%= entityClassHumanized %> {{ id }}?"
             },
@@ -50,9 +50,9 @@ let helpBlocks = 0; %>
     }<% if (microserviceAppName) { %>,
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
-            "created": "A new <%= entityClassHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClassHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClassHumanized %> is deleted with identifier {{ param }}"
+            "created": "Um novo <%= entityClassHumanized %> foi criado com o identificador {{ param }}",
+            "updated": "<%= entityClassHumanized %> com identificador {{ param }} foi actualizado",
+            "deleted": "<%= entityClassHumanized %> com identificador {{ param }} foi eliminado"
         }
     }<% } %>
 }

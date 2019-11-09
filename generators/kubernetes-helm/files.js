@@ -49,13 +49,10 @@ function writeFiles() {
                 if (this.app.searchEngine === 'elasticsearch') {
                     this.template(`${kubernetesSubgenPath}/db/elasticsearch.yml.ejs`, `${appName}/templates/${appName}-elasticsearch.yaml`);
                 }
-                if (
-                    (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') &&
-                    this.kubernetesServiceType === 'Ingress'
-                ) {
+                if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
                     if (this.istio) {
                         this.template(`${kubernetesSubgenPath}/istio/gateway.yml.ejs`, `${appName}/templates/${appName}-gateway.yaml`);
-                    } else {
+                    } else if (this.kubernetesServiceType === 'Ingress') {
                         this.template(`${kubernetesSubgenPath}/ingress.yml.ejs`, `${appName}/templates/${appName}-ingress.yaml`);
                     }
                 }
@@ -96,7 +93,7 @@ function writeFiles() {
                 if (this.deploymentApplicationType === 'microservice') {
                     this.template(`${k8s}/console/jhipster-zipkin.yml.ejs`, 'csvc/templates/jhipster-zipkin.yaml');
                 }
-                if (this.istio && this.kubernetesServiceType === 'Ingress') {
+                if (this.istio) {
                     this.template(`${k8s}/istio/gateway/jhipster-console-gateway.yml.ejs`, 'csvc/templates/jhipster-console-gateway.yaml');
                 }
             }
@@ -128,11 +125,9 @@ function writeFiles() {
         writeObservabilityGatewayFiles() {
             if (!this.istio) return;
             const k8s = this.fetchFromInstalledJHipster('kubernetes/templates');
-            if (this.kubernetesServiceType === 'Ingress') {
-                this.template(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, 'istio/grafana-gateway.yaml');
-                this.template(`${k8s}/istio/gateway/jaeger-gateway.yml.ejs`, 'istio/jaeger-gateway.yaml');
-                this.template(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, 'istio/kiali-gateway.yaml');
-            }
+            this.template(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, 'istio/grafana-gateway.yaml');
+            this.template(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, 'istio/zipkin-gateway.yaml');
+            this.template(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, 'istio/kiali-gateway.yaml');
         }
     };
 }

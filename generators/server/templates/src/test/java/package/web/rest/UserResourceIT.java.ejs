@@ -21,6 +21,9 @@ package <%= packageName %>.web.rest;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import <%=packageName%>.RedisTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%=packageName%>.config.TestSecurityConfiguration;
@@ -32,7 +35,7 @@ import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
@@ -49,6 +52,9 @@ import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (cacheManagerIsAvailable === true) { _%>
@@ -63,9 +69,6 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 <%_ if (!reactive) { _%>
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-<%_ } _%>
-<%_ if (messageBroker === 'kafka') { _%>
-import org.springframework.kafka.test.context.EmbeddedKafka;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -109,13 +112,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
-<%_ if (messageBroker === 'kafka') { _%>
-@EmbeddedKafka
-<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 

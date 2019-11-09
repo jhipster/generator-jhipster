@@ -23,7 +23,7 @@ buildscript {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        maven { url "http://repo.spring.io/plugins-release" }
+        maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -51,6 +51,7 @@ plugins {
     id "org.liquibase.gradle"
     <%_ } _%>
     id "org.sonarqube"
+    id "io.spring.nohttp"
     //jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
@@ -111,7 +112,7 @@ if (OperatingSystem.current().isWindows()) {
         archiveName = "runboot-classpath.jar"
         doFirst {
             manifest {
-                def classpath = sourceSets.test.runtimeClasspath.files
+                def classpath = sourceSets.main.runtimeClasspath.files
                 attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
             }
         }
@@ -229,8 +230,17 @@ liquibase {
 
     runList = project.ext.runList
 }
-
 <%_ } _%>
+
+checkstyle {
+    toolVersion '${checkstyle_version}'
+    configFile file("checkstyle.xml")
+    checkstyleTest.enabled = false
+}
+nohttp {
+    source.include "build.gradle", "README.md"
+}
+
 configurations {
     providedRuntime
     implementation.exclude module: "spring-boot-starter-tomcat"
@@ -240,17 +250,6 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    // more information at https://blogs.oracle.com/dev2dev/entry/how_to_get_oracle_jdbc
-    // https://discuss.gradle.org/t/support-for-maven-repositories-that-use-realm-based-sso/14456/5
-    maven {
-        url "https://www.oracle.com/content/secure/maven/content"
-        credentials {
-            username ''
-            password ''
-        }
-    }
-    <%_ } _%>
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -303,7 +302,13 @@ dependencies {
     implementation "com.google.code.simple-spring-memcached:xmemcached-provider"
     implementation "com.googlecode.xmemcached:xmemcached"
     <%_ } _%>
-    <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan'].includes(cacheProvider) || applicationType === 'gateway') { _%>
+    <%_ if (cacheProvider === 'redis') { _%>
+    implementation "org.redisson:redisson"
+        <%_ if (enableHibernateCache) { _%>
+    implementation "org.hibernate:hibernate-jcache"
+        <%_ } _%>
+    <%_ } _%>
+    <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'redis'].includes(cacheProvider) || applicationType === 'gateway') { _%>
     implementation "javax.cache:cache-api"
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
@@ -314,7 +319,7 @@ dependencies {
     implementation "commons-codec:commons-codec"
     <%_ } _%>
     <%_ if (enableSwaggerCodegen) { _%>
-    implementation "org.openapitools:jackson-databind-nullable:0.2.0"
+    implementation "org.openapitools:jackson-databind-nullable:${jackson_databind_nullable_version}"
     <%_ } _%>
     implementation "org.apache.commons:commons-lang3"
     implementation "commons-io:commons-io"
@@ -329,8 +334,8 @@ dependencies {
         <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider === 'caffeine') { _%>
-    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_cache_version}"
-    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_jcache_version}"
+    implementation "com.github.ben-manes.caffeine:caffeine:${caffeine_version}"
+    implementation "com.github.ben-manes.caffeine:jcache:${caffeine_version}"
     implementation "com.typesafe:config:${typesafe_config_version}"
         <%_ if (enableHibernateCache) { _%>
     implementation "org.hibernate:hibernate-jcache"
@@ -338,7 +343,6 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     implementation "org.hibernate:hibernate-entitymanager"
-    implementation "org.hibernate:hibernate-envers"
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase:liquibase-core"
@@ -360,17 +364,17 @@ dependencies {
         exclude module: "commons-logging"
     }
     // log4j2-mock needed to create embedded elasticsearch instance with SLF4J
-    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:0.0.1"
+    runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:${log4j2_mock_version}"
     // end of Spring Data Jest dependencies
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
-    implementation "org.springframework.kafka:spring-kafka"
+    implementation "org.apache.kafka:kafka-clients"
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
-    implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
+    implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
         exclude module: "spring-boot-starter-tomcat"
     }
     <%_ if (!reactive) { _%>
@@ -497,8 +501,8 @@ dependencies {
     <%_ if (cucumberTests) { _%>
     testImplementation "org.junit.vintage:junit-vintage-engine"
     <%_ } _%>
-    testImplementation 'com.tngtech.archunit:archunit-junit5-api:0.11.0'
-    testRuntime 'com.tngtech.archunit:archunit-junit5-engine:0.11.0'
+    testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
+    testRuntime "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     testImplementation "org.assertj:assertj-core"
     testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"
@@ -516,11 +520,12 @@ dependencies {
     liquibaseRuntime "com.h2database:h2"
     <%_ } _%>
     <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
-    implementation "com.oracle.jdbc:ojdbc8"
-    liquibaseRuntime "com.oracle.jdbc:ojdbc8"
+    implementation "com.oracle.ojdbc:ojdbc8"
+    liquibaseRuntime "com.oracle.ojdbc:ojdbc8"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
-    testImplementation "org.springframework.kafka:spring-kafka-test"
+    testImplementation "org.testcontainers:database-commons"
+    testImplementation "org.testcontainers:kafka"
     <%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
@@ -530,7 +535,7 @@ task cleanResources(type: Delete) {
 }
 
 wrapper {
-    gradleVersion = "5.6.2"
+    gradleVersion = "5.6.4"
 }
 <%_ if (!skipClient) { _%>
 

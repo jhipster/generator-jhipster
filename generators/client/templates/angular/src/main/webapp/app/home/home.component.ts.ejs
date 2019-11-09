@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
     }
 
     ngOnInit() {
-        this.accountService.identity().then((account: Account) => {
+        this.accountService.identity().subscribe((account: Account) => {
             this.account = account;
         });
         <%_ if (authenticationType !== 'oauth2') { _%>
@@ -66,8 +66,8 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
     }
 
     registerAuthenticationSuccess() {
-        this.authSubscription = this.eventManager.subscribe('authenticationSuccess', (message) => {
-            this.accountService.identity().then((account) => {
+        this.authSubscription = this.eventManager.subscribe('authenticationSuccess', () => {
+            this.accountService.identity().subscribe((account) => {
                 this.account = account;
             });
         });

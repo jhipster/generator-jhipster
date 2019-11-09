@@ -25,14 +25,29 @@ const mockBlueprintSubGen = class extends EntityGenerator {
 
     get initializing() {
         const phaseFromJHipster = super._initializing();
-        const customPhaseSteps = {
+        const customPrePhaseSteps = {
+            // Create a custom persistent entity config.
+            createCustomConfig() {
+                // Simulate data loaded from file
+                this.context.fileData = this.context.fileData || {};
+                this.context.fileData.customPreConfigKey = 'customPreConfigValue';
+                this.context.fileData.customBlueprintConfigKey = 'customPreConfigValue';
+
+                // Override with new value
+                this.storageData = {
+                    customBlueprintConfigKey: 'customBlueprintConfigValue'
+                };
+            }
+        };
+        const customPostPhaseSteps = {
             changeProperty() {
                 this.context.angularAppName = 'awesomeAngularAppName';
             }
         };
         return {
+            ...customPrePhaseSteps,
             ...phaseFromJHipster,
-            ...customPhaseSteps
+            ...customPostPhaseSteps
         };
     }
 
@@ -98,6 +113,14 @@ describe('JHipster entity generator with blueprint', () => {
 
             it('contains the specific change added by the blueprint', () => {
                 assert.fileContent(`${CLIENT_MAIN_SRC_DIR}i18n/en/foo.json`, /awesomeAngularAppName/);
+            });
+
+            // Verify if the custom entity config is persisted.
+            it('contains the specific config added', () => {
+                assert.fileContent('.jhipster/Foo.json', /"customPreConfigKey": "customPreConfigValue"/);
+            });
+            it('contains the specific config added by the blueprint', () => {
+                assert.fileContent('.jhipster/Foo.json', /"customBlueprintConfigKey": "customBlueprintConfigValue"/);
             });
         });
     });

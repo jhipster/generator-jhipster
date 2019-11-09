@@ -36,13 +36,10 @@ function writeFiles() {
                 if (this.app.searchEngine === 'elasticsearch') {
                     this.template('db/elasticsearch.yml.ejs', `${appName}/${appName}-elasticsearch.yml`);
                 }
-                if (
-                    (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') &&
-                    this.kubernetesServiceType === 'Ingress'
-                ) {
+                if (this.app.applicationType === 'gateway' || this.app.applicationType === 'monolith') {
                     if (this.istio) {
                         this.template('istio/gateway.yml.ejs', `${appName}/${appName}-gateway.yml`);
-                    } else {
+                    } else if (this.kubernetesServiceType === 'Ingress') {
                         this.template('ingress.yml.ejs', `${appName}/${appName}-ingress.yml`);
                     }
                 }
@@ -83,7 +80,7 @@ function writeFiles() {
                 if (this.deploymentApplicationType === 'microservice') {
                     this.template('console/jhipster-zipkin.yml.ejs', 'console/jhipster-zipkin.yml');
                 }
-                if (this.kubernetesServiceType === 'Ingress' && this.istio) {
+                if (this.istio) {
                     this.template('istio/gateway/jhipster-console-gateway.yml.ejs', 'console/jhipster-console-gateway.yml');
                 }
             }
@@ -95,7 +92,7 @@ function writeFiles() {
                 this.template('monitoring/jhipster-prometheus-cr.yml.ejs', 'monitoring/jhipster-prometheus-cr.yml');
                 this.template('monitoring/jhipster-grafana.yml.ejs', 'monitoring/jhipster-grafana.yml');
                 this.template('monitoring/jhipster-grafana-dashboard.yml.ejs', 'monitoring/jhipster-grafana-dashboard.yml');
-                if (this.kubernetesServiceType === 'Ingress' && this.istio) {
+                if (this.istio) {
                     this.template('istio/gateway/jhipster-grafana-gateway.yml.ejs', 'monitoring/jhipster-grafana-gateway.yml');
                 }
             }
@@ -118,11 +115,9 @@ function writeFiles() {
 
         writeObservabilityGatewayFiles() {
             if (!this.istio) return;
-            if (this.kubernetesServiceType === 'Ingress') {
-                this.template('istio/gateway/grafana-gateway.yml.ejs', 'istio/grafana-gateway.yml');
-                this.template('istio/gateway/jaeger-gateway.yml.ejs', 'istio/jaeger-gateway.yml');
-                this.template('istio/gateway/kiali-gateway.yml.ejs', 'istio/kiali-gateway.yml');
-            }
+            this.template('istio/gateway/grafana-gateway.yml.ejs', 'istio/grafana-gateway.yml');
+            this.template('istio/gateway/zipkin-gateway.yml.ejs', 'istio/zipkin-gateway.yml');
+            this.template('istio/gateway/kiali-gateway.yml.ejs', 'istio/kiali-gateway.yml');
         }
     };
 }

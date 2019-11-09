@@ -78,6 +78,13 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-fake-data` flag
+        this.option('skip-fake-data', {
+            desc: 'Skip generation of fake data for development',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--with-entities` flag
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
@@ -182,6 +189,7 @@ module.exports = class extends BaseGenerator {
             this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
+        this.skipFakeData = this.configOptions.skipFakeData = this.options['skip-fake-data'];
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
         this.uaaBaseName = this.configOptions.uaaBaseName = this.options['uaa-base-name'] || this.config.get('uaaBaseName');
 
@@ -233,7 +241,10 @@ module.exports = class extends BaseGenerator {
 
             validateBlueprint() {
                 if (this.blueprints && !this.skipChecks) {
-                    this.blueprints.forEach(e => this.checkBlueprint(e.name));
+                    this.blueprints.forEach(blueprint => {
+                        this.checkJHipsterBlueprintVersion(blueprint.name);
+                        this.checkBlueprint(blueprint.name);
+                    });
                 }
             },
 
@@ -448,6 +459,7 @@ module.exports = class extends BaseGenerator {
                 this.skipClient && (config.skipClient = true);
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
+                this.skipFakeData && (config.skipFakeData = true);
                 this.config.set(config);
             },
 

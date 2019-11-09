@@ -1,0 +1,65 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+name: Application CI
+on: [push, pull_request]
+jobs:
+    applications:
+        name: <%= baseName %> test suite
+        runs-on: ubuntu-latest
+        timeout-minutes: 40
+        env:
+            NODE_VERSION: <%= NODE_VERSION %>
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            SPRING_JPA_SHOW_SQL: false
+            JHI_DISABLE_WEBPACK_LOGS: true
+            <%_ if (clientFramework === 'angularX') { _%>
+            NG_CLI_ANALYTICS: false
+            <%_ } _%>
+        steps:
+            - uses: actions/checkout@v1
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: <%= NODE_VERSION %>
+            - uses: actions/setup-java@v1
+              with:
+                  java-version: '11.x'
+            - name: Stop MySQL server
+              run: sudo /etc/init.d/mysql stop
+            - name: Install node.js packages
+              run: <%= clientPackageManager %> install
+            - name: Run backend test
+              <%_ if (buildTool === 'maven') { _%>
+              run: |
+                 chmod +x mvnw
+                 ./mvnw -ntp clean verify <% if (!skipClient) { %>-P-webpack<% } %>
+              <%_ } else if (buildTool === 'gradle') { _%>
+              run: |
+                 chmod +x gradlew
+                 ./gradlew clean test integrationTest <% if (!skipClient) { %>-x webpack<% } %>
+              <%_ } _%>
+            <%_ if (!skipClient) { _%>
+            - name: Run frontend test
+              run: <%= clientPackageManager %> run <%= frontTestCommand %>
+            <%_ } _%>
+            - name: Package application
+              <%_ if (buildTool === 'maven') { _%>
+              run: ./mvnw -ntp package -Pprod -DskipTests
+              <%_ } else if (buildTool === 'gradle') { _%>
+              run: ./gradlew bootJar -Pprod -x test -x integrationTest
+              <%_ } _%>

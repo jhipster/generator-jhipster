@@ -28,11 +28,11 @@
     <div *ngIf="currentHealth.details">
         <h5 jhiTranslate="health.details.properties">Properties</h5>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" aria-describedby="showHealthLabel">
                 <thead>
                     <tr>
-                        <th class="text-left" jhiTranslate="health.details.name">Name</th>
-                        <th class="text-left" jhiTranslate="health.details.value">Value</th>
+                        <th scope="col" class="text-left" jhiTranslate="health.details.name">Name</th>
+                        <th scope="col" class="text-left" jhiTranslate="health.details.value">Value</th>
                     </tr>
                 </thead>
                 <tbody>
