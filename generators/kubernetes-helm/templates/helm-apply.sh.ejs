@@ -22,7 +22,7 @@
 <%_ if (kubernetesNamespace !== 'default') { _%>
 kubectl apply -f namespace.yaml
 <%_ } _%>
-<%_ if (istio !== 'no') { _%>
+<%_ if (istio) { _%>
 kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled
 <%_ } _%>
 if [ -d "csvc" ]; then
