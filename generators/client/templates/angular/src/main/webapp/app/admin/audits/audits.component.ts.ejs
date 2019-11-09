@@ -30,8 +30,7 @@ import { AuditsService } from './audits.service';
   templateUrl: './audits.component.html'
 })
 export class AuditsComponent implements OnInit {
-    private dateFormat = 'yyyy-MM-dd';
-    audits: Audit[] = [];
+    audits?: Audit[];
     fromDate = '';
     itemsPerPage = ITEMS_PER_PAGE;
     page!: number;
@@ -40,9 +39,8 @@ export class AuditsComponent implements OnInit {
     ascending!: boolean;
     toDate = '';
     totalItems = 0;
-    canLoad = false;
-    initialized = false;
-    dataHaveBeenLoaded = false;
+
+    private dateFormat = 'yyyy-MM-dd';
 
     constructor(
         private auditsService: AuditsService,
@@ -52,35 +50,32 @@ export class AuditsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.today();
-        this.previousMonth();
+        this.toDate = this.today();
+        this.fromDate = this.previousMonth();
         this.activatedRoute.data.subscribe(data => {
             this.page = data['pagingParams'].page;
             this.previousPage = data['pagingParams'].page;
             this.ascending = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
-            this.canLoad = true;
             this.loadData();
         });
     }
 
-    private previousMonth(): void {
+    private previousMonth(): string {
         let date = new Date();
         if (date.getMonth() === 0) {
             date = new Date(date.getFullYear() - 1, 11, date.getDate());
         } else {
             date = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
         }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.fromDate = this.datePipe.transform(date, this.dateFormat)!;
+        return this.datePipe.transform(date, this.dateFormat)!;
     }
 
-    private today(): void {
+    private today(): string {
         // Today + 1 day - needed if the current day must be included
         const date = new Date();
         date.setDate(date.getDate() + 1);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        this.toDate = this.datePipe.transform(date, this.dateFormat)!;
+        return this.datePipe.transform(date, this.dateFormat)!;
     }
 
     private loadData(): void {
@@ -92,7 +87,7 @@ export class AuditsComponent implements OnInit {
                 fromDate: this.fromDate,
                 toDate: this.toDate
             })
-            .subscribe((res: HttpResponse<Audit[]>) => this.onSuccess(res.body, res.headers), () => (this.initialized = true));
+            .subscribe((res: HttpResponse<Audit[]>) => this.onSuccess(res.body, res.headers));
     }
 
     private sort(): string[] {
@@ -110,18 +105,20 @@ export class AuditsComponent implements OnInit {
         }
     }
 
+    canLoad(): boolean {
+        return this.fromDate !== '' && this.toDate !== '';
+    }
+
     transition(): void {
-        this.canLoad = this.fromDate !== '' && this.toDate !== '';
-        if (!this.canLoad) {
-            return;
+        if (this.canLoad()) {
+            this.router.navigate(['/admin/audits'], {
+                queryParams: {
+                    page: this.page,
+                    sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
+                }
+            });
+            this.loadData();
         }
-        this.router.navigate(['/admin/audits'], {
-            queryParams: {
-                page: this.page,
-                sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
-            }
-        });
-        this.loadData();
     }
 
     private onSuccess(audits: Audit[] | null, headers: HttpHeaders): void {
@@ -131,7 +128,5 @@ export class AuditsComponent implements OnInit {
         } else {
             this.audits = audits;
         }
-        this.dataHaveBeenLoaded = true;
-        this.initialized = true;
     }
 }

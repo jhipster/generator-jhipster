@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { advanceTo } from 'jest-date-mock';
 
@@ -142,21 +142,6 @@ describe('Component Tests', () => {
                 expect(service.query).toHaveBeenCalled();
                 expect(comp.audits[0]).toEqual(jasmine.objectContaining(audit));
                 expect(comp.totalItems).toBe(1);
-                expect(comp.dataHaveBeenLoaded).toBe(true);
-                expect(comp.initialized).toBe(true);
-            });
-
-            it('Should set initialized to true even if error occurred on loading', () => {
-                // GIVEN
-                spyOn(service, 'query').and.returnValue(throwError({}));
-
-                // WHEN
-                comp.ngOnInit();
-
-                // THEN
-                expect(service.query).toHaveBeenCalled();
-                expect(comp.dataHaveBeenLoaded).toBe(false);
-                expect(comp.initialized).toBe(true);
             });
         });
 
@@ -236,7 +221,7 @@ describe('Component Tests', () => {
                 comp.transition();
 
                 // THEN
-                expect(comp.canLoad).toBe(false);
+                expect(comp.canLoad()).toBe(false);
                 expect(service.query).not.toBeCalled();
             });
 
@@ -249,7 +234,7 @@ describe('Component Tests', () => {
                 comp.transition();
 
                 // THEN
-                expect(comp.canLoad).toBe(true);
+                expect(comp.canLoad()).toBe(true);
                 expect(service.query).toBeCalled();
             });
         });
