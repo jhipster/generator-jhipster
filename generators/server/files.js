@@ -180,7 +180,7 @@ const serverFiles = {
                 { file: 'gradlew', method: 'copy', noEjs: true },
                 { file: 'gradlew.bat', method: 'copy', noEjs: true },
                 { file: 'gradle/wrapper/gradle-wrapper.jar', method: 'copy', noEjs: true },
-                { file: 'gradle/wrapper/gradle-wrapper.properties', method: 'copy', noEjs: true }
+                'gradle/wrapper/gradle-wrapper.properties'
             ]
         },
         {
