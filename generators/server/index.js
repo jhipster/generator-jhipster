@@ -123,6 +123,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
+                this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
                 this.JIB_VERSION = constants.JIB_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
