@@ -221,7 +221,7 @@ module.exports = class extends BaseGenerator {
             },
 
             checkLatestBlueprintVersions() {
-                if (!this.blueprints || this.blueprints.length < 0) {
+                if (!this.blueprints || this.blueprints.length === 0) {
                     this.log('No blueprints detected, skipping check of last blueprint version');
                     return;
                 }
