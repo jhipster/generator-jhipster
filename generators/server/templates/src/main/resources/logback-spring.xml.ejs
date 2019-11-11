@@ -93,7 +93,9 @@
     <logger name="com.github.benmanes.caffeine" level="WARN"/>
     <%_ } _%>
     <logger name="org.apache" level="WARN"/>
+    <%_ if (messageBroker === 'kafka') { _%>
     <logger name="org.apache.kafka" level="INFO"/>
+    <%_ } _%>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/><% if (searchEngine === 'elasticsearch') { %>
     <logger name="org.elasticsearch" level="WARN"/><% } %>
