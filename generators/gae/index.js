@@ -152,15 +152,15 @@ module.exports = class extends BaseGenerator {
                         message: 'Google Cloud Project ID',
                         default: this.defaultProjectId(),
                         validate: input => {
-                            if (input.length === 0) {
+                            if (input.trim().length === 0) {
                                 return 'Project ID cannot empty';
                             }
                             try {
-                                execSync(`gcloud projects describe ${input}`);
+                                execSync(`gcloud projects describe ${input.trim()}`);
                                 this.gcpProjectIdExists = true;
                             } catch (ex) {
                                 this.gcpProjectIdExists = false;
-                                return `Project ID "${chalk.cyan(input)}" does not exist, please create one first!`;
+                                return `Project ID "${chalk.cyan(input.trim())}" does not exist, please create one first!`;
                             }
                             return true;
                         }
@@ -168,7 +168,7 @@ module.exports = class extends BaseGenerator {
                 ];
 
                 this.prompt(prompts).then(props => {
-                    this.gcpProjectId = props.gcpProjectId;
+                    this.gcpProjectId = props.gcpProjectId.trim();
                     done();
                 });
             },
