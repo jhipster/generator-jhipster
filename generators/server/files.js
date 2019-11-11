@@ -566,6 +566,10 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/filter/RefreshTokenFilterConfigurer.java`
                 },
                 {
+                    file: 'package/web/filter/RouteDetectorFilter.java',
+                    renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`
+                },
+                {
                     file: 'package/config/oauth2/OAuth2AuthenticationConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/oauth2/OAuth2AuthenticationConfiguration.java`
                 },

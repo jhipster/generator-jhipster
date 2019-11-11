@@ -92,7 +92,7 @@ module.exports = class extends BaseDockerGenerator {
                     const path = this.destinationPath(this.directoryPath + appsFolder);
                     // Add application configuration
                     const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
-                    const yamlConfig = yaml.services[`${lowercaseBaseName}`];
+                    const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
                     if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
                         this.keycloakRedirectUris += '"http://localhost/*", "https://localhost/*", ';
@@ -115,6 +115,10 @@ module.exports = class extends BaseDockerGenerator {
                     if (this.serviceDiscoveryType === 'eureka') {
                         // Set the JHipster Registry password
                         yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
+                    }
+
+                    if (!this.serviceDiscoveryType && appConfig.applicationType !== 'gateway') {
+                        yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
                     }
 
                     parentConfiguration[`${lowercaseBaseName}`] = yamlConfig;
