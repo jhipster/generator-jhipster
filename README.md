@@ -4,7 +4,7 @@
 > JHipster-vuejs, a Vue.js blueprint for JHipster. It will use [Vue.js](https://vuejs.org/) as the frontend library.
 
 <div align="center">
-  <a href="http://www.jhipster.tech/">
+  <a href="https://www.jhipster.tech/">
     <img src="https://github.com/jhipster/jhipster-artwork/blob/master/logos/JHipster%20RGB-small100x25px.png?raw=true">
   </a>
   <a href="https://vuejs.org/">
@@ -14,11 +14,11 @@
 
 # Introduction
 
-This is a [JHipster](http://www.jhipster.tech/) blueprint.
+This is a [JHipster](https://www.jhipster.tech/) blueprint.
 
 # Prerequisites
 
-As this is a [JHipster](http://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
+As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
 
 - [Installing JHipster](https://www.jhipster.tech/installation/)
 
