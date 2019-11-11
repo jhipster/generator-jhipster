@@ -92,7 +92,7 @@ module.exports = class extends BaseDockerGenerator {
                     const path = this.destinationPath(this.directoryPath + appsFolder);
                     // Add application configuration
                     const yaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/app.yml`));
-                    const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
+                    const yamlConfig = yaml.services[`${lowercaseBaseName}`];
                     if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
                         this.keycloakRedirectUris += '"http://localhost/*", "https://localhost/*", ';
@@ -117,7 +117,7 @@ module.exports = class extends BaseDockerGenerator {
                         yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
                     }
 
-                    parentConfiguration[`${lowercaseBaseName}-app`] = yamlConfig;
+                    parentConfiguration[`${lowercaseBaseName}`] = yamlConfig;
 
                     // Add database configuration
                     const database = appConfig.prodDatabaseType;
