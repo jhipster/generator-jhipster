@@ -70,10 +70,18 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
+            desc: 'Disable checks during project regeneration',
+            type: Boolean,
+            defaults: false
+        });
+
         this.targetJhipsterVersion = this.options['target-version'];
         this.targetBlueprintVersions = utils.parseBluePrints(this.options['target-blueprint-versions']);
         this.skipInstall = this.options['skip-install'];
         this.silent = this.options.silent;
+        this.skipChecks = this.options['skip-checks'];
     }
 
     get initializing() {
@@ -127,7 +135,8 @@ module.exports = class extends BaseGenerator {
                     : shelljs.exec('npm bin', { silent: this.silent }).stdout;
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
-        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight`;
+        const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
+        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight ${skipChecksOption}`;
         this.info(regenerateCmd);
         try {
             childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
