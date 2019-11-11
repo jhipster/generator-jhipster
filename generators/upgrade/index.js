@@ -100,7 +100,6 @@ module.exports = class extends BaseGenerator {
                 this.currentJhipsterVersion = this.config.get('jhipsterVersion');
                 this.blueprints = this.config.get('blueprints');
                 this.clientPackageManager = this.config.get('clientPackageManager');
-                this.clientFramework = this.config.get('clientFramework');
             }
         };
     }
