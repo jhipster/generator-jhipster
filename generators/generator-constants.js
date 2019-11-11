@@ -25,6 +25,8 @@ const NODE_VERSION = '12.13.0';
 const YARN_VERSION = '1.19.0';
 const NPM_VERSION = '6.13.0';
 
+const GRADLE_VERSION = '6.0';
+
 // Libraries version
 const JIB_VERSION = '1.7.0';
 
@@ -305,6 +307,7 @@ const constants = {
     YARN_VERSION,
     NPM_VERSION,
     KAFKA_VERSION,
+    GRADLE_VERSION,
 
     // Libraries
     JIB_VERSION,

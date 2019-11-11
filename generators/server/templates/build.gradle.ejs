@@ -32,7 +32,7 @@ buildscript {
 
 plugins {
     id "java"
-    id "maven"
+    id "maven-publish"
     id "idea"
     id "jacoco"
     id "org.springframework.boot"
@@ -62,7 +62,7 @@ description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == "1.8" || "11" || "12"
+assert System.properties["java.specification.version"] == "1.8" || "11" || "12" || "13"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -502,7 +502,7 @@ dependencies {
     testImplementation "org.junit.vintage:junit-vintage-engine"
     <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
-    testRuntime "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
+    testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     testImplementation "org.assertj:assertj-core"
     testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"
@@ -534,9 +534,16 @@ task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
+<%_ if (enableSwaggerCodegen) { _%>
 wrapper {
     gradleVersion = "5.6.4"
 }
+<%_ } else { _%>
+wrapper {
+    gradleVersion = "<%= GRADLE_VERSION %>"
+}
+<%_ } _%>
+
 <%_ if (!skipClient) { _%>
 
 if (project.hasProperty("nodeInstall")) {
