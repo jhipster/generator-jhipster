@@ -25,7 +25,7 @@ const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
 module.exports = {
-    updateLanguagesInConfig,
+    updateLanguagesInTranslationStore,
     updateLanguagesInWebpack,
     replaceTranslation,
     addEntityToMenu,
@@ -40,8 +40,8 @@ module.exports = {
     addPageProtractorConf
 };
 
-function updateLanguagesInConfig(generator) {
-    const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`;
+function updateLanguagesInTranslationStore(generator) {
+    const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`;
     try {
         let content = 'languages: {\n';
         if (generator.enableTranslation) {

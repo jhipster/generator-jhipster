@@ -132,6 +132,8 @@ const vueFiles = {
                 'shared/config/axios-interceptor.ts',
                 'shared/config/config.ts',
                 'shared/config/config-bootstrap-vue.ts',
+                'shared/config/store/account-store.ts',
+                'shared/config/store/alert-store.ts',
                 'router/index.ts'
             ]
         }
@@ -142,7 +144,8 @@ const vueFiles = {
             path: VUE_DIR,
             templates: [
                 'locale/translation.service.ts',
-                'shared/config/formatter.ts'
+                'shared/config/formatter.ts',
+                'shared/config/store/translation-store.ts',
             ]
         }
     ],

@@ -45,7 +45,7 @@ module.exports = class extends LanguagesGenerator {
         const phaseFromJHipster = super._writing();
         const customPhaseSteps = {
             write() {
-                utils.updateLanguagesInConfig(this);
+                utils.updateLanguagesInTranslationStore(this);
                 utils.updateLanguagesInWebpack(this);
             }
         };
