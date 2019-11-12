@@ -23,7 +23,7 @@ const { expect } = require('chai');
 const EntityParser = require('../../../lib/parsers/entity_parser');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
-const JDLObject = require('../../../lib/core/jdl_object');
+const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
 const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
@@ -53,7 +53,7 @@ describe('EntityParser', () => {
       context('such as an no databaseType', () => {
         it('throws an error', () => {
           expect(() => {
-            EntityParser.parse({ jdlObject: new JDLObject() });
+            EntityParser.parse({ jdlObject: new ValidatedJDLObject() });
           }).to.throw('The JDL object and the database type are both mandatory.');
         });
       });
@@ -94,7 +94,7 @@ describe('EntityParser', () => {
             name: BinaryOptions.MICROSERVICE,
             value: 'myMs'
           });
-          jdlObject = new JDLObject();
+          jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(entityA);
           jdlObject.addEntity(entityB);
           jdlObject.addRelationship(oneToOneRelationship);
@@ -172,7 +172,7 @@ describe('EntityParser', () => {
           name: BinaryOptions.MICROSERVICE,
           value: 'myMs'
         });
-        jdlObject = new JDLObject();
+        jdlObject = new ValidatedJDLObject();
         jdlObject.addEntity(entityA);
         jdlObject.addEntity(entityB);
         jdlObject.addEnum(enumObject);
@@ -558,7 +558,7 @@ describe('EntityParser', () => {
             injectedFieldInTo: 'aaaa',
             type: RelationshipTypes.ONE_TO_ONE
           });
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(entityA);
           jdlObject.addEntity(entityB);
           jdlObject.addRelationship(oneToManyRelationship);
@@ -627,7 +627,7 @@ describe('EntityParser', () => {
         let content = null;
 
         before(() => {
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(
             new JDLEntity({
               name: 'A',
@@ -684,7 +684,7 @@ describe('EntityParser', () => {
             value: 'elasticsearch',
             excludedNames: ['B']
           });
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(entityA);
           jdlObject.addEntity(entityB);
           jdlObject.addOption(option);
@@ -710,7 +710,7 @@ describe('EntityParser', () => {
               name: UnaryOptions.FILTER,
               excludedNames: ['B']
             });
-            const jdlObject = new JDLObject();
+            const jdlObject = new ValidatedJDLObject();
             jdlObject.addEntity(entityA);
             jdlObject.addEntity(entityB);
             jdlObject.addOption(option);
@@ -746,7 +746,7 @@ describe('EntityParser', () => {
               value: BinaryOptionValues.service.SERVICE_IMPL,
               entityNames: ['A']
             });
-            const jdlObject = new JDLObject();
+            const jdlObject = new ValidatedJDLObject();
             jdlObject.addEntity(entityA);
             jdlObject.addEntity(entityB);
             jdlObject.addOption(filterOption);
@@ -779,7 +779,7 @@ describe('EntityParser', () => {
           });
           const entityA = new JDLEntity({ name: 'A' });
           const entityB = new JDLEntity({ name: 'B' });
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addApplication(application);
           jdlObject.addEntity(entityA);
           jdlObject.addEntity(entityB);
@@ -809,7 +809,7 @@ describe('EntityParser', () => {
             injectedFieldInTo: 'a',
             type: RelationshipTypes.ONE_TO_ONE
           });
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(entityA);
           jdlObject.addEntity(entityB);
           jdlObject.addRelationship(relationship);
@@ -838,7 +838,7 @@ describe('EntityParser', () => {
             type: RelationshipTypes.ONE_TO_ONE,
             options: { jpaDerivedIdentifier: true }
           });
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(entityA);
           jdlObject.addEntity(entityB);
           jdlObject.addRelationship(relationship);
@@ -858,7 +858,7 @@ describe('EntityParser', () => {
 
           before(() => {
             const entity = new JDLEntity({ name: 'A' });
-            const jdlObject = new JDLObject();
+            const jdlObject = new ValidatedJDLObject();
             const option = new JDLBinaryOption({
               name: BinaryOptions.DTO,
               value: BinaryOptionValues.dto.MAPSTRUCT
@@ -889,7 +889,7 @@ describe('EntityParser', () => {
               value: BinaryOptionValues.service.SERVICE_IMPL,
               entityNames: ['A']
             });
-            const jdlObject = new JDLObject();
+            const jdlObject = new ValidatedJDLObject();
             jdlObject.addEntity(entityA);
             jdlObject.addOption(dtoOption);
             jdlObject.addOption(serviceOption);
@@ -910,7 +910,7 @@ describe('EntityParser', () => {
       let result = null;
 
       before(() => {
-        jdlObject = new JDLObject();
+        jdlObject = new ValidatedJDLObject();
         const entity = new JDLEntity({
           name: 'Toto'
         });
@@ -983,7 +983,7 @@ describe('EntityParser', () => {
           name: 'toto',
           type: 'DoesNotExistAtAll'
         });
-        jdlObject = new JDLObject();
+        jdlObject = new ValidatedJDLObject();
         entityA.addField(field);
         jdlObject.addEntity(entityA);
         jdlObject.addEntity(entityB);

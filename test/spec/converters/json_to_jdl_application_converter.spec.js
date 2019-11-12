@@ -19,7 +19,7 @@
 
 const { expect } = require('chai');
 const { convertApplicationsToJDL } = require('../../../lib/converters/json_to_jdl_application_converter');
-const JDLObject = require('../../../lib/core/jdl_object');
+const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 
@@ -53,7 +53,7 @@ describe('JSONToJDLApplicationConverter', () => {
       let jdlObject;
 
       before(() => {
-        const previousJDLObject = new JDLObject();
+        const previousJDLObject = new ValidatedJDLObject();
         previousJDLObject.addApplication(
           new JDLMonolithApplication({ config: { baseName: 'tata', applicationType: ApplicationTypes.MONOLITH } })
         );

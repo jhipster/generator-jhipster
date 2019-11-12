@@ -23,7 +23,7 @@ const { expect } = require('chai');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
-const JDLObject = require('../../../lib/core/jdl_object');
+const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const JDLDeployment = require('../../../lib/core/jdl_deployment');
 const JDLEntity = require('../../../lib/core/jdl_entity');
@@ -34,16 +34,29 @@ const JDLRelationship = require('../../../lib/core/jdl_relationship');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 
-describe('JDLObject', () => {
+describe('ValidatedJDLObject', () => {
   describe('#addApplication', () => {
     context('when adding an invalid application', () => {
-      const object = new JDLObject();
+      const object = new ValidatedJDLObject();
 
       context('such as a nil application', () => {
         it('fails', () => {
           expect(() => {
             object.addApplication(null);
-          }).to.throw(/^Can't add nil application\.$/);
+          }).to.throw(/^Can't add invalid application\. Error: No application\.$/);
+        });
+      });
+      context('such as an incomplete application', () => {
+        it('fails', () => {
+          expect(() => {
+            object.addApplication({
+              config: {
+                baseName: 'toto'
+              }
+            });
+          }).to.throw(
+            /Can't add invalid application\. Error: The application attributes authenticationType, buildTool were not found\./
+          );
         });
       });
     });
@@ -52,7 +65,7 @@ describe('JDLObject', () => {
       let application = null;
 
       before(() => {
-        object = new JDLObject();
+        object = new ValidatedJDLObject();
         application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
         object.addApplication(application);
       });
@@ -66,7 +79,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when having no application', () => {
@@ -87,13 +100,24 @@ describe('JDLObject', () => {
   });
   describe('#addDeployment', () => {
     context('when adding an invalid deployment', () => {
-      const object = new JDLObject();
+      const object = new ValidatedJDLObject();
 
       context('such as a nil deployment', () => {
         it('fails', () => {
           expect(() => {
             object.addDeployment(null);
-          }).to.throw(/^Can't add nil deployment\.$/);
+          }).to.throw(/^Can't add invalid deployment\. Error: No deployment\.$/);
+        });
+      });
+      context('such as an incomplete deployment', () => {
+        it('fails', () => {
+          expect(() => {
+            object.addDeployment({
+              directoryPath: '../'
+            });
+          }).to.throw(
+            /^Can't add invalid deployment\. Error: The deployment attributes deploymentType, appsFolders, dockerRepositoryName were not found\.$/
+          );
         });
       });
     });
@@ -102,7 +126,7 @@ describe('JDLObject', () => {
       let application = null;
 
       before(() => {
-        object = new JDLObject();
+        object = new ValidatedJDLObject();
         application = new JDLDeployment({
           deploymentType: 'docker-compose',
           appFolders: ['tata'],
@@ -120,7 +144,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when having no deployment', () => {
@@ -149,7 +173,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
       jdlObject.addApplication(new JDLMonolithApplication({ config: { baseName: 'A' } }));
       jdlObject.addApplication(new JDLMonolithApplication({ config: { baseName: 'B' } }));
     });
@@ -175,13 +199,29 @@ describe('JDLObject', () => {
   });
   describe('#addEntity', () => {
     context('when adding an invalid entity', () => {
-      const object = new JDLObject();
+      const object = new ValidatedJDLObject();
 
       context('such as a nil object', () => {
         it('fails', () => {
           expect(() => {
             object.addEntity(null);
-          }).to.throw(/^Can't add nil entity\.$/);
+          }).to.throw(/^Can't add invalid entity\. Error: No entity\.$/);
+        });
+      });
+      context('such as an incomplete entity', () => {
+        let entity;
+
+        beforeEach(() => {
+          entity = new JDLEntity({
+            name: 'TSomething'
+          });
+          delete entity.tableName;
+        });
+
+        it('should fail', () => {
+          expect(() => {
+            object.addEntity(entity);
+          }).to.throw(/^Can't add invalid entity\. Error: The entity attribute tableName was not found\.$/);
         });
       });
     });
@@ -190,7 +230,7 @@ describe('JDLObject', () => {
       let entity = null;
 
       before(() => {
-        object = new JDLObject();
+        object = new ValidatedJDLObject();
         entity = new JDLEntity({
           name: 'Valid',
           tableName: 't_valid',
@@ -209,7 +249,7 @@ describe('JDLObject', () => {
       let entity2 = null;
 
       before(() => {
-        object = new JDLObject();
+        object = new ValidatedJDLObject();
         entity = new JDLEntity({
           name: 'Valid',
           tableName: 't_valid',
@@ -233,7 +273,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
       jdlObject.addEntity(new JDLEntity({ name: 'A' }));
     });
 
@@ -255,7 +295,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when having no entity', () => {
@@ -282,11 +322,11 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     afterEach(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when having no entity', () => {
@@ -310,7 +350,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
       jdlObject.addEntity(new JDLEntity({ name: 'A' }));
       jdlObject.addEntity(new JDLEntity({ name: 'B' }));
     });
@@ -336,13 +376,20 @@ describe('JDLObject', () => {
   });
   describe('#addEnum', () => {
     context('when adding an invalid enum', () => {
-      const object = new JDLObject();
+      const object = new ValidatedJDLObject();
 
       context('such as a nil enum', () => {
         it('fails', () => {
           expect(() => {
             object.addEnum(null);
-          }).to.throw(/^Can't add nil enum\.$/);
+          }).to.throw(/^Can't add invalid enum\. Error: No enum\.$/);
+        });
+      });
+      context('such as an incomplete enum', () => {
+        it('fails', () => {
+          expect(() => {
+            object.addEnum({ values: ['A', 'B'] });
+          }).to.throw(/^Can't add invalid enum\. Error: The enum attribute name was not found\.$/);
         });
       });
     });
@@ -351,7 +398,7 @@ describe('JDLObject', () => {
       let enumObject = null;
 
       before(() => {
-        object = new JDLObject();
+        object = new ValidatedJDLObject();
         enumObject = new JDLEnum({ name: 'Valid' });
         object.addEnum(enumObject);
       });
@@ -366,7 +413,7 @@ describe('JDLObject', () => {
       let enumObject2 = null;
 
       before(() => {
-        object = new JDLObject();
+        object = new ValidatedJDLObject();
         enumObject = new JDLEnum({ name: 'Valid' });
         object.addEnum(enumObject);
         enumObject2 = new JDLEnum({ name: 'Valid', values: [{ key: 'A' }, { key: 'B' }] });
@@ -382,7 +429,7 @@ describe('JDLObject', () => {
     let object = null;
 
     before(() => {
-      object = new JDLObject();
+      object = new ValidatedJDLObject();
     });
 
     context('when fetching an absent enum', () => {
@@ -407,7 +454,7 @@ describe('JDLObject', () => {
     let object = null;
 
     before(() => {
-      object = new JDLObject();
+      object = new ValidatedJDLObject();
     });
 
     context('when fetching an absent enum', () => {
@@ -432,7 +479,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when having no enum', () => {
@@ -459,7 +506,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
       jdlObject.addEnum(new JDLEnum({ name: 'A' }));
       jdlObject.addEnum(new JDLEnum({ name: 'B' }));
     });
@@ -485,13 +532,13 @@ describe('JDLObject', () => {
   });
   describe('#addRelationship', () => {
     context('when adding an invalid relationship', () => {
-      const object = new JDLObject();
+      const object = new ValidatedJDLObject();
 
       context('such as a nil relationship', () => {
         it('fails', () => {
           expect(() => {
             object.addRelationship(null);
-          }).to.throw(/^Can't add nil relationship\.$/);
+          }).to.throw(/^Can't add invalid relationship\. Error: No relationship\.$/);
         });
       });
       context('such as an incomplete relationship', () => {
@@ -513,7 +560,7 @@ describe('JDLObject', () => {
       let relationship = null;
 
       before(() => {
-        object = new JDLObject();
+        object = new ValidatedJDLObject();
         relationship = new JDLRelationship({
           from: 'Valid2',
           to: 'Valid',
@@ -532,7 +579,7 @@ describe('JDLObject', () => {
       let object = null;
 
       before(() => {
-        object = new JDLObject();
+        object = new ValidatedJDLObject();
         const relationship = new JDLRelationship({
           from: 'Valid2',
           to: 'Valid',
@@ -553,7 +600,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when having no relationship', () => {
@@ -583,7 +630,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
       jdlObject.addRelationship(
         new JDLRelationship({
           from: 'Abc',
@@ -623,7 +670,7 @@ describe('JDLObject', () => {
   });
   describe('#addOption', () => {
     context('when adding an invalid option', () => {
-      const object = new JDLObject();
+      const object = new ValidatedJDLObject();
 
       context('such as a nil option', () => {
         it('fails', () => {
@@ -642,7 +689,7 @@ describe('JDLObject', () => {
     });
     context('when adding a valid option', () => {
       it('works', () => {
-        new JDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT }));
+        new ValidatedJDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT }));
       });
     });
   });
@@ -650,11 +697,11 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     afterEach(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when passing an invalid name', () => {
@@ -700,7 +747,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when having no option', () => {
@@ -727,7 +774,7 @@ describe('JDLObject', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
       jdlObject.addOption(
         new JDLUnaryOption({
           name: UnaryOptions.SKIP_CLIENT
@@ -765,7 +812,7 @@ describe('JDLObject', () => {
     context('when an entity is in a microservice', () => {
       context('because no entity name has been specified', () => {
         before(() => {
-          jdlObject = new JDLObject();
+          jdlObject = new ValidatedJDLObject();
           const microserviceOption = new JDLBinaryOption({
             name: BinaryOptions.Options.MICROSERVICE,
             value: 'toto'
@@ -780,7 +827,7 @@ describe('JDLObject', () => {
 
       context('because entity names have been specified', () => {
         before(() => {
-          jdlObject = new JDLObject();
+          jdlObject = new ValidatedJDLObject();
           const microserviceOption = new JDLBinaryOption({
             name: BinaryOptions.Options.MICROSERVICE,
             value: 'toto',
@@ -796,7 +843,7 @@ describe('JDLObject', () => {
     });
     context('when an entity is not in a microservice', () => {
       before(() => {
-        jdlObject = new JDLObject();
+        jdlObject = new ValidatedJDLObject();
         const microserviceOption = new JDLBinaryOption({
           name: BinaryOptions.Options.MICROSERVICE,
           value: 'toto',
@@ -822,7 +869,7 @@ describe('JDLObject', () => {
     let option2;
 
     before(() => {
-      object = new JDLObject();
+      object = new ValidatedJDLObject();
       application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
       object.addApplication(application);
       deployment = new JDLDeployment({

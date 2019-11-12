@@ -20,7 +20,7 @@
   ],
   "changelogDate": "20190524215046",
   "dto": "no",
-  "pagination": "no",
+  "pagination": "pager",
   "service": "no",
   "javadoc": "",
   "entityTableName": "country"

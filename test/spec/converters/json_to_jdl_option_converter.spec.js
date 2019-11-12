@@ -21,7 +21,7 @@
 
 const { expect } = require('chai');
 const { convertServerOptionsToJDL } = require('../../../lib/converters/json_to_jdl_option_converter');
-const JDLObject = require('../../../lib/core/jdl_object');
+const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const { SKIP_USER_MANAGEMENT, SKIP_CLIENT } = require('../../../lib/core/jhipster/unary_options');
 
@@ -53,7 +53,7 @@ describe('JSONToJDLOptionConverter', () => {
       let jdlObject;
 
       before(() => {
-        const previousJDLObject = new JDLObject();
+        const previousJDLObject = new ValidatedJDLObject();
         previousJDLObject.addOption(
           new JDLUnaryOption({
             name: SKIP_CLIENT
