@@ -16,21 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apply plugin: "com.google.cloud.tools.appengine"
-
-appengine {
-    deploy {
-        projectId = "<%=gcpProjectId%>"
-        version = "1"
-    }
-}
-
-processResources {
-    if (project.hasProperty("prod-gae")) {
-        filesMatching("**/application.yml") {
-            filter {
-                it.replace("#spring.profiles.active#", "#spring.profiles.active#,prod-gae")
-            }
-        }
-    }
-}
+            <properties>
+                <spring.profiles.active>prod${profile.swagger}<%_ if (databaseType === 'sql') { _%>${profile.no-liquibase},prod-gae<%_ } _%></spring.profiles.active>
+            </properties>

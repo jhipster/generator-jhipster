@@ -111,6 +111,7 @@ module.exports = class extends BaseGenerator {
                 this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.config.buildTool) + constants.CLIENT_DIST_DIR;
                 this.skipClient = this.config.get('skipClient');
                 this.clientPackageManager = this.config.get('clientPackageManager');
+                this.dasherizedBaseName = _.kebabCase(this.baseName);
             }
         };
     }
@@ -735,7 +736,7 @@ module.exports = class extends BaseGenerator {
             addGradlePlugin() {
                 if (this.abort) return;
                 if (this.buildTool === 'gradle') {
-                    this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.1.0');
+                    this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.2.0');
                     this.applyFromGradleScript('gradle/gae');
                 }
             },
@@ -744,7 +745,10 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 if (this.buildTool === 'maven') {
                     this.render('pom-plugin.xml.ejs', rendered => {
-                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.1.0', rendered.trim());
+                        this.addMavenPlugin('com.google.cloud.tools', 'appengine-maven-plugin', '2.2.0', rendered.trim());
+                    });
+                    this.render('pom-profile.xml.ejs', rendered => {
+                        this.addMavenProfile('prod-gae', `            ${rendered.trim()}`);
                     });
                     this.render('pom-gae-build-profile.xml.ejs', rendered => {
                         this.addMavenProfile('gae', `            ${rendered.trim()}`);

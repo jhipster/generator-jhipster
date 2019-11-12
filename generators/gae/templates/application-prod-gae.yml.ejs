@@ -27,7 +27,8 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-
+server:
+    port: ${PORT}
 spring:
 <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     datasource:
