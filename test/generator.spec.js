@@ -13,6 +13,7 @@ const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const expectedFiles = {
     i18n: [
         `${CLIENT_MAIN_SRC_DIR}app/locale/translation.service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/activate.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/audits.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/configuration.json`,
@@ -168,6 +169,8 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/date/filters.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/config-bootstrap-vue.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/account-store.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/alert-store.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.vue`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/jhi-item-count.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/model/user.model.ts`,

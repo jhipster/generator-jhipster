@@ -1,5 +1,4 @@
 const path = require('path');
-const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const constants = require('generator-jhipster/generators/generator-constants');
@@ -10,33 +9,47 @@ const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 
 describe('Subgenerator languages of Vue.js JHipster blueprint', () => {
     context('Creates default i18n files', () => {
+        before((done) => {
+            helpers
+                .run('generator-jhipster/generators/app')
+                .withOptions({
+                    'from-cli': true,
+                    skipInstall: true,
+                    blueprint: 'vuejs',
+                    skipChecks: true
+                })
+                .withGenerators([
+                    [
+                        require('../generators/client/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:client',
+                        path.join(__dirname, '../generators/client/index.js')
+                    ],
+                    [
+                        require('../generators/languages/index.js'), // eslint-disable-line global-require
+                        'jhipster-vuejs:languages',
+                        path.join(__dirname, '../generators/languages/index.js')
+                    ],
+                ])
+                .withPrompts({
+                    baseName: 'sampleMysql',
+                    packageName: 'com.mycompany.myapp',
+                    applicationType: 'monolith',
+                    databaseType: 'sql',
+                    devDatabaseType: 'h2Disk',
+                    prodDatabaseType: 'mysql',
+                    cacheProvider: 'ehcache',
+                    authenticationType: 'jwt',
+                    enableTranslation: true,
+                    nativeLanguage: 'en',
+                    languages: constants.LANGUAGES.map(el => el.value),
+                    buildTool: 'maven',
+                    clientFramework: 'Vue.js',
+                    clientTheme: 'none'
+                })
+                .on('end', done);
+        });
         constants.LANGUAGES.forEach((language) => {
             describe(`for ${language.name}`, () => {
-                before((done) => {
-                    helpers
-                        .run('generator-jhipster/generators/languages')
-                        .inTmpDir((dir) => {
-                            fse.copySync(path.join(__dirname, '../test/templates/vuejs-default'), dir);
-                        })
-                        .withOptions({
-                            'from-cli': true,
-                            skipInstall: true,
-                            blueprint: 'vuejs',
-                            skipChecks: true
-                        })
-                        .withGenerators([
-                            [
-                                require('../generators/languages/index.js'), // eslint-disable-line global-require
-                                'jhipster-vuejs:languages',
-                                path.join(__dirname, '../generators/languages/index.js')
-                            ]
-                        ])
-                        .withPrompts({
-                            languages: [language.value]
-                        })
-                        .on('end', done);
-                });
-
                 it('creates expected files', () => {
                     assert.file([
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/activate.json`,
@@ -75,10 +88,11 @@ describe('Subgenerator languages of Vue.js JHipster blueprint', () => {
                         '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"'
                     );
                 });
-                it('add language into config.ts, webpack.common.js', () => {
+                it('add language into translation-store.ts, webpack.common.js', () => {
+                    const langKey = language.value.includes('-') ? `'${language.value}'` : `${language.value}`;
                     assert.fileContent(
-                        `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`,
-                        `'${language.value}': { name:`
+                        `${CLIENT_MAIN_SRC_DIR}app/shared/config/store/translation-store.ts`,
+                        `${langKey}: { name:`,
                     );
                     assert.fileContent(
                         `${CLIENT_WEBPACK_DIR}webpack.common.js`,
