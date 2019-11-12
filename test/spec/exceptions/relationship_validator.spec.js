@@ -148,6 +148,83 @@ describe('RelationshipValidator', () => {
           });
         });
       });
+      context(`when having a ${ONE_TO_ONE} relationship`, () => {
+        context('without an injected field in the source entity', () => {
+          let relationship;
+
+          before(() => {
+            relationship = {
+              from: 'A',
+              to: 'B',
+              type: ONE_TO_ONE,
+              injectedFieldInTo: 'a'
+            };
+          });
+
+          it('should fail', () => {
+            expect(() => validator.validate(relationship)).to.throw(
+              /^In the One-to-One relationship from A to B, the source entity must possess the source, or you must invert the direction of the relationship\.$/
+            );
+          });
+        });
+      });
+      context(`when having a ${MANY_TO_ONE} relationship`, () => {
+        context('when having a bidirectional relationship', () => {
+          let relationship;
+
+          before(() => {
+            relationship = new JDLRelationship({
+              from: 'A',
+              to: 'B',
+              type: MANY_TO_ONE,
+              injectedFieldInFrom: 'b',
+              injectedFieldInTo: 'a'
+            });
+          });
+
+          it('should fail', () => {
+            expect(() => validator.validate(relationship)).to.throw(
+              /^In the Many-to-One relationship from A to B, only unidirectionality is supported, you should either create a bidirectional One-to-Many relationship or remove the injected field in the destination entity instead\.$/
+            );
+          });
+        });
+      });
+      context(`when having a ${MANY_TO_MANY} relationship`, () => {
+        context('when not having an unidirectional relationship', () => {
+          let relationship1;
+          let relationship2;
+
+          before(() => {
+            relationship1 = new JDLRelationship({
+              from: 'A',
+              to: 'B',
+              type: MANY_TO_MANY,
+              injectedFieldInTo: 'a'
+            });
+            relationship2 = new JDLRelationship({
+              from: 'A',
+              to: 'B',
+              type: MANY_TO_MANY,
+              injectedFieldInFrom: 'b'
+            });
+          });
+
+          context('if the injected field in the source is missing', () => {
+            it('should fail', () => {
+              expect(() => validator.validate(relationship1)).to.throw(
+                /^In the Many-to-Many relationship from A to B, only bidirectionality is supported\.$/
+              );
+            });
+          });
+          context('if the injected field in the source is missing', () => {
+            it('should fail', () => {
+              expect(() => validator.validate(relationship2)).to.throw(
+                /^In the Many-to-Many relationship from A to B, only bidirectionality is supported\.$/
+              );
+            });
+          });
+        });
+      });
     });
   });
 });
