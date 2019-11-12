@@ -1,7 +1,5 @@
 # JHipster-vuejs
 [![NPM version][npm-image]][npm-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
-> ## ⚠️ Status: in development
-> JHipster-vuejs, a Vue.js blueprint for JHipster. It will use [Vue.js](https://vuejs.org/) as the frontend library.
 
 <div align="center">
   <a href="https://www.jhipster.tech/">
