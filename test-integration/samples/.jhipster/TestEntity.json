@@ -29,13 +29,6 @@
             "otherEntityField": "login"
         },
         {
-            "relationshipName": "userManyToMany",
-            "otherEntityName": "user",
-            "relationshipType": "many-to-many",
-            "otherEntityField": "login",
-            "ownerSide": true
-        },
-        {
             "relationshipName": "userOneToOne",
             "otherEntityName": "user",
             "relationshipType": "one-to-one",

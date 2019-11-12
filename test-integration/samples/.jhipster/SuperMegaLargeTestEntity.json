@@ -29,13 +29,6 @@
             "otherEntityField": "login"
         },
         {
-            "relationshipName": "superMegaLargeUserManyToMany",
-            "otherEntityName": "user",
-            "relationshipType": "many-to-many",
-            "otherEntityField": "login",
-            "ownerSide": true
-        },
-        {
             "relationshipName": "superMegaLargeUserOneToOne",
             "otherEntityName": "user",
             "relationshipType": "one-to-one",
