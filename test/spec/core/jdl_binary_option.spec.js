@@ -35,7 +35,7 @@ describe('JDLBinaryOption', () => {
       it('fails', () => {
         expect(() => {
           new JDLBinaryOption({ name: BinaryOptions.Options.DTO });
-        }).to.throw("The option's name and value must be valid to create an option, got no value for 'dto'.");
+        }).to.throw(/^A binary option must have a value\.$/);
       });
     });
     context('when passing a name and a value', () => {

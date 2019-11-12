@@ -268,7 +268,7 @@ describe('DocumentParser', () => {
             DocumentParser.parseFromConfigurationObject({
               document: input
             });
-          }).to.throw("The option's name and value must be valid to create an option, got value 'wrong' for 'dto'.");
+          }).to.throw(/^Can't add invalid option\. Error: The 'dto' option is not valid for value 'wrong'\.$/);
         });
       });
       context('with a required enum', () => {

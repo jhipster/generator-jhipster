@@ -21,7 +21,7 @@ const { expect } = require('chai');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const BinaryOptionValidator = require('../../../lib/exceptions/binary_option_validator');
 
-describe('JDLBinaryOption', () => {
+describe('BinaryOptionValidator', () => {
   let validator;
 
   before(() => {
@@ -49,7 +49,7 @@ describe('JDLBinaryOption', () => {
       context('with an invalid value', () => {
         it('should fail', () => {
           expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
-            /^The option's name and value must be valid to create an option, got value 'toto' for 'dto'\.$/
+            /^The 'dto' option is not valid for value 'toto'\.$/
           );
         });
       });
