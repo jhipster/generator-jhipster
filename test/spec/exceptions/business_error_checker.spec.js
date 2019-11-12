@@ -33,7 +33,7 @@ const FieldTypes = require('../../../lib/core/jhipster/field_types');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const Validations = require('../../../lib/core/jhipster/validations');
-const JDLObject = require('../../../lib/core/jdl_object');
+const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
 const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
 const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
@@ -66,7 +66,7 @@ describe('BusinessErrorChecker', () => {
       let optionCheckSpy = null;
 
       before(() => {
-        const jdlObject = new JDLObject();
+        const jdlObject = new ValidatedJDLObject();
         const application = new JDLMonolithApplication({
           entities: ['MyEntity']
         });
@@ -143,7 +143,7 @@ describe('BusinessErrorChecker', () => {
     let checkForFieldErrorsStub = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
       jdlObject.addEntity(
         new JDLEntity({
           name: 'valid'
@@ -151,7 +151,7 @@ describe('BusinessErrorChecker', () => {
       );
     });
     afterEach(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('if there is at least one entity', () => {
@@ -257,7 +257,7 @@ describe('BusinessErrorChecker', () => {
     let checkForValidationErrorsStub = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
       const entity = new JDLEntity({
         name: 'Valid'
       });
@@ -390,7 +390,7 @@ describe('BusinessErrorChecker', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when passing an unsupported validation for a field', () => {
@@ -426,7 +426,7 @@ describe('BusinessErrorChecker', () => {
       let jdlObject;
 
       before(() => {
-        jdlObject = new JDLObject();
+        jdlObject = new ValidatedJDLObject();
         const userEntity = new JDLEntity({
           name: 'User'
         });
@@ -487,7 +487,7 @@ describe('BusinessErrorChecker', () => {
           type: RelationshipTypes.ONE_TO_ONE,
           injectedFieldInFrom: 'other'
         });
-        const jdlObject = new JDLObject();
+        const jdlObject = new ValidatedJDLObject();
         jdlObject.addEntity(sourceEntity);
         jdlObject.addEntity(otherEntity);
         jdlObject.addRelationship(relationship);
@@ -516,7 +516,7 @@ describe('BusinessErrorChecker', () => {
               type: RelationshipTypes.ONE_TO_ONE,
               injectedFieldInFrom: 'other'
             });
-            const jdlObject = new JDLObject();
+            const jdlObject = new ValidatedJDLObject();
             jdlObject.addEntity(sourceEntity);
             jdlObject.addRelationship(relationship);
             checker = new BusinessErrorChecker(jdlObject);
@@ -544,7 +544,7 @@ describe('BusinessErrorChecker', () => {
               type: RelationshipTypes.ONE_TO_ONE,
               injectedFieldInFrom: 'other'
             });
-            const jdlObject = new JDLObject();
+            const jdlObject = new ValidatedJDLObject();
             jdlObject.addEntity(sourceEntity);
             jdlObject.addEntity(otherEntity);
             jdlObject.addRelationship(relationship);
@@ -577,7 +577,7 @@ describe('BusinessErrorChecker', () => {
             type: RelationshipTypes.ONE_TO_ONE,
             injectedFieldInFrom: 'other'
           });
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(sourceEntity);
           jdlObject.addRelationship(relationship);
           checker = new BusinessErrorChecker(jdlObject);
@@ -594,7 +594,7 @@ describe('BusinessErrorChecker', () => {
       let checker;
 
       before(() => {
-        const jdlObject = new JDLObject();
+        const jdlObject = new ValidatedJDLObject();
 
         jdlObject.addApplication(
           new JDLMicroserviceApplication({
@@ -676,10 +676,10 @@ describe('BusinessErrorChecker', () => {
     let jdlObject = null;
 
     before(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
     afterEach(() => {
-      jdlObject = new JDLObject();
+      jdlObject = new ValidatedJDLObject();
     });
 
     context('when having a JDL with pagination and Cassandra as database type', () => {

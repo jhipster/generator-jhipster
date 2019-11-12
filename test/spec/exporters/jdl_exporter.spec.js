@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 
 const fs = require('fs');
-const JDLObject = require('../../../lib/core/jdl_object');
+const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLExporter = require('../../../lib/exporters/jdl_exporter');
 
@@ -43,7 +43,7 @@ describe('JDLExporter', () => {
         let jdlContent = '';
 
         before(() => {
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(
             new JDLEntity({
               name: 'Toto'
@@ -71,7 +71,7 @@ describe('JDLExporter', () => {
         let jdlContent = '';
 
         before(() => {
-          const jdlObject = new JDLObject();
+          const jdlObject = new ValidatedJDLObject();
           jdlObject.addEntity(
             new JDLEntity({
               name: 'Toto'

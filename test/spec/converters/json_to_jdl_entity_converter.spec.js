@@ -23,7 +23,7 @@ const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const { convertEntitiesToJDL } = require('../../../lib/converters/json_to_jdl_entity_converter');
-const JDLObject = require('../../../lib/core/jdl_object');
+const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const { JPA_DERIVED_IDENTIFIER } = require('../../../lib/core/jhipster/relationship_options');
@@ -249,7 +249,7 @@ describe('JSONToJDLEntityConverter', () => {
               User: readJsonEntity('Region')
             };
             entities.User.relationships[0].otherEntityRelationshipName = 'user';
-            jdlObject = new JDLObject();
+            jdlObject = new ValidatedJDLObject();
             jdlObject.addOption(
               new JDLUnaryOption({
                 name: UnaryOptions.SKIP_USER_MANAGEMENT
