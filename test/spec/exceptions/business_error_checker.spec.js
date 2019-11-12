@@ -450,7 +450,10 @@ describe('BusinessErrorChecker', () => {
           expect(() => {
             checker.checkForRelationshipErrors();
           }).to.throw(
-            "Relationships from the User entity is not supported in the declaration between 'User' and 'Valid'."
+            new RegExp(
+              "Relationships from the User entity is not supported in the declaration between 'User' and " +
+                "'Valid'. You can have this by using the 'skipUserManagement' option."
+            )
           );
         });
       });
