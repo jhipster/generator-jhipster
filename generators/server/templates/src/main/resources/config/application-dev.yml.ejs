@@ -145,8 +145,10 @@ spring:
             enabled: false
     <%_ } _%>
     jpa:
-        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') { _%>
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        <%_ if (devDatabaseType === 'mysql') { _%>
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        <%_ } else if (devDatabaseType === 'mariadb') { _%>
+        database-platform: org.hibernate.dialect.MariaDB103Dialect
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
         <%_ } else if (devDatabaseType === 'oracle') { _%>
