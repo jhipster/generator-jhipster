@@ -68,8 +68,7 @@
                                 <b-button v-on:click="prepareRemove(user)"
                                        variant="danger"
                                        class="btn btn-sm delete"
-                                       :disabled="username === user.login"
-                                       v-b-modal.removeUser>
+                                       :disabled="username === user.login">
                                     <font-awesome-icon icon="times"></font-awesome-icon>
                                     <span class="d-none d-md-inline" v-text="$t('entity.action.delete')">Delete</span>
                                 </b-button>

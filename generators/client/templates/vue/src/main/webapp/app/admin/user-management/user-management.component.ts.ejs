@@ -99,6 +99,9 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
 
   public prepareRemove(instance): void {
     this.removeId = instance.login;
+    if (<any>this.$refs.removeUser) {
+      (<any>this.$refs.removeUser).show();
+    }
   }
 
   public closeDialog() : void {
