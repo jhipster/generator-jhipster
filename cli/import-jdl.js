@@ -58,19 +58,9 @@ const updateDeploymentState = importState =>
  * Imports the Applications and Entities defined in JDL
  * The app .yo-rc.json files and entity json files are written to disk
  */
-function importJDL() {
+function importJDL(jdlImporter) {
     logger.info('The JDL is being parsed.');
-    const jdlImporter = new jhiCore.JDLImporter(
-        this.jdlFiles,
-        {
-            databaseType: this.prodDatabaseType,
-            applicationType: this.applicationType,
-            applicationName: this.baseName,
-            generatorVersion: packagejs.version,
-            forceNoFiltering: this.options.force
-        },
-        this.jdlContent
-    );
+
     let importState = {
         exportedEntities: [],
         exportedApplications: [],
@@ -291,7 +281,21 @@ class JDLProcessor {
     }
 
     importJDL() {
-        this.importState = importJDL.call(this);
+        const configuration = {
+            databaseType: this.prodDatabaseType,
+            applicationType: this.applicationType,
+            applicationName: this.baseName,
+            generatorVersion: packagejs.version,
+            forceNoFiltering: this.options.force
+        };
+        const JDLImporter = jhiCore.jdl.import.JDLImporter;
+        let importer;
+        if (this.jdlContent) {
+            importer = JDLImporter.createImporterFromContent(this.jdlContent, configuration);
+        } else {
+            importer = JDLImporter.createImporterFromFiles(this.jdlFiles, configuration);
+        }
+        this.importState = importJDL.call(this, importer);
     }
 
     sendInsight() {

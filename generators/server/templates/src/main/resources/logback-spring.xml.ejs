@@ -53,8 +53,9 @@
     <logger name="javax.management.remote" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    <% if (databaseType === 'cassandra') { %>
-    <logger name="com.datastax" level="WARN"/><% } %>
+    <%_ if (databaseType === 'cassandra') { _%>
+    <logger name="com.datastax" level="WARN"/>
+    <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
     <logger name="com.hazelcast" level="INFO"/>
     <%_ } _%>
@@ -93,10 +94,14 @@
     <logger name="com.github.benmanes.caffeine" level="WARN"/>
     <%_ } _%>
     <logger name="org.apache" level="WARN"/>
+    <%_ if (messageBroker === 'kafka') { _%>
     <logger name="org.apache.kafka" level="INFO"/>
+    <%_ } _%>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
-    <logger name="org.bson" level="WARN"/><% if (searchEngine === 'elasticsearch') { %>
-    <logger name="org.elasticsearch" level="WARN"/><% } %>
+    <logger name="org.bson" level="WARN"/>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <logger name="org.elasticsearch" level="WARN"/>
+    <%_ } _%>
     <logger name="org.hibernate.validator" level="WARN"/>
     <%_ if (databaseType === 'sql') { _%>
     <logger name="org.hibernate" level="WARN"/>
@@ -134,9 +139,11 @@
     <logger name="reactor" level="WARN"/>
     <%_ } _%>
     <logger name="springfox" level="WARN"/>
-    <logger name="sun.rmi" level="WARN"/><% if (databaseType === 'sql') { %>
+    <logger name="sun.rmi" level="WARN"/>
+    <%_ if (databaseType === 'sql') { _%>
     <logger name="liquibase" level="WARN"/>
-    <logger name="LiquibaseSchemaResolver" level="INFO"/><% } %>
+    <logger name="LiquibaseSchemaResolver" level="INFO"/>
+    <%_ } _%>
     <logger name="springfox.documentation.schema.property" level="ERROR"/>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || cacheProvider === 'hazelcast') { _%>
     <logger name="sun.net.www" level="INFO"/>
