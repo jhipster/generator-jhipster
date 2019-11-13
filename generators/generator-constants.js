@@ -79,6 +79,16 @@ const KUBERNETES_INGRESS_API_VERSION = 'extensions/v1beta1';
 const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1alpha3';
 const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
 
+// Helm versions
+const HELM_KAFKA = '^0.20.1';
+const HELM_ELASTICSEARCH = '^1.32.0';
+const HELM_PROMETHEUS = '^9.2.0';
+const HELM_GRAFANA = '^4.0.0';
+const HELM_MYSQL = '^1.4.0';
+const HELM_MARIADB = '^6.12.2';
+const HELM_POSTGRESQL = '^6.5.3';
+const HELM_MOGODB_REPLICASET = '^3.10.1';
+
 // all constants used throughout all generators
 
 const MAIN_DIR = 'src/main/';
@@ -325,7 +335,16 @@ const constants = {
     KUBERNETES_STATEFULSET_API_VERSION,
     KUBERNETES_INGRESS_API_VERSION,
     KUBERNETES_ISTIO_NETWORKING_API_VERSION,
-    KUBERNETES_RBAC_API_VERSION
+    KUBERNETES_RBAC_API_VERSION,
+
+    HELM_KAFKA,
+    HELM_ELASTICSEARCH,
+    HELM_PROMETHEUS,
+    HELM_GRAFANA,
+    HELM_MYSQL,
+    HELM_MARIADB,
+    HELM_POSTGRESQL,
+    HELM_MOGODB_REPLICASET
 };
 
 module.exports = constants;
