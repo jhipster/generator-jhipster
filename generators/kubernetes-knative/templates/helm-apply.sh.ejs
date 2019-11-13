@@ -22,16 +22,16 @@
 <%_ if (kubernetesNamespace !== 'default') { _%>
 kubectl apply -f namespace.yaml
 <%_ } _%>
-<%_ if (istio !== 'no') { _%>
+<%_ if (istio) { _%>
 kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled
 <%_ } _%>
 if [ -d "csvc" ]; then
 helm delete --purge csvc 2>/dev/null
 helm dep up ./csvc
-helm install --name csvc ./csvc --namespace <%- kubernetesNamespace %>
+helm install --name csvc ./csvc --replace --namespace <%- kubernetesNamespace %>
 fi
 <%_ appConfigs.forEach((appConfig, index) =>  { _%>
 helm delete --purge <%- appConfig.baseName.toLowerCase() %> 2>/dev/null
 helm dep up ./<%- appConfig.baseName.toLowerCase() %>
-helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %> --namespace <%- kubernetesNamespace %>
+helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %> --replace --namespace <%- kubernetesNamespace %>
 <%_ }) _%>
