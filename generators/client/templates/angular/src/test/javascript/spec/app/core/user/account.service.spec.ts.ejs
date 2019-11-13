@@ -1,9 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { SERVER_API_URL } from 'app/app.constants';
-import { AccountService } from 'app/core/auth/account.service';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%= jhiPrefixCapitalized %>TrackerService } from 'app/core/tracker/tracker.service';
+import { TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
 import { JhiDateUtils
 <%_ if (enableTranslation) { _%>
@@ -11,6 +9,10 @@ import { JhiDateUtils
 <%_ } _%>
 } from 'ng-jhipster';
 import { NgxWebstorageModule } from 'ngx-webstorage';
+
+import { SERVER_API_URL } from 'app/app.constants';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 <%_ if (enableTranslation) { _%>
 import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
@@ -18,10 +20,23 @@ import { MockLanguageService } from '../../../helpers/mock-language.service';
 import { MockTrackerService } from '../../../helpers/mock-tracker.service';
 <%_ } _%>
 
+function accountWithAuthorities(authorities: string[]): Account {
+  return {
+    activated: true,
+    authorities,
+    email: '',
+    firstName: '',
+    langKey: '',
+    lastName: '',
+    login: '',
+    imageUrl: ''
+  };
+}
+
 describe('Service Tests', () => {
     describe('Account Service', () => {
         let service: AccountService;
-        let httpMock;
+        let httpMock: HttpTestingController;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -39,7 +54,7 @@ describe('Service Tests', () => {
                     <%_ } _%>
                     <%_ if (websocket === 'spring-websocket') { _%>
                     {
-                        provide: <%= jhiPrefixCapitalized %>TrackerService,
+                        provide: TrackerService,
                         useClass: MockTrackerService
                     }
                     <%_ } _%>
@@ -56,34 +71,23 @@ describe('Service Tests', () => {
 
         describe('Service methods', () => {
             it('should call /account if user is undefined', () => {
-                service.identity().subscribe(() => {});
+                service.identity().subscribe();
                 const req = httpMock.expectOne({ method: 'GET' });
                 const resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/account';
 
                 expect(req.request.url).toEqual(`${resourceUrl}`);
             });
 
-            it('should call /account only once', () => {
-                service.identity().subscribe(() => service.identity().subscribe(() => {}));
-                const req = httpMock.expectOne({ method: 'GET' });
-                const resourceUrl = SERVER_API_URL + '<%- apiUaaPath %>api/account';
-
-                expect(req.request.url).toEqual(`${resourceUrl}`);
-                req.flush({
-                    firstName: 'John'
-                });
-            });
-
-            it('should call /account again if user has logged out', () => {
+            it('should call /account only once if not logged out after first authentication and should call /account again if user has logged out', () => {
                 // Given the user is authenticated
-                service.identity().subscribe(() => {});
+                service.identity().subscribe();
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush({
                     firstName: 'Unimportant'
                 });
 
                 // When I call
-                service.identity().subscribe(() => {});
+                service.identity().subscribe();
 
                 // Then there is no second request
                 httpMock.expectNone({ method: 'GET' });
@@ -91,7 +95,7 @@ describe('Service Tests', () => {
                 // When I log out
                 service.authenticate(null);
                 // and then call
-                service.identity().subscribe(() => {});
+                service.identity().subscribe();
 
                 // Then there is a new request
                 httpMock.expectOne({ method: 'GET' });
@@ -100,27 +104,23 @@ describe('Service Tests', () => {
             describe('hasAnyAuthority string parameter', () => {
                 it('should return false if user is not logged', () => {
                     const hasAuthority = service.hasAnyAuthority('ROLE_USER');
-                    expect(hasAuthority).toBeFalsy();
+                    expect(hasAuthority).toBe(false);
                 });
 
                 it('should return false if user is logged and has not authority',  () => {
-                    service.authenticate({
-                        authorities: ['ROLE_USER']
-                    });
+                    service.authenticate(accountWithAuthorities(['ROLE_USER']));
 
                     const hasAuthority = service.hasAnyAuthority('ROLE_ADMIN');
 
-                    expect(hasAuthority).toBeFalsy();
+                    expect(hasAuthority).toBe(false);
                 });
 
                 it('should return true if user is logged and has authority', () => {
-                    service.authenticate({
-                        authorities: ['ROLE_USER']
-                    });
+                    service.authenticate(accountWithAuthorities(['ROLE_USER']));
 
                     const hasAuthority = service.hasAnyAuthority('ROLE_USER');
 
-                    expect(hasAuthority).toBeTruthy();
+                    expect(hasAuthority).toBe(true);
                 });
             });
 
@@ -131,23 +131,19 @@ describe('Service Tests', () => {
                 });
 
                 it('should return false if user is logged and has not authority', () => {
-                    service.authenticate({
-                        authorities: ['ROLE_USER']
-                    });
+                    service.authenticate(accountWithAuthorities(['ROLE_USER']));
 
                     const hasAuthority = service.hasAnyAuthority(['ROLE_ADMIN']);
 
-                    expect(hasAuthority).toBeFalsy();
+                    expect(hasAuthority).toBe(false);
                 });
 
                 it('should return true if user is logged and has authority', () => {
-                    service.authenticate({
-                        authorities: ['ROLE_USER']
-                    });
+                    service.authenticate(accountWithAuthorities(['ROLE_USER']));
 
                     const hasAuthority = service.hasAnyAuthority(['ROLE_USER', 'ROLE_ADMIN']);
 
-                    expect(hasAuthority).toBeTruthy();
+                    expect(hasAuthority).toBe(true);
                 });
             });
         });

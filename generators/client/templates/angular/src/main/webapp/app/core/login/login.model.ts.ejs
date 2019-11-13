@@ -16,14 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { SpyObject } from './spyobject';
-import { TrackerService } from 'app/core/tracker/tracker.service';
-
-export class MockTrackerService extends SpyObject {
-
-    constructor() {
-        super(TrackerService);
-    }
-
-    connect() {}
+export class Login {
+    constructor(public username: string, public password: string, public rememberMe: boolean) {}
 }

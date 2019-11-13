@@ -455,6 +455,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/login/login.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.ts`,
@@ -588,6 +589,8 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
         `${DOCKER_DIR}keycloak.yml`
     ],
+
+    oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/core/login/logout.model.ts`],
 
     messageBroker: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResource.java`,

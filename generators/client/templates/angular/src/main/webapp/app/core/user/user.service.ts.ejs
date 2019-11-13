@@ -49,7 +49,7 @@ export class UserService {
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
-    delete(login: string): Observable<any> {
+    delete(login: string): Observable<{}> {
         return this.http.delete(`${this.resourceUrl}/${login}`);
     }
 
