@@ -18,10 +18,10 @@
  */
 import { Input, Directive, ElementRef, OnChanges, OnInit, Optional, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
-import { JhiConfigService } from '../config.service';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { JhiConfigService } from '../config.service';
 
 /**
  * A wrapper directive on top of the translate pipe as the inbuilt translate directive from ngx-translate is too verbose and buggy
