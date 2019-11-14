@@ -1,8 +1,21 @@
-# Latest: v6.0.1
+# Latest: v6.0.2
+
+## Bug fixes:
+  - JDL export:
+    - Exporting to JDL no longer validates the JDL
+    - However, reimporting it can causes failures if the exported JDL has no longer supported values.
+  - Fixed JPADerivedIdentifier option:
+    - The issue was that the exported JSON files for both entities of a relationship had the option
+    - The correct way was just to have the option in the owner side of the relationship
+
+---
+
+# v6.0.1
 
 ## Bug fixes:
   - During the JDL export, if the `rememberMeKey` option exists in the .yo-rc.json file, then the export failed.
     - The fix consists in ignoring it, jsut like the `jwtSecretKey` app option.
+
 ---
 
 # v6.0.0
