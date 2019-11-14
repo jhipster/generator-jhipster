@@ -209,7 +209,7 @@
                     loadColumnType = 'blob';
                 } else if (columnType === '${clobType}') {
                     loadColumnType = 'clob';
-                } else if (columnType === '${uuidType}') {
+                } else if (columnType === '${uuidType}' && prodDatabaseType !== 'mysql' && prodDatabaseType !== 'mariadb') {
                     loadColumnType = '${uuidType}';
                 }
                 _%>
