@@ -18,7 +18,7 @@
  */
 import { Input, Directive, ElementRef, OnChanges, OnInit, Optional, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ReplaySubject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { JhiConfigService } from '../config.service';
@@ -33,7 +33,7 @@ export class JhiTranslateDirective implements OnChanges, OnInit, OnDestroy {
     @Input() jhiTranslate: string;
     @Input() translateValues: any;
 
-    private readonly directiveDestroyed = new ReplaySubject<never>(1);
+    private readonly directiveDestroyed = new Subject<never>();
 
     constructor(private configService: JhiConfigService, private el: ElementRef, @Optional() private translateService: TranslateService) {}
 
