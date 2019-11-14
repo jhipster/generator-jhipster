@@ -848,8 +848,11 @@ describe('EntityParser', () => {
           });
         });
 
-        it('sets it', () => {
+        it('sets it on the owner', () => {
           expect(content.A.relationships[0].useJPADerivedIdentifier).to.be.true;
+        });
+        it("doesn't set the option in the non-owner", () => {
+          expect(content.B.relationships[0].useJPADerivedIdentifier).to.be.undefined;
         });
       });
       context('when converting a JDL with DTO', () => {
