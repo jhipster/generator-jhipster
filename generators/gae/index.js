@@ -737,6 +737,7 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 if (this.buildTool === 'gradle') {
                     this.addGradlePlugin('com.google.cloud.tools', 'appengine-gradle-plugin', '2.2.0');
+                    this.addGradlePlugin('org.springframework.boot.experimental', 'spring-boot-thin-gradle-plugin', '1.0.13.RELEASE');
                     this.applyFromGradleScript('gradle/gae');
                 }
             },

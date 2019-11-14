@@ -34,3 +34,10 @@ processResources {
         }
     }
 }
+
+task copyFolders(type: Copy) {
+    into "$buildDir/staged-app/"
+    from "$buildDir/thin/root/"
+}
+
+appengineStage.finalizedBy copyFolders
