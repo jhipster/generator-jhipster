@@ -27,6 +27,7 @@ const DatabaseTypes = require('../lib/core/jhipster/database_types');
 const LintRules = require('../lib/linter/rules');
 
 const JDLObject = require('../lib/core/jdl_object');
+const ValidatedJDLObject = require('../lib/core/validated_jdl_object');
 const JDLMonolithApplication = require('../lib/core/jdl_monolith_application');
 const JDLGatewayApplication = require('../lib/core/jdl_gateway_application');
 const JDLMicroserviceApplication = require('../lib/core/jdl_microservice_application');
@@ -41,6 +42,7 @@ const JDLRelationships = require('../lib/core/jdl_relationships');
 const JDLUnaryOption = require('../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../lib/core/jdl_binary_option');
 const JDLOptions = require('../lib/core/jdl_options');
+const ValidatedJDLOptions = require('../lib/core/validated_jdl_options');
 
 const { createImporterFromFiles, createImporterFromContent } = require('../lib/jdl/jdl_importer');
 const JDLLinter = require('../lib/linter/jdl_linter');
@@ -80,6 +82,7 @@ module.exports = {
   isReservedFieldName: ReservedKeywords.isReservedFieldName,
   /* JDL objects */
   JDLObject,
+  ValidatedJDLObject,
   JDLMonolithApplication,
   JDLGatewayApplication,
   JDLMicroserviceApplication,
@@ -93,6 +96,7 @@ module.exports = {
   JDLRelationships,
   JDLUnaryOption,
   JDLBinaryOption,
+  ValidatedJDLOptions,
   JDLOptions,
   /* JDL Importer */
   JDLImporter: {

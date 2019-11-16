@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const ValidatedJDLObject = require('../lib/core/validated_jdl_object');
 const JDLObject = require('../lib/core/jdl_object');
 const JDLMonolithApplication = require('../lib/core/jdl_monolith_application');
 const JDLGatewayApplication = require('../lib/core/jdl_gateway_application');
@@ -32,6 +33,7 @@ const JDLRelationships = require('../lib/core/jdl_relationships');
 const JDLUnaryOption = require('../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../lib/core/jdl_binary_option');
 const JDLOptions = require('../lib/core/jdl_options');
+const ValidatedJDLOptions = require('../lib/core/validated_jdl_options');
 
 const ApplicationTypes = require('../lib/core/jhipster/application_types');
 const BinaryOptions = require('../lib/core/jhipster/binary_options');
@@ -75,6 +77,7 @@ module.exports = {
       }
     },
     objects: {
+      ValidatedJDLObject,
       JDLObject,
       JDLEntity,
       JDLField,
@@ -84,6 +87,7 @@ module.exports = {
       JDLRelationships,
       JDLRelationship,
       JDLOptions,
+      ValidatedJDLOptions,
       JDLUnaryOption,
       JDLBinaryOption,
       JDLMonolithApplication,
