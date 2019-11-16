@@ -1,4 +1,16 @@
-# Latest: v6.0.2
+# Latest: v6.0.3
+
+## What's new:
+  - Improved error message when having a unidirectional Many-to-Many relationship
+    - Now tells the injected fields in the source & destination entities for better pinpointing.
+  - Added the ValidatedJDLObject, which performs validations to entities, relationships, etc.
+    - The regular JDLObject doesn't do them anymore.
+  - Also added the ValidatedJDLOptions class
+    - It has the same behavior as the ValidatedJDLOptions.
+
+---
+
+# v6.0.2
 
 ## Bug fixes:
   - JDL export:
