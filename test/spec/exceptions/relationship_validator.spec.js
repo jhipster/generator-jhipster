@@ -190,7 +190,7 @@ describe('RelationshipValidator', () => {
         });
       });
       context(`when having a ${MANY_TO_MANY} relationship`, () => {
-        context('when not having an unidirectional relationship', () => {
+        context('when not having an bidirectional relationship', () => {
           let relationship1;
           let relationship2;
 
@@ -212,14 +212,14 @@ describe('RelationshipValidator', () => {
           context('if the injected field in the source is missing', () => {
             it('should fail', () => {
               expect(() => validator.validate(relationship1)).to.throw(
-                /^In the Many-to-Many relationship from A to B, only bidirectionality is supported\.$/
+                /^In the Many-to-Many relationship from A to B, only bidirectionality is supported\. The injected field in the source entity is not set and the injected field in the destination entity is 'a'\.$/
               );
             });
           });
           context('if the injected field in the source is missing', () => {
             it('should fail', () => {
               expect(() => validator.validate(relationship2)).to.throw(
-                /^In the Many-to-Many relationship from A to B, only bidirectionality is supported\.$/
+                /^In the Many-to-Many relationship from A to B, only bidirectionality is supported\. The injected field in the source entity is 'b' and the injected field in the destination entity is not set\.$/
               );
             });
           });
