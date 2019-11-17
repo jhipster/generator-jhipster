@@ -142,11 +142,10 @@ function askTypeOfApplication() {
         this.deploymentApplicationType = props.applicationType;
         if (applicationType) {
             this.log(applicationType);
-            done();
         } else {
             this.abort = true;
-            done();
         }
+        done();
     });
 }
 
@@ -170,11 +169,10 @@ function askRegion() {
         const region = props.region;
         if (region) {
             this.aws.region = region;
-            done();
         } else {
             this.abort = true;
-            done();
         }
+        done();
     });
 }
 
@@ -207,11 +205,10 @@ function askCloudFormation() {
                 this.aws.cloudFormationName = _.replace(this.aws.cloudFormationName, '_', '');
             }
             this.log(`CloudFormation Stack name will be ${this.aws.cloudFormationName}`);
-            done();
         } else {
             this.abort = true;
-            done();
         }
+        done();
     });
 }
 
@@ -281,8 +278,7 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
     ];
 
     return this.prompt(prompts).then(props => {
-        const performance = props.performance;
-        return performance;
+        return props.performance;
     });
 }
 
@@ -373,11 +369,10 @@ function askVPC() {
         if (targetVPC) {
             this.aws.vpc.id = targetVPC;
             this.aws.vpc.cidr = _.find(this.awsFacts.availableVpcs, ['VpcId', targetVPC]).CidrBlock;
-            done();
         } else {
             this.abort = true;
-            done();
         }
+        done();
     });
 }
 
