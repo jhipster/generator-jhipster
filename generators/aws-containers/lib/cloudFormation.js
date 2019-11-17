@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const AWS = require('aws-sdk'); // eslint-disable-line
+const AWS = require('aws-sdk');
 const _ = require('lodash');
 const chalk = require('chalk');
 
