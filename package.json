@@ -84,6 +84,7 @@
         "yo": "3.1.0"
     },
     "devDependencies": {
+        "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
         "chai": "4.2.0",
         "ejs-lint": "0.3.0",
         "eslint": "6.2.2",
@@ -96,8 +97,7 @@
         "mocha": "6.1.4",
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
-        "yeoman-test": "1.9.1",
-        "@openapitools/openapi-generator-cli": "0.0.14-4.0.2"
+        "yeoman-test": "1.9.1"
     },
     "resolutions": {
         "inquirer": "6.3.1"
