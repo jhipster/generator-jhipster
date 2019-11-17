@@ -572,7 +572,7 @@ function askDeployNow() {
         {
             type: 'confirm',
             name: 'deployNow',
-            message: 'Would you like to deploy now?.',
+            message: 'Would you like to deploy now?',
             default: true,
         },
     ];
