@@ -163,7 +163,7 @@ describe('RelationshipValidator', () => {
 
           it('should fail', () => {
             expect(() => validator.validate(relationship)).to.throw(
-              /^In the One-to-One relationship from A to B, the source entity must possess the source, or you must invert the direction of the relationship\.$/
+              /^In the One-to-One relationship from A to B, the source entity must possess the destination, or you must invert the direction of the relationship\.$/
             );
           });
         });
@@ -220,6 +220,152 @@ describe('RelationshipValidator', () => {
             it('should fail', () => {
               expect(() => validator.validate(relationship2)).to.throw(
                 /^In the Many-to-Many relationship from A to B, only bidirectionality is supported\. The injected field in the source entity is 'b' and the injected field in the destination entity is not set\.$/
+              );
+            });
+          });
+        });
+      });
+      context('with the user entity', () => {
+        context(`when having a ${ONE_TO_ONE} relationship`, () => {
+          context('having an injected field in the source entity', () => {
+            let relationship;
+
+            before(() => {
+              relationship = {
+                from: 'A',
+                to: 'User',
+                type: ONE_TO_ONE,
+                injectedFieldInFrom: 'user'
+              };
+            });
+
+            it('should not fail', () => {
+              expect(() => validator.validate(relationship)).not.to.throw();
+            });
+          });
+          context('having the source entity as user', () => {
+            let relationship;
+
+            before(() => {
+              relationship = {
+                from: 'User',
+                to: 'A',
+                type: ONE_TO_ONE,
+                injectedFieldInFrom: 'a'
+              };
+            });
+
+            it('should fail', () => {
+              expect(() => validator.validate(relationship)).to.throw(
+                /^Relationships from the User entity is not supported in the declaration between 'User' and 'A'\. You can have this by using the 'skipUserManagement' option\.$/
+              );
+            });
+          });
+        });
+        context(`when having a ${MANY_TO_ONE} relationship`, () => {
+          context('without the User having the injected field', () => {
+            let relationship;
+
+            before(() => {
+              relationship = new JDLRelationship({
+                from: 'A',
+                to: 'User',
+                type: MANY_TO_ONE,
+                injectedFieldInFrom: 'user'
+              });
+            });
+
+            it('should not fail', () => {
+              expect(() => validator.validate(relationship)).not.to.throw();
+            });
+          });
+          context('with the User having the injected field', () => {
+            context('with the skipUserManagement option', () => {
+              let relationship;
+
+              before(() => {
+                relationship = new JDLRelationship({
+                  from: 'User',
+                  to: 'A',
+                  type: MANY_TO_ONE,
+                  injectedFieldInFrom: 'a'
+                });
+              });
+
+              it('should not fail', () => {
+                expect(() => validator.validate(relationship, true)).not.to.throw();
+              });
+            });
+            context('as the source', () => {
+              let relationship;
+
+              before(() => {
+                relationship = new JDLRelationship({
+                  from: 'User',
+                  to: 'A',
+                  type: MANY_TO_ONE,
+                  injectedFieldInFrom: 'a'
+                });
+              });
+
+              it('should fail', () => {
+                expect(() => validator.validate(relationship)).to.throw(
+                  /^Relationships from the User entity is not supported in the declaration between 'User' and 'A'\. You can have this by using the 'skipUserManagement' option\.$/
+                );
+              });
+            });
+            context('as the destination', () => {
+              let relationship;
+
+              before(() => {
+                relationship = new JDLRelationship({
+                  from: 'A',
+                  to: 'User',
+                  type: MANY_TO_ONE,
+                  injectedFieldInTo: 'a'
+                });
+              });
+
+              it('should fail', () => {
+                expect(() => validator.validate(relationship)).to.throw(
+                  /^In the Many-to-One relationship from A to User, the User entity has the injected field without its management being skipped\. To have such a relation, you should use the 'skipUserManagement' option\.$/
+                );
+              });
+            });
+          });
+        });
+        context(`when having a ${MANY_TO_MANY} relationship`, () => {
+          context('with the user being the destination', () => {
+            let relationship;
+
+            before(() => {
+              relationship = new JDLRelationship({
+                from: 'A',
+                to: 'User',
+                type: MANY_TO_MANY,
+                injectedFieldInFrom: 'user'
+              });
+            });
+
+            it('should not fail', () => {
+              expect(() => validator.validate(relationship)).not.to.throw();
+            });
+          });
+          context('with the user being the source', () => {
+            let relationship;
+
+            before(() => {
+              relationship = new JDLRelationship({
+                from: 'User',
+                to: 'A',
+                type: MANY_TO_MANY,
+                injectedFieldInTo: 'a'
+              });
+            });
+
+            it('should fail', () => {
+              expect(() => validator.validate(relationship)).to.throw(
+                /^Relationships from the User entity is not supported in the declaration between 'User' and 'A'. You can have this by using the 'skipUserManagement' option\.$/
               );
             });
           });
