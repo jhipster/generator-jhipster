@@ -35,10 +35,9 @@ import { TrackerActivity } from './tracker-activity.model';
 @Injectable({providedIn: 'root'})
 export class TrackerService {
     stompClient: Stomp.Client | null = null;
-    subscriber: Stomp.Subscription | null = null;
-    connectionSubject: ReplaySubject<void>;
-    listenerSubject: Subject<TrackerActivity>;
-    alreadyConnectedOnce = false;
+    stompSubscription: Stomp.Subscription | null = null;
+    connectionSubject: ReplaySubject<void> = new ReplaySubject(1);
+    listenerSubject: Subject<TrackerActivity> = new Subject();
 
     private connectionSubscription: Subscription | null = null;
     private routerSubscription: Subscription | null = null;
@@ -52,12 +51,13 @@ export class TrackerService {
         private authServerProvider: AuthServerProvider,
         <%_ } _%>
         private location: Location
-    ) {
-        this.connectionSubject = new ReplaySubject(1);
-        this.listenerSubject = new Subject();
-    }
+    ) {}
 
     connect(): void {
+        if (this.stompClient !== null && this.stompClient.connected) {
+            return;
+        }
+
         // building absolute path so that websocket doesn't fail when deploying with a context path
         let url = '/websocket/tracker';
         url = this.location.prepareExternalUrl(url);
@@ -74,14 +74,13 @@ export class TrackerService {
         headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
         <%_ } _%>
         this.stompClient.connect(headers, () => {
+            this.connectionSubject.next();
+
             this.sendActivity();
-            if (!this.alreadyConnectedOnce) {
-                this.connectionSubject.next();
-                this.routerSubscription = this.router.events
-                    .pipe(filter((event: Event) => event instanceof NavigationEnd))
-                    .subscribe(() => this.sendActivity());
-                this.alreadyConnectedOnce = true;
-            }
+
+            this.routerSubscription = this.router.events
+                .pipe(filter((event: Event) => event instanceof NavigationEnd))
+                .subscribe(() => this.sendActivity());
         });
     }
 
@@ -92,11 +91,13 @@ export class TrackerService {
             }
             this.stompClient = null;
         }
-        if (this.routerSubscription) {
+
+        this.connectionSubject = new ReplaySubject(1);
+
+        if (this.routerSubscription !== null) {
             this.routerSubscription.unsubscribe();
             this.routerSubscription = null;
         }
-        this.alreadyConnectedOnce = false;
     }
 
     receive(): Subject<TrackerActivity> {
@@ -114,9 +115,13 @@ export class TrackerService {
     }
 
     subscribe(): void {
+        if (this.connectionSubscription !== null) {
+            return;
+        }
+      
         this.connectionSubscription = this.connectionSubject.subscribe(() => {
             if (this.stompClient !== null) {
-                this.subscriber = this.stompClient.subscribe('/topic/tracker', (data: Stomp.Message) => {
+                this.stompSubscription = this.stompClient.subscribe('/topic/tracker', (data: Stomp.Message) => {
                     this.listenerSubject.next(JSON.parse(data.body));
                 });
             }
@@ -126,9 +131,12 @@ export class TrackerService {
     unsubscribe(): void {
         if (this.connectionSubscription !== null) {
             this.connectionSubscription.unsubscribe();
+            this.connectionSubscription = null;
         }
-        if (this.subscriber !== null) {
-            this.subscriber.unsubscribe();
+
+        if (this.stompSubscription !== null) {
+            this.stompSubscription.unsubscribe();
+            this.stompSubscription = null;
         }
     }
 }
