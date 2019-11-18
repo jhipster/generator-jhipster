@@ -68,9 +68,7 @@ spring:
     devtools:
         restart:
             enabled: true
-            <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-            additional-exclude: .h2.server.properties
-            <%_ } _%>
+            additional-exclude: static/**<% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>,.h2.server.properties<% } %>
         livereload:
             enabled: false # we use Webpack dev server + BrowserSync for livereload
     jackson:
