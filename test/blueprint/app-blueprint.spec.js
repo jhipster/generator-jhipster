@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions, no-console */
+/* eslint-disable no-unused-expressions */
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');

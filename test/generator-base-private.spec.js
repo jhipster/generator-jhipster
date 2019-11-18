@@ -210,7 +210,6 @@ export * from './entityFolderName/entityFileName.state';`;
             });
             describe('when having quotes', () => {
                 it('formats the text to make the string valid', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
                 });
             });
@@ -252,13 +251,11 @@ export * from './entityFolderName/entityFileName.state';`;
             });
             describe('when having quotes', () => {
                 it('formats the text to escape it', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal('JHipster is &quot;the&quot; best');
                 });
             });
             describe('when having apostrophe', () => {
                 it('formats the text to escape it', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal('JHipster is &apos;the&apos; best');
                 });
             });

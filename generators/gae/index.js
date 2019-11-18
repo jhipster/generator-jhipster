@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 const os = require('os');
-const exec = require('child_process').exec;
-const execSync = require('child_process').execSync;
+const shelljs = require('shelljs');
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
@@ -41,7 +40,7 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                exec('gcloud version', err => {
+                shelljs.exec('gcloud version', { silent: true }, (code, stdout, err) => {
                     if (err) {
                         this.log.error(
                             "You don't have the Cloud SDK (gcloud) installed. \nDownload it from https://cloud.google.com/sdk/install"
@@ -57,15 +56,16 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 const component = 'app-engine-java';
 
-                exec(
+                shelljs.exec(
                     'gcloud components list --quiet --filter="Status=Installed OR Status=\\"Update Available\\"" --format="value(id)"',
+                    { silent: true },
                     (err, stdout, srderr) => {
                         if (_.includes(stdout, component)) {
                             done();
                         } else {
                             this.log(chalk.bold('\nInstalling App Engine Java SDK'));
                             this.log(`... Running: gcloud components install ${component} --quiet`);
-                            exec(`gcloud components install ${component} --quiet`, err => {
+                            shelljs.exec(`gcloud components install ${component} --quiet`, { silent: true }, (code, stdout, err) => {
                                 if (err) {
                                     this.log.error(err);
                                     done(
@@ -122,7 +122,7 @@ module.exports = class extends BaseGenerator {
             return this.gcpProjectId;
         }
         try {
-            const projectId = execSync('gcloud config get-value core/project --quiet', { encoding: 'utf8' });
+            const projectId = shelljs.exec('gcloud config get-value core/project --quiet', { silent: true }).stdout;
             return projectId.trim();
         } catch (ex) {
             this.log.error('Unable to determine the default Google Cloud Project ID');
@@ -157,7 +157,7 @@ module.exports = class extends BaseGenerator {
                                 return 'Project ID cannot empty';
                             }
                             try {
-                                execSync(`gcloud projects describe ${input.trim()}`);
+                                shelljs.exec(`gcloud projects describe ${input}`, { silent: true });
                                 this.gcpProjectIdExists = true;
                             } catch (ex) {
                                 this.gcpProjectIdExists = false;
@@ -178,42 +178,48 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                exec(`gcloud app describe --format="value(locationId)" --project="${this.gcpProjectId}"`, (err, stdout) => {
-                    if (err) {
-                        const prompts = [
-                            {
-                                type: 'list',
-                                name: 'gaeLocation',
-                                message: 'In which Google App Engine location do you want to deploy ?',
-                                choices: [
-                                    { value: 'northamerica-northeast1', name: 'northamerica-northeast1 - Montréal' },
-                                    { value: 'us-central', name: 'us-central - Iowa' },
-                                    { value: 'us-east1', name: 'us-east1 - South Carolina' },
-                                    { value: 'us-east4', name: 'us-east4 - Northern Virginia' },
-                                    { value: 'southamerica-east1', name: 'southamerica-east1 - São Paulo' },
-                                    { value: 'europe-west', name: 'europe-west - Belgium' },
-                                    { value: 'europe-west2', name: 'europe-west2 - London' },
-                                    { value: 'europe-west3', name: 'europe-west3 - Frankfurt' },
-                                    { value: 'asia-northeast1', name: 'asia-northeast1 - Tokyo' },
-                                    { value: 'asia-south1', name: 'asia-south1 - Mumbai' },
-                                    { value: 'australia-southeast1', name: 'australia-southeast1 - Sydney' }
-                                ],
-                                default: this.gaeLocation ? this.gaeLocation : 0
-                            }
-                        ];
+                shelljs.exec(
+                    `gcloud app describe --format="value(locationId)" --project="${this.gcpProjectId}"`,
+                    { silent: true },
+                    (code, stdout, err) => {
+                        if (err) {
+                            const prompts = [
+                                {
+                                    type: 'list',
+                                    name: 'gaeLocation',
+                                    message: 'In which Google App Engine location do you want to deploy ?',
+                                    choices: [
+                                        { value: 'northamerica-northeast1', name: 'northamerica-northeast1 - Montréal' },
+                                        { value: 'us-central', name: 'us-central - Iowa' },
+                                        { value: 'us-east1', name: 'us-east1 - South Carolina' },
+                                        { value: 'us-east4', name: 'us-east4 - Northern Virginia' },
+                                        { value: 'southamerica-east1', name: 'southamerica-east1 - São Paulo' },
+                                        { value: 'europe-west', name: 'europe-west - Belgium' },
+                                        { value: 'europe-west2', name: 'europe-west2 - London' },
+                                        { value: 'europe-west3', name: 'europe-west3 - Frankfurt' },
+                                        { value: 'asia-northeast1', name: 'asia-northeast1 - Tokyo' },
+                                        { value: 'asia-south1', name: 'asia-south1 - Mumbai' },
+                                        { value: 'australia-southeast1', name: 'australia-southeast1 - Sydney' }
+                                    ],
+                                    default: this.gaeLocation ? this.gaeLocation : 0
+                                }
+                            ];
 
-                        this.prompt(prompts).then(props => {
-                            this.gaeLocation = props.gaeLocation;
-                            this.gaeLocationExists = false;
+                            this.prompt(prompts).then(props => {
+                                this.gaeLocation = props.gaeLocation;
+                                this.gaeLocationExists = false;
+                                done();
+                            });
+                        } else {
+                            this.gaeLocationExists = true;
+                            this.gaeLocation = stdout.trim();
+                            this.log(
+                                `This project already has an App Engine location set, using location "${chalk.cyan(this.gaeLocation)}"`
+                            );
                             done();
-                        });
-                    } else {
-                        this.gaeLocationExists = true;
-                        this.gaeLocation = stdout.trim();
-                        this.log(`This project already has an App Engine location set, using location "${chalk.cyan(this.gaeLocation)}"`);
-                        done();
+                        }
                     }
-                });
+                );
             },
 
             askForServiceName() {
@@ -221,7 +227,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 try {
-                    execSync(`gcloud app services describe default --project="${this.gcpProjectId}"`, { encoding: 'utf8' });
+                    shelljs.exec(`gcloud app services describe default --project="${this.gcpProjectId}"`, { silent: true });
                     this.defaultServiceExists = true;
                 } catch (ex) {
                     this.defaultServiceExists = false;
@@ -405,9 +411,10 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
-                exec(
+                shelljs.exec(
                     `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
-                    (err, stdout, stderr) => {
+                    { silent: true },
+                    (code, stdout, err) => {
                         if (err) {
                             this.log.error(err);
                         } else {
@@ -502,9 +509,10 @@ module.exports = class extends BaseGenerator {
 
                 const cloudSqlDatabases = [{ value: '', name: 'New Database' }];
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
-                exec(
+                shelljs.exec(
                     `gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`,
-                    (err, stdout, stderr) => {
+                    { silent: true },
+                    (code, stdout, err) => {
                         if (err) {
                             this.log.error(err);
                         } else {
@@ -574,14 +582,18 @@ module.exports = class extends BaseGenerator {
 
                 if (!this.gaeLocationExists) {
                     this.log(chalk.bold(`Configuring Google App Engine Location "${chalk.cyan(this.gaeLocation)}"`));
-                    exec(`gcloud app create --region="${this.gaeLocation}" --project="${this.gcpProjectId}"`, (err, stdout) => {
-                        if (err) {
-                            this.log.error(err);
-                            this.abort = true;
-                        }
+                    shelljs.exec(
+                        `gcloud app create --region="${this.gaeLocation}" --project="${this.gcpProjectId}"`,
+                        { silent: true },
+                        (code, stdout, err) => {
+                            if (err) {
+                                this.log.error(err);
+                                this.abort = true;
+                            }
 
-                        done();
-                    });
+                            done();
+                        }
+                    );
                 } else {
                     done();
                 }
@@ -606,15 +618,15 @@ module.exports = class extends BaseGenerator {
                 }${dbVersionFlag}`;
                 this.log(chalk.bold(`\n... Running: ${cmd}`));
 
-                exec(cmd, (err, stdout, stderr) => {
+                shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
                     if (err) {
                         this.abort = true;
                         this.log.error(err);
                     }
 
-                    this.gcpCloudSqlInstanceName = execSync(
+                    this.gcpCloudSqlInstanceName = shelljs.exec(
                         `gcloud sql instances describe ${name} --format="value(connectionName)" --project="${this.gcpProjectId}"`,
-                        { encoding: 'utf8' }
+                        { silent: true }
                     );
 
                     done();
@@ -630,27 +642,31 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nConfiguring Cloud SQL Login'));
 
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
-                exec(`gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`, (err, stdout) => {
-                    if (_.includes(stdout, this.gcpCloudSqlUserName)) {
-                        this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
-                        const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --project="${
-                            this.gcpProjectId
-                        }" --password="..."`;
-                        this.log(chalk.bold(`... To set its password, run: ${cmd}`));
-                        done();
-                    } else {
-                        const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --password="${
-                            this.gcpCloudSqlPassword
-                        }" --project="${this.gcpProjectId}"`;
-                        this.log(chalk.bold(`... Running: ${cmd}`));
-                        exec(cmd, (err, stdout, stderr) => {
-                            if (err) {
-                                this.log.error(err);
-                            }
+                shelljs.exec(
+                    `gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`,
+                    { silent: true },
+                    (code, stdout, err) => {
+                        if (_.includes(stdout, this.gcpCloudSqlUserName)) {
+                            this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
+                            const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --project="${
+                                this.gcpProjectId
+                            }" --password="..."`;
+                            this.log(chalk.bold(`... To set its password, run: ${cmd}`));
                             done();
-                        });
+                        } else {
+                            const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --password="${
+                                this.gcpCloudSqlPassword
+                            }" --project="${this.gcpProjectId}"`;
+                            this.log(chalk.bold(`... Running: ${cmd}`));
+                            shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
+                                if (err) {
+                                    this.log.error(err);
+                                }
+                                done();
+                            });
+                        }
                     }
-                });
+                );
             },
 
             createCloudSqlDatabase() {
@@ -666,7 +682,7 @@ module.exports = class extends BaseGenerator {
                     this.gcpProjectId
                 }"`;
                 this.log(chalk.bold(`... Running: ${cmd}`));
-                exec(cmd, (err, stdout, stderr) => {
+                shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
                     if (err) {
                         this.log.error(err);
                     }

@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable consistent-return */
 const jhipsterUtils = require('./utils');
 const BaseGenerator = require('./generator-base');
 

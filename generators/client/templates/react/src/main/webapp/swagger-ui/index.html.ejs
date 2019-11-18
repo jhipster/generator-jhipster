@@ -169,6 +169,10 @@
 
                     var $urlDropdown = $('#select_baseUrl');
                     $urlDropdown.empty();
+                    data.sort(function (a, b) {
+                        var x = a.name.toLowerCase(), y = b.name.toLowerCase();
+                        return x < y ? -1 : x > y ? 1 : 0;
+                    });
                     $.each(data, function(i, resource) {
                         var option = $('<option></option>')
                         .attr("value", maybePrefix(resource.location, relativeLocation))

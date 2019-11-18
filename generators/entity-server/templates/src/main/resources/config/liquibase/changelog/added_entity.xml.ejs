@@ -209,6 +209,8 @@
                     loadColumnType = 'blob';
                 } else if (columnType === '${clobType}') {
                     loadColumnType = 'clob';
+                } else if (columnType === '${uuidType}' && prodDatabaseType !== 'mysql' && prodDatabaseType !== 'mariadb') {
+                    loadColumnType = '${uuidType}';
                 }
                 _%>
             <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>
