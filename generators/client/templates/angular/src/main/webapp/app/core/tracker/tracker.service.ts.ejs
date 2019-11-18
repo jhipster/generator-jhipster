@@ -54,7 +54,7 @@ export class TrackerService {
     ) {}
 
     connect(): void {
-        if (this.stompClient !== null && this.stompClient.connected) {
+        if (this.stompClient && this.stompClient.connected) {
             return;
         }
 
@@ -85,7 +85,7 @@ export class TrackerService {
     }
 
     disconnect(): void {
-        if (this.stompClient !== null) {
+        if (this.stompClient) {
             if (this.stompClient.connected) {
                 this.stompClient.disconnect();
             }
@@ -94,7 +94,7 @@ export class TrackerService {
 
         this.connectionSubject = new ReplaySubject(1);
 
-        if (this.routerSubscription !== null) {
+        if (this.routerSubscription) {
             this.routerSubscription.unsubscribe();
             this.routerSubscription = null;
         }
@@ -105,7 +105,7 @@ export class TrackerService {
     }
 
     private sendActivity(): void {
-        if (this.stompClient !== null && this.stompClient.connected) {
+        if (this.stompClient && this.stompClient.connected) {
             this.stompClient.send(
                 '/topic/activity', // destination
                 JSON.stringify({'page': this.router.routerState.snapshot.url}), // body
@@ -115,12 +115,12 @@ export class TrackerService {
     }
 
     subscribe(): void {
-        if (this.connectionSubscription !== null) {
+        if (this.connectionSubscription) {
             return;
         }
       
         this.connectionSubscription = this.connectionSubject.subscribe(() => {
-            if (this.stompClient !== null) {
+            if (this.stompClient) {
                 this.stompSubscription = this.stompClient.subscribe('/topic/tracker', (data: Stomp.Message) => {
                     this.listenerSubject.next(JSON.parse(data.body));
                 });
@@ -129,12 +129,12 @@ export class TrackerService {
     }
 
     unsubscribe(): void {
-        if (this.connectionSubscription !== null) {
+        if (this.connectionSubscription) {
             this.connectionSubscription.unsubscribe();
             this.connectionSubscription = null;
         }
 
-        if (this.stompSubscription !== null) {
+        if (this.stompSubscription) {
             this.stompSubscription.unsubscribe();
             this.stompSubscription = null;
         }

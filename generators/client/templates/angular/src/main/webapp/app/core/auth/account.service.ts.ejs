@@ -72,8 +72,7 @@ export class AccountService  {
         if (!Array.isArray(authorities)) {
             authorities = [authorities];
         }
-        const account = this.userIdentity;
-        return authorities.some((authority: string) => account.authorities.includes(authority));
+        return this.userIdentity.authorities.some((authority: string) => authorities.includes(authority));
     }
 
     identity(force?: boolean): Observable<Account | null> {

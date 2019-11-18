@@ -61,7 +61,7 @@ export class TrackerComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.trackerService.unsubscribe();
-        if (this.subscription !== null) {
+        if (this.subscription) {
             this.subscription.unsubscribe();
         }
     }
