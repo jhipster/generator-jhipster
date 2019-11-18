@@ -446,7 +446,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/csrf.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/form/form-util.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access-service.ts`,
