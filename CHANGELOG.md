@@ -1,4 +1,16 @@
-# Latest: v6.0.3
+# Latest: v6.0.4
+
+## Bug fixes:
+  - Authorized some relationships from & to the User entity:
+    - This is in the "bug fix" section as the JDL was way too permissive and let some invalid relationships pass.
+    - For Many-to-One cases:
+      - if the User entity has the injected field without the skipUserMgt option set, it should fail
+    - For Many-to-Many cases:
+      - if there is an unidirectional relationship to the User, it should not fail as this is a valid case
+
+---
+
+# v6.0.3
 
 ## What's new:
   - Improved error message when having a unidirectional Many-to-Many relationship
