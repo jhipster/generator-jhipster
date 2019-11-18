@@ -305,6 +305,26 @@ describe('JSONToJDLEntityConverter', () => {
         });
       });
     });
+    context('when parsing relationships including the User entity', () => {
+      let entity;
+
+      before(() => {
+        entity = {
+          TestEntity: JSON.parse(
+            fs
+              .readFileSync(
+                path.join('test', 'test_files', 'json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'),
+                'utf-8'
+              )
+              .toString()
+          )
+        };
+      });
+
+      it('should not fail', () => {
+        expect(() => convertEntitiesToJDL(entity)).not.to.throw();
+      });
+    });
   });
 });
 

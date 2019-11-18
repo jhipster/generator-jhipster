@@ -421,59 +421,6 @@ describe('BusinessErrorChecker', () => {
     });
   });
   describe('#checkForRelationshipErrors', () => {
-    context('when having User as source entity', () => {
-      let checker;
-      let jdlObject;
-
-      before(() => {
-        jdlObject = new ValidatedJDLObject();
-        const userEntity = new JDLEntity({
-          name: 'User'
-        });
-        const otherEntity = new JDLEntity({
-          name: 'Valid'
-        });
-        const relationship = new JDLRelationship({
-          from: userEntity.name,
-          to: otherEntity.name,
-          type: RelationshipTypes.ONE_TO_ONE,
-          injectedFieldInFrom: 'other'
-        });
-        jdlObject.addEntity(userEntity);
-        jdlObject.addEntity(otherEntity);
-        jdlObject.addRelationship(relationship);
-        checker = new BusinessErrorChecker(jdlObject);
-      });
-
-      context('when skipUserManagement flag is not set', () => {
-        it('fails', () => {
-          expect(() => {
-            checker.checkForRelationshipErrors();
-          }).to.throw(
-            new RegExp(
-              "Relationships from the User entity is not supported in the declaration between 'User' and " +
-                "'Valid'. You can have this by using the 'skipUserManagement' option."
-            )
-          );
-        });
-      });
-      context('when skipUserManagement flag is set', () => {
-        before(() => {
-          jdlObject.addOption(
-            new JDLUnaryOption({
-              name: UnaryOptions.SKIP_USER_MANAGEMENT
-            })
-          );
-          checker = new BusinessErrorChecker(jdlObject);
-        });
-
-        it('does not fail', () => {
-          expect(() => {
-            checker.checkForRelationshipErrors();
-          }).not.to.throw();
-        });
-      });
-    });
     context('when the source entity is missing', () => {
       let checker;
 
