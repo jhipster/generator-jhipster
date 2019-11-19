@@ -131,6 +131,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://vpngorilla.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/vpngorilla.png">
