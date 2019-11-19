@@ -56,6 +56,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 [![matchbankerNo][matchbanker-no-image]][matchbanker-no-url]
 
+[![VPNGorilla][vpngorilla-image]][vpngorilla-url]
+
 **Thank you to all our backers!**
 
 [![Backers][backers-image]][backers-url]
@@ -161,6 +163,8 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [matchbanker-pl-url]: https://matchbanker.pl/
 [matchbanker-no-image]: https://www.jhipster.tech/images/open-collective/matchbanker.png
 [matchbanker-no-url]: https://matchbanker.no/
+[vpngorilla-image]: https://www.jhipster.tech/images/open-collective/vpngorilla.png
+[vpngorilla-url]: https://vpngorilla.com/
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat
