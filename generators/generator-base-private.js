@@ -991,68 +991,95 @@ module.exports = class extends Generator {
      * @param {Array|Object} relationships - array of relationships
      * @param {string} entityInstance - entity instance
      * @param {string} dto - dto
-     * @returns {{queries: Array, variables: Array, hasManyToMany: boolean}}
+     * @returns {{queries: Array, variables: Array, rxjsMapIsUsed: boolean, selectableEntities: Array, selectableManyToManyEntities: Array}}
      */
     generateEntityQueries(relationships, entityInstance, dto) {
         const queries = [];
         const variables = [];
-        let hasManyToMany = false;
+        const selectableEntities = [];
+        const selectableManyToManyEntities = [];
+        let rxjsMapIsUsed = false;
         relationships.forEach(relationship => {
+            const relationshipType = relationship.relationshipType;
+            const ownerSide = relationship.ownerSide;
+            const otherEntityName = relationship.otherEntityName;
+            const selectableEntityType = `I${relationship.otherEntityAngularName}`;
             let query;
             let variableName;
             let filter;
-            hasManyToMany = hasManyToMany || relationship.relationshipType === 'many-to-many';
+            if (relationshipType === 'many-to-many' && ownerSide === true && !selectableManyToManyEntities.includes(selectableEntityType)) {
+                selectableManyToManyEntities.push(selectableEntityType);
+            }
             if (
-                relationship.relationshipType === 'one-to-one' &&
-                relationship.ownerSide === true &&
-                relationship.otherEntityName !== 'user'
+                relationshipType === 'many-to-one' ||
+                (relationshipType === 'one-to-one' && ownerSide === true) ||
+                (relationshipType === 'many-to-many' && ownerSide === true)
             ) {
-                variableName = relationship.relationshipFieldNamePlural.toLowerCase();
-                if (variableName === entityInstance) {
-                    variableName += 'Collection';
+                if (!selectableEntities.includes(selectableEntityType)) {
+                    selectableEntities.push(selectableEntityType);
                 }
-                const relationshipFieldName = `${relationship.relationshipFieldName}`;
-                const relationshipFieldNameIdCheck =
-                    dto === 'no'
-                        ? `!this.editForm.get('${relationshipFieldName}').value || !this.editForm.get('${relationshipFieldName}').value.id`
-                        : `!this.editForm.get('${relationshipFieldName}Id').value`;
+                if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName !== 'user') {
+                    rxjsMapIsUsed = true;
+                    variableName = relationship.relationshipFieldNamePlural.toLowerCase();
+                    if (variableName === entityInstance) {
+                        variableName += 'Collection';
+                    }
+                    const relationshipFieldName = `${relationship.relationshipFieldName}`;
+                    const relationshipFieldNameIdCheck =
+                        dto === 'no'
+                            ? `!${entityInstance}.${relationshipFieldName} || !${entityInstance}.${relationshipFieldName}.id`
+                            : `!${entityInstance}.${relationshipFieldName}Id`;
 
-                filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
-                if (this.jpaMetamodelFiltering) {
-                    filter = `'${relationship.otherEntityRelationshipName}Id.specified': 'false'`;
-                }
+                    filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
+                    if (relationship.jpaMetamodelFiltering) {
+                        filter = `'${relationship.otherEntityRelationshipName}Id.specified': 'false'`;
+                    }
 
-                query = `this.${relationship.otherEntityName}Service
-            .query({${filter}}).subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res.body;
+                    query = `
+                        this.${relationship.otherEntityName}Service
+                            .query({${filter}})
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
+                                return res.body ? res.body : [];
+                            }))
+                            .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
+                                if (${relationshipFieldNameIdCheck}) {
+                                    this.${variableName} = resBody;
+                                } else {
+                                    this.${relationship.otherEntityName}Service
+                                        .find(${entityInstance}.${relationshipFieldName}${dto !== 'no' ? 'Id' : '.id'})
+                                        .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
+                                            return subRes.body ? [subRes.body].concat(resBody) : resBody;
+                                        }))
+                                        .subscribe((concatRes: I${relationship.otherEntityAngularName}[]) => {
+                                            this.${variableName} = concatRes;
+                                        });
+                                }
+                            });`;
                 } else {
-                    this.${relationship.otherEntityName}Service
-                        .find(this.editForm.get('${relationshipFieldName}${dto !== 'no' ? 'Id' : ''}').value${
-                    dto === 'no' ? '.id' : ''
-                }).subscribe((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) =>
-                            this.${variableName} = [subRes.body].concat(res.body)
-                        , (subRes: HttpErrorResponse) => this.onError(subRes.message));
+                    rxjsMapIsUsed = true;
+                    variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
+                    if (variableName === entityInstance) {
+                        variableName += 'Collection';
+                    }
+                    query = `
+                        this.${relationship.otherEntityName}Service.query()
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
+                                return res.body ? res.body : [];
+                            }))
+                            .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => this.${variableName} = resBody);`;
                 }
-            }, (res: HttpErrorResponse) => this.onError(res.message));`;
-            } else if (relationship.relationshipType !== 'one-to-many') {
-                variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
-                if (variableName === entityInstance) {
-                    variableName += 'Collection';
-                }
-                query = `this.${relationship.otherEntityName}Service.query().subscribe(
-                (res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body,
-                (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
-                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[];`);
+                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[] = [];`);
             }
         });
         return {
             queries,
             variables,
-            hasManyToMany
+            rxjsMapIsUsed,
+            selectableEntities,
+            selectableManyToManyEntities
         };
     }
 
@@ -1079,6 +1106,19 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Find key type for Typescript
+     *
+     * @param {string} pkType - primary key type in database
+     * @returns {string} primary key type in Typescript
+     */
+    getTypescriptKeyType(pkType) {
+        if (pkType === 'String' || pkType === 'UUID') {
+            return 'string';
+        }
+        return 'number';
+    }
+
+    /**
      * Generate Entity Client Field Declarations
      *
      * @param {string} pkType - type of primary key
@@ -1089,12 +1129,7 @@ module.exports = class extends Generator {
      */
     generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
         const variablesWithTypes = [];
-        let tsKeyType;
-        if (pkType === 'String' || pkType === 'UUID') {
-            tsKeyType = 'string';
-        } else {
-            tsKeyType = 'number';
-        }
+        const tsKeyType = this.getTypescriptKeyType(pkType);
         variablesWithTypes.push(`id?: ${tsKeyType}`);
         fields.forEach(field => {
             const fieldType = field.fieldType;

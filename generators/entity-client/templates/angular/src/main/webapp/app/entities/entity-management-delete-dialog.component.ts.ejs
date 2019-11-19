@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const tsKeyType = getTypescriptKeyType(getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships));
 _%>
 import { Component } from '@angular/core';
 
@@ -32,7 +32,7 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
 })
 export class <%= entityAngularName %>DeleteDialogComponent {
 
-    <%= entityInstance %>: I<%= entityAngularName %>;
+    <%= entityInstance %>?: I<%= entityAngularName %>;
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
@@ -41,17 +41,14 @@ export class <%= entityAngularName %>DeleteDialogComponent {
     ) {
     }
 
-    clear() {
-        this.activeModal.dismiss('cancel');
+    clear(): void {
+        this.activeModal.dismiss();
     }
 
-    confirmDelete(id: <% if (primaryKeyType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %>) {
+    confirmDelete(id: <%= tsKeyType %>): void {
         this.<%= entityInstance %>Service.delete(id).subscribe(() => {
-            this.eventManager.broadcast({
-                name: '<%= entityInstance %>ListModification',
-                content: 'Deleted an <%= entityInstance %>'
-            });
-            this.activeModal.dismiss(true);
+            this.eventManager.broadcast('<%= entityInstance %>ListModification');
+            this.activeModal.close();
         });
     }
 }

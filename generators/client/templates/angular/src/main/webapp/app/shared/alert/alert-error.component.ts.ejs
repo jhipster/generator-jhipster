@@ -35,13 +35,19 @@ import { Subscription } from 'rxjs';
         </div>`
 })
 export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
-
-    alerts: any[];
-    cleanHttpErrorListener: Subscription;
+    alerts: JhiAlert[];
+    errorListener: Subscription;
+    httpErrorListener: Subscription;
+  
     constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
         this.alerts = [];
 
-        this.cleanHttpErrorListener = eventManager.subscribe('<%=angularAppName%>.httpError', (response) => {
+        this.errorListener = eventManager.subscribe('<%=angularAppName%>.error', response => {
+            const errorResponse = response.content;
+            this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
+        });
+
+        this.httpErrorListener = eventManager.subscribe('<%=angularAppName%>.httpError', (response) => {
             let i;
             const httpErrorResponse = response.content;
             switch (httpErrorResponse.status) {
@@ -114,10 +120,13 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.cleanHttpErrorListener !== undefined && this.cleanHttpErrorListener !== null) {
-            this.eventManager.destroy(this.cleanHttpErrorListener);
-            this.alerts = [];
+        if (this.errorListener) {
+            this.eventManager.destroy(this.errorListener);
         }
+        if (this.httpErrorListener) {
+            this.eventManager.destroy(this.httpErrorListener);
+        }
+        this.alerts = [];
     }
 
     addErrorAlert(message<% if (enableTranslation) { %>, key?, data?<% } %>) {

@@ -16,6 +16,18 @@
 -%>
 import { HttpParams } from '@angular/common/http';
 
+export interface IPagination {
+    page: number;
+    size: number;
+    sort: string[];
+}
+
+export interface ISearch {
+    query: string;
+}
+
+export interface IPaginationWithSearch extends IPagination, ISearch {}
+
 export const createRequestOption = (req?: any): HttpParams => {
     let options: HttpParams = new HttpParams();
     if (req) {
@@ -25,7 +37,7 @@ export const createRequestOption = (req?: any): HttpParams => {
             }
         });
         if (req.sort) {
-            req.sort.forEach((val) => {
+            req.sort.forEach((val: string) => {
                 options = options.append('sort', val);
             });
         }
