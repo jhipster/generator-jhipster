@@ -24,19 +24,14 @@ import { <%= entityAngularName %>Component } from './<%= entityFileName %>.compo
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
-import { <%= entityAngularName %>DeletePopupComponent, <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
-import { <%= entityInstance %>Route, <%= entityInstance %>PopupRoute } from './<%= entityFileName %>.route';
-
-const ENTITY_STATES = [
-    ...<%= entityInstance %>Route,
-    ...<%= entityInstance %>PopupRoute,
-];
+import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
 
 @NgModule({
     imports: [
         <%= angularXAppName %>SharedModule,
-        RouterModule.forChild(ENTITY_STATES)
+        RouterModule.forChild(<%= entityInstance %>Route)
     ],
     declarations: [
         <%= entityAngularName %>Component,
@@ -44,7 +39,6 @@ const ENTITY_STATES = [
         <%_ if (!readOnly) { _%>
         <%= entityAngularName %>UpdateComponent,
         <%= entityAngularName %>DeleteDialogComponent,
-        <%= entityAngularName %>DeletePopupComponent,
         <%_ } %>
     ],
     entryComponents: [
