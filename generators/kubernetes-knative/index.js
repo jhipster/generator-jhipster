@@ -23,7 +23,7 @@ const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
-const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants } = require('../kubernetes-base');
+const { checkHelm, checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseDockerGenerator {
@@ -35,6 +35,7 @@ module.exports = class extends BaseDockerGenerator {
             },
             ...super.initializing,
             checkKubernetes,
+            checkHelm,
             checkKnative() {
                 if (this.skipChecks) return;
                 const done = this.async();
@@ -63,7 +64,6 @@ module.exports = class extends BaseDockerGenerator {
 
     get prompting() {
         return {
-            // askForApplicationType: prompts.askForApplicationType,
             askForPath: prompts.askForPath,
             askForApps: prompts.askForApps,
             askForGeneratorType: prompts.askForGeneratorType,
