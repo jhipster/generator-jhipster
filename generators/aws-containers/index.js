@@ -722,7 +722,6 @@ module.exports = class extends BaseGenerator {
             },
             saveConf() {
                 delete this.aws.dockerLogin;
-                // eslint-disable-next-line no-undef
                 this._writeFileErrorHandler(this);
             }
         };

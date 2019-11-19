@@ -34,6 +34,9 @@
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
         protected eventManager: JhiEventManager,
+        <%_ if (!readOnly) { _%>
+        protected modalService: NgbModal,
+        <%_ } _%>
         protected parseLinks: JhiParseLinks,
         <%_ if (searchEngine === 'elasticsearch') { _%>
         protected activatedRoute: ActivatedRoute,

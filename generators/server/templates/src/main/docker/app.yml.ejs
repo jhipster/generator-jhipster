@@ -80,7 +80,7 @@ services:
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
                 <%_ } _%>
             <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-            - JHIPSTER_SLEEP=90 # gives time for mariadb server to start
+            - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
             <%_ } else { _%>
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
             <%_ } _%>

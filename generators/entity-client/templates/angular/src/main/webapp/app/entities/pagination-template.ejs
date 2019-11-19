@@ -42,7 +42,10 @@
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
         protected router: Router,
-        protected eventManager: JhiEventManager
+        protected eventManager: JhiEventManager,
+        <%_ if (!readOnly) { _%>
+        protected modalService: NgbModal
+        <%_ } _%>
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
         this.itemsPerPage = ITEMS_PER_PAGE;

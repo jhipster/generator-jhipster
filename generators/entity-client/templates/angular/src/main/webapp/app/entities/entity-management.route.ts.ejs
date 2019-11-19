@@ -31,13 +31,6 @@ import { <%= entityAngularName %>Component } from './<%= entityFileName %>.compo
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
-<%_ if (entityFileName.length <= 30) { _%>
-import { <%= entityAngularName %>DeletePopupComponent } from './<%= entityFileName %>-delete-dialog.component';
-<%_ } else { _%>
-import {
-    <%= entityAngularName %>DeletePopupComponent
-} from './<%= entityFileName %>-delete-dialog.component';
-<%_ } _%>
 <%_ } _%>
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
@@ -113,23 +106,5 @@ export const <%= entityInstance %>Route: Routes = [
         },
         canActivate: [UserRouteAccessService]
     },
-    <%_ } _%>
-];
-
-export const <%= entityInstance %>PopupRoute: Routes = [
-    <%_ if (!readOnly) { _%>
-    {
-        path: ':id/delete',
-        component: <%= entityAngularName %>DeletePopupComponent,
-        resolve: {
-            <%= entityInstance %>: <%= entityAngularName %>Resolve
-        },
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
-        },
-        canActivate: [UserRouteAccessService],
-        outlet: 'popup'
-    }
     <%_ } _%>
 ];

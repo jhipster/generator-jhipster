@@ -35,7 +35,6 @@ if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity FieldTestServiceClassEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
@@ -56,7 +55,6 @@ elif [[ "$JHI_ENTITY" == "micro" ]]; then
     moveEntity FieldTestServiceClassEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHI_ENTITY" == "uaa" ]]; then
@@ -65,7 +63,6 @@ elif [[ "$JHI_ENTITY" == "uaa" ]]; then
     moveEntity FieldTestServiceClassEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHI_ENTITY" == "sqllight" ]]; then
@@ -85,7 +82,6 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity FieldTestServiceClassEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
     moveEntity TestEntity
@@ -93,7 +89,6 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity TestServiceClass
     moveEntity TestServiceImpl
     moveEntity TestInfiniteScroll
-    moveEntity TestPager
     moveEntity TestPagination
     moveEntity TestManyToOne
     moveEntity TestManyToMany
@@ -131,7 +126,6 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity FieldTestServiceClassEntity
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
-    moveEntity FieldTestPagerEntity
     moveEntity FieldTestPaginationEntity
 
     moveEntity EntityWithDTO

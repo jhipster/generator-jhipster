@@ -62,22 +62,23 @@ module.exports = class extends BaseGenerator {
         }
 
         this.log(chalk.bold('Heroku configuration is starting'));
-        this.env.options.appPath = this.config.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.baseName = this.config.get('baseName');
-        this.packageName = this.config.get('packageName');
-        this.packageFolder = this.config.get('packageFolder');
-        this.cacheProvider = this.config.get('cacheProvider') || this.config.get('hibernateCache') || 'no';
-        this.enableHibernateCache = this.config.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-        this.databaseType = this.config.get('databaseType');
-        this.prodDatabaseType = this.config.get('prodDatabaseType');
-        this.searchEngine = this.config.get('searchEngine');
+        const configuration = this.getAllJhipsterConfig(this, true);
+        this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+        this.baseName = configuration.get('baseName');
+        this.packageName = configuration.get('packageName');
+        this.packageFolder = configuration.get('packageFolder');
+        this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+        this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
+        this.databaseType = configuration.get('databaseType');
+        this.prodDatabaseType = configuration.get('prodDatabaseType');
+        this.searchEngine = configuration.get('searchEngine');
         this.angularAppName = this.getAngularAppName();
-        this.buildTool = this.config.get('buildTool');
-        this.applicationType = this.config.get('applicationType');
-        this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-        this.herokuAppName = this.config.get('herokuAppName');
+        this.buildTool = configuration.get('buildTool');
+        this.applicationType = configuration.get('applicationType');
+        this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
+        this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
-        this.herokuDeployType = this.config.get('herokuDeployType');
+        this.herokuDeployType = configuration.get('herokuDeployType');
     }
 
     get prompting() {

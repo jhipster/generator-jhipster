@@ -68,9 +68,7 @@ spring:
     devtools:
         restart:
             enabled: true
-            <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-            additional-exclude: .h2.server.properties
-            <%_ } _%>
+            additional-exclude: static/**<% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>,.h2.server.properties<% } %>
         livereload:
             enabled: false # we use Webpack dev server + BrowserSync for livereload
     jackson:
@@ -145,8 +143,10 @@ spring:
             enabled: false
     <%_ } _%>
     jpa:
-        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') { _%>
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        <%_ if (devDatabaseType === 'mysql') { _%>
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        <%_ } else if (devDatabaseType === 'mariadb') { _%>
+        database-platform: org.hibernate.dialect.MariaDB103Dialect
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
         <%_ } else if (devDatabaseType === 'oracle') { _%>

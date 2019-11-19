@@ -36,7 +36,7 @@ fi
 if [ -f "mvnw" ]; then
     ./mvnw -ntp checkstyle:check
 elif [ -f "gradlew" ]; then
-    ./gradlew checkstyleNohttp -x webpack
+    ./gradlew checkstyleNohttp $JHI_GRADLE_EXCLUDE_WEBPACK
 fi
 
 #-------------------------------------------------------------------------------

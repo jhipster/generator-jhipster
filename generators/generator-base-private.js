@@ -545,7 +545,6 @@ module.exports = class extends Generator {
      */
     isNumber(input) {
         if (isNaN(this.filterNumber(input))) {
-            // eslint-disable-line
             return false;
         }
         return true;
@@ -557,7 +556,6 @@ module.exports = class extends Generator {
      */
     isSignedNumber(input) {
         if (isNaN(this.filterNumber(input, true))) {
-            // eslint-disable-line
             return false;
         }
         return true;
@@ -569,7 +567,6 @@ module.exports = class extends Generator {
      */
     isSignedDecimalNumber(input) {
         if (isNaN(this.filterNumber(input, true, true))) {
-            // eslint-disable-line
             return false;
         }
         return true;
