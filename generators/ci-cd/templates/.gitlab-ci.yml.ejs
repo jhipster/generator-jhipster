@@ -134,11 +134,11 @@ gradle-package:
 #    stage: release
 #    variables:
 #        REGISTRY_URL: registry.gitlab.com
-#        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+#        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA
 #    dependencies:
 #        - gradle-package
 #    script:
-#        - ./gradlew jib -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password=$CI_BUILD_TOKEN
+#        - ./gradlew jib -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username="gitlab-ci-token"  -Djib.to.auth.password=$CI_BUILD_TOKEN
 
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
@@ -234,11 +234,11 @@ maven-package:
 #    stage: release
 #    variables:
 #        REGISTRY_URL: registry.gitlab.com
-#        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+#        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA
 #    dependencies:
 #        - maven-package
 #    script:
-#        - ./mvnw -ntp compile jib:build -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
+#        - ./mvnw -ntp compile jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
 
 <%_ if (cicdIntegrations.includes('heroku')) { _%>
 deploy-to-production:
