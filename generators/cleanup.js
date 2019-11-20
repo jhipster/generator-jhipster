@@ -214,6 +214,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     }
     if (generator.isJhipsterVersionLessThan('6.5.2')) {
         generator.removeFile(`${testDir}service/mapper/UserMapperIT.java`);
+        generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`);
+        generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`);
         generator.removeFile(`${testDir}web/rest/ClientForwardControllerIT.java`);
     }
 }
