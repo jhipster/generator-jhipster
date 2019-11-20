@@ -23,7 +23,7 @@ const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
 const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
-const { checkHelm, checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants } = require('../kubernetes-base');
+const { checkHelm, checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants, setupHelmConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseDockerGenerator {
@@ -58,7 +58,8 @@ module.exports = class extends BaseDockerGenerator {
                 this.deploymentApplicationType = 'microservice';
                 this.istio = true;
             },
-            setupKubernetesConstants
+            setupKubernetesConstants,
+            setupHelmConstants
         };
     }
 

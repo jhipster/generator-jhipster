@@ -136,7 +136,7 @@ Example:
         alias: 'k8s-helm',
         desc: 'Deploy the current application to Kubernetes using Helm package manager'
     },
-    'k8s-knative': {
+    'kubernetes-knative': {
         alias: 'knative',
         desc: 'Deploy the current application to Kubernetes using knative constructs'
     },

@@ -50,15 +50,19 @@ function checkHelm() {
     if (this.skipChecks) return;
     const done = this.async();
 
-    shelljs.exec('helm version --client | grep -E "v2\\.1[2-9]{1,2}\\.[0-9]{1,3}"', { silent: true }, (code, stdout, stderr) => {
-        if (stderr || code !== 0) {
-            this.log(
-                `${chalk.yellow.bold('WARNING!')} helm 2.12.x or later is not installed on your computer.\n` +
-                    'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
-            );
+    shelljs.exec(
+        'helm version --client | grep -E "(v2\\.1[2-9]{1,2}\\.[0-9]{1,3})|(v3\\.[0-9]{1,2}\\.[0-9]{1,3})"',
+        { silent: true },
+        (code, stdout, stderr) => {
+            if (stderr || code !== 0) {
+                this.log(
+                    `${chalk.yellow.bold('WARNING!')} helm 2.12.x or later is not installed on your computer.\n` +
+                        'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
+                );
+            }
+            done();
         }
-        done();
-    });
+    );
 }
 
 function loadConfig() {

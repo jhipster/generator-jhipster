@@ -106,7 +106,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -142,7 +142,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -178,7 +178,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -218,7 +218,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -252,7 +252,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -291,7 +291,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -339,7 +339,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -377,7 +377,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -415,7 +415,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -451,7 +451,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -489,7 +489,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -533,7 +533,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -574,7 +574,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -617,7 +617,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -669,7 +669,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',
@@ -710,7 +710,7 @@ describe('JHipster Knative Sub Generator', () => {
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, './templates/compose/'), dir);
                     })
-                    .withOptions({skipChecks: true})
+                    .withOptions({ skipChecks: true })
                     .withPrompts({
                         deploymentApplicationType: 'microservice',
                         directoryPath: './',

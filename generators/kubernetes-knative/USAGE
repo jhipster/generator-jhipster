@@ -2,4 +2,4 @@ Description:
     Creates all required Kubernetes deployment and Knative configuration for the selected applications.
 
 Example:
-    jhipster k8s-knative
+    jhipster knative
