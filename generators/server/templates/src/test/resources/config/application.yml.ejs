@@ -213,13 +213,13 @@ kafka:
     consumer:
         key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        bootstrap.servers: ${kafkaBootstrapServers}
+        bootstrap.servers: localhost:9092
         group.id: <%= dasherizedBaseName %>
         auto.offset.reset: earliest
     producer:
         key.serializer: org.apache.kafka.common.serialization.StringSerializer
         value.serializer: org.apache.kafka.common.serialization.StringSerializer
-        bootstrap.servers: ${kafkaBootstrapServers}
+        bootstrap.servers: localhost:9092
 <%_ } _%>
 
 # ===================================================================

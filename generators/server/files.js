@@ -1077,16 +1077,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/service/KafkaConsumer.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`
-                },
-                {
-                    file: 'package/service/KafkaProducer.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`
-                },
-                {
                     file: 'package/config/KafkaProperties.java',
                     renameTo: generator => `${generator.javaDir}config/KafkaProperties.java`
                 }
