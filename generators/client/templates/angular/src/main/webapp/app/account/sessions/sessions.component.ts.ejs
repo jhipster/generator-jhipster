@@ -28,7 +28,7 @@ import { Account } from 'app/core/user/account.model';
     templateUrl: './sessions.component.html'
 })
 export class SessionsComponent implements OnInit {
-    account: Account | null = null;
+    account?: Account;
     error = false;
     success = false;
     sessions: Session[] = [];
