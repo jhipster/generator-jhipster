@@ -463,28 +463,28 @@ describe('JHipster Kubernetes Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent(expectedFiles.msmysql, /PersistentVolumeClaim/);
-            assert.fileContent(expectedFiles.msmysql, /claimName:/);
+            assert.fileContent(expectedFiles.msmysql[1], /PersistentVolumeClaim/);
+            assert.fileContent(expectedFiles.msmysql[1], /claimName:/);
         });
 
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
-            assert.fileContent(expectedFiles.mspsql, /PersistentVolumeClaim/);
-            assert.fileContent(expectedFiles.mspsql, /claimName:/);
+            assert.fileContent(expectedFiles.mspsql[1], /PersistentVolumeClaim/);
+            assert.fileContent(expectedFiles.mspsql[1], /claimName:/);
         });
         it('creates expected mongodb files', () => {
             assert.file(expectedFiles.msmongodb);
-            assert.fileContent(expectedFiles.msmongodb, /volumeClaimTemplates:/);
+            assert.fileContent(expectedFiles.msmongodb[1], /volumeClaimTemplates:/);
         });
         it('creates expected mariadb files', () => {
             assert.file(expectedFiles.msmariadb);
-            assert.fileContent(expectedFiles.msmariadb, /PersistentVolumeClaim/);
-            assert.fileContent(expectedFiles.msmariadb, /claimName:/);
+            assert.fileContent(expectedFiles.msmariadb[1], /PersistentVolumeClaim/);
+            assert.fileContent(expectedFiles.msmariadb[1], /claimName:/);
         });
         it('creates expected mssql files', () => {
             assert.file(expectedFiles.msmssqldb);
-            assert.fileContent(expectedFiles.msmssqldb, /PersistentVolumeClaim/);
-            assert.fileContent(expectedFiles.msmssqldb, /claimName:/);
+            assert.fileContent(expectedFiles.msmssqldb[1], /PersistentVolumeClaim/);
+            assert.fileContent(expectedFiles.msmssqldb[1], /claimName:/);
         });
 
         it('create the apply script', () => {
