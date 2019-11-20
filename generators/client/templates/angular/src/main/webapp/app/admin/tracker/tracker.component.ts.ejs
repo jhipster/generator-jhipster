@@ -28,7 +28,7 @@ import { TrackerActivity } from 'app/core/tracker/tracker-activity.model';
 })
 export class TrackerComponent implements OnInit, OnDestroy {
     activities: TrackerActivity[] = [];
-    subscription: Subscription | null = null;
+    subscription?: Subscription;
 
     constructor(
         private trackerService: TrackerService

@@ -35,7 +35,7 @@ import { TrackerService } from '../tracker/tracker.service';
 export class AccountService  {
     private userIdentity: Account | null = null;
     private authenticationState = new Subject<Account | null>();
-    private accountCache$: Observable<Account | null> | null = null;
+    private accountCache$?: Observable<Account | null>;
 
     constructor(
         <%_ if (enableTranslation) { _%>
@@ -76,7 +76,7 @@ export class AccountService  {
     }
 
     identity(force?: boolean): Observable<Account | null> {
-        if (this.accountCache$ == null || force || !this.isAuthenticated()) {
+        if (!this.accountCache$ || force || !this.isAuthenticated()) {
             this.accountCache$ = this.fetch().pipe(
               catchError(
                 () => {
