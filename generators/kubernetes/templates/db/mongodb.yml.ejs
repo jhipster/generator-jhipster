@@ -16,6 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mongodb-pvc
+  namespace: <%= kubernetesNamespace %>
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  <%_ if (kubernetesStorageClassName !== '') { _%>
+  storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+---
+<%_ } _%>
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: ConfigMap
 metadata:
@@ -311,6 +328,10 @@ spec:
             name: <%= app.baseName.toLowerCase() %>-mongodb-init
         - name: configdir
           emptyDir: {}
+<%_ if (!kubernetesUseDynamicStorage) { _%>
+        - name: datadir
+          emptyDir: {}
+<%_ } else { _%>
   volumeClaimTemplates:
     - metadata:
         name: datadir
@@ -319,6 +340,10 @@ spec:
         resources:
           requests:
             storage: "1Gi"
+  <%_ if (kubernetesStorageClassName !== '') { _%>
+        storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+<%_ } _%>
 ---
 # Headless service for DNS record
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>

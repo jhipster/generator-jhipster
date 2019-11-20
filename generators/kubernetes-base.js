@@ -69,6 +69,8 @@ function loadConfig() {
     this.ingressDomain = this.config.get('ingressDomain');
     this.istio = this.config.get('istio');
     this.dbRandomPassword = crypto.randomBytes(30).toString('hex');
+    this.kubernetesUseDynamicStorage = this.config.get('kubernetesUseDynamicStorage');
+    this.kubernetesStorageClassName = this.config.get('kubernetesStorageClassName');
 }
 
 function saveConfig() {
@@ -82,6 +84,8 @@ function saveConfig() {
         dockerPushCommand: this.dockerPushCommand,
         kubernetesNamespace: this.kubernetesNamespace,
         kubernetesServiceType: this.kubernetesServiceType,
+        kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
+        kubernetesStorageClassName: this.kubernetesStorageClassName,
         ingressType: this.ingressType,
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring,

@@ -16,6 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mariadb-pvc
+  namespace: <%= kubernetesNamespace %>
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  <%_ if (kubernetesStorageClassName !== '') { _%>
+  storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+---
+<%_ } _%>
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
@@ -48,7 +65,12 @@ spec:
     spec:
       volumes:
       - name: data
+        <%_ if (kubernetesUseDynamicStorage) { _%>
+        persistentVolumeClaim:
+          claimName: <%= app.baseName.toLowerCase() %>-mariadb-pvc
+        <%_ } else { _%>
         emptyDir: {}
+        <%_ } _%>
       containers:
       - name: mariadb
         image: <%= DOCKER_MARIADB %>
