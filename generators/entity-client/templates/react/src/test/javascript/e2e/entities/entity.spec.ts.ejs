@@ -170,7 +170,6 @@ describe('<%= entityClass %> e2e test', () => {
         await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
         const nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
         await create<%= entityClass %>();
-        await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
 
         await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
         expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
