@@ -73,8 +73,6 @@ describe('<%= entityClass %> e2e test', () => {
         await signInPage.loginWithOAuth('admin', 'admin');
         <%_ } _%>
         await waitUntilDisplayed(navBarPage.entityMenu);
-        await waitUntilDisplayed(navBarPage.adminMenu);
-        await waitUntilDisplayed(navBarPage.accountMenu);
     });
 
     it('should load <%= entityClassPlural %>', async () => {

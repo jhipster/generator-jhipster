@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 
 import { IRootState } from 'app/shared/reducers';
@@ -28,7 +28,7 @@ export interface ILogoutProps extends StateProps, DispatchProps {
 }
 
 export const Logout = (props: ILogoutProps) => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     props.logout();
     const logoutUrl = props.logoutUrl;
     if (logoutUrl) {
