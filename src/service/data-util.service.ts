@@ -17,6 +17,16 @@
  limitations under the License.
  */
 import { ElementRef, Injectable } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
+import { FormGroup } from '@angular/forms';
+
+export type JhiFileLoadErrorType = 'not.image' | 'could.not.extract';
+
+export interface JhiFileLoadError {
+    message: string;
+    key: JhiFileLoadErrorType;
+    params?: any;
+}
 
 /**
  * An utility service for data.
@@ -30,7 +40,7 @@ export class JhiDataUtils {
     /**
      * Method to abbreviate the text given
      */
-    abbreviate(text: string, append = '...') {
+    abbreviate(text: string, append = '...'): string {
         if (text.length < 30) {
             return text;
         }
@@ -40,14 +50,14 @@ export class JhiDataUtils {
     /**
      * Method to find the byte size of the string provides
      */
-    byteSize(base64String: string) {
+    byteSize(base64String: string): string {
         return this.formatAsBytes(this.size(base64String));
     }
 
     /**
      * Method to open file
      */
-    openFile(contentType: string, data: string) {
+    openFile(contentType: string, data: string): void {
         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             // To support IE and Edge
             const byteCharacters = atob(data);
@@ -75,10 +85,10 @@ export class JhiDataUtils {
     /**
      * Method to convert the file to base64
      */
-    toBase64(file: File, cb: Function) {
+    toBase64(file: File, cb: Function): void {
         const fileReader: FileReader = new FileReader();
         fileReader.onload = function(e: any) {
-            const base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
+            const base64Data: string = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
             cb(base64Data);
         };
         fileReader.readAsDataURL(file);
@@ -87,7 +97,7 @@ export class JhiDataUtils {
     /**
      * Method to clear the input
      */
-    clearInputImage(entity: any, elementRef: ElementRef, field: string, fieldContentType: string, idInput: string) {
+    clearInputImage(entity: any, elementRef: ElementRef, field: string, fieldContentType: string, idInput: string): void {
         if (entity && field && fieldContentType) {
             if (Object.prototype.hasOwnProperty.call(entity, field)) {
                 entity[field] = null;
@@ -131,9 +141,54 @@ export class JhiDataUtils {
     }
 
     /**
+     * Sets the base 64 data & file type of the 1st file on the event (event.target.files[0]) in the passed entity object
+     * and returns an observable.
+     *
+     * @param event the object containing the file (at event.target.files[0])
+     * @param editForm the form group where the input field is located
+     * @param field the field name to set the file's 'base 64 data' on
+     * @param isImage boolean representing if the file represented by the event is an image
+     * @returns an observable that loads file to form field and completes if sussessful
+     *          or returns error as JhiFileLoadError on failure
+     */
+    loadFileToForm(event: Event, editForm: FormGroup, field: string, isImage: boolean): Observable<void> {
+        return new Observable((observer: Observer<void>) => {
+            const eventTarget: HTMLInputElement = event.target as HTMLInputElement;
+            if (eventTarget.files && eventTarget.files[0]) {
+                const file: File = eventTarget.files[0];
+                if (isImage && !file.type.startsWith('image/')) {
+                    const error: JhiFileLoadError = {
+                        message: `File was expected to be an image but was found to be ${file.type}`,
+                        key: 'not.image',
+                        params: { fileType: file.type }
+                    };
+                    observer.error(error);
+                } else {
+                    const fieldContentType: string = field + 'ContentType';
+                    this.toBase64(file, (base64Data: string) => {
+                        editForm.patchValue({
+                            [field]: base64Data,
+                            [fieldContentType]: file.type
+                        });
+                        observer.next();
+                        observer.complete();
+                    });
+                }
+            } else {
+                const error: JhiFileLoadError = {
+                    message: `Base64 data was not set as file could not be extracted from passed parameter: ${event}`,
+                    key: 'could.not.extract',
+                    params: { event }
+                };
+                observer.error(error);
+            }
+        });
+    }
+
+    /**
      * Method to download file
      */
-    downloadFile(contentType: string, data: string, fileName: string) {
+    downloadFile(contentType: string, data: string, fileName: string): void {
         const byteCharacters = atob(data);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
