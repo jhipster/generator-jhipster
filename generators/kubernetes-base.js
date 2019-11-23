@@ -68,7 +68,7 @@ function loadConfig() {
     this.ingressType = this.config.get('ingressType');
     this.ingressDomain = this.config.get('ingressDomain');
     this.istio = this.config.get('istio');
-    this.dbRandomPassword = crypto.randomBytes(128).toString('hex');
+    this.dbRandomPassword = crypto.randomBytes(30).toString('hex');
 }
 
 function saveConfig() {
