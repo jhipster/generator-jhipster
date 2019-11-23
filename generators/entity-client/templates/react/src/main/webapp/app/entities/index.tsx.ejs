@@ -32,15 +32,13 @@ const Routes = ({ match }) => (
   <>
     <Switch>
       <%_ if (!readOnly) { _%>
+      <ErrorBoundaryRoute exact path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
       <ErrorBoundaryRoute exact path={`${match.url}/new`} component={<%= entityReactName %>Update} />
       <ErrorBoundaryRoute exact path={`${match.url}/:id/edit`} component={<%= entityReactName %>Update} />
       <%_ } _%>
       <ErrorBoundaryRoute exact path={`${match.url}/:id`} component={<%= entityReactName %>Detail}  />
       <ErrorBoundaryRoute path={match.url} component={<%= entityReactName %>} />
     </Switch>
-    <%_ if (!readOnly) { _%>
-    <ErrorBoundaryRoute path={`${match.url}/:id/delete`} component={<%= entityReactName %>DeleteDialog} />
-    <%_ } _%>
   </>
 );
 
