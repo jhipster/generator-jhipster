@@ -212,4 +212,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.config.delete('blueprint');
         generator.config.delete('blueprintVersion');
     }
+    if (generator.isJhipsterVersionLessThan('6.5.2')) {
+        generator.removeFile(`${testDir}web/rest/ClientForwardControllerIT.java`);
+    }
 }
