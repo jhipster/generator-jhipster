@@ -217,10 +217,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ } _%>
     <%_ } _%>
             .exceptionHandling()
-    <%_ if (authenticationType !== 'oauth2') { _%>
-            .authenticationEntryPoint(problemSupport)
-    <%_ } _%>
-            .accessDeniedHandler(problemSupport)
+                .authenticationEntryPoint(problemSupport)
+                .accessDeniedHandler(problemSupport)
     <%_ if (authenticationType === 'session') { _%>
         <%_ if (!skipUserManagement) { _%>
         .and()
