@@ -34,14 +34,18 @@ export const <%= entityReactName %>DeleteDialog = (props: I<%= entityReactName %
     props.getEntity(props.match.params.id);
   }, []);
 
-  const handleClose = event => {
-    event.stopPropagation();
-    props.history.goBack();
+  const handleClose = () => {
+    props.history.push('/<%= entityFileName %>');
   };
 
-  const confirmDelete = event => {
+  useEffect(() => {
+    if (props.updateSuccess) {
+      handleClose();
+    }
+  }, [props.updateSuccess]);
+
+  const confirmDelete = () => {
     props.deleteEntity(props.<%= entityInstance %>Entity.id);
-    handleClose(event);
   }
 
   const { <%= entityInstance %>Entity } = props;
@@ -68,7 +72,8 @@ export const <%= entityReactName %>DeleteDialog = (props: I<%= entityReactName %
 };
 
 const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
-    <%= entityInstance %>Entity: <%= entityInstance %>.entity
+  <%= entityInstance %>Entity: <%= entityInstance %>.entity,
+  updateSuccess: <%= entityInstance %>.updateSuccess
 });
 
 const mapDispatchToProps = { getEntity, deleteEntity };
