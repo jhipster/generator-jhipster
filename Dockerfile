@@ -22,6 +22,9 @@ RUN \
     build-essential \
     software-properties-common \
     sudo && \
+  # install tzdata
+  export DEBIAN_FRONTEND=noninteractive && \
+  apt-get install -y tzdata && \
   # install OpenJDK 11
   add-apt-repository ppa:openjdk-r/ppa && \
   apt-get update && \
