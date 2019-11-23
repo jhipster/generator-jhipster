@@ -534,15 +534,9 @@ task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
-<%_ if (enableSwaggerCodegen) { _%>
-wrapper {
-    gradleVersion = "5.6.4"
-}
-<%_ } else { _%>
 wrapper {
     gradleVersion = "<%= GRADLE_VERSION %>"
 }
-<%_ } _%>
 
 <%_ if (!skipClient) { _%>
 
