@@ -23,8 +23,6 @@ const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const { convertEntitiesToJDL } = require('../../../lib/converters/json_to_jdl_entity_converter');
-const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
-const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const { JPA_DERIVED_IDENTIFIER } = require('../../../lib/core/jhipster/relationship_options');
 const {
@@ -41,25 +39,31 @@ describe('JSONToJDLEntityConverter', () => {
   describe('::convertEntitiesToJDL', () => {
     context('when not passing entities', () => {
       it('fails', () => {
-        expect(() => convertEntitiesToJDL()).to.throw('Entities have to be passed to be converted.');
+        expect(() => convertEntitiesToJDL({})).to.throw('Entities have to be passed to be converted.');
       });
     });
     context('when passing entities', () => {
       let jdlObject = null;
 
       before(() => {
-        const entities = {
-          Employee: readJsonEntity('Employee'),
-          Country: readJsonEntity('Country'),
-          Department: readJsonEntity('Department'),
-          JobHistory: readJsonEntity('JobHistory'),
-          Location: readJsonEntity('Location'),
-          Region: readJsonEntity('Region'),
-          Job: readJsonEntity('Job'),
-          Task: readJsonEntity('Task')
-        };
-        entities.Employee.relationships.filter(r => r.relationshipName === 'department')[0].javadoc = undefined;
-        jdlObject = convertEntitiesToJDL(entities);
+        const entities = new Map([
+          ['Employee', readJsonEntity('Employee')],
+          ['Country', readJsonEntity('Country')],
+          ['Department', readJsonEntity('Department')],
+          ['JobHistory', readJsonEntity('JobHistory')],
+          ['Location', readJsonEntity('Location')],
+          ['Region', readJsonEntity('Region')],
+          ['Job', readJsonEntity('Job')],
+          ['Task', readJsonEntity('Task')]
+        ]);
+        // const employeeRelationshipToDepartment = entities
+        //   .get('Employee')
+        //   .relationships.filter(r => r.relationshipName === 'department')[0];
+        // employeeRelationshipToDepartment.javadoc = undefined
+        // const employee = entities.get('Employee');
+        // employee.relationships = employeeRelationships;
+        // entities.set('Employee', employee);
+        jdlObject = convertEntitiesToJDL({ entities });
       });
 
       context('when parsing a JSON entity to JDL', () => {
@@ -184,19 +188,18 @@ describe('JSONToJDLEntityConverter', () => {
             'OneToMany_Department{employee}_Employee{department(foo)}'
           );
           expect(relationship.commentInFrom).to.eq('A relationship');
-          expect(relationship.commentInTo).to.be.undefined;
+          expect(relationship.commentInTo).to.equal('Another side of the same relationship');
         });
         it('parses comments in relationships for owned', () => {
-          const entities = {
-            Department: readJsonEntity('Department'),
-            Employee: readJsonEntity('Employee')
-          };
-          entities.Department.relationships.filter(r => r.relationshipName === 'employee')[0].javadoc = undefined;
-          const jdlObject = convertEntitiesToJDL(entities);
+          const entities = new Map([
+            ['Department', readJsonEntity('Department')],
+            ['Employee', readJsonEntity('Employee')]
+          ]);
+          const jdlObject = convertEntitiesToJDL({ entities });
           const relationship = jdlObject.relationships.getOneToMany(
             'OneToMany_Department{employee}_Employee{department(foo)}'
           );
-          expect(relationship.commentInFrom).to.be.undefined;
+          expect(relationship.commentInFrom).to.equal('A relationship');
           expect(relationship.commentInTo).to.eq('Another side of the same relationship');
         });
         it('parses required relationships in owner', () => {
@@ -219,10 +222,7 @@ describe('JSONToJDLEntityConverter', () => {
             let jdlObject = null;
 
             before(() => {
-              const entities = {
-                Country: readJsonEntity('Country')
-              };
-              jdlObject = convertEntitiesToJDL(entities);
+              jdlObject = convertEntitiesToJDL({ entities: new Map([['Country', readJsonEntity('Country')]]) });
             });
 
             it('parses relationships to the JHipster managed User entity', () => {
@@ -230,32 +230,35 @@ describe('JSONToJDLEntityConverter', () => {
             });
           });
           context('when there is a User.json entity', () => {
+            let entities;
+
+            before(() => {
+              entities = new Map([
+                ['Country', readJsonEntity('Country')],
+                ['User', readJsonEntity('Region')]
+              ]);
+            });
+
             it('throws an error ', () => {
               expect(() => {
                 convertEntitiesToJDL({
-                  Country: readJsonEntity('Country'),
-                  User: readJsonEntity('Region')
+                  entities
                 });
               }).to.throw('User entity name is reserved if skipUserManagement is not set.');
             });
           });
         });
         context('when skipUserManagement flag is set', () => {
-          let jdlObject = null;
+          let jdlObject;
 
           before(() => {
-            const entities = {
-              Country: readJsonEntity('Country'),
-              User: readJsonEntity('Region')
-            };
-            entities.User.relationships[0].otherEntityRelationshipName = 'user';
-            jdlObject = new ValidatedJDLObject();
-            jdlObject.addOption(
-              new JDLUnaryOption({
-                name: UnaryOptions.SKIP_USER_MANAGEMENT
-              })
-            );
-            jdlObject = convertEntitiesToJDL(entities, jdlObject);
+            const regionEntity = readJsonEntity('Region');
+            regionEntity.relationships[0].otherEntityRelationshipName = 'user';
+            const entities = new Map([
+              ['Country', readJsonEntity('Country')],
+              ['User', regionEntity]
+            ]);
+            jdlObject = convertEntitiesToJDL({ entities, skippedUserManagement: true });
           });
 
           it('parses the User.json entity if skipUserManagement flag is set', () => {
@@ -269,10 +272,9 @@ describe('JSONToJDLEntityConverter', () => {
           let jdlObject = null;
 
           before(() => {
-            const entities = {
-              CassBankAccount: readJsonEntity('CassBankAccount')
-            };
-            jdlObject = convertEntitiesToJDL(entities);
+            jdlObject = convertEntitiesToJDL({
+              entities: new Map([['CassBankAccount', readJsonEntity('CassBankAccount')]])
+            });
           });
 
           it('parses tableName', () => {
@@ -294,35 +296,34 @@ describe('JSONToJDLEntityConverter', () => {
       });
 
       context('when parsing an unrecognised blob-typed field', () => {
-        let entity;
-
-        before(() => {
-          entity = readJsonEntity('InvalidBlobType');
-        });
-
         it('fails', () => {
-          expect(() => convertEntitiesToJDL([entity])).to.throw("Unrecognised blob type: 'unknown'");
+          expect(() =>
+            convertEntitiesToJDL({ entities: new Map([['InvalidBlobType', readJsonEntity('InvalidBlobType')]]) })
+          ).to.throw("Unrecognised blob type: 'unknown'");
         });
       });
     });
     context('when parsing relationships including the User entity', () => {
-      let entity;
+      let entities;
 
       before(() => {
-        entity = {
-          TestEntity: JSON.parse(
-            fs
-              .readFileSync(
-                path.join('test', 'test_files', 'json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'),
-                'utf-8'
-              )
-              .toString()
-          )
-        };
+        entities = new Map([
+          [
+            'TestEntity',
+            JSON.parse(
+              fs
+                .readFileSync(
+                  path.join('test', 'test_files', 'json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'),
+                  'utf-8'
+                )
+                .toString()
+            )
+          ]
+        ]);
       });
 
       it('should not fail', () => {
-        expect(() => convertEntitiesToJDL(entity)).not.to.throw();
+        expect(() => convertEntitiesToJDL({ entities })).not.to.throw();
       });
     });
   });

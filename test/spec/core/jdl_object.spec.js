@@ -759,6 +759,42 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#hasOption', () => {
+    context('when passing a falsy value', () => {
+      let jdlObject;
+
+      before(() => {
+        jdlObject = new JDLObject();
+      });
+
+      it('should return false', () => {
+        expect(jdlObject.hasOption()).to.be.false;
+      });
+    });
+    context('when passing an option name', () => {
+      let jdlObject;
+
+      before(() => {
+        jdlObject = new JDLObject();
+        jdlObject.addOption(
+          new JDLUnaryOption({
+            name: UnaryOptions.SKIP_USER_MANAGEMENT
+          })
+        );
+      });
+
+      context('for an absent option', () => {
+        it('should return false', () => {
+          expect(jdlObject.hasOption('toto')).to.be.false;
+        });
+      });
+      context('for an existing option', () => {
+        it('should return false', () => {
+          expect(jdlObject.hasOption(UnaryOptions.SKIP_USER_MANAGEMENT)).to.be.true;
+        });
+      });
+    });
+  });
   describe('#isEntityInMicroservice', () => {
     let jdlObject = null;
 
