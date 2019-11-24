@@ -652,6 +652,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 storageData.service = context.service;
                 storageData.entityTableName = context.entityTableName;
                 storageData.databaseType = context.databaseType;
+                storageData.readOnly = context.readOnly;
                 this.copyFilteringFlag(context, storageData, context);
                 if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
                     storageData.pagination = context.pagination;
