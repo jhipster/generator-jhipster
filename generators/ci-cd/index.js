@@ -61,11 +61,11 @@ module.exports = class extends BaseGenerator {
             description: 'Automatically configure Azure'
         });
 
-        // Automatically configure GitHub CI
+        // Automatically configure GitHub Actions
         this.argument('autoconfigure-github', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Github CI'
+            description: 'Automatically configure GitHub Actions'
         });
 
         this.registerPrettierTransform();

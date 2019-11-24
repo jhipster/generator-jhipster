@@ -598,9 +598,9 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     //--------------------------------------------------
-    // GitHub CI tests
+    // GitHub Actions tests
     //--------------------------------------------------
-    describe('GitHub CI: maven AngularX Yarn', () => {
+    describe('GitHub Actions: maven AngularX Yarn', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
@@ -619,7 +619,7 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
-    describe('GitHub CI: maven AngularX NPM', () => {
+    describe('GitHub Actions: maven AngularX NPM', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
@@ -638,7 +638,7 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
-    describe('GitHub CI: Gradle AngularX Yarn', () => {
+    describe('GitHub Actions: Gradle AngularX Yarn', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
@@ -657,7 +657,7 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
-    describe('GitHub CI: Gradle AngularX NPM', () => {
+    describe('GitHub Actions: Gradle AngularX NPM', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
@@ -676,7 +676,7 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
-    describe('GitHub CI: Autoconfigure', () => {
+    describe('GitHub Actions: Autoconfigure', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
