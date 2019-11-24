@@ -53,7 +53,7 @@ function askPipeline() {
     }
 
     if (this.autoconfigureGithub) {
-        this.log('Auto-configuring GitHub CI');
+        this.log('Auto-configuring GitHub Actions');
         this.pipeline = 'github';
         return;
     }
@@ -69,7 +69,7 @@ function askPipeline() {
                 { name: 'Jenkins pipeline', value: 'jenkins' },
                 { name: 'Azure Pipelines', value: 'azure' },
                 { name: 'GitLab CI', value: 'gitlab' },
-                { name: 'GitHub CI', value: 'github' },
+                { name: 'GitHub Actions', value: 'github' },
                 { name: 'Travis CI', value: 'travis' }
             ]
         }
@@ -107,7 +107,7 @@ function askIntegrations() {
     }
 
     if (this.autoconfigureGithub) {
-        this.log('Auto-configuring GitHub CI');
+        this.log('Auto-configuring GitHub Actions');
         this.pipeline = 'github';
         return;
     }
