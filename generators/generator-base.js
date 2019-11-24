@@ -1890,6 +1890,10 @@ module.exports = class extends PrivateBase {
         return filesOut;
     }
 
+    setupAppOptions(generator, context = generator, dest = context) {
+        this.setupSharedOptions(generator, context, dest);
+    }
+
     /**
      * Setup shared level options from context.
      * all variables should be set to dest,
