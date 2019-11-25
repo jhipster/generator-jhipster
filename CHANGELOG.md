@@ -1,4 +1,4 @@
-# Unreleased: v6.0.5
+# v6.0.5
 
 ## Bug fixes:
   - When having a relationship like this:
@@ -9,16 +9,16 @@
     }
     ```
     
-    The parsing system didn't know if the comma was separating the relationship
-    from A to B or the relationship option list.
-    
-    The comma is supposed to separate both, but a restriction has been made in this
-    commit: a comma without a new line has to separate relationship options.
+    The parsing system didn't know if the comma was separating the relationship from A to B or the relationship option
+    list.
+
+    The comma is supposed to separate both, but a restriction has been made in this case: a comma without
+    a new line has to separate relationship options.
     - Issue: [From the generator: #10824](https://github.com/jhipster/generator-jhipster/issues/10824)
 
 ---
 
-# Latest: v6.0.4
+# v6.0.4
 
 ## Bug fixes:
   - Authorized some relationships from & to the User entity:
