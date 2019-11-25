@@ -274,7 +274,7 @@ function askForStorageClassName() {
     ];
 
     this.prompt(prompts).then(props => {
-        this.kubernetesStorageClassName = props.kubernetesStorageClassName;
+        this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();
         done();
     });
 }

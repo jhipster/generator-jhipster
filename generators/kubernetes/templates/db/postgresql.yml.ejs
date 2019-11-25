@@ -28,7 +28,7 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  <%_ if (kubernetesStorageClassName !== '') { _%>
+  <%_ if (kubernetesStorageClassName) { _%>
   storageClassName: <%= kubernetesStorageClassName %>
   <%_ } _%>
 ---
