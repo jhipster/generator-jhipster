@@ -66,7 +66,6 @@ describe('Component Tests', () => {
             const accountValues: Account = {
                 firstName: 'John',
                 lastName: 'Doe',
-
                 activated: true,
                 email: 'john.doe@mail.com',
                 langKey: '<%= nativeLanguage %>',
@@ -74,16 +73,22 @@ describe('Component Tests', () => {
                 authorities: [],
                 imageUrl: ''
             };
+            const settingsFormValues = {
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john.doe@mail.com'<% if (enableTranslation) { %>,
+                langKey: '<%= nativeLanguage %>'<% } %>
+            };
             mockAuth.setIdentityResponse(accountValues);
 
             // WHEN
-            comp.updateForm(accountValues);
+            comp.ngOnInit();
             comp.save();
 
             // THEN
             expect(mockAuth.identitySpy).toHaveBeenCalled();
             expect(mockAuth.saveSpy).toHaveBeenCalledWith(accountValues);
-            expect(comp.settingsForm.value).toEqual(accountValues);
+            expect(comp.settingsForm.value).toEqual(settingsFormValues);
         });
 
         it('should notify of success upon successful save', () => {
@@ -97,23 +102,25 @@ describe('Component Tests', () => {
                 lastName: 'Doe'
             });
             mockAuth.setIdentityResponse(accountValues);
+
             // WHEN
+            comp.ngOnInit();
             comp.save();
 
             // THEN
-            expect(comp.error).toBeNull();
-            expect(comp.success).toBe('OK');
+            expect(comp.success).toBe(true);
         });
 
         it('should notify of error upon failed save', () => {
             // GIVEN
             mockAuth.saveSpy.and.returnValue(throwError('ERROR'));
+
             // WHEN
+            comp.ngOnInit();
             comp.save();
 
             // THEN
-            expect(comp.error).toEqual('ERROR');
-            expect(comp.success).toBeNull();
+            expect(comp.success).toBe(false);
         });
     });
 });
