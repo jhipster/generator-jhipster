@@ -42,7 +42,6 @@ public class SwaggerSecurityCustomizer implements SwaggerCustomizer {
 <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
 
     private static final String[] PUBLIC_ENDPOINTS = {
-        "/api/account/change-password",
         "/api/account/reset-password/finish",
         "/api/account/reset-password/init",
         "/api/activate",
