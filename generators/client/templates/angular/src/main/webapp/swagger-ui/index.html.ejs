@@ -67,7 +67,11 @@
                     var authToken = JSON.parse(localStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken")
                         || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken"));
                     if (authToken) {
-                        ui.preauthorizeApiKey("Bearer", "Bearer " + authToken)
+                        if(ui.specSelectors.isSwagger2()) {
+                            ui.preauthorizeApiKey("Bearer", "Bearer " + authToken)
+                        } else {
+                            ui.preauthorizeApiKey("Bearer", authToken)
+                        }
                     }
                 }
                 <%_ } _%>
@@ -75,6 +79,7 @@
 
             window.ui = ui
         });
+
     };
 </script>
 </body>
