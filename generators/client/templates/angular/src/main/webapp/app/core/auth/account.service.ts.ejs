@@ -17,26 +17,25 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
-import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, of } from 'rxjs';
 import { shareReplay, tap, catchError } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
 <%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from '../tracker/tracker.service';
+import { TrackerService } from '../tracker/tracker.service';
 <%_ } _%>
 
 @Injectable({providedIn: 'root'})
 export class AccountService  {
-    private userIdentity: Account;
-    private authenticated = false;
-    private authenticationState = new Subject<any>();
-    private accountCache$: Observable<Account>;
+    private userIdentity: Account | null = null;
+    private authenticationState = new Subject<Account | null>();
+    private accountCache$?: Observable<Account | null>;
 
     constructor(
         <%_ if (enableTranslation) { _%>
@@ -44,74 +43,57 @@ export class AccountService  {
         private sessionStorage: SessionStorageService,
         <%_ } _%>
         private http: HttpClient<% if (websocket === 'spring-websocket') { %>,
-        private trackerService: <%=jhiPrefixCapitalized%>TrackerService<% } %>) { }
+        private trackerService: TrackerService<% } %>) { }
 
-    fetch(): Observable<Account> {
+    private fetch(): Observable<Account> {
         return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
     }
 
-    save(account: Account): Observable<Account> {
-        return this.http.post<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
+    save(account: Account): Observable<{}> {
+        return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
     }
 
-    authenticate(identity) {
+    authenticate(identity: Account | null): void {
         this.userIdentity = identity;
-        this.authenticated = identity !== null;
         this.authenticationState.next(this.userIdentity);
+        <%_ if (websocket === 'spring-websocket') { _%>
+        if (identity) {
+            this.trackerService.connect();
+        } else {
+            this.trackerService.disconnect();
+        }
+        <%_ } _%>
     }
 
     hasAnyAuthority(authorities: string[] | string): boolean {
-        if (!this.authenticated || !this.userIdentity || !this.userIdentity.authorities) {
+        if (!this.userIdentity || !this.userIdentity.authorities) {
             return false;
         }
-
         if (!Array.isArray(authorities)) {
             authorities = [authorities];
         }
-
-        return authorities.some((authority: string) => this.userIdentity.authorities.includes(authority));
+        return this.userIdentity.authorities.some((authority: string) => authorities.includes(authority));
     }
 
-    identity(force?: boolean): Observable<Account> {
-        if (force || !this.authenticated) {
-            this.accountCache$ = null;
-        }
-
-        if (!this.accountCache$) {
+    identity(force?: boolean): Observable<Account | null> {
+        if (!this.accountCache$ || force || !this.isAuthenticated()) {
             this.accountCache$ = this.fetch().pipe(
               catchError(
                 () => {
-                    <%_ if (websocket === 'spring-websocket') { _%>
-                    if (this.trackerService.stompClient && this.trackerService.stompClient.connected) {
-                        this.trackerService.disconnect();
-                    }
-                    <%_ } _%>
                     return of(null);
                 }
               ),
-              tap(
-                account => {
-                  if (account) {
-                    this.userIdentity = account;
-                    this.authenticated = true;
-                    <%_ if (websocket === 'spring-websocket') { _%>
-                    this.trackerService.connect();
-                    <%_ } _%>
-                    <%_ if (enableTranslation) { _%>
-                    // After retrieve the account info, the language will be changed to
-                    // the user's preferred language configured in the account setting
-                    if (this.userIdentity.langKey) {
-                        const langKey = this.sessionStorage.retrieve('locale') || this.userIdentity.langKey;
-                        this.languageService.changeLanguage(langKey);
-                    }
-                    <%_ } _%>
-                  } else {
-                    this.userIdentity = null;
-                    this.authenticated = false;
-                  }
-                  this.authenticationState.next(this.userIdentity);
+              tap((account: Account | null) => {
+                this.authenticate(account);
+                <%_ if (enableTranslation) { _%>
+                // After retrieve the account info, the language will be changed to
+                // the user's preferred language configured in the account setting
+                if (account && account.langKey) {
+                  const langKey = this.sessionStorage.retrieve('locale') || account.langKey;
+                  this.languageService.changeLanguage(langKey);
                 }
-              ),
+                <%_ } _%>
+              }),
               shareReplay()
             );
         }
@@ -119,18 +101,14 @@ export class AccountService  {
     }
 
     isAuthenticated(): boolean {
-        return this.authenticated;
+        return this.userIdentity !== null;
     }
 
-    isIdentityResolved(): boolean {
-        return this.userIdentity !== undefined;
-    }
-
-    getAuthenticationState(): Observable<any> {
+    getAuthenticationState(): Observable<Account | null> {
         return this.authenticationState.asObservable();
     }
 
     getImageUrl(): string {
-        return this.isIdentityResolved() ? this.userIdentity.imageUrl : null;
+        return this.userIdentity ? this.userIdentity.imageUrl : '';
     }
 }

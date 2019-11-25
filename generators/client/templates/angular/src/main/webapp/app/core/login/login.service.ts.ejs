@@ -19,14 +19,23 @@
 import { Injectable } from '@angular/core';
 <%_ if (authenticationType === 'oauth2') { _%>
 import { Location } from '@angular/common';
+
 <%_ } else { _%>
+import { Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
+
+import { Account } from 'app/core/user/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ } _%>
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import { Logout } from './logout.model';
+<%_ } else { _%>
+import { Login } from './login.model';
 <%_ } _%>
 
 @Injectable({providedIn: 'root'})
@@ -42,29 +51,29 @@ export class LoginService {
     ) {}
 
     <%_ if (authenticationType === 'oauth2') { _%>
-    login() {
+    login(): void {
         // If you have configured multiple OIDC providers, then, you can update this URL to /login.
         // It will show a Spring Security generated login page with links to configured OIDC providers.
         location.href = `${location.origin}${this.location.prepareExternalUrl('oauth2/authorization/oidc')}`;
     }
     <%_ } else { _%>
-    login(credentials) {
+    login(credentials: Login): Observable<Account | null> {
         return this.authServerProvider.login(credentials).pipe(flatMap(() => this.accountService.identity(true)));
     }
     <%_ } _%>
 
     <%_ if (authenticationType === 'uaa') { _%>
 
-    isAuthenticated() {
+    isAuthenticated(): boolean {
         return this.accountService.isAuthenticated();
     }
 
-    logoutDirectly() {
+    logoutDirectly(): void {
         this.accountService.authenticate(null);
     }
     <%_ } _%>
 
-    logout() {
+    logout(): void {
         <%_ if (authenticationType === 'uaa') { _%>
         if (this.accountService.isAuthenticated()) {
             this.authServerProvider.logout().subscribe(() => this.accountService.authenticate(null));
@@ -72,18 +81,17 @@ export class LoginService {
             this.accountService.authenticate(null);
         }
         <%_ } else if (authenticationType === 'oauth2') { _%>
-        this.authServerProvider.logout().subscribe(response => {
-            const data = response.body;
-            let logoutUrl = data.logoutUrl;
+        this.authServerProvider.logout().subscribe((logout: Logout) => {
+            let logoutUrl = logout.logoutUrl;
             const redirectUri = `${location.origin}${this.location.prepareExternalUrl('/')}`;
 
             // if Keycloak, uri has protocol/openid-connect/token
-            if (logoutUrl.indexOf('/protocol') > -1) {
+            if (logoutUrl.includes('/protocol')) {
                 logoutUrl = logoutUrl + '?redirect_uri=' + redirectUri;
             } else {
                 // Okta
                 logoutUrl = logoutUrl + '?id_token_hint=' +
-                    data.idToken + '&post_logout_redirect_uri=' + redirectUri;
+                    logout.idToken + '&post_logout_redirect_uri=' + redirectUri;
             }
             window.location.href = logoutUrl;
         });

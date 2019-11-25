@@ -28,7 +28,7 @@ import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-
 
 @Injectable({providedIn: 'root'})
 export class JhiLanguageHelper {
-    private renderer: Renderer2 = null;
+    private renderer: Renderer2;
 
     constructor(
         private translateService: TranslateService,
@@ -54,7 +54,7 @@ export class JhiLanguageHelper {
      * 2. $state.$current.data.pageTitle (current state page title)
      * 3. 'global.title'
      */
-    updateTitle(titleKey?: string) {
+    updateTitle(titleKey?: string): void {
         if (!titleKey) {
              titleKey = this.getPageTitle(this.router.routerState.snapshot.root);
         }
@@ -64,7 +64,7 @@ export class JhiLanguageHelper {
         });
     }
 
-    private init() {
+    private init(): void {
         this.translateService.onLangChange.subscribe(() => {
             this.renderer.setAttribute(document.querySelector('html'), 'lang', this.translateService.currentLang);
             this.updateTitle();
@@ -74,7 +74,7 @@ export class JhiLanguageHelper {
         });
     }
 
-    private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
+    private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
         let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : '<%= angularAppName %>';
         if (routeSnapshot.firstChild) {
             title = this.getPageTitle(routeSnapshot.firstChild) || title;
@@ -83,7 +83,7 @@ export class JhiLanguageHelper {
     }
     <%_ if (enableI18nRTL) { _%>
 
-    private updatePageDirection() {
+    private updatePageDirection(): void {
         this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
     }
     <%_ }_%>

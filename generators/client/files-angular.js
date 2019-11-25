@@ -280,6 +280,7 @@ const files = {
                 { file: 'admin/tracker/tracker.module.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.html', method: 'processHtml' },
+                'core/tracker/tracker-activity.model.ts',
                 'core/tracker/tracker.service.ts'
             ]
         },
@@ -330,8 +331,14 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
                 // login
+                'core/login/login.model.ts',
                 'core/login/login-modal.service.ts'
             ]
+        },
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType === 'oauth2',
+            templates: ['core/login/logout.model.ts']
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',

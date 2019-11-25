@@ -17,13 +17,15 @@
  limitations under the License.
 -%>
 import { SpyObject } from './spyobject';
-import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
+import { TrackerService } from 'app/core/tracker/tracker.service';
 
 export class MockTrackerService extends SpyObject {
 
     constructor() {
-        super(<%=jhiPrefixCapitalized%>TrackerService);
+        super(TrackerService);
     }
 
     connect() {}
+
+    disconnect() {}
 }
