@@ -28,10 +28,8 @@ import { Audit } from './audit.model';
 export class AuditsService  {
     constructor(private http: HttpClient) { }
 
-    query(req: any): Observable<HttpResponse<Audit[]>> {
+    query(req: { page?: number; size?: number; sort?: string[]; fromDate: string; toDate: string }): Observable<HttpResponse<Audit[]>> {
         const params: HttpParams = createRequestOption(req);
-        params.set('fromDate', req.fromDate);
-        params.set('toDate', req.toDate);
 
         const requestURL = SERVER_API_URL + '<%- apiUaaPath %>management/audits';
 
