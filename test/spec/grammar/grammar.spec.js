@@ -859,6 +859,78 @@ entity A {
         ]);
       });
     });
+    context('when parsing more than one relationship', () => {
+      context('with methods', () => {
+        let relationships;
+
+        before(() => {
+          const content = parseFromContent(`relationship OneToOne {
+  A to B with jpaDerivedIdentifier,
+  B to C,
+  D to E with jpaDerivedIdentifier
+}
+`);
+          relationships = content.relationships;
+        });
+
+        it('should add them', () => {
+          expect(relationships).to.deep.equal([
+            {
+              cardinality: 'one-to-one',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'A'
+              },
+              options: [
+                {
+                  option: 'jpaDerivedIdentifier',
+                  type: 'UNARY'
+                }
+              ],
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'B'
+              }
+            },
+            {
+              cardinality: 'one-to-one',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'B'
+              },
+              options: [],
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'C'
+              }
+            },
+            {
+              cardinality: 'one-to-one',
+              from: {
+                injectedField: null,
+                javadoc: null,
+                name: 'D'
+              },
+              options: [
+                {
+                  option: 'jpaDerivedIdentifier',
+                  type: 'UNARY'
+                }
+              ],
+              to: {
+                injectedField: null,
+                javadoc: null,
+                name: 'E'
+              }
+            }
+          ]);
+        });
+      });
+    });
   });
   context('when parsing an option', () => {
     context('being unary', () => {
