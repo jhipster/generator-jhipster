@@ -158,7 +158,7 @@ export class JhiDataUtils {
                 const file: File = eventTarget.files[0];
                 if (isImage && !file.type.startsWith('image/')) {
                     const error: JhiFileLoadError = {
-                        message: `File was expected to be an image but was found to be ${file.type}`,
+                        message: `File was expected to be an image but was found to be '${file.type}'`,
                         key: 'not.image',
                         params: { fileType: file.type }
                     };
@@ -176,7 +176,7 @@ export class JhiDataUtils {
                 }
             } else {
                 const error: JhiFileLoadError = {
-                    message: `Base64 data was not set as file could not be extracted from passed parameter: ${event}`,
+                    message: 'Could not extract file',
                     key: 'could.not.extract',
                     params: { event }
                 };
