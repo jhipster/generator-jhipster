@@ -411,7 +411,6 @@ module.exports = class extends BaseGenerator {
                 const cloudSqlInstances = [{ value: '', name: 'New Cloud SQL Instance' }];
                 shelljs.exec(
                     `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
-                    { silent: true },
                     (code, stdout, err) => {
                         if (err && code !== 0) {
                             this.log.error(err);
@@ -506,7 +505,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 const cloudSqlDatabases = [{ value: '', name: 'New Database' }];
-                const name = this.gcpCloudSqlInstanceName.split(':')[2];
+                const name = this.gcpCloudSqlInstanceName.split(':')[2].trim();
                 shelljs.exec(
                     `gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`,
                     { silent: true },
@@ -639,7 +638,7 @@ module.exports = class extends BaseGenerator {
 
                 this.log(chalk.bold('\nConfiguring Cloud SQL Login'));
 
-                const name = this.gcpCloudSqlInstanceName.split(':')[2];
+                const name = this.gcpCloudSqlInstanceName.split(':')[2].trim();
                 shelljs.exec(
                     `gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`,
                     { silent: true },
@@ -674,7 +673,7 @@ module.exports = class extends BaseGenerator {
                 if (this.gcpCloudSqlDatabaseNameExists) return;
                 const done = this.async();
 
-                const name = this.gcpCloudSqlInstanceName.split(':')[2];
+                const name = this.gcpCloudSqlInstanceName.split(':')[2].trim();
                 this.log(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
                 const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${
                     this.gcpProjectId
