@@ -2,7 +2,7 @@ name: Generator
 on: [push, pull_request]
 jobs:
     generator-jhipster:
-        name: JHipster generator unit test suite
+        name: npm test
         runs-on: ${{ matrix.os }}
         timeout-minutes: 20
         strategy:

@@ -17,7 +17,7 @@ env:
     JHI_GITHUB_CI: true
 jobs:
     applications:
-        name: ${{ matrix.app-type }} application test suite
+        name: ${{ matrix.app-type }}
         runs-on: ${{ matrix.os }}
         timeout-minutes: 40
         strategy:
