@@ -46,34 +46,30 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
 
 <%_ if (authenticationType === 'uaa') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(tap(null, (err: any) => {
-            if (err instanceof HttpErrorResponse) {
-                if (err.status === 401) {
-                    if (this.loginService.isAuthenticated()) {
-                        this.loginService.logoutDirectly();
-                        this.loginModalService.open();
-                    } else {
-                        this.loginService.logout();
-                        this.router.navigate(['/']);
-                    }
+        return next.handle(request).pipe(tap(null, (err: HttpErrorResponse) => {
+            if (err.status === 401) {
+                if (this.loginService.isAuthenticated()) {
+                    this.loginService.logoutDirectly();
+                    this.loginModalService.open();
+                } else {
+                    this.loginService.logout();
+                    this.router.navigate(['/']);
                 }
             }
         }));
     }
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'jwt') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(tap(null, (err: any) => {
-            if (err instanceof HttpErrorResponse) {
-                if (err.status === 401 && err.url && !err.url.includes('api/account')) {
-                    this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
+        return next.handle(request).pipe(tap(null, (err: HttpErrorResponse) => {
+            if (err.status === 401 && err.url && !err.url.includes('api/account')) {
+                this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
 <%_ if (authenticationType === 'jwt' || authenticationType === 'session') { _%>
-                    this.loginService.logout();
-                    this.router.navigate(['']);
-                    this.loginModalService.open();
+                this.loginService.logout();
+                this.router.navigate(['']);
+                this.loginModalService.open();
 <%_ } else { _%>
-                    this.loginService.login();
+                this.loginService.login();
 <%_ } _%>
-                }
             }
         }));
     }
