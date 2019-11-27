@@ -41,7 +41,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 shelljs.exec('gcloud version', { silent: true }, (code, stdout, err) => {
-                    if (err) {
+                    if (err && code !== 0) {
                         this.log.error(
                             "You don't have the Cloud SDK (gcloud) installed. \nDownload it from https://cloud.google.com/sdk/install"
                         );
@@ -66,7 +66,7 @@ module.exports = class extends BaseGenerator {
                             this.log(chalk.bold('\nInstalling App Engine Java SDK'));
                             this.log(`... Running: gcloud components install ${component} --quiet`);
                             shelljs.exec(`gcloud components install ${component} --quiet`, { silent: true }, (code, stdout, err) => {
-                                if (err) {
+                                if (err && code !== 0) {
                                     this.log.error(err);
                                     done(
                                         `Installation failed. \nPlease try to install the app-engine-java component manually via; gcloud components install ${component}`
@@ -158,9 +158,7 @@ module.exports = class extends BaseGenerator {
                             }
                             try {
                                 shelljs.exec(`gcloud projects describe ${input}`, { silent: true });
-                                this.gcpProjectIdExists = true;
                             } catch (ex) {
-                                this.gcpProjectIdExists = false;
                                 return `Project ID "${chalk.cyan(input.trim())}" does not exist, please create one first!`;
                             }
                             return true;
@@ -182,7 +180,7 @@ module.exports = class extends BaseGenerator {
                     `gcloud app describe --format="value(locationId)" --project="${this.gcpProjectId}"`,
                     { silent: true },
                     (code, stdout, err) => {
-                        if (err) {
+                        if (err && code !== 0) {
                             const prompts = [
                                 {
                                     type: 'list',
@@ -415,7 +413,7 @@ module.exports = class extends BaseGenerator {
                     `gcloud sql instances list  --format='value[separator=":"](project,region,name)' --project="${this.gcpProjectId}"`,
                     { silent: true },
                     (code, stdout, err) => {
-                        if (err) {
+                        if (err && code !== 0) {
                             this.log.error(err);
                         } else {
                             _.forEach(stdout.toString().split(os.EOL), instance => {
@@ -513,7 +511,7 @@ module.exports = class extends BaseGenerator {
                     `gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`,
                     { silent: true },
                     (code, stdout, err) => {
-                        if (err) {
+                        if (err && code !== 0) {
                             this.log.error(err);
                         } else {
                             _.forEach(stdout.toString().split(os.EOL), database => {
@@ -586,7 +584,7 @@ module.exports = class extends BaseGenerator {
                         `gcloud app create --region="${this.gaeLocation}" --project="${this.gcpProjectId}"`,
                         { silent: true },
                         (code, stdout, err) => {
-                            if (err) {
+                            if (err && code !== 0) {
                                 this.log.error(err);
                                 this.abort = true;
                             }
@@ -619,7 +617,7 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold(`\n... Running: ${cmd}`));
 
                 shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
-                    if (err) {
+                    if (err && code !== 0) {
                         this.abort = true;
                         this.log.error(err);
                     }
@@ -659,7 +657,7 @@ module.exports = class extends BaseGenerator {
                             }" --project="${this.gcpProjectId}"`;
                             this.log(chalk.bold(`... Running: ${cmd}`));
                             shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
-                                if (err) {
+                                if (err && code !== 0) {
                                     this.log.error(err);
                                 }
                                 done();
@@ -683,7 +681,7 @@ module.exports = class extends BaseGenerator {
                 }"`;
                 this.log(chalk.bold(`... Running: ${cmd}`));
                 shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
-                    if (err) {
+                    if (err && code !== 0) {
                         this.log.error(err);
                     }
                     done();
