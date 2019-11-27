@@ -442,6 +442,21 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Rename File
+     *
+     * @param {string} source
+     * @param {string} dest
+     * @returns {boolean} true if success; false otherwise
+     */
+    renameFile(source, dest) {
+        if (shelljs.test('-f', source)) {
+            this.info(`Renaming the file - ${source} to ${dest}`);
+            return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
+        }
+        return true;
+    }
+
+    /**
      * @returns default app name
      */
     getDefaultAppName() {
