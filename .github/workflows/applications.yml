@@ -23,7 +23,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.x]
+                node_version: [12.13.1]
                 os: [ubuntu-latest]
                 app-type: [ngx-session-cassandra-fr, ngx-mongodb-kafka-cucumber, ngx-couchbase]
                 include:
