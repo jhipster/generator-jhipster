@@ -505,7 +505,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 const cloudSqlDatabases = [{ value: '', name: 'New Database' }];
-                const name = this.gcpCloudSqlInstanceName.split(':')[2].trim();
+                const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 shelljs.exec(
                     `gcloud sql databases list -i ${name} --format='value(name)' --project="${this.gcpProjectId}"`,
                     { silent: true },
@@ -621,10 +621,11 @@ module.exports = class extends BaseGenerator {
                         this.log.error(err);
                     }
 
-                    this.gcpCloudSqlInstanceName = shelljs.exec(
+                    const cloudSQLInstanceName = shelljs.exec(
                         `gcloud sql instances describe ${name} --format="value(connectionName)" --project="${this.gcpProjectId}"`,
                         { silent: true }
                     );
+                    this.gcpCloudSqlInstanceName = cloudSQLInstanceName.trim();
 
                     done();
                 });
@@ -638,7 +639,7 @@ module.exports = class extends BaseGenerator {
 
                 this.log(chalk.bold('\nConfiguring Cloud SQL Login'));
 
-                const name = this.gcpCloudSqlInstanceName.split(':')[2].trim();
+                const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 shelljs.exec(
                     `gcloud sql users list -i jhipster --format='value(name)' --project="${this.gcpProjectId}"`,
                     { silent: true },
@@ -673,7 +674,7 @@ module.exports = class extends BaseGenerator {
                 if (this.gcpCloudSqlDatabaseNameExists) return;
                 const done = this.async();
 
-                const name = this.gcpCloudSqlInstanceName.split(':')[2].trim();
+                const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 this.log(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
                 const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${
                     this.gcpProjectId
