@@ -1,4 +1,4 @@
-name: Generated Applications CI
+name: Applications
 on: [push, pull_request]
 env:
     JHI_RUN_APP: 1

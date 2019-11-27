@@ -1,4 +1,4 @@
-name: Generator CI
+name: Generator
 on: [push, pull_request]
 jobs:
     generator-jhipster:
