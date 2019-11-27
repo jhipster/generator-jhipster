@@ -26,7 +26,7 @@ const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
 const waitUntil = require('./wait-until');
-const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs } = require('./utils');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs, setExitCode } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
 
 const packagejs = require('../package.json');
@@ -128,6 +128,7 @@ const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProces
         }
     );
     childProc.on('exit', code => {
+        setExitCode(code);
         logger.info(`Deployment: child process exited with code ${code}`);
         generationCompletionState.exportedDeployments[deploymentType] = true;
     });
@@ -156,6 +157,7 @@ const generateApplicationFiles = ({ generator, application, withEntities, inFold
         }
     );
     childProc.on('exit', code => {
+        setExitCode(code);
         logger.info(`App: child process exited with code ${code}`);
         generationCompletionState.exportedApplications[baseName] = true;
     });
@@ -194,6 +196,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
 
             const childProc = forkProcess(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
             childProc.on('exit', code => {
+                setExitCode(code);
                 logger.info(`Entity: child process exited with code ${code}`);
                 generationCompletionState.exportedEntities[entity.name] = true;
             });
