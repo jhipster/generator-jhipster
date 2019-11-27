@@ -22,7 +22,7 @@ import { HttpClient } from '@angular/common/http';
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import { shareReplay, tap, catchError } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
@@ -34,7 +34,7 @@ import { TrackerService } from '../tracker/tracker.service';
 @Injectable({providedIn: 'root'})
 export class AccountService  {
     private userIdentity: Account | null = null;
-    private authenticationState = new Subject<Account | null>();
+    private authenticationState = new ReplaySubject<Account | null>(1);
     private accountCache$?: Observable<Account | null>;
 
     constructor(
@@ -78,11 +78,9 @@ export class AccountService  {
     identity(force?: boolean): Observable<Account | null> {
         if (!this.accountCache$ || force || !this.isAuthenticated()) {
             this.accountCache$ = this.fetch().pipe(
-              catchError(
-                () => {
-                    return of(null);
-                }
-              ),
+              catchError(() => {
+                return of(null);
+              }),
               tap((account: Account | null) => {
                 this.authenticate(account);
                 <%_ if (enableTranslation) { _%>
