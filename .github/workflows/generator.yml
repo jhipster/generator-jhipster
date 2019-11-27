@@ -1,14 +1,14 @@
-name: Generator CI
+name: Generator
 on: [push, pull_request]
 jobs:
     generator-jhipster:
-        name: JHipster generator unit test suite
+        name: npm test
         runs-on: ${{ matrix.os }}
         timeout-minutes: 20
         strategy:
             fail-fast: false
             matrix:
-                node_version: [10.x, 12.x]
+                node_version: [12.13.1]
                 os: [ubuntu-latest]
         steps:
             - uses: actions/checkout@v1
