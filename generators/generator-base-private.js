@@ -1231,19 +1231,19 @@ module.exports = class extends Generator {
      * @returns generated JDL from entities
      */
     generateJDLFromEntities() {
-        const jdl = new jhiCore.JDLObject();
+        let jdlObject;
+        const entities = new Map();
         try {
-            const entities = {};
             this.getExistingEntities().forEach(entity => {
-                entities[entity.name] = entity.definition;
+                entities.set(entity.name, entity.definition);
             });
-            jhiCore.convertJsonEntitiesToJDL(entities, jdl);
-            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdl);
-        } catch (e) {
-            this.log(e.message || e);
+            jdlObject = jhiCore.convertJsonEntitiesToJDL({ entities });
+            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
+        } catch (error) {
+            this.log(error.message || error);
             this.error('\nError while parsing entities to JDL\n');
         }
-        return jdl;
+        return jdlObject;
     }
 
     /**
