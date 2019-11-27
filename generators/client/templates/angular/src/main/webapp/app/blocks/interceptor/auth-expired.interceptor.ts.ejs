@@ -26,45 +26,29 @@ import { LoginService } from 'app/core/login/login.service';
 <%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
 import { LoginModalService } from 'app/core/login/login-modal.service';
 <%_ } _%>
-<%_ if (['session', 'oauth2', 'jwt'].includes(authenticationType)) { _%>
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-<%_ } _%>
 
 @Injectable()
 export class AuthExpiredInterceptor implements HttpInterceptor {
-
     constructor(
         private loginService: LoginService,
         <%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
         private loginModalService: LoginModalService,
         <%_ } _%>
-        <%_ if (['session', 'oauth2', 'jwt'].includes(authenticationType)) { _%>
         private stateStorageService: StateStorageService,
-        <%_ } _%>
         private router: Router
     ) {}
 
-<%_ if (authenticationType === 'uaa') { _%>
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(request).pipe(tap(null, (err: HttpErrorResponse) => {
-            if (err.status === 401) {
-                if (this.loginService.isAuthenticated()) {
-                    this.loginService.logoutDirectly();
-                    this.loginModalService.open();
-                } else {
-                    this.loginService.logout();
-                    this.router.navigate(['/']);
-                }
-            }
-        }));
-    }
-<%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'jwt') { _%>
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(tap(null, (err: HttpErrorResponse) => {
             if (err.status === 401 && err.url && !err.url.includes('api/account')) {
                 this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
-<%_ if (authenticationType === 'jwt' || authenticationType === 'session') { _%>
+<%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
+                <%_ if (authenticationType === 'uaa') { _%>
+                this.loginService.logoutDirectly();
+                <%_ } else { _%>
                 this.loginService.logout();
+                <%_ } _%>
                 this.router.navigate(['']);
                 this.loginModalService.open();
 <%_ } else { _%>
@@ -73,5 +57,4 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
             }
         }));
     }
-<%_ } _%>
 }
