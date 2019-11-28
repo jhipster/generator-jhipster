@@ -99,6 +99,8 @@ jobs:
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
+            - name: 'TOOLS: configure tools installed by the system'
+              run: $JHI_SCRIPTS/03-system.sh
             - name: Config git variables
               run: $JHI_SCRIPTS/04-git-config.sh
             - name: Install Jhipster
