@@ -181,7 +181,7 @@ function askForServerSideOpts(meta) {
                     value: 'couchbase',
                     name: 'Couchbase'
                 });
-                if (!reactive) {
+                if (!reactive && applicationType !== 'uaa') {
                     opts.push({
                         value: 'no',
                         name: 'No database'
