@@ -101,7 +101,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     @Test
     void createsConsumer() throws Exception {
         restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/consumers?name=consumer-create&topic=topic-create&topic=topic-create2&group.id=group-create"))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         Field consumersField = ReflectionUtils.findField(<%= upperFirstCamelCase(baseName) %>KafkaResource.class, "consumers");
         ReflectionUtils.makeAccessible(consumersField);
@@ -138,8 +138,8 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
         producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
 
         restMockMvc.perform(get("/api/<%= dasherizedBaseName %>-kafka/consumers/consumer-consume/records?durationMs=5000"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("[\"value-consume\"]"));
+            .andExpect(status().isOk())
+            .andExpect(content().string("[\"value-consume\"]"));
     }
 
     private Map<String, String> getProducerProps() {

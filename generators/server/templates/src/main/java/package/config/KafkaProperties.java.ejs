@@ -28,12 +28,26 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "kafka")
 public class KafkaProperties {
 
+    private String bootStrapServers = "localhost:9092";
+
     private Map<String, String> consumer = new HashMap<>();
 
     private Map<String, String> producer = new HashMap<>();
 
+    public String getBootStrapServers() {
+        return bootStrapServers;
+    }
+
+    public void setBootStrapServers(String bootStrapServers) {
+        this.bootStrapServers = bootStrapServers;
+    }
+
     public Map<String, Object> getConsumerProps() {
-        return (Map) consumer;
+        Map<String, Object> properties = new HashMap<>(this.consumer);
+        if (!properties.containsKey("bootstrap.servers")) {
+            properties.put("bootstrap.servers", this.bootStrapServers);
+        }
+        return properties;
     }
 
     public void setConsumer(Map<String, String> consumer) {
@@ -41,7 +55,11 @@ public class KafkaProperties {
     }
 
     public Map<String, Object> getProducerProps() {
-        return (Map) producer;
+        Map<String, Object> properties = new HashMap<>(this.producer);
+        if (!properties.containsKey("bootstrap.servers")) {
+            properties.put("bootstrap.servers", this.bootStrapServers);
+        }
+        return properties;
     }
 
     public void setProducer(Map<String, String> producer) {
