@@ -116,10 +116,6 @@ module.exports = class extends Generator {
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
         );
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langJavaProp}.properties`
-        );
-        generator.template(
             `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
