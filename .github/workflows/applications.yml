@@ -21,7 +21,7 @@ name: Applications
 on: [push, pull_request]
 env:
     JHI_RUN_APP: 1
-    JHI_PROTRACTOR: 0
+    JHI_PROTRACTOR: 1
     JHI_JDK: 11
     JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
     JHI_LIB_BRANCH: release
@@ -44,21 +44,53 @@ jobs:
             matrix:
                 node_version: [12.13.1]
                 os: [ubuntu-latest]
-                app-type: [ngx-session-cassandra-fr, ngx-mongodb-kafka-cucumber, ngx-couchbase]
+                app-type:
+                  - ngx-session-cassandra-fr
+                  - ngx-mongodb-kafka-cucumber
+                  - ngx-couchbase
+                  - ngx-psql-es-noi18n-mapsid
+                  - ngx-gradle-fr
+                  - ms-ngx-gateway-eureka
+                  - ms-micro-eureka
+                  - ms-micro-consul
                 include:
                     - app-type: ngx-session-cassandra-fr
                       entity: cassandra
                       profile: dev
+                      war: 0
                     - app-type: ngx-mongodb-kafka-cucumber
                       entity: mongodb
                       profile: dev
+                      war: 0
                     - app-type: ngx-couchbase
                       entity: couchbase
                       profile: prod
+                      war: 0
+                    - app-type: ngx-psql-es-noi18n-mapsid
+                      entity: sqlfull
+                      profile: prod
+                      war: 0
+                    - app-type: ngx-gradle-fr
+                      entity: sql
+                      profile: prod
+                      war: 1
+                    - app-type: ms-ngx-gateway-eureka
+                      entity: sql
+                      profile: prod
+                      war: 1
+                    - app-type: ms-micro-eureka
+                      entity: micro
+                      profile: dev
+                      war: 0
+                    - app-type: ms-micro-consul
+                      entity: micro
+                      profile: prod
+                      war: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
             JHI_PROFILE: ${{ matrix.profile }}
+            JHI_WAR: ${{ matrix.war }}
         steps:
             - uses: actions/checkout@v1
             - uses: actions/setup-node@v1
