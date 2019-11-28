@@ -92,6 +92,9 @@ jobs:
             JHI_PROFILE: ${{ matrix.profile }}
             JHI_WAR: ${{ matrix.war }}
         steps:
+            #----------------------------------------------------------------------
+            # Install all tools and check configuration
+            #----------------------------------------------------------------------
             - uses: actions/checkout@v1
             - uses: actions/setup-node@v1
               with:
@@ -101,27 +104,35 @@ jobs:
                   java-version: '11.x'
             - name: 'TOOLS: configure tools installed by the system'
               run: $JHI_SCRIPTS/03-system.sh
-            - name: Config git variables
+            - name: 'TOOLS: configure git'
               run: $JHI_SCRIPTS/04-git-config.sh
-            - name: Install Jhipster
+
+            #----------------------------------------------------------------------
+            # Install JHipster and generate project+entities
+            #----------------------------------------------------------------------
+            - name: 'GENERATION: install JHipster'
               run: $JHI_SCRIPTS/10-install-jhipster.sh
-            - name: Generate entities
+            - name: 'GENERATION: entities'
               run: $JHI_SCRIPTS/11-generate-entities.sh
-            - name: Generate project
+            - name: 'GENERATION: project'
               run: $JHI_SCRIPTS/12-generate-project.sh
-            - name: Replace version in generated project
+            - name: 'GENERATION: replace version in generated project'
               run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
-            - name: Jhipster Info
+            - name: 'GENERATION: jhipster info'
               run: $JHI_SCRIPTS/14-jhipster-info.sh
-            - name: Start docker containers
+
+            #----------------------------------------------------------------------
+            # Launch tests
+            #----------------------------------------------------------------------
+            - name: 'TESTS: Start docker-compose containers'
               run: $JHI_SCRIPTS/20-docker-compose.sh
-            - name: Run backend tests
+            - name: 'TESTS: backend'
               run: $JHI_SCRIPTS/21-tests-backend.sh
-            - name: Run frontend tests
+            - name: 'TESTS: frontend'
               run: $JHI_SCRIPTS/22-tests-frontend.sh
-            - name: Package application
+            - name: 'TESTS: packaging'
               run: $JHI_SCRIPTS/23-package.sh
-            - name: Run e2e tests
+            - name: 'TESTS: End-to-End'
               run: $JHI_SCRIPTS/24-tests-e2e.sh
-            - name: Sonar analysis
+            - name: 'TESTS: Sonar analysis'
               run: $JHI_SCRIPTS/25-sonar-analyze.sh
