@@ -428,6 +428,7 @@ dependencies {
     <%_ if (authenticationType === 'oauth2') { _%>
     implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+    implementation "org.springframework.security.oauth:spring-security-oauth2"
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     implementation "io.jsonwebtoken:jjwt-api"

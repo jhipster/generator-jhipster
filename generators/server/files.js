@@ -423,6 +423,17 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => !generator.reactive && 
+                (generator.applicationType === 'uaa' || generator.authenticationType === 'uaa' || generator.authenticationType === 'oauth2'),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/MethodSecurityConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/MethodSecurityConfiguration.java`
+                }
+            ]
+        },
+        {
             condition: generator =>
                 !shouldSkipUserManagement(generator) && generator.authenticationType === 'session' && !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
