@@ -95,9 +95,6 @@ import org.mockito.Mock;
 <%_ } _%>
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-<%_ if (fieldsContainDuration === true) { _%>
-import org.springframework.boot.convert.DurationUnit;
-<%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (searchEngine === 'elasticsearch' && pagination !== 'no' || fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.PageImpl;
@@ -128,7 +125,7 @@ import java.time.LocalDate;<% } %><% if (fieldsContainInstant === true || fields
 import java.time.Instant;<% } %><% if (fieldsContainZonedDateTime === true) { %>
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;<% } %><% if (fieldsContainLocalDate === true || fieldsContainZonedDateTime === true) { %>
-import java.time.ZoneId;<% } %><% if (fieldsContainInstant === true || fieldsContainDuration === true) { %>
+import java.time.ZoneId;<% } %><% if (fieldsContainInstant === true) { %>
 import java.time.temporal.ChronoUnit;<% } %>
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import java.util.ArrayList;
@@ -340,12 +337,9 @@ _%>
         <%_ } _%>
     <%_ } else if (fieldType === 'Duration') { _%>
 
-    @DurationUnit(ChronoUnit.MILLIS)
     private static final Duration <%=defaultValueName %> = Duration.ofHours(6);
-    @DurationUnit(ChronoUnit.MILLIS)
     private static final Duration <%=updatedValueName %> = Duration.ofHours(12);
         <%_ if (needsSmallerValueName) { _%>
-    @DurationUnit(ChronoUnit.MILLIS)
     private static final Duration <%=smallerValueName %> = Duration.ofHours(5);
         <%_ } _%>
     <%_ } else if (fieldType === 'Boolean') { _%>
