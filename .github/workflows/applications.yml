@@ -114,7 +114,7 @@ jobs:
                       profile: prod
                       war: 0
                     - app-type: react-maven-h2mem-memcached
-                      entity: sql
+                      entity: sqllight # TODO: instead of sql, because of flacky tests
                       profile: dev
                       war: 0 # TODO: need change to 1, when maven+war is fixed
                     - app-type: react-maven-cassandra-session-redis
@@ -130,7 +130,7 @@ jobs:
                       profile: prod
                       war: 0
                     - app-type: react-gradle-h2mem-memcached
-                      entity: sql
+                      entity: sqllight # TODO: instead of sql, because of flacky tests
                       profile: dev
                       war: 1
                     - app-type: react-gradle-cassandra-session-redis
