@@ -129,7 +129,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restUserMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value("test"))
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
@@ -190,7 +190,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         mockMvc.perform(get("/api/account")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.login").value("test"))
                 .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
     }
@@ -427,7 +427,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restUserMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value("test"))
             .andExpect(jsonPath("$.firstName").value("john"))
             .andExpect(jsonPath("$.lastName").value("doe"))
@@ -442,7 +442,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
             .jsonPath("$.login").isEqualTo("test")
             .jsonPath("$.firstName").isEqualTo("john")

@@ -487,7 +487,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         restUserMockMvc.perform(get("/api/users<% if (databaseType === 'sql') { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
@@ -501,7 +501,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
@@ -534,7 +534,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(user.getLogin()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
@@ -547,7 +547,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         webTestClient.get().uri("/api/users/{login}", user.getLogin())
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.login").isEqualTo(user.getLogin())
             .jsonPath("$.firstName").isEqualTo(DEFAULT_FIRSTNAME)
@@ -890,7 +890,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             .accept(TestUtil.APPLICATION_JSON_UTF8)
             .contentType(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
         <%_ } else { _%>
@@ -898,7 +898,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             .accept(TestUtil.APPLICATION_JSON_UTF8)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
             .jsonPath("$").isArray()
             .jsonPath("$[?(@=='" + AuthoritiesConstants.ADMIN + "')]").hasJsonPath()
