@@ -45,47 +45,43 @@ jobs:
                 node_version: [12.13.1]
                 os: [ubuntu-latest]
                 app-type:
-                  - ngx-session-cassandra-fr
-                  - ngx-mongodb-kafka-cucumber
-                  - ngx-couchbase
+                  - ngx-default
                   - ngx-psql-es-noi18n-mapsid
+                  - ngx-mariadb-oauth2-infinispan
+                  - ngx-mongodb-kafka-cucumber
+                  - ngx-h2mem-ws-nol2
                   - ngx-gradle-fr
-                  - ms-ngx-gateway-eureka
-                  - ms-micro-eureka
-                  - ms-micro-consul
+                  - ngx-gradle-psql-es-noi18n-mapsid
+                  - ngx-gradle-mariadb-oauth2-infinispan
                 include:
-                    - app-type: ngx-session-cassandra-fr
-                      entity: cassandra
-                      profile: dev
-                      war: 0
-                    - app-type: ngx-mongodb-kafka-cucumber
-                      entity: mongodb
-                      profile: dev
-                      war: 0
-                    - app-type: ngx-couchbase
-                      entity: couchbase
+                    - app-type: ngx-default
+                      entity: sql
                       profile: prod
                       war: 0
                     - app-type: ngx-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
                       war: 0
+                    - app-type: ngx-mariadb-oauth2-infinispan
+                      entity: sql
+                      profile: prod
+                    - app-type: ngx-mongodb-kafka-cucumber
+                      entity: mongodb
+                      profile: dev
+                      war: 0
+                    - app-type: ngx-h2mem-ws-nol2
+                      entity: sql
+                      profile: dev
+                      war: 0
                     - app-type: ngx-gradle-fr
                       entity: sql
                       profile: prod
-                      war: 1
-                    - app-type: ms-ngx-gateway-eureka
+                    - app-type: ngx-gradle-psql-es-noi18n-mapsid
+                      entity: sqlfull
+                      profile: prod
+                    - app-type: ngx-gradle-mariadb-oauth2-infinispan
                       entity: sql
                       profile: prod
-                      war: 1
-                    - app-type: ms-micro-eureka
-                      entity: micro
-                      profile: dev
-                      war: 0
-                    - app-type: ms-micro-consul
-                      entity: micro
-                      profile: prod
-                      war: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
