@@ -30,7 +30,6 @@
         "serviceDiscoveryType": false,
         "clientPackageManager": "npm",
         "clientFramework": "angularX",
-        "jhipsterVersion": "6.5.1",
         "jwtSecretKey": "OTNiNTU1YzgyNjA3NjUwNDRhYWM1OTBiMGI3YmY1ODk3NWFiZWIyMmZiNzFhM2JiOWY4OWY0OTc1YTllNTkzZWExNjk5NWMzZGQxZTEwODNhZWFlNjc2M2IzNGViODg2NWRlNjM0ZDdkNDkxYjdhZThhODY1ZGJmODRhYWM4OTk=",
         "embeddableLaunchScript": false,
         "useSass": true,

@@ -17,12 +17,23 @@
         "serviceDiscoveryType": "eureka",
         "buildTool": "maven",
         "applicationType": "gateway",
-        "testFrameworks": ["gatling"],
+        "testFrameworks": [
+            "gatling"
+        ],
         "jhiPrefix": "jhi",
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "languages": ["en"],
+        "languages": [
+            "en"
+        ],
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "embeddableLaunchScript": false,
+        "useSass": true,
+        "clientTheme": "none",
+        "entitySuffix": "",
+        "dtoSuffix": "DTO",
+        "otherModules": [],
+        "blueprints": []
     }
 }
