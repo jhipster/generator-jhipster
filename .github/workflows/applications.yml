@@ -58,7 +58,12 @@ jobs:
                   - react-default
                   - react-psql-es-noi18n-mapsid
                   - react-h2mem-memcached
-
+                  - react-maven-cassandra-session-redis
+                  - react-maven-couchbase-caffeine
+                  - react-gradle-psql-es-noi18n-mapsid
+                  - react-gradle-h2mem-memcached
+                  - react-gradle-cassandra-session-redis
+                  - react-gradle-couchbase-caffeine
                 include:
                     - app-type: ngx-default
                       entity: sql
@@ -105,18 +110,34 @@ jobs:
                       profile: prod
                       war: 0
                     - app-type: react-maven-psql-es-noi18n-mapsid
-                      entity: sqlfuull
+                      entity: sql # TODO: need change to sqlfull, when react is fixed
                       profile: prod
                       war: 0
                     - app-type: react-maven-h2mem-memcached
                       entity: sql
-                      profile: prod
-                      war: 0
+                      profile: dev
+                      war: 1
                     - app-type: react-maven-cassandra-session-redis
                       entity: cassandra
                       profile: prod
                       war: 0
                     - app-type: react-maven-couchbase-caffeine
+                      entity: couchbase
+                      profile: prod
+                      war: 0
+                    - app-type: react-gradle-psql-es-noi18n-mapsid
+                      entity: sql # TODO: need change to sqlfull, when react is fixed
+                      profile: prod
+                      war: 0
+                    - app-type: react-gradle-h2mem-memcached
+                      entity: sql
+                      profile: dev
+                      war: 1
+                    - app-type: react-gradle-cassandra-session-redis
+                      entity: cassandra
+                      profile: prod
+                      war: 0
+                    - app-type: react-gradle-couchbase-caffeine
                       entity: couchbase
                       profile: prod
                       war: 0
