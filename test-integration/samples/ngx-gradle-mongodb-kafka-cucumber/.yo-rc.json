@@ -12,7 +12,7 @@
         "devDatabaseType": "mongodb",
         "prodDatabaseType": "mongodb",
         "searchEngine": false,
-        "buildTool": "maven",
+        "buildTool": "gradle",
         "enableTranslation": true,
         "nativeLanguage": "en",
         "languages": [

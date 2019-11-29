@@ -53,6 +53,8 @@ jobs:
                   - ngx-gradle-fr
                   - ngx-gradle-psql-es-noi18n-mapsid
                   - ngx-gradle-mariadb-oauth2-infinispan
+                  - ngx-gradle-mongodb-kafka-cucumber
+                  - ngx-gradle-yarn-h2disk-ws-nocache
                 include:
                     - app-type: ngx-default
                       entity: sql
@@ -82,6 +84,12 @@ jobs:
                     - app-type: ngx-gradle-mariadb-oauth2-infinispan
                       entity: sql
                       profile: prod
+                    - app-type: ngx-gradle-mongodb-kafka-cucumber
+                      entity: sql
+                      profile: prod
+                    - app-type: ngx-gradle-yarn-h2disk-ws-nocache
+                      entity: sql
+                      profile: dev                    
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
