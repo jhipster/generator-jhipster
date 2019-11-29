@@ -133,10 +133,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarName: 'sonarName',
-                    dockerRegistryURL: 'https://registry.hub.docker.com',
-                    dockerRegistryCredentialsId: 'docker-login',
-                    dockerRegistryOrganizationName: 'jhipster'
+                    sonarName: 'sonarName'
                 })
                 .on('end', done);
         });
@@ -169,10 +166,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarName: 'sonarName',
-                    dockerRegistryURL: 'https://registry.hub.docker.com',
-                    dockerRegistryCredentialsId: 'docker-login',
-                    dockerRegistryOrganizationName: 'jhipster'
+                    sonarName: 'sonarName'
                 })
                 .on('end', done);
         });
@@ -337,10 +331,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarUrl: 'http://localhost:9000',
-                    dockerRegistryURL: 'https://registry.hub.docker.com',
-                    dockerRegistryCredentialsId: 'docker-login',
-                    dockerRegistryOrganizationName: 'jhipster'
+                    sonarUrl: 'http://localhost:9000'
                 })
                 .on('end', done);
         });
@@ -617,6 +608,9 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
+        it("doesn't Docker publish", () => {
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+        });
     });
 
     describe('GitHub Actions: maven AngularX NPM', () => {
@@ -635,6 +629,9 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
+        });
+        it("doesn't Docker publish", () => {
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
         });
     });
 
@@ -655,6 +652,9 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
+        it("doesn't Docker publish", () => {
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+        });
     });
 
     describe('GitHub Actions: Gradle AngularX NPM', () => {
@@ -673,6 +673,55 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
+        });
+        it("doesn't Docker publish", () => {
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+        });
+    });
+
+    describe('GitHub Actions: maven AngularX Yarn with full options', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'github',
+                    cicdIntegrations: ['publishDocker'],
+                    dockerImage: 'jhipster-publish-docker'
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.github);
+        });
+        it('contains Docker publish', () => {
+            assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+        });
+    });
+
+    describe('GitHub Actions: gradle AngularX Yarn with full options', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'github',
+                    cicdIntegrations: ['publishDocker'],
+                    dockerImage: 'jhipster-publish-docker'
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.github);
+        });
+        it('contains Docker publish', () => {
+            assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
         });
     });
 
