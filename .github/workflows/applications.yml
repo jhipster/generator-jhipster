@@ -55,6 +55,10 @@ jobs:
                   - ngx-gradle-mariadb-oauth2-infinispan
                   - ngx-gradle-mongodb-kafka-cucumber
                   - ngx-gradle-yarn-h2disk-ws-nocache
+                  - react-default
+                  - react-psql-es-noi18n-mapsid
+                  - react-h2mem-memcached
+
                 include:
                     - app-type: ngx-default
                       entity: sql
@@ -67,6 +71,7 @@ jobs:
                     - app-type: ngx-mariadb-oauth2-infinispan
                       entity: sql
                       profile: prod
+                      war: 0
                     - app-type: ngx-mongodb-kafka-cucumber
                       entity: mongodb
                       profile: dev
@@ -74,22 +79,47 @@ jobs:
                     - app-type: ngx-h2mem-ws-nol2
                       entity: sql
                       profile: dev
-                      war: 0
+                      war: 1
                     - app-type: ngx-gradle-fr
                       entity: sql
                       profile: prod
+                      war: 0
                     - app-type: ngx-gradle-psql-es-noi18n-mapsid
                       entity: sqlfull
                       profile: prod
+                      war: 0
                     - app-type: ngx-gradle-mariadb-oauth2-infinispan
                       entity: sql
                       profile: prod
+                      war: 0
                     - app-type: ngx-gradle-mongodb-kafka-cucumber
-                      entity: sql
+                      entity: mongodb
                       profile: prod
+                      war: 0
                     - app-type: ngx-gradle-yarn-h2disk-ws-nocache
                       entity: sql
-                      profile: dev                    
+                      profile: dev
+                      war: 1
+                    - app-type: react-default
+                      entity: sql
+                      profile: prod
+                      war: 0
+                    - app-type: react-maven-psql-es-noi18n-mapsid
+                      entity: sqlfuull
+                      profile: prod
+                      war: 0
+                    - app-type: react-maven-h2mem-memcached
+                      entity: sql
+                      profile: prod
+                      war: 0
+                    - app-type: react-maven-cassandra-session-redis
+                      entity: cassandra
+                      profile: prod
+                      war: 0
+                    - app-type: react-maven-couchbase-caffeine
+                      entity: couchbase
+                      profile: prod
+                      war: 0
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
