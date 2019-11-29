@@ -157,7 +157,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         login.setPassword("test");
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
@@ -166,7 +166,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
             .andExpect(header().string("Authorization", not(isEmptyString())));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isOk()
@@ -208,7 +208,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         login.setRememberMe(true);
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
@@ -217,7 +217,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
             .andExpect(header().string("Authorization", not(isEmptyString())));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isOk()
@@ -234,14 +234,14 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         login.setPassword("wrong password");
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.id_token").doesNotExist())
             .andExpect(header().doesNotExist("Authorization"));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isUnauthorized()
