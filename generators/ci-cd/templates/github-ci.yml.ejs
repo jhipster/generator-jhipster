@@ -19,8 +19,8 @@
 name: Application CI
 on: [push, pull_request]
 jobs:
-    applications:
-        name: <%= baseName %> test suite
+    pipeline:
+        name: <%= baseName %> pipeline
         runs-on: ubuntu-latest
         timeout-minutes: 40
         env:
@@ -74,4 +74,16 @@ jobs:
               run: ./mvnw -ntp package -Pprod -DskipTests
               <%_ } else if (buildTool === 'gradle') { _%>
               run: ./gradlew bootJar -Pprod -x test -x integrationTest
+              <%_ } _%>
+              <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
+            - name: Build and publish docker image
+              if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
+              run: |
+                  GIT_TAG=:${GITHUB_REF#refs/tags/}
+                  DOCKER_TAG=${GIT_TAG#:refs/heads/master}
+                  <%_ if (buildTool === 'maven') { _%>
+                  ./mvnw -ntp jib:build -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
+                  <%_ } else if (buildTool === 'gradle') { _%>
+                  ./gradlew jib -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
+                  <%_ } _%>
               <%_ } _%>
