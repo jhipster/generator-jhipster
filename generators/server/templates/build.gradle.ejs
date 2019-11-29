@@ -493,6 +493,7 @@ dependencies {
     <%_ } _%>
     testImplementation ("org.springframework.boot:spring-boot-starter-test") {
         exclude module: "junit"
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation "org.springframework.security:spring-security-test"
