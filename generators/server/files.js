@@ -1503,8 +1503,8 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/service/mapper/UserMapperIT.java',
-                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperIT.java`
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/UserResourceIT.java',
@@ -1794,8 +1794,8 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}service/UserServiceIT.java`
                 },
                 {
-                    file: 'package/service/mapper/UserMapperIT.java',
-                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperIT.java`
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/AccountResourceIT.java',
