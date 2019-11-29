@@ -24,34 +24,46 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 40
         env:
+            <%_ if (!skipClient) { _%>
             NODE_VERSION: <%= NODE_VERSION %>
+            <%_ } _%>
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            <%_ if (databaseType !== 'no') { _%>
             SPRING_JPA_SHOW_SQL: false
+            <%_ } _%>
+            <%_ if (!skipClient) { _%>
             JHI_DISABLE_WEBPACK_LOGS: true
+            <%_ } _%>
             <%_ if (clientFramework === 'angularX') { _%>
             NG_CLI_ANALYTICS: false
             <%_ } _%>
         steps:
             - uses: actions/checkout@v1
+              <%_ if (!skipClient) { _%>
             - uses: actions/setup-node@v1
               with:
                   node-version: <%= NODE_VERSION %>
+              <%_ } _%>
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
+              <%_ if (prodDatabaseType === 'mysql') { _%>
             - name: Stop MySQL server
               run: sudo /etc/init.d/mysql stop
+              <%_ } _%>
+              <%_ if (!skipClient) { _%>
             - name: Install node.js packages
               run: <%= clientPackageManager %> install
+              <%_ } _%>
             - name: Run backend test
               <%_ if (buildTool === 'maven') { _%>
               run: |
-                 chmod +x mvnw
-                 ./mvnw -ntp clean verify <% if (!skipClient) { %>-P-webpack<% } %>
+                  chmod +x mvnw
+                  ./mvnw -ntp clean verify<% if (!skipClient) { %> -P-webpack<% } %>
               <%_ } else if (buildTool === 'gradle') { _%>
               run: |
-                 chmod +x gradlew
-                 ./gradlew clean test integrationTest <% if (!skipClient) { %>-x webpack<% } %>
+                  chmod +x gradlew
+                  ./gradlew clean test integrationTest<% if (!skipClient) { %> -x webpack<% } %>
               <%_ } _%>
             <%_ if (!skipClient) { _%>
             - name: Run frontend test
