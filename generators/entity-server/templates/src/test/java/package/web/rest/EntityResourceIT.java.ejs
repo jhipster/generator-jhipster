@@ -340,12 +340,12 @@ _%>
         <%_ } _%>
     <%_ } else if (fieldType === 'Duration') { _%>
 
-    @DurationUnit(ChronoUnit.HOURS)
+    @DurationUnit(ChronoUnit.MILLIS)
     private static final Duration <%=defaultValueName %> = Duration.ofHours(6);
-    @DurationUnit(ChronoUnit.HOURS)
+    @DurationUnit(ChronoUnit.MILLIS)
     private static final Duration <%=updatedValueName %> = Duration.ofHours(12);
         <%_ if (needsSmallerValueName) { _%>
-    @DurationUnit(ChronoUnit.HOURS)
+    @DurationUnit(ChronoUnit.MILLIS)
     private static final Duration <%=smallerValueName %> = Duration.ofHours(5);
         <%_ } _%>
     <%_ } else if (fieldType === 'Boolean') { _%>
