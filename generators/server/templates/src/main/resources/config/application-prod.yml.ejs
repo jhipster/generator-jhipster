@@ -121,7 +121,7 @@ spring:
         <%_ } else if (prodDatabaseType === 'mariadb') { _%>
         database-platform: org.hibernate.dialect.MariaDB103Dialect
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } else if (prodDatabaseType === 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle12cDialect
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
