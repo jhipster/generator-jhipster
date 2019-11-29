@@ -9,7 +9,10 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/main/webapp/app/$1'
   },
-  reporters: ['default', ['jest-junit', { output: './<%= BUILD_DIR %>test-results/TESTS-results-jest.xml' }]],
+  reporters: [
+    'default',
+    [ 'jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' } ]
+  ],
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts)'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
