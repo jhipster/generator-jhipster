@@ -95,6 +95,9 @@ import org.mockito.Mock;
 <%_ } _%>
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (fieldsContainDuration === true) { _%>
+import org.springframework.boot.convert.DurationUnit;
+<%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (searchEngine === 'elasticsearch' && pagination !== 'no' || fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.PageImpl;
