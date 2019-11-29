@@ -84,7 +84,7 @@ jobs:
                     - app-type: ngx-h2mem-ws-nol2
                       entity: sql
                       profile: dev
-                      war: 1
+                      war: 0 # TODO: need change to 1, when maven+war is fixed
                     - app-type: ngx-gradle-fr
                       entity: sql
                       profile: prod
@@ -104,7 +104,7 @@ jobs:
                     - app-type: ngx-gradle-yarn-h2disk-ws-nocache
                       entity: sql
                       profile: dev
-                      war: 1
+                      war: 0 # TODO: need change to 1, when maven+war is fixed
                     - app-type: react-default
                       entity: sql
                       profile: prod
