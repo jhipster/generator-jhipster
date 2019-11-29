@@ -116,7 +116,7 @@ function askIntegrations() {
     if (['jenkins', 'gitlab'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' });
     }
-    if (['jenkins', 'gitlab', 'travis'].includes(this.pipeline)) {
+    if (['jenkins', 'gitlab', 'travis', 'github'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Analyze your code with ${chalk.yellow('*Sonar*')}`, value: 'sonar' });
     }
     if (['jenkins', 'github'].includes(this.pipeline)) {
@@ -128,7 +128,7 @@ function askIntegrations() {
             value: 'heroku'
         });
     }
-    const defaultDockerImage = `docker.io/jhipster/${this.dasherizedBaseName}`;
+    const defaultDockerImage = `jhipster/${this.dasherizedBaseName}`;
 
     const done = this.async();
     const prompts = [
