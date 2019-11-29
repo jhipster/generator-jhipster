@@ -513,7 +513,7 @@ dependencies {
     <%_ if (databaseType === 'couchbase') { _%>
     testImplementation "org.testcontainers:couchbase"
     <%_ } _%>
-    testImplementation "org.hamcrest:hamcrest-library"
+    testImplementation "org.hamcrest:hamcrest"
     <%_ if (databaseType === 'sql') { _%>
     testImplementation "com.h2database:h2"
     <%_ } _%>
