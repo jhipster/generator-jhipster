@@ -56,8 +56,8 @@ jobs:
                   - ngx-gradle-mongodb-kafka-cucumber
                   - ngx-gradle-yarn-h2disk-ws-nocache
                   - react-default
-                  - react-psql-es-noi18n-mapsid
-                  - react-h2mem-memcached
+                  - react-maven-psql-es-noi18n-mapsid
+                  - react-maven-h2mem-memcached
                   - react-maven-cassandra-session-redis
                   - react-maven-couchbase-caffeine
                   - react-gradle-psql-es-noi18n-mapsid
