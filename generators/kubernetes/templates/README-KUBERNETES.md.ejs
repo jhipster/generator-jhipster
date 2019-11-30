@@ -125,7 +125,7 @@ $ kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespac
 
 Check the docker registry your Kubernetes cluster is accessing. If you are using a private registry, you should add it to your namespace by `kubectl create secret docker-registry` (check the [docs](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/) for more info)
 
-> my applications is stopped, before they can boot up
+> my applications are stopped, before they can boot up
 
 This can occur if your cluster has low resource (e.g. Minikube). Increase the `initialDelaySeconds` value of livenessProbe of your deployments
 
