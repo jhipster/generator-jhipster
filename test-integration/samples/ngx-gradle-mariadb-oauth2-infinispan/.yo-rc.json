@@ -1,6 +1,6 @@
 {
     "generator-jhipster": {
-        "baseName": "sampleOauth2SassInfinispan",
+        "baseName": "sampleGradleOauth2Infinispan",
         "packageName": "io.github.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "serverPort": "8080",
@@ -13,14 +13,23 @@
         "prodDatabaseType": "mariadb",
         "searchEngine": false,
         "messageBroker": false,
-        "buildTool": "maven",
-        "rememberMeKey": "448f9a67a8a292c4905a733ec22cc3b78e493c56",
+        "buildTool": "gradle",
         "applicationType": "monolith",
-        "testFrameworks": ["gatling", "protractor"],
+        "testFrameworks": [
+            "gatling",
+            "protractor"
+        ],
         "jhiPrefix": "myPrefix",
         "serviceDiscoveryType": false,
         "enableTranslation": false,
         "clientPackageManager": "npm",
-        "clientFramework": "angularX"
+        "clientFramework": "angularX",
+        "embeddableLaunchScript": false,
+        "useSass": true,
+        "clientTheme": "none",
+        "entitySuffix": "",
+        "dtoSuffix": "DTO",
+        "otherModules": [],
+        "blueprints": []
     }
 }
