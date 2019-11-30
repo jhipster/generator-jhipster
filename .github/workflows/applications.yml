@@ -21,7 +21,6 @@ name: Applications
 on: [push, pull_request]
 env:
   JHI_RUN_APP: 1
-  JHI_PROTRACTOR: 1
   JHI_JDK: 11
   JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
   JHI_LIB_BRANCH: release
@@ -69,83 +68,103 @@ jobs:
             entity: sql
             profile: prod
             war: 0
+            protractor: 1
           - app-type: ngx-psql-es-noi18n-mapsid
             entity: sqlfull
             profile: prod
             war: 0
+            protractor: 1
           - app-type: ngx-mariadb-oauth2-infinispan
             entity: sql
             profile: prod
             war: 0
+            protractor: 1
           - app-type: ngx-mongodb-kafka-cucumber
             entity: mongodb
             profile: dev
             war: 0
+            protractor: 1
           - app-type: ngx-h2mem-ws-nol2
             entity: sql
             profile: dev
             war: 0 # TODO: need change to 1, when maven+war is fixed
+            protractor: 1
           - app-type: ngx-gradle-fr
             entity: sql
             profile: prod
             war: 0
+            protractor: 1
           - app-type: ngx-gradle-psql-es-noi18n-mapsid
             entity: sqlfull
             profile: prod
             war: 0
+            protractor: 1
           - app-type: ngx-gradle-mariadb-oauth2-infinispan
             entity: sql
             profile: prod
             war: 0
+            protractor: 1
           - app-type: ngx-gradle-mongodb-kafka-cucumber
             entity: mongodb
             profile: prod
             war: 0
+            protractor: 1
           - app-type: ngx-gradle-yarn-h2disk-ws-nocache
             entity: sql
             profile: dev
             war: 1
+            protractor: 1
           - app-type: react-default
             entity: sql
             profile: prod
             war: 0
+            protractor: 1
           - app-type: react-maven-psql-es-noi18n-mapsid
             entity: sql # TODO: need change to sqlfull, when react is fixed
             profile: prod
             war: 0
+            protractor: 0 # TODO: instead of sql, because of flacky tests
           - app-type: react-maven-h2mem-memcached
             entity: none # TODO: instead of sql, because of flacky tests
             profile: dev
             war: 0 # TODO: need change to 1, when maven+war is fixed
+            protractor: 0 # TODO: instead of sql, because of flacky tests
           - app-type: react-maven-cassandra-session-redis
             entity: cassandra
             profile: prod
             war: 0
+            protractor: 1
           - app-type: react-maven-couchbase-caffeine
             entity: couchbase
             profile: prod
             war: 0
+            protractor: 1
           - app-type: react-gradle-psql-es-noi18n-mapsid
             entity: sql # TODO: need change to sqlfull, when react is fixed
             profile: prod
             war: 0
+            protractor: 0 # TODO: instead of sql, because of flacky tests
           - app-type: react-gradle-h2mem-memcached
             entity: none # TODO: instead of sql, because of flacky tests
             profile: dev
             war: 1
+            protractor: 0 # TODO: instead of sql, because of flacky tests
           - app-type: react-gradle-cassandra-session-redis
             entity: cassandra
             profile: prod
             war: 0
+            protractor: 0 # TODO: instead of sql, because of flacky tests
           - app-type: react-gradle-couchbase-caffeine
             entity: couchbase
             profile: prod
             war: 0
+            protractor: 0 # TODO: instead of sql, because of flacky tests
     env:
       JHI_ENTITY: ${{ matrix.entity }}
       JHI_APP: ${{ matrix.app-type }}
       JHI_PROFILE: ${{ matrix.profile }}
       JHI_WAR: ${{ matrix.war }}
+      JHI_PROTRACTOR: ${{ matrix.protractor }}
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
