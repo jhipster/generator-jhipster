@@ -731,6 +731,9 @@ module.exports = class extends BaseGenerator {
             addDependencies() {
                 if (this.abort) return;
                 if (this.gaeCloudSQLInstanceNeeded === 'N') return;
+                if (this.buildTool === 'maven') {
+                    this.addMavenDependency('org.springframework.boot.experimental', 'spring-boot-thin-layout', '1.0.23.RELEASE');
+                }
                 if (this.prodDatabaseType === 'mysql' || this.prodDatabaseType === 'mariadb') {
                     if (this.buildTool === 'maven') {
                         this.addMavenDependency('com.google.cloud.sql', 'mysql-socket-factory', '1.0.8');
