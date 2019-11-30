@@ -540,6 +540,22 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Parse creationTimestamp option
+     * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
+     *                   obtained by parsing the given string representation of the creationTimestamp.
+     */
+    parseCreationTimestamp() {
+        let creationTimestamp;
+        if (this.options.creationTimestamp) {
+            creationTimestamp = Date.parse(this.options.creationTimestamp);
+            if (!creationTimestamp) {
+                this.warn(`Error parsing creationTimestamp ${this.options.creationTimestamp}`);
+            }
+        }
+        return creationTimestamp;
+    }
+
+    /**
      * @param {any} input input
      * @returns {boolean} true if input is number; false otherwise
      */

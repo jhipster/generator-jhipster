@@ -186,6 +186,12 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false
         });
 
+        // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
+        this.option('creation-timestamp', {
+            desc: 'Project creation timestamp (used for reproducible builds)',
+            type: String
+        });
+
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement =
@@ -459,8 +465,11 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             saveConfig() {
+                const creationTimestamp = this.parseCreationTimestamp() || this.config.get('creationTimestamp') || new Date().getTime();
+
                 const config = {
                     jhipsterVersion: packagejs.version,
+                    creationTimestamp,
                     applicationType: this.applicationType,
                     baseName: this.baseName,
                     testFrameworks: this.testFrameworks,
