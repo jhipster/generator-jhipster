@@ -153,7 +153,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   <%_ } _%>
 
   const handleClose = () => {
-    props.history.push('/<%= entityFileName %>');
+    props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination' || pagination === 'pager') { _%> + props.location.search<%_ } _%>);
   }
 
   useEffect(() => {
