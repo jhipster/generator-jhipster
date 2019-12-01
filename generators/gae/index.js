@@ -716,9 +716,7 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
                 this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
-                if (this.gaeCloudSQLInstanceNeeded === 'Y') {
-                    this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
-                }
+                this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
                 if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
                 }
