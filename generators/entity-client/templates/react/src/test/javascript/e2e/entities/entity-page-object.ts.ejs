@@ -47,7 +47,7 @@ export default class <%= entityClass %>ComponentsPage {
 
     <%_ if (!readOnly) { _%>
     async waitUntilLoaded() {
-        await waitUntilDisplayed(this.deleteButtons.first(), '', 10000);
+        await waitUntilDisplayed(this.deleteButtons.first());
     }
 
     async waitUntilDeleteButtonsLength(length) {
