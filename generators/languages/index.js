@@ -46,6 +46,7 @@ module.exports = class extends LanguagesGenerator {
         const customPhaseSteps = {
             write() {
                 utils.updateLanguagesInTranslationStore(this);
+                utils.updateI18nConfig(this);
                 utils.updateLanguagesInWebpack(this);
             }
         };

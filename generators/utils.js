@@ -26,6 +26,7 @@ const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 
 module.exports = {
     updateLanguagesInTranslationStore,
+    updateI18nConfig,
     updateLanguagesInWebpack,
     replaceTranslation,
     addEntityToMenu,
@@ -58,6 +59,22 @@ function updateLanguagesInTranslationStore(generator) {
             },
             generator
         );
+    } catch (e) {
+        generator.log(
+            chalk.yellow('\nUnable to find ')
+            + fullPath
+            + chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ')
+            + generator.languages
+            + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+        );
+        generator.debug('Error:', e);
+    }
+}
+
+function updateI18nConfig(generator) {
+    const fullPath = `${CLIENT_MAIN_SRC_DIR}app/shared/config/config.ts`;
+
+    try {
         // Add i18n config snippets for all languages
         let i18nConfig = 'const dateTimeFormats = {\n';
         if (generator.enableTranslation) {
@@ -67,6 +84,7 @@ function updateLanguagesInTranslationStore(generator) {
         }
         i18nConfig += '  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object\n';
         i18nConfig += '}';
+
         jhipsterUtils.replaceContent(
             {
                 file: fullPath,
