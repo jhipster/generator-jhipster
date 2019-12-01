@@ -34,7 +34,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="audit in audits" :key="audit.timestamp">
-                    <td><span>{{audit.timestamp | formatDate}}</span></td>
+                    <td><%_ if (enableTranslation) { _%><span>{{$d(Date.parse(audit.timestamp), 'short') }}</span><%_ } else { _%><span>{{audit.timestamp | formatDate}}</span><%_ } _%></td>
                     <td><small>{{audit.principal}}</small></td>
                     <td>{{audit.type}}</td>
                     <td>
