@@ -82,7 +82,7 @@ jobs:
               <%_ } _%>
             - name: Package application
               <%_ if (buildTool === 'maven') { _%>
-              run: ./mvnw -ntp package -Pprod -DskipTests
+              run: ./mvnw -ntp package <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests
               <%_ } else if (buildTool === 'gradle') { _%>
               run: ./gradlew bootJar -Pprod -x test -x integrationTest
               <%_ } _%>

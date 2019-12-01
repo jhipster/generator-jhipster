@@ -113,7 +113,7 @@ function askIntegrations() {
     }
 
     const integrationChoices = [];
-    if (['jenkins', 'gitlab'].includes(this.pipeline)) {
+    if (['jenkins', 'gitlab', 'github'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Deploy your application to an ${chalk.yellow('*Artifactory*')}`, value: 'deploy' });
     }
     if (['jenkins', 'gitlab', 'travis', 'github'].includes(this.pipeline)) {

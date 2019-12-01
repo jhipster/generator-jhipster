@@ -614,6 +614,9 @@ describe('JHipster CI-CD Sub Generator', () => {
             assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
             assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*sonar.com/);
         });
+        it("doesn't contain distributionManagement in pom.xml", () => {
+            assert.noFileContent('pom.xml', /distributionManagement/);
+        });
     });
 
     describe('GitHub Actions: maven AngularX NPM', () => {
@@ -654,7 +657,7 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
-        it("doesn't Docker publish", () => {
+        it("doesn't contain Docker, Sonar", () => {
             assert.noFileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
             assert.noFileContent('.github/workflows/github-ci.yml', /gradlew.*sonar.com/);
         });
@@ -689,8 +692,12 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'github',
-                    cicdIntegrations: ['publishDocker', 'sonar'],
+                    cicdIntegrations: ['deploy', 'publishDocker', 'sonar'],
                     dockerImage: 'jhipster-publish-docker',
+                    artifactorySnapshotsId: 'snapshots',
+                    artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
+                    artifactoryReleasesId: 'releases',
+                    artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
                     sonarUrl: 'http://sonar.com:9000'
                 })
                 .on('end', done);
@@ -698,9 +705,12 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
-        it('contains Docker publish', () => {
+        it('contains Docker, Sonar', () => {
             assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
             assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sonar.com/);
+        });
+        it('contains distributionManagement in pom.xml', () => {
+            assert.fileContent('pom.xml', /distributionManagement/);
         });
     });
 
@@ -723,7 +733,7 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
-        it('contains Docker publish', () => {
+        it('contains Docker, Sonar', () => {
             assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
             assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*sonar.com/);
         });
