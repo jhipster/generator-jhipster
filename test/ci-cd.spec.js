@@ -610,9 +610,10 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
-        it("doesn't Docker publish", () => {
+        it("doesn't contain Sonar, Docker, Heroku", () => {
             assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
             assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*sonar.com/);
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*sample-mysql/);
         });
         it("doesn't contain distributionManagement in pom.xml", () => {
             assert.noFileContent('pom.xml', /distributionManagement/);
@@ -657,9 +658,10 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
-        it("doesn't contain Docker, Sonar", () => {
-            assert.noFileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
+        it("doesn't contain Sonar, Docker, Heroku", () => {
             assert.noFileContent('.github/workflows/github-ci.yml', /gradlew.*sonar.com/);
+            assert.noFileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*sample-mysql/);
         });
     });
 
@@ -692,7 +694,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'github',
-                    cicdIntegrations: ['deploy', 'publishDocker', 'sonar'],
+                    cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
                     dockerImage: 'jhipster-publish-docker',
                     artifactorySnapshotsId: 'snapshots',
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
@@ -705,9 +707,10 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
-        it('contains Docker, Sonar', () => {
-            assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+        it('contains Docker, Sonar, Heroku', () => {
             assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sonar.com/);
+            assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+            assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sample-mysql/);
         });
         it('contains distributionManagement in pom.xml', () => {
             assert.fileContent('pom.xml', /distributionManagement/);
@@ -724,7 +727,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'github',
-                    cicdIntegrations: ['publishDocker', 'sonar'],
+                    cicdIntegrations: ['sonar', 'publishDocker', 'heroku'],
                     dockerImage: 'jhipster-publish-docker',
                     sonarUrl: 'http://sonar.com:9000'
                 })
@@ -733,9 +736,10 @@ describe('JHipster CI-CD Sub Generator', () => {
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
-        it('contains Docker, Sonar', () => {
+        it('contains Docker, Sonar, Heroku', () => {
             assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
             assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*sonar.com/);
+            assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*deployHeroku/);
         });
     });
 

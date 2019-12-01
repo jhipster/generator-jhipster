@@ -122,7 +122,7 @@ function askIntegrations() {
     if (['jenkins', 'github'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' });
     }
-    if (['jenkins', 'gitlab', 'travis'].includes(this.pipeline)) {
+    if (['jenkins', 'gitlab', 'travis', 'github'].includes(this.pipeline)) {
         integrationChoices.push({
             name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`,
             value: 'heroku'

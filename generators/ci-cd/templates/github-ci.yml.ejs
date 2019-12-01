@@ -86,6 +86,17 @@ jobs:
               <%_ } else if (buildTool === 'gradle') { _%>
               run: ./gradlew bootJar -Pprod -x test -x integrationTest
               <%_ } _%>
+              <%_ if (cicdIntegrations.includes('heroku')) { _%>
+              name: Deploy to Heroku
+              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+              env:
+                  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+                  <%_ if (buildTool === 'maven') { _%>
+              run: ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+                  <%_ } else if (buildTool === 'gradle') { _%>
+              run: ./gradlew deployHeroku --no-daemon
+                  <%_ } _%>
+              <%_ } _%>
               <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
             - name: Build and publish docker image
               if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
