@@ -65,15 +65,37 @@ jobs:
                   chmod +x gradlew
                   ./gradlew clean test integrationTest<% if (!skipClient) { %> -x webpack<% } %>
               <%_ } _%>
-            <%_ if (!skipClient) { _%>
+              <%_ if (!skipClient) { _%>
             - name: Run frontend test
               run: <%= clientPackageManager %> run <%= frontTestCommand %>
-            <%_ } _%>
+              <%_ } _%>
+              <%_ if (cicdIntegrations.includes('sonar')) { _%>
+            - name: Analyze code with SonarQube
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  <%_ if (buildTool === 'maven') { _%>
+              run: '[[ $SONAR_TOKEN != "" ]] &&  ./mvnw -ntp initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> || echo No SONAR_TOKEN, skipping...'
+                  <%_ } else if (buildTool === 'gradle') { _%>
+              run: '[[ $SONAR_TOKEN != "" ]] &&  ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %> || echo No SONAR_TOKEN, skipping...'
+                  <%_ } _%>
+              <%_ } _%>
             - name: Package application
               <%_ if (buildTool === 'maven') { _%>
-              run: ./mvnw -ntp package -Pprod -DskipTests
+              run: ./mvnw -ntp package <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests
               <%_ } else if (buildTool === 'gradle') { _%>
               run: ./gradlew bootJar -Pprod -x test -x integrationTest
+              <%_ } _%>
+              <%_ if (cicdIntegrations.includes('heroku')) { _%>
+              name: Deploy to Heroku
+              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+              env:
+                  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+                  <%_ if (buildTool === 'maven') { _%>
+              run: ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+                  <%_ } else if (buildTool === 'gradle') { _%>
+              run: ./gradlew deployHeroku --no-daemon
+                  <%_ } _%>
               <%_ } _%>
               <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
             - name: Build and publish docker image
