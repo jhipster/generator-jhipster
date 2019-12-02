@@ -208,3 +208,6 @@ jobs:
         run: $JHI_SCRIPTS/24-tests-e2e.sh
       - name: 'TESTS: Sonar analysis'
         run: $JHI_SCRIPTS/25-sonar-analyze.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
