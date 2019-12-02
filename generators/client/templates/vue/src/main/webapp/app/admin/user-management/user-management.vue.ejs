@@ -51,9 +51,15 @@
                             </div>
                         </td>
                         <%_ if (databaseType !== 'cassandra') { _%>
+                        <%_ if (enableTranslation) { _%>
+                        <td v-if="user.createdDate">{{$d(Date.parse(user.createdDate), 'short') }}</td><td v-else>{{user.createdDate | formatDate}}</td>
+                        <td>{{user.lastModifiedBy}}</td>
+                        <td v-if="user.lastModifiedDate">{{$d(Date.parse(user.lastModifiedDate), 'short') }}</td><td v-else>{{user.lastModifiedDate | formatDate}}</td>
+                        <%_ } else { _%>
                         <td>{{user.createdDate | formatDate}}</td>
                         <td>{{user.lastModifiedBy}}</td>
                         <td>{{user.lastModifiedDate | formatDate}}</td>
+                        <%_ } _%>
                         <%_ } _%>
                         <td class="text-right">
                             <div class="btn-group">

@@ -18,7 +18,11 @@
                     <td>{{activity.userLogin}}</td>
                     <td>{{activity.ipAddress}}</td>
                     <td>{{activity.page}}</td>
+                    <%_ if (enableTranslation) { _%>
+                    <td>{{$d(Date.parse(activity.time), 'short') }}</td>
+                    <%_ } else { _%>
                     <td>{{activity.time | formatDate}}</td>
+                    <%_ } _%>
                 </tr>
                 </tbody>
             </table>

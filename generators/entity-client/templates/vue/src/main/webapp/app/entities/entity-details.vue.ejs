@@ -27,7 +27,11 @@
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                        <%_ if (enableTranslation) { _%>
+                        <span v-if="<%= entityInstance %>.<%=fieldName %>">{{$d(Date.parse(<%= entityInstance %>.<%=fieldName %>), 'long') }}</span>
+                        <%_ } else { _%>
                         <span>{{<%= entityInstance %>.<%=fieldName %> | formatDate}}</span>
+                        <%_ } _%>
                         <%_ } else { _%>
                         <span>{{<%= entityInstance %>.<%= fieldName %>}}</span>
                         <%_ } _%>

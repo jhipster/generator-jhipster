@@ -50,6 +50,12 @@ import { alertStore } from '@/shared/config/store/alert-store';
 import { translationStore } from '@/shared/config/store/translation-store';
 <%_ } _%>
 
+<%_ if (enableTranslation) { _%>
+const dateTimeFormats = {
+  // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object
+}
+<%_ } _%>
+
 export function initVueApp(vue) {
   vue.use(VueCookie);
   vue.use(Vuelidate);
@@ -99,6 +105,7 @@ export function initFortAwesome(vue) {
 export function initI18N(vue) {
   vue.use(VueI18n);
   return new VueI18n({
+    dateTimeFormats,
     silentTranslationWarn: true,
     formatter: new <%=jhiPrefixCapitalized%>Formatter()
   });
