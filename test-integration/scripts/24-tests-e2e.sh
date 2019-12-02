@@ -71,8 +71,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             --logging.level.ROOT=OFF \
             --logging.level.org.zalando=OFF \
             --logging.level.io.github.jhipster=OFF \
-            --logging.level.io.github.jhipster.sample=OFF \
-            --logging.level.io.github.jhipster.travis=OFF &
+            --logging.level.io.github.jhipster.sample=OFF &
         sleep 80
     fi
 
@@ -86,8 +85,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             --logging.level.org.zalando=OFF \
             --logging.level.org.springframework.web=ERROR \
             --logging.level.io.github.jhipster=OFF \
-            --logging.level.io.github.jhipster.sample=OFF \
-            --logging.level.io.github.jhipster.travis=OFF &
+            --logging.level.io.github.jhipster.sample=OFF &
             echo $! > .pidRunApp
     else
         java \
@@ -97,8 +95,7 @@ if [ "$JHI_RUN_APP" == 1 ]; then
             --logging.level.org.zalando=OFF \
             --logging.level.org.springframework.web=ERROR \
             --logging.level.io.github.jhipster=OFF \
-            --logging.level.io.github.jhipster.sample=OFF \
-            --logging.level.io.github.jhipster.travis=OFF &
+            --logging.level.io.github.jhipster.sample=OFF &
         echo $! > .pidRunApp
     fi
     sleep 40
