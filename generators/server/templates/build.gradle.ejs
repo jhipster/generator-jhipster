@@ -87,11 +87,13 @@ if (project.hasProperty("zipkin")) {
 }
 <%_ } _%>
 
+<%_ if (skipClient) { _%>
 idea {
     module {
         excludeDirs += files("node_modules")
     }
 }
+<%_ } _%>
 
 eclipse {
     sourceSets {
