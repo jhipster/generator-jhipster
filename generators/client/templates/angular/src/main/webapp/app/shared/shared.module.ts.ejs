@@ -22,7 +22,7 @@ import { <%=angularXAppName%>SharedLibsModule } from './shared-libs.module';
 import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe';
 <%_ } _%>
 import { <%=jhiPrefixCapitalized%>AlertComponent } from './alert/alert.component';
-import { <%=jhiPrefixCapitalized%>AlertErrorComponent } from './alert/alert-error.component';
+import { AlertErrorComponent } from './alert/alert-error.component';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { <%=jhiPrefixCapitalized%>LoginModalComponent } from './login/login.component';
 <%_ } _%>
@@ -37,7 +37,7 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         FindLanguageFromKeyPipe,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>AlertComponent,
-        <%=jhiPrefixCapitalized%>AlertErrorComponent,
+        AlertErrorComponent,
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>
@@ -52,7 +52,7 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         FindLanguageFromKeyPipe,
         <%_ } _%>
         <%=jhiPrefixCapitalized%>AlertComponent,
-        <%=jhiPrefixCapitalized%>AlertErrorComponent,
+        AlertErrorComponent,
         <%_ if (authenticationType !== 'oauth2') { _%>
         <%=jhiPrefixCapitalized%>LoginModalComponent,
         <%_ } _%>

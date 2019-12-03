@@ -22,9 +22,10 @@ import { Resolve, ActivatedRouteSnapshot, Routes, Router } from '@angular/router
 <%_ if (pagination === 'pagination') { _%>
 import { JhiResolvePagingParams } from 'ng-jhipster';
 <%_ } _%>
-import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
+
+import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';

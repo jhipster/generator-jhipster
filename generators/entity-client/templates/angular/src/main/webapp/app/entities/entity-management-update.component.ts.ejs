@@ -42,8 +42,12 @@ import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
 <%_ if (fieldsContainBlob) { _%>
 import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
 <%_ } _%>
+
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+<%_ if (fieldsContainBlob) { _%>
+import { AlertError } from 'app/shared/alert/alert-error.model';
+<%_ } _%>
 <%_
 Object.keys(differentRelationships).forEach(key => {
     if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
@@ -214,7 +218,9 @@ _%>
 
     setFileData(event: Event, field: string, isImage: boolean): void {
         this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe(null, (err: JhiFileLoadError) => {
-            this.eventManager.broadcast(new JhiEventWithContent('<%=angularAppName%>.error', { ...err, key: 'error.file.' + err.key }));
+            this.eventManager.broadcast(
+                new JhiEventWithContent<AlertError>('<%=angularAppName%>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
+            );
         });
     }
 
