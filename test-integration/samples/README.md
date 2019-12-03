@@ -1,6 +1,6 @@
 # Sample application generation
 
-To generate test applications, either automatically by Travis or locally on the developer machine, a number of pre-defined configurations have been prepared.
+To generate test applications, either automatically by the CI or locally on the developer machine, a number of pre-defined configurations have been prepared.
 
 ## Application configurations
 

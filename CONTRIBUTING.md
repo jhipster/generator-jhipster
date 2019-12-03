@@ -116,7 +116,7 @@ Before you submit your pull request consider the following guidelines:
     mvnw spring-boot:run
     ```
 
--   You can generate our Continuous Integration (with Travis CI and Azure Pipelines) by following [this](#local-build)
+-   You can generate our Continuous Integration (with GitHub Actions and Azure Pipelines) by following [this](#local-build)
 
 -   Commit your changes using a descriptive commit message that follows our
     [commit message conventions](#commit-message-format).
@@ -265,7 +265,7 @@ It is possible to debug JHipster's code using a Node.js debugger. To achieve thi
 
 #### Debugging with VSCode
 
-To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `travis/samples/app-sample-dev` folder.
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `test-integration/samples/app-sample-dev` folder.
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
