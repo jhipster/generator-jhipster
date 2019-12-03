@@ -18,35 +18,6 @@
 -%>
 <%_
 const tsKeyType = getTypescriptKeyType(getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships));
-const queryFilterTypeName = 'EntityQueryFilterType';
-
-const queryTypes = [];
-const filters = [];
-let importPagination = false;
-
-if (jpaMetamodelFiltering) {
-    queryTypes.push('any');
-} else {
-    if (pagination === 'pagination' || pagination === 'infinite-scroll') {
-        importPagination = true;
-        queryTypes.push('IPagination');
-    }
-    for (idx in relationships) {
-        if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) {
-            filters.push(`'${relationships[idx].relationshipName.toLowerCase()}-is-null'`);
-        }
-    }
-    if (filters.length > 0) {
-        queryTypes.push(queryFilterTypeName);
-        if (pagination === 'pagination' || pagination === 'infinite-scroll') {
-            queryTypes.push(`IPagination & ${queryFilterTypeName}`);
-        }
-    }
-}
-let queryParam = '';
-if (queryTypes.length > 0) {
-    queryParam = 'req?: ' + queryTypes.join(' | ');
-}
 const searchTypes = ['ISearch'];
 if (pagination === 'pagination' || pagination === 'infinite-scroll') {
     searchTypes.push('IPaginationWithSearch');
@@ -63,16 +34,11 @@ import { map } from 'rxjs/operators';
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
-<%_ if (queryParam || searchEngine === 'elasticsearch') { _%>
-import { createRequestOption<% if (importPagination) { %>, IPagination<% } %><% if (searchEngine === 'elasticsearch') { %>, <%= searchTypes.join(' ,') %><% } %> } from 'app/shared/util/request-util';
-<%_ } _%>
+import { createRequestOption<% if (searchEngine === 'elasticsearch') { %>, <%= searchTypes.join(' ,') %><% } %> } from 'app/shared/util/request-util';
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
-<%_ if (filters.length > 0) { _%>
-type <%= queryFilterTypeName %> = { filter: <%- filters.join(' | ') %> };
-<%_ } _%>
 
 @Injectable({providedIn: 'root'})
 export class <%= entityAngularName %>Service {
@@ -112,11 +78,9 @@ export class <%= entityAngularName %>Service {
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
-    query(<%- queryParam %>): Observable<EntityArrayResponseType> {
-        <%_ if (queryParam) { _%>
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        <%_ } _%>
-        return this.http.get<I<%= entityAngularName %>[]>(this.resourceUrl, {<% if (queryParam) { %> params: options,<% } %> observe: 'response' })
+        return this.http.get<I<%= entityAngularName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
 
