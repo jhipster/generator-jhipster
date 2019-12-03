@@ -91,7 +91,7 @@ describe('Component Tests', () => {
                         tick(); // simulate async
 
                         // THEN
-                        expect(service.update).toHaveBeenCalledWith(user);
+                        expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
                         expect(service.query).toHaveBeenCalled();
                         expect(comp.users && comp.users[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
                     })
