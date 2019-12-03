@@ -1,7 +1,8 @@
 [![Logo][jhipster-image]][jhipster-url]
 
 [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
-[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Applications Build Status][github-actions-applications-image]][github-actions-url] [![Travis Build Status][travis-image]][travis-url-main] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
+
+[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Applications Build Status][github-actions-applications-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
 
 Greetings, Java Hipster!
 
@@ -204,9 +205,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [jhipster-url]: https://www.jhipster.tech/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
-[travis-image]: https://travis-ci.org/jhipster/generator-jhipster.svg?branch=master
 [azure-devops-image]: https://dev.azure.com/jhipster/generator-jhipster/_apis/build/status/jhipster.generator-jhipster?branchName=master
-[travis-url-main]: https://travis-ci.org/jhipster/generator-jhipster
 [azure-devops-url-main]: https://dev.azure.com/jhipster/generator-jhipster/_build
 [github-actions-generator-image]: https://github.com/jhipster/generator-jhipster/workflows/Generator/badge.svg
 [github-actions-applications-image]: https://github.com/jhipster/generator-jhipster/workflows/Applications/badge.svg
