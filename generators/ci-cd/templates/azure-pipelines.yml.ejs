@@ -56,6 +56,7 @@ jobs:
   <%_ if (buildTool === 'maven') { _%>
   - script: |
       chmod +x mvnw
+      ./mvnw -ntp checkstyle:check
       ./mvnw -ntp clean verify -P-webpack
   <%_ } else if (buildTool === 'gradle') { _%>
   - script: |
