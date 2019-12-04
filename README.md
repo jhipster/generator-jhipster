@@ -102,7 +102,7 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://edusson.com/" target="_blank">
+        <a href="https://edusson.co.uk/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edusson.png">
         </a>
       </td>
