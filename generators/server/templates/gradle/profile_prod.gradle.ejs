@@ -75,16 +75,6 @@ processResources {
     <%_ } _%>
 }
 
-generateGitProperties {
-    onlyIf {
-        !source.isEmpty()
-    }
-}
-
-gitProperties {
-    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
-}
-
 <%_ if (!skipClient) { _%>
 test.dependsOn webpack_test
 processResources.dependsOn webpack

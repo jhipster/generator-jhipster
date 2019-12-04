@@ -232,6 +232,11 @@ liquibase {
 }
 <%_ } _%>
 
+gitProperties {
+    failOnNoGitDirectory = false
+    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+}
+
 checkstyle {
     toolVersion '${checkstyle_version}'
     configFile file("checkstyle.xml")
