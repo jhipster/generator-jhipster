@@ -63,7 +63,7 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     }
 
     private static void startTestcontainer() {
-        kafkaContainer = new KafkaContainer("5.3.1");
+        kafkaContainer = new KafkaContainer("<%= KAFKA_VERSION %>");
         kafkaContainer.start();
     }
 
