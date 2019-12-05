@@ -28,7 +28,7 @@ const NPM_VERSION = '6.13.2';
 const GRADLE_VERSION = '6.0.1';
 
 // Libraries version
-const JIB_VERSION = '1.7.0';
+const JIB_VERSION = '1.8.0';
 
 const JACOCO_VERSION = '0.8.5';
 
