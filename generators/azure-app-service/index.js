@@ -74,7 +74,7 @@ module.exports = class extends BaseGenerator {
         this.buildTool = this.config.get('buildTool');
         this.applicationType = this.config.get('applicationType');
         this.serviceDiscoveryType = this.config.get('serviceDiscoveryType');
-        this.azureSpringCloudResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
+        this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
         this.azureAppServicePlan = this.config.get('azureAppServicePlan');
         this.azureAppServiceName = this.config.get('azureAppServiceName');
         this.azureAppServiceDeploymentType = this.config.get('azureAppServiceDeploymentType');
@@ -115,7 +115,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 exec('az configure --list-defaults true', (err, stdout) => {
                     if (err) {
                         this.config.set({
-                            azureSpringCloudResourceGroupName: null
+                            azureAppServiceResourceGroupName: null
                         });
                         this.abort = true;
                         this.error('Could not retrieve your Azure default configuration.');
@@ -123,15 +123,15 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         const json = JSON.parse(stdout);
                         Object.keys(json).forEach(key => {
                             if (json[key].name === 'group') {
-                                this.azureSpringCloudResourceGroupName = json[key].value;
+                                this.azureAppServiceResourceGroupName = json[key].value;
                             }
                         });
-                        if (this.azureSpringCloudResourceGroupName === '') {
+                        if (this.azureAppServiceResourceGroupName === '') {
                             this.log(
                                 `Your default Azure resource group is not set up. We recommend doing it using the command 
                                 '${chalk.yellow('az configure --defaults group=<resource group name>')}`
                             );
-                            this.azureSpringCloudResourceGroupName = '';
+                            this.azureAppServiceResourceGroupName = '';
                         }
                     }
                     done();
@@ -145,9 +145,9 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 const prompts = [
                     {
                         type: 'input',
-                        name: 'azureSpringCloudResourceGroupName',
+                        name: 'azureAppServiceResourceGroupName',
                         message: 'Azure resource group name:',
-                        default: this.azureSpringCloudResourceGroupName
+                        default: this.azureAppServiceResourceGroupName
                     },
                     {
                         type: 'input',
@@ -164,7 +164,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 ];
 
                 this.prompt(prompts).then(props => {
-                    this.azureSpringCloudResourceGroupName = props.azureSpringCloudResourceGroupName;
+                    this.azureAppServiceResourceGroupName = props.azureAppServiceResourceGroupName;
                     this.azureAppServicePlan = props.azureAppServicePlan;
                     this.azureAppServiceName = props.azureAppServiceName;
                     done();
@@ -224,15 +224,15 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 if (this.abort) return;
                 const done = this.async();
                 this.log(chalk.bold(`\nChecking Azure App Service plan '${this.azureAppServicePlan}'...`));
+                let servicePlanAlreadyExists = false;
                 exec(
-                    `az appservice plan list --resource-group ${this.azureSpringCloudResourceGroupName}`,
-                    (err, stdout) => {
+                    `az appservice plan list --resource-group ${this.azureAppServiceResourceGroupName}`,
+                    (err, stdout, stderr) => {
                         if (err) {
                             this.abort = true;
                             this.error('Could not list your Azure App Service plans');
                         } else {
                             const json = JSON.parse(stdout);
-                            let servicePlanAlreadyExists = false;
                             try {
                                 for (let i = 0; i < json.length; i++) {
                                     let currentPlan = json[i];
@@ -249,16 +249,19 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                                 if (!servicePlanAlreadyExists) {
                                     this.log(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
                                     exec(
-                                        `az appservice plan create --name ${this.azureAppServicePlan} --sku B1 --resource-group ${this.azureSpringCloudResourceGroupName}`, (err, stdout) => {
+                                        `az appservice plan create --name ${this.azureAppServicePlan} --sku B1 --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
                                             if (err) {
                                                 this.abort = true;
                                                 this.error('Could not create the Azure App Service plan');
                                             } else {
-                                                this.log(chalk.green(`Service plan ${this.azureAppServicePlan} created`));
-                                                this.log(`Service plan ${this.azureAppServicePlan} uses the 'B1' (basic small) pricing tier, \
-                                                    which is free for the first 30 days`);
+                                                this.log(chalk.green(`Service plan '${this.azureAppServicePlan}' created!`));
+                                                this.log(`Service plan '${this.azureAppServicePlan}' uses the 'B1' (basic small) pricing tier, \
+which is free for the first 30 days`);
                                             }
+                                            done();
                                         });
+                                } else {
+                                    done();
                                 }
                             } catch (e) {
                                 this.log(e);
@@ -266,7 +269,6 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                                 this.error('Could not manage the Azure App Service plan');
                             }
                         }
-                        done();
                     }
                 );
             },
@@ -276,8 +278,8 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 const done = this.async();
                 this.log(chalk.bold(`\nChecking Azure App Service '${this.azureAppServiceName}'...`));
                 exec(
-                    `az webapp list --query "[]" --resource-group ${this.azureSpringCloudResourceGroupName}`,
-                    (err, stdout) => {
+                    `az webapp list --query "[]" --resource-group ${this.azureAppServiceResourceGroupName}`,
+                    (err, stdout, stderr) => {
                         if (err) {
                             this.abort = true;
                             this.error('Could not list your Azure App Service instances');
@@ -300,14 +302,18 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                                 if (!applicationAlreadyExists) {
                                     this.log(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
                                     exec(
-                                        `az webapp create --name ${this.azureAppServiceName} --plan ${this.azureAppServicePlan} --resource-group ${this.azureSpringCloudResourceGroupName}`, (err, stdout) => {
+                                        `az webapp create --name ${this.azureAppServiceName} --runtime "java|11|Java|SE" --plan ${this.azureAppServicePlan} \
+                                            --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
                                             if (err) {
                                                 this.abort = true;
                                                 this.error('Could not create the Web application');
                                             } else {
-                                                this.log(chalk.green(`Web application ${this.azureAppServiceName} created`));
+                                                this.log(chalk.green(`Web application '${this.azureAppServiceName}' created!`));
                                             }
+                                            done();
                                         });
+                                } else {
+                                    done();
                                 }
                             } catch (e) {
                                 this.log(e);
@@ -315,7 +321,6 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                                 this.error('Could not manage the Azure App Service Web application');
                             }
                         }
-                        done();
                     }
                 );
             },
@@ -324,22 +329,20 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 if (this.abort) return;
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Azure App Service deployment files'));
-                this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
-                this.template('bootstrap-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-azure.yml`);
                 if (this.azureAppServiceDeploymentType === 'github-action') {
-                    this.template('github/workflows/azure-spring-cloud.yml.ejs', '.github/workflows/azure-spring-cloud.yml');
+                    this.template('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
                 }
                 this.conflicter.resolve(err => {
                     done();
                 });
             },
 
-            addAzureSpringCloudMavenProfile() {
+            addAzureAppServiceMavenPlugin() {
                 if (this.abort) return;
                 const done = this.async();
                 if (this.buildTool === 'maven') {
-                    this.render('pom-profile.xml.ejs', profile => {
-                        this.addMavenProfile('azure', `            ${profile.toString().trim()}`);
+                    this.render('pom-plugin.xml.ejs', rendered => {
+                        this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', '1.8.0', rendered.trim());
                     });
                 }
                 done();
@@ -426,7 +429,7 @@ for more detailed information.`
                 const done = this.async();
                 this.log(chalk.bold('\nBuilding application'));
 
-                const child = this.buildApplication(this.buildTool, 'prod,azure', false, err => {
+                const child = this.buildApplication(this.buildTool, 'prod', false, err => {
                     if (err) {
                         this.abort = true;
                         this.error(err);
@@ -450,7 +453,7 @@ for more detailed information.`
                 this.log(chalk.bold('\nDeploying application...'));
 
                 exec(
-                    `az spring-cloud app deploy --resource-group ${this.azureSpringCloudResourceGroupName} \
+                    `az spring-cloud app deploy --resource-group ${this.azureAppServiceResourceGroupName} \
 --service ${this.azureSpringCloudServiceName} --name ${this.azureAppServiceName} \
 --jar-path target/*.jar`,
                     (err, stdout) => {
