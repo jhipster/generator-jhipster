@@ -91,7 +91,7 @@ describe('FormatUtils', () => {
         const now = new Date();
         const increment = 1000042;
         const result = FormatUtils.dateFormatForLiquibase({ date: now, increment });
-        now.setSeconds(now.getUTCSeconds() + increment);
+        now.setMinutes(now.getMinutes() + increment);
         const nowUtc = new Date(
           now.getUTCFullYear(),
           now.getUTCMonth(),
