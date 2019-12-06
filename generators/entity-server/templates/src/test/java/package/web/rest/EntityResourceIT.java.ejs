@@ -172,12 +172,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
-<%_
-    let oldSource = '';
-    try {
-        oldSource = this.fs.readFileSync(this.SERVER_TEST_SRC_DIR + packageFolder + '/web/rest/' + entityClass + 'ResourceIT.java', 'utf8');
-    } catch (e) {}
-_%>
     <%_ for (idx in fields) {
     const defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     const updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -237,23 +231,14 @@ _%>
             updatedTextString += "B";
         }
         if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
-            if (oldSource !== '') {
-                // Check for old values
-                const sampleTextStringSearchResult = new RegExp('private static final String ' + defaultValueName + ' = "(.*)";', 'm').exec(oldSource);
-                if (sampleTextStringSearchResult != null) {
-                    sampleTextString = sampleTextStringSearchResult[1];
-                }
-                const updatedTextStringSearchResult = new RegExp('private static final String ' + updatedValueName + ' = "(.*)";', 'm').exec(oldSource);
-                if (updatedTextStringSearchResult != null) {
-                    updatedTextString = updatedTextStringSearchResult[1];
-                }
-            }
             // Generate Strings, using pattern
             try {
                 const patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
                 const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
                 // set infinite repetitions max range
                 randExp.max = 1;
+                // In order to have consistent results with RandExp, the RNG is seeded.
+                randExp.randInt = seededRandomNumberGenerator(idx)
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
                     sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
