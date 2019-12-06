@@ -497,6 +497,11 @@
                 </configuration>
                 <dependencies>
                     <dependency>
+                        <groupId>io.github.jhipster</groupId>
+                        <artifactId>jhipster-framework</artifactId>
+                        <version>${jhipster-dependencies.version}</version>
+                    </dependency>
+                    <dependency>
                         <groupId>org.javassist</groupId>
                         <artifactId>javassist</artifactId>
                         <version>${javassist.version}</version>
