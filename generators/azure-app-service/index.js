@@ -271,6 +271,55 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 );
             },
 
+            azureAzureAppServiceCreate() {
+                if (this.abort) return;
+                const done = this.async();
+                this.log(chalk.bold(`\nChecking Azure App Service '${this.azureAppServiceName}'...`));
+                exec(
+                    `az webapp list --query "[]" --resource-group ${this.azureSpringCloudResourceGroupName}`,
+                    (err, stdout) => {
+                        if (err) {
+                            this.abort = true;
+                            this.error('Could not list your Azure App Service instances');
+                        } else {
+                            const json = JSON.parse(stdout);
+                            let applicationAlreadyExists = false;
+                            try {
+                                for (let i = 0; i < json.length; i++) {
+                                    let currentApp = json[i];
+                                    Object.keys(currentApp).forEach(key => {
+                                        if (key === 'name') {
+                                            if (this.azureAppServiceName == currentApp[key]) {
+                                                this.log(`Application '${this.azureAppServiceName}' already exists, using it`);
+                                                applicationAlreadyExists = true;
+                                            }
+                                        }
+                                    });
+                                }
+                            
+                                if (!applicationAlreadyExists) {
+                                    this.log(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
+                                    exec(
+                                        `az webapp create --name ${this.azureAppServiceName} --plan ${this.azureAppServicePlan} --resource-group ${this.azureSpringCloudResourceGroupName}`, (err, stdout) => {
+                                            if (err) {
+                                                this.abort = true;
+                                                this.error('Could not create the Web application');
+                                            } else {
+                                                this.log(chalk.green(`Web application ${this.azureAppServiceName} created`));
+                                            }
+                                        });
+                                }
+                            } catch (e) {
+                                this.log(e);
+                                this.abort = true;
+                                this.error('Could not manage the Azure App Service Web application');
+                            }
+                        }
+                        done();
+                    }
+                );
+            },
+
             copyAzureAppServiceFiles() {
                 if (this.abort) return;
                 const done = this.async();
