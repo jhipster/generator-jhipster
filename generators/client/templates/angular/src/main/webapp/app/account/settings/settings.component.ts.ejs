@@ -58,7 +58,16 @@ export class SettingsComponent implements OnInit {
 
     ngOnInit(): void {
         this.accountService.identity().subscribe((account) => {
-            this.updateForm(account);
+            if (account) {
+                this.settingsForm.patchValue({
+                    firstName: account.firstName,
+                    lastName: account.lastName,
+                    email: account.email<% if (enableTranslation) { %>,
+                    langKey: account.langKey<% } %>
+                });
+        
+                this.account = account;
+            }
         });
     }
 
@@ -75,29 +84,13 @@ export class SettingsComponent implements OnInit {
         this.accountService.save(this.account).subscribe(() => {
             this.success = true;
 
-            this.accountService.identity(true).subscribe((account) => {
-                this.updateForm(account);
-            });
+            this.accountService.authenticate(this.account);
             <%_ if (enableTranslation) { _%>
 
-            this.languageService.getCurrent().then((current) => {
-                if (this.account.langKey !== current) {
-                    this.languageService.changeLanguage(this.account.langKey);
-                }
-            });
+            if (this.account.langKey !== this.languageService.getCurrentLanguage()) {
+                this.languageService.changeLanguage(this.account.langKey);
+            }
             <%_ } _%>
         });
     }
-
-    private updateForm(account: Account): void {
-        this.settingsForm.patchValue({
-            firstName: account.firstName,
-            lastName: account.lastName,
-            email: account.email<% if (enableTranslation) { %>,
-            langKey: account.langKey<% } %>
-        });
-
-        this.account = account;
-    }
-
 }

@@ -140,7 +140,7 @@ describe('Component Tests', () => {
 
                 // THEN
                 expect(service.query).toHaveBeenCalled();
-                expect(comp.audits[0]).toEqual(jasmine.objectContaining(audit));
+                expect(comp.audits && comp.audits[0]).toEqual(jasmine.objectContaining(audit));
                 expect(comp.totalItems).toBe(1);
             });
         });

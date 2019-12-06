@@ -24,10 +24,7 @@ import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { SettingsComponent } from 'app/account/settings/settings.component';
-<%_ if (websocket === 'spring-websocket') { _%>
-import { TrackerService } from 'app/core/tracker/tracker.service';
-import { MockTrackerService } from '../../../helpers/mock-tracker.service';
-<%_ } _%>
+import { MockAccountService } from '../../../helpers/mock-account.service';
 
 describe('Component Tests', () => {
 
@@ -35,21 +32,13 @@ describe('Component Tests', () => {
 
         let comp: SettingsComponent;
         let fixture: ComponentFixture<SettingsComponent>;
-        let mockAuth: any;
+        let mockAuth: MockAccountService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [SettingsComponent],
-                providers: [
-                    FormBuilder,
-                    <%_ if (websocket === 'spring-websocket') { _%>
-                    {
-                        provide: TrackerService,
-                        useClass: MockTrackerService
-                    },
-                    <%_ } _%>
-                ]
+                providers: [FormBuilder]
             })
             .overrideTemplate(SettingsComponent, '')
             .compileComponents();
@@ -58,7 +47,7 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(SettingsComponent);
             comp = fixture.componentInstance;
-            mockAuth = fixture.debugElement.injector.get(AccountService);
+            mockAuth = TestBed.get(AccountService);
         });
 
         it('should send the current identity upon save', () => {
@@ -88,6 +77,7 @@ describe('Component Tests', () => {
             // THEN
             expect(mockAuth.identitySpy).toHaveBeenCalled();
             expect(mockAuth.saveSpy).toHaveBeenCalledWith(accountValues);
+            expect(mockAuth.authenticateSpy).toHaveBeenCalledWith(accountValues);
             expect(comp.settingsForm.value).toEqual(settingsFormValues);
         });
 
