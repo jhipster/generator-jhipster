@@ -155,7 +155,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             if (fields[idx].fieldValidateRules.includes('pattern')) {
                 const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern)
                 randExp.max = 5;
-                data = `"${randExp.gen().replace(/"/g, '""')}"`;
+                data = `"${randExp.gen().replace(/"/g, '')}"`;
             }
 
             // manage String max length
