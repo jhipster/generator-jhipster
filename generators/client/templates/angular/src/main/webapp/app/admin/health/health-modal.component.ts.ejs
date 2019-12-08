@@ -19,28 +19,27 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
+import { HealthKey } from './health.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-health-modal',
     templateUrl: './health-modal.component.html'
 })
-export class <%=jhiPrefixCapitalized%>HealthModalComponent {
+export class HealthModalComponent {
+    healthKey?: HealthKey;
+    healthDetails: any;
 
-    currentHealth: any;
+    constructor(public activeModal: NgbActiveModal) {}
 
-    constructor(private healthService: <%=jhiPrefixCapitalized%>HealthService, public activeModal: NgbActiveModal) {}
-
-    baseName(name) {
-        return this.healthService.getBaseName(name);
+    detailsKeys(): string[] {
+        if (this.healthDetails) {
+            return Object.keys(this.healthDetails);
+        }
+        return [];
     }
 
-    subSystemName(name) {
-        return this.healthService.getSubSystemName(name);
-    }
-
-    readableValue(value: number) {
-        if (this.currentHealth.name === 'diskSpace') {
+    readableValue(value: any): string {
+        if (this.healthKey === 'diskSpace') {
             // Should display storage space in an human readable unit
             const val = value / 1073741824;
             if (val > 1) { // Value
@@ -55,5 +54,9 @@ export class <%=jhiPrefixCapitalized%>HealthModalComponent {
         } else {
             return value.toString();
         }
+    }
+
+    dismiss(): void {
+        this.activeModal.dismiss();
     }
 }

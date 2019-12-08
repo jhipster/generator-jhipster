@@ -33,15 +33,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let health of healthData">
-                    <td><% if (enableTranslation) { %>{{'health.indicator.' + baseName(health.name) | translate}}<% } else { %><span class="text-capitalize">{{ baseName(health.name) }}</span><% } %> {{subSystemName(health.name)}}</td>
+                <tr *ngFor="let healthKey of healthKeys()">
+                    <td><% if (enableTranslation) { %>{{'health.indicator.' + healthKey | translate}}<% } else { %><span class="text-capitalize">{{ healthKey }}</span><% } %></td>
                     <td class="text-center">
-                        <span class="badge" [ngClass]="getBadgeClass(health.status)" jhiTranslate="{{'health.status.' + health.status}}">
-                            {{health.status}}
+                        <span class="badge" [ngClass]="getBadgeClass(healthData.details[healthKey].status)" jhiTranslate="{{'health.status.' + healthData.details[healthKey].status}}">
+                            {{ healthData.details[healthKey].status }}
                         </span>
                     </td>
                     <td class="text-center">
-                        <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
+                        <a class="hand" (click)="showHealth(healthKey, healthData.details[healthKey].details)" *ngIf="healthData.details[healthKey].details">
                             <fa-icon [icon]="'eye'"></fa-icon>
                         </a>
                     </td>
