@@ -28,8 +28,15 @@ servers:
     - url: https://localhost:<%= serverPort %>/api
       description: Development server with TLS Profile
 paths: {}
-<% if(authenticationType === 'jwt') { %>
 components:
+    responses:
+        Problem:
+            description: error occurred - see status code and problem object for more information.
+            content:
+                "application/problem+json":
+                    schema:
+                        $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+<% if(authenticationType === 'jwt') { %>
     securitySchemes:
         jwt:
             type: http
@@ -40,7 +47,6 @@ security:
     - jwt: []
 <% } %>
 <% if(authenticationType === 'oauth2') { %>
-components:
     securitySchemes:
         oauth:
             type: oauth2
@@ -62,7 +68,6 @@ security:
     - openId: [jhipster, email, profile]
 <% } %>
 <% if(authenticationType === 'session') { %>
-components:
     securitySchemes:
         sessionId:
             type: apiKey
