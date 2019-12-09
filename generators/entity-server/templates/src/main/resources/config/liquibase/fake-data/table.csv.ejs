@@ -157,7 +157,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
                 randExp.max = 5;
                 // In order to have consistent results with RandExp, the RNG is seeded.
                 randExp.randInt = seededRandomNumberGenerator(lineNb);
-                data = `"${randExp.gen().replace(/"/g, '""')}"`;
+                data = `"${randExp.gen().replace(/"/g, '')}"`;
             }
 
             // manage String max length
