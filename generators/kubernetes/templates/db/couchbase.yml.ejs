@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: PersistentVolumeClaim
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mongodb-pvc
