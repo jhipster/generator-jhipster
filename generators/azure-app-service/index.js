@@ -92,6 +92,7 @@ module.exports = class extends BaseGenerator {
         this.azureAppServiceName = this.config.get('azureAppServiceName');
         this.azureApplicationInsightsName = this.config.get('azureApplicationInsightsName');
         this.azureAppServiceDeploymentType = this.config.get('azureAppServiceDeploymentType');
+        this.azureAppInsightsInstrumentationKey = '';
     }
 
     get prompting() {
@@ -324,15 +325,17 @@ which is free for the first 30 days`);
                                 if (!applicationAlreadyExists) {
                                     this.log(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
                                     exec(
-                                        `az webapp create --name ${this.azureAppServiceName} --runtime "java|11|Java|SE" --plan ${this.azureAppServicePlan} \
+                                        `az webapp create --name ${this.azureAppServiceName} --runtime "${AZURE_WEBAPP_RUNTIME}" --plan ${this.azureAppServicePlan} \
                                             --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
                                             if (err) {
                                                 this.abort = true;
                                                 this.error('Could not create the Web application');
+                                                this.log(err);
+                                                done();
                                             } else {
                                                 this.log(chalk.green(`Web application '${this.azureAppServiceName}' created!`));
+                                                done();
                                             }
-                                            done();
                                         });
                                 } else {
                                     done();
@@ -347,12 +350,30 @@ which is free for the first 30 days`);
                 );
             },
 
+            azureAzureAppServiceConfig() {
+                if (this.abort) return;
+                const done = this.async();
+                this.log(`Configuring Azure App Service '${this.azureAppServiceName}'...`);
+                this.log(`Enabling 'prod' and 'azure' Spring Boot profiles`);
+                exec(
+                    `az webapp config appsettings set --resource-group ${this.azureAppServiceResourceGroupName} --name ${this.azureAppServiceName} --settings SPRING_PROFILES_ACTIVE=prod,azure`,
+                    (err, stdout) => {
+                        if (err) {
+                            this.abort = true;
+                            this.error('Could not configure Azure App Service instance');
+                        }
+                        done();
+                    }
+                );
+            },
+
             addAzureAppServiceMavenPlugin() {
                 if (this.abort) return;
                 const done = this.async();
+                this.log(chalk.bold('\nAdding Azure Web App Maven plugin'));
                 if (this.buildTool === 'maven') {
                     this.render('pom-plugin.xml.ejs', rendered => {
-                        this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', this.AZURE_WEBAPP_MAVEN_PLUGIN_VERSION, rendered);
+                        this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', AZURE_WEBAPP_MAVEN_PLUGIN_VERSION, rendered);
                     });
                 }
                 done();
@@ -362,7 +383,8 @@ which is free for the first 30 days`);
                 if (this.abort) return;
                 if (this.azureSpringCloudSkipInsights) return;
                 const done = this.async();
-                this.log(chalk.bold('\nChecking Azure Application Insights CLI extension'));
+                this.log(chalk.bold('\nAzure Application Insights configuration'));
+                this.log('Checking Azure Application Insights CLI extension...');
                 exec('az extension show --name application-insights', err => {
                     if (err) {
                         this.log('The Azure Application Insights CLI extension is NOT installed, installing it...');
@@ -387,11 +409,11 @@ which is free for the first 30 days`);
                 if (this.abort) return;
                 if (this.azureSpringCloudSkipInsights) return;
                 const done = this.async();
-                this.log(chalk.bold('\nAzure Application Insights configuration'));
+                this.log('Checking Azure Application Insights instance...');
                 exec(`az monitor app-insights component show --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`, 
                     (err, stdout) => {
                     if (err) {
-                        this.log(chalk.bold('Azure Application Insights instance does not exist, creating it...'));
+                        this.log('Azure Application Insights instance does not exist, creating it...');
                         exec(`az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`, 
                             (err, stdout) => {
                             if (err) {
@@ -401,18 +423,14 @@ which is free for the first 30 days`);
                             } else {
                                 this.log(chalk.green('The Azure Application Insights instance is created!'));
                                 const json = JSON.parse(stdout);
-                                Object.keys(json).forEach(key => {
-                                    if (json[key].name === 'instrumentationKey') {
-                                        this.azureAppInsightsInstrumentationKey = json[key].value;
-                                    }
-                                });
+                                this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
                             }
                             done();
                         });
                     } else {
                         this.log('The Azure Application Insights instance already exists, using it');
                         const json = JSON.parse(stdout);
-                        this.azureAppInsightsInstrumentationKey = json['instrumentationKey'].value;
+                        this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
                         done();
                     }
                 });
@@ -422,8 +440,8 @@ which is free for the first 30 days`);
                 if (this.abort) return;
                 if (this.azureSpringCloudSkipInsights) return;
                 const done = this.async();
-                this.log(chalk.bold('\nAdd Azure Application Insights support in the Web Application'));
-                this.addMavenPlugin('com.microsoft.azure', 'applicationinsights-spring-boot-starter', this.AZURE_APP_INSIGHTS_STARTER_VERSION);
+                this.log('Adding Azure Application Insights support in the Web Application');
+                this.addMavenDependency('com.microsoft.azure', 'applicationinsights-spring-boot-starter', AZURE_APP_INSIGHTS_STARTER_VERSION);
                 this.log(`The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`);
                 done();
             },
@@ -432,13 +450,10 @@ which is free for the first 30 days`);
                 if (this.abort) return;
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Azure App Service deployment files'));
-                if (!this.azureSpringCloudSkipInsights) {
-                    this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
-                }
+                this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
                 if (this.azureAppServiceDeploymentType === 'github-action') {
                     this.template('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
                 }
-
                 this.conflicter.resolve(err => {
                     done();
                 });
