@@ -371,7 +371,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                     return;
                 }
                 const gitAddCmd = 'git add .';
-                this.log(chalk.bold('\nAdding Azure Spring Cloud files to the Git repository'));
+                this.log(chalk.bold('\nAdding Azure App Service files to the Git repository'));
                 this.log(chalk.cyan(gitAddCmd));
                 exec(gitAddCmd, (err, stdout, stderr) => {
                     if (err) {
@@ -380,9 +380,9 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                     } else {
                         const line = stderr.toString().trimRight();
                         if (line.trim().length !== 0) this.log(line);
-                        this.log(chalk.bold('\nCommitting Azure Spring Cloud files'));
+                        this.log(chalk.bold('\nCommitting Azure App Service files'));
                         const gitCommitCmd =
-                            'git commit -m "Add Azure Spring Cloud files with automated GitHub Action deployment" --allow-empty';
+                            'git commit -m "Add Azure App Service files with automated GitHub Action deployment" --allow-empty';
 
                         this.log(chalk.cyan(gitCommitCmd));
                         exec(gitCommitCmd, (err, stdout, stderr) => {
@@ -392,7 +392,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                             } else {
                                 const line = stderr.toString().trimRight();
                                 if (line.trim().length !== 0) this.log(line);
-                                this.log(chalk.bold('\nPushing Azure Spring Cloud files'));
+                                this.log(chalk.bold('\nPushing Azure App Service files'));
                                 const gitPushCmd = 'git push';
                                 this.log(chalk.cyan(gitPushCmd));
                                 exec(gitPushCmd, (err, stdout, stderr) => {
@@ -452,19 +452,21 @@ for more detailed information.`
                 const done = this.async();
                 this.log(chalk.bold('\nDeploying application...'));
 
+                let buildCmd = 'mvnw -DskipTests=true -B -Pprod azure-webapp:deploy';
+
+                if (os.platform() !== 'win32') {
+                    buildCmd = `./${buildCmd}`;
+                }
+
                 exec(
-                    `az spring-cloud app deploy --resource-group ${this.azureAppServiceResourceGroupName} \
---service ${this.azureSpringCloudServiceName} --name ${this.azureAppServiceName} \
---jar-path target/*.jar`,
+                    buildCmd,
                     (err, stdout) => {
                         if (err) {
                             this.abort = true;
                             this.error(`Deployment failed!\n ${err}`);
                         } else {
-                            const json = JSON.parse(stdout);
+                            this.log(stdout);
                             this.log(`${chalk.green(chalk.bold('Success!'))} Your application has been deployed.`);
-                            this.log(`Provisitioning state: ${chalk.bold(json.properties.provisioningState)}`);
-                            this.log(`Application status  : ${chalk.bold(json.properties.status)}`);
                         }
                         done();
                     }
