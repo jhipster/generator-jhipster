@@ -36,8 +36,17 @@ components:
             description: JWT Authentication
             scheme: bearer
             bearerFormat: JWT
+        <%_ if (applicationType === 'monolith') { _%>
+        basic:
+            type: http
+            description: Basic Authentication
+            scheme: basic
+        <%_ } _%>
 security:
     - jwt: []
+    <%_ if (applicationType === 'monolith') { _%>
+    - basic: []
+    <%_ } _%>
 <% } %>
 <% if(authenticationType === 'oauth2') { %>
 components:
