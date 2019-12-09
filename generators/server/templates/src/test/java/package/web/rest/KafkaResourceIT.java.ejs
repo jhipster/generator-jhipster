@@ -28,9 +28,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+<%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+<%_ } else { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
 import org.testcontainers.containers.KafkaContainer;
 
 import java.time.Duration;
@@ -39,17 +43,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (!reactive) { _%>
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } _%>
 
 class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
     private static boolean started = false;
     private static KafkaContainer kafkaContainer;
 
+    <%_ if (!reactive) { _%>
     private MockMvc restMockMvc;
+    <%_ } else { _%>
+    private WebTestClient client;
+    <%_ } _%>
 
     @BeforeAll
     static void startServer() {
@@ -76,15 +86,25 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
 
         <%= upperFirstCamelCase(baseName) %>KafkaResource kafkaResource = new <%= upperFirstCamelCase(baseName) %>KafkaResource(kafkaProperties);
 
-        restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource)
-            .build();
+        <%_ if (!reactive) { _%>
+        restMockMvc = MockMvcBuilders.standaloneSetup(kafkaResource).build();
+        <%_ } else { _%>
+        client = WebTestClient.bindToController(kafkaResource).build();
+        <%_ } _%>
     }
 
     @Test
-    void producesMessages() throws Exception {
+    void producesMessages()<% if (!reactive) { %> throws Exception<% } %> {
+        <%_ if (!reactive) { _%>
         restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+        <%_ } else { _%>
+        client.post().uri("/api/jhipster-kafka/publish/topic-produce?message=value-produce")
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8);
+        <%_ } _%>
 
         Map<String, Object> consumerProps = new HashMap<>(getConsumerProps("group-produce"));
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
@@ -97,12 +117,13 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     }
 
     @Test
-    void consumesMessages() throws Exception {
+    void consumesMessages()<% if (!reactive) { %> throws Exception<% } %> {
         Map<String, Object> producerProps = new HashMap<>(getProducerProps());
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerProps);
 
         producer.send(new ProducerRecord<>("topic-consume", "value-consume"));
 
+        <%_ if (!reactive) { _%>
         MvcResult mvcResult = restMockMvc.perform(get("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume"))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM))
@@ -117,6 +138,17 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
             }
         }
         fail("Expected content data:value-consume not received");
+        <%_ } else { _%>
+        String value = client.get().uri("/api/jhipster-kafka/consume?topic=topic-consume")
+            .accept(MediaType.TEXT_EVENT_STREAM)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
+            .returnResult(String.class)
+            .getResponseBody().blockFirst(Duration.ofSeconds(10));
+
+        assertThat(value).isEqualTo("value-consume");
+        <%_ } _%>
     }
 
     private Map<String, String> getProducerProps() {

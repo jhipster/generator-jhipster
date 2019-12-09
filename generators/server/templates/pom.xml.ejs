@@ -617,10 +617,17 @@
             <scope>test</scope>
         </dependency>
 <%_ if (messageBroker === 'kafka') { _%>
+    <%_ if (!reactive) { _%>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
         </dependency>
+    <%_ } else { _%>
+        <dependency>
+            <groupId>io.projectreactor.kafka</groupId>
+            <artifactId>reactor-kafka</artifactId>
+        </dependency>
+    <%_ } _%>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>kafka</artifactId>
