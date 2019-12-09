@@ -90,6 +90,7 @@ module.exports = class extends BaseGenerator {
         this.azureAppServiceResourceGroupName = ''; // This is not saved, as it is better to get the Azure default variable
         this.azureAppServicePlan = this.config.get('azureAppServicePlan');
         this.azureAppServiceName = this.config.get('azureAppServiceName');
+        this.azureApplicationInsightsName = this.config.get('azureApplicationInsightsName');
         this.azureAppServiceDeploymentType = this.config.get('azureAppServiceDeploymentType');
     }
 
@@ -166,7 +167,13 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         type: 'input',
                         name: 'azureAppServicePlan',
                         message: 'Azure App Service plan name:',
-                        default: this.azureAppServicePlan || this.baseName + 'Plan'
+                        default: this.azureAppServicePlan || this.baseName + '-plan'
+                    },
+                    {
+                        type: 'input',
+                        name: 'azureApplicationInsightsName',
+                        message: 'Azure Application Insights instance name:',
+                        default: this.azureApplicationInsightsName || this.baseName + '-insights'
                     },
                     {
                         type: 'input',
@@ -179,6 +186,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 this.prompt(prompts).then(props => {
                     this.azureAppServiceResourceGroupName = props.azureAppServiceResourceGroupName;
                     this.azureAppServicePlan = props.azureAppServicePlan;
+                    this.azureApplicationInsightsName = props.azureApplicationInsightsName;
                     this.azureAppServiceName = props.azureAppServiceName;
                     done();
                 });
@@ -220,6 +228,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 if (this.abort) return;
                 this.config.set({
                     azureAppServicePlan: this.azureAppServicePlan,
+                    azureApplicationInsightsName: this.azureApplicationInsightsName,
                     azureAppServiceName: this.azureAppServiceName,
                     azureAppServiceDeploymentType: this.azureAppServiceDeploymentType
                 });
@@ -262,7 +271,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                                 if (!servicePlanAlreadyExists) {
                                     this.log(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
                                     exec(
-                                        `az appservice plan create --name ${this.azureAppServicePlan} --sku B1 --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
+                                        `az appservice plan create --name ${this.azureAppServicePlan} --sku B1 --resource-group ${this.azureAppServiceResourceGroupName}`, (err) => {
                                             if (err) {
                                                 this.abort = true;
                                                 this.error('Could not create the Azure App Service plan');
@@ -361,7 +370,7 @@ which is free for the first 30 days`);
                 done();
             },
 
-            checkAzureApplicationInsights() {
+            checkAzureApplicationInsightsExtension() {
                 if (this.abort) return;
                 if (this.azureSpringCloudSkipInsights) return;
                 const done = this.async();
@@ -381,6 +390,45 @@ which is free for the first 30 days`);
                         });
                     } else {
                         this.log('The Azure Application Insights extension is installed');
+                        done();
+                    }
+                });
+            },
+
+            configureAzureApplicationInsights() {
+                if (this.abort) return;
+                if (this.azureSpringCloudSkipInsights) return;
+                const done = this.async();
+                this.log(chalk.bold('\Azure Application Insights configuration'));
+                exec(`az monitor app-insights component show --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`, 
+                    (err, stdout) => {
+                    if (err) {
+                        this.log(chalk.bold('Azure Application Insights instance does not exist, creating it...'));
+                        exec(`az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`, 
+                            (err, stdout) => {
+                            if (err) {
+                                this.log(err);
+                                this.abort = true;
+                                this.error('Could not create the Azure Application Insights instance');
+                            } else {
+                                this.log('The Azure Application Insights instance is created');
+                                const json = JSON.parse(stdout);
+                                Object.keys(json).forEach(key => {
+                                    if (json[key].name === 'instrumentationKey') {
+                                        this.azureAppInsightsInstrumentationKey = json[key].value;
+                                    }
+                                });
+                            }
+                            done();
+                        });
+                    } else {
+                        this.log('The Azure Application Insights instance already exists, using it');
+                        const json = JSON.parse(stdout);
+                        Object.keys(json).forEach(key => {
+                            if (json[key].name === 'instrumentationKey') {
+                                this.azureAppInsightsInstrumentationKey = json[key].value;
+                            }
+                        });
                         done();
                     }
                 });
