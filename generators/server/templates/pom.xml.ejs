@@ -664,7 +664,7 @@
             <scope>runtime</scope>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
