@@ -22,7 +22,13 @@ const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
 
+// Global constants
 const constants = require('../generator-constants');
+
+// Local constants
+const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';
+const AZURE_WEBAPP_RUNTIME = 'java|11|Java|SE';
+const AZURE_WEBAPP_OS = 'java|11|Java|SE';
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -342,7 +348,7 @@ which is free for the first 30 days`);
                 const done = this.async();
                 if (this.buildTool === 'maven') {
                     this.render('pom-plugin.xml.ejs', rendered => {
-                        this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', '1.8.0', rendered.trim());
+                        this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', this.AZURE_WEBAPP_MAVEN_PLUGIN_VERSION, rendered);
                     });
                 }
                 done();
@@ -452,25 +458,19 @@ for more detailed information.`
                 const done = this.async();
                 this.log(chalk.bold('\nDeploying application...'));
 
-                let buildCmd = 'mvnw -DskipTests=true -B -Pprod azure-webapp:deploy';
-
-                if (os.platform() !== 'win32') {
-                    buildCmd = `./${buildCmd}`;
-                }
-
-                exec(
-                    buildCmd,
-                    (err, stdout) => {
-                        if (err) {
-                            this.abort = true;
-                            this.error(`Deployment failed!\n ${err}`);
-                        } else {
-                            this.log(stdout);
-                            this.log(`${chalk.green(chalk.bold('Success!'))} Your application has been deployed.`);
-                        }
-                        done();
+                const child = this.runJavaBuildCommand(this.buildTool, 'prod', 'azure-webapp:deploy', err => {
+                    if (err) {
+                        this.abort = true;
+                        this.log.error(err);
                     }
-                );
+                    done();
+                });
+
+                this.buildCmd = child.buildCmd;
+
+                child.stdout.on('data', data => {
+                    process.stdout.write(data.toString());
+                });
             }
         };
     }
