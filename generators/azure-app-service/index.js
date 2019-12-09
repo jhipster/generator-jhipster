@@ -29,6 +29,7 @@ const constants = require('../generator-constants');
 const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';
 const AZURE_WEBAPP_RUNTIME = 'java|11|Java|SE';
 const AZURE_WEBAPP_OS = 'java|11|Java|SE';
+const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -347,18 +348,6 @@ which is free for the first 30 days`);
                 );
             },
 
-            copyAzureAppServiceFiles() {
-                if (this.abort) return;
-                const done = this.async();
-                this.log(chalk.bold('\nCreating Azure App Service deployment files'));
-                if (this.azureAppServiceDeploymentType === 'github-action') {
-                    this.template('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
-                }
-                this.conflicter.resolve(err => {
-                    done();
-                });
-            },
-
             addAzureAppServiceMavenPlugin() {
                 if (this.abort) return;
                 const done = this.async();
@@ -374,13 +363,13 @@ which is free for the first 30 days`);
                 if (this.abort) return;
                 if (this.azureSpringCloudSkipInsights) return;
                 const done = this.async();
-                this.log(chalk.bold('\Checking Azure Application Insights extension'));
+                this.log(chalk.bold('\nChecking Azure Application Insights CLI extension'));
                 exec('az extension show --name application-insights', err => {
                     if (err) {
-                        this.log('The Azure Application Insights extension is NOT installed, installing it...');
+                        this.log('The Azure Application Insights CLI extension is NOT installed, installing it...');
                         exec('az extension add --name application-insights', err => {
                             if (!err) {
-                                this.log(chalk.green(`The Azure Application Insights extension is installed!`));
+                                this.log(chalk.green(`The Azure Application Insights CLI extension is installed!`));
                             } else {
                                 this.log(err);
                                 this.abort = true;
@@ -389,7 +378,7 @@ which is free for the first 30 days`);
                             done();
                         });
                     } else {
-                        this.log('The Azure Application Insights extension is installed');
+                        this.log('The Azure Application Insights CLI extension is already installed');
                         done();
                     }
                 });
@@ -399,7 +388,7 @@ which is free for the first 30 days`);
                 if (this.abort) return;
                 if (this.azureSpringCloudSkipInsights) return;
                 const done = this.async();
-                this.log(chalk.bold('\Azure Application Insights configuration'));
+                this.log(chalk.bold('\nAzure Application Insights configuration'));
                 exec(`az monitor app-insights component show --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`, 
                     (err, stdout) => {
                     if (err) {
@@ -411,7 +400,7 @@ which is free for the first 30 days`);
                                 this.abort = true;
                                 this.error('Could not create the Azure Application Insights instance');
                             } else {
-                                this.log('The Azure Application Insights instance is created');
+                                this.log(chalk.green('The Azure Application Insights instance is created!'));
                                 const json = JSON.parse(stdout);
                                 Object.keys(json).forEach(key => {
                                     if (json[key].name === 'instrumentationKey') {
@@ -424,16 +413,37 @@ which is free for the first 30 days`);
                     } else {
                         this.log('The Azure Application Insights instance already exists, using it');
                         const json = JSON.parse(stdout);
-                        Object.keys(json).forEach(key => {
-                            if (json[key].name === 'instrumentationKey') {
-                                this.azureAppInsightsInstrumentationKey = json[key].value;
-                            }
-                        });
+                        this.azureAppInsightsInstrumentationKey = json['instrumentationKey'].value;
                         done();
                     }
                 });
             },
 
+            addAzureApplicationInsightsDependency() {
+                if (this.abort) return;
+                if (this.azureSpringCloudSkipInsights) return;
+                const done = this.async();
+                this.log(chalk.bold('\nAdd Azure Application Insights support in the Web Application'));
+                this.addMavenPlugin('com.microsoft.azure', 'applicationinsights-spring-boot-starter', this.AZURE_APP_INSIGHTS_STARTER_VERSION);
+                this.log(`The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`);
+                done();
+            },
+
+            copyAzureAppServiceFiles() {
+                if (this.abort) return;
+                const done = this.async();
+                this.log(chalk.bold('\nCreating Azure App Service deployment files'));
+                if (!this.azureSpringCloudSkipInsights) {
+                    this.template('application-azure.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-azure.yml`);
+                }
+                if (this.azureAppServiceDeploymentType === 'github-action') {
+                    this.template('github/workflows/azure-app-service.yml.ejs', '.github/workflows/azure-app-service.yml');
+                }
+
+                this.conflicter.resolve(err => {
+                    done();
+                });
+            }
         };
     }
 
