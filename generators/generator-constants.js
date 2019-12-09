@@ -21,14 +21,14 @@
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
-const NODE_VERSION = '12.13.0';
-const YARN_VERSION = '1.19.0';
-const NPM_VERSION = '6.13.0';
+const NODE_VERSION = '12.13.1';
+const YARN_VERSION = '1.19.2';
+const NPM_VERSION = '6.13.2';
 
 const GRADLE_VERSION = '6.0.1';
 
 // Libraries version
-const JIB_VERSION = '1.7.0';
+const JIB_VERSION = '1.8.0';
 
 const JACOCO_VERSION = '0.8.5';
 
@@ -38,15 +38,15 @@ const KAFKA_VERSION = '5.3.1';
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v5.0.2';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.18';
-const DOCKER_MARIADB = 'mariadb:10.4.8';
-const DOCKER_POSTGRESQL = 'postgres:11.5';
+const DOCKER_MARIADB = 'mariadb:10.4.10';
+const DOCKER_POSTGRESQL = 'postgres:11.6';
 const DOCKER_MONGODB = 'mongo:4.0.13';
 const DOCKER_COUCHBASE = 'couchbase:6.0.3';
 const DOCKER_CASSANDRA = 'cassandra:3.11.5';
 const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
-const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.6';
-const DOCKER_MEMCACHED = 'memcached:1.5.19-alpine';
-const DOCKER_REDIS = 'redis:5.0.6';
+const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.7';
+const DOCKER_MEMCACHED = 'memcached:1.5.20-alpine';
+const DOCKER_REDIS = 'redis:5.0.7';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:7.0.0'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.4.3'; // The version should be coerent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
@@ -59,11 +59,11 @@ const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.1.0';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.1.0';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.1.0';
 const DOCKER_TRAEFIK = 'traefik:1.7.19';
-const DOCKER_CONSUL = 'consul:1.6.1';
+const DOCKER_CONSUL = 'consul:1.6.2';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v2.13.1';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.14.0';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.19.0';
-const DOCKER_GRAFANA = 'grafana/grafana:6.4.3';
+const DOCKER_GRAFANA = 'grafana/grafana:6.5.1';
 const DOCKER_JENKINS = 'jenkins:latest';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';

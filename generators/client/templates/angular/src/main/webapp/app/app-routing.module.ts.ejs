@@ -44,7 +44,7 @@ const LAYOUT_ROUTES = [
                 <%_ if (!skipUserManagement) { _%>
                 {
                     path: 'account',
-                    loadChildren: () => import('./account/account.module').then(m => m.<%=angularXAppName%>AccountModule)
+                    loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
                 },
                 <%_ } _%>
                 ...LAYOUT_ROUTES

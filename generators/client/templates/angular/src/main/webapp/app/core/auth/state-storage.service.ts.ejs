@@ -25,11 +25,11 @@ export class StateStorageService {
         private $sessionStorage: SessionStorageService
     ) {}
 
-    storeUrl(url: string) {
+    storeUrl(url: string): void {
         this.$sessionStorage.store('previousUrl', url);
     }
 
-    getUrl() {
+    getUrl(): string {
         return this.$sessionStorage.retrieve('previousUrl');
     }
 }

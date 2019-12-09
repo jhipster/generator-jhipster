@@ -23,9 +23,9 @@ info:
     title: "<%= baseName %>"
     version: 0.0.1
 servers:
-    - url: http://localhost:<%= serverPort %>
+    - url: http://localhost:<%= serverPort %>/api
       description: Development server
-    - url: https://localhost:<%= serverPort %>
+    - url: https://localhost:<%= serverPort %>/api
       description: Development server with TLS Profile
 paths: {}
 <% if(authenticationType === 'jwt') { %>

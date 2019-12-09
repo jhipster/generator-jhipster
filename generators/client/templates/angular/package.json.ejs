@@ -46,7 +46,7 @@
     <%_ } _%>
     "core-js": "3.2.1",
     "moment": "2.24.0",
-    "ng-jhipster": "0.11.4",
+    "ng-jhipster": "0.11.5",
     "ngx-cookie": "4.0.2",
     "ngx-infinite-scroll": "8.0.0",
     "ngx-webstorage": "4.0.1",
@@ -72,6 +72,9 @@
     "@types/mocha": "5.2.7",
     <%_ } _%>
     "@types/node": "10.12.27",
+    <%_ if (websocket === 'spring-websocket') { _%>
+    "@types/sockjs-client": "1.1.1",
+    <%_ } _%>
     "@typescript-eslint/eslint-plugin": "2.7.0",
     "@typescript-eslint/eslint-plugin-tslint": "2.7.0",
     "@typescript-eslint/parser": "2.7.0",
@@ -106,6 +109,7 @@
     "husky": "3.0.4",
     <%_ } _%>
     "jest": "24.9.0",
+    "jest-date-mock": "1.0.7",
     "jest-junit": "8.0.0",
     "jest-preset-angular": "7.1.1",
     "jest-sonar-reporter": "2.0.0",

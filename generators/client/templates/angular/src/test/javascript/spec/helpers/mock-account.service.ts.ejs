@@ -26,6 +26,7 @@ export class MockAccountService extends SpyObject {
 
     getSpy: Spy;
     saveSpy: Spy;
+    authenticateSpy: Spy;
     fakeResponse: any;
     identitySpy: Spy;
     getAuthenticationStateSpy: Spy;
@@ -36,6 +37,7 @@ export class MockAccountService extends SpyObject {
         this.fakeResponse = null;
         this.getSpy = this.spy('get').andReturn(this);
         this.saveSpy = this.spy('save').andReturn(this);
+        this.authenticateSpy = this.spy('authenticate').andReturn(this);
         this.setIdentitySpy({});
     }
 

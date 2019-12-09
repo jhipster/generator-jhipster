@@ -128,6 +128,7 @@ const expectedFiles = {
             `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`
         ],
         fakeData: [`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`],
+        serverLiquibase: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_added_entity_Foo.xml`],
         gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
     },
 
@@ -240,7 +241,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/AuditEventServiceIT.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperTest.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`
     ],
 
@@ -455,6 +456,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/login/login.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.ts`,
@@ -588,6 +590,8 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
         `${DOCKER_DIR}keycloak.yml`
     ],
+
+    oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/core/login/logout.model.ts`],
 
     messageBroker: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResource.java`,

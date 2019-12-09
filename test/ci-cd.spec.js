@@ -133,10 +133,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarName: 'sonarName',
-                    dockerRegistryURL: 'https://registry.hub.docker.com',
-                    dockerRegistryCredentialsId: 'docker-login',
-                    dockerRegistryOrganizationName: 'jhipster'
+                    sonarName: 'sonarName'
                 })
                 .on('end', done);
         });
@@ -169,10 +166,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarName: 'sonarName',
-                    dockerRegistryURL: 'https://registry.hub.docker.com',
-                    dockerRegistryCredentialsId: 'docker-login',
-                    dockerRegistryOrganizationName: 'jhipster'
+                    sonarName: 'sonarName'
                 })
                 .on('end', done);
         });
@@ -337,10 +331,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarUrl: 'http://localhost:9000',
-                    dockerRegistryURL: 'https://registry.hub.docker.com',
-                    dockerRegistryCredentialsId: 'docker-login',
-                    dockerRegistryOrganizationName: 'jhipster'
+                    sonarUrl: 'http://localhost:9000'
                 })
                 .on('end', done);
         });
@@ -598,9 +589,9 @@ describe('JHipster CI-CD Sub Generator', () => {
     });
 
     //--------------------------------------------------
-    // GitHub CI tests
+    // GitHub Actions tests
     //--------------------------------------------------
-    describe('GitHub CI: maven AngularX Yarn', () => {
+    describe('GitHub Actions: maven AngularX Yarn', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
@@ -610,16 +601,26 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'github',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
+                    dockerImage: 'jhipster-publish-docker',
+                    sonarUrl: 'http://sonar.com:9000'
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
+        it("doesn't contain Sonar, Docker, Heroku", () => {
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*sonar.com/);
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*sample-mysql/);
+        });
+        it("doesn't contain distributionManagement in pom.xml", () => {
+            assert.noFileContent('pom.xml', /distributionManagement/);
+        });
     });
 
-    describe('GitHub CI: maven AngularX NPM', () => {
+    describe('GitHub Actions: maven AngularX NPM', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
@@ -638,7 +639,7 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
-    describe('GitHub CI: Gradle AngularX Yarn', () => {
+    describe('GitHub Actions: Gradle AngularX Yarn', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
@@ -648,16 +649,23 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'github',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
+                    dockerImage: 'jhipster-publish-docker',
+                    sonarUrl: 'http://sonar.com:9000'
                 })
                 .on('end', done);
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
         });
+        it("doesn't contain Sonar, Docker, Heroku", () => {
+            assert.noFileContent('.github/workflows/github-ci.yml', /gradlew.*sonar.com/);
+            assert.noFileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
+            assert.noFileContent('.github/workflows/github-ci.yml', /mvnw.*sample-mysql/);
+        });
     });
 
-    describe('GitHub CI: Gradle AngularX NPM', () => {
+    describe('GitHub Actions: Gradle AngularX NPM', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))
@@ -676,7 +684,66 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
-    describe('GitHub CI: Autoconfigure', () => {
+    describe('GitHub Actions: maven AngularX Yarn with full options', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'github',
+                    cicdIntegrations: ['deploy', 'sonar', 'publishDocker', 'heroku'],
+                    dockerImage: 'jhipster-publish-docker',
+                    artifactorySnapshotsId: 'snapshots',
+                    artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
+                    artifactoryReleasesId: 'releases',
+                    artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
+                    sonarUrl: 'http://sonar.com:9000'
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.github);
+        });
+        it('contains Docker, Sonar, Heroku', () => {
+            assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sonar.com/);
+            assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*jhipster-publish-docker/);
+            assert.fileContent('.github/workflows/github-ci.yml', /mvnw.*sample-mysql/);
+        });
+        it('contains distributionManagement in pom.xml', () => {
+            assert.fileContent('pom.xml', /distributionManagement/);
+        });
+    });
+
+    describe('GitHub Actions: gradle AngularX Yarn with full options', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/gradle-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'github',
+                    cicdIntegrations: ['sonar', 'publishDocker', 'heroku'],
+                    dockerImage: 'jhipster-publish-docker',
+                    sonarUrl: 'http://sonar.com:9000'
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.github);
+        });
+        it('contains Docker, Sonar, Heroku', () => {
+            assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*jhipster-publish-docker/);
+            assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*sonar.com/);
+            assert.fileContent('.github/workflows/github-ci.yml', /gradlew.*deployHeroku/);
+        });
+    });
+
+    describe('GitHub Actions: Autoconfigure', () => {
         before(done => {
             helpers
                 .run(require.resolve('../generators/ci-cd'))

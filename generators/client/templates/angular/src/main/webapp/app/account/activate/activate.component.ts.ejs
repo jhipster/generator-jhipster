@@ -28,8 +28,8 @@ import { ActivateService } from './activate.service';
     templateUrl: './activate.component.html'
 })
 export class ActivateComponent implements OnInit {
-    error: string;
-    success: string;
+    error = false;
+    success = false;
 
     constructor(
         private activateService: ActivateService,
@@ -38,20 +38,18 @@ export class ActivateComponent implements OnInit {
     ) {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.route.queryParams.pipe(flatMap(params => this.activateService.get(params.key))).subscribe(
             () => {
-                this.error = null;
-                this.success = 'OK';
+                this.success = true;
             },
             () => {
-                this.success = null;
-                this.error = 'ERROR';
+                this.error = true;
             }
         );
     }
 
-    login() {
+    login(): void {
         this.loginModalService.open();
     }
 }

@@ -22,20 +22,18 @@ import { JhiLanguageHelper } from 'app/core/language/language.helper';
 import Spy = jasmine.Spy;
 
 export class MockLanguageService extends SpyObject {
-
-    getCurrentSpy: Spy;
-    fakeResponse: any;
+    getCurrentLanguageSpy: Spy;
+    fakeResponse: string;
 
     constructor() {
         super(JhiLanguageService);
 
         this.fakeResponse = '<%= nativeLanguage %>';
-        this.getCurrentSpy = this.spy('getCurrent').andReturn(Promise.resolve(this.fakeResponse));
+        this.getCurrentLanguageSpy = this.spy('getCurrentLanguage').andReturn(this.fakeResponse);
     }
 }
 
 export class MockLanguageHelper extends SpyObject {
-
     getAllSpy: Spy;
 
     constructor() {

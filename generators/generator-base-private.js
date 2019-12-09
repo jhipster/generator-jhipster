@@ -540,6 +540,22 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Parse creationTimestamp option
+     * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
+     *                   obtained by parsing the given string representation of the creationTimestamp.
+     */
+    parseCreationTimestamp() {
+        let creationTimestamp;
+        if (this.options.creationTimestamp) {
+            creationTimestamp = Date.parse(this.options.creationTimestamp);
+            if (!creationTimestamp) {
+                this.warn(`Error parsing creationTimestamp ${this.options.creationTimestamp}`);
+            }
+        }
+        return creationTimestamp;
+    }
+
+    /**
      * @param {any} input input
      * @returns {boolean} true if input is number; false otherwise
      */
@@ -1231,19 +1247,19 @@ module.exports = class extends Generator {
      * @returns generated JDL from entities
      */
     generateJDLFromEntities() {
-        const jdl = new jhiCore.JDLObject();
+        let jdlObject;
+        const entities = new Map();
         try {
-            const entities = {};
             this.getExistingEntities().forEach(entity => {
-                entities[entity.name] = entity.definition;
+                entities.set(entity.name, entity.definition);
             });
-            jhiCore.convertJsonEntitiesToJDL(entities, jdl);
-            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdl);
-        } catch (e) {
-            this.log(e.message || e);
+            jdlObject = jhiCore.convertJsonEntitiesToJDL({ entities });
+            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
+        } catch (error) {
+            this.log(error.message || error);
             this.error('\nError while parsing entities to JDL\n');
         }
-        return jdl;
+        return jdlObject;
     }
 
     /**

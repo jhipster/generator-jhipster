@@ -61,11 +61,11 @@ module.exports = class extends BaseGenerator {
             description: 'Automatically configure Azure'
         });
 
-        // Automatically configure GitHub CI
+        // Automatically configure GitHub Actions
         this.argument('autoconfigure-github', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Github CI'
+            description: 'Automatically configure GitHub Actions'
         });
 
         this.registerPrettierTransform();
@@ -83,7 +83,10 @@ module.exports = class extends BaseGenerator {
                 this.jhipsterVersion = packagejs.version;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.baseName = configuration.get('baseName');
+                this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.applicationType = configuration.get('applicationType');
+                this.databaseType = configuration.get('databaseType');
+                this.prodDatabaseType = configuration.get('prodDatabaseType');
                 this.skipClient = configuration.get('skipClient');
                 this.clientPackageManager = configuration.get('clientPackageManager');
                 this.buildTool = configuration.get('buildTool');

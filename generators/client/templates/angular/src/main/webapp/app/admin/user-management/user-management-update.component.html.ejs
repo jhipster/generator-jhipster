@@ -22,7 +22,7 @@
             <h2 id="myUserLabel" jhiTranslate="userManagement.home.createOrEditLabel">
                 Create or edit a User
             </h2>
-            <div>
+            <div *ngIf="user">
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
                 <div class="form-group" [hidden]="!user.id">
                     <label jhiTranslate="global.field.id">ID</label>
@@ -108,7 +108,8 @@
                 </div>
                 <div class="form-check">
                     <label class="form-check-label" for="activated">
-                        <input class="form-check-input" [disabled]="user.id === null" type="checkbox" id="activated" name="activated"  formControlName="activated">
+                        <input class="form-check-input" [attr.disabled]="user.id === undefined ? 'disabled' : null"
+                        type="checkbox" id="activated" name="activated" formControlName="activated">
                         <span jhiTranslate="userManagement.activated">Activated</span>
                     </label>
                 </div>
@@ -128,7 +129,7 @@
                     </select>
                 </div>
             </div>
-            <div>
+            <div *ngIf="user">
                 <button type="button" class="btn btn-secondary" (click)="previousState()">
                     <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span
                     jhiTranslate="entity.action.cancel">Cancel</span>

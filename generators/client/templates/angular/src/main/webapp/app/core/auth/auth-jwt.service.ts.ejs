@@ -25,7 +25,14 @@ import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
 import { SERVER_API_URL } from 'app/app.constants';
+import { Login } from 'app/core/login/login.model';
 
+<%_ if (authenticationType !== 'uaa') { _%>
+type JwtToken = {
+  id_token: string;
+};
+
+<%_ } _%>
 @Injectable({providedIn: 'root'})
 export class AuthServerProvider {
     constructor(
@@ -35,61 +42,40 @@ export class AuthServerProvider {
 <%_ } _%>
     ) {}
 
-    getToken() {
 <%_ if (authenticationType === 'uaa') { _%>
-        return null;
-<% } else { %>
-        return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken');
-<%_ } _%>
+    login(credentials: Login): Observable<any> {
+        return this.http.post(SERVER_API_URL + 'auth/login', credentials);
     }
 
-    login(credentials): Observable<any> {
-<%_ if (authenticationType === 'uaa') { _%>
-        const data = {
-            username: credentials.username,
-            password: credentials.password,
-            rememberMe: credentials.rememberMe
-        };
-        return this.http.post(SERVER_API_URL + 'auth/login', data, {});
-<% } else { %>
-        const data = {
-            username: credentials.username,
-            password: credentials.password,
-            rememberMe: credentials.rememberMe
-        };
-
-        function authenticateSuccess(resp) {
-            const bearerToken = resp.headers.get('Authorization');
-            if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
-                const jwt = bearerToken.slice(7, bearerToken.length);
-                this.storeAuthenticationToken(jwt, credentials.rememberMe);
-                return jwt;
-            }
-        }
-
-        return this.http.post(SERVER_API_URL + 'api/authenticate', data, {observe : 'response'}).pipe(map(authenticateSuccess.bind(this)));
-<%_ } _%>
+    logout(): Observable<{}> {
+        return this.http.post(SERVER_API_URL + 'auth/logout', null);
     }
-<%_ if (authenticationType !== 'uaa') { _%>
+<% } else { %>
+    getToken(): string {
+        return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken') || '';
+    }
 
-    storeAuthenticationToken(jwt, rememberMe) {
+    login(credentials: Login): Observable<void> {
+        return this.http
+            .post<JwtToken>(SERVER_API_URL + 'api/authenticate', credentials)
+            .pipe(map(response => this.authenticateSuccess(response, credentials.rememberMe)));
+    }
+
+    private authenticateSuccess(response: JwtToken, rememberMe: boolean): void {
+        const jwt = response.id_token;
         if (rememberMe) {
             this.$localStorage.store('authenticationToken', jwt);
         } else {
             this.$sessionStorage.store('authenticationToken', jwt);
         }
     }
-<%_ } _%>
 
-    logout(): Observable<any> {
-<%_ if (authenticationType === 'uaa') { _%>
-        return this.http.post(SERVER_API_URL + 'auth/logout', null);
-<% } else { %>
+    logout(): Observable<void> {
         return new Observable((observer) => {
             this.$localStorage.clear('authenticationToken');
             this.$sessionStorage.clear('authenticationToken');
             observer.complete();
         });
-<%_ } _%>
     }
+<%_ } _%>
 }
