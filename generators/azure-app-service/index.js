@@ -51,8 +51,15 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        this.option('skip-insights', {
+            desc: 'Skips configuration of Azure Application Insights',
+            type: Boolean,
+            defaults: false
+        });
+
         this.azureSpringCloudSkipBuild = this.options['skip-build'];
         this.azureSpringCloudSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
+        this.azureSpringCloudSkipInsights = this.options['skip-insights'];
         this.registerPrettierTransform();
     }
 
@@ -352,7 +359,33 @@ which is free for the first 30 days`);
                     });
                 }
                 done();
-            }
+            },
+
+            checkAzureApplicationInsights() {
+                if (this.abort) return;
+                if (this.azureSpringCloudSkipInsights) return;
+                const done = this.async();
+                this.log(chalk.bold('\Checking Azure Application Insights extension'));
+                exec('az extension show --name application-insights', err => {
+                    if (err) {
+                        this.log('The Azure Application Insights extension is NOT installed, installing it...');
+                        exec('az extension add --name application-insights', err => {
+                            if (!err) {
+                                this.log(chalk.green(`The Azure Application Insights extension is installed!`));
+                            } else {
+                                this.log(err);
+                                this.abort = true;
+                                this.error('Could not install the Azure Application Insights extension');
+                            }
+                            done();
+                        });
+                    } else {
+                        this.log('The Azure Application Insights extension is installed');
+                        done();
+                    }
+                });
+            },
+
         };
     }
 
