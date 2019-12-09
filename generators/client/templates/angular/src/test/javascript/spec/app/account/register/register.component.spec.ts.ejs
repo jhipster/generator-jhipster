@@ -81,7 +81,7 @@ describe('Component Tests', () => {
                     });
                     expect(comp.success).toBe(true);
                     <%_ if (enableTranslation) { _%>
-                    expect(mockTranslate.getCurrentSpy).toHaveBeenCalled();
+                    expect(mockTranslate.getCurrentLanguageSpy).toHaveBeenCalled();
                     <%_ } _%>
                     expect(comp.errorUserExists).toBe(false);
                     expect(comp.errorEmailExists).toBe(false);

@@ -20,7 +20,6 @@ import { ComponentFixture, TestBed, async, inject, fakeAsync, tick } from '@angu
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
 
 import { LoginService } from 'app/core/login/login.service';
 import { <%=jhiPrefixCapitalized%>LoginModalComponent } from 'app/shared/login/login.component';
@@ -38,7 +37,6 @@ describe('Component Tests', () => {
         let mockLoginService: any;
         let mockStateStorageService: any;
         let mockRouter: any;
-        let mockEventManager: any;
         let mockActiveModal: any;
 
         beforeEach(async(() => {
@@ -67,7 +65,6 @@ describe('Component Tests', () => {
             mockLoginService = fixture.debugElement.injector.get(LoginService);
             mockStateStorageService = fixture.debugElement.injector.get(StateStorageService);
             mockRouter = fixture.debugElement.injector.get(Router);
-            mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
             mockActiveModal = fixture.debugElement.injector.get(NgbActiveModal);
         });
 
@@ -97,7 +94,6 @@ describe('Component Tests', () => {
                     // THEN
                     expect(comp.authenticationError).toEqual(false);
                     expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
-                    expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
                     expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
                     expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);
                     expect(mockStateStorageService.storeUrlSpy).toHaveBeenCalledWith(null);
@@ -131,7 +127,6 @@ describe('Component Tests', () => {
                     // THEN
                     expect(comp.authenticationError).toEqual(false);
                     expect(mockActiveModal.dismissSpy).toHaveBeenCalledWith('login success');
-                    expect(mockEventManager.broadcastSpy).toHaveBeenCalledTimes(1);
                     expect(mockLoginService.loginSpy).toHaveBeenCalledWith(credentials);
                     expect(mockStateStorageService.getUrlSpy).toHaveBeenCalledTimes(1);
                     expect(mockStateStorageService.storeUrlSpy).not.toHaveBeenCalled();

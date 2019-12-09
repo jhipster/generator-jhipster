@@ -64,23 +64,13 @@ export class LoginService {
 
     <%_ if (authenticationType === 'uaa') { _%>
 
-    isAuthenticated(): boolean {
-        return this.accountService.isAuthenticated();
-    }
-
     logoutDirectly(): void {
         this.accountService.authenticate(null);
     }
     <%_ } _%>
 
     logout(): void {
-        <%_ if (authenticationType === 'uaa') { _%>
-        if (this.accountService.isAuthenticated()) {
-            this.authServerProvider.logout().subscribe(() => this.accountService.authenticate(null));
-        } else {
-            this.accountService.authenticate(null);
-        }
-        <%_ } else if (authenticationType === 'oauth2') { _%>
+        <%_ if (authenticationType === 'oauth2') { _%>
         this.authServerProvider.logout().subscribe((logout: Logout) => {
             let logoutUrl = logout.logoutUrl;
             const redirectUri = `${location.origin}${this.location.prepareExternalUrl('/')}`;

@@ -31,9 +31,6 @@ import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { LoginModalService } from 'app/core/login/login-modal.service';
 <%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
-import { TrackerService } from 'app/core/tracker/tracker.service';
-<%_ } _%>
 import { MockAccountService } from './helpers/mock-account.service';
 import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service';
 import { MockActiveModal } from './helpers/mock-active-modal.service';
@@ -56,12 +53,6 @@ _%>
         {
             provide: JhiLanguageHelper,
             useClass: MockLanguageHelper
-        },
-        <%_ } _%>
-        <%_ if (websocket === 'spring-websocket') { _%>
-        {
-            provide: TrackerService,
-            useValue: null
         },
         <%_ } _%>
         {

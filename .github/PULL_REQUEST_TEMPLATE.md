@@ -8,5 +8,4 @@
 <!--
 Please also reference the issue number in a commit message to [automatically close the related Github issue](https://help.github.com/articles/closing-issues-via-commit-messages/)
 
-Note: It is also possible to add `[skip ci]` to your commit message to skip Travis tests
 -->

@@ -116,10 +116,6 @@ module.exports = class extends Generator {
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
         );
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langJavaProp}.properties`
-        );
-        generator.template(
             `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
@@ -443,6 +439,21 @@ module.exports = class extends Generator {
             this.log(`Removing the folder - ${folder}`);
             shelljs.rm('-rf', folder);
         }
+    }
+
+    /**
+     * Rename File
+     *
+     * @param {string} source
+     * @param {string} dest
+     * @returns {boolean} true if success; false otherwise
+     */
+    renameFile(source, dest) {
+        if (shelljs.test('-f', source)) {
+            this.info(`Renaming the file - ${source} to ${dest}`);
+            return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
+        }
+        return true;
     }
 
     /**
@@ -1459,5 +1470,17 @@ module.exports = class extends Generator {
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
         }
+    }
+
+    /**
+     * Returns a seeded random number generator, used for RandExp regex generation.
+     * @param {number} id - seeds the random number generator
+     */
+    seededRandomNumberGenerator(id) {
+        let seed = 42 + id;
+        return (a, b) => {
+            seed = seed ** 2 % 969421;
+            return (seed % (1 + b - a)) + a;
+        };
     }
 };
