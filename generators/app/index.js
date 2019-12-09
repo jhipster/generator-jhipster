@@ -521,6 +521,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             cleanup() {
                 cleanup.cleanupOldFiles(this);
+                cleanup.upgradeFiles(this);
             },
 
             regenerateEntities() {
