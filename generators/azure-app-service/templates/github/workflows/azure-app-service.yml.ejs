@@ -24,10 +24,10 @@ jobs:
     - name: Test with Maven
       run: mvn test
     - name: Build with Maven
-      run: mvn package -DskipTests -Pprod,azure
+      run: mvn package -DskipTests -Pprod
     - name: Login to Azure
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Deploy with Maven
-      run: mvn azure-webapp:deploy -DskipTests -Pprod,azure
+      run: mvn azure-webapp:deploy -DskipTests -Pprod
