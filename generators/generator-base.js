@@ -1839,6 +1839,33 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * run a command using the configured Java build tool.
+     *
+     * @param {String} buildTool - maven | gradle
+     * @param {String} profile - dev | prod
+     * @param {Boolean} command - the command (goal/task) to run
+     * @param {Function} cb - callback when build is complete
+     */
+    runJavaBuildCommand(buildTool, profile, command, cb) {
+        let buildCmd = 'mvnw -ntp -DskipTests=true -B ' + command;
+
+        if (buildTool === 'gradle') {
+            buildCmd = 'gradlew -x ' + command;
+        }
+
+        if (os.platform() !== 'win32') {
+            buildCmd = `./${buildCmd}`;
+        }
+        buildCmd += ` -P${profile}`;
+        this.log(`Running command: '${chalk.bold(buildCmd)}'`);
+        const child = {};
+        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout;
+        child.buildCmd = buildCmd;
+
+        return child;
+    }
+
+    /**
      * write the given files using provided config.
      *
      * @param {object} files - files to write
