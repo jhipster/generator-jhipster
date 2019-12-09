@@ -19,27 +19,27 @@
 
 const { expect } = require('chai');
 const JDLValidation = require('../../../../lib/core/jdl_validation');
-const { convertValidation } = require('../../../../lib/converters/parsedJDLToJDLObject/validation_converter');
+const { convertValidations } = require('../../../../lib/converters/parsedJDLToJDLObject/validation_converter');
 
 describe('ValidationConverter', () => {
-  describe('convertValidation', () => {
-    context('when not passing a validation', () => {
+  describe('convertValidations', () => {
+    context('when not passing validations', () => {
       it('should fail', () => {
-        expect(() => convertValidation()).to.throw(/^A validation has to be passed so as to be converted.$/);
+        expect(() => convertValidations()).to.throw(/^Validations have to be passed so as to be converted.$/);
       });
     });
-    context('when passing a validation', () => {
+    context('when passing validations', () => {
       context('with all the attributes', () => {
-        let expectedValidation;
-        let convertedJDLValidation;
+        let expectedValidations;
+        let convertedJDLValidations;
 
         before(() => {
-          convertedJDLValidation = convertValidation({ key: 'min', value: 0 }, () => {});
-          expectedValidation = new JDLValidation({ name: 'min', value: 0 });
+          convertedJDLValidations = convertValidations([{ key: 'min', value: 0 }], () => {});
+          expectedValidations = [new JDLValidation({ name: 'min', value: 0 })];
         });
 
         it('should convert it', () => {
-          expect(convertedJDLValidation).to.deep.equal(expectedValidation);
+          expect(convertedJDLValidations).to.deep.equal(expectedValidations);
         });
       });
       context('having for value a constant', () => {
@@ -47,11 +47,11 @@ describe('ValidationConverter', () => {
 
         before(() => {
           const getConstantValue = () => 42;
-          const convertedJDLValidation = convertValidation(
-            { key: 'min', value: 'MINIMUM', constant: true },
+          const convertedJDLValidations = convertValidations(
+            [{ key: 'min', value: 'MINIMUM', constant: true }],
             getConstantValue
           );
-          valueFromTheConvertedValidation = convertedJDLValidation.value;
+          valueFromTheConvertedValidation = convertedJDLValidations[0].value;
         });
 
         it('should use it', () => {
@@ -63,14 +63,16 @@ describe('ValidationConverter', () => {
           let valueFromTheConvertedValidation;
 
           before(() => {
-            const convertedJDLValidation = convertValidation(
-              {
-                key: 'pattern',
-                value: '/d+/'
-              },
+            const convertedJDLValidations = convertValidations(
+              [
+                {
+                  key: 'pattern',
+                  value: '/d+/'
+                }
+              ],
               () => {}
             );
-            valueFromTheConvertedValidation = convertedJDLValidation.value;
+            valueFromTheConvertedValidation = convertedJDLValidations[0].value;
           });
 
           it('should not format the value', () => {
@@ -81,19 +83,34 @@ describe('ValidationConverter', () => {
           let valueFromTheConvertedValidation;
 
           before(() => {
-            const convertedJDLValidation = convertValidation(
-              {
-                key: 'pattern',
-                value: "/[A-Z']/"
-              },
+            const convertedJDLValidations = convertValidations(
+              [
+                {
+                  key: 'pattern',
+                  value: "/[A-Z']/"
+                }
+              ],
               () => {}
             );
-            valueFromTheConvertedValidation = convertedJDLValidation.value;
+            valueFromTheConvertedValidation = convertedJDLValidations[0].value;
           });
 
           it('should format it', () => {
             expect(valueFromTheConvertedValidation).to.equal("/[A-Z\\\\']/\\");
           });
+        });
+      });
+      context('having one falsy element', () => {
+        let expectedValidations;
+        let convertedJDLValidations;
+
+        before(() => {
+          convertedJDLValidations = convertValidations([null, { key: 'min', value: 0 }, undefined], () => {});
+          expectedValidations = [new JDLValidation({ name: 'min', value: 0 })];
+        });
+
+        it('should ignore it', () => {
+          expect(convertedJDLValidations).to.deep.equal(expectedValidations);
         });
       });
     });
