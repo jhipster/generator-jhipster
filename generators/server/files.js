@@ -424,6 +424,20 @@ const serverFiles = {
         },
         {
             condition: generator =>
+                !generator.reactive &&
+                (generator.applicationType === 'uaa' ||
+                    generator.authenticationType === 'uaa' ||
+                    generator.authenticationType === 'oauth2'),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/MethodSecurityConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/MethodSecurityConfiguration.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
                 !shouldSkipUserManagement(generator) && generator.authenticationType === 'session' && !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -564,6 +578,10 @@ const serverFiles = {
                 {
                     file: 'package/web/filter/RefreshTokenFilterConfigurer.java',
                     renameTo: generator => `${generator.javaDir}web/filter/RefreshTokenFilterConfigurer.java`
+                },
+                {
+                    file: 'package/web/filter/RouteDetectorFilter.java',
+                    renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`
                 },
                 {
                     file: 'package/config/oauth2/OAuth2AuthenticationConfiguration.java',
