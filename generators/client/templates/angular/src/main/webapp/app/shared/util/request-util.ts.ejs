@@ -16,17 +16,17 @@
 -%>
 import { HttpParams } from '@angular/common/http';
 
-export interface IPagination {
+export interface Pagination {
     page: number;
     size: number;
     sort: string[];
 }
 
-export interface ISearch {
+export interface Search {
     query: string;
 }
 
-export interface IPaginationWithSearch extends IPagination, ISearch {}
+export interface SearchWithPagination extends Search, Pagination {}
 
 export const createRequestOption = (req?: any): HttpParams => {
     let options: HttpParams = new HttpParams();

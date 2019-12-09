@@ -18,9 +18,9 @@
 -%>
 <%_
 const tsKeyType = getTypescriptKeyType(getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships));
-const searchTypes = ['ISearch'];
+let searchType = 'Search';
 if (pagination === 'pagination' || pagination === 'infinite-scroll') {
-    searchTypes.push('IPaginationWithSearch');
+    searchType = 'SearchWithPagination';
 }
 _%>
 import { Injectable } from '@angular/core';
@@ -36,7 +36,7 @@ import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 <%_ } _%>
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption<% if (searchEngine === 'elasticsearch') { %>, <%= searchTypes.join(' ,') %><% } %> } from 'app/shared/util/request-util';
+import { createRequestOption<% if (searchEngine === 'elasticsearch') { %>, <%= searchType %><% } %> } from 'app/shared/util/request-util';
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
@@ -93,7 +93,7 @@ export class <%= entityAngularName %>Service {
 <%_ } _%>
 
     <%_ if (searchEngine === 'elasticsearch') { _%>
-    search(req: <%= searchTypes.join(' | ') %>): Observable<EntityArrayResponseType> {
+    search(req: <%= searchType %>): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<I<%= entityAngularName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
