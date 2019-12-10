@@ -279,9 +279,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                             if (!servicePlanAlreadyExists) {
                                 this.log(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
                                 exec(
-                                    `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${
-                                        this.azureAppServiceResourceGroupName
-                                    }`,
+                                    `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${this.azureAppServiceResourceGroupName}`,
                                     err => {
                                         if (err) {
                                             this.abort = true;
@@ -327,9 +325,7 @@ which is free for the first 30 days`);
                             if (!applicationAlreadyExists) {
                                 this.log(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
                                 exec(
-                                    `az webapp create --name ${this.azureAppServiceName} --runtime "${AZURE_WEBAPP_RUNTIME}" --plan ${
-                                        this.azureAppServicePlan
-                                    } \
+                                    `az webapp create --name ${this.azureAppServiceName} --runtime "${AZURE_WEBAPP_RUNTIME}" --plan ${this.azureAppServicePlan} \
                                             --resource-group ${this.azureAppServiceResourceGroupName}`,
                                     err => {
                                         if (err) {
@@ -361,9 +357,7 @@ which is free for the first 30 days`);
                 this.log(`Configuring Azure App Service '${this.azureAppServiceName}'...`);
                 this.log("Enabling 'prod' and 'azure' Spring Boot profiles");
                 exec(
-                    `az webapp config appsettings set --resource-group ${this.azureAppServiceResourceGroupName} --name ${
-                        this.azureAppServiceName
-                    } --settings SPRING_PROFILES_ACTIVE=prod,azure`,
+                    `az webapp config appsettings set --resource-group ${this.azureAppServiceResourceGroupName} --name ${this.azureAppServiceName} --settings SPRING_PROFILES_ACTIVE=prod,azure`,
                     (err, stdout) => {
                         if (err) {
                             this.abort = true;
@@ -423,16 +417,12 @@ which is free for the first 30 days`);
                 const done = this.async();
                 this.log('Checking Azure Application Insights instance...');
                 exec(
-                    `az monitor app-insights component show --app ${this.azureApplicationInsightsName} --resource-group ${
-                        this.azureAppServiceResourceGroupName
-                    }`,
+                    `az monitor app-insights component show --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`,
                     (err, stdout) => {
                         if (err) {
                             this.log('Azure Application Insights instance does not exist, creating it...');
                             exec(
-                                `az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${
-                                    this.azureAppServiceResourceGroupName
-                                }`,
+                                `az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`,
                                 (err, stdout) => {
                                     if (err) {
                                         this.log(err);
@@ -547,9 +537,7 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                                         );
                                         this.log(
                                             chalk.bold(
-                                                `'az ad sp create-for-rbac --name http://${
-                                                    this.azureAppServiceName
-                                                } --role contributor --scopes ${this.azureGroupId} --sdk-auth'`
+                                                `'az ad sp create-for-rbac --name http://${this.azureAppServiceName} --role contributor --scopes ${this.azureGroupId} --sdk-auth'`
                                             )
                                         );
                                         done();
