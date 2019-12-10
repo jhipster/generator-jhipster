@@ -1811,6 +1811,7 @@ module.exports = class extends PrivateBase {
      * @param {String} profile - dev | prod
      * @param {Boolean} buildWar - build a war instead of a jar
      * @param {Function} cb - callback when build is complete
+     * @returns {object} the command line and its result
      */
     buildApplication(buildTool, profile, buildWar, cb) {
         let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
@@ -1845,6 +1846,7 @@ module.exports = class extends PrivateBase {
      * @param {String} profile - dev | prod
      * @param {String} command - the command (goal/task) to run
      * @param {Function} cb - callback when build is complete
+     * @returns {object} the command line and its result
      */
     runJavaBuildCommand(buildTool, profile, command, cb) {
         let buildCmd = `mvnw -ntp -DskipTests=true -B ${command}`;
