@@ -169,13 +169,13 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         type: 'input',
                         name: 'azureAppServicePlan',
                         message: 'Azure App Service plan name:',
-                        default: this.azureAppServicePlan || this.baseName + '-plan'
+                        default: this.azureAppServicePlan || `${this.baseName}-plan`
                     },
                     {
                         type: 'input',
                         name: 'azureApplicationInsightsName',
                         message: 'Azure Application Insights instance name:',
-                        default: this.azureApplicationInsightsName || this.baseName + '-insights'
+                        default: this.azureApplicationInsightsName || `${this.baseName}-insights`
                     },
                     {
                         type: 'input',
@@ -265,117 +265,121 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                 const done = this.async();
                 this.log(chalk.bold(`\nChecking Azure App Service plan '${this.azureAppServicePlan}'...`));
                 let servicePlanAlreadyExists = false;
-                exec(
-                    `az appservice plan list --resource-group ${this.azureAppServiceResourceGroupName}`,
-                    (err, stdout, stderr) => {
-                        if (err) {
-                            this.abort = true;
-                            this.error('Could not list your Azure App Service plans');
-                        } else {
-                            const json = JSON.parse(stdout);
-                            try {
-                                for (let i = 0; i < json.length; i++) {
-                                    let currentPlan = json[i];
-                                    Object.keys(currentPlan).forEach(key => {
-                                        if (key === 'name') {
-                                            if (this.azureAppServicePlan == currentPlan[key]) {
-                                                this.log(`Service plan '${this.azureAppServicePlan}' already exists, using it`);
-                                                servicePlanAlreadyExists = true;
-                                            }
+                exec(`az appservice plan list --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
+                    if (err) {
+                        this.abort = true;
+                        this.error('Could not list your Azure App Service plans');
+                    } else {
+                        const json = JSON.parse(stdout);
+                        try {
+                            for (let i = 0; i < json.length; i++) {
+                                const currentPlan = json[i];
+                                Object.keys(currentPlan).forEach(key => {
+                                    if (key === 'name') {
+                                        if (this.azureAppServicePlan == currentPlan[key]) {
+                                            this.log(`Service plan '${this.azureAppServicePlan}' already exists, using it`);
+                                            servicePlanAlreadyExists = true;
                                         }
-                                    });
-                                }
-                            
-                                if (!servicePlanAlreadyExists) {
-                                    this.log(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
-                                    exec(
-                                        `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${this.azureAppServiceResourceGroupName}`, (err) => {
-                                            if (err) {
-                                                this.abort = true;
-                                                this.error('Could not create the Azure App Service plan');
-                                                this.log(err);
-                                                done();
-                                            } else {
-                                                this.log(chalk.green(`Service plan '${this.azureAppServicePlan}' created!`));
-                                                this.log(`Service plan '${this.azureAppServicePlan}' uses the 'B1' (basic small) pricing tier, \
-which is free for the first 30 days`);
-                                                done();
-                                            }
-                                        });
-                                } else {
-                                    done();
-                                }
-                            } catch (e) {
-                                this.log(e);
-                                this.abort = true;
-                                this.error('Could not manage the Azure App Service plan');
+                                    }
+                                });
                             }
+
+                            if (!servicePlanAlreadyExists) {
+                                this.log(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
+                                exec(
+                                    `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${
+                                        this.azureAppServiceResourceGroupName
+                                    }`,
+                                    err => {
+                                        if (err) {
+                                            this.abort = true;
+                                            this.error('Could not create the Azure App Service plan');
+                                            this.log(err);
+                                            done();
+                                        } else {
+                                            this.log(chalk.green(`Service plan '${this.azureAppServicePlan}' created!`));
+                                            this.log(`Service plan '${this.azureAppServicePlan}' uses the 'B1' (basic small) pricing tier, \
+which is free for the first 30 days`);
+                                            done();
+                                        }
+                                    }
+                                );
+                            } else {
+                                done();
+                            }
+                        } catch (e) {
+                            this.log(e);
+                            this.abort = true;
+                            this.error('Could not manage the Azure App Service plan');
                         }
                     }
-                );
+                });
             },
 
             azureAzureAppServiceCreate() {
                 if (this.abort) return;
                 const done = this.async();
                 this.log(chalk.bold(`\nChecking Azure App Service '${this.azureAppServiceName}'...`));
-                exec(
-                    `az webapp list --query "[]" --resource-group ${this.azureAppServiceResourceGroupName}`,
-                    (err, stdout, stderr) => {
-                        if (err) {
-                            this.abort = true;
-                            this.error('Could not list your Azure App Service instances');
-                        } else {
-                            const json = JSON.parse(stdout);
-                            let applicationAlreadyExists = false;
-                            try {
-                                for (let i = 0; i < json.length; i++) {
-                                    let currentApp = json[i];
-                                    Object.keys(currentApp).forEach(key => {
-                                        if (key === 'name') {
-                                            if (this.azureAppServiceName == currentApp[key]) {
-                                                this.log(`Application '${this.azureAppServiceName}' already exists, using it`);
-                                                applicationAlreadyExists = true;
-                                            }
+                exec(`az webapp list --query "[]" --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
+                    if (err) {
+                        this.abort = true;
+                        this.error('Could not list your Azure App Service instances');
+                    } else {
+                        const json = JSON.parse(stdout);
+                        let applicationAlreadyExists = false;
+                        try {
+                            for (let i = 0; i < json.length; i++) {
+                                const currentApp = json[i];
+                                Object.keys(currentApp).forEach(key => {
+                                    if (key === 'name') {
+                                        if (this.azureAppServiceName == currentApp[key]) {
+                                            this.log(`Application '${this.azureAppServiceName}' already exists, using it`);
+                                            applicationAlreadyExists = true;
                                         }
-                                    });
-                                }
-                            
-                                if (!applicationAlreadyExists) {
-                                    this.log(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
-                                    exec(
-                                        `az webapp create --name ${this.azureAppServiceName} --runtime "${AZURE_WEBAPP_RUNTIME}" --plan ${this.azureAppServicePlan} \
-                                            --resource-group ${this.azureAppServiceResourceGroupName}`, (err) => {
-                                            if (err) {
-                                                this.abort = true;
-                                                this.error('Could not create the Web application');
-                                                this.log(err);
-                                                done();
-                                            } else {
-                                                this.log(chalk.green(`Web application '${this.azureAppServiceName}' created!`));
-                                                done();
-                                            }
-                                        });
-                                } else {
-                                    done();
-                                }
-                            } catch (e) {
-                                this.log(e);
-                                this.abort = true;
-                                this.error('Could not manage the Azure App Service Web application');
+                                    }
+                                });
                             }
+
+                            if (!applicationAlreadyExists) {
+                                this.log(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
+                                exec(
+                                    `az webapp create --name ${this.azureAppServiceName} --runtime "${AZURE_WEBAPP_RUNTIME}" --plan ${
+                                        this.azureAppServicePlan
+                                    } \
+                                            --resource-group ${this.azureAppServiceResourceGroupName}`,
+                                    err => {
+                                        if (err) {
+                                            this.abort = true;
+                                            this.error('Could not create the Web application');
+                                            this.log(err);
+                                            done();
+                                        } else {
+                                            this.log(chalk.green(`Web application '${this.azureAppServiceName}' created!`));
+                                            done();
+                                        }
+                                    }
+                                );
+                            } else {
+                                done();
+                            }
+                        } catch (e) {
+                            this.log(e);
+                            this.abort = true;
+                            this.error('Could not manage the Azure App Service Web application');
                         }
                     }
-                );
+                });
             },
 
             azureAzureAppServiceConfig() {
                 if (this.abort) return;
                 const done = this.async();
                 this.log(`Configuring Azure App Service '${this.azureAppServiceName}'...`);
-                this.log(`Enabling 'prod' and 'azure' Spring Boot profiles`);
+                this.log("Enabling 'prod' and 'azure' Spring Boot profiles");
                 exec(
-                    `az webapp config appsettings set --resource-group ${this.azureAppServiceResourceGroupName} --name ${this.azureAppServiceName} --settings SPRING_PROFILES_ACTIVE=prod,azure`,
+                    `az webapp config appsettings set --resource-group ${this.azureAppServiceResourceGroupName} --name ${
+                        this.azureAppServiceName
+                    } --settings SPRING_PROFILES_ACTIVE=prod,azure`,
                     (err, stdout) => {
                         if (err) {
                             this.abort = true;
@@ -392,7 +396,12 @@ which is free for the first 30 days`);
                 this.log(chalk.bold('\nAdding Azure Web App Maven plugin'));
                 if (this.buildTool === 'maven') {
                     this.render('pom-plugin.xml.ejs', rendered => {
-                        this.addMavenPlugin('com.microsoft.azure', 'azure-webapp-maven-plugin', AZURE_WEBAPP_MAVEN_PLUGIN_VERSION, rendered);
+                        this.addMavenPlugin(
+                            'com.microsoft.azure',
+                            'azure-webapp-maven-plugin',
+                            AZURE_WEBAPP_MAVEN_PLUGIN_VERSION,
+                            rendered
+                        );
                     });
                 }
                 done();
@@ -409,7 +418,7 @@ which is free for the first 30 days`);
                         this.log('The Azure Application Insights CLI extension is NOT installed, installing it...');
                         exec('az extension add --name application-insights', err => {
                             if (!err) {
-                                this.log(chalk.green(`The Azure Application Insights CLI extension is installed!`));
+                                this.log(chalk.green('The Azure Application Insights CLI extension is installed!'));
                             } else {
                                 this.log(err);
                                 this.abort = true;
@@ -429,30 +438,38 @@ which is free for the first 30 days`);
                 if (this.azureSpringCloudSkipInsights) return;
                 const done = this.async();
                 this.log('Checking Azure Application Insights instance...');
-                exec(`az monitor app-insights component show --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`, 
+                exec(
+                    `az monitor app-insights component show --app ${this.azureApplicationInsightsName} --resource-group ${
+                        this.azureAppServiceResourceGroupName
+                    }`,
                     (err, stdout) => {
-                    if (err) {
-                        this.log('Azure Application Insights instance does not exist, creating it...');
-                        exec(`az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${this.azureAppServiceResourceGroupName}`, 
-                            (err, stdout) => {
-                            if (err) {
-                                this.log(err);
-                                this.abort = true;
-                                this.error('Could not create the Azure Application Insights instance');
-                            } else {
-                                this.log(chalk.green('The Azure Application Insights instance is created!'));
-                                const json = JSON.parse(stdout);
-                                this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
-                            }
+                        if (err) {
+                            this.log('Azure Application Insights instance does not exist, creating it...');
+                            exec(
+                                `az monitor app-insights component create --app ${this.azureApplicationInsightsName} --resource-group ${
+                                    this.azureAppServiceResourceGroupName
+                                }`,
+                                (err, stdout) => {
+                                    if (err) {
+                                        this.log(err);
+                                        this.abort = true;
+                                        this.error('Could not create the Azure Application Insights instance');
+                                    } else {
+                                        this.log(chalk.green('The Azure Application Insights instance is created!'));
+                                        const json = JSON.parse(stdout);
+                                        this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
+                                    }
+                                    done();
+                                }
+                            );
+                        } else {
+                            this.log('The Azure Application Insights instance already exists, using it');
+                            const json = JSON.parse(stdout);
+                            this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
                             done();
-                        });
-                    } else {
-                        this.log('The Azure Application Insights instance already exists, using it');
-                        const json = JSON.parse(stdout);
-                        this.azureAppInsightsInstrumentationKey = json.instrumentationKey;
-                        done();
+                        }
                     }
-                });
+                );
             },
 
             addAzureApplicationInsightsDependency() {
@@ -460,7 +477,11 @@ which is free for the first 30 days`);
                 if (this.azureSpringCloudSkipInsights) return;
                 const done = this.async();
                 this.log('Adding Azure Application Insights support in the Web Application');
-                this.addMavenDependency('com.microsoft.azure', 'applicationinsights-spring-boot-starter', AZURE_APP_INSIGHTS_STARTER_VERSION);
+                this.addMavenDependency(
+                    'com.microsoft.azure',
+                    'applicationinsights-spring-boot-starter',
+                    AZURE_APP_INSIGHTS_STARTER_VERSION
+                );
                 this.log(`The Application Insights instrumentation key used is: '${chalk.bold(this.azureAppInsightsInstrumentationKey)}'`);
                 done();
             },
@@ -538,8 +559,15 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                                         this.log(
                                             `For the deployment to succeed, you will need to configure a ${chalk.bold(
                                                 'AZURE_CREDENTIALS'
-                                            )} secret in GitHub. Type the following command to generate one for the current Azure Web Application:`);
-                                        this.log(chalk.bold(`'az ad sp create-for-rbac --name http://${this.azureAppServiceName} --role contributor --scopes ${this.azureGroupId} --sdk-auth'`));
+                                            )} secret in GitHub. Type the following command to generate one for the current Azure Web Application:`
+                                        );
+                                        this.log(
+                                            chalk.bold(
+                                                `'az ad sp create-for-rbac --name http://${
+                                                    this.azureAppServiceName
+                                                } --role contributor --scopes ${this.azureGroupId} --sdk-auth'`
+                                            )
+                                        );
                                         done();
                                     }
                                 });
