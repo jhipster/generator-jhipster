@@ -271,19 +271,11 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         this.error('Could not list your Azure App Service plans');
                     } else {
                         const json = JSON.parse(stdout);
+                        if (json.filter(currentPlan => currentPlan.name === this.azureAppServicePlan).length > 0) {
+                            this.log(`Service plan '${this.azureAppServicePlan}' already exists, using it`);
+                            servicePlanAlreadyExists = true;
+                        }
                         try {
-                            for (let i = 0; i < json.length; i++) {
-                                const currentPlan = json[i];
-                                Object.keys(currentPlan).forEach(key => {
-                                    if (key === 'name') {
-                                        if (this.azureAppServicePlan === currentPlan[key]) {
-                                            this.log(`Service plan '${this.azureAppServicePlan}' already exists, using it`);
-                                            servicePlanAlreadyExists = true;
-                                        }
-                                    }
-                                });
-                            }
-
                             if (!servicePlanAlreadyExists) {
                                 this.log(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
                                 exec(
@@ -327,19 +319,11 @@ which is free for the first 30 days`);
                     } else {
                         const json = JSON.parse(stdout);
                         let applicationAlreadyExists = false;
+                        if (json.filter(currentApp => currentApp.name === this.azureAppServiceName).length > 0) {
+                            this.log(`Application '${this.azureAppServiceName}' already exists, using it`);
+                            applicationAlreadyExists = true;
+                        }
                         try {
-                            for (let i = 0; i < json.length; i++) {
-                                const currentApp = json[i];
-                                Object.keys(currentApp).forEach(key => {
-                                    if (key === 'name') {
-                                        if (this.azureAppServiceName === currentApp[key]) {
-                                            this.log(`Application '${this.azureAppServiceName}' already exists, using it`);
-                                            applicationAlreadyExists = true;
-                                        }
-                                    }
-                                });
-                            }
-
                             if (!applicationAlreadyExists) {
                                 this.log(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
                                 exec(
