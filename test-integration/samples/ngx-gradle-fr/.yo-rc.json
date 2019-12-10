@@ -15,17 +15,11 @@
         "messageBroker": false,
         "buildTool": "gradle",
         "applicationType": "monolith",
-        "testFrameworks": [
-            "gatling",
-            "protractor"
-        ],
+        "testFrameworks": ["gatling", "protractor"],
         "jhiPrefix": "jhi",
         "enableTranslation": true,
         "nativeLanguage": "fr",
-        "languages": [
-            "en",
-            "fr"
-        ],
+        "languages": ["en", "fr"],
         "serviceDiscoveryType": false,
         "clientPackageManager": "npm",
         "clientFramework": "angularX",
