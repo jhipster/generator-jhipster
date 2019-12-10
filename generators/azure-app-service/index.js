@@ -289,16 +289,18 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                                 if (!servicePlanAlreadyExists) {
                                     this.log(`Service plan '${this.azureAppServicePlan}' doesn't exist, creating it...`);
                                     exec(
-                                        `az appservice plan create --name ${this.azureAppServicePlan} --sku B1 --resource-group ${this.azureAppServiceResourceGroupName}`, (err) => {
+                                        `az appservice plan create --name ${this.azureAppServicePlan} --is-linux --sku B1 --resource-group ${this.azureAppServiceResourceGroupName}`, (err) => {
                                             if (err) {
                                                 this.abort = true;
                                                 this.error('Could not create the Azure App Service plan');
+                                                this.log(err);
+                                                done();
                                             } else {
                                                 this.log(chalk.green(`Service plan '${this.azureAppServicePlan}' created!`));
                                                 this.log(`Service plan '${this.azureAppServicePlan}' uses the 'B1' (basic small) pricing tier, \
 which is free for the first 30 days`);
+                                                done();
                                             }
-                                            done();
                                         });
                                 } else {
                                     done();
