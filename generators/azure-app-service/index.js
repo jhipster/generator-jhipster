@@ -538,10 +538,8 @@ You need a GitHub project correctly configured in order to use GitHub Actions.`
                                         this.log(
                                             `For the deployment to succeed, you will need to configure a ${chalk.bold(
                                                 'AZURE_CREDENTIALS'
-                                            )} secret in GitHub.
-Read the documentation at https://github.com/microsoft/azure-spring-cloud-training/blob/master/11-configure-ci-cd/README.md
-for more detailed information.`
-                                        );
+                                            )} secret in GitHub. Type the following command to generate one for the current Azure Web Application:`);
+                                        this.log(chalk.bold(`'az ad sp create-for-rbac --name http://${this.azureAppServiceName} --role contributor --scopes ${this.azureGroupId} --sdk-auth'`));
                                         done();
                                     }
                                 });
