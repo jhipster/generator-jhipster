@@ -93,6 +93,7 @@ module.exports = class extends BaseGenerator {
         this.azureApplicationInsightsName = this.config.get('azureApplicationInsightsName');
         this.azureAppServiceDeploymentType = this.config.get('azureAppServiceDeploymentType');
         this.azureAppInsightsInstrumentationKey = '';
+        this.azureGroupId = '';
     }
 
     get prompting() {
@@ -241,6 +242,22 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
         return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'azure-app-service');
+            },
+
+            checkAzureGroupId() {
+                if (this.abort) return;
+                const done = this.async();
+                this.log(chalk.bold(`\nChecking Azure resource group '${this.azureAppServiceResourceGroupName}'...`));
+                exec(`az group show --name ${this.azureAppServiceResourceGroupName}`, (err, stdout) => {
+                    if (err) {
+                        this.abort = true;
+                        this.error('Could not retrieve your Azure resource group information, it is probably not configured.');
+                    } else {
+                        const json = JSON.parse(stdout);
+                        this.azureGroupId = json.id;
+                    }
+                    done();
+                });
             },
 
             azureAzureAppServicePlanCreate() {
