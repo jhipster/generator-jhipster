@@ -283,4 +283,56 @@ export * from './entityFolderName/entityFileName.state';`;
             });
         });
     });
+    describe('getEntityParentPathAddition', () => {
+        describe('when passing /', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('/')).to.equal('');
+            });
+        });
+        describe('when passing /foo/', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('/foo/')).to.equal('../');
+            });
+        });
+        describe('when passing undefined', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition()).to.equal('');
+            });
+        });
+        describe('when passing empty', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('')).to.equal('');
+            });
+        });
+        describe('when passing foo', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('foo')).to.equal('../');
+            });
+        });
+        describe('when passing foo/bar', () => {
+            it('returns ../../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal('../../');
+            });
+        });
+        describe('when passing ../foo', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo')).to.equal('');
+            });
+        });
+        describe('when passing ../foo/bar', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar')).to.equal('../');
+            });
+        });
+        describe('when passing ../foo/bar/foo2', () => {
+            it('returns ../../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal('../../');
+            });
+        });
+        describe('when passing ../../foo', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getEntityParentPathAddition('../../foo')).to.throw();
+            });
+        });
+    });
 });
