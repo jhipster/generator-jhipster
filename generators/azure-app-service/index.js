@@ -276,7 +276,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                                 const currentPlan = json[i];
                                 Object.keys(currentPlan).forEach(key => {
                                     if (key === 'name') {
-                                        if (this.azureAppServicePlan == currentPlan[key]) {
+                                        if (this.azureAppServicePlan === currentPlan[key]) {
                                             this.log(`Service plan '${this.azureAppServicePlan}' already exists, using it`);
                                             servicePlanAlreadyExists = true;
                                         }
@@ -332,7 +332,7 @@ which is free for the first 30 days`);
                                 const currentApp = json[i];
                                 Object.keys(currentApp).forEach(key => {
                                     if (key === 'name') {
-                                        if (this.azureAppServiceName == currentApp[key]) {
+                                        if (this.azureAppServiceName === currentApp[key]) {
                                             this.log(`Application '${this.azureAppServiceName}' already exists, using it`);
                                             applicationAlreadyExists = true;
                                         }
