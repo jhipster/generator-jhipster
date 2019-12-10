@@ -345,7 +345,7 @@ which is free for the first 30 days`);
                                     this.log(`Application '${this.azureAppServiceName}' doesn't exist, creating it...`);
                                     exec(
                                         `az webapp create --name ${this.azureAppServiceName} --runtime "${AZURE_WEBAPP_RUNTIME}" --plan ${this.azureAppServicePlan} \
-                                            --resource-group ${this.azureAppServiceResourceGroupName}`, (err, stdout, stderr) => {
+                                            --resource-group ${this.azureAppServiceResourceGroupName}`, (err) => {
                                             if (err) {
                                                 this.abort = true;
                                                 this.error('Could not create the Web application');
