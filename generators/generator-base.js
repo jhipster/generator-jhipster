@@ -1843,7 +1843,7 @@ module.exports = class extends PrivateBase {
      *
      * @param {String} buildTool - maven | gradle
      * @param {String} profile - dev | prod
-     * @param {Boolean} command - the command (goal/task) to run
+     * @param {String} command - the command (goal/task) to run
      * @param {Function} cb - callback when build is complete
      */
     runJavaBuildCommand(buildTool, profile, command, cb) {
