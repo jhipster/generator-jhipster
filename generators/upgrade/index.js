@@ -381,9 +381,7 @@ module.exports = class extends BaseGenerator {
                         this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
                             if (code !== 0) {
                                 this.error(
-                                    `Unable to record current code has been generated with version ${
-                                        this.currentJhipsterVersion
-                                    }:\n${msg} ${err}`
+                                    `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${msg} ${err}`
                                 );
                             }
                             this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);

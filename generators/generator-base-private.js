@@ -1442,10 +1442,26 @@ module.exports = class extends Generator {
      * @param {string} clientRootFolder
      */
     getEntityParentPathAddition(clientRootFolder) {
-        if (clientRootFolder) {
-            return '../';
+        if (!clientRootFolder) {
+            return '';
         }
-        return '';
+        const relative = path.relative(`/app/entities/${clientRootFolder}/`, '/app/entities/');
+        if (relative.includes('app')) {
+            // Relative path outside angular base dir.
+            const message = `
+                "clientRootFolder outside app base dir '${clientRootFolder}'"
+            `;
+            // Test case doesn't have a environment instance so return 'error'
+            if (this.env === undefined) {
+                throw new Error(message);
+            }
+            this.error(message);
+        }
+        const entityFolderPathAddition = relative.replace(/[/]?..\/entities/, '').replace('entities', '..');
+        if (!entityFolderPathAddition) {
+            return '';
+        }
+        return `${entityFolderPathAddition}/`;
     }
 
     /**
