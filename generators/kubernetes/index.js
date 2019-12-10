@@ -118,7 +118,7 @@ module.exports = class extends BaseDockerGenerator {
                 if (appConfig.buildTool === 'maven') {
                     runCommand = `./mvnw -ntp -Pprod verify jib:build -Djib.to.image=${appConfig.targetImageName}`;
                 } else {
-                    runCommand = `./gradlew bootJar -Pprod jibBuild -Djib.to.image=${appConfig.targetImageName}`;
+                    runCommand = `./gradlew bootJar -Pprod jib -Djib.to.image=${appConfig.targetImageName}`;
                 }
                 this.log(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
             });
