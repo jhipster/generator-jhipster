@@ -379,22 +379,38 @@ function getJavadoc(text, indentSize) {
  * @param {any} field : entity field
  * @param {string} angularAppName
  * @param {string} packageName
+ * @param {string} clientRootFolder
  */
 function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
     field.enumInstance = _.lowerFirst(fieldType);
-    const enumInfo = {
+    const enums = field.fieldValues.replace(/\s/g, '').split(',');
+    const enumsWithCustomValue = enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
+        if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
+            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
+            const enumValueName = matches[1];
+            const enumValueCustomValue = matches[3];
+            enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue});
+        } else {
+            enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
+        }
+        return enumsWithCustomValueArray;
+    }, []);
+    return {
         enumName: fieldType,
         enumValues: field.fieldValues.split(',').join(', '),
         enumInstance: field.enumInstance,
-        enums: field.fieldValues.replace(/\s/g, '').split(','),
+        enums,
+        enumsWithCustomValue,
         angularAppName,
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
-    return enumInfo;
 }
 
+function doesTheEnumValueHaveACustomValue(enumValue) {
+    return enumValue.includes('(');
+}
 /**
  * Copy object props from source to destination
  * @param {*} toObj
