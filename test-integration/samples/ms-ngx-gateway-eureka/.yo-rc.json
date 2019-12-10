@@ -16,13 +16,8 @@
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "languages": [
-            "en",
-            "fr"
-        ],
-        "testFrameworks": [
-            "gatling"
-        ],
+        "languages": ["en", "fr"],
+        "testFrameworks": ["gatling"],
         "serverPort": "8080",
         "jhiPrefix": "jhi",
         "messageBroker": false,
