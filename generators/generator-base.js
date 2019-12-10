@@ -1832,11 +1832,10 @@ module.exports = class extends PrivateBase {
             buildCmd = `./${buildCmd}`;
         }
         buildCmd += ` -P${profile}`;
-        const child = {};
-        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout;
-        child.buildCmd = buildCmd;
-
-        return child;
+        return {
+            stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
+            buildCmd
+        };
     }
 
     /**
@@ -1860,11 +1859,10 @@ module.exports = class extends PrivateBase {
         }
         buildCmd += ` -P${profile}`;
         this.log(`Running command: '${chalk.bold(buildCmd)}'`);
-        const child = {};
-        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout;
-        child.buildCmd = buildCmd;
-
-        return child;
+        return {
+            stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
+            buildCmd
+        };
     }
 
     /**
