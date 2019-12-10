@@ -27,7 +27,7 @@ const constants = require('../generator-constants');
 
 // Local constants
 const AZURE_WEBAPP_MAVEN_PLUGIN_VERSION = '1.8.0';
-const AZURE_WEBAPP_RUNTIME = 'java|11|Java|SE';
+const AZURE_WEBAPP_RUNTIME = 'JAVA|11-java11';
 const AZURE_APP_INSIGHTS_STARTER_VERSION = '2.5.1';
 
 module.exports = class extends BaseGenerator {
