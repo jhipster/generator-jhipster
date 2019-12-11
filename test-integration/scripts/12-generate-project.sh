@@ -13,12 +13,12 @@ fi
 
 if [[ "$JHI_ENTITY" == "jdl" ]]; then
     #-------------------------------------------------------------------------------
-    # Generate with JDL
+    # Setup jhipster JDL parameters
     #-------------------------------------------------------------------------------
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/*.jdl "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
-    jhipster import-jdl *.jdl --no-insight
+    JHI_PARAMS="import-jdl *.jdl --no-insight $JHI_PARAMS"
 
 else
     #-------------------------------------------------------------------------------
@@ -33,13 +33,38 @@ else
     fi
 
     #-------------------------------------------------------------------------------
-    # Generate project with jhipster
+    # Setup jhipster parameters
     #-------------------------------------------------------------------------------
     mkdir -p "$JHI_FOLDER_APP"
     cp -f "$JHI_SAMPLES"/"$JHI_APP"/.yo-rc.json "$JHI_FOLDER_APP"/
     cd "$JHI_FOLDER_APP"
-    jhipster --force --no-insight --skip-checks --with-entities --from-cli
+    JHI_PARAMS="--force --no-insight --skip-checks --with-entities --from-cli $JHI_PARAMS"
 
+fi
+
+#-------------------------------------------------------------------------------
+# 'package_manager install' will install a released jhipster version.
+# For reproducible build it must be ignored, so the app will be regenerated with same jhipster version.
+#-------------------------------------------------------------------------------
+if [ "$REPRODUCIBLE_TEST" == "true" ]; then
+   JHI_PARAMS="$JHI_PARAMS --skip-install --creation-timestamp 2019-12-01"
+fi
+
+#-------------------------------------------------------------------------------
+# Generate project with jhipster
+#-------------------------------------------------------------------------------
+jhipster $JHI_PARAMS
+
+#-------------------------------------------------------------------------------
+# Reproducible test
+#-------------------------------------------------------------------------------
+if [ "$REPRODUCIBLE_TEST" == "true" ]; then
+    if [ "$JHI_ENTITY" == "jdl" ]; then
+        jhipster $JHI_PARAMS --bail --creation-timestamp 2019-12-01
+        echo "Done. JDL regeneration finished without any change"
+    fi
+    jhipster --no-insight --with-entities --bail
+    echo "Done. Regeneration finished without any change"
 fi
 
 #-------------------------------------------------------------------------------
