@@ -18,10 +18,10 @@
 -%>
 export const enum <%= enumName %> {
 <% enumsWithCustomValue.forEach((enumWithCustomValue, index) => { %>
-  <% if (!enumWithCustomValue.value) { %>
-    <%= enumWithCustomValue.name %>
-  <% } else {%>
-    <%= enumWithCustomValue.name %> = '<%= enumWithCustomValue.value %>'
-  <% } %><% if (index < enumsWithCustomValue.length - 1) { %>,<% } %>
+<% if (!enumWithCustomValue.value) { %>
+  <%= enumWithCustomValue.name %>
+<% } else {%>
+  <%= enumWithCustomValue.name %> = '<%= enumWithCustomValue.value %>'
+<% } %><% if (index < enumsWithCustomValue.length - 1) { %>,<% } %>
 <%}); %>
 }
