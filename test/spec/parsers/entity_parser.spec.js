@@ -196,21 +196,19 @@ describe('EntityParser', () => {
         before(() => {
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.MYSQL
+            databaseType: DatabaseTypes.MYSQL,
+            creationTimestamp: new Date(Date.parse('2019-01-01'))
           });
         });
 
         it('converts it', () => {
           expect(content).not.to.be.null;
           expect(Object.keys(content)).to.have.length(2);
-          expect(content.EntityA.changelogDate).not.to.be.undefined;
-          expect(content.EntityB.changelogDate).not.to.be.undefined;
-          delete content.EntityA.changelogDate;
-          delete content.EntityB.changelogDate;
           expect(content).to.deep.equal({
             EntityA: {
               name: 'EntityA',
               applications: '*',
+              changelogDate: '20190101000100',
               clientRootFolder: '',
               dto: 'no',
               entityTableName: 'a',
@@ -249,6 +247,7 @@ describe('EntityParser', () => {
             EntityB: {
               name: 'EntityB',
               applications: '*',
+              changelogDate: '20190101000200',
               clientRootFolder: '',
               dto: 'no',
               entityTableName: 'entity_b',
@@ -283,21 +282,19 @@ describe('EntityParser', () => {
         before(() => {
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.MONGODB
+            databaseType: DatabaseTypes.MONGODB,
+            creationTimestamp: new Date(Date.parse('2019-01-01'))
           });
         });
 
         it('converts it', () => {
           expect(content).not.to.be.null;
           expect(Object.keys(content)).to.have.length(2);
-          expect(content.EntityA.changelogDate).not.to.be.undefined;
-          expect(content.EntityB.changelogDate).not.to.be.undefined;
-          delete content.EntityA.changelogDate;
-          delete content.EntityB.changelogDate;
           expect(content).to.deep.equal({
             EntityA: {
               name: 'EntityA',
               applications: '*',
+              changelogDate: '20190101000100',
               clientRootFolder: '',
               dto: 'no',
               entityTableName: 'a',
@@ -336,6 +333,7 @@ describe('EntityParser', () => {
             EntityB: {
               name: 'EntityB',
               applications: '*',
+              changelogDate: '20190101000200',
               clientRootFolder: '',
               dto: 'no',
               entityTableName: 'entity_b',
@@ -370,21 +368,19 @@ describe('EntityParser', () => {
         before(() => {
           content = EntityParser.parse({
             jdlObject,
-            databaseType: DatabaseTypes.COUCHBASE
+            databaseType: DatabaseTypes.COUCHBASE,
+            creationTimestamp: new Date(Date.parse('2019-01-01'))
           });
         });
 
         it('converts it', () => {
           expect(content).not.to.be.null;
           expect(Object.keys(content)).to.have.length(2);
-          expect(content.EntityA.changelogDate).not.to.be.undefined;
-          expect(content.EntityB.changelogDate).not.to.be.undefined;
-          delete content.EntityA.changelogDate;
-          delete content.EntityB.changelogDate;
           expect(content).to.deep.equal({
             EntityA: {
               name: 'EntityA',
               applications: '*',
+              changelogDate: '20190101000100',
               clientRootFolder: '',
               dto: 'no',
               entityTableName: 'a',
@@ -423,6 +419,7 @@ describe('EntityParser', () => {
             EntityB: {
               name: 'EntityB',
               applications: '*',
+              changelogDate: '20190101000200',
               clientRootFolder: '',
               dto: 'no',
               entityTableName: 'entity_b',
@@ -461,21 +458,19 @@ describe('EntityParser', () => {
           content = EntityParser.parse({
             jdlObject,
             applicationType: ApplicationTypes.GATEWAY,
-            databaseType: DatabaseTypes.CASSANDRA
+            databaseType: DatabaseTypes.CASSANDRA,
+            creationTimestamp: new Date(Date.parse('2019-01-01'))
           });
         });
 
         it('converts it', () => {
           expect(content).not.to.be.null;
           expect(Object.keys(content)).to.have.length(2);
-          expect(content.EntityA.changelogDate).not.to.be.undefined;
-          expect(content.EntityB.changelogDate).not.to.be.undefined;
-          delete content.EntityA.changelogDate;
-          delete content.EntityB.changelogDate;
           expect(content).to.deep.equal({
             EntityA: {
               name: 'EntityA',
               applications: '*',
+              changelogDate: '20190101000100',
               clientRootFolder: '',
               dto: 'no',
               entityTableName: 'a',
@@ -504,6 +499,7 @@ describe('EntityParser', () => {
             EntityB: {
               name: 'EntityB',
               applications: '*',
+              changelogDate: '20190101000200',
               clientRootFolder: '',
               dto: 'no',
               entityTableName: 'entity_b',
@@ -931,9 +927,9 @@ describe('EntityParser', () => {
         result = EntityParser.parse({
           jdlObject,
           databaseType: DatabaseTypes.NO,
-          applicationType: ApplicationTypes.MICROSERVICE
+          applicationType: ApplicationTypes.MICROSERVICE,
+          creationTimestamp: new Date(Date.parse('2019-01-01'))
         });
-        delete result.Toto.changelogDate;
       });
 
       it('converts everything into JSON', () => {
@@ -941,6 +937,7 @@ describe('EntityParser', () => {
           Toto: {
             name: 'Toto',
             applications: '*',
+            changelogDate: '20190101000100',
             clientRootFolder: '',
             dto: 'no',
             entityTableName: 'toto',
