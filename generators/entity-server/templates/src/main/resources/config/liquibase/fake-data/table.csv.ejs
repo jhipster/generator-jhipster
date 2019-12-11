@@ -175,7 +175,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
             if (
                 fields[idx].fieldValidateRules.includes("pattern") &&
-                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data)
+                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data.substring(1, data.length - 1))
             ) {
                 data = "";
             }

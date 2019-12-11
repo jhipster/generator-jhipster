@@ -270,7 +270,11 @@ function addEnumerationFiles(generator, templateDir, clientFolder) {
 function addSampleRegexTestingStrings(generator) {
     generator.fields.forEach(field => {
         if (field.fieldValidateRulesPattern !== undefined) {
-            field.fieldValidateSampleString = new Randexp(field.fieldValidateRulesPattern).gen();
+            const randExp = new Randexp(field.fieldValidateRulesPattern);
+            randExp.max = 5;
+            // In order to have consistent results with RandExp, the RNG is seeded.
+            randExp.randInt = generator.seededRandomNumberGenerator(10);
+            field.fieldValidateSampleString = randExp.gen();
         }
     });
 }
