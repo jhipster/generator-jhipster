@@ -84,12 +84,13 @@ entity Employee {
   /**
    * The firstname attribute.
    */
-  firstName String,
-  lastName String,
-  email String,
-  phoneNumber String,
-  hireDate ZonedDateTime,
-  salary Long,
+  firstName String
+  lastName String
+  email String required pattern(/^\\S+@\\S+\\.\\S+$/)
+  patter String required pattern(/^[a-zA-Z0-9]*$/)
+  phoneNumber String
+  hireDate ZonedDateTime
+  salary Long
   commissionPct Long
 }
 
