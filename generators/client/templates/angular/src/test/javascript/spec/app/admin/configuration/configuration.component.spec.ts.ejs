@@ -20,29 +20,29 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from 'app/admin/configuration/configuration.component';
-import { <%=jhiPrefixCapitalized%>ConfigurationService } from 'app/admin/configuration/configuration.service';
+import { ConfigurationComponent } from 'app/admin/configuration/configuration.component';
+import { ConfigurationService } from 'app/admin/configuration/configuration.service';
 
 describe('Component Tests', () => {
-    describe('<%=jhiPrefixCapitalized%>ConfigurationComponent', () => {
-        let comp: <%=jhiPrefixCapitalized%>ConfigurationComponent;
-        let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>ConfigurationComponent>;
-        let service: <%=jhiPrefixCapitalized%>ConfigurationService;
+    describe('ConfigurationComponent', () => {
+        let comp: ConfigurationComponent;
+        let fixture: ComponentFixture<ConfigurationComponent>;
+        let service: ConfigurationService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [<%=jhiPrefixCapitalized%>ConfigurationComponent],
-                providers: [<%=jhiPrefixCapitalized%>ConfigurationService]
+                declarations: [ConfigurationComponent],
+                providers: [ConfigurationService]
             })
-                .overrideTemplate(<%=jhiPrefixCapitalized%>ConfigurationComponent, '')
+                .overrideTemplate(ConfigurationComponent, '')
                 .compileComponents();
         }));
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(<%=jhiPrefixCapitalized%>ConfigurationComponent);
+            fixture = TestBed.createComponent(ConfigurationComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(<%=jhiPrefixCapitalized%>ConfigurationService);
+            service = fixture.debugElement.injector.get(ConfigurationService);
         });
 
         describe('OnInit', () => {
