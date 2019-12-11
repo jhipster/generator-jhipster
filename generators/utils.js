@@ -385,17 +385,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
     field.enumInstance = _.lowerFirst(fieldType);
     const enums = field.fieldValues.replace(/\s/g, '').split(',');
-    const enumsWithCustomValue = enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
-        if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
-            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
-            const enumValueName = matches[1];
-            const enumValueCustomValue = matches[3];
-            enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
-        } else {
-            enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
-        }
-        return enumsWithCustomValueArray;
-    }, []);
+    const enumsWithCustomValue = getEnumsWithCustomValue(enums);
     return {
         enumName: fieldType,
         enumValues: field.fieldValues.split(',').join(', '),
@@ -406,6 +396,20 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
+}
+
+function getEnumsWithCustomValue(enums) {
+    return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
+        if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
+            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
+            const enumValueName = matches[1];
+            const enumValueCustomValue = matches[3];
+            enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
+        } else {
+            enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
+        }
+        return enumsWithCustomValueArray;
+    }, []);
 }
 
 function doesTheEnumValueHaveACustomValue(enumValue) {
