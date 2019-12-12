@@ -18,11 +18,11 @@
 -%>
 import { Route } from '@angular/router';
 
-import { <%=jhiPrefixCapitalized%>HealthCheckComponent } from './health.component';
+import { HealthComponent } from './health.component';
 
 export const healthRoute: Route = {
     path: '',
-    component: <%=jhiPrefixCapitalized%>HealthCheckComponent,
+    component: HealthComponent,
     data: {
         pageTitle: 'health.title'
     }
