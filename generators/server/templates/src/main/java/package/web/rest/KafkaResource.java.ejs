@@ -19,23 +19,24 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.config.KafkaProperties;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/<%= dasherizedBaseName %>-kafka")
@@ -45,80 +46,50 @@ public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
 
     private final KafkaProperties kafkaProperties;
     private KafkaProducer<String, String> producer;
-    private Map<String, SafeKafkaConsumer> consumers = new ConcurrentHashMap<>();
+    private ExecutorService sseExecutorService = Executors.newCachedThreadPool();
 
     public <%= upperFirstCamelCase(baseName) %>KafkaResource(KafkaProperties kafkaProperties) {
         this.kafkaProperties = kafkaProperties;
         this.producer = new KafkaProducer<>(kafkaProperties.getProducerProps());
     }
 
-    @PostMapping(value = "/publish/{topic}")
+    @PostMapping("/publish/{topic}")
     public PublishResult publish(@PathVariable String topic, @RequestParam String message, @RequestParam(required = false) String key) throws ExecutionException, InterruptedException {
         log.debug("REST request to send to Kafka topic {} with key {} the message : {}", topic, key, message);
         RecordMetadata metadata = producer.send(new ProducerRecord<>(topic, key, message)).get();
         return new PublishResult(metadata.topic(), metadata.partition(), metadata.offset(), Instant.ofEpochMilli(metadata.timestamp()));
     }
 
-    @PostMapping("/consumers")
-    public void createConsumer(@RequestParam String name, @RequestParam("topic") List<String> topics, @RequestParam Map<String, String> params) {
-        log.debug("REST request to create a Kafka consumer {} of Kafka topics {}", name, topics);
+    @GetMapping("/consume")
+    public SseEmitter consume(@RequestParam("topic") List<String> topics, @RequestParam Map<String, String> consumerParams) {
+        log.debug("REST request to consume records from Kafka topics {}", topics);
         Map<String, Object> consumerProps = kafkaProperties.getConsumerProps();
-        consumerProps.putAll(params);
+        consumerProps.putAll(consumerParams);
         consumerProps.remove("topic");
-        consumerProps.remove("name");
-        SafeKafkaConsumer consumer = new SafeKafkaConsumer(consumerProps);
-        consumer.subscribe(topics);
-        consumers.put(name, consumer);
-    }
 
-    @GetMapping("/consumers/{name}/records")
-    public List<String> pollConsumer(@PathVariable String name, @RequestParam(defaultValue = "10000") int durationMs) {
-        log.debug("REST request to get records of Kafka consumer {}", name);
-        List<String> records = new ArrayList<>();
-        SafeKafkaConsumer consumer = consumers.get(name);
-        if (consumer == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Consumer not found!");
-        }
-        try {
-            consumer.poll(Duration.ofMillis(durationMs)).forEach(record -> records.add(record.value()));
-        } catch (WakeupException e) {
-            log.trace("Waken up while polling", e);
-        }
-        return records;
-    }
-
-    @DeleteMapping("consumers/{name}")
-    public void deleteConsumer(@PathVariable String name) {
-        SafeKafkaConsumer consumer = consumers.get(name);
-        if (consumer == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Consumer not found!");
-        }
-        consumer.wakeup();
-        consumer.close();
-        consumers.remove(name);
-    }
-
-    static class SafeKafkaConsumer extends KafkaConsumer<String, String> {
-
-        public SafeKafkaConsumer(Map<String, Object> configs) {
-            super(configs);
-        }
-
-        @Override
-        public synchronized ConsumerRecords<String, String> poll(Duration timeout) {
-            return super.poll(timeout);
-        }
-
-        @Override
-        public synchronized void subscribe(Collection<String> topics) {
-            super.subscribe(topics);
-        }
-
-        @Override
-        public synchronized void close(Duration timeout) {
-            super.wakeup();
-            super.close(timeout);
-        }
+        SseEmitter emitter = new SseEmitter(0L);
+        sseExecutorService.execute(() -> {
+            KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
+            emitter.onCompletion(consumer::close);
+            consumer.subscribe(topics);
+            boolean exitLoop = false;
+            while(!exitLoop) {
+                try {
+                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(5));
+                    for (ConsumerRecord<String, String> record : records) {
+                        emitter.send(record.value());
+                    }
+                    emitter.send(SseEmitter.event().comment(""));
+                } catch (Exception ex) {
+                    log.trace("Complete with error {}", ex.getMessage(), ex);
+                    emitter.completeWithError(ex);
+                    exitLoop = true;
+                }
+            }
+            consumer.close();
+            emitter.complete();
+        });
+        return emitter;
     }
 
     private static class PublishResult {
