@@ -116,10 +116,6 @@ module.exports = class extends Generator {
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
         );
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langJavaProp}.properties`
-        );
-        generator.template(
             `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
@@ -443,6 +439,21 @@ module.exports = class extends Generator {
             this.log(`Removing the folder - ${folder}`);
             shelljs.rm('-rf', folder);
         }
+    }
+
+    /**
+     * Rename File
+     *
+     * @param {string} source
+     * @param {string} dest
+     * @returns {boolean} true if success; false otherwise
+     */
+    renameFile(source, dest) {
+        if (shelljs.test('-f', source)) {
+            this.info(`Renaming the file - ${source} to ${dest}`);
+            return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
+        }
+        return true;
     }
 
     /**
@@ -1466,10 +1477,26 @@ module.exports = class extends Generator {
      * @param {string} clientRootFolder
      */
     getEntityParentPathAddition(clientRootFolder) {
-        if (clientRootFolder) {
-            return '../';
+        if (!clientRootFolder) {
+            return '';
         }
-        return '';
+        const relative = path.relative(`/app/entities/${clientRootFolder}/`, '/app/entities/');
+        if (relative.includes('app')) {
+            // Relative path outside angular base dir.
+            const message = `
+                "clientRootFolder outside app base dir '${clientRootFolder}'"
+            `;
+            // Test case doesn't have a environment instance so return 'error'
+            if (this.env === undefined) {
+                throw new Error(message);
+            }
+            this.error(message);
+        }
+        const entityFolderPathAddition = relative.replace(/[/]?..\/entities/, '').replace('entities', '..');
+        if (!entityFolderPathAddition) {
+            return '';
+        }
+        return `${entityFolderPathAddition}/`;
     }
 
     /**

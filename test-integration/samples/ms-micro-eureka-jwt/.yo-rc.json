@@ -15,13 +15,8 @@
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "languages": [
-            "en",
-            "fr"
-        ],
-        "testFrameworks": [
-            "gatling"
-        ],
+        "languages": ["en", "fr"],
+        "testFrameworks": ["gatling"],
         "skipClient": true,
         "skipUserManagement": true,
         "serverPort": "8081",

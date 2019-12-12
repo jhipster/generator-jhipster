@@ -74,7 +74,7 @@ function writeFiles() {
             // Generate a list of target apps to monitor for the prometheus config
             const appsToMonitor = [];
             for (let i = 0; i < this.appConfigs.length; i++) {
-                appsToMonitor.push(`        - ${this.appConfigs[i].baseName}-app:${this.appConfigs[i].serverPort}`);
+                appsToMonitor.push(`        - ${this.appConfigs[i].baseName}:${this.appConfigs[i].serverPort}`);
             }
 
             // Format the application target list as a YAML array

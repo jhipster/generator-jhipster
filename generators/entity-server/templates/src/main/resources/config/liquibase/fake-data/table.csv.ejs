@@ -157,7 +157,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
                 randExp.max = 5;
                 // In order to have consistent results with RandExp, the RNG is seeded.
                 randExp.randInt = seededRandomNumberGenerator(lineNb);
-                data = `"${randExp.gen().replace(/"/g, '""')}"`;
+                data = `"${randExp.gen().replace(/"/g, '')}"`;
             }
 
             // manage String max length
@@ -175,7 +175,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
             if (
                 fields[idx].fieldValidateRules.includes("pattern") &&
-                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data)
+                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data.substring(1, data.length - 1))
             ) {
                 data = "";
             }

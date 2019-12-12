@@ -423,6 +423,7 @@ const files = {
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
                 'spec/app/core/user/account.service.spec.ts',
+                'spec/app/layouts/main/main.component.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',
                 'spec/helpers/mock-route.service.ts',
@@ -497,11 +498,6 @@ const files = {
         {
             condition: generator => generator.protractorTests,
             templates: ['tsconfig.e2e.json']
-        },
-        {
-            condition: generator => generator.authenticationType === 'oauth2',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/layouts/main/main.component.spec.ts']
         }
     ]
 };

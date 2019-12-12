@@ -514,6 +514,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/layouts/main/main.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`,

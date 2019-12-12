@@ -117,7 +117,11 @@ module.exports = class extends BaseDockerGenerator {
                         yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
                     }
 
-                    parentConfiguration[`${lowercaseBaseName}-app`] = yamlConfig;
+                    if (!this.serviceDiscoveryType && appConfig.applicationType !== 'gateway') {
+                        yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
+                    }
+
+                    parentConfiguration[`${lowercaseBaseName}`] = yamlConfig;
 
                     // Add database configuration
                     const database = appConfig.prodDatabaseType;
