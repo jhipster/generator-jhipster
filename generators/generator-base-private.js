@@ -1522,16 +1522,4 @@ module.exports = class extends Generator {
             );
         }
     }
-
-    /**
-     * Returns a seeded random number generator, used for RandExp regex generation.
-     * @param {number} id - seeds the random number generator
-     */
-    seededRandomNumberGenerator(id) {
-        let seed = 42 + id;
-        return (a, b) => {
-            seed = seed ** 2 % 969421;
-            return (seed % (1 + b - a)) + a;
-        };
-    }
 };

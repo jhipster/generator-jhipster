@@ -33,6 +33,8 @@ const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 // In order to have consistent results with Faker, the seed is fixed.
 faker.seed(42);
+// In order to have consistent results with RandExp, the RNG is seeded.
+randexp.prototype.randInt = (min, max) => faker.random.number({ min, max });
 
 /*
  * Current faker version is 4.1.0 and was release in 2017

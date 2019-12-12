@@ -238,13 +238,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
                 // set infinite repetitions max range
                 randExp.max = 5;
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-                    // In order to have consistent results with RandExp, the RNG is seeded.
-                    randExp.randInt = seededRandomNumberGenerator(2 * idx);
                     sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
                 if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-                    // In order to have consistent results with RandExp, the RNG is seeded.
-                    randExp.randInt = seededRandomNumberGenerator(2 * idx + 1);
                     updatedTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
             } catch (error) {

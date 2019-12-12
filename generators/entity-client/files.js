@@ -18,8 +18,14 @@
  */
 const _ = require('lodash');
 const Randexp = require('randexp');
+const faker = require('faker');
 const utils = require('../utils');
 const constants = require('../generator-constants');
+
+// In order to have consistent results with Faker, the seed is fixed.
+faker.seed(42);
+// In order to have consistent results with RandExp, the RNG is seeded.
+Randexp.prototype.randInt = (min, max) => faker.random.number({ min, max });
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -272,8 +278,6 @@ function addSampleRegexTestingStrings(generator) {
         if (field.fieldValidateRulesPattern !== undefined) {
             const randExp = new Randexp(field.fieldValidateRulesPattern);
             randExp.max = 5;
-            // In order to have consistent results with RandExp, the RNG is seeded.
-            randExp.randInt = generator.seededRandomNumberGenerator(10);
             field.fieldValidateSampleString = randExp.gen();
         }
     });
@@ -283,7 +287,9 @@ function writeFiles() {
     return {
         writeClientFiles() {
             if (this.skipClient) return;
-            addSampleRegexTestingStrings(this);
+            if (this.protractorTests) {
+                addSampleRegexTestingStrings(this);
+            }
             if (this.clientFramework === 'angularX') {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(
