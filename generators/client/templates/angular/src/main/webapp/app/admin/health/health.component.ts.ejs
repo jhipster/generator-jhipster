@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { HealthService, HealthStatus, Health, HealthKey } from './health.service';
+import { HealthService, HealthStatus, Health, HealthKey, HealthDetails } from './health.service';
 import { HealthModalComponent } from './health-modal.component';
 
 @Component({
@@ -28,7 +28,7 @@ import { HealthModalComponent } from './health-modal.component';
     templateUrl: './health.component.html'
 })
 export class HealthComponent implements OnInit {
-    healthData?: Health;
+    health?: Health;
 
     constructor(
         private modalService: NgbModal,
@@ -37,13 +37,6 @@ export class HealthComponent implements OnInit {
 
     ngOnInit(): void {
         this.refresh();
-    }
-
-    healthKeys(): string[] {
-        if (this.healthData) {
-            return Object.keys(this.healthData.details);
-        }
-        return [];
     }
 
     getBadgeClass(statusState: HealthStatus): string {
@@ -56,18 +49,17 @@ export class HealthComponent implements OnInit {
 
     refresh(): void {
         this.healthService.checkHealth().subscribe(
-            health => (this.healthData = health),
+            health => (this.health = health),
             (error: HttpErrorResponse) => {
                 if (error.status === 503) {
-                    this.healthData = error.error;
+                    this.health = error.error;
                 }
             }
         );
     }
 
-    showHealth(healthKey: HealthKey, healthDetails: any): void {
+    showHealth(health: { key: HealthKey; value: HealthDetails }): void {
         const modalRef  = this.modalService.open(HealthModalComponent);
-        modalRef.componentInstance.healthKey = healthKey;
-        modalRef.componentInstance.healthDetails = healthDetails;
+        modalRef.componentInstance.health = health;
     }
 }

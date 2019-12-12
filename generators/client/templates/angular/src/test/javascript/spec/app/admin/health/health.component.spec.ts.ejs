@@ -59,28 +59,28 @@ describe('Component Tests', () => {
         describe('refresh', () => {
             it('should call refresh on init', () => {
                 // GIVEN
-                const healthData: Health = { status: 'UP', details: { mail: { status: 'UP', details: 'mailDetails' } } };
-                spyOn(service, 'checkHealth').and.returnValue(of(healthData));
+                const health: Health = { status: 'UP', details: { mail: { status: 'UP', details: 'mailDetails' } } };
+                spyOn(service, 'checkHealth').and.returnValue(of(health));
 
                 // WHEN
                 comp.ngOnInit()
 
                 // THEN
                 expect(service.checkHealth).toHaveBeenCalled();
-                expect(comp.healthData).toEqual(healthData);
+                expect(comp.health).toEqual(health);
             });
 
             it('should handle a 503 on refreshing health data', () => {
                 // GIVEN
-                const healthData: Health = { status: 'DOWN', details: { mail: { status: 'DOWN', details: 'mailDetails' } } };
-                spyOn(service, 'checkHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: healthData })));
+                const health: Health = { status: 'DOWN', details: { mail: { status: 'DOWN', details: 'mailDetails' } } };
+                spyOn(service, 'checkHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: health })));
 
                 // WHEN
                 comp.refresh();
 
                 // THEN
                 expect(service.checkHealth).toHaveBeenCalled();
-                expect(comp.healthData).toEqual(healthData);
+                expect(comp.health).toEqual(health);
             });
         });
     });

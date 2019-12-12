@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 <div class="modal-header">
-    <h4 class="modal-title" id="showHealthLabel" *ngIf="healthKey"><% if (enableTranslation) { %>
-        {{ 'health.indicator.' + healthKey | translate }}<% } else { %><span class="text-capitalize">{{ healthKey }}</span><% } %>
+    <h4 class="modal-title" id="showHealthLabel" *ngIf="health"><% if (enableTranslation) { %>
+        {{ 'health.indicator.' + health.key | translate }}<% } else { %><span class="text-capitalize">{{ health.key }}</span><% } %>
     </h4>
     <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="dismiss()"><span aria-hidden="true">&times;</span>
     </button>
 </div>
 <div class="modal-body pad">
-    <div *ngIf="healthDetails">
+    <div *ngIf="health">
         <h5 jhiTranslate="health.details.properties">Properties</h5>
         <div class="table-responsive">
             <table class="table table-striped" aria-describedby="showHealthLabel">
@@ -35,9 +35,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let key of detailsKeys()">
-                        <td class="text-left">{{ key }}</td>
-                        <td class="text-left">{{ readableValue(healthDetails[key]) }}</td>
+                    <tr *ngFor="let healthDetail of health.value.details | keys">
+                        <td class="text-left">{{ healthDetail.key }}</td>
+                        <td class="text-left">{{ readableValue(healthDetail.value) }}</td>
                     </tr>
                 </tbody>
             </table>
