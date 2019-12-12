@@ -36,6 +36,21 @@ export class MainComponent implements OnInit {
         private router: Router
     ) {}
 
+    ngOnInit(): void {
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.updateTitle();
+            }
+            if (event instanceof NavigationError && event.error.status === 404) {
+                this.router.navigate(['/404']);
+            }
+        });
+        <%_ if (enableTranslation) { _%>
+
+        this.translateService.onLangChange.subscribe(() => this.updateTitle());
+        <%_ } _%>
+    }
+
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
         let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : '';
         if (routeSnapshot.firstChild) {
@@ -53,21 +68,6 @@ export class MainComponent implements OnInit {
         this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
         <%_ } else { _%>
         this.titleService.setTitle(pageTitle);
-        <%_ } _%>
-    }
-
-    ngOnInit(): void {
-        this.router.events.subscribe(event => {
-            if (event instanceof NavigationEnd) {
-                this.updateTitle();
-            }
-            if (event instanceof NavigationError && event.error.status === 404) {
-                this.router.navigate(['/404']);
-            }
-        });
-        <%_ if (enableTranslation) { _%>
-
-        this.translateService.onLangChange.subscribe(() => this.updateTitle());
         <%_ } _%>
     }
 }

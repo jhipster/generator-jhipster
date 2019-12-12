@@ -46,8 +46,8 @@ export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnD
             if (routeData.errorMessage) {
                 <%_ if (enableTranslation) { _%>
                 this.errorKey = routeData.errorMessage;
-                this.setErrorMessage();
-                this.langChangeSubscription = this.translateService.onLangChange.subscribe(() => this.setErrorMessage());
+                this.getErrorMessageTranslation();
+                this.langChangeSubscription = this.translateService.onLangChange.subscribe(() => this.getErrorMessageTranslation());
                 <%_ } else { _%>
                 this.errorMessage = routeData.errorMessage;
                 <%_ } _%>
@@ -56,7 +56,7 @@ export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnD
     }
     <%_ if (enableTranslation) { _%>
 
-    private setErrorMessage(): void {
+    private getErrorMessageTranslation(): void {
         this.translateService.get(this.errorKey).subscribe(translatedErrorMessage => this.errorMessage = translatedErrorMessage);
     }
 
