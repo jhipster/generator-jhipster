@@ -6,19 +6,19 @@ import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { <%=jhiPrefixCapitalized%>AlertErrorComponent } from 'app/shared/alert/alert-error.component';
+import { AlertErrorComponent } from 'app/shared/alert/alert-error.component';
 import { MockAlertService } from "../../../helpers/mock-alert.service";
 
 describe('Component Tests', () => {
     describe('Alert Error Component', () => {
-        let comp: <%=jhiPrefixCapitalized%>AlertErrorComponent;
-        let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>AlertErrorComponent>;
+        let comp: AlertErrorComponent;
+        let fixture: ComponentFixture<AlertErrorComponent>;
         let eventManager: JhiEventManager;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule<% if (enableTranslation) { %>, TranslateModule.forRoot()<% } %>],
-                declarations: [<%=jhiPrefixCapitalized%>AlertErrorComponent],
+                declarations: [AlertErrorComponent],
                 providers: [
                     JhiEventManager,
                     {
@@ -27,12 +27,12 @@ describe('Component Tests', () => {
                     }
                 ]
             })
-                .overrideTemplate(<%=jhiPrefixCapitalized%>AlertErrorComponent, '')
+                .overrideTemplate(AlertErrorComponent, '')
                 .compileComponents();
         }));
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(<%=jhiPrefixCapitalized%>AlertErrorComponent);
+            fixture = TestBed.createComponent(AlertErrorComponent);
             comp = fixture.componentInstance;
             eventManager = fixture.debugElement.injector.get(JhiEventManager);
         });

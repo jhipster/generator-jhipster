@@ -16,27 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-    <%= entityInstancePlural %>: I<%= entityAngularName %>[];
-    error: any;
-    success: any;
-    eventSubscriber: Subscription;
+    <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
+    eventSubscriber?: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
     currentSearch: string;
     <%_ } _%>
     <%_ if (databaseType !== 'cassandra') { _%>
-    routeData: any;
-    links: any;
-    totalItems: any;
-    itemsPerPage: any;
-    page: any;
-    predicate: any;
-    previousPage: any;
-    reverse: any;
+    totalItems = 0;
+    itemsPerPage = ITEMS_PER_PAGE;
+    page!: number;
+    predicate!: string;
+    previousPage!: number;
+    ascending!: boolean;
     <%_ } _%>
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
-        protected parseLinks: JhiParseLinks,
         protected activatedRoute: ActivatedRoute,
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: JhiDataUtils,
@@ -48,13 +43,6 @@
         <%_ } _%>
     ) {
         <%_ if (databaseType !== 'cassandra') { _%>
-        this.itemsPerPage = ITEMS_PER_PAGE;
-        this.routeData = this.activatedRoute.data.subscribe((data) => {
-            this.page = data.pagingParams.page;
-            this.previousPage = data.pagingParams.page;
-            this.reverse = data.pagingParams.ascending;
-            this.predicate = data.pagingParams.predicate;
-        });
         <%_ if (searchEngine === 'elasticsearch') { _%>
         this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
             this.activatedRoute.snapshot.queryParams['search'] : '';
@@ -62,7 +50,7 @@
         <%_ } _%>
     }
 
-    loadAll() {
+    loadAll(): void {
         <%_ if (searchEngine === 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
@@ -84,14 +72,14 @@
     }
     <%_ if (databaseType !== 'cassandra') { _%>
 
-    loadPage(page: number) {
+    loadPage(page: number): void {
         if (page !== this.previousPage) {
             this.previousPage = page;
             this.transition();
         }
     }
 
-    transition() {
+    transition(): void {
         this.router.navigate(['/<%= entityUrl %>'], {queryParams:
             {
                 page: this.page,
@@ -99,37 +87,33 @@
                 <%_ if (searchEngine === 'elasticsearch') { _%>
                 search: this.currentSearch,
                 <%_ } _%>
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+                sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
             }
         });
-        this.loadAll();
-    }
-
-    clear() {
-        this.page = 0;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        this.currentSearch = '';
-        <%_ } _%>
-        this.router.navigate(['/<%= entityUrl %>', {
-            page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-        }]);
         this.loadAll();
     }
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    search(query) {
-        if (!query) {
-            return this.clear();
-        }
+    search(query: string): void {
         this.page = 0;
         this.currentSearch = query;
         this.router.navigate(['/<%= entityUrl %>', {
             search: this.currentSearch,
             page: this.page,
-            sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
         }]);
         this.loadAll();
     }
     <%_ } _%>
+
+    ngOnInit(): void {
+        this.activatedRoute.data.subscribe(data => {
+            this.page = data.pagingParams.page;
+            this.previousPage = data.pagingParams.page;
+            this.ascending = data.pagingParams.ascending;
+            this.predicate = data.pagingParams.predicate;
+            this.loadAll();
+        });
+        this.registerChangeIn<%= entityClassPlural %>();
+    }

@@ -30,7 +30,7 @@ import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileN
 })
 export class <%= entityAngularName %>DetailComponent implements OnInit {
 
-    <%= entityInstance %>: I<%= entityAngularName %>;
+    <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 
     constructor(
         <%_ if (fieldsContainBlob) { _%>
@@ -40,22 +40,23 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
     ) {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
             this.<%= entityInstance %> = <%= entityInstance %>;
         });
     }
 
     <%_ if (fieldsContainBlob) { _%>
-    byteSize(field) {
-        return this.dataUtils.byteSize(field);
+    byteSize(base64String: string): string {
+        return this.dataUtils.byteSize(base64String);
     }
 
-    openFile(contentType, field) {
-        return this.dataUtils.openFile(contentType, field);
+    openFile(contentType: string, base64String: string): void {
+        this.dataUtils.openFile(contentType, base64String);
     }
+
     <%_ } _%>
-    previousState() {
+    previousState(): void {
         window.history.back();
     }
 
