@@ -83,7 +83,8 @@ describe('JDLImporter', () => {
           applications: '*',
           skipServer: true,
           microserviceName: 'mymicroservice',
-          javadoc: ''
+          javadoc: '',
+          changelogDate: '20190101000700'
         },
         Department: {
           fields: [
@@ -144,7 +145,8 @@ describe('JDLImporter', () => {
           clientRootFolder: '',
           applications: '*',
           microserviceName: 'mymicroservice',
-          javadoc: ''
+          javadoc: '',
+          changelogDate: '20190101000100'
         },
         Employee: {
           fields: [
@@ -228,7 +230,8 @@ describe('JDLImporter', () => {
           clientRootFolder: '',
           applications: '*',
           microserviceName: 'mymicroservice',
-          searchEngine: 'elasticsearch'
+          searchEngine: 'elasticsearch',
+          changelogDate: '20190101000400'
         },
         Job: {
           fields: [
@@ -289,7 +292,8 @@ describe('JDLImporter', () => {
           clientRootFolder: '',
           applications: '*',
           microserviceName: 'mymicroservice',
-          javadoc: ''
+          javadoc: '',
+          changelogDate: '20190101000300'
         },
         JobHistory: {
           fields: [
@@ -348,7 +352,8 @@ describe('JDLImporter', () => {
           fluentMethods: true,
           clientRootFolder: '',
           applications: '*',
-          microserviceName: 'mymicroservice'
+          microserviceName: 'mymicroservice',
+          changelogDate: '20190101000200'
         },
         Location: {
           fields: [
@@ -388,7 +393,8 @@ describe('JDLImporter', () => {
           clientRootFolder: '',
           applications: '*',
           microserviceName: 'mymicroservice',
-          javadoc: ''
+          javadoc: '',
+          changelogDate: '20190101000500'
         },
         Region: {
           fields: [
@@ -417,7 +423,8 @@ describe('JDLImporter', () => {
           clientRootFolder: '',
           applications: '*',
           microserviceName: 'mymicroservice',
-          javadoc: ''
+          javadoc: '',
+          changelogDate: '20190101000800'
         },
         Task: {
           fields: [
@@ -451,7 +458,8 @@ describe('JDLImporter', () => {
           clientRootFolder: '',
           applications: '*',
           microserviceName: 'mymicroservice',
-          javadoc: ''
+          javadoc: '',
+          changelogDate: '20190101000600'
         }
       };
 
@@ -459,7 +467,8 @@ describe('JDLImporter', () => {
         const importer = createImporterFromFiles([path.join('test', 'test_files', 'big_sample.jdl')], {
           applicationName: 'MyApp',
           applicationType: ApplicationTypes.MONOLITH,
-          databaseType: DatabaseTypes.SQL
+          databaseType: DatabaseTypes.SQL,
+          creationTimestamp: '2019-01-01'
         });
         returned = importer.import();
         returned.exportedEntities = returned.exportedEntities
@@ -471,7 +480,6 @@ describe('JDLImporter', () => {
           })
           .map(exportedEntity => {
             exportedEntity.javadoc = exportedEntity.javadoc || '';
-            delete exportedEntity.changelogDate;
             return exportedEntity;
           });
         filesExist = ENTITY_NAMES.reduce(
@@ -505,8 +513,6 @@ describe('JDLImporter', () => {
       it('exports their content', () => {
         ENTITY_NAMES.forEach(entityName => {
           const entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', `${entityName}.json`), 'utf-8'));
-          expect(entityContent.changelogDate).not.to.be.undefined;
-          delete entityContent.changelogDate;
           if (expectedContent[entityName].javadoc === '') {
             delete expectedContent[entityName].javadoc;
           }
@@ -643,7 +649,8 @@ describe('JDLImporter', () => {
             nativeLanguage: 'en',
             skipUserManagement: false,
             skipClient: false,
-            skipServer: false
+            skipServer: false,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -678,7 +685,8 @@ describe('JDLImporter', () => {
             nativeLanguage: 'en',
             skipUserManagement: false,
             skipClient: false,
-            skipServer: false
+            skipServer: false,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -708,7 +716,8 @@ describe('JDLImporter', () => {
             clientPackageManager: 'npm',
             nativeLanguage: 'en',
             skipUserManagement: true,
-            skipClient: true
+            skipClient: true,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -743,14 +752,17 @@ describe('JDLImporter', () => {
             nativeLanguage: 'en',
             skipUserManagement: false,
             skipClient: false,
-            skipServer: false
+            skipServer: false,
+            creationTimestamp: 1546300800000
           }
         }
       ];
       const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
 
       before(() => {
-        const importer = createImporterFromFiles([path.join('test', 'test_files', 'applications2.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'applications2.jdl')], {
+          creationTimestamp: '2019-01-01'
+        });
         importer.import();
         APPLICATION_NAMES.forEach(applicationName => {
           contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
@@ -809,7 +821,8 @@ describe('JDLImporter', () => {
             nativeLanguage: 'en',
             skipUserManagement: false,
             skipClient: false,
-            skipServer: false
+            skipServer: false,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -839,7 +852,8 @@ describe('JDLImporter', () => {
             clientPackageManager: 'npm',
             nativeLanguage: 'en',
             skipUserManagement: true,
-            skipClient: true
+            skipClient: true,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -869,7 +883,8 @@ describe('JDLImporter', () => {
             clientPackageManager: 'npm',
             nativeLanguage: 'en',
             skipUserManagement: true,
-            skipClient: true
+            skipClient: true,
+            creationTimestamp: 1546300800000
           }
         }
       ];
@@ -934,10 +949,15 @@ describe('JDLImporter', () => {
       ];
       let importState;
       before(() => {
-        const importer = createImporterFromFiles([
-          path.join('test', 'test_files', 'integration', 'file1.jdl'),
-          path.join('test', 'test_files', 'integration', 'file2.jdl')
-        ]);
+        const importer = createImporterFromFiles(
+          [
+            path.join('test', 'test_files', 'integration', 'file1.jdl'),
+            path.join('test', 'test_files', 'integration', 'file2.jdl')
+          ],
+          {
+            creationTimestamp: '2019-01-01'
+          }
+        );
         importState = importer.import();
       });
 
@@ -1154,7 +1174,8 @@ describe('JDLImporter', () => {
             nativeLanguage: 'en',
             skipUserManagement: false,
             skipClient: false,
-            skipServer: false
+            skipServer: false,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -1189,7 +1210,8 @@ describe('JDLImporter', () => {
             nativeLanguage: 'en',
             skipUserManagement: false,
             skipClient: false,
-            skipServer: false
+            skipServer: false,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -1219,7 +1241,8 @@ describe('JDLImporter', () => {
             clientPackageManager: 'npm',
             nativeLanguage: 'en',
             skipUserManagement: true,
-            skipClient: true
+            skipClient: true,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -1254,7 +1277,8 @@ describe('JDLImporter', () => {
             nativeLanguage: 'en',
             skipUserManagement: false,
             skipClient: false,
-            skipServer: false
+            skipServer: false,
+            creationTimestamp: 1546300800000
           }
         },
         {
@@ -1275,7 +1299,9 @@ describe('JDLImporter', () => {
       const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
 
       before(() => {
-        const importer = createImporterFromFiles([path.join('test', 'test_files', 'applications3.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'applications3.jdl')], {
+          creationTimestamp: '2019-01-01'
+        });
         importer.import();
         APPLICATION_NAMES.forEach(applicationName => {
           contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
@@ -1416,7 +1442,8 @@ describe('JDLImporter', () => {
             useSass: true,
             skipUserManagement: false,
             clientPackageManager: 'npm',
-            serverPort: '8080'
+            serverPort: '8080',
+            creationTimestamp: 1546300800000
           },
           entities: [
             'Customer',
@@ -1455,7 +1482,8 @@ describe('JDLImporter', () => {
             buildTool: 'gradle',
             serverPort: '8081',
             skipUserManagement: true,
-            clientPackageManager: 'npm'
+            clientPackageManager: 'npm',
+            creationTimestamp: 1546300800000
           },
           entities: ['Product', 'ProductCategory', 'ProductOrder', 'OrderItem']
         },
@@ -1485,7 +1513,8 @@ describe('JDLImporter', () => {
             serverPort: '8082',
             skipUserManagement: true,
             clientPackageManager: 'npm',
-            cacheProvider: 'hazelcast'
+            cacheProvider: 'hazelcast',
+            creationTimestamp: 1546300800000
           },
           entities: ['Invoice', 'Shipment']
         },
@@ -1515,7 +1544,8 @@ describe('JDLImporter', () => {
             buildTool: 'gradle',
             serverPort: '8083',
             skipUserManagement: true,
-            clientPackageManager: 'npm'
+            clientPackageManager: 'npm',
+            creationTimestamp: 1546300800000
           },
           entities: ['Notification']
         },
@@ -1555,7 +1585,9 @@ describe('JDLImporter', () => {
       const FOLDER_NAMES = ['store', 'product', 'invoice', 'notification', 'docker-compose', 'kubernetes'];
 
       before(() => {
-        const importer = createImporterFromFiles([path.join('test', 'test_files', 'realistic_sample.jdl')]);
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'realistic_sample.jdl')], {
+          creationTimestamp: '2019-01-01'
+        });
         importer.import();
         FOLDER_NAMES.forEach(applicationName => {
           contents.push(JSON.parse(fse.readFileSync(path.join(applicationName, '.yo-rc.json'), 'utf-8')));
