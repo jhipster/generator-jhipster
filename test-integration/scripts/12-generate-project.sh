@@ -59,10 +59,10 @@ jhipster $JHI_PARAMS
 # Reproducible test
 #-------------------------------------------------------------------------------
 if [ "$REPRODUCIBLE_TEST" == "true" ]; then
-    if [ "$JHI_ENTITY" == "jdl" ]; then
-        jhipster $JHI_PARAMS --bail --creation-timestamp 2019-12-01
-        echo "Done. JDL regeneration finished without any change"
-    fi
+    # if [ "$JHI_ENTITY" == "jdl" ]; then
+    #    jhipster $JHI_PARAMS --bail --creation-timestamp 2019-12-01
+    #    echo "Done. JDL regeneration finished without any change"
+    # fi
     jhipster --no-insight --with-entities --bail
     echo "Done. Regeneration finished without any change"
 fi
