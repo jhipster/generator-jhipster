@@ -113,7 +113,7 @@ export class AlertErrorComponent implements OnDestroy {
     }
 
     setClasses(alert: JhiAlert): { [key: string]: boolean } {
-        const classes = { 'jhi-toast': !!alert.toast };
+        const classes = { 'jhi-toast': Boolean(alert.toast) };
         if (alert.position) {
             return { ...classes, [alert.position]: true };
         }
