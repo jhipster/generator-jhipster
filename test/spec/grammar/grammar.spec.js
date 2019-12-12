@@ -939,7 +939,7 @@ entity A {
 
         before(() => {
           const content = parseFromContent('skipClient * except A');
-          parsedOption = content.options.noClient;
+          parsedOption = content.options.skipClient;
         });
 
         it('should add the exclusions', () => {
