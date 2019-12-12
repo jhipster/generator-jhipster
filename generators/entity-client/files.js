@@ -22,8 +22,6 @@ const faker = require('faker');
 const utils = require('../utils');
 const constants = require('../generator-constants');
 
-// In order to have consistent results with Faker, the seed is fixed.
-faker.seed(42);
 // In order to have consistent results with RandExp, the RNG is seeded.
 Randexp.prototype.randInt = (min, max) => faker.random.number({ min, max });
 
@@ -285,6 +283,13 @@ function addSampleRegexTestingStrings(generator) {
 
 function writeFiles() {
     return {
+        setupReproducibility() {
+            if (this.skipClient) return;
+
+            // In order to have consistent results with Faker, restart seed with current entity name hash.
+            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
+        },
+
         writeClientFiles() {
             if (this.skipClient) return;
             if (this.protractorTests) {

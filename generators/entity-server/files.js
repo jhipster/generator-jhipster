@@ -31,8 +31,6 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
-// In order to have consistent results with Faker, the seed is fixed.
-faker.seed(42);
 // In order to have consistent results with RandExp, the RNG is seeded.
 randexp.prototype.randInt = (min, max) => faker.random.number({ min, max });
 
@@ -63,7 +61,10 @@ const getRecentDate = function(days, refDate) {
 const getRecentForLiquibase = function(days, changelogDate) {
     let formatedDate;
     if (changelogDate !== undefined) {
-        formatedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(6, 8)}`;
+        formatedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
+            6,
+            8
+        )}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
     }
     return getRecentDate(1, formatedDate);
 };
@@ -336,6 +337,13 @@ function writeFiles() {
                 `${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`,
                 this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`)
             );
+        },
+
+        setupReproducibility() {
+            if (this.skipServer) return;
+
+            // In order to have consistent results with Faker, restart seed with current entity name hash.
+            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
         },
 
         writeServerFiles() {
