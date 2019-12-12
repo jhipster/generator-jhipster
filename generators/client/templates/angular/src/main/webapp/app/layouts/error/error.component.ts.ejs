@@ -57,7 +57,10 @@ export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnD
     <%_ if (enableTranslation) { _%>
 
     private getErrorMessageTranslation(): void {
-        this.translateService.get(this.errorKey).subscribe(translatedErrorMessage => this.errorMessage = translatedErrorMessage);
+        this.errorMessage = '';
+        if (this.errorKey) {
+          this.translateService.get(this.errorKey).subscribe(translatedErrorMessage => (this.errorMessage = translatedErrorMessage));
+        }
     }
 
     ngOnDestroy(): void {
