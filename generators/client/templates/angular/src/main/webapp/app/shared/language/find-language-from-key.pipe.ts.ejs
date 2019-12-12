@@ -28,7 +28,7 @@ export class FindLanguageFromKeyPipe implements PipeTransform {
     }
     <%_ if (enableI18nRTL) { _%>
     isRTL(lang: string): boolean {
-        return !!this.languages[lang].rtl;
+        return Boolean(this.languages[lang].rtl);
     }
     <%_ } _%>
 }
