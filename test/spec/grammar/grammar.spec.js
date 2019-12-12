@@ -315,7 +315,7 @@ application {
 
         before(() => {
           const content = parseFromContent(`/**
- * Big 
+ * Big
  * comment.
  */
  entity A`);
@@ -326,7 +326,7 @@ application {
           expect(parsedEntity).to.deep.equal({
             annotations: [],
             body: [],
-            javadoc: '\n * Big \n * comment.\n ',
+            javadoc: '\n * Big\n * comment.\n ',
             name: 'A',
             tableName: 'A'
           });
@@ -939,7 +939,7 @@ entity A {
 
         before(() => {
           const content = parseFromContent('skipClient * except A');
-          parsedOption = content.noClient;
+          parsedOption = content.options.noClient;
         });
 
         it('should add the exclusions', () => {
@@ -957,7 +957,7 @@ entity A {
 
           before(() => {
             const content = parseFromContent('clientRootFolder * with client');
-            parsedOption = content.clientRootFolder;
+            parsedOption = content.options.clientRootFolder;
           });
 
           it('should parse it', () => {
@@ -974,7 +974,7 @@ entity A {
 
           before(() => {
             const content = parseFromContent('clientRootFolder * with "../../toto"');
-            parsedOption = content.clientRootFolder;
+            parsedOption = content.options.clientRootFolder;
           });
 
           it('should parse it', () => {
@@ -992,7 +992,7 @@ entity A {
 
         before(() => {
           const content = parseFromContent('dto * with mapstruct except A');
-          parsedOption = content.dto;
+          parsedOption = content.options.dto;
         });
 
         it('should add the exclusions', () => {
@@ -1010,7 +1010,7 @@ entity A {
 
       before(() => {
         const content = parseFromContent('clientRootFolder all with client');
-        parsedOption = content.clientRootFolder;
+        parsedOption = content.options.clientRootFolder;
       });
 
       it("should parse it as '*'", () => {
@@ -1027,7 +1027,7 @@ entity A {
 
       before(() => {
         const content = parseFromContent('clientRootFolder * with client');
-        parsedOption = content.clientRootFolder;
+        parsedOption = content.options.clientRootFolder;
       });
 
       it('should parse it', () => {
