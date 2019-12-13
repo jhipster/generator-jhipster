@@ -60,15 +60,14 @@ describe('JSONToJDLConverter', () => {
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName truc
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
@@ -110,15 +109,14 @@ describe('JSONToJDLConverter', () => {
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName truc
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
@@ -241,15 +239,14 @@ paginate Country with pager
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName app1
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
@@ -277,15 +274,14 @@ application {
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName app2
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
@@ -313,15 +309,14 @@ application {
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName app3
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm

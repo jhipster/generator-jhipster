@@ -205,7 +205,7 @@ describe('AbstractJDLApplication', () => {
     skipServer false
     testFrameworks []
     websocket false
-    jhipsterVersion 4.9.0
+    jhipsterVersion "4.9.0"
     baseName jhipster
     buildTool maven
     skipUserManagement false

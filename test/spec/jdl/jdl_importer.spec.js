@@ -555,7 +555,7 @@ describe('JDLImporter', () => {
             config {
               baseName MyApp
               applicationType microservice
-              jwtSecretKey aaa.bbb.ccc
+              jwtSecretKey "aaa.bbb.ccc"
             }
             entities * except Customer
           }
