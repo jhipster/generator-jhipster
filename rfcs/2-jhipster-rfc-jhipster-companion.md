@@ -23,7 +23,7 @@
 
 [summary]: #summary
 
-As of JHipster 6.5, the JHipster administrator's management and monitoring UI is spread out to various places (JHipster Registry, angular/react/vue.js pages) which causes code duplication and restraints their evolution. This RFC proposes to move this functionality to an external application that can be used in different development and production scenarios. In the following, this application will be referred to as the **JHipster companion**.
+As of JHipster 6.5, the JHipster administrator's management and monitoring UI is spread out to various places (JHipster Registry, angular/react/vue.js pages) which causes code duplication and slows down their evolution. This RFC proposes to move this functionality to an external application that can be used in different development and production scenarios. In the following, this application will be referred to as the **JHipster companion**.
 
 # Motivation
 
@@ -31,7 +31,7 @@ As of JHipster 6.5, the JHipster administrator's management and monitoring UI is
 
 In recent years the technology landscape has changed significantly for Java and non Java based microservices but JHipster has somehow failed to adapt because we invested too much in maintaining our Eureka based solution: the JHipster registry. Although this solution is great and very productive for developers, it is not a very popular choice nowadays and our support for microservices without Eureka is lacking. Moreover, if we want to support more languages and technologies (.NET, Node.JS, Micronaut, Quarkus) and integrate them in the JHipster platform, non portable technologies such as Spring Cloud and Eureka cannot be made mandatory.
 
-In the meantime, our experience with the JHipster Registry has showed that in a microservice architecture, it is very valuable to have an overview of your running applications instances either in development or production. Currently this overview is provided as part of the application itself (for JHipster monoliths) or the JHipster Registry (for JHipster microservices). The goal of this RFC is to describe a solution that provide this overview in a new external application which can be used to cover all current use cases and more.
+In the meantime, our experience with the JHipster Registry has showed that in a microservice architecture, it is very valuable to have an overview of your running applications instances either in development or production. Currently this overview is provided as part of the application itself (for JHipster monoliths) or the JHipster Registry (for JHipster microservices). The goal of this RFC is to describe a solution that provides this overview in a new external application which can be used to cover all current use cases and more.
 
 
 # Guide-level explanation
@@ -77,7 +77,7 @@ In every JHipster app, docker-compose files are present in the `src/main/docker`
 
 ## Usage in production
 
-Once deployed on a production server, the **JHipster companion** can be configured to discover JHipster application instances automatically by plugging into service discovery backends (eureka, consul, kubernetes) or using a static list of application URLs provided in the configuration.
+Once deployed on a production server, the **JHipster companion** can be configured to discover JHipster application instances automatically by plugging into service discovery backends (Eureka, Consul, Kubernetes) or using a static list of application URLs provided in the configuration.
 
 # Reference-level explanation
 
@@ -88,7 +88,7 @@ Implementation details will be left to the discretion of the **JHipster companio
 - A separate  **JHipster companion** GitHub repository will host the application and allow collaboration
 - The **JHipster companion** application will be based on a reactive Spring Boot application using Spring Cloud Gateway as embedded proxy technology
 - The application will include Spring Cloud dependencies to allow it to plug into Eureka, Consul and Kubernetes service discovery mechanism
-- The Management UI will be developped using Angular/React/Vue.js and can reuse some the existing code that currently lives in the "Admin pages" of a JHipster application
+- The Management UI will be developed using Angular/React/Vue.js and can reuse some the existing code that currently lives in the "Admin pages" of a JHipster application
 - The application will be packaged as a docker image and a jar file which will be published on Docker Hub and Maven Central
 - After the initial **JHipster companion** 1.0 release, it will be expected to keep backward compatibility with JHipster applications generated with JHipster version 7.0 or higher.
 - The **JHipster companion** will be an optional part of JHipster so that users will not have to use it. However, we think that it will provide sufficient improvements to the development and operational experience to convince users to adopt it.
@@ -98,19 +98,19 @@ Implementation details will be left to the discretion of the **JHipster companio
 
 [drawbacks]: #drawbacks
 
-- As JHipster is first and foremost a code generator, it could be argued that it is not the goal of the project to release non code generator products. Two date, several external products have been released as part of the JHipster organisation: the JHipster Registry and JHipster Console and their release cadence has been low compared to the main generator.
+- As JHipster is first and foremost a code generator, it could be argued that it is not the goal of the project to release non code generator products. Two date, several external products have been released as part of the JHipster organization: the JHipster Registry and JHipster Console and their release cadence has been low compared to the main generator.
 - Impose the overhead of running another service in development and production
 
 # Rationale and alternatives
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-Compared to today's situation, the proposed solution would have the following advantages :
+Compared to today's situation, the proposed solution would have the following advantages:
 
-- Reduce the generated code as code related to  management screens will no longer be generated
+- Reduce the generated code as code related to management screens will no longer be generated
 - Faster build times for the front end resulting from less front-end code to compile
 - Stop developing the same management UI with 3 different frontend framework (Angular, React and Vue.js)
-- Improve security as management endpoint will no longer be exposed to the outside but only internally on a separate port. Also the **JHipster companion** can have proper authentication (jwt,oauth) rather than the basic authentication scheme that is present on the JHipster registry (which is the only scheme supported by the eureka server).
+- Improve security as management endpoint will no longer be exposed to the outside but only internally on a separate port. Also the **JHipster companion** can have proper authentication (JWT, OAuth) rather than the basic authentication scheme that is present on the JHipster registry (which is the only scheme supported by the Eureka server).
 
 # Prior art
 
@@ -121,7 +121,7 @@ Some existing similar or related solutions :
 - [JHipster Registry](https://www.jhipster.tech/jhipster-registry/)
 - [Spring Boot Admin](https://codecentric.github.io/spring-boot-admin/current/)
 - [Trampoline](https://ernestort.github.io/Trampoline/)
-- [Pivotal Cloud Fondry Apps Manager](https://docs.run.pivotal.io/console/manage-apps.html)
+- [Pivotal Cloud Foundry Apps Manager](https://docs.run.pivotal.io/console/manage-apps.html)
 - [Azure Spring Cloud](https://azure.microsoft.com/en-in/services/spring-cloud/): currently focused only on running Spring Boot workloads but we can expect management features coming to it in the future.
 
 # Unresolved questions
@@ -137,6 +137,6 @@ Some existing similar or related solutions :
 Possible future evolutions:
 
 - Provide a plugin mechanism to let organizations customize the **JHipster companion** with custom features without forking
-- Seemlessly integrate with observablility tools such as ELK, Grafana and Zipkin
+- Seamlessly integrate with observablility tools such as ELK, Grafana and Zipkin
 - Plug into service mesh telemetry services such as those provided by Istio
 - Integrate with the [JHipster Kubernetes Operator](https://github.com/jhipster/jhipster-operator)
