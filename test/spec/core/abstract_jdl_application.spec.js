@@ -302,5 +302,69 @@ describe('AbstractJDLApplication', () => {
         expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
       });
     });
+    context('when the entitySuffix is present', () => {
+      context('without a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { entitySuffix: '' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).not.to.include('entitySuffix');
+        });
+      });
+      context('with a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { entitySuffix: 'Entity' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).to.include('entitySuffix Entity');
+        });
+      });
+    });
+    context('when the dtoSuffix is present', () => {
+      context('without a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { dtoSuffix: '' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).not.to.include('dtoSuffix');
+        });
+      });
+      context('with a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { dtoSuffix: 'DTO' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).to.include('dtoSuffix DTO');
+        });
+      });
+    });
+    context('when the blueprints option is present', () => {
+      let result;
+
+      before(() => {
+        const application = new AbstractJDLApplication({ config: { blueprints: ['whatever'] } });
+        result = application.toString();
+      });
+
+      it('should not stringify it', () => {
+        expect(result).not.to.include('blueprints');
+      });
+    });
   });
 });
