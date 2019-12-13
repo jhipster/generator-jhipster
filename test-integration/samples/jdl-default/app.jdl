@@ -86,8 +86,10 @@ entity Employee {
    */
   firstName String
   lastName String
-  email String required pattern(/^\\S+@\\S+\\.\\S+$/)
+  email String required pattern(/^\S+@\S+\.\S+$/)
   patter String required pattern(/^[a-zA-Z0-9]*$/)
+  numberPatternTom String pattern(/^[0-9]+$/)
+  patternName String pattern(/^[A-Z][a-z]+\d$/)
   phoneNumber String
   hireDate ZonedDateTime
   salary Long
