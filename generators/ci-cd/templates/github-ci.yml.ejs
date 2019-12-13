@@ -22,6 +22,7 @@ jobs:
     pipeline:
         name: <%= baseName %> pipeline
         runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
         timeout-minutes: 40
         env:
             <%_ if (!skipClient) { _%>
