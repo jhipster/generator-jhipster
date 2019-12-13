@@ -17,11 +17,14 @@
  limitations under the License.
 -%>
 import { Component, OnDestroy } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { JhiEventManager, JhiAlert, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlert, JhiAlertService, JhiEventWithContent } from 'ng-jhipster';
 import { Subscription } from 'rxjs';
+
+import { AlertError } from './alert-error.model';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-alert-error',
@@ -34,15 +37,18 @@ import { Subscription } from 'rxjs';
             </div>
         </div>`
 })
-export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
-
-    alerts: any[];
-    cleanHttpErrorListener: Subscription;
+export class AlertErrorComponent implements OnDestroy {
+    alerts: JhiAlert[] = [];
+    errorListener: Subscription;
+    httpErrorListener: Subscription;
+  
     constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager<% if (enableTranslation) { %>, translateService: TranslateService<% } %>) {
-        this.alerts = [];
+        this.errorListener = eventManager.subscribe('<%=angularAppName%>.error', (response: JhiEventWithContent<AlertError>) => {
+            const errorResponse = response.content;
+            this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
+        });
 
-        this.cleanHttpErrorListener = eventManager.subscribe('<%=angularAppName%>.httpError', (response) => {
-            let i;
+        this.httpErrorListener = eventManager.subscribe('<%=angularAppName%>.httpError', (response: JhiEventWithContent<HttpErrorResponse>) => {
             const httpErrorResponse = response.content;
             switch (httpErrorResponse.status) {
                 // connection refused, server not reachable
@@ -72,8 +78,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                         this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, { entityName }<% } %>);
                     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
                         const fieldErrors = httpErrorResponse.error.fieldErrors;
-                        for (i = 0; i < fieldErrors.length; i++) {
-                            const fieldError = fieldErrors[i];
+                        for (const fieldError of fieldErrors) {
                             if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
                                 fieldError.message = 'Size';
                             }
@@ -92,6 +97,7 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
                     }
                     break;
                 }
+
                 case 404:
                     this.addErrorAlert('Not found'<% if (enableTranslation) { %>, 'error.url.not.found'<% } %>);
                     break;
@@ -106,21 +112,24 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
         });
     }
 
-    setClasses(alert) {
-        return {
-            'jhi-toast': alert.toast,
-            [alert.position]: true
-        };
+    setClasses(alert: JhiAlert): { [key: string]: boolean } {
+        const classes = { 'jhi-toast': Boolean(alert.toast) };
+        if (alert.position) {
+            return { ...classes, [alert.position]: true };
+        }
+        return classes;
     }
-
-    ngOnDestroy() {
-        if (this.cleanHttpErrorListener !== undefined && this.cleanHttpErrorListener !== null) {
-            this.eventManager.destroy(this.cleanHttpErrorListener);
-            this.alerts = [];
+    
+    ngOnDestroy(): void {
+        if (this.errorListener) {
+            this.eventManager.destroy(this.errorListener);
+        }
+        if (this.httpErrorListener) {
+            this.eventManager.destroy(this.httpErrorListener);
         }
     }
 
-    addErrorAlert(message<% if (enableTranslation) { %>, key?, data?<% } %>) {
+    addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: any<% } %>): void {
         <%_ if (enableTranslation) { _%>
         message = (key && key !== null) ? key : message;
 
@@ -137,6 +146,5 @@ export class <%=jhiPrefixCapitalized%>AlertErrorComponent implements OnDestroy {
         };
 
         this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
-
     }
 }

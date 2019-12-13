@@ -21,7 +21,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ } _%>
 import { User } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
@@ -34,7 +34,7 @@ export class UserManagementUpdateComponent implements OnInit {
 
     user!: User;
     <%_ if (enableTranslation) { _%>
-    languages: string[];
+    languages = LANGUAGES;
     <%_ } _%>
     authorities: string[] = [];
     isSaving = false;
@@ -51,17 +51,10 @@ export class UserManagementUpdateComponent implements OnInit {
     });
 
     constructor(
-        <%_ if (enableTranslation) { _%>
-        private languageHelper: JhiLanguageHelper,
-        <%_ } _%>
         private userService: UserService,
         private route: ActivatedRoute,
         private fb: FormBuilder
-    ) {
-        <%_ if (enableTranslation) { _%>
-        this.languages = this.languageHelper.getAll();
-        <%_ } _%>
-    }
+    ) {}
 
     ngOnInit(): void {
         this.route.data.subscribe(({user}) => {

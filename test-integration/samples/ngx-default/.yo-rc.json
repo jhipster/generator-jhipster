@@ -60,10 +60,7 @@
             "uz-Latn-uz",
             "vi"
         ],
-        "testFrameworks": [
-            "gatling",
-            "protractor"
-        ],
+        "testFrameworks": ["gatling", "protractor"],
         "serverPort": "8080",
         "jhiPrefix": "myPrefix",
         "messageBroker": false,

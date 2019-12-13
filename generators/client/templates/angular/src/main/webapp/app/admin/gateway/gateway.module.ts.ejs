@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 
-import { <%=jhiPrefixCapitalized%>GatewayComponent } from './gateway.component';
+import { GatewayComponent } from './gateway.component';
 
 import { gatewayRoute } from './gateway.route';
 
@@ -11,6 +11,6 @@ import { gatewayRoute } from './gateway.route';
     <%=angularXAppName%>SharedModule,
     RouterModule.forChild([gatewayRoute])
   ],
-  declarations: [<%=jhiPrefixCapitalized%>GatewayComponent]
+  declarations: [GatewayComponent]
 })
 export class GatewayModule {}
