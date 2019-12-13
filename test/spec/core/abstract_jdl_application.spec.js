@@ -254,5 +254,53 @@ describe('AbstractJDLApplication', () => {
         );
       });
     });
+    context('when the jhipsterVersion option is not quoted', () => {
+      let result;
+
+      before(() => {
+        const application = new AbstractJDLApplication({ config: { jhipsterVersion: '6.5.1' } });
+        result = application.toString();
+      });
+
+      it('should stringify it quoted', () => {
+        expect(result).to.include('jhipsterVersion "6.5.1"');
+      });
+    });
+    context('when the jhipsterVersion option is quoted', () => {
+      let result;
+
+      before(() => {
+        const application = new AbstractJDLApplication({ config: { jhipsterVersion: '"6.5.1"' } });
+        result = application.toString();
+      });
+
+      it('should not stringify it again', () => {
+        expect(result).to.include('jhipsterVersion "6.5.1"');
+      });
+    });
+    context('when the jwtSecretKey option is not quoted', () => {
+      let result;
+
+      before(() => {
+        const application = new AbstractJDLApplication({ config: { jwtSecretKey: 'ASTUPIDLYLONGWORD=' } });
+        result = application.toString();
+      });
+
+      it('should stringify it quoted', () => {
+        expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+      });
+    });
+    context('when the jwtSecretKey option is quoted', () => {
+      let result;
+
+      before(() => {
+        const application = new AbstractJDLApplication({ config: { jwtSecretKey: '"ASTUPIDLYLONGWORD="' } });
+        result = application.toString();
+      });
+
+      it('should not stringify it again', () => {
+        expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+      });
+    });
   });
 });
