@@ -25,7 +25,7 @@ const Validations = require('../../../lib/core/jhipster/validations');
 describe('JDLValidation', () => {
   describe('::new', () => {
     context('when not passing any argument', () => {
-      let validation = null;
+      let validation;
 
       before(() => {
         validation = new JDLValidation();
@@ -37,7 +37,7 @@ describe('JDLValidation', () => {
       });
     });
     context('when passing arguments', () => {
-      let validation = null;
+      let validation;
 
       before(() => {
         validation = new JDLValidation({
@@ -54,7 +54,7 @@ describe('JDLValidation', () => {
   });
   describe('#toString', () => {
     context('with no value', () => {
-      let validation = null;
+      let validation;
 
       before(() => {
         validation = new JDLValidation();
@@ -65,7 +65,7 @@ describe('JDLValidation', () => {
       });
     });
     context('with a value', () => {
-      let validation = null;
+      let validation;
       let args = {};
 
       before(() => {

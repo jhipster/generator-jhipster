@@ -39,7 +39,7 @@ describe('JDLExporter', () => {
     context('when passing valid parameters', () => {
       context('with a path', () => {
         const PATH = 'myPath.jdl';
-        let fileExistence = null;
+        let fileExistence;
         let jdlContent = '';
 
         before(() => {
@@ -67,7 +67,7 @@ describe('JDLExporter', () => {
       });
       context('without a path', () => {
         const DEFAULT_PATH = 'app.jdl';
-        let fileExistence = null;
+        let fileExistence;
         let jdlContent = '';
 
         before(() => {

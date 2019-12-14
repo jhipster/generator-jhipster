@@ -39,7 +39,7 @@ describe('JSONEntity', () => {
       });
     });
     context('when only passing an entity name', () => {
-      let entity = null;
+      let entity;
 
       before(() => {
         entity = new JSONEntity({
@@ -68,7 +68,7 @@ describe('JSONEntity', () => {
       });
     });
     context('when passing values', () => {
-      let entity = null;
+      let entity;
 
       before(() => {
         entity = new JSONEntity({
@@ -118,7 +118,7 @@ describe('JSONEntity', () => {
     });
   });
   describe('#addField', () => {
-    let entity = null;
+    let entity;
 
     before(() => {
       entity = new JSONEntity({
@@ -146,7 +146,7 @@ describe('JSONEntity', () => {
     });
   });
   describe('#addRelationship', () => {
-    let entity = null;
+    let entity;
 
     before(() => {
       entity = new JSONEntity({

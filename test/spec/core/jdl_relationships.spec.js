@@ -46,7 +46,7 @@ describe('JDLRelationships', () => {
       });
     });
     context('when passing a valid relationship', () => {
-      let relationships = null;
+      let relationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -95,8 +95,8 @@ describe('JDLRelationships', () => {
         });
       });
       context('for an existing relationship', () => {
-        let relationships = null;
-        let relationship = null;
+        let relationships;
+        let relationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -130,8 +130,8 @@ describe('JDLRelationships', () => {
         });
       });
       context('for an existing relationship', () => {
-        let relationships = null;
-        let relationship = null;
+        let relationships;
+        let relationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -165,8 +165,8 @@ describe('JDLRelationships', () => {
         });
       });
       context('for an existing relationship', () => {
-        let relationships = null;
-        let relationship = null;
+        let relationships;
+        let relationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -200,8 +200,8 @@ describe('JDLRelationships', () => {
         });
       });
       context('for an existing relationship', () => {
-        let relationships = null;
-        let relationship = null;
+        let relationships;
+        let relationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -235,8 +235,8 @@ describe('JDLRelationships', () => {
         });
       });
       context('for an existing relationship', () => {
-        let relationships = null;
-        let relationship = null;
+        let relationships;
+        let relationship;
 
         before(() => {
           relationships = new JDLRelationships();
@@ -257,9 +257,9 @@ describe('JDLRelationships', () => {
     });
   });
   describe('#toArray', () => {
-    let relationships = null;
-    let relationship1 = null;
-    let relationship2 = null;
+    let relationships;
+    let relationship1;
+    let relationship2;
     let array = [];
 
     before(() => {
@@ -292,7 +292,7 @@ describe('JDLRelationships', () => {
       });
     });
     context('when there are OtO relationships', () => {
-      let relationships = null;
+      let relationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -318,7 +318,7 @@ describe('JDLRelationships', () => {
       });
     });
     context('when there are OtM relationships', () => {
-      let relationships = null;
+      let relationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -344,7 +344,7 @@ describe('JDLRelationships', () => {
       });
     });
     context('when there are MtO relationships', () => {
-      let relationships = null;
+      let relationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -370,7 +370,7 @@ describe('JDLRelationships', () => {
       });
     });
     context('when there are OtO relationships', () => {
-      let relationships = null;
+      let relationships;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -391,7 +391,7 @@ describe('JDLRelationships', () => {
     });
   });
   describe('#size', () => {
-    let relationships = null;
+    let relationships;
 
     before(() => {
       relationships = new JDLRelationships();
@@ -470,9 +470,9 @@ describe('JDLRelationships', () => {
       });
     });
     context('when having one relationship per type', () => {
-      let relationships = null;
-      let oneToOneRelationship = null;
-      let oneToManyRelationship = null;
+      let relationships;
+      let oneToOneRelationship;
+      let oneToManyRelationship;
 
       before(() => {
         relationships = new JDLRelationships();
@@ -504,9 +504,9 @@ relationship ${oneToManyRelationship.type} {
       });
     });
     context('when having more than one relationship per type', () => {
-      let relationships = null;
-      let oneToOneRelationship1 = null;
-      let oneToOneRelationship2 = null;
+      let relationships;
+      let oneToOneRelationship1;
+      let oneToOneRelationship2;
 
       before(() => {
         relationships = new JDLRelationships();

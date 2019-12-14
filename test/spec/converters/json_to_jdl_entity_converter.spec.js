@@ -43,7 +43,7 @@ describe('JSONToJDLEntityConverter', () => {
       });
     });
     context('when passing entities', () => {
-      let jdlObject = null;
+      let jdlObject;
 
       before(() => {
         const entities = new Map([
@@ -219,7 +219,7 @@ describe('JSONToJDLEntityConverter', () => {
       context('when parsing entities with relationships to User', () => {
         context('when skipUserManagement flag is not set', () => {
           context('when there is no User.json entity', () => {
-            let jdlObject = null;
+            let jdlObject;
 
             before(() => {
               jdlObject = convertEntitiesToJDL({ entities: new Map([['Country', readJsonEntity('Country')]]) });
@@ -269,7 +269,7 @@ describe('JSONToJDLEntityConverter', () => {
           });
         });
         context('without relationship', () => {
-          let jdlObject = null;
+          let jdlObject;
 
           before(() => {
             jdlObject = convertEntitiesToJDL({

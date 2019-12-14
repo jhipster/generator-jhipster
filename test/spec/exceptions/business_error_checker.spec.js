@@ -48,7 +48,7 @@ const logger = require('../../../lib/utils/objects/logger');
 
 describe('BusinessErrorChecker', () => {
   describe('#checkForErrors', () => {
-    let checker = null;
+    let checker;
 
     context('with no passed JDL object', () => {
       it('fails', () => {
@@ -58,13 +58,13 @@ describe('BusinessErrorChecker', () => {
       });
     });
     context('with a complete JDL object', () => {
-      let applicationCheckSpy = null;
-      let entityCheckSpy = null;
-      let fieldCheckSpy = null;
-      let validationCheckSpy = null;
-      let relationshipCheckSpy = null;
-      let enumCheckSpy = null;
-      let optionCheckSpy = null;
+      let applicationCheckSpy;
+      let entityCheckSpy;
+      let fieldCheckSpy;
+      let validationCheckSpy;
+      let relationshipCheckSpy;
+      let enumCheckSpy;
+      let optionCheckSpy;
 
       before(() => {
         const jdlObject = new ValidatedJDLObject();
@@ -139,9 +139,9 @@ describe('BusinessErrorChecker', () => {
     });
   });
   describe('#checkForEntityErrors', () => {
-    let checker = null;
-    let jdlObject = null;
-    let checkForFieldErrorsStub = null;
+    let checker;
+    let jdlObject;
+    let checkForFieldErrorsStub;
 
     before(() => {
       jdlObject = new ValidatedJDLObject();
@@ -253,9 +253,9 @@ describe('BusinessErrorChecker', () => {
     });
   });
   describe('#checkForFieldErrors', () => {
-    let checker = null;
-    let jdlObject = null;
-    let checkForValidationErrorsStub = null;
+    let checker;
+    let jdlObject;
+    let checkForValidationErrorsStub;
 
     before(() => {
       jdlObject = new ValidatedJDLObject();
@@ -387,8 +387,8 @@ describe('BusinessErrorChecker', () => {
     });
   });
   describe('#checkForValidationErrors', () => {
-    let checker = null;
-    let jdlObject = null;
+    let checker;
+    let jdlObject;
 
     before(() => {
       jdlObject = new ValidatedJDLObject();
@@ -623,8 +623,8 @@ describe('BusinessErrorChecker', () => {
     });
   });
   describe('#checkForOptionErrors', () => {
-    let checker = null;
-    let jdlObject = null;
+    let checker;
+    let jdlObject;
 
     before(() => {
       jdlObject = new ValidatedJDLObject();

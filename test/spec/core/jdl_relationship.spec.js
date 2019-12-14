@@ -50,7 +50,7 @@ describe('JDLRelationship', () => {
       });
     });
     context('when passing valid args', () => {
-      let relationship = null;
+      let relationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -70,7 +70,7 @@ describe('JDLRelationship', () => {
     });
   });
   describe('#getId', () => {
-    let relationship = null;
+    let relationship;
 
     before(() => {
       relationship = new JDLRelationship({
@@ -134,7 +134,7 @@ describe('JDLRelationship', () => {
   });
   describe('#toString', () => {
     context('without any comment', () => {
-      let relationship = null;
+      let relationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -154,7 +154,7 @@ describe('JDLRelationship', () => {
       });
     });
     context('with comments for both sides', () => {
-      let relationship = null;
+      let relationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -183,7 +183,7 @@ describe('JDLRelationship', () => {
       });
     });
     context('with a comment for the source side', () => {
-      let relationship = null;
+      let relationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -207,7 +207,7 @@ describe('JDLRelationship', () => {
       });
     });
     context('with a comment for the destination side', () => {
-      let relationship = null;
+      let relationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -232,7 +232,7 @@ describe('JDLRelationship', () => {
       });
     });
     context('with only one injected field', () => {
-      let relationship = null;
+      let relationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -252,7 +252,7 @@ describe('JDLRelationship', () => {
       });
     });
     context('with both injected fields', () => {
-      let relationship = null;
+      let relationship;
 
       before(() => {
         relationship = new JDLRelationship({
@@ -273,7 +273,7 @@ describe('JDLRelationship', () => {
       });
     });
     context('with options', () => {
-      let relationship = null;
+      let relationship;
 
       before(() => {
         relationship = new JDLRelationship({

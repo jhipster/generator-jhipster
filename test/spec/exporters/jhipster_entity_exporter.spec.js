@@ -40,9 +40,9 @@ describe('JHipsterEntityExporter', () => {
     });
     context('when passing valid arguments', () => {
       context('for only entities and a monolith app', () => {
-        let entities = null;
-        let aEntityContent = null;
-        let returned = null;
+        let entities;
+        let aEntityContent;
+        let returned;
 
         before(() => {
           entities = {
@@ -90,10 +90,10 @@ describe('JHipsterEntityExporter', () => {
         });
       });
       context('when exporting the same entity', () => {
-        let entities = null;
-        let previousChangelogDate = null;
-        let newChangelogDate = null;
-        let returned = null;
+        let entities;
+        let previousChangelogDate;
+        let newChangelogDate;
+        let returned;
 
         before(done => {
           entities = {
@@ -174,8 +174,8 @@ describe('JHipsterEntityExporter', () => {
       });
       context('when passing an application name and application type', () => {
         context('inside a monolith', () => {
-          let entities = null;
-          let returned = null;
+          let entities;
+          let returned;
 
           before(() => {
             entities = {
@@ -388,7 +388,7 @@ describe('JHipsterEntityExporter', () => {
         });
         context('inside a microservice', () => {
           context('and when entities without the microservice option are passed', () => {
-            let entities = null;
+            let entities;
 
             before(() => {
               entities = {
@@ -507,7 +507,7 @@ describe('JHipsterEntityExporter', () => {
             });
           });
           context('and when microservice entities are passed', () => {
-            let entities = null;
+            let entities;
 
             before(() => {
               entities = {
@@ -734,12 +734,12 @@ describe('JHipsterEntityExporter', () => {
         });
       });
       context('with more than one application', () => {
-        let application1 = null;
-        let application2 = null;
-        let entities = null;
-        let aEntityContent = null;
-        let bEntityContent = null;
-        let returned = null;
+        let application1;
+        let application2;
+        let entities;
+        let aEntityContent;
+        let bEntityContent;
+        let returned;
 
         before(() => {
           entities = {

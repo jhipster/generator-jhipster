@@ -49,8 +49,8 @@ describe('JDLObject', () => {
       });
     });
     context('when adding a valid application', () => {
-      let object = null;
-      let application = null;
+      let object;
+      let application;
 
       before(() => {
         object = new JDLObject();
@@ -64,7 +64,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getApplicationQuantity', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -99,8 +99,8 @@ describe('JDLObject', () => {
       });
     });
     context('when adding a valid application', () => {
-      let object = null;
-      let application = null;
+      let object;
+      let application;
 
       before(() => {
         object = new JDLObject();
@@ -118,7 +118,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getDeploymentQuantity', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -147,7 +147,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#forEachApplication', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -187,8 +187,8 @@ describe('JDLObject', () => {
       });
     });
     context('when adding a valid entity', () => {
-      let object = null;
-      let entity = null;
+      let object;
+      let entity;
 
       before(() => {
         object = new JDLObject();
@@ -205,9 +205,9 @@ describe('JDLObject', () => {
       });
     });
     context('when adding an entity with the same name', () => {
-      let object = null;
-      let entity = null;
-      let entity2 = null;
+      let object;
+      let entity;
+      let entity2;
 
       before(() => {
         object = new JDLObject();
@@ -231,7 +231,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getEntity', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -253,7 +253,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getEntityQuantity', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -280,7 +280,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getEntityNames', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -308,7 +308,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#forEachEntity', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -348,8 +348,8 @@ describe('JDLObject', () => {
       });
     });
     context('when adding a valid enum', () => {
-      let object = null;
-      let enumObject = null;
+      let object;
+      let enumObject;
 
       before(() => {
         object = new JDLObject();
@@ -362,9 +362,9 @@ describe('JDLObject', () => {
       });
     });
     context('when adding an enum with the same name', () => {
-      let object = null;
-      let enumObject = null;
-      let enumObject2 = null;
+      let object;
+      let enumObject;
+      let enumObject2;
 
       before(() => {
         object = new JDLObject();
@@ -380,7 +380,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getEnum', () => {
-    let object = null;
+    let object;
 
     before(() => {
       object = new JDLObject();
@@ -405,7 +405,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#hasEnum', () => {
-    let object = null;
+    let object;
 
     before(() => {
       object = new JDLObject();
@@ -430,7 +430,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getEnumQuantity', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -457,7 +457,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#forEachEnum', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -510,8 +510,8 @@ describe('JDLObject', () => {
       });
     });
     context('when adding a valid relationship', () => {
-      let object = null;
-      let relationship = null;
+      let object;
+      let relationship;
 
       before(() => {
         object = new JDLObject();
@@ -530,7 +530,7 @@ describe('JDLObject', () => {
       });
     });
     context('when adding twice the same relationship', () => {
-      let object = null;
+      let object;
 
       before(() => {
         object = new JDLObject();
@@ -551,7 +551,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getRelationshipQuantity', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -581,7 +581,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#forEachRelationship', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -648,7 +648,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getOptionsForName', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -669,9 +669,9 @@ describe('JDLObject', () => {
       });
     });
     context('when checking for a present option', () => {
-      let option1 = null;
-      let option2 = null;
-      let option3 = null;
+      let option1;
+      let option2;
+      let option3;
 
       before(() => {
         option1 = new JDLUnaryOption({
@@ -698,7 +698,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#getOptionQuantity', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -725,7 +725,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#forEachOption', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     before(() => {
       jdlObject = new JDLObject();
@@ -797,7 +797,7 @@ describe('JDLObject', () => {
     });
   });
   describe('#isEntityInMicroservice', () => {
-    let jdlObject = null;
+    let jdlObject;
 
     context('when an entity is in a microservice', () => {
       context('because no entity name has been specified', () => {

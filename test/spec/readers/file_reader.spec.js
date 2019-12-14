@@ -38,7 +38,7 @@ describe('FileReader', () => {
       });
     });
     context('when passing a valid text file', () => {
-      let content = null;
+      let content;
 
       before(() => {
         fs.writeFileSync('./myFile.txt', 'Hello World');
@@ -70,7 +70,7 @@ describe('FileReader', () => {
       });
     });
     context('when passing valid text files', () => {
-      let content = null;
+      let content;
 
       before(() => {
         fs.writeFileSync('./myFile1.txt', 'Hello...');

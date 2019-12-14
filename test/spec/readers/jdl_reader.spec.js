@@ -95,7 +95,7 @@ describe('JDLReader', () => {
         });
       });
       context('when reading a single JDL file', () => {
-        let content = null;
+        let content;
 
         before(() => {
           content = JDLReader.parseFromFiles(['./test/test_files/valid_jdl.jdl']);
@@ -106,7 +106,7 @@ describe('JDLReader', () => {
         });
       });
       context('when reading more than one JDL file', () => {
-        let content = null;
+        let content;
 
         before(() => {
           content = JDLReader.parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
@@ -117,7 +117,7 @@ describe('JDLReader', () => {
         });
       });
       context('when reading a complex JDL file', () => {
-        let content = null;
+        let content;
 
         before(() => {
           content = JDLReader.parseFromFiles(['./test/test_files/complex_jdl.jdl']);

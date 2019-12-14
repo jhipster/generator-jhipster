@@ -29,7 +29,7 @@ const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 describe('ValidatedJDLOptions', () => {
   describe('#addOption', () => {
     context('when passing an invalid option', () => {
-      let options = null;
+      let options;
 
       before(() => {
         options = new ValidatedJDLOptions();
@@ -42,9 +42,9 @@ describe('ValidatedJDLOptions', () => {
       });
     });
     context('when passing a valid option', () => {
-      let options = null;
-      let option1 = null;
-      let option2 = null;
+      let options;
+      let option1;
+      let option2;
 
       before(() => {
         options = new ValidatedJDLOptions();
@@ -94,7 +94,7 @@ describe('ValidatedJDLOptions', () => {
       });
     });
     context('with a valid input', () => {
-      let options = null;
+      let options;
 
       before(() => {
         options = new ValidatedJDLOptions();
@@ -113,7 +113,7 @@ describe('ValidatedJDLOptions', () => {
     });
   });
   describe('#size', () => {
-    let options = null;
+    let options;
 
     before(() => {
       options = new ValidatedJDLOptions();
@@ -132,7 +132,7 @@ describe('ValidatedJDLOptions', () => {
     });
   });
   describe('#forEach', () => {
-    let jdlOptions = null;
+    let jdlOptions;
 
     before(() => {
       jdlOptions = new ValidatedJDLOptions();
@@ -168,7 +168,7 @@ describe('ValidatedJDLOptions', () => {
     });
   });
   describe('#getOptionsForName', () => {
-    let jdlOptions = null;
+    let jdlOptions;
 
     before(() => {
       jdlOptions = new ValidatedJDLOptions();
@@ -189,9 +189,9 @@ describe('ValidatedJDLOptions', () => {
       });
     });
     context('when checking for a present option', () => {
-      let option1 = null;
-      let option2 = null;
-      let option3 = null;
+      let option1;
+      let option2;
+      let option3;
 
       before(() => {
         option1 = new JDLUnaryOption({

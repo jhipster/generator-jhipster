@@ -26,7 +26,7 @@ const ApplicationOptions = require('../../../lib/core/jhipster/application_optio
 describe('JDLUaaApplication', () => {
   describe('#new', () => {
     context('by default', () => {
-      let jdlApplicationConfig = null;
+      let jdlApplicationConfig;
 
       before(() => {
         const jdlApplication = new JDLUaaApplication({ config: { jhipsterVersion: '4.9.0' } });

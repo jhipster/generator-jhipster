@@ -26,7 +26,7 @@ const JDLGatewayApplication = require('../../../lib/core/jdl_gateway_application
 describe('JDLGatewayApplication', () => {
   describe('::new', () => {
     context('by default', () => {
-      let jdlApplicationConfig = null;
+      let jdlApplicationConfig;
 
       before(() => {
         const jdlApplication = new JDLGatewayApplication({ config: { jhipsterVersion: '4.9.0' } });
@@ -71,7 +71,7 @@ describe('JDLGatewayApplication', () => {
       });
     });
     context(`when the authentication type is ${ApplicationOptions.authenticationType.oauth2}`, () => {
-      let jdlApplicationConfig = null;
+      let jdlApplicationConfig;
 
       before(() => {
         const jdlApplication = new JDLGatewayApplication({

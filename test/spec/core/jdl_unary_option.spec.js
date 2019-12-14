@@ -33,7 +33,7 @@ describe('JDLUnaryOption', () => {
       });
     });
     context('when passing a name at least', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
@@ -44,7 +44,7 @@ describe('JDLUnaryOption', () => {
       });
     });
     context('when passing a list of entity names and excluded names with some of them being repeated', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({
@@ -66,7 +66,7 @@ describe('JDLUnaryOption', () => {
     });
   });
   describe('#setEntityNames', () => {
-    let option = null;
+    let option;
 
     before(() => {
       option = new JDLUnaryOption({
@@ -83,7 +83,7 @@ describe('JDLUnaryOption', () => {
   });
   describe('#addEntityName', () => {
     context('when passing a nil name', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
@@ -96,7 +96,7 @@ describe('JDLUnaryOption', () => {
       });
     });
     context("when passing a name that hasn't been added yet", () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
@@ -108,7 +108,7 @@ describe('JDLUnaryOption', () => {
       });
     });
     context('when passing a name that has already been added', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
@@ -121,7 +121,7 @@ describe('JDLUnaryOption', () => {
       });
     });
     context('when passing an excluded name', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
@@ -136,7 +136,7 @@ describe('JDLUnaryOption', () => {
     });
   });
   describe('#addEntitiesFromAnotherOption', () => {
-    let option = null;
+    let option;
 
     before(() => {
       option = new JDLUnaryOption({
@@ -176,7 +176,7 @@ describe('JDLUnaryOption', () => {
   });
   describe('#excludeEntityName', () => {
     context('when passing a nil name', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
@@ -189,7 +189,7 @@ describe('JDLUnaryOption', () => {
       });
     });
     context("when passing a name that hasn't been excluded yet", () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
@@ -201,7 +201,7 @@ describe('JDLUnaryOption', () => {
       });
     });
     context('when passing a name that has already been excluded', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
@@ -214,7 +214,7 @@ describe('JDLUnaryOption', () => {
       });
     });
     context('when passing an added name', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });

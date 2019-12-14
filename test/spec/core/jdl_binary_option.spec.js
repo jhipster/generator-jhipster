@@ -39,7 +39,7 @@ describe('JDLBinaryOption', () => {
       });
     });
     context('when passing a name and a value', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({
@@ -55,7 +55,7 @@ describe('JDLBinaryOption', () => {
       });
     });
     context('when passing a list of entity names and excluded names with some of them being repeated', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({
@@ -78,7 +78,7 @@ describe('JDLBinaryOption', () => {
     });
   });
   describe('#setEntityNames', () => {
-    let option = null;
+    let option;
 
     before(() => {
       option = new JDLBinaryOption({
@@ -96,7 +96,7 @@ describe('JDLBinaryOption', () => {
   });
   describe('#addEntityName', () => {
     context('when passing a nil name', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
@@ -109,7 +109,7 @@ describe('JDLBinaryOption', () => {
       });
     });
     context("when passing a name that hasn't been added yet", () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
@@ -121,7 +121,7 @@ describe('JDLBinaryOption', () => {
       });
     });
     context('when passing a name that has already been added', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
@@ -134,7 +134,7 @@ describe('JDLBinaryOption', () => {
       });
     });
     context('when passing an excluded name', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
@@ -150,7 +150,7 @@ describe('JDLBinaryOption', () => {
   });
   describe('#excludeEntityName', () => {
     context('when passing a nil name', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
@@ -163,7 +163,7 @@ describe('JDLBinaryOption', () => {
       });
     });
     context("when passing a name that hasn't been excluded yet", () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
@@ -175,7 +175,7 @@ describe('JDLBinaryOption', () => {
       });
     });
     context('when passing a name that has already been excluded', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
@@ -188,7 +188,7 @@ describe('JDLBinaryOption', () => {
       });
     });
     context('when passing an added name', () => {
-      let option = null;
+      let option;
 
       before(() => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });

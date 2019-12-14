@@ -47,7 +47,7 @@ describe('JDLImporter', () => {
     context('when not parsing applications', () => {
       const ENTITY_NAMES = ['Country', 'Department', 'Employee', 'Job', 'JobHistory', 'Location', 'Region', 'Task'];
       let filesExist = true;
-      let returned = null;
+      let returned;
       const expectedContent = {
         Country: {
           fields: [
@@ -521,7 +521,7 @@ describe('JDLImporter', () => {
       });
     });
     context('when parsing one JDL application and entities', () => {
-      let returned = null;
+      let returned;
 
       before(() => {
         const importer = createImporterFromFiles([path.join('test', 'test_files', 'application_with_entities.jdl')]);
@@ -547,7 +547,7 @@ describe('JDLImporter', () => {
       });
     });
     context('when parsing one JDL application and entities passed as string', () => {
-      let returned = null;
+      let returned;
 
       before(() => {
         const importer = createImporterFromContent(
@@ -587,8 +587,8 @@ describe('JDLImporter', () => {
       });
     });
     context('when parsing one JDL application and entities with entity and dto suffixes', () => {
-      let returned = null;
-      let content = null;
+      let returned;
+      let content;
 
       before(() => {
         const importer = createImporterFromFiles([
@@ -983,7 +983,7 @@ describe('JDLImporter', () => {
       });
       it('exports the entities for each application', () => {
         APPLICATION_NAMES.forEach(applicationName => {
-          let readJSON = null;
+          let readJSON;
           expect(fse.statSync(path.join(applicationName, '.jhipster')).isDirectory()).to.be.true;
           switch (applicationName) {
             case 'myFirstApp': // A, B, E, F
@@ -1019,7 +1019,7 @@ describe('JDLImporter', () => {
       });
     });
     context("when choosing 'no' as database type", () => {
-      let importer = null;
+      let importer;
 
       before("importing a JDL file with the 'no' database type", () => {
         importer = createImporterFromFiles([path.join('test', 'test_files', 'simple.jdl')], {
@@ -1038,7 +1038,7 @@ describe('JDLImporter', () => {
       });
     });
     context('when parsing a JDL with annotations', () => {
-      let returned = null;
+      let returned;
 
       before(() => {
         const importer = createImporterFromFiles([path.join('test', 'test_files', 'annotations.jdl')], {
@@ -1069,7 +1069,7 @@ describe('JDLImporter', () => {
       });
     });
     context('when parsing a JDL with a pattern validation', () => {
-      let returned = null;
+      let returned;
       let entityContent;
 
       before(() => {
@@ -1096,7 +1096,7 @@ describe('JDLImporter', () => {
       });
     });
     context('when parsing a JDL with a pattern validation containing a quote', () => {
-      let returned = null;
+      let returned;
 
       before(() => {
         const importer = createImporterFromFiles(
@@ -1119,7 +1119,7 @@ describe('JDLImporter', () => {
       });
     });
     context('when parsing a JDL with underscores contained in the application name', () => {
-      let returned = null;
+      let returned;
 
       before(() => {
         const importer = createImporterFromFiles([path.join('test', 'test_files', 'underscore_application_name.jdl')]);

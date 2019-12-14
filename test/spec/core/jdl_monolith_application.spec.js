@@ -26,7 +26,7 @@ const ApplicationOptions = require('../../../lib/core/jhipster/application_optio
 describe('JDLMonolithApplication', () => {
   describe('#new', () => {
     context('by default', () => {
-      let jdlApplicationConfig = null;
+      let jdlApplicationConfig;
 
       before(() => {
         const jdlApplication = new JDLMonolithApplication({ config: { jhipsterVersion: '4.9.0' } });
@@ -65,7 +65,7 @@ describe('JDLMonolithApplication', () => {
       });
     });
     context(`when the authentication type is ${ApplicationOptions.authenticationType.oauth2}`, () => {
-      let jdlApplicationConfig = null;
+      let jdlApplicationConfig;
 
       before(() => {
         const jdlApplication = new JDLMonolithApplication({

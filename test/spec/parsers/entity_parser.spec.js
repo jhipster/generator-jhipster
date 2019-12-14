@@ -59,7 +59,7 @@ describe('EntityParser', () => {
       });
 
       context('such as an app with Cassandra and relationships between entities', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const entityA = new JDLEntity({
@@ -113,8 +113,8 @@ describe('EntityParser', () => {
       });
     });
     context('when passing valid arguments', () => {
-      let content = null;
-      let jdlObject = null;
+      let content;
+      let jdlObject;
       let expectedResult;
       let expectedResultWithoutRelationships;
 
@@ -360,7 +360,7 @@ describe('EntityParser', () => {
         });
       });
       context('when converting JDL to entity json for Cassandra type', () => {
-        let content = null;
+        let content;
 
         before(() => {
           jdlObject.relationships = new JDLRelationships();
@@ -377,7 +377,7 @@ describe('EntityParser', () => {
         });
       });
       context('when converting a JDL to JSON with different types of bi-directional relationships', () => {
-        let content = null;
+        let content;
 
         before(() => {
           const entityA = new JDLEntity({
@@ -474,7 +474,7 @@ describe('EntityParser', () => {
         });
       });
       context('when converting a JDL with blobs', () => {
-        let content = null;
+        let content;
 
         before(() => {
           const jdlObject = new ValidatedJDLObject();
@@ -524,7 +524,7 @@ describe('EntityParser', () => {
         });
       });
       context('when converting a JDL with elastic except', () => {
-        let content = null;
+        let content;
 
         before(() => {
           const entityA = new JDLEntity({ name: 'A' });
@@ -551,7 +551,7 @@ describe('EntityParser', () => {
       });
       context('when converting a JDL with filtering', () => {
         context('if there was not a service option for entity', () => {
-          let content = null;
+          let content;
 
           before(() => {
             const entityA = new JDLEntity({ name: 'A' });
@@ -582,7 +582,7 @@ describe('EntityParser', () => {
           });
         });
         context('if there was a service option for the entity', () => {
-          let content = null;
+          let content;
 
           before(() => {
             const entityA = new JDLEntity({ name: 'A' });
@@ -618,7 +618,7 @@ describe('EntityParser', () => {
         });
       });
       context('when parsing a JDL application with entities inside', () => {
-        let content = null;
+        let content;
 
         before(() => {
           const application = new JDLMicroserviceApplication({
@@ -647,7 +647,7 @@ describe('EntityParser', () => {
         });
       });
       context('when parsing a relationship with no from injected field for a one-to-one', () => {
-        let content = null;
+        let content;
 
         before(() => {
           const entityA = new JDLEntity({ name: 'A' });
@@ -675,7 +675,7 @@ describe('EntityParser', () => {
         });
       });
       context('when parsing a relationship with a useJPADerivedIdentifier flag', () => {
-        let content = null;
+        let content;
 
         before(() => {
           const entityA = new JDLEntity({ name: 'A' });
@@ -729,7 +729,7 @@ describe('EntityParser', () => {
           });
         });
         context('if there was a service option for the entity', () => {
-          let content = null;
+          let content;
 
           before(() => {
             const entityA = new JDLEntity({ name: 'A' });
@@ -759,8 +759,8 @@ describe('EntityParser', () => {
       });
     });
     context("when passing 'no' as database type", () => {
-      let jdlObject = null;
-      let result = null;
+      let jdlObject;
+      let result;
 
       before(() => {
         jdlObject = new ValidatedJDLObject();
@@ -817,7 +817,7 @@ describe('EntityParser', () => {
       });
     });
     context('when passing a JDL object with a wrong field type', () => {
-      let jdlObject = null;
+      let jdlObject;
 
       before(() => {
         const entityA = new JDLEntity({

@@ -24,7 +24,7 @@ const { MONGODB, COUCHBASE, CASSANDRA, NO } = require('../../../lib/core/jhipste
 
 describe('AbstractJDLApplication', () => {
   describe('::new', () => {
-    let jdlApplicationConfig = null;
+    let jdlApplicationConfig;
 
     context('without specifying special options', () => {
       before(() => {
@@ -151,7 +151,7 @@ describe('AbstractJDLApplication', () => {
     });
   });
   describe('#forEachEntityName', () => {
-    let application = null;
+    let application;
 
     before(() => {
       application = new AbstractJDLApplication({ entities: ['A', 'B'] });
@@ -178,7 +178,7 @@ describe('AbstractJDLApplication', () => {
   });
   describe('#toString', () => {
     context('when there is no entity', () => {
-      let jdlApplication = null;
+      let jdlApplication;
 
       before(() => {
         jdlApplication = new AbstractJDLApplication({ config: { jhipsterVersion: '4.9.0' } });
@@ -214,7 +214,7 @@ describe('AbstractJDLApplication', () => {
       });
     });
     context('when there are listed entities', () => {
-      let jdlApplication = null;
+      let jdlApplication;
 
       before(() => {
         jdlApplication = new AbstractJDLApplication({ entities: ['A', 'B', 'C', 'C'] });

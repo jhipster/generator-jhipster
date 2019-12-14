@@ -49,7 +49,7 @@ describe('DocumentParser', () => {
     });
     context('when passing valid args', () => {
       context('with no error', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/complex_jdl.jdl']);
@@ -189,7 +189,7 @@ describe('DocumentParser', () => {
         });
       });
       context('with an application type', () => {
-        let input = null;
+        let input;
 
         before(() => {
           input = JDLReader.parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
@@ -203,8 +203,8 @@ describe('DocumentParser', () => {
         });
       });
       context('with a required relationship', () => {
-        let jdlObject = null;
-        let relationship = null;
+        let jdlObject;
+        let relationship;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/required_relationships.jdl']);
@@ -220,7 +220,7 @@ describe('DocumentParser', () => {
         });
       });
       context("with a field name 'id'", () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/id_field.jdl']);
@@ -242,7 +242,7 @@ describe('DocumentParser', () => {
         });
       });
       context('with User entity as destination for a relationship', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
@@ -257,7 +257,7 @@ describe('DocumentParser', () => {
         });
       });
       context('with an invalid option', () => {
-        let input = null;
+        let input;
 
         before(() => {
           input = JDLReader.parseFromFiles(['./test/test_files/invalid_option.jdl']);
@@ -272,8 +272,8 @@ describe('DocumentParser', () => {
         });
       });
       context('with a required enum', () => {
-        let jdlObject = null;
-        let enumField = null;
+        let jdlObject;
+        let enumField;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/enum.jdl']);
@@ -302,8 +302,8 @@ describe('DocumentParser', () => {
         });
       });
       context('when using the noFluentMethods option', () => {
-        let input = null;
-        let jdlObject = null;
+        let input;
+        let jdlObject;
 
         before(() => {
           input = JDLReader.parseFromFiles(['./test/test_files/fluent_methods.jdl']);
@@ -322,7 +322,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when having following comments', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/following_comments.jdl']);
@@ -349,8 +349,8 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing another complex JDL file', () => {
-        let jdlObject = null;
-        let options = null;
+        let jdlObject;
+        let options;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
@@ -386,7 +386,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when having two consecutive comments for fields', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/field_comments.jdl']);
@@ -403,7 +403,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when having constants', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/constants.jdl']);
@@ -446,7 +446,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when having a cassandra app with paginated entities', () => {
-        let input = null;
+        let input;
 
         before(() => {
           input = JDLReader.parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
@@ -463,7 +463,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing applications', () => {
-        let application = null;
+        let application;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/application.jdl']);
@@ -512,7 +512,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing deployments', () => {
-        let deployment = null;
+        let deployment;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/deployments.jdl']);
@@ -540,8 +540,8 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing filtered entities', () => {
-        let jdlObject = null;
-        let filterOption = null;
+        let jdlObject;
+        let filterOption;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
@@ -558,8 +558,8 @@ describe('DocumentParser', () => {
       });
       context('when parsing entities with a custom client root folder', () => {
         context('inside a microservice app', () => {
-          let jdlObject = null;
-          let clientRootFolderOption = null;
+          let jdlObject;
+          let clientRootFolderOption;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
@@ -576,8 +576,8 @@ describe('DocumentParser', () => {
           });
         });
         context('inside any other app', () => {
-          let jdlObject = null;
-          let clientRootFolderOption = null;
+          let jdlObject;
+          let clientRootFolderOption;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
@@ -597,8 +597,8 @@ describe('DocumentParser', () => {
       });
       context('when parsing a JDL inside a microservice app', () => {
         context('without the microservice option in the JDL', () => {
-          let jdlObject = null;
-          let microserviceOption = null;
+          let jdlObject;
+          let microserviceOption;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/no_microservice.jdl']);
@@ -616,8 +616,8 @@ describe('DocumentParser', () => {
           });
         });
         context('with the microservice option in the JDL', () => {
-          let jdlObject = null;
-          let microserviceOption = null;
+          let jdlObject;
+          let microserviceOption;
 
           before(() => {
             const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
@@ -636,7 +636,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing a JDL microservice application with entities', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/application_with_entities.jdl']);
@@ -651,10 +651,10 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing a relationship with no injected field', () => {
-        let jdlObject = null;
-        let relationshipOneToOne = null;
-        let relationshipOneToMany = null;
-        let relationshipManyToMany = null;
+        let jdlObject;
+        let relationshipOneToOne;
+        let relationshipOneToMany;
+        let relationshipManyToMany;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/no_injected_field.jdl']);
@@ -677,16 +677,16 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing entities with annotations', () => {
-        let dtoOption = null;
-        let filterOption = null;
-        let paginationOption = null;
-        let serviceOption = null;
-        let skipClientOption = null;
-        let customUnaryOption = null;
-        let customBinaryOption = null;
-        let customBinaryOption2 = null;
-        let fieldAnnotation = null;
-        let relationshipAnnotation = null;
+        let dtoOption;
+        let filterOption;
+        let paginationOption;
+        let serviceOption;
+        let skipClientOption;
+        let customUnaryOption;
+        let customBinaryOption;
+        let customBinaryOption2;
+        let fieldAnnotation;
+        let relationshipAnnotation;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/annotations.jdl']);
@@ -722,13 +722,13 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing a mix between annotations and regular options', () => {
-        let dtoOptions = null;
-        let filterOptions = null;
-        let paginationOptions = null;
-        let serviceOptions = null;
-        let skipClientOptions = null;
-        let skipServerOptions = null;
-        let readOnlyOptions = null;
+        let dtoOptions;
+        let filterOptions;
+        let paginationOptions;
+        let serviceOptions;
+        let skipClientOptions;
+        let skipServerOptions;
+        let readOnlyOptions;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/annotations_and_options.jdl']);
@@ -770,7 +770,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when having a pattern validation with a quote in it', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/pattern_validation_with_quote.jdl']);
@@ -785,7 +785,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing a JDL with the unique constraint', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/unique.jdl']);
@@ -801,7 +801,7 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing a JDL relationship with JPA derived identifier enabled', () => {
-        let jdlObject = null;
+        let jdlObject;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/relationship_jpa_derived_identifier.jdl']);

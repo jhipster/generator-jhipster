@@ -38,7 +38,7 @@ describe('JDLDeployment', () => {
       });
     });
     context('when passing arguments', () => {
-      let deployment = null;
+      let deployment;
       let args = {};
 
       before(() => {
@@ -59,8 +59,8 @@ describe('JDLDeployment', () => {
   });
   describe('#toString', () => {
     context('with some default options', () => {
-      let deployment = null;
-      let args = null;
+      let deployment;
+      let args;
 
       before(() => {
         args = {
@@ -82,8 +82,8 @@ describe('JDLDeployment', () => {
       });
     });
     context('with some non default options', () => {
-      let deployment = null;
-      let args = null;
+      let deployment;
+      let args;
 
       before(() => {
         args = {

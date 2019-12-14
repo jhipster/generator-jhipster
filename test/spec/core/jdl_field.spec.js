@@ -50,7 +50,7 @@ describe('JDLField', () => {
     });
     context('when passing arguments', () => {
       let args = {};
-      let field = null;
+      let field;
 
       before(() => {
         args = {
@@ -75,7 +75,7 @@ describe('JDLField', () => {
     });
   });
   describe('#addValidation', () => {
-    let field = null;
+    let field;
 
     before(() => {
       field = new JDLField({
@@ -102,7 +102,7 @@ describe('JDLField', () => {
       });
     });
     context('when adding a valid validation', () => {
-      let validation = null;
+      let validation;
 
       before(() => {
         validation = { name: Validations.MIN, value: 42 };
@@ -161,7 +161,7 @@ describe('JDLField', () => {
   describe('#toString', () => {
     context('without comment', () => {
       let args = {};
-      let field = null;
+      let field;
 
       before(() => {
         args = {
@@ -177,7 +177,7 @@ describe('JDLField', () => {
     });
     context('without any validation', () => {
       let args = {};
-      let field = null;
+      let field;
 
       before(() => {
         args = {
@@ -194,7 +194,7 @@ describe('JDLField', () => {
     });
     context('with everything', () => {
       let args = {};
-      let field = null;
+      let field;
 
       before(() => {
         args = {

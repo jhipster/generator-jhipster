@@ -38,7 +38,7 @@ describe('JHipsterDeploymentExporter', () => {
     });
     context('when passing valid arguments', () => {
       context('when exporting deployments to JSON', () => {
-        let returned = null;
+        let returned;
 
         before('common setup for both deployments', () => {
           returned = JHipsterDeploymentExporter.exportDeployments({
@@ -59,7 +59,7 @@ describe('JHipsterDeploymentExporter', () => {
           expect(returned).to.have.lengthOf(2);
         });
         context('for the first deployment', () => {
-          let content = null;
+          let content;
 
           before('setup for the first deployment', done => {
             fs.readFile(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
@@ -98,7 +98,7 @@ describe('JHipsterDeploymentExporter', () => {
           });
         });
         context('for the second deployment', () => {
-          let content = null;
+          let content;
 
           before('setup for the first deployment', done => {
             fs.readFile(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {

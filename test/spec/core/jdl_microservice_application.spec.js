@@ -26,7 +26,7 @@ const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_a
 describe('JDLMicroserviceApplication', () => {
   describe('#new', () => {
     context('by default', () => {
-      let jdlApplicationConfig = null;
+      let jdlApplicationConfig;
 
       before(() => {
         const jdlApplication = new JDLMicroserviceApplication({ config: { jhipsterVersion: '4.9.0' } });
@@ -68,7 +68,7 @@ describe('JDLMicroserviceApplication', () => {
       });
     });
     context('when skipServer is true', () => {
-      let jdlApplicationConfig = null;
+      let jdlApplicationConfig;
 
       before(() => {
         const jdlApplication = new JDLMicroserviceApplication({

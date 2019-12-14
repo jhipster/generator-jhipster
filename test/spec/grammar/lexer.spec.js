@@ -23,7 +23,7 @@ const { JDLLexer } = require('../../../lib/dsl/lexer');
 
 describe('JDLLexer', () => {
   context('when passing a valid JDL input', () => {
-    let lexingResult = null;
+    let lexingResult;
 
     before(() => {
       const input = `
@@ -62,7 +62,7 @@ describe('JDLLexer', () => {
   });
 
   context('when passing an invalid JDL input', () => {
-    let lexingResult = null;
+    let lexingResult;
 
     before(() => {
       const input = `

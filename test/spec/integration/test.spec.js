@@ -29,8 +29,8 @@ const JDLExporter = require('../../../lib/exporters/jdl_exporter');
 
 describe('integration tests', () => {
   context('when parsing and exporting a JDL', () => {
-    let originalContent = null;
-    let writtenContent = null;
+    let originalContent;
+    let writtenContent;
 
     before(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({

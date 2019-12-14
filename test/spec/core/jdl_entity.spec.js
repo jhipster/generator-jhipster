@@ -40,7 +40,7 @@ describe('JDLEntity', () => {
       });
     });
     context('when not passing the table name', () => {
-      let entity = null;
+      let entity;
 
       before(() => {
         entity = new JDLEntity({ name: 'Abc' });
@@ -51,7 +51,7 @@ describe('JDLEntity', () => {
       });
     });
     context('when passing arguments', () => {
-      let entity = null;
+      let entity;
       let args = {};
 
       before(() => {
@@ -80,7 +80,7 @@ describe('JDLEntity', () => {
     });
   });
   describe('#addField', () => {
-    let entity = null;
+    let entity;
 
     before(() => {
       entity = new JDLEntity({
@@ -106,7 +106,7 @@ describe('JDLEntity', () => {
       });
     });
     context('when adding a valid field', () => {
-      let validField = null;
+      let validField;
 
       before(() => {
         validField = new JDLField({ name: 'myField', type: 'String' });
@@ -164,8 +164,8 @@ describe('JDLEntity', () => {
   });
   describe('#toString', () => {
     context('without a comment', () => {
-      let entity = null;
-      let args = null;
+      let entity;
+      let args;
 
       before(() => {
         args = {
@@ -180,8 +180,8 @@ describe('JDLEntity', () => {
       });
     });
     context('with a table equal to the name (snakecase)', () => {
-      let entity = null;
-      let args = null;
+      let entity;
+      let args;
 
       before(() => {
         args = {
@@ -196,8 +196,8 @@ describe('JDLEntity', () => {
       });
     });
     context('with a table name not equal to the name (snakecase)', () => {
-      let entity = null;
-      let args = null;
+      let entity;
+      let args;
 
       before(() => {
         args = {
@@ -212,8 +212,8 @@ describe('JDLEntity', () => {
       });
     });
     context('without fields', () => {
-      let entity = null;
-      let args = null;
+      let entity;
+      let args;
 
       before(() => {
         args = {
@@ -234,9 +234,9 @@ entity ${args.name} (${args.tableName})`
       });
     });
     context('with fields', () => {
-      let entity = null;
-      let field1 = null;
-      let field2 = null;
+      let entity;
+      let field1;
+      let field2;
 
       before(() => {
         entity = new JDLEntity({

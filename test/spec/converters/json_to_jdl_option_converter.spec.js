@@ -75,7 +75,7 @@ describe('JSONToJDLOptionConverter', () => {
 
 /*
     context('when parsing app config file to JDL', () => {
-      let jdlObject = null;
+      let jdlObject;
 
       before(() => {
         const yoRcJson = readJsonYoFile();
