@@ -15,15 +15,8 @@
         "buildTool": "gradle",
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "languages": [
-            "en",
-            "fr"
-        ],
-        "testFrameworks": [
-            "gatling",
-            "cucumber",
-            "protractor"
-        ],
+        "languages": ["en", "fr"],
+        "testFrameworks": ["gatling", "cucumber", "protractor"],
         "serverPort": "8080",
         "jhiPrefix": "myPrefix",
         "messageBroker": "kafka",

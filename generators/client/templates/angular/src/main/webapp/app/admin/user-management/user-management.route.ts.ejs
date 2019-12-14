@@ -48,7 +48,6 @@ export const userManagementRoute: Routes = [
             'pagingParams': JhiResolvePagingParams
         },
         data: {
-            pageTitle: 'userManagement.home.title',
             defaultSort: 'id,asc'
         }
     },
@@ -57,9 +56,6 @@ export const userManagementRoute: Routes = [
         component: UserManagementDetailComponent,
         resolve: {
             user: UserManagementResolve
-        },
-        data: {
-            pageTitle: 'userManagement.home.title'
         }
     },
     {
@@ -67,9 +63,6 @@ export const userManagementRoute: Routes = [
         component: UserManagementUpdateComponent,
         resolve: {
             user: UserManagementResolve
-        },
-        data: {
-            pageTitle: 'userManagement.home.title'
         }
     },
     {
@@ -77,9 +70,6 @@ export const userManagementRoute: Routes = [
         component: UserManagementUpdateComponent,
         resolve: {
             user: UserManagementResolve
-        },
-        data: {
-            pageTitle: 'userManagement.home.title'
         }
     }
 ];

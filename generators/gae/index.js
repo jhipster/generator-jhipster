@@ -610,9 +610,7 @@ module.exports = class extends BaseGenerator {
                 const dbVersionFlag =
                     this.prodDatabaseType === 'postgresql' ? ' --database-version="POSTGRES_9_6" --tier="db-g1-small"' : '';
 
-                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${
-                    this.gcpProjectId
-                }${dbVersionFlag}`;
+                const cmd = `gcloud sql instances create "${name}" --region='${this.gaeLocation}' --project=${this.gcpProjectId}${dbVersionFlag}`;
                 this.log(chalk.bold(`\n... Running: ${cmd}`));
 
                 shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
@@ -646,15 +644,11 @@ module.exports = class extends BaseGenerator {
                     (code, stdout, err) => {
                         if (_.includes(stdout, this.gcpCloudSqlUserName)) {
                             this.log(chalk.bold(`... User "${chalk.cyan(this.gcpCloudSqlUserName)}" already exists`));
-                            const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --project="${
-                                this.gcpProjectId
-                            }" --password="..."`;
+                            const cmd = `gcloud sql users set-password "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --project="${this.gcpProjectId}" --password="..."`;
                             this.log(chalk.bold(`... To set its password, run: ${cmd}`));
                             done();
                         } else {
-                            const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --password="${
-                                this.gcpCloudSqlPassword
-                            }" --project="${this.gcpProjectId}"`;
+                            const cmd = `gcloud sql users create "${this.gcpCloudSqlUserName}" -i "${name}" --host="%" --password="${this.gcpCloudSqlPassword}" --project="${this.gcpProjectId}"`;
                             this.log(chalk.bold(`... Running: ${cmd}`));
                             shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
                                 if (err && code !== 0) {
@@ -676,9 +670,7 @@ module.exports = class extends BaseGenerator {
 
                 const name = this.gcpCloudSqlInstanceName.split(':')[2];
                 this.log(chalk.bold(`\nCreating Database ${chalk.cyan(this.gcpCloudSqlDatabaseName)}`));
-                const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${
-                    this.gcpProjectId
-                }"`;
+                const cmd = `gcloud sql databases create "${this.gcpCloudSqlDatabaseName}" --charset=utf8 -i "${name}" --project="${this.gcpProjectId}"`;
                 this.log(chalk.bold(`... Running: ${cmd}`));
                 shelljs.exec(cmd, { silent: true }, (code, stdout, err) => {
                     if (err && code !== 0) {

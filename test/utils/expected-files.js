@@ -443,6 +443,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/layouts/profiles/profile.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/polyfills.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert-error.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert-error.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/csrf.service.ts`,
@@ -513,6 +514,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/layouts/main/main.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`,
@@ -594,9 +596,8 @@ const expectedFiles = {
     oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/core/login/logout.model.ts`],
 
     messageBroker: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/KafkaProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResource.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/JhipsterKafkaConsumer.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/JhipsterKafkaProducer.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResourceIT.java`,
         `${DOCKER_DIR}kafka.yml`
     ],

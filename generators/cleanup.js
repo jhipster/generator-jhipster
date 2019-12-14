@@ -22,10 +22,12 @@ const constants = require('./generator-constants');
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 module.exports = {
     cleanupOldFiles,
-    cleanupOldServerFiles
+    cleanupOldServerFiles,
+    upgradeFiles
 };
 
 /**
@@ -214,6 +216,37 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
     }
     if (generator.isJhipsterVersionLessThan('6.5.2')) {
         generator.removeFile(`${testDir}service/mapper/UserMapperIT.java`);
+        generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`);
+        generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`);
         generator.removeFile(`${testDir}web/rest/ClientForwardControllerIT.java`);
     }
+}
+
+/**
+ * Upgrade files.
+ *
+ * @param {any} generator - reference to generator
+ */
+function upgradeFiles(generator) {
+    let atLeastOneSuccess = false;
+    if (generator.isJhipsterVersionLessThan('6.1.0')) {
+        const langNameDiffer = function(lang) {
+            const langProp = lang.replace(/-/g, '_');
+            // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+            const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+            return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
+        };
+        const languages = generator.config.get('languages');
+        languages
+            .map(langNameDiffer)
+            .filter(props => props)
+            .forEach(props => {
+                const code = generator.renameFile(
+                    `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
+                    `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
+                );
+                atLeastOneSuccess = atLeastOneSuccess || code;
+            });
+    }
+    return atLeastOneSuccess;
 }

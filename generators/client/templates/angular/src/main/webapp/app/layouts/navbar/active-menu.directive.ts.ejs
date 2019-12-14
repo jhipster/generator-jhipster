@@ -25,11 +25,11 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
     selector: '[<%=jhiPrefix%>ActiveMenu]'
 })
 export class ActiveMenuDirective implements OnInit {
-    @Input() <%=jhiPrefix%>ActiveMenu: string;
+    @Input() <%=jhiPrefix%>ActiveMenu?: string;
 
     constructor(private el: ElementRef, private renderer: Renderer<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
 <%_ if (enableTranslation) { _%>
       this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
          this.updateActiveFlag(event.lang);
@@ -37,7 +37,7 @@ export class ActiveMenuDirective implements OnInit {
       this.updateActiveFlag(this.translateService.currentLang);<% } %>
     }
 
-    updateActiveFlag(selectedLanguage) {
+    updateActiveFlag(selectedLanguage: string): void {
       if (this.<%=jhiPrefix%>ActiveMenu === selectedLanguage) {
           this.renderer.setElementClass(this.el.nativeElement, 'active', true);
       } else {

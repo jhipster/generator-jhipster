@@ -24,6 +24,7 @@ const fs = require('fs');
 const gitignore = require('parse-gitignore');
 const childProcess = require('child_process');
 const BaseGenerator = require('../generator-base');
+const cleanup = require('../cleanup');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const utils = require('../utils');
@@ -82,6 +83,9 @@ module.exports = class extends BaseGenerator {
         this.skipInstall = this.options['skip-install'];
         this.silent = this.options.silent;
         this.skipChecks = this.options['skip-checks'];
+
+        // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
+        this.jhipsterOldVersion = this.config.get('jhipsterVersion');
     }
 
     get initializing() {
@@ -104,12 +108,32 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    _gitCheckout(branch, callback) {
-        this.gitExec(['checkout', '-q', branch], { silent: this.silent }, (code, msg, err) => {
+    _gitCheckout(branch, options, callback) {
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        }
+        const args = ['checkout', '-q', branch];
+        if (options.force) {
+            args.push('-f');
+        }
+        this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
             if (code !== 0) this.error(`Unable to checkout branch ${branch}:\n${err}`);
             this.success(`Checked out branch "${branch}"`);
             callback();
         });
+    }
+
+    _upgradeFiles(callback) {
+        if (cleanup.upgradeFiles(this)) {
+            this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent }, (code, msg, err) => {
+                if (code !== 0) this.error(`Unable to prepare upgrade:\n${err}`);
+                this.success('Upgrade preparation');
+                callback();
+            });
+        } else {
+            callback();
+        }
     }
 
     _cleanUp() {
@@ -357,9 +381,7 @@ module.exports = class extends BaseGenerator {
                         this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
                             if (code !== 0) {
                                 this.error(
-                                    `Unable to record current code has been generated with version ${
-                                        this.currentJhipsterVersion
-                                    }:\n${msg} ${err}`
+                                    `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${msg} ${err}`
                                 );
                             }
                             this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
@@ -468,6 +490,11 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
+            upgradeFiles() {
+                const done = this.async();
+                this._upgradeFiles(done);
+            },
+
             generateWithLatestVersion() {
                 const done = this.async();
                 this._cleanUp();
@@ -480,7 +507,7 @@ module.exports = class extends BaseGenerator {
 
             checkoutSourceBranch() {
                 const done = this.async();
-                this._gitCheckout(this.sourceBranch, done);
+                this._gitCheckout(this.sourceBranch, { force: true }, done);
             },
 
             mergeChangesBack() {

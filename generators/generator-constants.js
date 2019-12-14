@@ -22,8 +22,8 @@ const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the var
 
 // Version of Node, Yarn, NPM
 const NODE_VERSION = '12.13.1';
-const YARN_VERSION = '1.19.2';
-const NPM_VERSION = '6.13.2';
+const YARN_VERSION = '1.21.1';
+const NPM_VERSION = '6.13.4';
 
 const GRADLE_VERSION = '6.0.1';
 
@@ -43,7 +43,7 @@ const DOCKER_POSTGRESQL = 'postgres:11.6';
 const DOCKER_MONGODB = 'mongo:4.0.13';
 const DOCKER_COUCHBASE = 'couchbase:6.0.3';
 const DOCKER_CASSANDRA = 'cassandra:3.11.5';
-const DOCKER_MSSQL = 'microsoft/mssql-server-linux:latest';
+const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2017-latest-ubuntu';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.7';
 const DOCKER_MEMCACHED = 'memcached:1.5.20-alpine';
 const DOCKER_REDIS = 'redis:5.0.7';
