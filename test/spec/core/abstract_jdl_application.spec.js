@@ -197,7 +197,6 @@ describe('AbstractJDLApplication', () => {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType false
@@ -205,7 +204,7 @@ describe('AbstractJDLApplication', () => {
     skipServer false
     testFrameworks []
     websocket false
-    jhipsterVersion 4.9.0
+    jhipsterVersion "4.9.0"
     baseName jhipster
     buildTool maven
     skipUserManagement false
@@ -235,7 +234,6 @@ describe('AbstractJDLApplication', () => {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType false
@@ -252,6 +250,186 @@ describe('AbstractJDLApplication', () => {
   entities A, B, C
 }`
         );
+      });
+    });
+    context('when the jhipsterVersion option is there', () => {
+      context('when it is not quoted', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { jhipsterVersion: '6.5.1' } });
+          result = application.toString();
+        });
+
+        it('should stringify it quoted', () => {
+          expect(result).to.include('jhipsterVersion "6.5.1"');
+        });
+      });
+      context('when it is quoted', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { jhipsterVersion: '"6.5.1"' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it again', () => {
+          expect(result).to.include('jhipsterVersion "6.5.1"');
+        });
+      });
+    });
+    context('when the jwtSecretKey option is there', () => {
+      context('when it is not quoted', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { jwtSecretKey: 'ASTUPIDLYLONGWORD=' } });
+          result = application.toString();
+        });
+
+        it('should stringify it quoted', () => {
+          expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+        });
+      });
+      context('when it is quoted', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { jwtSecretKey: '"ASTUPIDLYLONGWORD="' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it again', () => {
+          expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+        });
+      });
+    });
+    context('when the rememberMeKey option is there', () => {
+      context('when it is not quoted', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { rememberMeKey: 'ASTUPIDLYLONGWORD=' } });
+          result = application.toString();
+        });
+
+        it('should stringify it quoted', () => {
+          expect(result).to.include('rememberMeKey "ASTUPIDLYLONGWORD="');
+        });
+      });
+      context('when it is quoted', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { rememberMeKey: '"ASTUPIDLYLONGWORD="' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it again', () => {
+          expect(result).to.include('rememberMeKey "ASTUPIDLYLONGWORD="');
+        });
+      });
+    });
+    context('when the entitySuffix is present', () => {
+      context('without a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { entitySuffix: '' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).not.to.include('entitySuffix');
+        });
+      });
+      context('with a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { entitySuffix: 'Entity' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).to.include('entitySuffix Entity');
+        });
+      });
+    });
+    context('when the dtoSuffix is present', () => {
+      context('without a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { dtoSuffix: '' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).not.to.include('dtoSuffix');
+        });
+      });
+      context('with a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { dtoSuffix: 'DTO' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).to.include('dtoSuffix DTO');
+        });
+      });
+    });
+    context('when the clientThemeVariant is present', () => {
+      context('without a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { clientThemeVariant: '' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).not.to.include('clientThemeVariant');
+        });
+      });
+      context('with a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { clientThemeVariant: 'aVariant' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).to.include('clientThemeVariant aVariant');
+        });
+      });
+    });
+    context('when the blueprints option is present', () => {
+      let result;
+
+      before(() => {
+        const application = new AbstractJDLApplication({ config: { blueprints: ['whatever'] } });
+        result = application.toString();
+      });
+
+      it('should not stringify it', () => {
+        expect(result).not.to.include('blueprints');
+      });
+    });
+    context('when the packageFolder option is present', () => {
+      let result;
+
+      before(() => {
+        const application = new AbstractJDLApplication({ config: { packageFolder: 'whatever' } });
+        result = application.toString();
+      });
+
+      it('should not stringify it', () => {
+        expect(result).not.to.include('packageFolder');
       });
     });
   });
