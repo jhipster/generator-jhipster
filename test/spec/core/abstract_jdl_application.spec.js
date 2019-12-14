@@ -252,52 +252,82 @@ describe('AbstractJDLApplication', () => {
         );
       });
     });
-    context('when the jhipsterVersion option is not quoted', () => {
-      let result;
+    context('when the jhipsterVersion option is there', () => {
+      context('when it is not quoted', () => {
+        let result;
 
-      before(() => {
-        const application = new AbstractJDLApplication({ config: { jhipsterVersion: '6.5.1' } });
-        result = application.toString();
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { jhipsterVersion: '6.5.1' } });
+          result = application.toString();
+        });
+
+        it('should stringify it quoted', () => {
+          expect(result).to.include('jhipsterVersion "6.5.1"');
+        });
       });
+      context('when it is quoted', () => {
+        let result;
 
-      it('should stringify it quoted', () => {
-        expect(result).to.include('jhipsterVersion "6.5.1"');
-      });
-    });
-    context('when the jhipsterVersion option is quoted', () => {
-      let result;
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { jhipsterVersion: '"6.5.1"' } });
+          result = application.toString();
+        });
 
-      before(() => {
-        const application = new AbstractJDLApplication({ config: { jhipsterVersion: '"6.5.1"' } });
-        result = application.toString();
-      });
-
-      it('should not stringify it again', () => {
-        expect(result).to.include('jhipsterVersion "6.5.1"');
-      });
-    });
-    context('when the jwtSecretKey option is not quoted', () => {
-      let result;
-
-      before(() => {
-        const application = new AbstractJDLApplication({ config: { jwtSecretKey: 'ASTUPIDLYLONGWORD=' } });
-        result = application.toString();
-      });
-
-      it('should stringify it quoted', () => {
-        expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+        it('should not stringify it again', () => {
+          expect(result).to.include('jhipsterVersion "6.5.1"');
+        });
       });
     });
-    context('when the jwtSecretKey option is quoted', () => {
-      let result;
+    context('when the jwtSecretKey option is there', () => {
+      context('when it is not quoted', () => {
+        let result;
 
-      before(() => {
-        const application = new AbstractJDLApplication({ config: { jwtSecretKey: '"ASTUPIDLYLONGWORD="' } });
-        result = application.toString();
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { jwtSecretKey: 'ASTUPIDLYLONGWORD=' } });
+          result = application.toString();
+        });
+
+        it('should stringify it quoted', () => {
+          expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+        });
       });
+      context('when it is quoted', () => {
+        let result;
 
-      it('should not stringify it again', () => {
-        expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { jwtSecretKey: '"ASTUPIDLYLONGWORD="' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it again', () => {
+          expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+        });
+      });
+    });
+    context('when the rememberMeKey option is there', () => {
+      context('when it is not quoted', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { rememberMeKey: 'ASTUPIDLYLONGWORD=' } });
+          result = application.toString();
+        });
+
+        it('should stringify it quoted', () => {
+          expect(result).to.include('rememberMeKey "ASTUPIDLYLONGWORD="');
+        });
+      });
+      context('when it is quoted', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { rememberMeKey: '"ASTUPIDLYLONGWORD="' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it again', () => {
+          expect(result).to.include('rememberMeKey "ASTUPIDLYLONGWORD="');
+        });
       });
     });
     context('when the entitySuffix is present', () => {
@@ -352,6 +382,32 @@ describe('AbstractJDLApplication', () => {
         });
       });
     });
+    context('when the clientThemeVariant is present', () => {
+      context('without a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { clientThemeVariant: '' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).not.to.include('clientThemeVariant');
+        });
+      });
+      context('with a value', () => {
+        let result;
+
+        before(() => {
+          const application = new AbstractJDLApplication({ config: { clientThemeVariant: 'aVariant' } });
+          result = application.toString();
+        });
+
+        it('should not stringify it', () => {
+          expect(result).to.include('clientThemeVariant aVariant');
+        });
+      });
+    });
     context('when the blueprints option is present', () => {
       let result;
 
@@ -362,6 +418,18 @@ describe('AbstractJDLApplication', () => {
 
       it('should not stringify it', () => {
         expect(result).not.to.include('blueprints');
+      });
+    });
+    context('when the packageFolder option is present', () => {
+      let result;
+
+      before(() => {
+        const application = new AbstractJDLApplication({ config: { packageFolder: 'whatever' } });
+        result = application.toString();
+      });
+
+      it('should not stringify it', () => {
+        expect(result).not.to.include('packageFolder');
       });
     });
   });
