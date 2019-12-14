@@ -501,8 +501,6 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-test"
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
-    testImplementation "org.assertj:assertj-core"
-    testImplementation "org.mockito:mockito-core"
     <%_ if (databaseType === 'mongodb') { _%>
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
