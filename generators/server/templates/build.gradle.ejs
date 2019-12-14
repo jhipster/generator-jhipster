@@ -376,7 +376,11 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
+        <%_ if (!reactive) { _%>
     implementation "org.apache.kafka:kafka-clients"
+        <%_ } else { _%>
+    implementation "io.projectreactor.kafka:reactor-kafka"
+        <%_ } _%>
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
