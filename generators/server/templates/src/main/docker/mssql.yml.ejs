@@ -25,6 +25,7 @@ services:
         #     - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
         environment:
             - ACCEPT_EULA=Y
+            - MSSQL_PID=Express
             - SA_PASSWORD=yourStrong(!)Password
             - MSSQL_DATABASE=<%= baseName %>
             - MSSQL_SLEEP=60
