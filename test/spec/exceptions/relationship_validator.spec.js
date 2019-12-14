@@ -19,7 +19,7 @@
 
 const { expect } = require('chai');
 const JDLRelationship = require('../../../lib/core/jdl_relationship');
-const RelationshipValidator = require('../../../lib/exceptions/relationship_validator');
+const RelationshipValidator = require('../../../lib/validators/relationship_validator');
 
 const { JPA_DERIVED_IDENTIFIER } = require('../../../lib/core/jhipster/relationship_options');
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../lib/core/jhipster/relationship_types');

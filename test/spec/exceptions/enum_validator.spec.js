@@ -18,7 +18,7 @@
 
 const { expect } = require('chai');
 const JDLEnum = require('../../../lib/core/jdl_enum');
-const EnumValidator = require('../../../lib/exceptions/enum_validator');
+const EnumValidator = require('../../../lib/validators/enum_validator');
 
 describe('EnumValidator', () => {
   let validator;

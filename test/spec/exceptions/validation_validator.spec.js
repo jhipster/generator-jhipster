@@ -19,7 +19,7 @@
 
 const { expect } = require('chai');
 const JDLValidation = require('../../../lib/core/jdl_validation');
-const ValidationValidator = require('../../../lib/exceptions/validation_validator');
+const ValidationValidator = require('../../../lib/validators/validation_validator');
 
 describe('ValidationValidator', () => {
   let validator;

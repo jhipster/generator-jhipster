@@ -53,22 +53,20 @@ describe('JSONToJDLConverter', () => {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName truc
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
@@ -103,22 +101,20 @@ describe('JSONToJDLConverter', () => {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName truc
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
@@ -234,22 +230,20 @@ paginate Country with pager
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.app1
-    packageFolder com/mycompany/app1
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName app1
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
@@ -270,22 +264,20 @@ application {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.app2
-    packageFolder com/mycompany/app2
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName app2
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
@@ -306,22 +298,20 @@ application {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.app3
-    packageFolder com/mycompany/app3
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
     testFrameworks []
     websocket false
-    jhipsterVersion 6.0.1
+    jhipsterVersion "6.0.1"
     applicationType microservice
     baseName app3
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
     buildTool maven
-    jwtSecretKey HIDDEN
-    entitySuffix 
+    jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm

@@ -19,7 +19,7 @@
 
 const { expect } = require('chai');
 const JDLField = require('../../../lib/core/jdl_field');
-const FieldValidator = require('../../../lib/exceptions/field_validator');
+const FieldValidator = require('../../../lib/validators/field_validator');
 
 describe('FieldValidator', () => {
   let validator;
