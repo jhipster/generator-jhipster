@@ -130,7 +130,7 @@ module.exports = {
   isJDLFile: JDLReader.checkFileIsJDLFile,
   /* JSON utils */
   ObjectUtils,
-  readEntityJSON: JSONFileReader.readEntityJSON,
+  readEntityJSON: JSONFileReader.readJSONFile,
   toFilePath: JSONFileReader.toFilePath,
   /* Utils */
   FileUtils,
