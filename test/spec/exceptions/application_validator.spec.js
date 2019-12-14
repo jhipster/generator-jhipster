@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const ApplicationValidator = require('../../../lib/exceptions/application_validator');
+const ApplicationValidator = require('../../../lib/validators/application_validator');
 
 const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
 const { MONOLITH } = require('../../../lib/core/jhipster/application_types');

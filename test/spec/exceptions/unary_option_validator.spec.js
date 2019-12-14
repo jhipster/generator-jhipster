@@ -19,7 +19,7 @@
 
 const { expect } = require('chai');
 const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
-const UnaryOptionValidator = require('../../../lib/exceptions/unary_option_validator');
+const UnaryOptionValidator = require('../../../lib/validators/unary_option_validator');
 
 describe('UnaryOptionValidator', () => {
   let validator;
