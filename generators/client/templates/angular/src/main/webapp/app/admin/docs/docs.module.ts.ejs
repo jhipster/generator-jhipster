@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 
-import { <%=jhiPrefixCapitalized%>DocsComponent } from './docs.component';
+import { DocsComponent } from './docs.component';
 
 import { docsRoute } from './docs.route';
 
@@ -11,6 +11,6 @@ import { docsRoute } from './docs.route';
     <%=angularXAppName%>SharedModule,
     RouterModule.forChild([docsRoute])
   ],
-  declarations: [<%=jhiPrefixCapitalized%>DocsComponent]
+  declarations: [DocsComponent]
 })
 export class DocsModule {}
