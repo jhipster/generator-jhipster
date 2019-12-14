@@ -384,7 +384,7 @@ module.exports = class extends BaseGenerator {
                 prompts.push({
                     type: 'input',
                     name: 'gaeCloudSQLInstanceNeeded',
-                    message: 'Initialize a new Cloud SQL instance (Y/N) ?',
+                    message: 'Use a Cloud SQL instance (Y/N) ?',
                     default: this.gaeCloudSQLInstanceNeeded ? this.gaeCloudSQLInstanceNeeded : 'Y',
                     validate: input => {
                         if (input !== 'Y' && input !== 'N') {

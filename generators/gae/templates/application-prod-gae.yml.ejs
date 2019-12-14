@@ -29,7 +29,7 @@
 # ===================================================================
 server:
     port: ${PORT}
-<%_ if (this.gaeCloudSQLInstanceNeeded === 'Y') { _%>
+<%_ if (gaeCloudSQLInstanceNeeded === 'Y') { _%>
 spring:
     <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     datasource:
