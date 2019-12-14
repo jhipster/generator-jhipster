@@ -1526,7 +1526,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
 
         context('an invalid value', () => {
-          context('such as having special charecter inside the list', () => {
+          context('such as having special character inside the list', () => {
             it('will report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1565,7 +1565,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
 
         context('an invalid value', () => {
-          context('such as having special charecter', () => {
+          context('such as having special character', () => {
             it('will report a syntax error', () => {
               expect(() =>
                 parse(`
@@ -1604,7 +1604,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
 
         context('an invalid value', () => {
-          context('such as having special charecter', () => {
+          context('such as having special character', () => {
             it('will report a syntax error', () => {
               expect(() =>
                 parse(`

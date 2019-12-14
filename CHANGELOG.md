@@ -58,7 +58,7 @@
 
 ## Bug fixes:
   - During the JDL export, if the `rememberMeKey` option exists in the .yo-rc.json file, then the export failed.
-    - The fix consists in ignoring it, jsut like the `jwtSecretKey` app option.
+    - The fix consists in ignoring it, just like the `jwtSecretKey` app option.
 
 ---
 
@@ -141,7 +141,7 @@
   -  Made the `reactive` option available
 
 ## Fixed
-  - Fixed muli-line JDL comment generation (thanks to @yelhouti for the report!)
+  - Fixed multi-line JDL comment generation (thanks to @yelhouti for the report!)
   - Fixed checkNoSQLModeling with multi applications (thanks to @clement26695!)
 
 ---
@@ -532,7 +532,7 @@ _Released on: 2018-05-31_
 ## Breaking changes
   - `JDLObject#hasOption` has been removed (not used in the project)
   - `JDLReader::parse` has been removed (in favor of `::parseFromConfigurationObject`
-  - The entity and application exporters now return relevant informations:
+  - The entity and application exporters now return relevant information:
     - Application exporter: the exported application list
     - Entity exporter: the exported entity list
   - Set is no longer exposed (future removal will happen, maybe)
