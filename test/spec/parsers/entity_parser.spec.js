@@ -202,8 +202,6 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content).not.to.be.null;
-          expect(Object.keys(content)).to.have.length(2);
           expect(content).to.deep.equal({
             EntityA: {
               name: 'EntityA',
@@ -288,8 +286,6 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content).not.to.be.null;
-          expect(Object.keys(content)).to.have.length(2);
           expect(content).to.deep.equal({
             EntityA: {
               name: 'EntityA',
@@ -374,8 +370,6 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content).not.to.be.null;
-          expect(Object.keys(content)).to.have.length(2);
           expect(content).to.deep.equal({
             EntityA: {
               name: 'EntityA',
