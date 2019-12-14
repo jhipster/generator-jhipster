@@ -16,9 +16,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
+import Spy = jasmine.Spy;
+
 import { SpyObject } from './spyobject';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import Spy = jasmine.Spy;
 
 export class MockStateStorageService extends SpyObject {
     getUrlSpy: Spy;

@@ -19,9 +19,11 @@
 import { ComponentFixture, TestBed, async, inject, tick, fakeAsync } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { of, throwError } from 'rxjs';
-
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
+<%_ } _%>
+
+<%_ if (enableTranslation) { _%>
 import { MockLanguageService } from '../../../helpers/mock-language.service';
 <%_ } _%>
 import { <%=angularXAppName%>TestModule } from '../../../test.module';

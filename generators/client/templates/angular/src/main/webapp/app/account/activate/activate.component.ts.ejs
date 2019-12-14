@@ -40,12 +40,8 @@ export class ActivateComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.queryParams.pipe(flatMap(params => this.activateService.get(params.key))).subscribe(
-            () => {
-                this.success = true;
-            },
-            () => {
-                this.error = true;
-            }
+            () => this.success = true,
+            () => this.error = true
         );
     }
 

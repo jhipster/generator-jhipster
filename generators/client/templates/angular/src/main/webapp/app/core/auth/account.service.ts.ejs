@@ -51,10 +51,6 @@ export class AccountService  {
         private stateStorageService: StateStorageService,
         private router: Router
     ) {}
-
-    private fetch(): Observable<Account> {
-        return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
-    }
     <%_ if (!skipUserManagement) { _%>
 
     save(account: Account): Observable<{}> {
@@ -111,16 +107,6 @@ export class AccountService  {
         }
         return this.accountCache$;
     }
-
-    private navigateToStoredUrl(): void {
-        // previousState can be set in the authExpiredInterceptor and in the userRouteAccessService
-        // if login is successful, go to stored previousState and clear previousState
-        const previousUrl = this.stateStorageService.getUrl();
-        if (previousUrl) {
-            this.stateStorageService.clearUrl();
-            this.router.navigateByUrl(previousUrl);
-        }
-    }
     
     isAuthenticated(): boolean {
         return this.userIdentity !== null;
@@ -132,5 +118,19 @@ export class AccountService  {
 
     getImageUrl(): string {
         return this.userIdentity ? this.userIdentity.imageUrl : '';
+    }
+
+    private fetch(): Observable<Account> {
+        return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
+    }
+
+    private navigateToStoredUrl(): void {
+        // previousState can be set in the authExpiredInterceptor and in the userRouteAccessService
+        // if login is successful, go to stored previousState and clear previousState
+        const previousUrl = this.stateStorageService.getUrl();
+        if (previousUrl) {
+            this.stateStorageService.clearUrl();
+            this.router.navigateByUrl(previousUrl);
+        }
     }
 }

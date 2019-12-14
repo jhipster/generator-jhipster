@@ -105,16 +105,6 @@ export class TrackerService {
         return this.listenerSubject;
     }
 
-    private sendActivity(): void {
-        if (this.stompClient && this.stompClient.connected) {
-            this.stompClient.send(
-                '/topic/activity', // destination
-                JSON.stringify({'page': this.router.routerState.snapshot.url}), // body
-                {} // header
-            );
-        }
-    }
-
     subscribe(): void {
         if (this.connectionSubscription) {
             return;
@@ -138,6 +128,16 @@ export class TrackerService {
         if (this.connectionSubscription) {
             this.connectionSubscription.unsubscribe();
             this.connectionSubscription = null;
+        }
+    }
+
+    private sendActivity(): void {
+        if (this.stompClient && this.stompClient.connected) {
+            this.stompClient.send(
+                '/topic/activity', // destination
+                JSON.stringify({'page': this.router.routerState.snapshot.url}), // body
+                {} // header
+            );
         }
     }
 }

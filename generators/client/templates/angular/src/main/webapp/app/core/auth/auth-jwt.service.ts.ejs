@@ -61,6 +61,14 @@ export class AuthServerProvider {
             .pipe(map(response => this.authenticateSuccess(response, credentials.rememberMe)));
     }
 
+    logout(): Observable<void> {
+        return new Observable((observer) => {
+            this.$localStorage.clear('authenticationToken');
+            this.$sessionStorage.clear('authenticationToken');
+            observer.complete();
+        });
+    }
+
     private authenticateSuccess(response: JwtToken, rememberMe: boolean): void {
         const jwt = response.id_token;
         if (rememberMe) {
@@ -68,14 +76,6 @@ export class AuthServerProvider {
         } else {
             this.$sessionStorage.store('authenticationToken', jwt);
         }
-    }
-
-    logout(): Observable<void> {
-        return new Observable((observer) => {
-            this.$localStorage.clear('authenticationToken');
-            this.$sessionStorage.clear('authenticationToken');
-            observer.complete();
-        });
     }
 <%_ } _%>
 }
