@@ -9,6 +9,7 @@ services:
             - ACCEPT_EULA=Y
             - SA_PASSWORD=yourStrong(!)Password
             - MSSQL_DATABASE=msmssql
+            - MSSQL_PID=Express
             - MSSQL_SLEEP=60
         ports:
             - 1433:1433
