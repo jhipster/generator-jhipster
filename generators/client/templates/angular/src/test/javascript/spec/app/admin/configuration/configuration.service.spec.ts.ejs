@@ -44,7 +44,7 @@ describe('Service Tests', () => {
 
         describe('Service methods', () => {
             it('should call correct URL', () => {
-                service.getBeans().subscribe(() => {});
+                service.getBeans().subscribe();
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 const resourceUrl = SERVER_API_URL + 'management/configprops';
