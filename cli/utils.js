@@ -28,8 +28,6 @@ const SUB_GENERATORS = require('./commands');
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
 
-let exitCode = 0;
-
 const debug = function(msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
@@ -50,7 +48,6 @@ const error = function(msg, trace) {
         console.log(trace);
     }
     process.exit(1);
-    exitCode = 1;
 };
 
 const init = function(program) {
@@ -220,15 +217,5 @@ module.exports = {
     getCommandOptions,
     done,
     createYeomanEnv,
-    getOptionAsArgs,
-
-    getExitCode() {
-        return exitCode;
-    },
-
-    setExitCode(code) {
-        if (code !== 0) {
-            exitCode = code;
-        }
-    }
+    getOptionAsArgs
 };
