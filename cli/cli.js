@@ -43,7 +43,7 @@ const env = createYeomanEnv();
 logger.init(program);
 
 process.on('exit', code => {
-    process.exit(code || getExitCode());
+    process.exitCode = code || getExitCode();
 });
 
 /**
