@@ -115,6 +115,8 @@ describe('EntityParser', () => {
     context('when passing valid arguments', () => {
       let content = null;
       let jdlObject = null;
+      let expectedResult;
+      let expectedResultWithoutRelationships;
 
       before(() => {
         const entityA = new JDLEntity({
@@ -181,6 +183,132 @@ describe('EntityParser', () => {
         jdlObject.addOption(readOnlyOption);
         jdlObject.addOption(paginationOption);
         jdlObject.addOption(microserviceOption);
+        expectedResult = {
+          EntityA: {
+            name: 'EntityA',
+            applications: '*',
+            changelogDate: '20190101000100',
+            clientRootFolder: '',
+            dto: 'no',
+            entityTableName: 'a',
+            fields: [
+              {
+                fieldName: 'aa',
+                fieldType: 'String',
+                fieldValidateRules: ['required'],
+                javadoc: 'My field'
+              },
+              {
+                fieldName: 'ab',
+                fieldType: 'ZonedDateTime'
+              }
+            ],
+            fluentMethods: true,
+            javadoc: undefined,
+            jpaMetamodelFiltering: false,
+            microserviceName: 'myMs',
+            pagination: 'pagination',
+            readOnly: true,
+            relationships: [
+              {
+                otherEntityField: 'id',
+                otherEntityName: 'entityB',
+                otherEntityRelationshipName: 'a',
+                ownerSide: true,
+                relationshipName: 'b',
+                relationshipType: 'one-to-one',
+                relationshipValidateRules: 'required'
+              }
+            ],
+            service: 'no',
+            skipClient: true
+          },
+          EntityB: {
+            name: 'EntityB',
+            applications: '*',
+            changelogDate: '20190101000200',
+            clientRootFolder: '',
+            dto: 'no',
+            entityTableName: 'entity_b',
+            fields: [
+              {
+                fieldName: 'ba',
+                fieldType: 'EnumA',
+                fieldValues: 'A,B,C'
+              }
+            ],
+            fluentMethods: true,
+            javadoc: undefined,
+            jpaMetamodelFiltering: false,
+            microserviceName: 'myMs',
+            pagination: 'no',
+            readOnly: false,
+            relationships: [
+              {
+                otherEntityName: 'entityA',
+                otherEntityRelationshipName: 'b',
+                ownerSide: false,
+                relationshipName: 'a',
+                relationshipType: 'one-to-one'
+              }
+            ],
+            service: 'no'
+          }
+        };
+        expectedResultWithoutRelationships = {
+          EntityA: {
+            name: 'EntityA',
+            applications: '*',
+            changelogDate: '20190101000100',
+            clientRootFolder: '',
+            dto: 'no',
+            entityTableName: 'a',
+            fields: [
+              {
+                fieldName: 'aa',
+                fieldType: 'String',
+                fieldValidateRules: ['required'],
+                javadoc: 'My field'
+              },
+              {
+                fieldName: 'ab',
+                fieldType: 'ZonedDateTime'
+              }
+            ],
+            fluentMethods: true,
+            javadoc: undefined,
+            jpaMetamodelFiltering: false,
+            microserviceName: 'myMs',
+            pagination: 'pagination',
+            readOnly: true,
+            relationships: [],
+            service: 'no',
+            skipClient: true
+          },
+          EntityB: {
+            name: 'EntityB',
+            applications: '*',
+            changelogDate: '20190101000200',
+            clientRootFolder: '',
+            dto: 'no',
+            entityTableName: 'entity_b',
+            fields: [
+              {
+                fieldName: 'ba',
+                fieldType: 'EnumA',
+                fieldValues: 'A,B,C'
+              }
+            ],
+            fluentMethods: true,
+            javadoc: undefined,
+            jpaMetamodelFiltering: false,
+            microserviceName: 'myMs',
+            pagination: 'no',
+            readOnly: false,
+            relationships: [],
+            service: 'no'
+          }
+        };
       });
 
       context('when passing args for a gateway app', () => {
@@ -202,78 +330,7 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content).to.deep.equal({
-            EntityA: {
-              name: 'EntityA',
-              applications: '*',
-              changelogDate: '20190101000100',
-              clientRootFolder: '',
-              dto: 'no',
-              entityTableName: 'a',
-              fields: [
-                {
-                  fieldName: 'aa',
-                  fieldType: 'String',
-                  fieldValidateRules: ['required'],
-                  javadoc: 'My field'
-                },
-                {
-                  fieldName: 'ab',
-                  fieldType: 'ZonedDateTime'
-                }
-              ],
-              fluentMethods: true,
-              javadoc: undefined,
-              jpaMetamodelFiltering: false,
-              microserviceName: 'myMs',
-              pagination: 'pagination',
-              readOnly: true,
-              relationships: [
-                {
-                  otherEntityField: 'id',
-                  otherEntityName: 'entityB',
-                  otherEntityRelationshipName: 'a',
-                  ownerSide: true,
-                  relationshipName: 'b',
-                  relationshipType: 'one-to-one',
-                  relationshipValidateRules: 'required'
-                }
-              ],
-              service: 'no',
-              skipClient: true
-            },
-            EntityB: {
-              name: 'EntityB',
-              applications: '*',
-              changelogDate: '20190101000200',
-              clientRootFolder: '',
-              dto: 'no',
-              entityTableName: 'entity_b',
-              fields: [
-                {
-                  fieldName: 'ba',
-                  fieldType: 'EnumA',
-                  fieldValues: 'A,B,C'
-                }
-              ],
-              fluentMethods: true,
-              javadoc: undefined,
-              jpaMetamodelFiltering: false,
-              microserviceName: 'myMs',
-              pagination: 'no',
-              readOnly: false,
-              relationships: [
-                {
-                  otherEntityName: 'entityA',
-                  otherEntityRelationshipName: 'b',
-                  ownerSide: false,
-                  relationshipName: 'a',
-                  relationshipType: 'one-to-one'
-                }
-              ],
-              service: 'no'
-            }
-          });
+          expect(content).to.deep.equal(expectedResult);
         });
       });
       context('when converting JDL to entity json for MongoDB type', () => {
@@ -286,78 +343,7 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content).to.deep.equal({
-            EntityA: {
-              name: 'EntityA',
-              applications: '*',
-              changelogDate: '20190101000100',
-              clientRootFolder: '',
-              dto: 'no',
-              entityTableName: 'a',
-              fields: [
-                {
-                  fieldName: 'aa',
-                  fieldType: 'String',
-                  fieldValidateRules: ['required'],
-                  javadoc: 'My field'
-                },
-                {
-                  fieldName: 'ab',
-                  fieldType: 'ZonedDateTime'
-                }
-              ],
-              fluentMethods: true,
-              javadoc: undefined,
-              jpaMetamodelFiltering: false,
-              microserviceName: 'myMs',
-              pagination: 'pagination',
-              readOnly: true,
-              relationships: [
-                {
-                  otherEntityField: 'id',
-                  otherEntityName: 'entityB',
-                  otherEntityRelationshipName: 'a',
-                  ownerSide: true,
-                  relationshipName: 'b',
-                  relationshipType: 'one-to-one',
-                  relationshipValidateRules: 'required'
-                }
-              ],
-              service: 'no',
-              skipClient: true
-            },
-            EntityB: {
-              name: 'EntityB',
-              applications: '*',
-              changelogDate: '20190101000200',
-              clientRootFolder: '',
-              dto: 'no',
-              entityTableName: 'entity_b',
-              fields: [
-                {
-                  fieldName: 'ba',
-                  fieldType: 'EnumA',
-                  fieldValues: 'A,B,C'
-                }
-              ],
-              fluentMethods: true,
-              javadoc: undefined,
-              jpaMetamodelFiltering: false,
-              microserviceName: 'myMs',
-              pagination: 'no',
-              readOnly: false,
-              relationships: [
-                {
-                  otherEntityName: 'entityA',
-                  otherEntityRelationshipName: 'b',
-                  ownerSide: false,
-                  relationshipName: 'a',
-                  relationshipType: 'one-to-one'
-                }
-              ],
-              service: 'no'
-            }
-          });
+          expect(content).to.deep.equal(expectedResult);
         });
       });
       context('when converting JDL to entity json for Couchbase type', () => {
@@ -370,78 +356,7 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content).to.deep.equal({
-            EntityA: {
-              name: 'EntityA',
-              applications: '*',
-              changelogDate: '20190101000100',
-              clientRootFolder: '',
-              dto: 'no',
-              entityTableName: 'a',
-              fields: [
-                {
-                  fieldName: 'aa',
-                  fieldType: 'String',
-                  fieldValidateRules: ['required'],
-                  javadoc: 'My field'
-                },
-                {
-                  fieldName: 'ab',
-                  fieldType: 'ZonedDateTime'
-                }
-              ],
-              fluentMethods: true,
-              javadoc: undefined,
-              jpaMetamodelFiltering: false,
-              microserviceName: 'myMs',
-              pagination: 'pagination',
-              readOnly: true,
-              relationships: [
-                {
-                  otherEntityField: 'id',
-                  otherEntityName: 'entityB',
-                  otherEntityRelationshipName: 'a',
-                  ownerSide: true,
-                  relationshipName: 'b',
-                  relationshipType: 'one-to-one',
-                  relationshipValidateRules: 'required'
-                }
-              ],
-              service: 'no',
-              skipClient: true
-            },
-            EntityB: {
-              name: 'EntityB',
-              applications: '*',
-              changelogDate: '20190101000200',
-              clientRootFolder: '',
-              dto: 'no',
-              entityTableName: 'entity_b',
-              fields: [
-                {
-                  fieldName: 'ba',
-                  fieldType: 'EnumA',
-                  fieldValues: 'A,B,C'
-                }
-              ],
-              fluentMethods: true,
-              javadoc: undefined,
-              jpaMetamodelFiltering: false,
-              microserviceName: 'myMs',
-              pagination: 'no',
-              readOnly: false,
-              relationships: [
-                {
-                  otherEntityName: 'entityA',
-                  otherEntityRelationshipName: 'b',
-                  ownerSide: false,
-                  relationshipName: 'a',
-                  relationshipType: 'one-to-one'
-                }
-              ],
-              service: 'no'
-            }
-          });
+          expect(content).to.deep.equal(expectedResult);
         });
       });
       context('when converting JDL to entity json for Cassandra type', () => {
@@ -458,62 +373,7 @@ describe('EntityParser', () => {
         });
 
         it('converts it', () => {
-          expect(content).not.to.be.null;
-          expect(Object.keys(content)).to.have.length(2);
-          expect(content).to.deep.equal({
-            EntityA: {
-              name: 'EntityA',
-              applications: '*',
-              changelogDate: '20190101000100',
-              clientRootFolder: '',
-              dto: 'no',
-              entityTableName: 'a',
-              fields: [
-                {
-                  fieldName: 'aa',
-                  fieldType: 'String',
-                  fieldValidateRules: ['required'],
-                  javadoc: 'My field'
-                },
-                {
-                  fieldName: 'ab',
-                  fieldType: 'ZonedDateTime'
-                }
-              ],
-              fluentMethods: true,
-              javadoc: undefined,
-              jpaMetamodelFiltering: false,
-              microserviceName: 'myMs',
-              pagination: 'pagination',
-              readOnly: true,
-              relationships: [],
-              service: 'no',
-              skipClient: true
-            },
-            EntityB: {
-              name: 'EntityB',
-              applications: '*',
-              changelogDate: '20190101000200',
-              clientRootFolder: '',
-              dto: 'no',
-              entityTableName: 'entity_b',
-              fields: [
-                {
-                  fieldName: 'ba',
-                  fieldType: 'EnumA',
-                  fieldValues: 'A,B,C'
-                }
-              ],
-              fluentMethods: true,
-              javadoc: undefined,
-              jpaMetamodelFiltering: false,
-              microserviceName: 'myMs',
-              pagination: 'no',
-              readOnly: false,
-              relationships: [],
-              service: 'no'
-            }
-          });
+          expect(content).to.deep.equal(expectedResultWithoutRelationships);
         });
       });
       context('when converting a JDL to JSON with different types of bi-directional relationships', () => {
