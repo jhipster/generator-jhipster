@@ -53,7 +53,6 @@ describe('JSONToJDLConverter', () => {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
@@ -102,7 +101,6 @@ describe('JSONToJDLConverter', () => {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
@@ -232,7 +230,6 @@ paginate Country with pager
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.app1
-    packageFolder com/mycompany/app1
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
@@ -267,7 +264,6 @@ application {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.app2
-    packageFolder com/mycompany/app2
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka
@@ -302,7 +298,6 @@ application {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.app3
-    packageFolder com/mycompany/app3
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType eureka

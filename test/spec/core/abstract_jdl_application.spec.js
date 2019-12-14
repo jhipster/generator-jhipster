@@ -197,7 +197,6 @@ describe('AbstractJDLApplication', () => {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType false
@@ -235,7 +234,6 @@ describe('AbstractJDLApplication', () => {
     messageBroker false
     nativeLanguage en
     packageName com.mycompany.myapp
-    packageFolder com/mycompany/myapp
     prodDatabaseType mysql
     searchEngine false
     serviceDiscoveryType false
