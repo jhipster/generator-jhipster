@@ -1,34 +1,33 @@
 # Contributing to JHipster
 
 Are you ready to contribute to JHipster core? We'd love to have you on board, and we will help you as much as we can. Here are the guidelines we'd like you to follow so that we can be of more help:
- - [Questions and help](#question)
- - [Issues and Bugs](#issue)
- - [Feature Requests](#feature)
- - [Submission Guidelines](#submit)
- - [Generator development setup](#setup)
- - [Coding Rules](#rules)
- - [Git Commit Guidelines](#commit)
+ - [Questions and help](#questions-and-help)
+ - [Issues and Bugs](#issues-and-bugs)
+ - [Feature Requests](#feature-requests)
+ - [Submission Guidelines](#submission-guidelines)
+ - [Coding Rules](#coding-rules)
+ - [Git Commit Guidelines](#git-commit-guidelines)
 
 And don't forget we also accept [financial contributions to the project](http://www.jhipster.tech/sponsors/) using OpenCollective.
 
-## <a name="question"></a> Questions and help
+## Questions and help
 This is the JHipster core bug tracker, and it is used for [Issues and Bugs](#issue) and for [Feature Requests](#feature). It is **not** a help desk or a support forum.
 
 If you have a question on using JHipster, or if you need help with your JHipster core project, please [read our help page](http://www.jhipster.tech/help/) and use the [JHipster tag on StackOverflow](http://stackoverflow.com/tags/jhipster) or join our [Gitter.im chat room](https://gitter.im/jhipster/generator-jhipster).
 
-## <a name="issue"></a> Issues and Bugs
+## Issues and Bugs
 If you find a bug in the source code or a mistake in the documentation, you can help us by [submitting a ticket](https://opensource.guide/how-to-contribute/#opening-an-issue) to our [GitHub issues](https://github.com/jhipster/jhipster-core/issues). Even better, you can submit a Pull Request to our [JHipster core project](https://github.com/jhipster/jhipster-core) or to our [Documentation project](https://github.com/jhipster/jhipster.github.io).
 
 **Please see the Submission Guidelines below**.
 
-## <a name="feature"></a> Feature Requests
+## Feature Requests
 You can request a new feature by submitting a ticket to our [GitHub issues](https://github.com/jhipster/jhipster-core/issues). If you
 would like to implement a new feature then consider what kind of change it is:
 
 * **Major Changes** that you wish to contribute to the project should be discussed first. Please open a ticket which clearly states that it is a feature request in the title and explain clearly what you want to achieve in the description, and the JHipster team will discuss with you what should be done in that ticket. You can then start working on a Pull Request.
 * **Small Changes** can be proposed without any discussion. Open up a ticket which clearly states that it is a feature request in the title. Explain your change in the description, and you can propose a Pull Request straight away.
 
-## <a name="submit"></a> Submission Guidelines
+## Submission Guidelines
 
 ### [Submitting an Issue](https://opensource.guide/how-to-contribute/#opening-an-issue)
 Before you submit your issue search the [archive](https://github.com/jhipster/jhipster-core/issues?utf8=%E2%9C%93&q=is%3Aissue), maybe your question was already answered.
@@ -130,7 +129,7 @@ from the main (upstream) repository:
     git pull --ff upstream master
     ```
 
-## <a name="rules"></a> Coding Rules
+## Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
 * All features or bug fixes **must be tested** by one or more tests.
@@ -139,7 +138,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 Please ensure to run `yarn lint` and `yarn test` on the project root before submitting a pull request. You can also run `yarn lint-fix` to fix some of the lint issues automatically.
 
-## <a name="commit"></a> Git Commit Guidelines
+## Git Commit Guidelines
 
 We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://help.github.com/articles/about-git-rebase/#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
 
