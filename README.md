@@ -2,7 +2,7 @@
 
 [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
 
-[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Applications Build Status][github-actions-applications-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
+[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
 
 Greetings, Java Hipster!
 
@@ -223,7 +223,8 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [azure-devops-image]: https://dev.azure.com/jhipster/generator-jhipster/_apis/build/status/jhipster.generator-jhipster?branchName=master
 [azure-devops-url-main]: https://dev.azure.com/jhipster/generator-jhipster/_build
 [github-actions-generator-image]: https://github.com/jhipster/generator-jhipster/workflows/Generator/badge.svg
-[github-actions-applications-image]: https://github.com/jhipster/generator-jhipster/workflows/Applications/badge.svg
+[github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/workflows/Angular/badge.svg
+[github-actions-react-image]: https://github.com/jhipster/generator-jhipster/workflows/React/badge.svg
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
 [daviddm-image]: https://david-dm.org/jhipster/generator-jhipster.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/generator-jhipster

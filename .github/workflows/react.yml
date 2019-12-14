@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-name: Applications
+name: React
 on: [push, pull_request]
 env:
   JHI_RUN_APP: 1
@@ -45,16 +45,6 @@ jobs:
         node_version: [12.13.1]
         os: [ubuntu-latest]
         app-type:
-          - ngx-default
-          - ngx-psql-es-noi18n-mapsid
-          - ngx-mariadb-oauth2-infinispan
-          - ngx-mongodb-kafka-cucumber
-          - ngx-h2mem-ws-nol2
-          - ngx-gradle-fr
-          - ngx-gradle-psql-es-noi18n-mapsid
-          - ngx-gradle-mariadb-oauth2-infinispan
-          - ngx-gradle-mongodb-kafka-cucumber
-          - ngx-gradle-yarn-h2disk-ws-nocache
           - react-default
           - react-maven-psql-es-noi18n-mapsid
           - react-maven-h2mem-memcached
