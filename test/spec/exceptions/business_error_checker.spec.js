@@ -27,6 +27,7 @@ const { expect } = chai;
 
 const BusinessErrorChecker = require('../../../lib/validators/business_error_checker');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
+const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types');
@@ -500,7 +501,7 @@ describe('BusinessErrorChecker', () => {
             jdlObject.addRelationship(relationship);
             jdlObject.addOption(
               new JDLUnaryOption({
-                name: UnaryOptions.SKIP_USER_MANAGEMENT
+                name: ApplicationOptions.names.SKIP_USER_MANAGEMENT
               })
             );
             delete jdlObject.entities.User;

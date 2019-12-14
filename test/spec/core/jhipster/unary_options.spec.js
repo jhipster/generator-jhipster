@@ -34,4 +34,23 @@ describe('UnaryOptions', () => {
       });
     });
   });
+  describe('::forEach', () => {
+    context('when not passing a function', () => {
+      it('should fail', () => {
+        expect(() => UnaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
+      });
+    });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        result = [];
+        UnaryOptions.forEach(option => result.push(option));
+      });
+
+      it('should loop over the unary options', () => {
+        expect(result).to.deep.equal(['skipClient', 'skipServer', 'noFluentMethod', 'readOnly', 'filter']);
+      });
+    });
+  });
 });

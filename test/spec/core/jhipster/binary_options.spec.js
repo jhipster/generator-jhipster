@@ -35,4 +35,33 @@ describe('BinaryOptions', () => {
       });
     });
   });
+  describe('::forEach', () => {
+    context('when not passing a function', () => {
+      it('should fail', () => {
+        expect(() => BinaryOptions.forEach()).to.throw(
+          /^A function has to be passed to loop over the binary options\.$/
+        );
+      });
+    });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        result = [];
+        BinaryOptions.forEach(optionName => result.push(optionName));
+      });
+
+      it('should iterate over them', () => {
+        expect(result).to.deep.equal([
+          'dto',
+          'service',
+          'pagination',
+          'microservice',
+          'search',
+          'angularSuffix',
+          'clientRootFolder'
+        ]);
+      });
+    });
+  });
 });

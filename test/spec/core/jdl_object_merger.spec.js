@@ -18,6 +18,7 @@
  */
 
 const { expect } = require('chai');
+const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const FieldTypes = require('../../../lib/core/jhipster/field_types');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
@@ -117,7 +118,7 @@ function createFirstJDLObjectForTheMergeTest() {
     values: [{ key: 'AAA' }, { key: 'BBB' }]
   });
   const option = new JDLUnaryOption({
-    name: UnaryOptions.SKIP_USER_MANAGEMENT,
+    name: ApplicationOptions.names.SKIP_USER_MANAGEMENT,
     entityNames: [entityA.name, entityB.name]
   });
   entityA.addField(fieldForA);
