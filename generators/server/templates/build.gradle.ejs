@@ -344,7 +344,9 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     implementation "org.hibernate:hibernate-entitymanager"
     implementation "org.hibernate.validator:hibernate-validator"
-    implementation "org.liquibase:liquibase-core"
+    // Inherited version from Spring Boot can't be used since a regression has been introduced with 3.8.1:
+    // https://liquibase.jira.com/projects/CORE/issues/CORE-3522
+    implementation "org.liquibase:liquibase-core:3.8.0"
     liquibaseRuntime "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
     liquibaseRuntime sourceSets.main.compileClasspath

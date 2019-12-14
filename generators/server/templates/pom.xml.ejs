@@ -445,6 +445,9 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <!-- Inherited version from Spring Boot can't be used since a regression has been introduced with 3.8.1:
+            https://liquibase.jira.com/projects/CORE/issues/CORE-3522 -->
+            <version>3.8.0</version>
         </dependency>
 <%_ } _%>
         <dependency>
