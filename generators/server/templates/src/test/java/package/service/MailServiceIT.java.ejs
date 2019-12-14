@@ -229,7 +229,11 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     @Test
     public void testSendEmailWithException() throws Exception {
         doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
-        mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
+        try {
+            mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
+        } catch (Exception e) {
+            fail("Exception shouldn't have been thrown");
+        }
     }
 
     @Test

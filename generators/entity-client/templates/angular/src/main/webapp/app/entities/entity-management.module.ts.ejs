@@ -22,29 +22,29 @@ import { RouterModule } from '@angular/router';
 import { <%= angularXAppName %>SharedModule } from 'app/shared/shared.module';
 import { <%= entityAngularName %>Component } from './<%= entityFileName %>.component';
 import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>-detail.component';
+<%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
-import { <%= entityAngularName %>DeletePopupComponent, <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
-import { <%= entityInstance %>Route, <%= entityInstance %>PopupRoute } from './<%= entityFileName %>.route';
-
-const ENTITY_STATES = [
-    ...<%= entityInstance %>Route,
-    ...<%= entityInstance %>PopupRoute,
-];
+import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
+<%_ } _%>
+import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
 
 @NgModule({
     imports: [
         <%= angularXAppName %>SharedModule,
-        RouterModule.forChild(ENTITY_STATES)
+        RouterModule.forChild(<%= entityInstance %>Route)
     ],
     declarations: [
         <%= entityAngularName %>Component,
         <%= entityAngularName %>DetailComponent,
+        <%_ if (!readOnly) { _%>
         <%= entityAngularName %>UpdateComponent,
         <%= entityAngularName %>DeleteDialogComponent,
-        <%= entityAngularName %>DeletePopupComponent,
+        <%_ } %>
     ],
     entryComponents: [
+        <%_ if (!readOnly) { _%>
         <%= entityAngularName %>DeleteDialogComponent
+        <%_ } _%>
     ]
 })
 export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {

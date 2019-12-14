@@ -31,6 +31,15 @@ elif [ -f "gradlew" ]; then
 fi
 
 #-------------------------------------------------------------------------------
+# Check no-http
+#-------------------------------------------------------------------------------
+if [ -f "mvnw" ]; then
+    ./mvnw -ntp checkstyle:check
+elif [ -f "gradlew" ]; then
+    ./gradlew checkstyleNohttp $JHI_GRADLE_EXCLUDE_WEBPACK
+fi
+
+#-------------------------------------------------------------------------------
 # Launch UAA tests
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
@@ -48,7 +57,6 @@ if [ -f "mvnw" ]; then
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
         -Dlogging.level.io.github.jhipster.sample=OFF \
-        -Dlogging.level.io.github.jhipster.travis=OFF \
         -Dlogging.level.org.springframework=OFF \
         -Dlogging.level.org.springframework.web=OFF \
         -Dlogging.level.org.springframework.security=OFF
@@ -59,7 +67,6 @@ elif [ -f "gradlew" ]; then
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
         -Dlogging.level.io.github.jhipster.sample=OFF \
-        -Dlogging.level.io.github.jhipster.travis=OFF \
         -Dlogging.level.org.springframework=OFF \
         -Dlogging.level.org.springframework.web=OFF \
         -Dlogging.level.org.springframework.security=OFF

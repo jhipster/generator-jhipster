@@ -163,6 +163,9 @@ const serverFiles = {
     ],
     serverBuild: [
         {
+            templates: [{ file: 'checkstyle.xml', options: { interpolate: INTERPOLATE_REGEX } }]
+        },
+        {
             condition: generator => generator.buildTool === 'gradle',
             templates: [
                 'build.gradle',
@@ -177,7 +180,7 @@ const serverFiles = {
                 { file: 'gradlew', method: 'copy', noEjs: true },
                 { file: 'gradlew.bat', method: 'copy', noEjs: true },
                 { file: 'gradle/wrapper/gradle-wrapper.jar', method: 'copy', noEjs: true },
-                { file: 'gradle/wrapper/gradle-wrapper.properties', method: 'copy', noEjs: true }
+                'gradle/wrapper/gradle-wrapper.properties'
             ]
         },
         {
@@ -421,6 +424,20 @@ const serverFiles = {
         },
         {
             condition: generator =>
+                !generator.reactive &&
+                (generator.applicationType === 'uaa' ||
+                    generator.authenticationType === 'uaa' ||
+                    generator.authenticationType === 'oauth2'),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/MethodSecurityConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/MethodSecurityConfiguration.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
                 !shouldSkipUserManagement(generator) && generator.authenticationType === 'session' && !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -561,6 +578,10 @@ const serverFiles = {
                 {
                     file: 'package/web/filter/RefreshTokenFilterConfigurer.java',
                     renameTo: generator => `${generator.javaDir}web/filter/RefreshTokenFilterConfigurer.java`
+                },
+                {
+                    file: 'package/web/filter/RouteDetectorFilter.java',
+                    renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`
                 },
                 {
                     file: 'package/config/oauth2/OAuth2AuthenticationConfiguration.java',
@@ -1074,16 +1095,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/service/KafkaConsumer.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`
-                },
-                {
-                    file: 'package/service/KafkaProducer.java',
-                    renameTo: generator =>
-                        `${generator.javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`
-                },
-                {
                     file: 'package/config/KafkaProperties.java',
                     renameTo: generator => `${generator.javaDir}config/KafkaProperties.java`
                 }
@@ -1244,8 +1255,8 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/web/rest/ClientForwardControllerIT.java',
-                    renameTo: generator => `${generator.testDir}web/rest/ClientForwardControllerIT.java`
+                    file: 'package/web/rest/ClientForwardControllerTest.java',
+                    renameTo: generator => `${generator.testDir}web/rest/ClientForwardControllerTest.java`
                 }
             ]
         },
@@ -1500,8 +1511,8 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/service/mapper/UserMapperIT.java',
-                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperIT.java`
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/UserResourceIT.java',
@@ -1791,8 +1802,8 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}service/UserServiceIT.java`
                 },
                 {
-                    file: 'package/service/mapper/UserMapperIT.java',
-                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperIT.java`
+                    file: 'package/service/mapper/UserMapperTest.java',
+                    renameTo: generator => `${generator.testDir}service/mapper/UserMapperTest.java`
                 },
                 {
                     file: 'package/web/rest/AccountResourceIT.java',

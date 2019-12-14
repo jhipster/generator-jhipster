@@ -39,7 +39,7 @@ relationship ManyToOne {
 }
 
 relationship ManyToMany {
-	CustomerOrder{orderedItems(name)} to OrderedItem
+	CustomerOrder{orderedItems(name)} to OrderedItem{customerOrder}
 }
 
 

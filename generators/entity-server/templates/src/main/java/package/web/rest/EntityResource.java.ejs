@@ -87,7 +87,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.http.MediaType;
 <%_ } _%>
-import org.springframework.http.ResponseEntity; <%_ if (isUsingMapsId === true && !viaService) { %>
+import org.springframework.http.ResponseEntity; <%_ if (!viaService && !saveUserSnapshot) { %>
 import org.springframework.transaction.annotation.Transactional; <% } %>
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactiveRepositories) { _%>
@@ -114,11 +114,12 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
  * REST controller for managing {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>}.
  */
 @RestController
-@RequestMapping("/api")<% if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { %>
+@RequestMapping("/api")<% if (databaseType === 'sql' && !viaService && !saveUserSnapshot) { %>
 @Transactional <%_ } %>
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
+<%_ if (!readOnly) { _%>
 
     <%_ let entityName = entityInstance;
     if (clientRootFolder && !skipUiGrouping) {
@@ -128,10 +129,12 @@ public class <%= entityClass %>Resource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
+<%_ } _%>
     <%_
     const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
     const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
+<%_ if (!readOnly) { _%>
 
     /**
      * {@code POST  /<%= entityApiUrl %>} : Create a new <%= entityInstance %>.
@@ -187,6 +190,7 @@ public class <%= entityClass %>Resource {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
     }
+<%_ } _%>
 
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %>.
@@ -239,6 +243,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
+<%_ if (!readOnly) { _%>
 
     /**
      * {@code DELETE  /<%= entityApiUrl %>/:id} : delete the "id" <%= entityInstance %>.
@@ -251,7 +256,9 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: viaService}); -%>
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
-    }<% if (searchEngine === 'elasticsearch') { %>
+    }
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
      * {@code SEARCH  /_search/<%= entityApiUrl %>?query=:query} : search for the <%= entityInstance %> corresponding
@@ -266,5 +273,6 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
      * @return the result of the search.
      */
-    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {asEntity, asDto, viaService}); -%><% } %>
+    @GetMapping("/_search/<%= entityApiUrl %>")<%- include('../../common/search_template', {asEntity, asDto, viaService}); -%>
+<%_ } _%>
 }

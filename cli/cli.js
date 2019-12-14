@@ -16,12 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-console */
 const program = require('commander');
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, createYeomanEnv, toString, getCommand, getCommandOptions, getArgs, done } = require('./utils');
+const {
+    CLI_NAME,
+    initHelp,
+    logger,
+    createYeomanEnv,
+    toString,
+    getCommand,
+    getCommandOptions,
+    getArgs,
+    done,
+    getExitCode
+} = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 
@@ -31,6 +41,10 @@ const env = createYeomanEnv();
 
 /* setup debugging */
 logger.init(program);
+
+process.on('exit', code => {
+    process.exit(code || getExitCode());
+});
 
 /**
  *  Run a yeoman command

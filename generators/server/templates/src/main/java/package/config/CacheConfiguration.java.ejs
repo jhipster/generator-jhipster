@@ -448,13 +448,21 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
-            }
-            return () -> GlobalConfigurationBuilder
+            } else if (discoveryClient.getInstances(registration.getServiceId()).size() == 0) {
+                return () -> GlobalConfigurationBuilder
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport()
+                    .transport(new JGroupsTransport())
+                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .allowDuplicateDomains(true).build();
+            } else {
+                return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport()
                     .transport(new JGroupsTransport(getTransportChannel()))
                     .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
+            }
         <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport().defaultTransport()

@@ -20,8 +20,8 @@ const _ = require('lodash');
 const chalk = require('chalk');
 const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
 
-const AURORA_DB_PASSORD_REGEX = /^[^@"\/]{8,42}$/; // eslint-disable-line
-const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/; // eslint-disable-line
+const AURORA_DB_PASSWORD_REGEX = /^[^@"/]{8,42}$/;
+const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/;
 
 const SCALING_TO_CONFIG = {
     low: {
@@ -99,6 +99,7 @@ module.exports = {
     askVPC,
     askForDBPasswords,
     askForSubnets,
+    promptEKSClusterCreation,
     askDeployNow
 };
 
@@ -218,7 +219,7 @@ function askCloudFormation() {
  * As user to select AWS performance.
  */
 function askPerformances() {
-    if (this.abort) return null;
+    if (this.abort || this.deploymentApplicationType === 'microservice') return null;
     const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
@@ -289,7 +290,7 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
  * Ask about scaling
  */
 function askScaling() {
-    if (this.abort) return null;
+    if (this.abort || this.deploymentApplicationType === 'microservice') return null;
     const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
@@ -480,13 +481,109 @@ function promptDBPassword(config) {
                 'This value will be stored within Amazon SSM, and not within .yo-rc.json'
             )}`,
             validate: input =>
-                _.isEmpty(input) || !input.match(AURORA_DB_PASSORD_REGEX)
-                    ? 'Password must be between 8 - 42 characters, and not contain an """, "/" or "@"'
+                _.isEmpty(input) || !input.match(AURORA_DB_PASSWORD_REGEX)
+                    ? 'Password must be between 8 - 42 characters, and not contain a """, "/" or "@"'
                     : true
         }
     ];
 
     return this.prompt(prompts).then(props => props.database_Password);
+}
+
+/**
+ * Create EKS stack for Micro-Services
+ */
+function promptEKSClusterCreation() {
+    if (this.abort || this.deploymentApplicationType === 'monolith') return null;
+    const done = this.async();
+    const prompts = [
+        {
+            type: 'input',
+            name: 'clusterName',
+            message: 'Name of the EKS Cluster?',
+            default: this.aws.clusterName || 'jhipster'
+        },
+        {
+            type: 'list',
+            name: 'kubernetesVersion',
+            message: 'What Kubernetes version would you like to use?',
+            choices: [
+                {
+                    value: '1.12',
+                    name: '1.12'
+                },
+                {
+                    value: '1.13',
+                    name: '1.13'
+                },
+                {
+                    value: '1.14',
+                    name: '1.14'
+                }
+            ],
+            default: this.aws.kubernetesVersion || 1
+        },
+        {
+            type: 'input',
+            name: 'nodegroupName',
+            message: 'Name of the Node Group?',
+            default: 'standard-workers'
+        },
+        {
+            type: 'list',
+            name: 'clusterRegion',
+            message: 'On which region do you want to deploy?',
+            choices: [
+                'ap-northeast-1',
+                'ap-northeast-2',
+                'ap-south-1',
+                'ap-southeast-1',
+                'ap-southeast-2',
+                'ca-central-1',
+                'eu-central-1',
+                'eu-north-1',
+                'eu-west-1',
+                'eu-west-2',
+                'eu-west-3',
+                'sa-east-1',
+                'us-east-1',
+                'us-east-2',
+                'us-west-1',
+                'us-west-2'
+            ],
+            default: this.aws.clusterRegion || 15
+        },
+        {
+            type: 'input',
+            name: 'totalNumberOfNodes',
+            message: 'Total number of nodes (for a static ASG)?',
+            default: this.aws.totalNumberOfNodes || '4',
+            validate: input => {
+                if (input.length === 0) {
+                    return 'Instances cannot be empty';
+                }
+                const n = Math.floor(Number(input));
+                if (n === Infinity || String(n) !== input || n <= 0) {
+                    return 'Please enter an integer greater than 0';
+                }
+                return true;
+            }
+        }
+    ];
+
+    return this.prompt(prompts).then(props => {
+        this.clusterName = props.clusterName;
+        this.aws.clusterName = props.clusterName;
+        this.kubernetesVersion = props.kubernetesVersion;
+        this.aws.kubernetesVersion = props.kubernetesVersion;
+        this.nodegroupName = props.nodegroupName;
+        this.aws.nodegroupName = props.nodegroupName;
+        this.clusterRegion = props.clusterRegion;
+        this.aws.clusterRegion = props.clusterRegion;
+        this.totalNumberOfNodes = props.totalNumberOfNodes;
+        this.aws.totalNumberOfNodes = props.totalNumberOfNodes;
+        done();
+    });
 }
 
 /**

@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash'); // eslint-disable-line
-const ora = require('ora'); // eslint-disable-line
+const _ = require('lodash');
+const ora = require('ora');
 
 /**
  * Wraps the promise in a CLI spinner

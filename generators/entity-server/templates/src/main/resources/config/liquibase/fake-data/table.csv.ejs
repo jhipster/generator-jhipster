@@ -87,11 +87,11 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         } else if (columnType === 'boolean') {
             data = this.faker.random.boolean();
         } else if (columnType === 'date') {
-            data = this.faker.date.recent().toISOString().split('T')[0];
+            data = this.getRecentForLiquibase(1, changelogDate).toISOString().split('T')[0];
         } else if (columnType === 'datetime') {
             // Write the date without milliseconds so Java can parse it
             // See https://stackoverflow.com/a/34053802/150868
-            data = this.faker.date.recent().toISOString().split('.')[0];
+            data = this.getRecentForLiquibase(1, changelogDate).toISOString().split('.')[0];
         } else if (columnType.startsWith('varchar')) {
             let columnName = fields[idx].fieldNameAsDatabaseColumn;
             if (columnName === 'first_name') {
@@ -139,7 +139,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         if (fields[idx].fieldIsEnum) {
             if (fields[idx].fieldValues.length !== 0) {
                 const enums = fields[idx].fieldValues.split(',');
-                data = enums[Math.floor(Math.random() * Math.floor(enums.length))];
+                data = enums[this.faker.random.number(enums.length-1)];
             } else {
                 data = '';
             }
@@ -153,7 +153,11 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         // Validation rules
         if (fields[idx].fieldValidate === true) {
             if (fields[idx].fieldValidateRules.includes('pattern')) {
-                data = `"${new this.randexp(fields[idx].fieldValidateRulesPattern).gen()}"`;
+                const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern)
+                randExp.max = 5;
+                // In order to have consistent results with RandExp, the RNG is seeded.
+                randExp.randInt = seededRandomNumberGenerator(lineNb);
+                data = `"${randExp.gen().replace(/"/g, '')}"`;
             }
 
             // manage String max length
@@ -171,7 +175,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
             // test if generated data is still compatible with the regexp as we potentially modify it with min/maxLength
             if (
                 fields[idx].fieldValidateRules.includes("pattern") &&
-                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data)
+                !new RegExp("^" + fields[idx].fieldValidateRulesPattern + "$").test(data.substring(1, data.length - 1))
             ) {
                 data = "";
             }

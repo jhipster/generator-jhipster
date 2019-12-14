@@ -76,22 +76,20 @@ services:
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
                 <%_ if (authenticationType === 'uaa') { _%>
             - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
-                <%_ } _%>
-            <%_ } _%>
+                <%_ } else { _%>
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+                <%_ } _%>
+            <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+            - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
+            <%_ } else { _%>
+            - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+            <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
-            - KAFKA_CONSUMER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_CONSUMER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9092
-            - KAFKA_CONSUMER_GROUP_ID=<%= dasherizedBaseName %>
-            - KAFKA_CONSUMER_AUTO_OFFSET_RESET=earliest
-            - KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092
-            - KAFKA_PRODUCER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_PRODUCER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
+            - KAFKA_BOOTSTRAPSERVERS=kafka:9092
             <%_ } _%>
             <%_ if (cacheProvider === 'infinispan') { _%>
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true

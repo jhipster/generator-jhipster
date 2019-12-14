@@ -39,6 +39,25 @@
             "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
         },
         {
+            "fieldName": "numberPatternTom",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "pattern"
+            ],
+            "fieldValidateRulesPattern": "^[0-9]+$",
+            "fieldValidateRulesPatternJava": "^[0-9]+$"
+        },
+        {
+            "fieldName": "numberPatternRequiredTom",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "pattern",
+                "required"
+            ],
+            "fieldValidateRulesPattern": "^[0-9]+$",
+            "fieldValidateRulesPatternJava": "^[0-9]+$"
+        },
+        {
             "fieldName": "integerTom",
             "fieldType": "Integer"
         },

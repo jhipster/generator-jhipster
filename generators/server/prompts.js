@@ -181,7 +181,7 @@ function askForServerSideOpts(meta) {
                     value: 'couchbase',
                     name: 'Couchbase'
                 });
-                if (!reactive) {
+                if (!reactive && applicationType !== 'uaa') {
                     opts.push({
                         value: 'no',
                         name: 'No database'
@@ -371,11 +371,11 @@ function askForOptionalItems(meta) {
                 value: 'websocket:spring-websocket'
             });
         }
-        choices.push({
-            name: 'Asynchronous messages using Apache Kafka',
-            value: 'messageBroker:kafka'
-        });
     }
+    choices.push({
+        name: 'Asynchronous messages using Apache Kafka',
+        value: 'messageBroker:kafka'
+    });
     choices.push({
         name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'

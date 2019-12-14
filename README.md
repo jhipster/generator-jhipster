@@ -1,6 +1,8 @@
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Travis Build Status][travis-image]][travis-url-main] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
+[![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
+
+[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
 
 Greetings, Java Hipster!
 
@@ -14,34 +16,148 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 **Thank you to our sponsors!**
 
-**Gold sponsors**
+### Gold Sponsors
 
-[![Okta][okta-image]][okta-url]
-[Okta][okta-url]
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://developer.okta.com/signup?utm_source=JHipster&utm_medium=logo&utm_campaign=Gold-Sponsor" target="_blank">
+          <img width="200em" src="https://www.jhipster.tech/images/open-collective/okta.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="http://www.octoconsulting.com/" target="_blank">
+          <img width="200em" src="https://www.jhipster.tech/images/open-collective/octoconsulting.png">
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-[![Octo Consulting Group][octoconsulting-image]][octoconsulting-url]
-[Octo Consulting Group][octoconsulting-url]
+### Silver sponsors
 
-**Silver sponsors**
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://www.bizequity.com/" target="_blank">
+          <img width="200em" src="https://www.jhipster.tech/images/open-collective/bizequity.png">
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-[![BizEquity][bizequity-image]][bizequity-url]
-[BizEquity][bizequity-url]
+### Bronze sponsors
 
-**Bronze sponsors**
-
-[![ForsysLab][forsyslab-image]][forsyslab-url]
-
-[![CUBA Platform][cubaplatform-image]][cubaplatform-url]
-
-[![Intesys][intesys-image]][intesys-url]
-
-[![CodeFirst][codefirst-image]][codefirst-url]
-
-[![Blokt][blokt-image]][blokt-url]
-
-[![Clay][clay-image]][clay-url]
-
-[![UX Planet][uxplanet-image]][uxplanet-url]
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://forsyslab.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/forsyslab.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.cuba-platform.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/cubaplatform.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.intesys.it/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/intesys.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.codefirst.co.uk" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/codefirst.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://blokt.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/blokt.png">
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://clay.global/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/clay.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://uxplanet.org/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/uxplanet.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://opencollective.com/top-web-design-agencies" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/top-web-design-agencies.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://piratebay.ink/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/the-pirate-bay.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://edusson.co.uk/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edusson.png">
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://www.crosswordsolver.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/crosswordsolver.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://fair-laan.se/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/fair-laan.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://superkredit.net" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/superkredit.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://matchbanker.pl/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://matchbanker.no/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle">
+        <a href="https://vpngorilla.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/vpngorilla.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://papersowl.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.banksecrets.eu/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://edubirdie.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 **Thank you to all our backers!**
 
@@ -104,34 +220,16 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [jhipster-url]: https://www.jhipster.tech/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
-[travis-image]: https://travis-ci.org/jhipster/generator-jhipster.svg?branch=master
 [azure-devops-image]: https://dev.azure.com/jhipster/generator-jhipster/_apis/build/status/jhipster.generator-jhipster?branchName=master
-[travis-url-main]: https://travis-ci.org/jhipster/generator-jhipster
 [azure-devops-url-main]: https://dev.azure.com/jhipster/generator-jhipster/_build
+[github-actions-generator-image]: https://github.com/jhipster/generator-jhipster/workflows/Generator/badge.svg
+[github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/workflows/Angular/badge.svg
+[github-actions-react-image]: https://github.com/jhipster/generator-jhipster/workflows/React/badge.svg
+[github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
 [daviddm-image]: https://david-dm.org/jhipster/generator-jhipster.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/generator-jhipster
 [backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890
 [backers-url]: https://opencollective.com/generator-jhipster
-[okta-image]: https://www.jhipster.tech/images/open-collective/okta.png
-[okta-url]: https://developer.okta.com/signup?utm_source=JHipster&utm_medium=logo&utm_campaign=Gold-Sponsor
-[octoconsulting-image]: https://www.jhipster.tech/images/open-collective/octoconsulting.png
-[octoconsulting-url]: http://www.octoconsulting.com/
-[bizequity-image]: https://www.jhipster.tech/images/open-collective/bizequity.png
-[bizequity-url]: https://www.bizequity.com/
-[forsyslab-image]: https://www.jhipster.tech/images/open-collective/forsyslab.jpg
-[forsyslab-url]: https://forsyslab.com/
-[cubaplatform-image]: https://www.jhipster.tech/images/open-collective/cubaplatform.png
-[cubaplatform-url]: https://www.cuba-platform.com/
-[intesys-image]: https://www.jhipster.tech/images/open-collective/intesys.png
-[intesys-url]: https://www.intesys.it/
-[codefirst-image]: https://www.jhipster.tech/images/open-collective/codefirst.png
-[codefirst-url]: https://www.codefirst.co.uk
-[blokt-image]: https://www.jhipster.tech/images/open-collective/blokt.png
-[blokt-url]: https://blokt.com/
-[clay-image]: https://www.jhipster.tech/images/open-collective/clay.png
-[clay-url]: https://clay.global/
-[uxplanet-image]: https://www.jhipster.tech/images/open-collective/uxplanet.png
-[uxplanet-url]: https://uxplanet.org/
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat

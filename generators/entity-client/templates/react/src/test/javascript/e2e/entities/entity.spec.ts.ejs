@@ -20,10 +20,12 @@ import { browser, element, by<% if ( fieldsContainInstant || fieldsContainZonedD
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
-import <%= entityClass %>ComponentsPage, { <%= entityClass %>DeleteDialog } from './<%= entityFileName %>.page-object';
+import <%= entityClass %>ComponentsPage<%_ if (!readOnly) { _%>, { <%= entityClass %>DeleteDialog }<%_ } %> from './<%= entityFileName %>.page-object';
+<%_ if (!readOnly) { _%>
 import <%= entityClass %>UpdatePage from './<%= entityFileName%>-update.page-object';
+<%_ } _%>
 import { waitUntilDisplayed, waitUntilHidden } from '../../<%= entityParentPathAddition %>util/utils';
-<%_ if (fieldsContainBlobOrImage) { _%>
+<%_ if (fieldsContainBlobOrImage && !readOnly) { _%>
 import path from 'path';
 <%_ } _%>
 <%_
@@ -46,13 +48,15 @@ const expect = chai.expect;
 describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
-    let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
+<%_ if (!readOnly) { _%>
+    let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
     <%_ if (fieldsContainBlobOrImage) { _%>
     const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/logo-jhipster.png';
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
+<%_ } _%>
 
     before(async () => {
         await browser.get('/');
@@ -69,6 +73,8 @@ describe('<%= entityClass %> e2e test', () => {
         await signInPage.loginWithOAuth('admin', 'admin');
         <%_ } _%>
         await waitUntilDisplayed(navBarPage.entityMenu);
+        await waitUntilDisplayed(navBarPage.adminMenu);
+        await waitUntilDisplayed(navBarPage.accountMenu);
     });
 
     it('should load <%= entityClassPlural %>', async () => {
@@ -79,6 +85,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     });
 
+<%_ if (!readOnly) { _%>
     it('should load create <%= entityClass %> page', async () => {
         await <%= entityInstance %>ComponentsPage.clickOnCreateButton();
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
@@ -101,6 +108,7 @@ describe('<%= entityClass %> e2e test', () => {
                 const fieldType = field.fieldType;
                 const fieldTypeBlobContent = field.fieldTypeBlobContent;
                 const fieldIsEnum = field.fieldIsEnum;
+                const fieldValidateSampleString = field.fieldValidateSampleString;
             _%>
             <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
@@ -133,6 +141,9 @@ describe('<%= entityClass %> e2e test', () => {
             <%_ } else if (fieldType === 'UUID'){ _%>
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
+            <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+            await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldValidateSampleString %>');
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldValidateSampleString %>/);
             <%_ } else { _%>
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
@@ -159,6 +170,7 @@ describe('<%= entityClass %> e2e test', () => {
         await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
         const nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
         await create<%= entityClass %>();
+        await <%= entityInstance %>ComponentsPage.waitUntilLoaded();
 
         await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeCreate + 1);
         expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1);
@@ -179,6 +191,7 @@ describe('<%= entityClass %> e2e test', () => {
         await <%= entityInstance %>ComponentsPage.waitUntilDeleteButtonsLength(nbButtonsBeforeDelete - 1);
         expect(await <%= entityInstance %>ComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
     });<%= closeBlockComment %>
+<%_ } _%>
 
     after(async () => {
         await navBarPage.autoSignOut();

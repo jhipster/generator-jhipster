@@ -116,10 +116,6 @@ module.exports = class extends Generator {
             `${resourceDir}i18n/messages_${langJavaProp}.properties`
         );
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langJavaProp}.properties`
-        );
-        generator.template(
             `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
             `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
@@ -446,6 +442,21 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Rename File
+     *
+     * @param {string} source
+     * @param {string} dest
+     * @returns {boolean} true if success; false otherwise
+     */
+    renameFile(source, dest) {
+        if (shelljs.test('-f', source)) {
+            this.info(`Renaming the file - ${source} to ${dest}`);
+            return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
+        }
+        return true;
+    }
+
+    /**
      * @returns default app name
      */
     getDefaultAppName() {
@@ -540,12 +551,27 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Parse creationTimestamp option
+     * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
+     *                   obtained by parsing the given string representation of the creationTimestamp.
+     */
+    parseCreationTimestamp() {
+        let creationTimestamp;
+        if (this.options.creationTimestamp) {
+            creationTimestamp = Date.parse(this.options.creationTimestamp);
+            if (!creationTimestamp) {
+                this.warn(`Error parsing creationTimestamp ${this.options.creationTimestamp}`);
+            }
+        }
+        return creationTimestamp;
+    }
+
+    /**
      * @param {any} input input
      * @returns {boolean} true if input is number; false otherwise
      */
     isNumber(input) {
         if (isNaN(this.filterNumber(input))) {
-            // eslint-disable-line
             return false;
         }
         return true;
@@ -557,7 +583,6 @@ module.exports = class extends Generator {
      */
     isSignedNumber(input) {
         if (isNaN(this.filterNumber(input, true))) {
-            // eslint-disable-line
             return false;
         }
         return true;
@@ -569,7 +594,6 @@ module.exports = class extends Generator {
      */
     isSignedDecimalNumber(input) {
         if (isNaN(this.filterNumber(input, true, true))) {
-            // eslint-disable-line
             return false;
         }
         return true;
@@ -790,11 +814,11 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Try to retrieve the version of the blueprint used.
+     * Try to retrieve the package.json of the blueprint used, as an object.
      * @param {string} blueprintPkgName - generator name
-     * @return {string} version - retrieved version or empty string if not found
+     * @return {object} packageJson - retrieved package.json as an object or undefined if not found
      */
-    findBlueprintVersion(blueprintPkgName) {
+    findBlueprintPackageJson(blueprintPkgName) {
         let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
         try {
             if (!fs.existsSync(packageJsonPath)) {
@@ -802,13 +826,26 @@ module.exports = class extends Generator {
                 packageJsonPath = path.join(blueprintPkgName, 'package.json');
             }
             // eslint-disable-next-line global-require,import/no-dynamic-require
-            const packagejs = require(packageJsonPath);
-            return packagejs.version;
+            return require(packageJsonPath);
         } catch (err) {
             this.debug('ERROR:', err);
+            this.warning(`Could not retrieve package.json of blueprint '${blueprintPkgName}'`);
+            return undefined;
+        }
+    }
+
+    /**
+     * Try to retrieve the version of the blueprint used.
+     * @param {string} blueprintPkgName - generator name
+     * @return {string} version - retrieved version or empty string if not found
+     */
+    findBlueprintVersion(blueprintPkgName) {
+        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
+        if (!blueprintPackageJson || !blueprintPackageJson.version) {
             this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
             return '';
         }
+        return blueprintPackageJson.version;
     }
 
     /**
@@ -844,6 +881,39 @@ module.exports = class extends Generator {
             }
             done();
         });
+    }
+
+    /**
+     * Check if the generator specified as blueprint has a version compatible with current JHipster.
+     * @param {string} blueprintPkgName - generator name
+     */
+    checkJHipsterBlueprintVersion(blueprintPkgName) {
+        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
+        if (!blueprintPackageJson) {
+            return;
+        }
+        const mainGeneratorJhipsterVersion = packagejs.version;
+        const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
+        if (blueprintJhipsterVersion && mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
+            this.error(
+                `The installed ${chalk.yellow(
+                    blueprintPkgName
+                )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+            );
+        }
+        const blueprintPeerJhipsterVersion =
+            blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
+        if (blueprintPeerJhipsterVersion) {
+            if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion)) {
+                return;
+            }
+            this.error(
+                `The installed ${chalk.yellow(
+                    blueprintPkgName
+                )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+            );
+        }
+        this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
     }
 
     /**
@@ -932,80 +1002,95 @@ module.exports = class extends Generator {
      * @param {Array|Object} relationships - array of relationships
      * @param {string} entityInstance - entity instance
      * @param {string} dto - dto
-     * @returns {{queries: Array, variables: Array, hasManyToMany: boolean}}
+     * @returns {{queries: Array, variables: Array, rxjsMapIsUsed: boolean, selectableEntities: Array, selectableManyToManyEntities: Array}}
      */
     generateEntityQueries(relationships, entityInstance, dto) {
         const queries = [];
         const variables = [];
-        let hasManyToMany = false;
+        const selectableEntities = [];
+        const selectableManyToManyEntities = [];
+        let rxjsMapIsUsed = false;
         relationships.forEach(relationship => {
+            const relationshipType = relationship.relationshipType;
+            const ownerSide = relationship.ownerSide;
+            const otherEntityName = relationship.otherEntityName;
+            const selectableEntityType = `I${relationship.otherEntityAngularName}`;
             let query;
             let variableName;
             let filter;
-            hasManyToMany = hasManyToMany || relationship.relationshipType === 'many-to-many';
+            if (relationshipType === 'many-to-many' && ownerSide === true && !selectableManyToManyEntities.includes(selectableEntityType)) {
+                selectableManyToManyEntities.push(selectableEntityType);
+            }
             if (
-                relationship.relationshipType === 'one-to-one' &&
-                relationship.ownerSide === true &&
-                relationship.otherEntityName !== 'user'
+                relationshipType === 'many-to-one' ||
+                (relationshipType === 'one-to-one' && ownerSide === true) ||
+                (relationshipType === 'many-to-many' && ownerSide === true)
             ) {
-                variableName = relationship.relationshipFieldNamePlural.toLowerCase();
-                if (variableName === entityInstance) {
-                    variableName += 'Collection';
+                if (!selectableEntities.includes(selectableEntityType)) {
+                    selectableEntities.push(selectableEntityType);
                 }
-                const relationshipFieldName = `${relationship.relationshipFieldName}`;
-                const relationshipFieldNameIdCheck =
-                    dto === 'no'
-                        ? `!this.editForm.get('${relationshipFieldName}').value || !this.editForm.get('${relationshipFieldName}').value.id`
-                        : `!this.editForm.get('${relationshipFieldName}Id').value`;
+                if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName !== 'user') {
+                    rxjsMapIsUsed = true;
+                    variableName = relationship.relationshipFieldNamePlural.toLowerCase();
+                    if (variableName === entityInstance) {
+                        variableName += 'Collection';
+                    }
+                    const relationshipFieldName = `${relationship.relationshipFieldName}`;
+                    const relationshipFieldNameIdCheck =
+                        dto === 'no'
+                            ? `!${entityInstance}.${relationshipFieldName} || !${entityInstance}.${relationshipFieldName}.id`
+                            : `!${entityInstance}.${relationshipFieldName}Id`;
 
-                filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
-                if (this.jpaMetamodelFiltering) {
-                    filter = `'${relationship.otherEntityRelationshipName}Id.specified': 'false'`;
-                }
+                    filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
+                    if (relationship.jpaMetamodelFiltering) {
+                        filter = `'${relationship.otherEntityRelationshipName}Id.specified': 'false'`;
+                    }
 
-                query = `this.${relationship.otherEntityName}Service
-            .query({${filter}}).pipe(
-                filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
-                map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
-            )
-            .subscribe((res: I${relationship.otherEntityAngularName}[]) => {
-                if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res;
+                    query = `
+                        this.${relationship.otherEntityName}Service
+                            .query({${filter}})
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
+                                return res.body ? res.body : [];
+                            }))
+                            .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
+                                if (${relationshipFieldNameIdCheck}) {
+                                    this.${variableName} = resBody;
+                                } else {
+                                    this.${relationship.otherEntityName}Service
+                                        .find(${entityInstance}.${relationshipFieldName}${dto !== 'no' ? 'Id' : '.id'})
+                                        .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
+                                            return subRes.body ? [subRes.body].concat(resBody) : resBody;
+                                        }))
+                                        .subscribe((concatRes: I${relationship.otherEntityAngularName}[]) => {
+                                            this.${variableName} = concatRes;
+                                        });
+                                }
+                            });`;
                 } else {
-                    this.${relationship.otherEntityName}Service
-                        .find(this.editForm.get('${relationshipFieldName}${dto !== 'no' ? 'Id' : ''}').value${
-                    dto === 'no' ? '.id' : ''
-                }).pipe(
-                            filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
-                            map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
-                        )
-                        .subscribe((subRes: I${relationship.otherEntityAngularName}) =>
-                            this.${variableName} = [subRes].concat(res)
-                        , (subRes: HttpErrorResponse) => this.onError(subRes.message));
+                    rxjsMapIsUsed = true;
+                    variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
+                    if (variableName === entityInstance) {
+                        variableName += 'Collection';
+                    }
+                    query = `
+                        this.${relationship.otherEntityName}Service.query()
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
+                                return res.body ? res.body : [];
+                            }))
+                            .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => this.${variableName} = resBody);`;
                 }
-            }, (res: HttpErrorResponse) => this.onError(res.message));`;
-            } else if (relationship.relationshipType !== 'one-to-many') {
-                variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
-                if (variableName === entityInstance) {
-                    variableName += 'Collection';
-                }
-                query = `this.${relationship.otherEntityName}Service.query().pipe(
-                            filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
-                            map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
-                        )
-            .subscribe(
-                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res,
-                (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
-                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[];`);
+                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[] = [];`);
             }
         });
         return {
             queries,
             variables,
-            hasManyToMany
+            rxjsMapIsUsed,
+            selectableEntities,
+            selectableManyToManyEntities
         };
     }
 
@@ -1032,6 +1117,19 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Find key type for Typescript
+     *
+     * @param {string} pkType - primary key type in database
+     * @returns {string} primary key type in Typescript
+     */
+    getTypescriptKeyType(pkType) {
+        if (pkType === 'String' || pkType === 'UUID') {
+            return 'string';
+        }
+        return 'number';
+    }
+
+    /**
      * Generate Entity Client Field Declarations
      *
      * @param {string} pkType - type of primary key
@@ -1042,12 +1140,7 @@ module.exports = class extends Generator {
      */
     generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
         const variablesWithTypes = [];
-        let tsKeyType;
-        if (pkType === 'String' || pkType === 'UUID') {
-            tsKeyType = 'string';
-        } else {
-            tsKeyType = 'number';
-        }
+        const tsKeyType = this.getTypescriptKeyType(pkType);
         variablesWithTypes.push(`id?: ${tsKeyType}`);
         fields.forEach(field => {
             const fieldType = field.fieldType;
@@ -1200,19 +1293,19 @@ module.exports = class extends Generator {
      * @returns generated JDL from entities
      */
     generateJDLFromEntities() {
-        const jdl = new jhiCore.JDLObject();
+        let jdlObject;
+        const entities = new Map();
         try {
-            const entities = {};
             this.getExistingEntities().forEach(entity => {
-                entities[entity.name] = entity.definition;
+                entities.set(entity.name, entity.definition);
             });
-            jhiCore.convertJsonEntitiesToJDL(entities, jdl);
-            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdl);
-        } catch (e) {
-            this.log(e.message || e);
+            jdlObject = jhiCore.convertJsonEntitiesToJDL({ entities });
+            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
+        } catch (error) {
+            this.log(error.message || error);
             this.error('\nError while parsing entities to JDL\n');
         }
-        return jdl;
+        return jdlObject;
     }
 
     /**
@@ -1384,10 +1477,26 @@ module.exports = class extends Generator {
      * @param {string} clientRootFolder
      */
     getEntityParentPathAddition(clientRootFolder) {
-        if (clientRootFolder) {
-            return '../';
+        if (!clientRootFolder) {
+            return '';
         }
-        return '';
+        const relative = path.relative(`/app/entities/${clientRootFolder}/`, '/app/entities/');
+        if (relative.includes('app')) {
+            // Relative path outside angular base dir.
+            const message = `
+                "clientRootFolder outside app base dir '${clientRootFolder}'"
+            `;
+            // Test case doesn't have a environment instance so return 'error'
+            if (this.env === undefined) {
+                throw new Error(message);
+            }
+            this.error(message);
+        }
+        const entityFolderPathAddition = relative.replace(/[/]?..\/entities/, '').replace('entities', '..');
+        if (!entityFolderPathAddition) {
+            return '';
+        }
+        return `${entityFolderPathAddition}/`;
     }
 
     /**
@@ -1412,5 +1521,17 @@ module.exports = class extends Generator {
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
         }
+    }
+
+    /**
+     * Returns a seeded random number generator, used for RandExp regex generation.
+     * @param {number} id - seeds the random number generator
+     */
+    seededRandomNumberGenerator(id) {
+        let seed = 42 + id;
+        return (a, b) => {
+            seed = seed ** 2 % 969421;
+            return (seed % (1 + b - a)) + a;
+        };
     }
 };

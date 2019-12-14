@@ -19,7 +19,7 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2 jhiTranslate="settings.title" <% if (enableTranslation) { %>[translateValues]="{username: settingsForm.get('login').value}"<% } %> *ngIf="settingsForm.get('login').value">User settings for [<b>{{settingsForm.get('login').value}}</b>]</h2>
+            <h2 jhiTranslate="settings.title" <% if (enableTranslation) { %>[translateValues]="{username: account.login}"<% } %> *ngIf="account">User settings for [<b>{{ account.login }}</b>]</h2>
 
             <div class="alert alert-success" *ngIf="success" jhiTranslate="settings.messages.success">
                 <strong>Settings saved!</strong>
@@ -27,7 +27,7 @@
 
             <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
-            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="settingsForm.get('login').value" novalidate>
+            <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="account" novalidate>
 
                 <div class="form-group">
                     <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>

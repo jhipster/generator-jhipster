@@ -17,20 +17,26 @@
  limitations under the License.
 -%>
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+const tsKeyType = getTypescriptKeyType(getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships));
+let searchType = 'Search';
+if (pagination === 'pagination' || pagination === 'infinite-scroll') {
+    searchType = 'SearchWithPagination';
+}
 _%>
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 <%_ if (fieldsContainDate) { _%>
-import * as moment from 'moment';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
+import * as moment from 'moment';
 <%_ } _%>
 
+<%_ if (fieldsContainDate) { _%>
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+<%_ } _%>
 import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/shared/util/request-util';
+import { createRequestOption<% if (searchEngine === 'elasticsearch') { %>, <%= searchType %><% } %> } from 'app/shared/util/request-util';
 import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
@@ -46,6 +52,7 @@ export class <%= entityAngularName %>Service {
 
     constructor(protected http: HttpClient) { }
 
+<%_ if (!readOnly) { _%>
     create(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
         <%_ if (fieldsContainDate) { _%>
         const copy = this.convertDateFromClient(<%= entityInstance %>);
@@ -65,8 +72,9 @@ export class <%= entityAngularName %>Service {
                     { observe: 'response' })
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
+<%_ } _%>
 
-    find(id: <% if (primaryKeyType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %>): Observable<EntityResponseType> {
+    find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
 
         return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
@@ -78,12 +86,14 @@ export class <%= entityAngularName %>Service {
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
 
-    delete(id: <% if (primaryKeyType === 'String' || pkType === 'UUID') { %>string<% } else { %>number<% } %>): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+<%_ if (!readOnly) { _%>
+    delete(id: <%= tsKeyType %>): Observable<HttpResponse<{}>> {
+        return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response'});
     }
+<%_ } _%>
 
     <%_ if (searchEngine === 'elasticsearch') { _%>
-    search(req?: any): Observable<EntityArrayResponseType> {
+    search(req: <%= searchType %>): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<I<%= entityAngularName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
@@ -95,10 +105,10 @@ export class <%= entityAngularName %>Service {
         const copy: I<%= entityAngularName %> = Object.assign({}, <%= entityInstance %>, {
     <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime'].includes(fields[idx].fieldType) ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : null,
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.toJSON() : undefined,
         <%_ } _%>
         <%_ if ( fields[idx].fieldType === 'LocalDate' ) { _%>
-        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> != null && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : null,
+        <%= fields[idx].fieldName %>: <%= entityInstance %>.<%= fields[idx].fieldName %> && <%= entityInstance %>.<%= fields[idx].fieldName %>.isValid() ? <%= entityInstance %>.<%= fields[idx].fieldName %>.format(DATE_FORMAT) : undefined,
         <%_ } _%>
     <%_ } _%>
         });
@@ -109,7 +119,7 @@ export class <%= entityAngularName %>Service {
         if (res.body) {
     <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-            res.body.<%= fields[idx].fieldName %> = res.body.<%= fields[idx].fieldName %> != null ? moment(res.body.<%= fields[idx].fieldName %>) : null;
+            res.body.<%= fields[idx].fieldName %> = res.body.<%= fields[idx].fieldName %> ? moment(res.body.<%= fields[idx].fieldName %>) : undefined;
         <%_ } _%>
     <%_ } _%>
         }
@@ -121,7 +131,7 @@ export class <%= entityAngularName %>Service {
             res.body.forEach ((<%= entityInstance %>: I<%= entityAngularName %>) => {
     <%_ for (idx in fields) { _%>
         <%_ if ( ['Instant', 'ZonedDateTime', 'LocalDate'].includes(fields[idx].fieldType) ) { _%>
-                <%= entityInstance %>.<%= fields[idx].fieldName %> = <%= entityInstance %>.<%= fields[idx].fieldName %> != null ? moment(<%= entityInstance %>.<%= fields[idx].fieldName %>) : null;
+                <%= entityInstance %>.<%= fields[idx].fieldName %> = <%= entityInstance %>.<%= fields[idx].fieldName %> ? moment(<%= entityInstance %>.<%= fields[idx].fieldName %>) : undefined;
         <%_ } _%>
     <%_ } _%>
             });

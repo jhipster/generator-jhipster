@@ -18,6 +18,8 @@
 -%>
 import { Injectable, isDevMode } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -40,7 +42,7 @@ export class UserRouteAccessService implements CanActivate {
                 private stateStorageService: StateStorageService) {
     }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
 
         const authorities = route.data['authorities'];
         // We need to call the checkLogin / and so the accountService.identity() function, to ensure,
@@ -49,8 +51,8 @@ export class UserRouteAccessService implements CanActivate {
         return this.checkLogin(authorities, state.url);
     }
 
-    checkLogin(authorities: string[], url: string): Promise<boolean> {
-        return this.accountService.identity().then((account) => {
+    checkLogin(authorities: string[], url: string): Observable<boolean> {
+        return this.accountService.identity().pipe(map((account) => {
 
             if (!authorities || authorities.length === 0) {
                 return true;
@@ -70,11 +72,12 @@ export class UserRouteAccessService implements CanActivate {
 
             this.stateStorageService.storeUrl(url);
             <%_ if (authenticationType !== 'oauth2') { _%>
+            this.router.navigate(['']);
             this.loginModalService.open();
             <%_ } else { _%>
             this.loginService.login();
             <%_ } _%>
             return false;
-        });
+        }));
     }
 }

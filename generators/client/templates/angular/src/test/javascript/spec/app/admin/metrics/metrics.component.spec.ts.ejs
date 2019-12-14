@@ -20,28 +20,28 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from 'app/admin/metrics/metrics.component';
-import { <%=jhiPrefixCapitalized%>MetricsService } from 'app/admin/metrics/metrics.service';
+import { MetricsComponent } from 'app/admin/metrics/metrics.component';
+import { MetricsService } from 'app/admin/metrics/metrics.service';
 
 describe('Component Tests', () => {
-    describe('<%=jhiPrefixCapitalized%>MetricsMonitoringComponent', () => {
-        let comp: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent;
-        let fixture: ComponentFixture<<%=jhiPrefixCapitalized%>MetricsMonitoringComponent>;
-        let service: <%=jhiPrefixCapitalized%>MetricsService;
+    describe('MetricsComponent', () => {
+        let comp: MetricsComponent;
+        let fixture: ComponentFixture<MetricsComponent>;
+        let service: MetricsService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
-                declarations: [<%=jhiPrefixCapitalized%>MetricsMonitoringComponent]
+                declarations: [MetricsComponent]
             })
-                .overrideTemplate(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent, '')
+                .overrideTemplate(MetricsComponent, '')
                 .compileComponents();
         }));
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(<%=jhiPrefixCapitalized%>MetricsMonitoringComponent);
+            fixture = TestBed.createComponent(MetricsComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(<%=jhiPrefixCapitalized%>MetricsService);
+            service = fixture.debugElement.injector.get(MetricsService);
         });
 
         describe('refresh', () => {

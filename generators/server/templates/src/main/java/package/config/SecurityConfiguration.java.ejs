@@ -35,15 +35,24 @@ import io.github.jhipster.security.*;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
     <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
+import io.github.jhipster.config.JHipsterProperties;
+    <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
     <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
 import org.springframework.http.HttpMethod;
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+    <%_ } _%>
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
     <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+    <%_ } else { _%>
+        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+        <%_ } _%>
     <%_ } _%>
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -96,7 +105,9 @@ import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @EnableWebSecurity
+    <%_ if (authenticationType !== 'oauth2') { _%>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+    <%_ } _%>
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
@@ -118,11 +129,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
 
+    private final JHipsterProperties jHipsterProperties;
     private final JwtAuthorityExtractor jwtAuthorityExtractor;
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %><% if (authenticationType === 'oauth2') { %>JwtAuthorityExtractor jwtAuthorityExtractor, <% } %>SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %><% if (authenticationType === 'oauth2') { %>JwtAuthorityExtractor jwtAuthorityExtractor, JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport) {
     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
         this.jHipsterProperties = jHipsterProperties;
         this.rememberMeServices = rememberMeServices;
@@ -136,6 +148,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         this.problemSupport = problemSupport;
     <%_ if (authenticationType === 'oauth2') { _%>
         this.jwtAuthorityExtractor = jwtAuthorityExtractor;
+        this.jHipsterProperties = jHipsterProperties;
     <%_ } _%>
     }
     <%_ if (authenticationType === 'session') { _%>
@@ -179,6 +192,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/swagger-ui/index.html")
             .antMatchers("/test/**");
     }
+    <%_ } else { _%>
+        <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring()
+            .antMatchers("/h2-console/**");
+    }
+        <%_ } _%>
     <%_ } _%>
 
     @Override
@@ -200,10 +221,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         <%_ } _%>
     <%_ } _%>
             .exceptionHandling()
-    <%_ if (authenticationType !== 'oauth2') { _%>
-            .authenticationEntryPoint(problemSupport)
-    <%_ } _%>
-            .accessDeniedHandler(problemSupport)
+                .authenticationEntryPoint(problemSupport)
+                .accessDeniedHandler(problemSupport)
     <%_ if (authenticationType === 'session') { _%>
         <%_ if (!skipUserManagement) { _%>
         .and()
@@ -322,7 +341,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         NimbusJwtDecoderJwkSupport jwtDecoder = (NimbusJwtDecoderJwkSupport)
             JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
-        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator();
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
 
@@ -350,7 +369,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.loadbalancer.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -367,7 +385,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableResourceServer
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     private final OAuth2Properties oAuth2Properties;
 

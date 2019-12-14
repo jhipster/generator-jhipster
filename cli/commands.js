@@ -63,6 +63,12 @@ const defaultCommands = {
     'aws-containers': {
         desc: 'Deploy the current application to Amazon Web Services using ECS'
     },
+    'azure-app-service': {
+        desc: 'Deploy the current application to Azure App Service'
+    },
+    'azure-spring-cloud': {
+        desc: 'Deploy the current application to Azure Spring Cloud'
+    },
     'ci-cd': {
         desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools'
     },
@@ -99,6 +105,7 @@ const defaultCommands = {
     --ignore-application  # Ignores application generation                                         Default: false
     --ignore-deployments  # Ignores deployments generation                                         Default: false
     --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
+    --skip-db-changelog   # Disable generation of database changelogs                              Default: false
     --inline              # Pass JDL content inline. Argument can be skipped when passing this
 
 Arguments:

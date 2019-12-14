@@ -79,7 +79,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
         });
     <%_ if (pagination !== 'no') { _%>
 
@@ -100,7 +100,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
         });
         <%_ if (pagination !== 'infinite-scroll') { _%>
 
@@ -108,13 +108,15 @@ describe('Component Tests', () => {
             spyOn(service, 'query').and.callThrough();
 
             // WHEN
+            comp.ngOnInit();
             comp.loadPage(0);
 
             // THEN
-            expect(service.query).toHaveBeenCalledTimes(0);
+            expect(service.query).toHaveBeenCalledTimes(1);
         });
         <%_ } _%>
 
+        <%_ if (pagination === 'infinite-scroll') { _%>
         it('should re-initialize the page', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
@@ -129,20 +131,17 @@ describe('Component Tests', () => {
 
             // WHEN
             comp.loadPage(1);
-            <%_ if (pagination === 'infinite-scroll') { _%>
             comp.reset();
-            <%_ } else { _%>
-            comp.clear();
-            <%_ } _%>
 
             // THEN
             expect(comp.page).toEqual(0);
             expect(service.query).toHaveBeenCalledTimes(2);
-            expect(comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
         });
-        <%_ if (pagination === 'infinite-scroll') { _%>
+
         it('should calculate the sort attribute for an id', () => {
             // WHEN
+            comp.ngOnInit();
             const result = comp.sort();
 
             // THEN
@@ -150,6 +149,9 @@ describe('Component Tests', () => {
         });
 
         it('should calculate the sort attribute for a non-id attribute', () => {
+            // INIT
+            comp.ngOnInit();
+
             // GIVEN
             comp.predicate = 'name';
 
@@ -162,6 +164,7 @@ describe('Component Tests', () => {
         <%_ } else { _%>
         it('should calculate the sort attribute for an id', () => {
             // WHEN
+            comp.ngOnInit();
             const result = comp.sort();
 
             // THEN
@@ -169,6 +172,9 @@ describe('Component Tests', () => {
         });
 
         it('should calculate the sort attribute for a non-id attribute', () => {
+            // INIT
+            comp.ngOnInit();
+
             // GIVEN
             comp.predicate = 'name';
 

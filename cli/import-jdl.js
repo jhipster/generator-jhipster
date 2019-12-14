@@ -26,7 +26,7 @@ const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
 const waitUntil = require('./wait-until');
-const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs } = require('./utils');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs, setExitCode } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
 
 const packagejs = require('../package.json');
@@ -58,19 +58,9 @@ const updateDeploymentState = importState =>
  * Imports the Applications and Entities defined in JDL
  * The app .yo-rc.json files and entity json files are written to disk
  */
-function importJDL() {
+function importJDL(jdlImporter) {
     logger.info('The JDL is being parsed.');
-    const jdlImporter = new jhiCore.JDLImporter(
-        this.jdlFiles,
-        {
-            databaseType: this.prodDatabaseType,
-            applicationType: this.applicationType,
-            applicationName: this.baseName,
-            generatorVersion: packagejs.version,
-            forceNoFiltering: this.options.force
-        },
-        this.jdlContent
-    );
+
     let importState = {
         exportedEntities: [],
         exportedApplications: [],
@@ -138,6 +128,7 @@ const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProces
         }
     );
     childProc.on('exit', code => {
+        setExitCode(code);
         logger.info(`Deployment: child process exited with code ${code}`);
         generationCompletionState.exportedDeployments[deploymentType] = true;
     });
@@ -166,6 +157,7 @@ const generateApplicationFiles = ({ generator, application, withEntities, inFold
         }
     );
     childProc.on('exit', code => {
+        setExitCode(code);
         logger.info(`App: child process exited with code ${code}`);
         generationCompletionState.exportedApplications[baseName] = true;
     });
@@ -190,6 +182,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         'skip-server': entity.skipServer,
         'no-fluent-methods': entity.noFluentMethod,
         'skip-user-management': entity.skipUserManagement,
+        'skip-db-changelog': generator.options['skip-db-changelog'],
         'skip-ui-grouping': generator.options['skip-ui-grouping']
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
@@ -203,6 +196,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
 
             const childProc = forkProcess(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
             childProc.on('exit', code => {
+                setExitCode(code);
                 logger.info(`Entity: child process exited with code ${code}`);
                 generationCompletionState.exportedEntities[entity.name] = true;
             });
@@ -290,7 +284,21 @@ class JDLProcessor {
     }
 
     importJDL() {
-        this.importState = importJDL.call(this);
+        const configuration = {
+            databaseType: this.prodDatabaseType,
+            applicationType: this.applicationType,
+            applicationName: this.baseName,
+            generatorVersion: packagejs.version,
+            forceNoFiltering: this.options.force
+        };
+        const JDLImporter = jhiCore.jdl.import.JDLImporter;
+        let importer;
+        if (this.jdlContent) {
+            importer = JDLImporter.createImporterFromContent(this.jdlContent, configuration);
+        } else {
+            importer = JDLImporter.createImporterFromFiles(this.jdlFiles, configuration);
+        }
+        this.importState = importJDL.call(this, importer);
     }
 
     sendInsight() {

@@ -16,8 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<div *ngIf="audits">
+<div>
     <h2 id="audits-page-heading" jhiTranslate="audits.title">Audits</h2>
+
+    <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
     <div class="row">
         <div class="col-md-5">
@@ -39,14 +41,21 @@
     <div class="alert alert-warning" *ngIf="audits?.length === 0">
         <span jhiTranslate="audits.notFound">No audit found</span>
     </div>
+
     <div class="table-responsive" *ngIf="audits?.length > 0">
-        <table class="table table-sm table-striped">
-            <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-                <th jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span><fa-icon [icon]="'sort'"></fa-icon></th>
-                <th jhiSortBy="principal"><span jhiTranslate="audits.table.header.principal">User</span><fa-icon [icon]="'sort'"></fa-icon></th>
-                <th jhiSortBy="auditEventType"><span jhiTranslate="audits.table.header.status">State</span><fa-icon [icon]="'sort'"></fa-icon></th>
-                <th><span jhiTranslate="audits.table.header.data">Extra data</span></th>
+        <table class="table table-sm table-striped"  aria-describedby="audits-page-heading">
+            <thead [ngSwitch]="canLoad()">
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)" *ngSwitchCase="true">
+                <th scope="col" jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                <th scope="col" jhiSortBy="principal"><span jhiTranslate="audits.table.header.principal">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                <th scope="col" jhiSortBy="auditEventType"><span jhiTranslate="audits.table.header.status">State</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                <th scope="col"><span jhiTranslate="audits.table.header.data">Extra data</span></th>
+            </tr>
+            <tr *ngSwitchCase="false">
+                <th scope="col"><span jhiTranslate="audits.table.header.date">Date</span></th>
+                <th scope="col"><span jhiTranslate="audits.table.header.principal">User</span></th>
+                <th scope="col"><span jhiTranslate="audits.table.header.status">State</span></th>
+                <th scope="col"><span jhiTranslate="audits.table.header.data">Extra data</span></th>
             </tr>
             </thead>
             <tbody>
@@ -62,12 +71,13 @@
             </tbody>
         </table>
     </div>
-    <div [hidden]="audits?.length === 0">
+
+    <div *ngIf="audits?.length > 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
         <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)" [disabled]="!canLoad()"></ngb-pagination>
         </div>
     </div>
 </div>

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <div>
-    <h2 jhiTranslate="sessions.title" [translateValues]="{username: account.login}" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
+    <h2 id="session-page-heading" jhiTranslate="sessions.title" [translateValues]="{username: account.login}" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
 
     <div class="alert alert-success" *ngIf="success" jhiTranslate="sessions.messages.success">
         <strong>Session invalidated!</strong>
@@ -27,13 +27,13 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped" aria-describedby="session-page-heading">
             <thead>
                 <tr>
-                    <th jhiTranslate="sessions.table.ipaddress">IP Address</th>
-                    <th jhiTranslate="sessions.table.useragent">User agent</th>
-                    <th jhiTranslate="sessions.table.date">Date</th>
-                    <th></th>
+                    <th scope="col" jhiTranslate="sessions.table.ipaddress">IP Address</th>
+                    <th scope="col" jhiTranslate="sessions.table.useragent">User agent</th>
+                    <th scope="col" jhiTranslate="sessions.table.date">Date</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>

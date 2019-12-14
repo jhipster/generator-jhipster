@@ -149,26 +149,15 @@ _%>
             .build();
         return create(ex, problem, request);
     }
-    <%_ if (!reactive) { _%>
-
-    @ExceptionHandler
-    public ResponseEntity<Problem> handleNoSuchElementException(NoSuchElementException ex, NativeWebRequest request) {
-        Problem problem = Problem.builder()
-            .withStatus(Status.NOT_FOUND)
-            .with(MESSAGE_KEY, ErrorConstants.ENTITY_NOT_FOUND_TYPE)
-            .build();
-        return create(ex, problem, request);
-    }
-    <%_ } _%>
     <%_ if (!skipUserManagement) { _%>
     @ExceptionHandler
-    public <%- returnType %> handleEmailAreadyUsedException(<%=packageName%>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
+    public <%- returnType %> handleEmailAlreadyUsedException(<%=packageName%>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
-    public <%- returnType %> handleUsernameAreadyUsedException(<%=packageName%>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
+    public <%- returnType %> handleUsernameAlreadyUsedException(<%=packageName%>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }

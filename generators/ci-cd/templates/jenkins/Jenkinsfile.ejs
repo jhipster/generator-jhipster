@@ -38,6 +38,9 @@ node {
 <%= indent %>        sh "chmod +x mvnw"
 <%= indent %>        sh "./mvnw -ntp clean"
 <%= indent %>    }
+<%= indent %>    stage('nohttp') {
+<%= indent %>        sh "./mvnw -ntp checkstyle:check"
+<%= indent %>    }
 
     <%_ if (!skipClient) { _%>
         <%_ if (clientPackageManager === 'yarn') { _%>
@@ -95,6 +98,9 @@ node {
 <%= indent %>    stage('clean') {
 <%= indent %>        sh "chmod +x gradlew"
 <%= indent %>        sh "./gradlew clean --no-daemon"
+<%= indent %>    }
+<%= indent %>    stage('nohttp') {
+<%= indent %>        sh "./gradlew checkstyleNohttp --no-daemon"
 <%= indent %>    }
 
     <%_ if (!skipClient) { _%>

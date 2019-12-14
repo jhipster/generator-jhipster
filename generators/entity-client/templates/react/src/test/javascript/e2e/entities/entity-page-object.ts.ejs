@@ -21,10 +21,13 @@ import { element, by, ElementFinder } from 'protractor';
 import { waitUntilCount, waitUntilDisplayed } from '<% if (clientRootFolder && !skipUiGrouping) { %>../<% } %>../../util/utils';
 
 export default class <%= entityClass %>ComponentsPage {
+    <%_ if (!readOnly) { _%>
     createButton: ElementFinder = element(by.id('jh-create-entity'));
     deleteButtons = element.all(by.css('div table .btn-danger'));
+    <%_ } _%>
     title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
 
+    <%_ if (!readOnly) { _%>
     async clickOnCreateButton() {
         await this.createButton.click();
     }
@@ -36,11 +39,13 @@ export default class <%= entityClass %>ComponentsPage {
     async countDeleteButtons() {
         return this.deleteButtons.count();
     }
+    <%_ } _%>
 
     getTitle() {
         return this.title;
     }
 
+    <%_ if (!readOnly) { _%>
     async waitUntilLoaded() {
         await waitUntilDisplayed(this.deleteButtons.first());
     }
@@ -48,8 +53,10 @@ export default class <%= entityClass %>ComponentsPage {
     async waitUntilDeleteButtonsLength(length) {
         await waitUntilCount(this.deleteButtons, length);
     }
+    <%_ } _%>
 }
 
+<%_ if (!readOnly) { _%>
 export class <%= entityClass %>DeleteDialog {
     private dialogTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
     private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
@@ -62,3 +69,4 @@ export class <%= entityClass %>DeleteDialog {
         await this.confirmButton.click();
     }
 }
+<%_ } _%>

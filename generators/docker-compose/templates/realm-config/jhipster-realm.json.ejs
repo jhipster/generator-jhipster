@@ -442,7 +442,8 @@
       "optionalClientScopes": [
         "address",
         "phone",
-        "offline_access"
+        "offline_access",
+        "microprofile-jwt"
       ]
     },
     {
@@ -479,7 +480,8 @@
       "optionalClientScopes": [
         "address",
         "phone",
-        "offline_access"
+        "offline_access",
+        "microprofile-jwt"
       ]
     },
     {
@@ -516,7 +518,8 @@
       "optionalClientScopes": [
         "address",
         "phone",
-        "offline_access"
+        "offline_access",
+        "microprofile-jwt"
       ]
     },
     {
@@ -614,7 +617,8 @@
       "optionalClientScopes": [
         "address",
         "phone",
-        "offline_access"
+        "offline_access",
+        "microprofile-jwt"
       ],
       "authorizationSettings": {
         "allowRemoteResourceManagement": false,
@@ -656,7 +660,8 @@
             }
           }
         ],
-        "scopes": []
+        "scopes": [],
+        "decisionStrategy": "UNANIMOUS"
       }
     },<% if (serviceDiscoveryType === 'eureka') { %>
     {
@@ -715,7 +720,8 @@
       "optionalClientScopes": [
         "address",
         "phone",
-        "offline_access"
+        "offline_access",
+        "microprofile-jwt"
       ]
     },<% } %>
     {
@@ -750,7 +756,8 @@
       "optionalClientScopes": [
         "address",
         "phone",
-        "offline_access"
+        "offline_access",
+        "microprofile-jwt"
       ]
     },
     {
@@ -807,7 +814,8 @@
       "optionalClientScopes": [
         "address",
         "phone",
-        "offline_access"
+        "offline_access",
+        "microprofile-jwt"
       ]
     },
     {
@@ -827,10 +835,10 @@
         "dev.localhost.ionic:*"
       ],
       "webOrigins": [
-        <%- keycloakRedirectUris %>
-        "http://localhost:8100/*",
-        "http://127.0.0.1:8761/*",
-        "http://localhost:9000/*"
+        <%- keycloakRedirectUris.replace(/\/\*/g, "") %>
+        "http://localhost:8100",
+        "http://127.0.0.1:8761",
+        "http://localhost:9000"
       ],
       "notBefore": 0,
       "bearerOnly": false,
@@ -871,7 +879,8 @@
       "optionalClientScopes": [
         "address",
         "phone",
-        "offline_access"
+        "offline_access",
+        "microprofile-jwt"
       ]
     }
   ],
@@ -995,6 +1004,48 @@
             "jsonType.label": "String",
             "multivalued": "true",
             "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "id": "a72d436e-111b-445b-804a-967d249f6455",
+      "name": "microprofile-jwt",
+      "description": "Microprofile - JWT built-in scope",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "id": "dec0c468-3c11-429b-844e-dfd632b20ba7",
+          "name": "upn",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "username",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "upn",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "1ac09ef6-ab67-4379-b15a-5e54e50783be",
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "user.attribute": "foo",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups",
+            "jsonType.label": "String"
           }
         }
       ]
@@ -1312,11 +1363,11 @@
           "protocolMapper": "oidc-usermodel-client-role-mapper",
           "consentRequired": false,
           "config": {
-            "multivalued": "true",
             "user.attribute": "foo",
             "access.token.claim": "true",
             "claim.name": "resource_access.${client_id}.roles",
-            "jsonType.label": "String"
+            "jsonType.label": "String",
+            "multivalued": "true"
           }
         },
         {
@@ -1326,11 +1377,11 @@
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
           "consentRequired": false,
           "config": {
-            "multivalued": "true",
             "user.attribute": "foo",
             "access.token.claim": "true",
             "claim.name": "realm_access.roles",
-            "jsonType.label": "String"
+            "jsonType.label": "String",
+            "multivalued": "true"
           }
         },
         {
@@ -1375,7 +1426,8 @@
   "defaultOptionalClientScopes": [
     "phone",
     "address",
-    "offline_access"
+    "offline_access",
+    "microprofile-jwt"
   ],
   "browserSecurityHeaders": {
     "contentSecurityPolicyReportOnly": "",
@@ -1778,6 +1830,44 @@
       ]
     },
     {
+      "id": "d7ea5a9d-7f88-4b40-b3fe-ad43ba544760",
+      "alias": "http challenge",
+      "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "no-cookie-redirect",
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "basic-auth",
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "basic-auth-otp",
+          "requirement": "DISABLED",
+          "priority": 30,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "auth-spnego",
+          "requirement": "DISABLED",
+          "priority": 40,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    },
+    {
       "id": "5ce6e8c5-f704-47f2-88eb-91831add3e2d",
       "alias": "registration",
       "description": "registration flow",
@@ -1912,7 +2002,7 @@
       "providerId": "CONFIGURE_TOTP",
       "enabled": true,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 10,
       "config": {}
     },
     {
@@ -1921,7 +2011,7 @@
       "providerId": "terms_and_conditions",
       "enabled": false,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 20,
       "config": {}
     },
     {
@@ -1930,7 +2020,7 @@
       "providerId": "UPDATE_PASSWORD",
       "enabled": true,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 30,
       "config": {}
     },
     {
@@ -1939,7 +2029,7 @@
       "providerId": "UPDATE_PROFILE",
       "enabled": true,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 40,
       "config": {}
     },
     {
@@ -1948,7 +2038,7 @@
       "providerId": "VERIFY_EMAIL",
       "enabled": true,
       "defaultAction": false,
-      "priority": 0,
+      "priority": 50,
       "config": {}
     }
   ],
@@ -1979,6 +2069,6 @@
     "waitIncrementSeconds": "60",
     "offlineSessionMaxLifespanEnabled": "false"
   },
-  "keycloakVersion": "6.0.1",
+  "keycloakVersion": "7.0.0",
   "userManagedAccessAllowed": false
 }

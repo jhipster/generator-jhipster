@@ -352,14 +352,14 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } else {
         if (databaseType === 'sql') {
             if (ownerSide) { _%>
-    @OneToOne<%_ if (relationshipRequired) { _%>(optional = false)<%_ } _%>
+    @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
             <%_ if (relationshipValidate) { _%>
     <%- include relationship_validators -%>
             <%_ }_%>
             <%_ if (isUsingMapsId === true) { %>
     @MapsId
     @JoinColumn(name = "id")
-            <%_ } else { %>
+            <%_ } else { _%>
     @JoinColumn(unique = true)
             <%_ } _%>
         <%_ } else { _%>

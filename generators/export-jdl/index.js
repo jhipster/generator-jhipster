@@ -17,16 +17,15 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const JCore = require('jhipster-core');
+const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
-const { logger } = require('../utils');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
         this.baseName = this.config.get('baseName');
-        this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jh` });
+        this.argument('jdlFile', { type: String, required: false, defaults: `${this.baseName}.jdl` });
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -47,9 +46,9 @@ module.exports = class extends BaseGenerator {
 
             convertToJDL() {
                 try {
-                    JCore.convertToJDL();
+                    jhiCore.jdl.conversion.JSONToJDLConverter.convertToJDL('.', this.options.jdlFile);
                 } catch (error) {
-                    logger.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
+                    this.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
                 }
             }
         };

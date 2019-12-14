@@ -27,21 +27,21 @@
         <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
             <thead>
                 <tr>
-                    <th jhiTranslate="health.table.service">Service Name</th>
-                    <th class="text-center" jhiTranslate="health.table.status">Status</th>
-                    <th class="text-center" jhiTranslate="health.details.details">Details</th>
+                    <th scope="col" jhiTranslate="health.table.service">Service Name</th>
+                    <th scope="col" class="text-center" jhiTranslate="health.table.status">Status</th>
+                    <th scope="col" class="text-center" jhiTranslate="health.details.details">Details</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr *ngFor="let health of healthData">
-                    <td><% if (enableTranslation) { %>{{'health.indicator.' + baseName(health.name) | translate}}<% } else { %><span class="text-capitalize">{{ baseName(health.name) }}</span><% } %> {{subSystemName(health.name)}}</td>
+            <tbody *ngIf="health">
+                <tr *ngFor="let componentHealth of health.details | keys">
+                    <td><% if (enableTranslation) { %>{{'health.indicator.' + componentHealth.key | translate}}<% } else { %><span class="text-capitalize">{{ componentHealth.key }}</span><% } %></td>
                     <td class="text-center">
-                        <span class="badge" [ngClass]="getBadgeClass(health.status)" jhiTranslate="{{'health.status.' + health.status}}">
-                            {{health.status}}
+                        <span class="badge" [ngClass]="getBadgeClass(componentHealth.value.status)" jhiTranslate="{{'health.status.' + componentHealth.value.status}}">
+                            {{ componentHealth.value.status }}
                         </span>
                     </td>
                     <td class="text-center">
-                        <a class="hand" (click)="showHealth(health)" *ngIf="health.details || health.error">
+                        <a class="hand" (click)="showHealth(componentHealth)" *ngIf="componentHealth.value.details">
                             <fa-icon [icon]="'eye'"></fa-icon>
                         </a>
                     </td>

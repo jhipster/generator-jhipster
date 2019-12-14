@@ -46,7 +46,7 @@ spring:
     <%_ if (databaseType === 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MULTI_THREADED=FALSE
+        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
         name:
         username:
         password:
@@ -93,6 +93,11 @@ spring:
             properties:
                 path:
                     home: <%= BUILD_DIR %>elasticsearch
+                <%_ if (cucumberTests) { _%>
+                # See https://github.com/jhipster/generator-jhipster/issues/10302
+                node:
+                    max_local_storage_nodes: 2
+                <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
@@ -205,16 +210,15 @@ jhipster:
 <%_ } _%>
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
+    bootstrap-servers: localhost:9092
     consumer:
         key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        bootstrap.servers: ${kafkaBootstrapServers}
         group.id: <%= dasherizedBaseName %>
         auto.offset.reset: earliest
     producer:
         key.serializer: org.apache.kafka.common.serialization.StringSerializer
         value.serializer: org.apache.kafka.common.serialization.StringSerializer
-        bootstrap.servers: ${kafkaBootstrapServers}
 <%_ } _%>
 
 # ===================================================================
