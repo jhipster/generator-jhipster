@@ -128,7 +128,7 @@ objects:
                     done
               containerName: ${APPLICATION_NAME}
         resources:
-      replicas: "1"
+      replicas: 1
       template:
         metadata:
           labels:
@@ -156,7 +156,7 @@ objects:
             - name: SPRING_CLOUD_CONSUL_HOST
               value: ${APPLICATION_NAME}-consul
             - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
+              value: 8500
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mysql') { _%>
             - name: SPRING_DATASOURCE_URL
@@ -274,7 +274,7 @@ objects:
             <%_ } _%>
             ports:
             - name: http
-              containerPort: "${APP_PORT}"
+              containerPort: ${{APP_PORT}}
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
@@ -295,7 +295,7 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
-        port: "${APP_PORT}"
+        port: ${{APP_PORT}}
   -
     apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
@@ -305,7 +305,7 @@ objects:
       to:
         kind: Service
         name: ${APPLICATION_NAME}
-        weight: "100"
+        weight: 100
       port:
         targetPort: "http"
       wildcardPolicy: None
