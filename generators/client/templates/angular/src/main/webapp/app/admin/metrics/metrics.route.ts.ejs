@@ -18,11 +18,11 @@
 -%>
 import { Route } from '@angular/router';
 
-import { <%=jhiPrefixCapitalized%>MetricsMonitoringComponent } from './metrics.component';
+import { MetricsComponent } from './metrics.component';
 
 export const metricsRoute: Route = {
     path: '',
-    component: <%=jhiPrefixCapitalized%>MetricsMonitoringComponent,
+    component: MetricsComponent,
     data: {
         pageTitle: 'metrics.title'
     }

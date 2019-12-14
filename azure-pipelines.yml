@@ -28,7 +28,7 @@ jobs:
           JHI_JDK: 11
           # if JHI_LIB_BRANCH value is release, use the release from Maven
           JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-          JHI_LIB_BRANCH: release
+          JHI_LIB_BRANCH: master
           # if JHI_GEN_BRANCH value is release, use the release from NPM
           JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
           JHI_GEN_BRANCH: master
@@ -42,55 +42,47 @@ jobs:
 
       strategy:
           matrix:
+              ms-ngx-gateway-eureka-jwt:
+                  JHI_APP: ms-ngx-gateway-eureka-jwt
+                  JHI_ENTITY: sqllight
+                  JHI_PROFILE: prod
+                  JHI_PROTRACTOR: 1
+              ms-ngx-gateway-eureka-oauth2:
+                  JHI_APP: ms-ngx-gateway-eureka-oauth2
+                  JHI_ENTITY: sqllight
+                  JHI_PROFILE: prod
+                  JHI_PROTRACTOR: 1
+              ms-ngx-gateway-eureka-uaa:
+                  JHI_APP: ms-ngx-gateway-eureka-uaa
+                  JHI_ENTITY: uaa
+              ms-micro-eureka-jwt:
+                  JHI_APP: ms-micro-eureka-jwt
+                  JHI_ENTITY: micro
+              ms-react-gateway-consul-jwt:
+                  JHI_APP: ms-react-gateway-consul-jwt
+                  JHI_ENTITY: sqllight
+                  JHI_PROFILE: prod
+                  JHI_PROTRACTOR: 1
+              ms-react-gateway-consul-oauth2:
+                  JHI_APP: ms-react-gateway-consul-oauth2
+                  JHI_ENTITY: sqllight
+                  JHI_PROFILE: prod
+                  JHI_PROTRACTOR: 1
               jdl-default:
                   JHI_APP: jdl-default
                   JHI_ENTITY: jdl
                   JHI_PROFILE: prod
                   JHI_PROTRACTOR: 1
-              jdl-default-jdk8:
-                  JHI_APP: jdl-default
-                  JHI_ENTITY: jdl
-                  JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
-                  JHI_JDK: 8
-              react-default:
-                  JHI_APP: react-default
-                  JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
-                  JHI_ENTITY: sql
-              react-noi18n-es-ws-gradle-session:
-                  JHI_APP: react-noi18n-es-ws-gradle-session
-                  JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
-                  JHI_ENTITY: sql
-              ms-ngx-gateway-eureka-oauth2:
-                  JHI_APP: ms-ngx-gateway-eureka-oauth2
-                  JHI_PROTRACTOR: 1
-                  JHI_ENTITY: sql
-              ms-ngx-gateway-consul:
-                  JHI_APP: ms-ngx-gateway-consul
-                  JHI_ENTITY: sql
-              ms-ngx-gateway-uaa:
-                  JHI_APP: ms-ngx-gateway-uaa
-                  JHI_ENTITY: uaa
-              ngx-mariadb-oauth2-sass-infinispan:
-                  JHI_APP: ngx-mariadb-oauth2-sass-infinispan
-                  JHI_PROTRACTOR: 1
-                  JHI_ENTITY: sql
-              ngx-h2mem-ws-nol2:
-                  JHI_APP: ngx-h2mem-ws-nol2
-                  JHI_ENTITY: sql
               webflux-mongodb:
                   JHI_APP: webflux-mongodb
                   JHI_ENTITY: none
-
       steps:
           #----------------------------------------------------------------------
           # Install all tools and check configuration
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '12.13.0'
+                versionSpec: '12.13.1'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then

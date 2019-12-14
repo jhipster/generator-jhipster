@@ -33,9 +33,23 @@ h4 {
 
 <%_ if (clientTheme === 'none') { _%>
 /* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
-a, a:hover {
+a {
     color: #533f03;
     font-weight: bold;
+}
+
+a:hover {
+    color: #533f03;
+}
+
+/* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
+a:not([href]):not([tabindex]):hover.dropdown-item {
+    color: $dropdown-link-hover-color;
+}
+
+/* override .dropdown-item.active background-color on hover */
+.dropdown-item.active:hover {
+    background-color: mix($dropdown-link-hover-bg, $dropdown-link-active-bg, 50%);
 }
 <%_ } _%>
 

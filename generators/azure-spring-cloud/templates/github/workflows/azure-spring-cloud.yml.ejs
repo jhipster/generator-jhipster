@@ -14,12 +14,19 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Cache Maven archetypes
+      uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
     - name: Test with Maven
       run: mvn test
     - name: Build with Maven
       run: mvn package -DskipTests -Pprod,azure
-    - name: Login to Azure Spring Cloud
-      uses: azure/actions/login@v1
+    - name: Login to Azure
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Install Azure Spring Cloud extension

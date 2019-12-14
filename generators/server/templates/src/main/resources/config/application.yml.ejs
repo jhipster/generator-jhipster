@@ -60,7 +60,7 @@ ribbon:
     eureka:
         enabled: true
 <%_ } _%>
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationType === 'gateway') { _%>
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
 zuul: # those values must be configured depending on the application specific needs
     sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
@@ -257,9 +257,6 @@ security:
 
 server:
     servlet:
-        <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { _%>
-        context-path: /services/${spring.application.name}
-        <%_ } _%>
         session:
             cookie:
                 http-only: true
@@ -312,16 +309,15 @@ jhipster:
     <%_ } _%>
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
+  bootstrap-servers: localhost:9092
   consumer:
     key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    bootstrap.servers: localhost:9092
     group.id: <%= dasherizedBaseName %>
     auto.offset.reset: earliest
   producer:
     key.serializer: org.apache.kafka.common.serialization.StringSerializer
     value.serializer: org.apache.kafka.common.serialization.StringSerializer
-    bootstrap.servers: localhost:9092
 <%_ } _%>
 # ===================================================================
 # Application specific properties

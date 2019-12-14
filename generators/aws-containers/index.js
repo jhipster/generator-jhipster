@@ -329,9 +329,7 @@ module.exports = class extends BaseGenerator {
                     if (config.cacheProvider !== 'no') {
                         this.log(
                             chalk.yellow(
-                                `Warning ${
-                                    config.baseName
-                                } is using a cache provider, scaling will not be available. Refer to an AWS native scaling service.`
+                                `Warning ${config.baseName} is using a cache provider, scaling will not be available. Refer to an AWS native scaling service.`
                             )
                         );
                     }

@@ -309,9 +309,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityTableName = context.entityTableName;
                 const jhiTablePrefix = context.jhiTablePrefix;
                 const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
-                const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${
-                    context.name
-                }.json file and then run again 'jhipster entity ${context.name}.'`;
+                const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${context.name}.json file and then run again 'jhipster entity ${context.name}.'`;
 
                 if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
                     this.error(`The table name cannot contain special characters.\n${instructions}`);
@@ -1043,9 +1041,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                         context.entityParentPathAddition ? `${context.entityParentPathAddition}/` : ''
                                     }${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                                 }
-                                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${
-                                    relationship.otherEntityFileName
-                                }`;
+                                relationship.otherEntityModelName = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFileName}`;
                                 relationship.otherEntityPath = `${otherEntityData.clientRootFolder}/${relationship.otherEntityFolderName}`;
                             } else {
                                 relationship.otherEntityModulePath = `${
@@ -1058,6 +1054,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
                             relationship.otherEntityModulePath = 'app/core';
                         }
+                    }
+                    if (otherEntityData) {
+                        this.copyFilteringFlag(otherEntityData, relationship, { ...otherEntityData, databaseType: context.databaseType });
                     }
                     // Load in-memory data for root
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) {

@@ -18,16 +18,13 @@
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { throwError } from 'rxjs';
+import { throwError, of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { SettingsComponent } from 'app/account/settings/settings.component';
-<%_ if (websocket === 'spring-websocket') { _%>
-import { TrackerService } from 'app/core/tracker/tracker.service';
-import { MockTrackerService } from '../../../helpers/mock-tracker.service';
-<%_ } _%>
+import { MockAccountService } from '../../../helpers/mock-account.service';
 
 describe('Component Tests', () => {
 
@@ -35,21 +32,23 @@ describe('Component Tests', () => {
 
         let comp: SettingsComponent;
         let fixture: ComponentFixture<SettingsComponent>;
-        let mockAuth: any;
+        let mockAuth: MockAccountService;
+        const accountValues: Account = {
+            firstName: 'John',
+            lastName: 'Doe',
+            activated: true,
+            email: 'john.doe@mail.com',
+            langKey: '<%= nativeLanguage %>',
+            login: 'john',
+            authorities: [],
+            imageUrl: ''
+          };
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [<%=angularXAppName%>TestModule],
                 declarations: [SettingsComponent],
-                providers: [
-                    FormBuilder,
-                    <%_ if (websocket === 'spring-websocket') { _%>
-                    {
-                        provide: TrackerService,
-                        useClass: MockTrackerService
-                    },
-                    <%_ } _%>
-                ]
+                providers: [FormBuilder]
             })
             .overrideTemplate(SettingsComponent, '')
             .compileComponents();
@@ -58,28 +57,19 @@ describe('Component Tests', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(SettingsComponent);
             comp = fixture.componentInstance;
-            mockAuth = fixture.debugElement.injector.get(AccountService);
+            mockAuth = TestBed.get(AccountService);
+            mockAuth.setIdentityResponse(accountValues);
         });
 
         it('should send the current identity upon save', () => {
             // GIVEN
-            const accountValues: Account = {
-                firstName: 'John',
-                lastName: 'Doe',
-                activated: true,
-                email: 'john.doe@mail.com',
-                langKey: '<%= nativeLanguage %>',
-                login: 'john',
-                authorities: [],
-                imageUrl: ''
-            };
+            mockAuth.saveSpy.and.returnValue(of({}));
             const settingsFormValues = {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'john.doe@mail.com'<% if (enableTranslation) { %>,
                 langKey: '<%= nativeLanguage %>'<% } %>
             };
-            mockAuth.setIdentityResponse(accountValues);
 
             // WHEN
             comp.ngOnInit();
@@ -88,20 +78,13 @@ describe('Component Tests', () => {
             // THEN
             expect(mockAuth.identitySpy).toHaveBeenCalled();
             expect(mockAuth.saveSpy).toHaveBeenCalledWith(accountValues);
+            expect(mockAuth.authenticateSpy).toHaveBeenCalledWith(accountValues);
             expect(comp.settingsForm.value).toEqual(settingsFormValues);
         });
 
         it('should notify of success upon successful save', () => {
             // GIVEN
-            const accountValues = {
-                firstName: 'John',
-                lastName: 'Doe'
-            };
-            comp.settingsForm.patchValue({
-                firstName: 'John',
-                lastName: 'Doe'
-            });
-            mockAuth.setIdentityResponse(accountValues);
+            mockAuth.saveSpy.and.returnValue(of({}));
 
             // WHEN
             comp.ngOnInit();

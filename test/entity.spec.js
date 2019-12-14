@@ -616,6 +616,87 @@ describe('JHipster generator for entity', () => {
                 });
             });
         });
+
+        describe('with creation timestamp', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                    })
+                    .withOptions({ creationTimestamp: '2016-01-20', withEntities: true })
+                    .withArguments(['foo'])
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination'
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected default files', () => {
+                assert.file(expectedFiles.server);
+                assert.file(expectedFiles.serverLiquibase);
+                assert.file(expectedFiles.clientNg2);
+                assert.file(expectedFiles.gatling);
+            });
+        });
+
+        describe('with formated creation timestamp', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                    })
+                    .withOptions({ creationTimestamp: '2016-01-20T00:00:00.000Z', withEntities: true })
+                    .withArguments(['foo'])
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination'
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected default files', () => {
+                assert.file(expectedFiles.server);
+                assert.file(expectedFiles.serverLiquibase);
+                assert.file(expectedFiles.clientNg2);
+                assert.file(expectedFiles.gatling);
+            });
+        });
+
+        describe('with wrong base changelog date', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                    })
+                    .withOptions({ baseChangelogDate: '20-01-2016' })
+                    .withArguments(['foo'])
+                    .withPrompts({
+                        fieldAdd: false,
+                        relationshipAdd: false,
+                        dto: 'no',
+                        service: 'no',
+                        pagination: 'pagination'
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected default files', () => {
+                assert.file(expectedFiles.server);
+                assert.noFile(expectedFiles.serverLiquibase);
+                assert.file(expectedFiles.clientNg2);
+                assert.file(expectedFiles.gatling);
+            });
+        });
     });
 
     context('regeneration from json file', () => {

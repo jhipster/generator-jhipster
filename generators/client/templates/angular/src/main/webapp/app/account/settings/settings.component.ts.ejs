@@ -25,7 +25,7 @@ import { JhiLanguageService } from 'ng-jhipster';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ } _%>
 
 @Component({
@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit {
     account!: Account;
     success = false;
     <%_ if (enableTranslation) { _%>
-    languages: string[];
+    languages = LANGUAGES;
     <%_ } _%>
     settingsForm = this.fb.group({
         firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -48,17 +48,21 @@ export class SettingsComponent implements OnInit {
     constructor(
         private accountService: AccountService,
         private fb: FormBuilder<% if (enableTranslation) { %>,
-        private languageService: JhiLanguageService,
-        private languageHelper: JhiLanguageHelper<% } %>
-    ) {
-        <%_ if (enableTranslation) { _%>
-        this.languages = this.languageHelper.getAll();
-        <%_ } _%>
-    }
+        private languageService: JhiLanguageService<% } %>
+    ) {}
 
     ngOnInit(): void {
         this.accountService.identity().subscribe((account) => {
-            this.updateForm(account);
+            if (account) {
+                this.settingsForm.patchValue({
+                    firstName: account.firstName,
+                    lastName: account.lastName,
+                    email: account.email<% if (enableTranslation) { %>,
+                    langKey: account.langKey<% } %>
+                });
+        
+                this.account = account;
+            }
         });
     }
 
@@ -75,29 +79,13 @@ export class SettingsComponent implements OnInit {
         this.accountService.save(this.account).subscribe(() => {
             this.success = true;
 
-            this.accountService.identity(true).subscribe((account) => {
-                this.updateForm(account);
-            });
+            this.accountService.authenticate(this.account);
             <%_ if (enableTranslation) { _%>
 
-            this.languageService.getCurrent().then((current) => {
-                if (this.account.langKey !== current) {
-                    this.languageService.changeLanguage(this.account.langKey);
-                }
-            });
+            if (this.account.langKey !== this.languageService.getCurrentLanguage()) {
+                this.languageService.changeLanguage(this.account.langKey);
+            }
             <%_ } _%>
         });
     }
-
-    private updateForm(account: Account): void {
-        this.settingsForm.patchValue({
-            firstName: account.firstName,
-            lastName: account.lastName,
-            email: account.email<% if (enableTranslation) { %>,
-            langKey: account.langKey<% } %>
-        });
-
-        this.account = account;
-    }
-
 }

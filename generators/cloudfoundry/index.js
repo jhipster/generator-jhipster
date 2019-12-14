@@ -111,9 +111,7 @@ module.exports = class extends BaseGenerator {
                 if (this.databaseType !== 'no') {
                     this.log(chalk.bold('Creating the database'));
                     const child = exec(
-                        `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${
-                            this.cloudfoundryDeployedName
-                        }`,
+                        `cf create-service ${this.cloudfoundryDatabaseServiceName} ${this.cloudfoundryDatabaseServicePlan} ${this.cloudfoundryDeployedName}`,
                         {},
                         (err, stdout, stderr) => {
                             done();

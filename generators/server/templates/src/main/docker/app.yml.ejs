@@ -89,14 +89,7 @@ services:
             - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
-            - KAFKA_CONSUMER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_CONSUMER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9092
-            - KAFKA_CONSUMER_GROUP_ID=<%= dasherizedBaseName %>
-            - KAFKA_CONSUMER_AUTO_OFFSET_RESET=earliest
-            - KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092
-            - KAFKA_PRODUCER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_PRODUCER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
+            - KAFKA_BOOTSTRAPSERVERS=kafka:9092
             <%_ } _%>
             <%_ if (cacheProvider === 'infinispan') { _%>
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
