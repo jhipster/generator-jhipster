@@ -492,20 +492,16 @@ dependencies {
     testImplementation "io.cucumber:cucumber-spring"
     <%_ } _%>
     testImplementation ("org.springframework.boot:spring-boot-starter-test") {
-        exclude module: "junit"
+        <%_ if (cucumberTests === false) { _%>
         exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+        <%_ } _%>
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
-    testImplementation "org.junit.jupiter:junit-jupiter-engine"
-    <%_ if (cucumberTests) { _%>
-    testImplementation "org.junit.vintage:junit-vintage-engine"
-    <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     testImplementation "org.assertj:assertj-core"
-    testImplementation "junit:junit"
     testImplementation "org.mockito:mockito-core"
     <%_ if (databaseType === 'mongodb') { _%>
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
