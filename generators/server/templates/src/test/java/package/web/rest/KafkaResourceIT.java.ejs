@@ -98,12 +98,12 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
         <%_ if (!reactive) { _%>
         restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
         <%_ } else { _%>
         client.post().uri("/api/jhipster-kafka/publish/topic-produce?message=value-produce")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8);
+            .expectHeader().contentType(MediaType.APPLICATION_JSON);
         <%_ } _%>
 
         Map<String, Object> consumerProps = new HashMap<>(getConsumerProps("group-produce"));
