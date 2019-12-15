@@ -30,7 +30,7 @@ logger.info(chalk.yellow(`Options: ${toString(options)}`));
 try {
     env.run(command, options, () => {
         done();
-        process.exit(0);
+        process.exitCode = 0;
     });
 } catch (e) {
     logger.error(e.message, e);
