@@ -160,7 +160,7 @@ objects:
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mysql') { _%>
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:

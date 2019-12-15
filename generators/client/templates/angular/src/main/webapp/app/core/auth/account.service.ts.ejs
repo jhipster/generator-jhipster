@@ -17,13 +17,15 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 <%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
 import { SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, ReplaySubject, of } from 'rxjs';
 import { shareReplay, tap, catchError } from 'rxjs/operators';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { Account } from 'app/core/user/account.model';
@@ -34,7 +36,7 @@ import { TrackerService } from '../tracker/tracker.service';
 @Injectable({providedIn: 'root'})
 export class AccountService  {
     private userIdentity: Account | null = null;
-    private authenticationState = new Subject<Account | null>();
+    private authenticationState = new ReplaySubject<Account | null>(1);
     private accountCache$?: Observable<Account | null>;
 
     constructor(
@@ -42,16 +44,23 @@ export class AccountService  {
         private languageService: JhiLanguageService,
         private sessionStorage: SessionStorageService,
         <%_ } _%>
-        private http: HttpClient<% if (websocket === 'spring-websocket') { %>,
-        private trackerService: TrackerService<% } %>) { }
+        private http: HttpClient,
+        <%_ if (websocket === 'spring-websocket') { _%>
+        private trackerService: TrackerService,
+        <%_ } _%>
+        private stateStorageService: StateStorageService,
+        private router: Router
+    ) {}
 
     private fetch(): Observable<Account> {
         return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
     }
+    <%_ if (!skipUserManagement) { _%>
 
     save(account: Account): Observable<{}> {
         return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
     }
+    <%_ } _%>
 
     authenticate(identity: Account | null): void {
         this.userIdentity = identity;
@@ -78,14 +87,13 @@ export class AccountService  {
     identity(force?: boolean): Observable<Account | null> {
         if (!this.accountCache$ || force || !this.isAuthenticated()) {
             this.accountCache$ = this.fetch().pipe(
-              catchError(
-                () => {
-                    return of(null);
-                }
-              ),
+              catchError(() => {
+                return of(null);
+              }),
               tap((account: Account | null) => {
                 this.authenticate(account);
                 <%_ if (enableTranslation) { _%>
+
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
                 if (account && account.langKey) {
@@ -93,6 +101,10 @@ export class AccountService  {
                   this.languageService.changeLanguage(langKey);
                 }
                 <%_ } _%>
+
+                if (account) {
+                    this.navigateToStoredUrl();
+                }
               }),
               shareReplay()
             );
@@ -100,6 +112,16 @@ export class AccountService  {
         return this.accountCache$;
     }
 
+    private navigateToStoredUrl(): void {
+        // previousState can be set in the authExpiredInterceptor and in the userRouteAccessService
+        // if login is successful, go to stored previousState and clear previousState
+        const previousUrl = this.stateStorageService.getUrl();
+        if (previousUrl) {
+            this.stateStorageService.clearUrl();
+            this.router.navigateByUrl(previousUrl);
+        }
+    }
+    
     isAuthenticated(): boolean {
         return this.userIdentity !== null;
     }

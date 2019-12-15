@@ -63,6 +63,9 @@ const defaultCommands = {
     'aws-containers': {
         desc: 'Deploy the current application to Amazon Web Services using ECS'
     },
+    'azure-app-service': {
+        desc: 'Deploy the current application to Azure App Service'
+    },
     'azure-spring-cloud': {
         desc: 'Deploy the current application to Azure Spring Cloud'
     },

@@ -18,7 +18,7 @@
 -%>
 import { TestBed } from '@angular/core/testing';
 
-import { AuditsService } from 'app/admin/audits/audits.service';
+import { AuditsService, AuditsQuery } from 'app/admin/audits/audits.service';
 import { Audit } from 'app/admin/audits/audit.model';
 import { SERVER_API_URL } from 'app/app.constants';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
@@ -30,7 +30,7 @@ describe('Service Tests', () => {
         let service: AuditsService;
         let httpMock: HttpTestingController;
         let expectedResult: HttpResponse<Audit[]>;
-        const fakeRequest = { fromDate: '', toDate: '' };
+        const fakeRequest: AuditsQuery = { page: 0, size: 0, sort: [], fromDate: '', toDate: '' };
 
         beforeEach(() => {
             TestBed.configureTestingModule({

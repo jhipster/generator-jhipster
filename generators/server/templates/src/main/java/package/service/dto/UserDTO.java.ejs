@@ -25,9 +25,6 @@ import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
 import javax.validation.constraints.*;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 import java.time.Instant;

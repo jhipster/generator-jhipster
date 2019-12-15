@@ -53,29 +53,37 @@ jobs:
   #----------------------------------------------------------------------
   - script: <%= clientPackageManager %> install
     displayName: 'INSTALL: launch <%= clientPackageManager %> install'
-  <%_ if (buildTool === 'maven') { _%>
+  <%_ if (!skipServer) { _%>
+    <%_ if (buildTool === 'maven') { _%>
   - script: |
       chmod +x mvnw
       ./mvnw -ntp checkstyle:check
       ./mvnw -ntp clean verify
-  <%_ } else if (buildTool === 'gradle') { _%>
+    <%_ } else if (buildTool === 'gradle') { _%>
   - script: |
       chmod +x gradlew
       ./gradlew checkstyleNohttp
       ./gradlew clean test integrationTest
-  <%_ } _%>
+    <%_ } _%>
     displayName: 'TESTS: backend'
+  <%_ } _%>
 <%_ if (!skipClient) { _%>
-  <%_ if (buildTool === 'maven') { _%>
+  <%_ if (!skipServer) { _%>
+    <%_ if (buildTool === 'maven') { _%>
   - script: ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'
-  <%_ } else if (buildTool === 'gradle') { _%>
+    <%_ } else if (buildTool === 'gradle') { _%>
   - script: ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
+    <%_ } _%>
+  <%_ } else { _%>
+  - script: npm test
   <%_ } _%>
     displayName: 'TESTS: frontend'
 <%_ } _%>
-<%_ if (buildTool === 'maven') { _%>
+<%_ if (!skipServer) { _%>
+  <%_ if (buildTool === 'maven') { _%>
   - script: ./mvnw -ntp verify -Pprod -DskipTests
-<%_ } else if (buildTool === 'gradle') { _%>
+  <%_ } else if (buildTool === 'gradle') { _%>
   - script: ./gradlew bootJar -Pprod -x test
-<%_ } _%>
+  <%_ } _%>
     displayName: 'TESTS: packaging'
+<%_ } _%>

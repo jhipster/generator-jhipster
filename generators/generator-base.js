@@ -808,7 +808,21 @@ module.exports = class extends PrivateBase {
      * Generate a date to be used by Liquibase changelogs.
      */
     dateFormatForLiquibase() {
-        const now = new Date();
+        let now = new Date();
+        // Run reproducible timestamp when regenerating the project with with-entities option.
+        if (this.options.withEntities || this.options.creationTimestamp) {
+            if (this.configOptions.lastLiquibaseTimestamp) {
+                // Counter already started.
+                now = this.configOptions.lastLiquibaseTimestamp;
+            } else {
+                // Create a new counter
+                const creationTimestamp = this.parseCreationTimestamp() || this.config.get('creationTimestamp');
+                now = creationTimestamp ? new Date(creationTimestamp) : now;
+            }
+            now.setMinutes(now.getMinutes() + 1);
+            this.configOptions.lastLiquibaseTimestamp = now;
+        }
+
         const nowUTC = new Date(
             now.getUTCFullYear(),
             now.getUTCMonth(),
@@ -1797,6 +1811,7 @@ module.exports = class extends PrivateBase {
      * @param {String} profile - dev | prod
      * @param {Boolean} buildWar - build a war instead of a jar
      * @param {Function} cb - callback when build is complete
+     * @returns {object} the command line and its result
      */
     buildApplication(buildTool, profile, buildWar, cb) {
         let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
@@ -1817,11 +1832,37 @@ module.exports = class extends PrivateBase {
             buildCmd = `./${buildCmd}`;
         }
         buildCmd += ` -P${profile}`;
-        const child = {};
-        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout;
-        child.buildCmd = buildCmd;
+        return {
+            stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
+            buildCmd
+        };
+    }
 
-        return child;
+    /**
+     * run a command using the configured Java build tool.
+     *
+     * @param {String} buildTool - maven | gradle
+     * @param {String} profile - dev | prod
+     * @param {String} command - the command (goal/task) to run
+     * @param {Function} cb - callback when build is complete
+     * @returns {object} the command line and its result
+     */
+    runJavaBuildCommand(buildTool, profile, command, cb) {
+        let buildCmd = `mvnw -ntp -DskipTests=true -B ${command}`;
+
+        if (buildTool === 'gradle') {
+            buildCmd = `gradlew -x ${command}`;
+        }
+
+        if (os.platform() !== 'win32') {
+            buildCmd = `./${buildCmd}`;
+        }
+        buildCmd += ` -P${profile}`;
+        this.log(`Running command: '${chalk.bold(buildCmd)}'`);
+        return {
+            stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
+            buildCmd
+        };
     }
 
     /**

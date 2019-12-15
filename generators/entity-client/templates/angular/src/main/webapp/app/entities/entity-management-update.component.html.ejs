@@ -73,7 +73,7 @@ _%>
                             <span class="pull-left">{{editForm.get('<%= fieldName %>ContentType').value}}, {{byteSize(editForm.get('<%= fieldName %>').value)}}</span>
             <%_ } _%>
             <%_ if (fieldTypeBlobContent === 'image') { _%>
-                            <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                            <button type="button" (click)="clearInputImage('<%= fieldName %>', '<%= fieldName %>ContentType', 'file_<%= fieldName %>')" class="btn btn-secondary btn-xs pull-right">
             <%_ } else { _%>
                             <button type="button" (click)="editForm.patchValue({<%= fieldName %>: null});editForm.patchValue({<%= fieldName %>ContentType: null});"
                                     class="btn btn-secondary btn-xs pull-right">
@@ -198,7 +198,7 @@ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
             <%_ } else { _%>
                         <option *ngIf="!editForm.get('<%= relationshipName %>').value" [ngValue]="null" selected></option>
             <%_ } _%>
-                        <option [ngValue]="<%=otherEntityName %>Option.id === editForm.get('<%= relationshipFieldName %>').value?.id ? editForm.get('<%= relationshipFieldName %>').value : <%=otherEntityName %>Option" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: track<%=otherEntityNameCapitalized %>ById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        <option [ngValue]="<%=otherEntityName %>Option.id === editForm.get('<%= relationshipFieldName %>').value?.id ? editForm.get('<%= relationshipFieldName %>').value : <%=otherEntityName %>Option" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                     </select>
         <%_ } else { _%>
                     <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>Id">
@@ -207,7 +207,7 @@ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
             <%_ } else { _%>
                         <option *ngIf="!editForm.get('<%= relationshipName %>Id').value" [ngValue]="null" selected></option>
             <%_ } _%>
-                        <option [ngValue]="<%=otherEntityName %>Option.id" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: track<%=otherEntityNameCapitalized %>ById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        <option [ngValue]="<%=otherEntityName %>Option.id" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                     </select>
         <%_ } _%>
                 </div>
@@ -221,7 +221,7 @@ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
             <%_ } else { _%>
                         <option *ngIf="!editForm.get('<%= relationshipName %>').value" [ngValue]="null" selected></option>
             <%_ } _%>
-                        <option [ngValue]="<%=otherEntityName %>Option.id === editForm.get('<%= relationshipFieldName %>').value?.id ? editForm.get('<%= relationshipFieldName %>').value : <%=otherEntityName %>Option" *ngFor="let <%=otherEntityName %>Option of <%=relationshipFieldNamePlural.toLowerCase() %>; trackBy: track<%=otherEntityNameCapitalized %>ById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        <option [ngValue]="<%=otherEntityName %>Option.id === editForm.get('<%= relationshipFieldName %>').value?.id ? editForm.get('<%= relationshipFieldName %>').value : <%=otherEntityName %>Option" *ngFor="let <%=otherEntityName %>Option of <%=relationshipFieldNamePlural.toLowerCase() %>; trackBy: trackById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                     </select>
         <%_ } else { _%>
                     <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" formControlName="<%= relationshipName %>Id">
@@ -230,15 +230,15 @@ const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
             <%_ } else { _%>
                         <option *ngIf="!editForm.get('<%= relationshipName %>Id').value" [ngValue]="null" selected></option>
             <%_ } _%>
-                        <option [ngValue]="<%=otherEntityName %>Option.id" *ngFor="let <%=otherEntityName %>Option of <%=relationshipFieldNamePlural.toLowerCase() %>; trackBy: track<%=otherEntityNameCapitalized %>ById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        <option [ngValue]="<%=otherEntityName %>Option.id" *ngFor="let <%=otherEntityName %>Option of <%=relationshipFieldNamePlural.toLowerCase() %>; trackBy: trackById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                     </select>
         <%_ } _%>
                 </div>
-    <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
+    <%_ } else if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
                 <div class="form-group">
                     <label jhiTranslate="<%= translationKey %>" for="field_<%= relationshipFieldNamePlural %>"><%= relationshipNameHumanized %></label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" multiple name="<%= relationshipFieldNamePlural %>" formControlName="<%=relationshipFieldNamePlural %>">
-                        <option [ngValue]="getSelected(editForm.get('<%= relationshipFieldNamePlural %>').value, <%=otherEntityName %>Option)" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: track<%=otherEntityNameCapitalized %>ById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
+                        <option [ngValue]="getSelected(editForm.get('<%= relationshipFieldNamePlural %>').value, <%=otherEntityName %>Option)" *ngFor="let <%=otherEntityName %>Option of <%=otherEntityNamePlural.toLowerCase() %>; trackBy: trackById">{{<%=otherEntityName %>Option.<%=otherEntityField %>}}</option>
                     </select>
                 </div>
     <%_ } _%>

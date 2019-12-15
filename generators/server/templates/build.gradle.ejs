@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import org.gradle.internal.os.OperatingSystem
-
 buildscript {
     repositories {
         mavenLocal()
@@ -100,26 +98,6 @@ eclipse {
                 srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
             }
         }
-    }
-}
-
-// See https://virgo47.wordpress.com/2018/09/14/classpath-too-long-with-spring-boot-and-gradle/ for details
-// https://github.com/jhipster/generator-jhipster/issues/9713
-if (OperatingSystem.current().isWindows()) {
-    task classpathJar(type: Jar) {
-        inputs.files sourceSets.main.runtimeClasspath
-
-        archiveName = "runboot-classpath.jar"
-        doFirst {
-            manifest {
-                def classpath = sourceSets.main.runtimeClasspath.files
-                attributes "Class-Path": classpath.collect {f -> f.toURI().toString()}.join(" ")
-            }
-        }
-    }
-
-    bootRun {
-        classpath = classpathJar.outputs.files
     }
 }
 
@@ -231,6 +209,11 @@ liquibase {
     runList = project.ext.runList
 }
 <%_ } _%>
+
+gitProperties {
+    failOnNoGitDirectory = false
+    keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
+}
 
 checkstyle {
     toolVersion '${checkstyle_version}'
@@ -378,7 +361,11 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-data-<%=databaseType%><% if (reactive) { %>-reactive<% } %>"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
+        <%_ if (!reactive) { _%>
     implementation "org.apache.kafka:kafka-clients"
+        <%_ } else { _%>
+    implementation "io.projectreactor.kafka:reactor-kafka"
+        <%_ } _%>
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation ("org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>") {
@@ -435,6 +422,7 @@ dependencies {
     <%_ if (authenticationType === 'oauth2') { _%>
     implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
+    implementation "org.springframework.security.oauth:spring-security-oauth2"
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     implementation "io.jsonwebtoken:jjwt-api"

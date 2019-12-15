@@ -75,22 +75,11 @@ export class RegisterComponent implements AfterViewInit {
         if (password !== this.registerForm.get(['confirmPassword'])!.value) {
             this.doNotMatch = true;
         } else {
-<%_ if (enableTranslation) { _%>
-            this.languageService.getCurrent().then((langKey) => {
-                const login = this.registerForm.get(['login'])!.value;
-                const email = this.registerForm.get(['email'])!.value;
-                this.registerService.save({ login, email, password, langKey }).subscribe(() => {
-                    this.success = true;
-                }, (response) => this.processError(response));
-            });
-<%_ } else { _%>
             const login = this.registerForm.get(['login'])!.value;
             const email = this.registerForm.get(['email'])!.value;
-            const langKey = 'en';
-            this.registerService.save({ login, email, password, langKey }).subscribe(() => {
-                this.success = true;
-            }, (response) => this.processError(response));
-<%_ } _%>
+            this.registerService
+                .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.languageService.getCurrentLanguage()<% } else { %>'en'<% } %> })
+                .subscribe(() => (this.success = true), response => this.processError(response));
         }
     }
 

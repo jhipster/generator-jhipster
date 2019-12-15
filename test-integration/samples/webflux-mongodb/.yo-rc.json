@@ -2,9 +2,9 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "reactive": true,
-        "baseName": "travisWebflux",
-        "packageName": "io.github.jhipster.travis",
-        "packageFolder": "io/github/jhipster/travis",
+        "baseName": "sampleWebflux",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
         "authenticationType": "jwt",
         "cacheProvider": "no",
         "enableHibernateCache": false,
@@ -20,7 +20,6 @@
         "testFrameworks": ["gatling"],
         "serverPort": "8080",
         "jhiPrefix": "jhi",
-        "travis": true,
         "clientPackageManager": "yarn",
         "clientFramework": "angularX"
     }

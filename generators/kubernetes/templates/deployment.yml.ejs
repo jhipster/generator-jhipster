@@ -110,7 +110,7 @@ spec:
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mysql') { _%>
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://<%= app.baseName.toLowerCase() %>-mysql.<%= kubernetesNamespace %>.svc.cluster.local:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+          value: jdbc:mysql://<%= app.baseName.toLowerCase() %>-mysql.<%= kubernetesNamespace %>.svc.cluster.local:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mariadb') { _%>
         - name: SPRING_DATASOURCE_URL
@@ -206,13 +206,13 @@ spec:
           containerPort: <%= app.serverPort %>
         readinessProbe:
           httpGet:
-            path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health
+            path: /management/health
             port: http
           initialDelaySeconds: 20
           periodSeconds: 15
           failureThreshold: 6
         livenessProbe:
           httpGet:
-            path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/info
+            path: /management/health
             port: http
           initialDelaySeconds: 120

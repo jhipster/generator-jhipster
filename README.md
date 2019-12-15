@@ -1,7 +1,8 @@
 [![Logo][jhipster-image]][jhipster-url]
 
 [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
-[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Applications Build Status][github-actions-applications-image]][github-actions-url] [![Travis Build Status][travis-image]][travis-url-main] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
+
+[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
 
 Greetings, Java Hipster!
 
@@ -101,7 +102,7 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://edusson.com/" target="_blank">
+        <a href="https://edusson.co.uk/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edusson.png">
         </a>
       </td>
@@ -137,6 +138,21 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
       <td align="center" valign="middle">
         <a href="https://vpngorilla.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/vpngorilla.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://papersowl.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.banksecrets.eu/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://edubirdie.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">
         </a>
       </td>
     </tr>
@@ -204,12 +220,11 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [jhipster-url]: https://www.jhipster.tech/
 [npm-image]: https://badge.fury.io/js/generator-jhipster.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster
-[travis-image]: https://travis-ci.org/jhipster/generator-jhipster.svg?branch=master
 [azure-devops-image]: https://dev.azure.com/jhipster/generator-jhipster/_apis/build/status/jhipster.generator-jhipster?branchName=master
-[travis-url-main]: https://travis-ci.org/jhipster/generator-jhipster
 [azure-devops-url-main]: https://dev.azure.com/jhipster/generator-jhipster/_build
 [github-actions-generator-image]: https://github.com/jhipster/generator-jhipster/workflows/Generator/badge.svg
-[github-actions-applications-image]: https://github.com/jhipster/generator-jhipster/workflows/Applications/badge.svg
+[github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/workflows/Angular/badge.svg
+[github-actions-react-image]: https://github.com/jhipster/generator-jhipster/workflows/React/badge.svg
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
 [daviddm-image]: https://david-dm.org/jhipster/generator-jhipster.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/generator-jhipster
