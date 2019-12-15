@@ -47,7 +47,7 @@ const error = function(msg, trace) {
     if (trace) {
         console.log(trace);
     }
-    process.exit(1);
+    process.exitCode = 1;
 };
 
 const init = function(program) {
@@ -99,7 +99,7 @@ const initHelp = (program, cliName) => {
             logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
         }
 
-        process.exit(1);
+        process.exitCode = 1;
     });
 };
 
