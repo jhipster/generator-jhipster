@@ -33,7 +33,7 @@ services:
             - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mysql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mariadb') { _%>
             - SPRING_DATASOURCE_URL=jdbc:mariadb://<%= baseName.toLowerCase() %>-mariadb:3306/<%= baseName.toLowerCase() %>
