@@ -229,9 +229,9 @@ configurations {
     implementation.exclude module: "spring-boot-starter-tomcat"
     all {
         resolutionStrategy {
-            // Inherited version from Spring Boot can't be used since a regression has been introduced with 3.8.1:
-            // https://liquibase.jira.com/projects/CORE/issues/CORE-3522
-            force 'org.liquibase:liquibase-core:3.8.0'
+            // Inherited version from Spring Boot can't be used because of regressions:
+            // https://liquibase.jira.com/browse/CORE-3536 and https://liquibase.jira.com/browse/CORE-3522
+            force 'org.liquibase:liquibase-core:3.6.3'
         }
     }
 }

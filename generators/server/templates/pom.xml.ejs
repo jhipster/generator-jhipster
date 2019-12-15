@@ -83,6 +83,8 @@
         <javassist.version>3.24.0-GA</javassist.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
+        <!-- However due to regressions, we can't upgrade: https://liquibase.jira.com/browse/CORE-3536 and
+         https://liquibase.jira.com/browse/CORE-3522 -->
         <liquibase.version>3.6.3</liquibase.version>
         <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
         <!-- The hibernate version to be used to override default version of liquibase maven plugin -->
@@ -445,9 +447,8 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <!-- Inherited version from Spring Boot can't be used since a regression has been introduced with 3.8.1:
-            https://liquibase.jira.com/projects/CORE/issues/CORE-3522 -->
-            <version>3.8.0</version>
+            <!-- Inherited version from Spring Boot can't be used because of regressions -->
+            <version>${liquibase.version}</version>
         </dependency>
 <%_ } _%>
         <dependency>
