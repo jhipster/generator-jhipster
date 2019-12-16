@@ -158,6 +158,12 @@ spec:
         - name: <%= app.baseName.toLowerCase() %>-couchbase-data
           mountPath: /opt/couchbase/var/lib/couchbase/data/
         resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
         imagePullPolicy: IfNotPresent
       restartPolicy: Always
       terminationGracePeriodSeconds: 30

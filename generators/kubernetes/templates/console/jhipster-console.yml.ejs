@@ -40,6 +40,13 @@ spec:
         name: jhipster-console
         ports:
         - containerPort: 5601
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
       restartPolicy: Always
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
