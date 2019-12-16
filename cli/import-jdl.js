@@ -86,7 +86,7 @@ function importJDL(jdlImporter) {
             const errorMessage = error.message || '';
             logger.log(chalk.red(`${errorName} ${errorMessage}`));
         }
-        logger.error(`Error while parsing applications and entities from the JDL ${error}`, error);
+        logger.fatal(`Error while parsing applications and entities from the JDL ${error}`, error);
     }
     return importState;
 }
@@ -334,7 +334,7 @@ class JDLProcessor {
                 );
                 previousApp = getBaseName(application);
             } catch (error) {
-                logger.error(`Error while generating applications from the parsed JDL\n${error}`, error);
+                logger.fatal(`Error while generating applications from the parsed JDL\n${error}`, error);
             }
         };
         this.importState.exportedApplications.forEach(application => {
@@ -377,7 +377,7 @@ class JDLProcessor {
                     );
                     previousDeployment = getDeploymentType(deployment);
                 } catch (error) {
-                    logger.error(`Error while generating deployments from the parsed JDL\n${error}`, error);
+                    logger.fatal(`Error while generating deployments from the parsed JDL\n${error}`, error);
                 }
             };
             this.importState.exportedDeployments.forEach(deployment => {
@@ -436,7 +436,7 @@ class JDLProcessor {
                 );
             });
         } catch (error) {
-            logger.error(`Error while generating entities from the parsed JDL\n${error}`, error);
+            logger.fatal(`Error while generating entities from the parsed JDL\n${error}`, error);
         }
     }
 }
@@ -445,7 +445,7 @@ const validateFiles = jdlFiles => {
     if (jdlFiles) {
         jdlFiles.forEach(key => {
             if (!shelljs.test('-f', key)) {
-                logger.error(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
+                logger.fatal(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
             }
         });
     }
@@ -477,6 +477,6 @@ module.exports = (args, options, env, forkProcess = fork) => {
         jdlImporter.generateEntities(env, forkProcess);
         jdlImporter.generateDeployments(forkProcess);
     } catch (e) {
-        logger.error(`Error during import-jdl: ${e.message}`, e);
+        logger.fatal(`Error during import-jdl: ${e.message}`, e);
     }
 };

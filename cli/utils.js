@@ -47,6 +47,19 @@ const error = function(msg, trace) {
     if (trace) {
         console.log(trace);
     }
+    process.exitCode = 1;
+};
+
+/**
+ *  Use with carefull.
+ *  process.exit is not recommended by Node.js.
+ *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
+ */
+const fatal = function(msg, trace) {
+    console.error(`${chalk.red(msg)}`);
+    if (trace) {
+        console.log(trace);
+    }
     process.exit(1);
 };
 
@@ -66,7 +79,8 @@ const logger = {
     debug,
     info,
     log,
-    error
+    error,
+    fatal
 };
 
 const toString = item => {
@@ -183,7 +197,7 @@ const getCommandOptions = (pkg, argv) => {
 
 const done = errorMsg => {
     if (errorMsg) {
-        logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+        logger.fatal(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
     } else {
         logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
     }
