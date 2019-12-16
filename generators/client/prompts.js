@@ -174,7 +174,11 @@ function askForClientThemeVariant(meta) {
 
     const skipClient = this.skipClient;
 
-    const choices = [{ value: 'primary', name: 'Primary' }, { value: 'dark', name: 'Dark' }, { value: 'light', name: 'Light' }];
+    const choices = [
+        { value: 'primary', name: 'Primary' },
+        { value: 'dark', name: 'Dark' },
+        { value: 'light', name: 'Light' }
+    ];
 
     const PROMPT = {
         type: 'list',

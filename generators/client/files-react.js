@@ -154,7 +154,10 @@ const files = {
     reactMain: [
         {
             path: REACT_DIR,
-            templates: [{ file: 'modules/home/home.tsx', method: 'processJsx' }, { file: 'modules/login/logout.tsx', method: 'processJsx' }]
+            templates: [
+                { file: 'modules/home/home.tsx', method: 'processJsx' },
+                { file: 'modules/login/logout.tsx', method: 'processJsx' }
+            ]
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
