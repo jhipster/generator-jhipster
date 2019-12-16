@@ -70,7 +70,7 @@
         "os-locale": "3.1.0",
         "parse-gitignore": "1.0.1",
         "pluralize": "7.0.0",
-        "prettier": "1.18.2",
+        "prettier": "1.19.1",
         "progress": "2.0.3",
         "randexp": "0.5.3",
         "semver": "5.6.0",
