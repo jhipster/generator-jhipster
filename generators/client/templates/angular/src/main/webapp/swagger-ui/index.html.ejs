@@ -80,19 +80,16 @@
                 requestInterceptor: function(req) {
                     req.headers['X-XSRF-TOKEN'] = getCSRF();
                     return req;
-                },
+                }
                 <%_ } _%>
                 <%_ if (authenticationType === 'jwt') { _%>
-                onComplete: function () {
+                requestInterceptor: function (req) {
                     var authToken = JSON.parse(localStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken")
                         || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken"));
                     if (authToken) {
-                        if(ui.specSelectors.isSwagger2()) {
-                            ui.preauthorizeApiKey("Bearer", "Bearer " + authToken)
-                        } else {
-                            ui.preauthorizeApiKey("Bearer", authToken)
-                        }
+                        req.headers['Authorization'] = "Bearer " + authToken;
                     }
+                    return req;
                 }
                 <%_ } _%>
             });

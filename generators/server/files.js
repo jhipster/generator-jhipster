@@ -377,10 +377,6 @@ const serverFiles = {
                 {
                     file: 'package/security/jwt/JWTConfigurer.java',
                     renameTo: generator => `${generator.javaDir}security/jwt/JWTConfigurer.java`
-                },
-                {
-                    file: 'package/config/apidoc/SwaggerSecurityCustomizer.java',
-                    renameTo: generator => `${generator.javaDir}config/apidoc/SwaggerSecurityCustomizer.java`
                 }
             ]
         },
