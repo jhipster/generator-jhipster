@@ -648,7 +648,7 @@ describe('JHipsterEntityExporter', () => {
             clientRootFolder: '',
             applications: []
           };
-          FileUtils.createDirectory('.jhipster');
+          FileUtils.createFolderIfItDoesNotExist('.jhipster');
           fs.writeFileSync(
             path.join('.jhipster', 'A.json'),
             JSON.stringify({ ...originalContent, customAttribute: '42' })

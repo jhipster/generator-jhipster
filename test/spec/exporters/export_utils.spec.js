@@ -18,44 +18,11 @@
  */
 /* eslint-disable no-unused-expressions */
 
-const { mkdirSync, readFileSync, rmdirSync, statSync, unlinkSync, writeFileSync } = require('fs');
+const { readFileSync, unlinkSync, writeFileSync } = require('fs');
 const { expect } = require('chai');
-const { createFolderIfItDoesNotExist, writeConfigFile } = require('../../../lib/exporters/export_utils');
+const { writeConfigFile } = require('../../../lib/exporters/export_utils');
 
 describe('ExportUtils', () => {
-  describe('createFolderIfItDoesNotExist', () => {
-    context('when the folder does not exist', () => {
-      let statObject;
-
-      before(() => {
-        createFolderIfItDoesNotExist('folderForTesting');
-        statObject = statSync('folderForTesting');
-      });
-
-      after(() => {
-        rmdirSync('folderForTesting');
-      });
-      it('should create it', () => {
-        expect(statObject.isDirectory()).to.be.true;
-      });
-    });
-    context('when the folder exists', () => {
-      let statObject;
-
-      before(() => {
-        mkdirSync('folderForTesting');
-        createFolderIfItDoesNotExist('folderForTesting');
-        statObject = statSync('folderForTesting');
-      });
-
-      after(() => {
-        rmdirSync('folderForTesting');
-      });
-      it('should not fail', () => {
-        expect(statObject.isDirectory()).to.be.true;
-      });
-    });
-  });
   describe('writeConfigFile', () => {
     context('when there is no .yo-rc.json file present', () => {
       let exportedConfig;
