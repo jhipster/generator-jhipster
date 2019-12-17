@@ -11,7 +11,7 @@ Are you ready to contribute to JHipster core? We'd love to have you on board, an
 And don't forget we also accept [financial contributions to the project](http://www.jhipster.tech/sponsors/) using OpenCollective.
 
 ## Questions and help
-This is the JHipster core bug tracker, and it is used for [Issues and Bugs](#issue) and for [Feature Requests](#feature). It is **not** a help desk or a support forum.
+This is the JHipster core bug tracker, and it is used for [Issues and Bugs](#issues-and-bugs) and for [Feature Requests](#feature-requests). It is **not** a help desk or a support forum.
 
 If you have a question on using JHipster, or if you need help with your JHipster core project, please [read our help page](http://www.jhipster.tech/help/) and use the [JHipster tag on StackOverflow](http://stackoverflow.com/tags/jhipster) or join our [Gitter.im chat room](https://gitter.im/jhipster/generator-jhipster).
 
