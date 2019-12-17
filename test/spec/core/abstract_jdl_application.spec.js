@@ -189,12 +189,14 @@ describe('AbstractJDLApplication', () => {
   config {
     baseName jhipster
     buildTool maven
+    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
     enableSwaggerCodegen false
     enableTranslation true
     jhiPrefix jhi
+    jhipsterVersion "4.9.0"
     languages [en, fr]
     messageBroker false
     nativeLanguage en
@@ -207,8 +209,6 @@ describe('AbstractJDLApplication', () => {
     skipUserManagement false
     testFrameworks []
     websocket false
-    jhipsterVersion "4.9.0"
-    clientPackageManager npm
   }
 }`);
       });
@@ -226,6 +226,7 @@ describe('AbstractJDLApplication', () => {
   config {
     baseName jhipster
     buildTool maven
+    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -244,7 +245,6 @@ describe('AbstractJDLApplication', () => {
     skipUserManagement false
     testFrameworks []
     websocket false
-    clientPackageManager npm
   }
 
   entities A, B, C
