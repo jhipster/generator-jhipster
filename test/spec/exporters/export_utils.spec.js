@@ -20,33 +20,9 @@
 
 const { mkdirSync, readFileSync, rmdirSync, statSync, unlinkSync, writeFileSync } = require('fs');
 const { expect } = require('chai');
-const { checkPath, createFolderIfNeeded, writeConfigFile } = require('../../../lib/exporters/export_utils');
+const { createFolderIfNeeded, writeConfigFile } = require('../../../lib/exporters/export_utils');
 
 describe('ExportUtils', () => {
-  describe('checkPath', () => {
-    context('when a folder does not already exist', () => {
-      it('should not throw any error', () => {
-        expect(() => checkPath('AFolderThatDoesNotAlreadyExist')).not.to.throw();
-      });
-    });
-    context('when a folder already exists', () => {
-      it('should not throw any error', () => {
-        expect(() => checkPath('..')).not.to.throw();
-      });
-    });
-    context('when a file already exists', () => {
-      it('should throw an error', () => {
-        expect(() => checkPath('package.json')).to.throw(
-          /^A file 'package.json' already exists, so a folder of the same name can't be created for the application\.$/
-        );
-      });
-    });
-    context('when a file does not already exist', () => {
-      it('should not throw any error', () => {
-        expect(() => checkPath('AFileThatDoesNotAlreadyExist')).not.to.throw();
-      });
-    });
-  });
   describe('createFolderIfNeeded', () => {
     context('when the folder does not exist', () => {
       let statObject;
