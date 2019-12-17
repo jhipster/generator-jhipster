@@ -22,9 +22,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Test with Maven
-      run: mvn test
+      run: mvn test --batch-mode
     - name: Build with Maven
-      run: mvn package -DskipTests -Pprod,azure
+      run: mvn package -DskipTests -Pprod,azure --batch-mode
     - name: Login to Azure
       uses: azure/login@v1
       with:
