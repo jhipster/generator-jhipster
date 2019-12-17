@@ -20,15 +20,15 @@
 
 const { mkdirSync, readFileSync, rmdirSync, statSync, unlinkSync, writeFileSync } = require('fs');
 const { expect } = require('chai');
-const { createFolderIfNeeded, writeConfigFile } = require('../../../lib/exporters/export_utils');
+const { createFolderIfItDoesNotExist, writeConfigFile } = require('../../../lib/exporters/export_utils');
 
 describe('ExportUtils', () => {
-  describe('createFolderIfNeeded', () => {
+  describe('createFolderIfItDoesNotExist', () => {
     context('when the folder does not exist', () => {
       let statObject;
 
       before(() => {
-        createFolderIfNeeded('folderForTesting');
+        createFolderIfItDoesNotExist('folderForTesting');
         statObject = statSync('folderForTesting');
       });
 
@@ -44,7 +44,7 @@ describe('ExportUtils', () => {
 
       before(() => {
         mkdirSync('folderForTesting');
-        createFolderIfNeeded('folderForTesting');
+        createFolderIfItDoesNotExist('folderForTesting');
         statObject = statSync('folderForTesting');
       });
 
