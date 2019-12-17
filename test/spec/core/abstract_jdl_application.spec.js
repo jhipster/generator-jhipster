@@ -187,6 +187,8 @@ describe('AbstractJDLApplication', () => {
       it('stringifies the application object', () => {
         expect(jdlApplication.toString()).to.eq(`application {
   config {
+    baseName jhipster
+    buildTool maven
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -202,12 +204,10 @@ describe('AbstractJDLApplication', () => {
     serviceDiscoveryType false
     skipClient false
     skipServer false
+    skipUserManagement false
     testFrameworks []
     websocket false
     jhipsterVersion "4.9.0"
-    baseName jhipster
-    buildTool maven
-    skipUserManagement false
     clientPackageManager npm
   }
 }`);
@@ -224,6 +224,8 @@ describe('AbstractJDLApplication', () => {
         expect(jdlApplication.toString()).to.equal(
           `application {
   config {
+    baseName jhipster
+    buildTool maven
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -239,11 +241,9 @@ describe('AbstractJDLApplication', () => {
     serviceDiscoveryType false
     skipClient false
     skipServer false
+    skipUserManagement false
     testFrameworks []
     websocket false
-    baseName jhipster
-    buildTool maven
-    skipUserManagement false
     clientPackageManager npm
   }
 

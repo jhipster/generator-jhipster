@@ -43,6 +43,8 @@ describe('JSONToJDLConverter', () => {
         it('writes a JDL file with the application', () => {
           expect(jdlFileContent).to.equal(`application {
   config {
+    baseName truc
+    buildTool maven
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -57,20 +59,18 @@ describe('JSONToJDLConverter', () => {
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
+    skipUserManagement true
     testFrameworks []
     websocket false
     jhipsterVersion "6.0.1"
     applicationType microservice
-    baseName truc
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
-    buildTool maven
     jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
-    skipUserManagement true
   }
 }
 
@@ -91,6 +91,8 @@ describe('JSONToJDLConverter', () => {
         it('exports apps & entities', () => {
           expect(jdlFileContent).to.equal(`application {
   config {
+    baseName truc
+    buildTool maven
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -105,20 +107,18 @@ describe('JSONToJDLConverter', () => {
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
+    skipUserManagement true
     testFrameworks []
     websocket false
     jhipsterVersion "6.0.1"
     applicationType microservice
-    baseName truc
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
-    buildTool maven
     jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
-    skipUserManagement true
   }
 
   entities Country, Department, Employee, Job, JobHistory, Location, Region, Task
@@ -220,6 +220,8 @@ paginate Country with pager
         it('exports each app', () => {
           expect(jdlFileContent).to.equal(`application {
   config {
+    baseName app1
+    buildTool maven
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -234,26 +236,26 @@ paginate Country with pager
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
+    skipUserManagement true
     testFrameworks []
     websocket false
     jhipsterVersion "6.0.1"
     applicationType microservice
-    baseName app1
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
-    buildTool maven
     jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
-    skipUserManagement true
   }
 
   entities Region
 }
 application {
   config {
+    baseName app2
+    buildTool maven
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -268,26 +270,26 @@ application {
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
+    skipUserManagement true
     testFrameworks []
     websocket false
     jhipsterVersion "6.0.1"
     applicationType microservice
-    baseName app2
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
-    buildTool maven
     jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
-    skipUserManagement true
   }
 
   entities Country, Location
 }
 application {
   config {
+    baseName app3
+    buildTool maven
     databaseType sql
     devDatabaseType h2Disk
     enableHibernateCache true
@@ -302,20 +304,18 @@ application {
     searchEngine false
     serviceDiscoveryType eureka
     skipClient true
+    skipUserManagement true
     testFrameworks []
     websocket false
     jhipsterVersion "6.0.1"
     applicationType microservice
-    baseName app3
     serverPort 8081
     authenticationType jwt
     cacheProvider hazelcast
-    buildTool maven
     jwtSecretKey "HIDDEN"
     dtoSuffix DTO
     otherModules []
     clientPackageManager npm
-    skipUserManagement true
   }
 }
 
