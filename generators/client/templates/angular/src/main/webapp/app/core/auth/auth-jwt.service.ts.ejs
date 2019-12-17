@@ -32,6 +32,9 @@ type JwtToken = {
   id_token: string;
 };
 
+<%_ } else { _%>
+export const LOGOUT_URL = SERVER_API_URL + 'auth/logout';
+
 <%_ } _%>
 @Injectable({providedIn: 'root'})
 export class AuthServerProvider {
@@ -48,7 +51,7 @@ export class AuthServerProvider {
     }
 
     logout(): Observable<{}> {
-        return this.http.post(SERVER_API_URL + 'auth/logout', null);
+        return this.http.post(LOGOUT_URL, null);
     }
 <% } else { %>
     getToken(): string {
