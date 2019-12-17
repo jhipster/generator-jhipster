@@ -58,6 +58,13 @@ module.exports = class extends Generator {
     /* ======================================================================== */
 
     /**
+     * Override yeoman generator's usage function to fine tune --help message.
+     */
+    usage() {
+        return super.usage().replace('yo jhipster:', 'jhipster ');
+    }
+
+    /**
      * Install I18N Client Files By Language
      *
      * @param {any} _this reference to generator
