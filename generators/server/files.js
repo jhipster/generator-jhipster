@@ -1090,13 +1090,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement,
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/service/util/RandomUtil.java', renameTo: generator => `${generator.javaDir}service/util/RandomUtil.java` }
-            ]
-        },
-        {
             condition: generator => generator.messageBroker === 'kafka',
             path: SERVER_MAIN_SRC_DIR,
             templates: [

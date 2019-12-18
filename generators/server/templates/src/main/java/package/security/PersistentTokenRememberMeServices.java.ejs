@@ -21,7 +21,7 @@ package <%=packageName%>.security;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.service.util.RandomUtil;
+import io.github.jhipster.security.RandomUtil;
 
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.core.exceptions.DriverException;
