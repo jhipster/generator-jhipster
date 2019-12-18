@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
 
-import { <%=jhiPrefixCapitalized%>ConfigurationComponent } from './configuration.component';
+import { ConfigurationComponent } from './configuration.component';
 
 import { configurationRoute } from './configuration.route';
 
@@ -11,6 +11,6 @@ import { configurationRoute } from './configuration.route';
     <%=angularXAppName%>SharedModule,
     RouterModule.forChild([configurationRoute])
   ],
-  declarations: [<%=jhiPrefixCapitalized%>ConfigurationComponent]
+  declarations: [ConfigurationComponent]
 })
 export class ConfigurationModule {}

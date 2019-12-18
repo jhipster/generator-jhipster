@@ -155,6 +155,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">
         </a>
       </td>
+      <td align="center" valign="middle">
+        <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
+        </a>
+      </td>
     </tr>
   </tbody>
 </table>

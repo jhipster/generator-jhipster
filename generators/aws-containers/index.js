@@ -139,9 +139,15 @@ module.exports = class extends BaseGenerator {
                 awsClient.initAwsStuff();
             },
             setOutputs() {
-                dockerCli.setOutputs(data => this.log(chalk.white(data.toString().trim())), data => this.log.error(data.toString().trim()));
+                dockerCli.setOutputs(
+                    data => this.log(chalk.white(data.toString().trim())),
+                    data => this.log.error(data.toString().trim())
+                );
 
-                awsClient.CF().setOutputs(message => this.log(message), message => this.log.error(message));
+                awsClient.CF().setOutputs(
+                    message => this.log(message),
+                    message => this.log.error(message)
+                );
             },
             fetchRegion() {
                 if (this.abort) return;

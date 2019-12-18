@@ -544,7 +544,7 @@ function checkStringInFile(path, search, generator) {
  */
 function loadBlueprintsFromConfiguration(config) {
     // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-    const configuration = config && (config.getAll && typeof config.getAll === 'function') ? config.getAll() || {} : config;
+    const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
     // load blueprints from config file
     const blueprints = configuration.blueprints || [];
 

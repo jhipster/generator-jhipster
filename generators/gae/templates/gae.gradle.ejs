@@ -20,13 +20,9 @@ apply plugin: "com.google.cloud.tools.appengine"
 
 appengine {
     deploy {
-        project = "<%=gcpProjectId%>"
+        projectId = "<%=gcpProjectId%>"
         version = "1"
     }
-}
-
-bootWar {
-    webXml = file("${project.rootDir}/<%= CLIENT_MAIN_SRC_DIR %>WEB-INF/web.xml")
 }
 
 processResources {
@@ -38,3 +34,10 @@ processResources {
         }
     }
 }
+
+task copyFolders(type: Copy) {
+    into "$buildDir/staged-app/"
+    from "$buildDir/thin/root/"
+}
+
+appengineStage.finalizedBy copyFolders
