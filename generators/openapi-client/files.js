@@ -54,7 +54,7 @@ function writeFiles() {
                 let command;
                 if (generatorName === 'spring') {
                     this.log(chalk.green(`\n\nGenerating java client code for client ${cliName} (${inputSpec})`));
-                    const cliPackage = `${this.packageName}.client.${_.snakeCase(cliName)}`;
+                    const cliPackage = `${this.packageName}.client.${_.toLower(cliName)}`;
                     const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
                     if (shelljs.test('-d', clientPackageLocation)) {
                         this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
