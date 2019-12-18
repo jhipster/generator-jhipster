@@ -21,7 +21,7 @@ import { of } from 'rxjs';
 
 import { <%=angularXAppName%>TestModule } from '../../../test.module';
 import { ConfigurationComponent } from 'app/admin/configuration/configuration.component';
-import { ConfigurationService, Beans, PropertySource } from 'app/admin/configuration/configuration.service';
+import { ConfigurationService, Bean, PropertySource } from 'app/admin/configuration/configuration.service';
 
 describe('Component Tests', () => {
     describe('ConfigurationComponent', () => {
@@ -48,8 +48,8 @@ describe('Component Tests', () => {
         describe('OnInit', () => {
             it('Should call load all on init', () => {
                 // GIVEN
-                const beans: Beans = {
-                    'io.github.jhipster.config.JHipsterProperties': {
+                const beans: Bean[] = [
+                    {
                         prefix: 'jhipster',
                         properties: {
                             clientApp: {
@@ -57,7 +57,7 @@ describe('Component Tests', () => {
                             }
                         }
                     }
-                };
+                ];
                 const propertySources: PropertySource[] = [
                     {
                         name: 'server.ports',
@@ -78,16 +78,7 @@ describe('Component Tests', () => {
                 expect(service.getBeans).toHaveBeenCalled();
                 expect(service.getPropertySources).toHaveBeenCalled();
                 expect(comp.allBeans).toEqual(beans);
-                expect(comp.beans).toEqual([
-                    {
-                        prefix: 'jhipster',
-                        properties: {
-                            clientApp: {
-                                name: 'jhipsterApp'
-                            }
-                        }
-                    }
-                ]);
+                expect(comp.beans).toEqual(beans);
                 expect(comp.propertySources).toEqual(propertySources);
             });
         });

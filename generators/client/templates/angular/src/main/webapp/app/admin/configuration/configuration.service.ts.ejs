@@ -68,29 +68,19 @@ export interface Property {
 export class ConfigurationService {
     constructor(private http: HttpClient) {}
 
-    getBeans(): Observable<Beans> {
+    getBeans(): Observable<Bean[]> {
         return this.http.get<ConfigProps>(SERVER_API_URL + 'management/configprops').pipe(
-            map(configProps => {
-                // This code is for Spring Boot 2
-                for (const key in configProps.contexts) {
-                    // If the key is not bootstrap, it will be the ApplicationContext Id
-                    // For default app, it is baseName
-                    // For microservice, it is baseName-1
-                    if (!key.startsWith('bootstrap')) {
-                        return configProps.contexts[key].beans;
-                    }
-                }
-                // by default, use the default ApplicationContext Id
-                return configProps.contexts['<%= baseName %>'].beans;
-            })
+            map(configProps =>
+                Object.values(
+                    Object.values(configProps.contexts)
+                        .map(context => context.beans)
+                        .reduce((allBeans: Beans, contextBeans: Beans) => ({ ...allBeans, ...contextBeans }))
+                )
+            )
         );
     }
 
     getPropertySources(): Observable<PropertySource[]> {
-        return this.http.get<Env>(SERVER_API_URL + 'management/env').pipe(
-            map(env => {
-                return env.propertySources;
-            })
-        );
+        return this.http.get<Env>(SERVER_API_URL + 'management/env').pipe(map(env => env.propertySources));
     }
 }

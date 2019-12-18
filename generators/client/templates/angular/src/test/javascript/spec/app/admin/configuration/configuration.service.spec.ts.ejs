@@ -19,14 +19,14 @@ limitations under the License.
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { ConfigurationService, ConfigProps, Env, Beans, PropertySource } from 'app/admin/configuration/configuration.service';
+import { ConfigurationService, ConfigProps, Env, Bean, PropertySource } from 'app/admin/configuration/configuration.service';
 import { SERVER_API_URL } from 'app/app.constants';
 
 describe('Service Tests', () => {
     describe('Logs Service', () => {
         let service: ConfigurationService;
         let httpMock: HttpTestingController;
-        let expectedResult: Beans | PropertySource[] | null;
+        let expectedResult: Bean[] | PropertySource[] | null;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
@@ -52,26 +52,28 @@ describe('Service Tests', () => {
             });
 
             it('should get the config', () => {
-                const beans: Beans = {
-                    'io.github.jhipster.config.JHipsterProperties': {
-                        prefix: 'jhipster',
-                        properties: {
-                            clientApp: {
-                                name: 'jhipsterApp'
-                            }
+                const bean: Bean = {
+                    prefix: 'jhipster',
+                    properties: {
+                        clientApp: {
+                            name: 'jhipsterApp'
                         }
                     }
                 };
                 const configProps: ConfigProps = {
                     contexts: {
-                        jhipster: { beans }
+                        jhipster: {
+                            beans: {
+                                'io.github.jhipster.config.JHipsterProperties': bean
+                            }
+                        }
                     }
                 };
                 service.getBeans().subscribe(received => (expectedResult = received));
 
                 const req = httpMock.expectOne({ method: 'GET' });
                 req.flush(configProps);
-                expect(expectedResult).toEqual(beans);
+                expect(expectedResult).toEqual([bean]);
             });
 
             it('should get the env', () => {
