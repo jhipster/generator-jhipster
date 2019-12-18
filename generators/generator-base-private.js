@@ -784,9 +784,14 @@ module.exports = class extends Generator {
      * @param {string[]} args - arguments to print
      */
     debug(msg, ...args) {
+        const formattedMsg = `${chalk.yellow.bold('DEBUG!')} ${msg}`;
         if (this.isDebugEnabled || (this.options && this.options.debug)) {
-            this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+            this.log(formattedMsg);
             args.forEach(arg => this.log(arg));
+        }
+        if (this._debug && this._debug.enabled) {
+            this._debug(formattedMsg);
+            args.forEach(arg => this._debug(arg));
         }
     }
 
