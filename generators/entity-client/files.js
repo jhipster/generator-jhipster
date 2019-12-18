@@ -17,13 +17,12 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const Randexp = require('randexp');
 const faker = require('faker');
 const utils = require('../utils');
 const constants = require('../generator-constants');
 
-// In order to have consistent results with RandExp, the RNG is seeded.
-Randexp.prototype.randInt = (min, max) => faker.random.number({ min, max });
+/* Use customized randexp */
+const Randexp = utils.RandexpWithFaker;
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -275,7 +274,6 @@ function addSampleRegexTestingStrings(generator) {
     generator.fields.forEach(field => {
         if (field.fieldValidateRulesPattern !== undefined) {
             const randExp = new Randexp(field.fieldValidateRulesPattern);
-            randExp.max = 5;
             field.fieldValidateSampleString = randExp.gen();
         }
     });

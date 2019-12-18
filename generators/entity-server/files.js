@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const randexp = require('randexp');
 const chalk = require('chalk');
 const faker = require('faker');
 const fs = require('fs');
 const utils = require('../utils');
 const constants = require('../generator-constants');
+
+/* Use customized randexp */
+const randexp = utils.RandexpWithFaker;
 
 /* Constants use throughout */
 const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
@@ -30,9 +32,6 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-
-// In order to have consistent results with RandExp, the RNG is seeded.
-randexp.prototype.randInt = (min, max) => faker.random.number({ min, max });
 
 /*
  * Current faker version is 4.1.0 and was release in 2017

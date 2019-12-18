@@ -24,10 +24,24 @@ const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const fs = require('fs');
 const crypto = require('crypto');
+const randexp = require('randexp');
+const faker = require('faker');
 
 const constants = require('./generator-constants');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+
+class RandexpWithFaker extends randexp {
+    constructor(regexp, m) {
+        super(regexp, m);
+        this.max = 5;
+    }
+
+    // In order to have consistent results with RandExp, the RNG is seeded.
+    randInt(min, max) {
+        return faker.random.number({ min, max });
+    }
+}
 
 module.exports = {
     rewrite,
@@ -50,7 +64,8 @@ module.exports = {
     loadBlueprintsFromConfiguration,
     parseBluePrints,
     normalizeBlueprintName,
-    stringHashCode
+    stringHashCode,
+    RandexpWithFaker
 };
 
 /**

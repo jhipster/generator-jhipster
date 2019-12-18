@@ -236,7 +236,6 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
                 const patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
                 const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
                 // set infinite repetitions max range
-                randExp.max = 5;
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
                     sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
