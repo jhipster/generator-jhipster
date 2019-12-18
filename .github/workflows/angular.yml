@@ -120,6 +120,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
             node-version: ${{ matrix.node_version }}
+      - name: Download latest chrome binary
+        run: |
+            sudo apt update
+            sudo apt install google-chrome-stable
       - uses: actions/setup-java@v1
         with:
             java-version: '11.x'
