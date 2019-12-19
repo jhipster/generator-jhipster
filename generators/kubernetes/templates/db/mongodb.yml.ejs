@@ -318,6 +318,10 @@ spec:
             name: <%= app.baseName.toLowerCase() %>-mongodb-init
         - name: configdir
           emptyDir: {}
+<%_ if (!kubernetesUseDynamicStorage) { _%>
+        - name: datadir
+          emptyDir: {}
+<%_ } else { _%>
   volumeClaimTemplates:
     - metadata:
         name: datadir
@@ -326,6 +330,10 @@ spec:
         resources:
           requests:
             storage: "1Gi"
+  <%_ if (kubernetesStorageClassName) { _%>
+        storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+<%_ } _%>
 ---
 # Headless service for DNS record
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>

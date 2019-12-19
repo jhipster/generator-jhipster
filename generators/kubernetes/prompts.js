@@ -25,6 +25,8 @@ module.exports = {
     askForIngressType,
     askForIngressDomain,
     askForIstioSupport,
+    askForPersistentStorage,
+    askForStorageClassName,
     ...dockerPrompts
 };
 
@@ -216,6 +218,63 @@ function askForIstioSupport() {
 
     this.prompt(prompts).then(props => {
         this.istio = props.istio;
+        done();
+    });
+}
+
+function askForPersistentStorage() {
+    if (this.regenerate) return;
+    const done = this.async();
+    let usingDataBase = false;
+    this.appConfigs.forEach((appConfig, index) => {
+        if (appConfig.prodDatabaseType !== 'no') {
+            usingDataBase = true;
+        }
+    });
+
+    const prompts = [
+        {
+            when: () => usingDataBase,
+            type: 'list',
+            name: 'kubernetesUseDynamicStorage',
+            message: 'Do you want to use dynamic storage provisioning for your stateful services?',
+            choices: [
+                {
+                    value: false,
+                    name: 'No'
+                },
+                {
+                    value: true,
+                    name: 'Yes'
+                }
+            ],
+            default: this.kubernetesUseDynamicStorage
+        }
+    ];
+
+    this.prompt(prompts).then(props => {
+        this.kubernetesUseDynamicStorage = props.kubernetesUseDynamicStorage;
+        done();
+    });
+}
+
+function askForStorageClassName() {
+    if (this.regenerate) return;
+    const done = this.async();
+    const kubernetesUseDynamicStorage = this.kubernetesUseDynamicStorage;
+
+    const prompts = [
+        {
+            when: () => kubernetesUseDynamicStorage,
+            type: 'input',
+            name: 'kubernetesStorageClassName',
+            message: 'Do you want to use a specific storage class? (leave empty for using the clusters default storage class)',
+            default: this.kubernetesStorageClassName ? this.kubernetesStorageClassName : ''
+        }
+    ];
+
+    this.prompt(prompts).then(props => {
+        this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();
         done();
     });
 }
