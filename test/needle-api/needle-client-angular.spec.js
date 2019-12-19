@@ -132,12 +132,17 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">\n' +
-                '                                <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">\n' +
-                '                                    <fa-icon [icon]="\'glyphiconName1\'" [fixedWidth]="true"></fa-icon>&nbsp;\n' +
-                '                                    <span jhiTranslate="global.menu.routerName1">Router Name 1</span>\n' +
-                '                                </a>\n' +
-                '                            </li>'
+                '                <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">\n' +
+                '                    <fa-icon [icon]="\'glyphiconName1\'" [fixedWidth]="true"></fa-icon>&nbsp;\n' +
+                '                    <span jhiTranslate="global.menu.routerName1">Router Name 1</span>\n' +
+                '                </a>\n' +
+                '            </li>'
         );
+    });
+
+    it('needle is removed', () => {
+        assert.noFileContent(`${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`, 'jhipster-needle-start-add-element-to-menu');
+        assert.noFileContent(`${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`, 'jhipster-needle-end-add-element-to-menu');
     });
 
     it('admin menu contains the admin element added by needle api', () => {
@@ -167,10 +172,10 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     it('entity module contains the microservice object added by needle api', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
-            '            {\n' +
-                "                path: 'entityUrl',\n" +
-                "                loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroServiceNameentityNameModule)\n" +
-                '            }'
+            '      {\n' +
+                "        path: 'entityUrl',\n" +
+                "        loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroServiceNameentityNameModule)\n" +
+                '      }'
         );
     });
 

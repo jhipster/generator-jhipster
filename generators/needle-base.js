@@ -18,6 +18,7 @@
  */
 const chalk = require('chalk');
 const jhipsterUtils = require('./utils');
+const NeedleFile = require('./needle-file');
 
 module.exports = class {
     constructor(generator) {
@@ -53,5 +54,14 @@ module.exports = class {
             needle: needleTag,
             splicable: content
         };
+    }
+
+    writeToNeedleFile(path, context, errorMessage) {
+        const needleFile = new NeedleFile(path, this.generator.fs);
+        if (!needleFile.writeNeedle('add-element-to-menu', context)) {
+            this.generator.log(errorMessage);
+            return false;
+        }
+        return true;
     }
 };

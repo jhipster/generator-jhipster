@@ -32,7 +32,7 @@ const filter = require('gulp-filter');
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
-const { prettierTransform, prettierOptions } = require('./generator-transforms');
+const { prettierTransform, prettierOptions, needleTransform } = require('./generator-transforms');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
@@ -1511,6 +1511,9 @@ module.exports = class extends Generator {
      * @param {any} generator
      */
     registerPrettierTransform(generator = this) {
+        const needleFilter = filter(['{,**/}*.html'], { restore: true });
+        generator.registerTransformStream([needleFilter, needleTransform(generator.fs), needleFilter.restore]);
+
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         const prettierFilter = filter(['{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter

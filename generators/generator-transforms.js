@@ -19,6 +19,8 @@
 const through = require('through2');
 const prettier = require('prettier');
 
+const NeedleFile = require('./needle-file');
+
 const prettierOptions = {
     printWidth: 140,
     singleQuote: true,
@@ -50,12 +52,23 @@ const prettierTransform = function(defaultOptions) {
     return through.obj(transform);
 };
 
+const needleTransform = function(fs) {
+    return through.obj((file, encoding, callback) => {
+        const needleFile = new NeedleFile(file.path, fs);
+        const str = file.contents.toString('utf8');
+        const data = needleFile.removeNeedles(str);
+        file.contents = Buffer.from(data);
+        callback(null, file);
+    });
+};
+
 const prettierFormat = function(str, options = {}) {
     return prettier.format(str, { ...prettierOptions, ...options });
 };
 
 module.exports = {
     prettierTransform,
+    needleTransform,
     prettierFormat,
     prettierOptions
 };

@@ -144,16 +144,15 @@ module.exports = class extends needleClientBase {
     addElementToMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu = routerName) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
-        // prettier-ignore
-        const entityEntry = `<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                                <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
-                                    <span${enableTranslation ? ` jhiTranslate="global.menu.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
-                                </a>
-                            </li>`;
-        const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-element-to-menu', entityEntry);
-
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+        const routerNameStartCase = _.startCase(routerName);
+        const context = {
+            routerName,
+            routerNameStartCase,
+            glyphiconName,
+            enableTranslation,
+            translationKeyMenu
+        };
+        return this.writeToNeedleFile(entityMenuPath, context, errorMessage);
     }
 
     addElementToAdminMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu = routerName) {

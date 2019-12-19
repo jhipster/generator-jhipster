@@ -64,6 +64,8 @@ module.exports = class extends BaseBlueprintGenerator {
         this.setupClientOptions(this);
 
         useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
+
+        this.registerPrettierTransform();
     }
 
     // Public API method used by the getter and also by Blueprints
