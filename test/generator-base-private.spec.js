@@ -267,22 +267,6 @@ export * from './entityFolderName/entityFileName.state';`;
         });
     });
 
-    describe('seededRandomNumberGenerator', () => {
-        describe('generates the same random number when provided the same seed', () => {
-            it('generates the same random values', () => {
-                const seededRandomNumberGenerator1 = BaseGenerator.seededRandomNumberGenerator(1);
-                const seededRandomNumberGenerator2 = BaseGenerator.seededRandomNumberGenerator(1);
-                expect(seededRandomNumberGenerator1(1, 10)).to.equal(seededRandomNumberGenerator2(1, 10));
-            });
-        });
-        describe('generates a different random number when provided a different seed', () => {
-            it('generates different random values', () => {
-                const seededRandomNumberGenerator1 = BaseGenerator.seededRandomNumberGenerator(1);
-                const seededRandomNumberGenerator2 = BaseGenerator.seededRandomNumberGenerator(2);
-                expect(seededRandomNumberGenerator1(1, 10)).to.not.equal(seededRandomNumberGenerator2(1, 10));
-            });
-        });
-    });
     describe('getEntityParentPathAddition', () => {
         describe('when passing /', () => {
             it('returns an empty string', () => {
