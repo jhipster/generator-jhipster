@@ -1505,7 +1505,7 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        const prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }
