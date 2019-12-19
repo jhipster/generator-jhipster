@@ -299,6 +299,13 @@ spec:
               mountPath: /data/configdb
             - name: workdir
               mountPath: /work-dir
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
       volumes:
         - name: config
           configMap:

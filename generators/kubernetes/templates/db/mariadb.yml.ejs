@@ -71,6 +71,13 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/mysql/
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
