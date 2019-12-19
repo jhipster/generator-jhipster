@@ -28,9 +28,9 @@ import { Account } from 'app/core/user/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ } _%>
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+import { AuthServerProvider<% if (authenticationType === 'uaa') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+import { AuthServerProvider<% if (authenticationType === 'session') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-session.service';
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import { Logout } from './logout.model';
@@ -62,9 +62,13 @@ export class LoginService {
     }
     <%_ } _%>
 
-    <%_ if (authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa' || authenticationType === 'session') { _%>
 
-    logoutDirectly(): void {
+    logoutUrl(): string {
+        return LOGOUT_URL;
+    }
+
+    logoutInClient(): void {
         this.accountService.authenticate(null);
     }
     <%_ } _%>

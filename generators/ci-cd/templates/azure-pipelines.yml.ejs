@@ -75,7 +75,7 @@ jobs:
   - script: ./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon
     <%_ } _%>
   <%_ } else { _%>
-  - script: npm test
+  - script: <%= clientPackageManager %> test
   <%_ } _%>
     displayName: 'TESTS: frontend'
 <%_ } _%>

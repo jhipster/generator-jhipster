@@ -55,7 +55,7 @@ function loadBlueprintCommands() {
 const defaultCommands = {
     app: {
         default: true,
-        desc: 'Create a new JHipster application based on the selected options'
+        desc: '[Default] Create a new JHipster application based on the selected options'
     },
     aws: {
         desc: 'Deploy the current application to Amazon Web Services'

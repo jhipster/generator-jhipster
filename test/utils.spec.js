@@ -190,4 +190,9 @@ describe('JHipster Utils', () => {
             });
         });
     });
+    describe('::stringHashCode', () => {
+        it('calculates hash', () => {
+            assert.equal(utils.stringHashCode('some text'), 642107175);
+        });
+    });
 });

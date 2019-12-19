@@ -24,10 +24,24 @@ const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const fs = require('fs');
 const crypto = require('crypto');
+const randexp = require('randexp');
+const faker = require('faker');
 
 const constants = require('./generator-constants');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+
+class RandexpWithFaker extends randexp {
+    constructor(regexp, m) {
+        super(regexp, m);
+        this.max = 5;
+    }
+
+    // In order to have consistent results with RandExp, the RNG is seeded.
+    randInt(min, max) {
+        return faker.random.number({ min, max });
+    }
+}
 
 module.exports = {
     rewrite,
@@ -49,7 +63,9 @@ module.exports = {
     checkStringInFile,
     loadBlueprintsFromConfiguration,
     parseBluePrints,
-    normalizeBlueprintName
+    normalizeBlueprintName,
+    stringHashCode,
+    RandexpWithFaker
 };
 
 /**
@@ -605,4 +621,24 @@ function normalizeBlueprintName(blueprint) {
         return `generator-jhipster-${blueprint}`;
     }
     return blueprint;
+}
+
+/**
+ * Calculate a hash code for a given string.
+ * @param {string} str - any string
+ * @returns {number} returns the calculated hash code.
+ */
+function stringHashCode(str) {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        const character = str.charCodeAt(i);
+        hash = (hash << 5) - hash + character; // eslint-disable-line no-bitwise
+        hash |= 0; // eslint-disable-line no-bitwise
+    }
+
+    if (hash < 0) {
+        hash *= -1;
+    }
+    return hash;
 }
