@@ -113,14 +113,14 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         this.ngbPaginationPage = this.page;
         <%_ } _%>
         this.router.navigate(['/<%= entityUrl %>'], {
-          queryParams: {
-            page: this.page,
-            size: this.itemsPerPage,
-            <%_ if (searchEngine === 'elasticsearch') { _%>
-            search: this.currentSearch,
-            <%_ } _%>
-            sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
-          }
+            queryParams: {
+                page: this.page,
+                size: this.itemsPerPage,
+                <%_ if (searchEngine === 'elasticsearch') { _%>
+                search: this.currentSearch,
+                <%_ } _%>
+                sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
+            }
         });
         <%_ } _%>
         this.<%= entityInstancePlural %> = data ? data : [];

@@ -50,28 +50,26 @@
 
     loadPage(<% if (databaseType !== 'cassandra') { %>page?: number<% } %>): void {
         <%_ if (databaseType !== 'cassandra') { _%>
-        if (!page) {
-            page = this.page;
-        }
+        const pageToLoad: number = page ? page : this.page;
         <%_ } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search(<% if (databaseType !== 'cassandra') { %>{
-                page: page - 1,
+                page: pageToLoad - 1,
                 query: this.currentSearch,
                 size: this.itemsPerPage,
                 sort: this.sort()}<% } %>).subscribe(
-                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, page)<% if (databaseType !== 'cassandra') { %>,
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, pageToLoad)<% if (databaseType !== 'cassandra') { %>,
                     () => this.onError()<% } %>
                 );
             return;
         }
         <%_ } _%>
         this.<%= entityInstance %>Service.query(<% if (databaseType !== 'cassandra') { %>{
-            page: page - 1,
+            page: pageToLoad - 1,
             size: this.itemsPerPage,
             sort: this.sort()}<% } %>).subscribe(
-                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, page)<% if (databaseType !== 'cassandra') { %>,
+                (res: HttpResponse<I<%= entityAngularName %>[]>) => this.onSuccess(res.body, res.headers, pageToLoad)<% if (databaseType !== 'cassandra') { %>,
                 () => this.onError()<% } %>
             );
     }
