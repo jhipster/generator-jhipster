@@ -101,27 +101,10 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
     }
 
-    private loadAll(): void {
-        this.userService.query(<% if (databaseType !== 'cassandra') { %>{
-            page: this.page - 1,
-            size: this.itemsPerPage,
-            sort: this.sort()}<% } %>).subscribe(
-                (res: HttpResponse<User[]>) => this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>)
-        );
-    }
-
     trackIdentity(index: number, item: User): any {
         return item.id;
     }
     <%_ if (databaseType !== 'cassandra') { _%>
-
-    private sort(): string[] {
-        const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
-        }
-        return result;
-    }
 
     loadPage(page: number): void {
         if (page !== this.previousPage) {
@@ -146,6 +129,25 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.user = user;
     }
+
+    private loadAll(): void {
+        this.userService.query(<% if (databaseType !== 'cassandra') { %>{
+            page: this.page - 1,
+            size: this.itemsPerPage,
+            sort: this.sort()}<% } %>).subscribe(
+                (res: HttpResponse<User[]>) => this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>)
+        );
+    }
+    <%_ if (databaseType !== 'cassandra') { _%>
+
+    private sort(): string[] {
+        const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+        if (this.predicate !== 'id') {
+            result.push('id');
+        }
+        return result;
+    }
+    <%_ } _%>
 
     private onSuccess(users: User[] | null<% if (databaseType !== 'cassandra') { %>, headers: HttpHeaders<% } %>): void {
         <%_ if (databaseType !== 'cassandra') { _%>

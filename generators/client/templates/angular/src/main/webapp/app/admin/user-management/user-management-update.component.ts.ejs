@@ -31,7 +31,6 @@ import { UserService } from 'app/core/user/user.service';
     templateUrl: './user-management-update.component.html'
 })
 export class UserManagementUpdateComponent implements OnInit {
-
     user!: User;
     <%_ if (enableTranslation) { _%>
     languages = LANGUAGES;
@@ -71,19 +70,6 @@ export class UserManagementUpdateComponent implements OnInit {
         });
     }
 
-    private updateForm(user: User): void {
-        this.editForm.patchValue({
-            id: user.id,
-            login: user.login,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            activated: user.activated,
-            langKey: user.langKey,
-            authorities: user.authorities
-        });
-    }
-
     previousState(): void {
         window.history.back();
     }
@@ -97,6 +83,19 @@ export class UserManagementUpdateComponent implements OnInit {
             this.user.langKey = 'en';<% } %>
             this.userService.create(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
         }
+    }
+
+    private updateForm(user: User): void {
+        this.editForm.patchValue({
+            id: user.id,
+            login: user.login,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            activated: user.activated,
+            langKey: user.langKey,
+            authorities: user.authorities
+        });
     }
 
     private updateUser(user: User): void {
