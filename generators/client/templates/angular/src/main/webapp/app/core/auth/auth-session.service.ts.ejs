@@ -28,6 +28,8 @@ import { SERVER_API_URL } from 'app/app.constants';
 import { Logout } from 'app/core/login/logout.model';
 <%_ } else { _%>
 import { Login } from 'app/core/login/login.model';
+
+export const LOGOUT_URL = SERVER_API_URL + 'api/logout';
 <%_ } _%>
 
 @Injectable({providedIn: 'root'})
@@ -52,7 +54,7 @@ export class AuthServerProvider {
 
     logout(): Observable<void> {
         // logout from the server
-        return this.http.post(SERVER_API_URL + 'api/logout', {}).pipe(
+        return this.http.post(LOGOUT_URL, {}).pipe(
             map(() => {
                 // to get a new csrf token call the api
                 this.http.get(SERVER_API_URL + 'api/account').subscribe();
