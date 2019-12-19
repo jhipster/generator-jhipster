@@ -94,6 +94,7 @@
         "eslint-plugin-prettier": "3.1.0",
         "fs-extra": "7.0.1",
         "jsdoc": "3.6.3",
+        "mem-fs-editor": "^6.0.0",
         "mocha": "6.1.4",
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
