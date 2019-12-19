@@ -172,7 +172,7 @@
             </tbody>
         </table>
     </div>
-    <%_ if (databaseType !== 'cassandra' && pagination === 'pagination') { _%>
+    <%_ if (pagination === 'pagination') { _%>
     <div *ngIf="<%=entityInstancePlural %>?.length > 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
