@@ -23,12 +23,15 @@ import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
+import { AccountService } from 'app/core/auth/account.service';
+
 @Component({
     selector: '<%= jhiPrefixDashed %>-main',
     templateUrl: './main.component.html'
 })
 export class MainComponent implements OnInit {
     constructor(
+        private accountService: AccountService,
         <%_ if (enableTranslation) { _%>
         private translateService: TranslateService,
         <%_ } _%>
@@ -37,6 +40,9 @@ export class MainComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        // try to log in automatically
+        this.accountService.identity().subscribe();
+
         this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd) {
                 this.updateTitle();
