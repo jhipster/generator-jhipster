@@ -219,6 +219,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`);
         generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`);
         generator.removeFile(`${testDir}web/rest/ClientForwardControllerIT.java`);
+        generator.removeFile(`${javaDir}package/config/DefaultProfileUtil.java`);
     }
 }
 
