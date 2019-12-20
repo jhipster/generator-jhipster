@@ -105,6 +105,8 @@ function writeFiles() {
                 return;
             }
 
+            const openApiToolsDependencyVersion = '0.2.1';
+
             if (this.buildTool === 'maven') {
                 if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
                     let exclusions;
@@ -120,6 +122,9 @@ function writeFiles() {
                     this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-openfeign', null, exclusions);
                 }
                 this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-oauth2');
+                this.addMavenProperty('jackson-databind-nullable.version', openApiToolsDependencyVersion);
+                // eslint-disable-next-line no-template-curly-in-string
+                this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
             } else if (this.buildTool === 'gradle') {
                 if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
                     if (this.authenticationType === 'session') {
@@ -131,6 +136,14 @@ function writeFiles() {
                     }
                 }
                 this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-starter-oauth2');
+                this.addGradleProperty('jackson_databind_nullable_version', openApiToolsDependencyVersion);
+                this.addGradleDependency(
+                    'compile',
+                    'org.openapitools',
+                    'jackson-databind-nullable',
+                    // eslint-disable-next-line no-template-curly-in-string
+                    '${jackson_databind_nullable_version}'
+                );
             }
         },
 
