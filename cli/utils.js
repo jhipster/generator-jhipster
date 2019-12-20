@@ -99,7 +99,7 @@ const initHelp = (program, cliName) => {
             logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
         }
 
-        process.exitCode = 1;
+        process.exit(1);
     });
 };
 
