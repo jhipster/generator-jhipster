@@ -41,6 +41,7 @@ import <%=packageName%>.security.SecurityUtils;
 <%_ } _%>
 import <%=packageName%>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
+
 import io.github.jhipster.security.RandomUtil;
 <%_ } _%>
 

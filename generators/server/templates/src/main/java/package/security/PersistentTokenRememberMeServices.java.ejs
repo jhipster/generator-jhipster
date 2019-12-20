@@ -21,7 +21,6 @@ package <%=packageName%>.security;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
-import io.github.jhipster.security.RandomUtil;
 
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.core.exceptions.DriverException;
@@ -29,6 +28,7 @@ import com.datastax.driver.core.exceptions.DriverException;
 
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.PersistentTokenCache;
+import io.github.jhipster.security.RandomUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
