@@ -19,13 +19,13 @@
 
 name: Triage issues
 on:
-  issues: {types: opened}
+    issues: { types: opened }
 jobs:
-  apply-label:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/github-script@0.3.0
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.issues.addLabels({...context.issue, labels: ['area: triage', 'theme: undefined']})
+    apply-label:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/github-script@0.3.0
+              with:
+                  github-token: ${{secrets.GITHUB_TOKEN}}
+                  script: |
+                      github.issues.addLabels({...context.issue, labels: ['area: triage', 'theme: undefined']})
