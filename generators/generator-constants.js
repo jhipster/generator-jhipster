@@ -35,7 +35,7 @@ const JACOCO_VERSION = '0.8.5';
 const KAFKA_VERSION = '5.3.1';
 
 // Version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.0.1';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.0.2';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.18';
 const DOCKER_MARIADB = 'mariadb:10.4.10';
