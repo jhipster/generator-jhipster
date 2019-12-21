@@ -67,7 +67,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesNamespace: 'jhipsternamespace',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -102,7 +104,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -138,7 +142,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     monitoring: 'elk',
                     jhipsterConsole: true,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -176,7 +182,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     kubernetesServiceType: 'Ingress',
                     ingressDomain: 'example.com',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -208,7 +216,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -246,7 +256,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -293,7 +305,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -325,7 +339,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -356,7 +372,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
                     monitoring: 'prometheus',
-                    kubernetesServiceType: 'LoadBalancer'
+                    kubernetesServiceType: 'LoadBalancer',
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -394,7 +412,9 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
-                    istio: true
+                    istio: true,
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
                 })
                 .on('end', done);
         });
@@ -407,6 +427,66 @@ describe('JHipster Kubernetes Sub Generator', () => {
         it('creates expected routing gateway and istio files', () => {
             assert.file(expectedFiles.jhgategateway);
         });
+        it('create the apply script', () => {
+            assert.file(expectedFiles.applyScript);
+        });
+    });
+
+    describe('mysql, psql, mongodb, mariadb, mssql microservices with dynamic storage provisioning', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/kubernetes'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    deploymentApplicationType: 'microservice',
+                    directoryPath: './',
+                    chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb', '11-mssql'],
+                    dockerRepositoryName: 'jhipster',
+                    dockerPushCommand: 'docker push',
+                    kubernetesNamespace: 'default',
+                    jhipsterConsole: false,
+                    kubernetesServiceType: 'LoadBalancer',
+                    clusteredDbApps: [],
+                    kubernetesUseDynamicStorage: true,
+                    kubernetesStorageClassName: ''
+                })
+                .on('end', done);
+        });
+        it('creates expected registry files', () => {
+            assert.file(expectedFiles.eurekaregistry);
+        });
+        it('creates expected gateway files', () => {
+            assert.file(expectedFiles.jhgate);
+        });
+        it('creates expected mysql files', () => {
+            assert.file(expectedFiles.msmysql);
+            assert.fileContent(expectedFiles.msmysql[1], /PersistentVolumeClaim/);
+            assert.fileContent(expectedFiles.msmysql[1], /claimName:/);
+        });
+
+        it('creates expected psql files', () => {
+            assert.file(expectedFiles.mspsql);
+            assert.fileContent(expectedFiles.mspsql[1], /PersistentVolumeClaim/);
+            assert.fileContent(expectedFiles.mspsql[1], /claimName:/);
+        });
+        it('creates expected mongodb files', () => {
+            assert.file(expectedFiles.msmongodb);
+            assert.fileContent(expectedFiles.msmongodb[1], /volumeClaimTemplates:/);
+        });
+        it('creates expected mariadb files', () => {
+            assert.file(expectedFiles.msmariadb);
+            assert.fileContent(expectedFiles.msmariadb[1], /PersistentVolumeClaim/);
+            assert.fileContent(expectedFiles.msmariadb[1], /claimName:/);
+        });
+        it('creates expected mssql files', () => {
+            assert.file(expectedFiles.msmssqldb);
+            assert.fileContent(expectedFiles.msmssqldb[1], /PersistentVolumeClaim/);
+            assert.fileContent(expectedFiles.msmssqldb[1], /claimName:/);
+        });
+
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
         });

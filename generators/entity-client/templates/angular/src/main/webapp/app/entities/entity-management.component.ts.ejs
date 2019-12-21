@@ -76,7 +76,9 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     <%_ } _%>
     <%_
     let eventCallBack = 'this.loadAll()';
-    if (pagination === 'infinite-scroll') {
+    if (pagination === 'pagination') {
+        eventCallBack = 'this.loadPage()';
+    } else if (pagination === 'infinite-scroll') {
         eventCallBack = 'this.reset()';
     } _%>
 
@@ -91,7 +93,6 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     }
     <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
-        <%_ if (databaseType !== 'cassandra') { _%>
 
     sort(): string[] {
         const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
@@ -100,18 +101,29 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         }
         return result;
     }
-        <%_ } _%>
         <%_ if (pagination === 'pagination') { _%>
 
-    protected paginate<%= entityClassPlural %>(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders): void {
-        <%_ if (databaseType !== 'cassandra') { _%>
+    protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number): void {
         this.totalItems = Number(headers.get('X-Total-Count'));
+        this.page = page;
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        this.ngbPaginationPage = this.page;
         <%_ } _%>
-        if (data) {
-            this.<%= entityInstancePlural %> = data;
-        } else {
-            this.<%= entityInstancePlural %> = [];
-        }
+        this.router.navigate(['/<%= entityUrl %>'], {
+            queryParams: {
+                page: this.page,
+                size: this.itemsPerPage,
+                <%_ if (searchEngine === 'elasticsearch') { _%>
+                search: this.currentSearch,
+                <%_ } _%>
+                sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
+            }
+        });
+        this.<%= entityInstancePlural %> = data ? data : [];
+    }
+
+    protected onError(): void {
+        this.ngbPaginationPage = this.page;
     }
         <%_ } else if (pagination === 'infinite-scroll') { _%>
 

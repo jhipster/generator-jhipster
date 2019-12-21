@@ -818,10 +818,6 @@ const serverFiles = {
                     file: 'package/aop/logging/LoggingAspect.java',
                     renameTo: generator => `${generator.javaDir}aop/logging/LoggingAspect.java`
                 },
-                {
-                    file: 'package/config/DefaultProfileUtil.java',
-                    renameTo: generator => `${generator.javaDir}config/DefaultProfileUtil.java`
-                },
                 { file: 'package/config/package-info.java', renameTo: generator => `${generator.javaDir}config/package-info.java` },
                 {
                     file: 'package/config/AsyncConfiguration.java',
@@ -1087,13 +1083,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/service/package-info.java', renameTo: generator => `${generator.javaDir}service/package-info.java` }
-            ]
-        },
-        {
-            condition: generator => !generator.skipUserManagement,
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/service/util/RandomUtil.java', renameTo: generator => `${generator.javaDir}service/util/RandomUtil.java` }
             ]
         },
         {

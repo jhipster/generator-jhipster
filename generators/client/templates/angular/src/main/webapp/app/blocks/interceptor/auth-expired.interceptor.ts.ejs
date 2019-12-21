@@ -42,13 +42,15 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(tap(null, (err: HttpErrorResponse) => {
             if (err.status === 401 && err.url && !err.url.includes('api/account')) {
+                <%_ if (authenticationType === 'session' || authenticationType === 'uaa') { _%>
+                if (err.url.includes(this.loginService.logoutUrl())) {
+                    this.loginService.logoutInClient();
+                    return;
+                }
+                <%_ } _%>
                 this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
 <%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
-                <%_ if (authenticationType === 'uaa') { _%>
-                this.loginService.logoutDirectly();
-                <%_ } else { _%>
                 this.loginService.logout();
-                <%_ } _%>
                 this.router.navigate(['']);
                 this.loginModalService.open();
 <%_ } else { _%>

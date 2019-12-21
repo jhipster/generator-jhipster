@@ -28,8 +28,10 @@ jobs:
             <%_ if (!skipClient) { _%>
             NODE_VERSION: <%= NODE_VERSION %>
             <%_ } _%>
+            <%_ if (!skipServer) { _%>
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
-            <%_ if (databaseType !== 'no') { _%>
+            <%_ }
+            if (databaseType !== 'no' && !skipServer ) { _%>
             SPRING_JPA_SHOW_SQL: false
             <%_ } _%>
             <%_ if (!skipClient) { _%>
@@ -44,18 +46,21 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: <%= NODE_VERSION %>
-              <%_ } _%>
+              <%_ }
+              if (!skipServer) { _%>
             - uses: actions/setup-java@v1
               with:
                   java-version: '11.x'
-              <%_ if (prodDatabaseType === 'mysql') { _%>
+              <%_ }
+              if (prodDatabaseType === 'mysql') { _%>
             - name: Stop MySQL server
               run: sudo /etc/init.d/mysql stop
-              <%_ } _%>
-              <%_ if (!skipClient) { _%>
+              <%_ }
+              if (!skipClient) { _%>
             - name: Install node.js packages
               run: <%= clientPackageManager %> install
-              <%_ } _%>
+              <%_ }
+              if (!skipServer) { _%>
             - name: Run backend test
               <%_ if (buildTool === 'maven') { _%>
               run: |
@@ -65,8 +70,9 @@ jobs:
               run: |
                   chmod +x gradlew
                   ./gradlew clean test integrationTest<% if (!skipClient) { %> -x webpack<% } %>
-              <%_ } _%>
-              <%_ if (!skipClient) { _%>
+              <%_ }
+               }
+              if (!skipClient) { _%>
             - name: Run frontend test
               run: <%= clientPackageManager %> run <%= frontTestCommand %>
               <%_ } _%>
@@ -87,13 +93,20 @@ jobs:
                   fi
               <%_ } _%>
             - name: Package application
-              <%_ if (buildTool === 'maven') { _%>
+              <%_ if (!skipServer) {
+              if (buildTool === 'maven') { _%>
               run: ./mvnw -ntp package <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests
               <%_ } else if (buildTool === 'gradle') { _%>
               run: ./gradlew bootJar -Pprod -x test -x integrationTest
-              <%_ } _%>
-              <%_ if (cicdIntegrations.includes('heroku')) { _%>
-              name: Deploy to Heroku
+              <%_ }
+              }
+              if (skipServer && !skipClient) {
+              _%>
+              run: <%= clientPackageManager %> run build
+              <%_
+              }
+              if (cicdIntegrations.includes('heroku')) { _%>
+            - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/master'
               env:
                   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}

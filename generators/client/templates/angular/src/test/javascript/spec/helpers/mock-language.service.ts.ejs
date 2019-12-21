@@ -16,9 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { SpyObject } from './spyobject';
-import { JhiLanguageService } from 'ng-jhipster';
 import Spy = jasmine.Spy;
+import { JhiLanguageService } from 'ng-jhipster';
+
+import { SpyObject } from './spyobject';
 
 export class MockLanguageService extends SpyObject {
     getCurrentLanguageSpy: Spy;

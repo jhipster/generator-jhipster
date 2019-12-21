@@ -58,6 +58,13 @@ module.exports = class extends Generator {
     /* ======================================================================== */
 
     /**
+     * Override yeoman generator's usage function to fine tune --help message.
+     */
+    usage() {
+        return super.usage().replace('yo jhipster:', 'jhipster ');
+    }
+
+    /**
      * Install I18N Client Files By Language
      *
      * @param {any} _this reference to generator
@@ -1505,7 +1512,7 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        const prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }
@@ -1521,17 +1528,5 @@ module.exports = class extends Generator {
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
         }
-    }
-
-    /**
-     * Returns a seeded random number generator, used for RandExp regex generation.
-     * @param {number} id - seeds the random number generator
-     */
-    seededRandomNumberGenerator(id) {
-        let seed = 42 + id;
-        return (a, b) => {
-            seed = seed ** 2 % 969421;
-            return (seed % (1 + b - a)) + a;
-        };
     }
 };

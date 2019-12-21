@@ -102,19 +102,6 @@ describe('Component Tests', () => {
             expect(service.query).toHaveBeenCalled();
             expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
         });
-        <%_ if (pagination !== 'infinite-scroll') { _%>
-
-        it('should not load a page is the page is the same as the previous page', () => {
-            spyOn(service, 'query').and.callThrough();
-
-            // WHEN
-            comp.ngOnInit();
-            comp.loadPage(0);
-
-            // THEN
-            expect(service.query).toHaveBeenCalledTimes(1);
-        });
-        <%_ } _%>
 
         <%_ if (pagination === 'infinite-scroll') { _%>
         it('should re-initialize the page', () => {

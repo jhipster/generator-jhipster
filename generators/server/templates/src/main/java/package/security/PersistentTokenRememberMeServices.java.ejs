@@ -21,7 +21,6 @@ package <%=packageName%>.security;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.service.util.RandomUtil;
 
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.core.exceptions.DriverException;
@@ -29,6 +28,7 @@ import com.datastax.driver.core.exceptions.DriverException;
 
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.PersistentTokenCache;
+import io.github.jhipster.security.RandomUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
@@ -127,7 +127,7 @@ public class PersistentTokenRememberMeServices extends
                 log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
                 token.setTokenDate(LocalDate.now());<%}%><% if (databaseType === 'cassandra') { %>
                 token.setTokenDate(new Date());<%}%>
-                token.setTokenValue(RandomUtil.generateTokenData());
+                token.setTokenValue(RandomUtil.generateRandomAlphanumericString());
                 token.setIpAddress(request.getRemoteAddr());
                 token.setUserAgent(request.getHeader("User-Agent"));
                 try {
@@ -156,11 +156,11 @@ public class PersistentTokenRememberMeServices extends
         log.debug("Creating new persistent login for user {}", login);
         PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
             PersistentToken t = new PersistentToken();
-            t.setSeries(RandomUtil.generateSeriesData());<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+            t.setSeries(RandomUtil.generateRandomAlphanumericString());<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
             t.setUser(u);<% } else { %>
             t.setLogin(login);<% } %><% if (databaseType === 'cassandra') { %>
             t.setUserId(u.getId());<% } %>
-            t.setTokenValue(RandomUtil.generateTokenData());
+            t.setTokenValue(RandomUtil.generateRandomAlphanumericString());
             t.setTokenDate(<% if (databaseType === 'cassandra') { %>new Date()<% } else { %>LocalDate.now()<% } %>);
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
