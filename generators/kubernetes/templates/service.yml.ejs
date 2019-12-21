@@ -35,9 +35,4 @@ spec:
   <%_ } _%>
   ports:
   - name: http
-  <%_ if (app.applicationType === 'microservice' || app.applicationType === 'uaa') { _%>
-    port: 80
-    targetPort: <%= app.serverPort %>
-  <%_ } else { _%>
     port: <%= app.serverPort %>
-  <%_ } _%>
