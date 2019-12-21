@@ -1,8 +1,8 @@
 # JHipster-RFC-1: JHipster Kubernetes Operator
 
-- Feature Name: JHipster Kubernetes Operator
-- Start Date: 8/8/19
-- Issue: [jhipster/generator-jhipster#10053](https://github.com/jhipster/generator-jhipster/10053)
+-   Feature Name: JHipster Kubernetes Operator
+-   Start Date: 8/8/19
+-   Issue: [jhipster/generator-jhipster#10053](https://github.com/jhipster/generator-jhipster/10053)
 
 # Summary
 
