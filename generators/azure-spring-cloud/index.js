@@ -118,9 +118,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         this.log.error(
                             `You don't have the Azure Spring Cloud extension installed in your Azure CLI.
 Install it by running:
-${chalk.red(
-    'az extension add -y --source https://azureclitemp.blob.core.windows.net/spring-cloud/spring_cloud-0.1.0-py2.py3-none-any.whl'
-)}`
+${chalk.red('az extension add --name spring-cloud')}`
                         );
                         this.abort = true;
                     }
