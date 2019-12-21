@@ -100,7 +100,7 @@ jobs:
               run: ./gradlew bootJar -Pprod -x test -x integrationTest
               <%_ }
               }
-              if (!skipClient) {
+              if (skipServer && !skipClient) {
               _%>
               run: <%= clientPackageManager %> run build
               <%_
