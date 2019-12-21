@@ -903,13 +903,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.relationshipFieldNamePlural = pluralize(_.lowerFirst(relationship.relationshipName));
                     }
 
-                    if (
-                        _.isUndefined(relationship.otherEntityRelationshipNamePlural) &&
-                        _.isUndefined(relationship.otherEntityRelationshipName) === false
-                    ) {
-                        relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
-                    }
-
                     if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalized)) {
                         relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
                     }
@@ -992,6 +985,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                                 });
                             }
                         }
+                    }
+
+                    if (
+                        _.isUndefined(relationship.otherEntityRelationshipNamePlural) &&
+                        _.isUndefined(relationship.otherEntityRelationshipName) === false
+                    ) {
+                        relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                     }
 
                     if (_.isUndefined(relationship.otherEntityAngularName)) {
