@@ -159,11 +159,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+<%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } else { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
 
 /**
  * Integration tests for the {@link AccountResource} REST controller.
@@ -174,32 +178,59 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
+    <%_ if (!reactive) { _%>
     private MockMvc mockMvc;
+    <%_ } else { _%>
+    private WebTestClient webTestClient;
+    <%_ } _%>
 
     @BeforeEach
     public void setup() {
         AccountResource accountUserMockResource = new AccountResource();
+        <%_ if (!reactive) { _%>
         this.mockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
-                .setControllerAdvice(exceptionTranslator)
-                .build();
+            .setControllerAdvice(exceptionTranslator)
+        <%_ } else { _%>
+        this.webTestClient = WebTestClient.bindToController(accountUserMockResource)
+            .controllerAdvice(exceptionTranslator)
+        <%_ } _%>
+            .build();
     }
 
     @Test
     @WithMockUser(username = "test", roles = "ADMIN")
     public void testGetExistingAccount() throws Exception {
+        <%_ if (!reactive) { _%>
         mockMvc.perform(get("/api/account")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.login").value("test"))
-                .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.login").value("test"))
+            .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+        <%_ } else { _%>
+        webTestClient.get().uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+            .expectBody()
+            .jsonPath("$.login").isEqualTo("test")
+            .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
+        <%_ } _%>
     }
 
     @Test
     public void testGetUnknownAccount() throws Exception {
+        <%_ if (!reactive) { _%>
         mockMvc.perform(get("/api/account")
-                .accept(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(status().isInternalServerError());
+            .accept(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(status().isInternalServerError());
+        <%_ } else { _%>
+        webTestClient.get().uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().is5xxServerError();
+        <%_ } _%>
     }
 }
 <%_ } else {  // not oauth, not skipUserManagement _%>
