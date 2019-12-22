@@ -54,12 +54,19 @@ function writeFiles() {
                 let command;
                 if (generatorName === 'spring') {
                     this.log(chalk.green(`\n\nGenerating java client code for client ${cliName} (${inputSpec})`));
-                    const cliPackage = `${this.packageName}.client.${_.snakeCase(cliName)}`;
-                    const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
-                    if (shelljs.test('-d', clientPackageLocation)) {
-                        this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
-                        shelljs.rm('-rf', clientPackageLocation);
-                    }
+                    const baseCliPackage = `${this.packageName}.client.`;
+                    const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
+                    const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
+                    const cleanOldDirectory = cliPackage => {
+                        const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
+                        if (shelljs.test('-d', clientPackageLocation)) {
+                            this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
+                            shelljs.rm('-rf', clientPackageLocation);
+                        }
+                    };
+
+                    cleanOldDirectory(snakeCaseCliPackage);
+                    cleanOldDirectory(cliPackage);
 
                     JAVA_OPTS = ' -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
 
