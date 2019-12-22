@@ -245,7 +245,9 @@ public class UserService {
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
-        newUser.setEmail(userDTO.getEmail().toLowerCase());
+        if (userDTO.getEmail() != null) {
+            newUser.setEmail(userDTO.getEmail().toLowerCase());
+        }
         <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
         newUser.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
@@ -303,7 +305,9 @@ public class UserService {
                 newUser.setPassword(encryptedPassword);
                 newUser.setFirstName(userDTO.getFirstName());
                 newUser.setLastName(userDTO.getLastName());
-                newUser.setEmail(userDTO.getEmail().toLowerCase());
+                if (userDTO.getEmail() != null) {
+                    newUser.setEmail(userDTO.getEmail().toLowerCase());
+                }
                 <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
                 newUser.setImageUrl(userDTO.getImageUrl());
                 <%_ } _%>
@@ -354,7 +358,9 @@ public class UserService {
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail().toLowerCase());
+        if (userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+        }
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         user.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
@@ -425,7 +431,9 @@ public class UserService {
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
-                user.setEmail(email.toLowerCase());
+                if (email != null) {
+	                user.setEmail(email.toLowerCase());
+                }
                 user.setLangKey(langKey);
                 <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
                 user.setImageUrl(imageUrl);
@@ -481,7 +489,9 @@ public class UserService {
                 user.setLogin(userDTO.getLogin().toLowerCase());
                 user.setFirstName(userDTO.getFirstName());
                 user.setLastName(userDTO.getLastName());
-                user.setEmail(userDTO.getEmail().toLowerCase());
+                if (userDTO.getEmail() != null) {
+                    user.setEmail(userDTO.getEmail().toLowerCase());
+                }
                 <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
                 user.setImageUrl(userDTO.getImageUrl());
                 <%_ } _%>
@@ -862,7 +872,9 @@ public class UserService {
 
     private void clearUserCaches(<%= asEntity('User') %> user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
-        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+        if (user.getEmail() != null) {
+            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+        }
     }
     <%_ } _%>
 }
