@@ -255,6 +255,13 @@ jhipster --with-entities
 
 You should see your changes reflected in the generated project.
 
+Note: The generated project might not build properly in case the generator is using a
+snapshot version of [jhipster/jhipster](https://github.com/jhipster/jhipster). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
+this case clone the jhipster/jhipster project and build it using: 
+```
+./mvnw clean install -Dgpg.skip=true` 
+```
+
 ### Use a text editor
 
 As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
