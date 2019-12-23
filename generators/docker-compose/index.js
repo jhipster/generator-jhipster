@@ -97,10 +97,15 @@ module.exports = class extends BaseDockerGenerator {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
                         this.keycloakRedirectUris += '"http://localhost/*", "https://localhost/*", ';
                     } else if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
-                        this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
-                        const ports = yamlConfig.ports[0].split(':');
-                        ports[0] = portIndex;
-                        yamlConfig.ports[0] = ports.join(':');
+                        if (!this.serviceDiscoveryType && appConfig.applicationType !== 'gateway') {
+                            const ports = [portIndex, 80];
+                            yamlConfig.ports[0] = ports.join(':');
+                        } else {
+                            this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
+                            const ports = yamlConfig.ports[0].split(':');
+                            ports[0] = portIndex;
+                            yamlConfig.ports[0] = ports.join(':');
+                        }
                         portIndex++;
                     }
 
