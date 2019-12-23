@@ -176,6 +176,59 @@ describe('AbstractJDLApplication', () => {
       });
     });
   });
+  describe('setEntityNames', () => {
+    context('when not passing entity names', () => {
+      let application;
+
+      before(() => {
+        application = new AbstractJDLApplication({
+          config: {
+            baseName: 'toto'
+          },
+          entities: ['A', 'B']
+        });
+        application.setEntityNames();
+      });
+
+      it('should not alter the entity names', () => {
+        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B']));
+      });
+    });
+    context('when passing an empty list', () => {
+      let application;
+
+      before(() => {
+        application = new AbstractJDLApplication({
+          config: {
+            baseName: 'toto'
+          },
+          entities: ['A', 'B']
+        });
+        application.setEntityNames([]);
+      });
+
+      it('should not alter the entity names', () => {
+        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B']));
+      });
+    });
+    context('when passing entity names', () => {
+      let application;
+
+      before(() => {
+        application = new AbstractJDLApplication({
+          config: {
+            baseName: 'toto'
+          },
+          entities: ['A', 'B']
+        });
+        application.setEntityNames(['B', 'C']);
+      });
+
+      it('should update the entity names', () => {
+        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B', 'C']));
+      });
+    });
+  });
   describe('#toString', () => {
     context('when there is no entity', () => {
       let jdlApplication;
