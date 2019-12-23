@@ -18,7 +18,7 @@ $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 You can deploy all your apps by running the below bash command:
 
 ```
-./kubectl-apply.sh
+./kubectl-apply.sh -f (default option)  [or] ./kubectl-apply.sh -k (kustomize option)
 ```
 
 ## Exploring your services
