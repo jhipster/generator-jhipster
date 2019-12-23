@@ -1355,7 +1355,8 @@ module.exports = class extends PrivateBase {
      * @param {string} prodDatabaseType - database type
      */
     getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-        const joinTableName = `${this.getTableName(entityName)}_${this.getTableName(relationshipName)}`;
+        const separator = '__';
+        const joinTableName = `${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
@@ -1379,8 +1380,8 @@ module.exports = class extends PrivateBase {
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
             const entityTable = this.getTableName(entityName).substring(0, halfLimit);
-            const relationTable = this.getTableName(relationshipName).substring(0, limit - entityTable.length - 1);
-            return `${entityTable}_${relationTable}`;
+            const relationTable = this.getTableName(relationshipName).substring(0, limit - entityTable.length - separator.length);
+            return `${entityTable}${separator}${relationTable}`;
         }
         return joinTableName;
     }
