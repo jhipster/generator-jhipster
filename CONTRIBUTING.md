@@ -258,8 +258,12 @@ You should see your changes reflected in the generated project.
 Note: The generated project might not build properly in case the generator is using a
 snapshot version of [jhipster/jhipster](https://github.com/jhipster/jhipster). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
 this case clone the jhipster/jhipster project and build it using: 
-```
+```shell script
 ./mvnw clean install -Dgpg.skip=true
+```
+or on Windows:
+```
+.\mvnw.cmd clean install -D"gpg.skip=true"
 ```
 
 ### Use a text editor
