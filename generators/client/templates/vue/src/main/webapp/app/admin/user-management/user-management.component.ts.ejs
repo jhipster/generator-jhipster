@@ -85,7 +85,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mi
       const headerParams = `X-${angularAppName}-params`.toLowerCase();
       if (enableTranslation) {
       _%>
-      const message = this.$t(res.headers['<%=headerAlert%>'], { param: res.headers['<%=headerParams%>'] });
+      const message = this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
       <%_ } else {_%>
       const message = res.headers['<%=headerAlert%>'];
       <%_ } _%>

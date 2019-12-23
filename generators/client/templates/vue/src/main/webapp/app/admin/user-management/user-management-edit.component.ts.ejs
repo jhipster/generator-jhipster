@@ -107,7 +107,7 @@ export default class <%=jhiPrefixCapitalized%>UserManagementEdit extends Vue {
     const headerParams = `X-${angularAppName}-params`.toLowerCase();
     if (enableTranslation) {
     _%>
-    return this.$t(res.headers['<%=headerAlert%>'], { param: res.headers['<%=headerParams%>'] });
+    return this.$t(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) });
     <%_ } else {_%>
     return res.headers['<%=headerAlert%>'];
     <%_ } _%>
