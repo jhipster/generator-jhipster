@@ -1,0 +1,8 @@
+<!-- jhipster-needle-start-add-element-to-menu - JHipster will add new menu items here -->
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link" routerLink="<$= routerName; $>" (click)="collapseNavbar()">
+                    <fa-icon [icon]="'<$= glyphiconName; $>'" [fixedWidth]="true"></fa-icon>&nbsp;
+                    <span<$_ if (enableTranslation) { _$> jhiTranslate="global.menu.<$= translationKeyMenu; $>"<$_ } _$>><$= routerNameStartCase; $></span>
+                </a>
+            </li>
+<!-- jhipster-needle-end-add-element-to-menu -->

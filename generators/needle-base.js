@@ -56,9 +56,14 @@ module.exports = class {
         };
     }
 
-    writeToNeedleFile(path, context, errorMessage) {
+    writeToNeedleFile(sourceNeedleFile, needleName, path, context, errorMessage) {
+        const content = sourceNeedleFile.render(needleName, context);
+        if (!content) {
+            this.generator.log(errorMessage);
+            return false;
+        }
         const needleFile = new NeedleFile(path, this.generator.fs);
-        if (!needleFile.writeNeedle('add-element-to-menu', context)) {
+        if (!needleFile.writeNeedle(needleName, content)) {
             this.generator.log(errorMessage);
             return false;
         }

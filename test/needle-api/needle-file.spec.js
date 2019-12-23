@@ -24,7 +24,8 @@ describe('Unit tests for needle-file', () => {
         this.filePath = path.join(tmpdir, 'test.html');
         this.memFs = env.createEnv().sharedFs;
         this.fs = FileEditor.create(this.memFs);
-        this.needleFile = new NeedleFile(this.filePath, this.fs);
+        this.needleFile = new NeedleFile(this.filePath, this.fs, true);
+        this.writeNeedleFile = new NeedleFile(this.filePath, this.fs);
     });
 
     afterEach(function() {
@@ -77,14 +78,17 @@ describe('Unit tests for needle-file', () => {
         it('#writeNeedle()', function() {
             this.needleFile.write(`<!-- jhipster-needle-start-some-name - xx xx -->
             a <$= value; $>
-            <!-- jhipster-needle-end-some-name -->`);
-            this.needleFile.writeNeedle('some-name', { value: 'test' });
+            <!-- jhipster-needle-end-some-name -->
+            <!-- jhipster-needle-some-name - xx xx -->`);
+            const content = this.needleFile.render('some-name', { value: 'test' });
+            this.writeNeedleFile.writeNeedle('some-name', content);
             assert.equal(
-                this.needleFile.read(),
-                `            a test
-<!-- jhipster-needle-start-some-name - xx xx -->
+                this.writeNeedleFile.read(),
+                `<!-- jhipster-needle-start-some-name - xx xx -->
             a <$= value; $>
-            <!-- jhipster-needle-end-some-name -->`
+            <!-- jhipster-needle-end-some-name -->
+            a test
+            <!-- jhipster-needle-some-name - xx xx -->`
             );
         });
 

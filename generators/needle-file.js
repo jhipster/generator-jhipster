@@ -21,11 +21,12 @@ const path = require('path');
 // const jhipsterUtils = require('./utils');
 
 const ANY_HTML_NEEDLE = / *<!-- jhipster-needle-start-(?<name>[\w-]*)( - (?<comment>.*))? -->\n?(?<needle>[\S\s]*)<!-- jhipster-needle-end-\k<name> -->\n?/gi;
-const htmlNeedle = name =>
+const htmlNeedleReader = name =>
     new RegExp(
         ` *<!-- jhipster-needle-start-${name}( - (?<comment>.*))? -->\n?(?<needle>[\\S\\s]*)<!-- jhipster-needle-end-${name} -->\n?`,
         'gi'
     );
+const htmlNeedleWriter = name => new RegExp(` *<!-- jhipster-needle-${name}( - (?<comment>.*))? -->\n?`, 'gi');
 
 const getNeedleGroup = result => {
     if (!result || !result.groups || !result.groups.needle) {
@@ -36,7 +37,7 @@ const getNeedleGroup = result => {
 };
 
 module.exports = class {
-    constructor(filePath, fs) {
+    constructor(filePath, fs, reader) {
         if (!path.isAbsolute(filePath)) {
             this.path = path.join(process.cwd(), filePath);
         } else {
@@ -44,9 +45,9 @@ module.exports = class {
         }
         this.fs = fs;
         const ext = path.extname(this.path);
-        if (ext === '.html') {
+        if (ext === '.html' || ext === '.ejs') {
             this.anyRegexp = ANY_HTML_NEEDLE;
-            this.regexp = htmlNeedle;
+            this.regexp = reader ? htmlNeedleReader : htmlNeedleWriter;
         } else {
             throw new Error(`Needle not implemented for type ${ext}`);
         }
@@ -60,19 +61,27 @@ module.exports = class {
         this.fs.write(this.path, content);
     }
 
-    writeNeedle(needleName, obj, options = {}) {
-        const result = this.findNeedle(needleName);
+    writeNeedle(needleName, needleContent, options = {}) {
+        const content = this.read();
+        const result = this.findNeedle(needleName, content);
         if (!result) {
             return false;
         }
+        this.write(content.slice(0, result.index) + needleContent + content.slice(result.index));
+        return true;
+    }
+
+    render(needleName, obj, options = {}) {
+        const content = this.read();
+        const result = this.findNeedle(needleName, content);
+        if (!result) {
+            return undefined;
+        }
         const needle = getNeedleGroup(result);
         if (!needle) {
-            return false;
+            return undefined;
         }
-        const rendered = ejs.render(needle, obj, { ...options, delimiter: '$' });
-        const content = this.read();
-        this.write(content.slice(0, result.index) + rendered + content.slice(result.index));
-        return true;
+        return ejs.render(needle, obj, { ...options, delimiter: '$' });
     }
 
     removeNeedles(content) {
@@ -85,8 +94,8 @@ module.exports = class {
         return content;
     }
 
-    findNeedle(needleName) {
-        return this.regexp(needleName).exec(this.read());
+    findNeedle(needleName, content) {
+        return this.regexp(needleName).exec(content || this.read());
     }
 
     getNeedle(needleName) {

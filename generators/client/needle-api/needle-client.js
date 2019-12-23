@@ -16,13 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const path = require('path');
+
 const needleBase = require('../../needle-base');
+const NeedleFile = require('../../needle-file');
 
 const constants = require('../../generator-constants');
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = class extends needleBase {
+    constructor(generator) {
+        super(generator);
+
+        const needlesFile = path.join(__dirname, 'needles-client-angular.ejs');
+        this.clientNeedleReader = new NeedleFile(needlesFile, generator.fs, true);
+    }
+
     addStyle(style, comment, filePath, needle) {
         const styleBlock = this._mergeStyleAndComment(style, comment);
         const rewriteFileModel = this.generateFileModel(filePath, needle, styleBlock);
@@ -54,5 +64,9 @@ module.exports = class extends needleBase {
         const rewriteFileModel = this.generateFileModel(indexFilePath, 'jhipster-needle-add-resources-to-root', resourcesBlock);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
+    writeClientToNeedleFile(needleName, path, context, errorMessage) {
+        return this.writeToNeedleFile(this.clientNeedleReader, needleName, path, context, errorMessage);
     }
 };

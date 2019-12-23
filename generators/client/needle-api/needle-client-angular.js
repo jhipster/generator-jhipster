@@ -152,7 +152,7 @@ module.exports = class extends needleClientBase {
             enableTranslation,
             translationKeyMenu
         };
-        return this.writeToNeedleFile(entityMenuPath, context, errorMessage);
+        return this.writeClientToNeedleFile('add-element-to-menu', entityMenuPath, context, errorMessage);
     }
 
     addElementToAdminMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu = routerName) {
