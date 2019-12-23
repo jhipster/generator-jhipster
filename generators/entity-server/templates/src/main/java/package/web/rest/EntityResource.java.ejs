@@ -149,7 +149,7 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.getId() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        <%_ if (saveUserSnapshot) { %>
+        <%_ if (saveUserSnapshot) { _%>
         if (<%= instanceName %>.getUser() != null) {
             // Save user in case it's new and only exists in gateway
             userRepository.save(<%= instanceName %>.getUser());
@@ -179,7 +179,7 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        <%_ if (saveUserSnapshot) { %>
+        <%_ if (saveUserSnapshot) { _%>
         if (<%= instanceName %>.getUser() != null) {
             // Save user in case it's new and only exists in gateway
             userRepository.save(<%= instanceName %>.getUser());
@@ -195,7 +195,7 @@ public class <%= entityClass %>Resource {
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %>.
      *
-    <%_ if (pagination !== 'no') { %>
+    <%_ if (pagination !== 'no') { _%>
      * @param pageable the pagination information.
         <%_ if (reactive) { _%>
      * @param request a {@link ServerHttpRequest} request.
@@ -238,7 +238,7 @@ public class <%= entityClass %>Resource {
      */
     @GetMapping("/<%= entityApiUrl %>/{id}")<%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
 
-    @Transactional(readOnly = true) <%_ } %>
+    @Transactional(readOnly = true) <%_ } _%>
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= primaryKeyType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);

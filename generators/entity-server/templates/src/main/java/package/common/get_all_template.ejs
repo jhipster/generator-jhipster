@@ -36,11 +36,11 @@
     }
 
     /**
-    * {@code GET  /<%= entityApiUrl %>/count} : count all the <%= entityInstancePlural %>.
-    *
-    * @param criteria the criteria which the requested entities should match.
-    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-    */
+     * {@code GET  /<%= entityApiUrl %>/count} : count all the <%= entityInstancePlural %>.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
     @GetMapping("/<%= entityApiUrl %>/count")
     public ResponseEntity<Long> count<%= entityClassPlural %>(<%= entityClass %>Criteria criteria) {
         log.debug("REST request to count <%= entityClassPlural %> by criteria: {}", criteria);
