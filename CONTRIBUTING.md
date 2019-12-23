@@ -259,7 +259,7 @@ Note: The generated project might not build properly in case the generator is us
 snapshot version of [jhipster/jhipster](https://github.com/jhipster/jhipster). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
 this case clone the jhipster/jhipster project and build it using: 
 ```
-./mvnw clean install -Dgpg.skip=true` 
+./mvnw clean install -Dgpg.skip=true
 ```
 
 ### Use a text editor
