@@ -23,13 +23,6 @@ const { MONOLITH, MICROSERVICE, GATEWAY, UAA } = require('../../../lib/core/jhip
 
 describe('JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
-    context('when passing an invalid config', () => {
-      it('fails', () => {
-        expect(() => {
-          createJDLApplication({ applicationType: 'toto' });
-        }).to.throw('Unknown application type: toto');
-      });
-    });
     context(`when passing a ${MICROSERVICE} config`, () => {
       let application;
 
