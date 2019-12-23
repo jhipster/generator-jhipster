@@ -123,6 +123,7 @@ describe('<%= entityClass %> e2e test', () => {
         const fieldType = field.fieldType;
         const fieldTypeBlobContent = field.fieldTypeBlobContent;
         const fieldIsEnum = field.fieldIsEnum;
+        const fieldValidateSampleString = field.fieldValidateSampleString;
       _%>
 
       <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
@@ -167,6 +168,10 @@ describe('<%= entityClass %> e2e test', () => {
       <%_ } else if (fieldType === 'UUID'){ _%>
       await updatePage.<%= fieldName %>Input.sendKeys('64c99148-3908-465d-8c4a-e510e3ade974');
       expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
+
+      <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+      await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldValidateSampleString %>');
+      expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('<%= fieldValidateSampleString %>');
 
       <%_ } else { _%>
       await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldName %>');
@@ -252,6 +257,7 @@ describe('<%= entityClass %> e2e test', () => {
           const fieldType = field.fieldType;
           const fieldTypeBlobContent = field.fieldTypeBlobContent;
           const fieldIsEnum = field.fieldIsEnum;
+          const fieldValidateModifiedString = field.fieldValidateModifiedString;
         _%>
         <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
           await clear(updatePage.<%= fieldName %>Input);
@@ -292,6 +298,11 @@ describe('<%= entityClass %> e2e test', () => {
           await updatePage.<%= fieldName %>Input.clear();
           await updatePage.<%= fieldName %>Input.sendKeys('64c99148-3908-465d-8c4a-e510e3ade978');
           expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/64c99148-3908-465d-8c4a-e510e3ade978/);
+
+        <%_ } else if (fieldType === 'String' && fieldValidateModifiedString) { _%>
+          await updatePage.<%= fieldName %>Input.clear();
+          await updatePage.<%= fieldName %>Input.sendKeys('<%= fieldValidateModifiedString %>');
+          expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('<%= fieldValidateModifiedString %>');
 
         <%_ } else if (!fieldIsEnum && !['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
           await updatePage.<%= fieldName %>Input.clear();

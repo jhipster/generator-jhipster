@@ -17,7 +17,11 @@
  * limitations under the License.
  */
 const constants = require('generator-jhipster/generators/generator-constants');
+const jhipsterUtils = require('generator-jhipster/generators/utils');
 const utils = require('../utils');
+
+/* Use customized randexp */
+const Randexp = jhipsterUtils.RandexpWithFaker;
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -135,6 +139,15 @@ const vueFiles = {
     ]
 };
 
+function addSampleRegexTestingStrings(generator) {
+    generator.fields.forEach((field) => {
+        if (field.fieldValidateRulesPattern !== undefined) {
+            const randExp = new Randexp(field.fieldValidateRulesPattern);
+            field.fieldValidateSampleString = randExp.gen();
+            field.fieldValidateModifiedString = randExp.gen();
+        }
+    });
+}
 
 module.exports = {
     writeFiles
@@ -142,6 +155,12 @@ module.exports = {
 
 function writeFiles() {
     if (this.skipClient) return;
+
+    // generate correct values for pattern fields
+    if (this.protractorTests) {
+        addSampleRegexTestingStrings(this);
+    }
+
     // write client side files for Vue.js
     this.writeFilesToDisk(vueFiles, this, false, `${CLIENT_VUE_TEMPLATES_DIR}`);
 
