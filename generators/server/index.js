@@ -221,10 +221,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
                 }
-                const useJacksonBlackBird = configuration.get('useJacksonBlackBird');
-                if (useJacksonBlackBird) {
-                    this.useJacksonBlackBird = useJacksonBlackBird;
-                }
 
                 const baseName = configuration.get('baseName');
                 if (baseName) {
@@ -283,9 +279,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                     if (this.languages === undefined) {
                         this.languages = ['en', 'fr'];
-                    }
-                    if (this.useJacksonBlackBird === undefined) {
-                        this.useJacksonBlackBird = false;
                     }
                     // user-management will be handled by UAA app, oauth expects users to be managed in IpP
                     if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
@@ -446,9 +439,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.testFrameworks = [];
                 if (this.configOptions.testFrameworks) {
                     this.testFrameworks = this.configOptions.testFrameworks;
-                }
-                if (this.configOptions.useJacksonBlackBird) {
-                    this.useJacksonBlackBird = this.configOptions.useJacksonBlackBird;
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;

@@ -23,12 +23,7 @@ import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 <%_ } _%>
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-<%_ if (!useJacksonBlackBird) { _%>
-import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
-<%_ } _%>
-<%_ if (useJacksonBlackBird) { _%>
 import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
-<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.zalando.problem.ProblemModule;
@@ -60,17 +55,6 @@ public class JacksonConfiguration {
         return new Hibernate5Module();
     }
 <%_ } _%>
-<%_ if (!useJacksonBlackBird) { _%>
-
-    /*
-     * Jackson Afterburner module to speed up serialization/deserialization.
-     */
-    @Bean
-    public AfterburnerModule afterburnerModule() {
-        return new AfterburnerModule();
-    }
-<%_ } _%>
-<%_ if (useJacksonBlackBird) { _%>
 
     /*
      * Jackson BlackBird module to speed up serialization/deserialization.
@@ -79,7 +63,6 @@ public class JacksonConfiguration {
     public BlackbirdModule blackbirdModule() {
         return new BlackbirdModule();
     }
-<%_ } _%>
 
     /*
      * Module for serialization/deserialization of RFC7807 Problem.

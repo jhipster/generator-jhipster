@@ -376,10 +376,6 @@ function askForOptionalItems(meta) {
         name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'
     });
-    choices.push({
-        name: 'Jackson Blackbird (only works with Java 11)',
-        value: 'useJacksonBlackBird:false'
-    });
 
     const PROMPTS = {
         type: 'checkbox',
@@ -399,7 +395,6 @@ function askForOptionalItems(meta) {
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
             this.messageBroker = this.getOptionFromArray(this.serverSideOptions, 'messageBroker');
             this.enableSwaggerCodegen = this.getOptionFromArray(this.serverSideOptions, 'enableSwaggerCodegen');
-            this.useJacksonBlackBird = this.getOptionFromArray(this.serverSideOptions, 'useJacksonBlackBird');
             // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
             if (!this.serviceDiscoveryType) {
                 this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
