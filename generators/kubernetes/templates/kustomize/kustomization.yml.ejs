@@ -44,6 +44,10 @@ const appName = appConfig.baseName.toLowerCase(); _%>
 - <%= appName %>/<%= appName %>-virtual-service.yml
 <%_  } _%>
 <%_ }) _%>
+<%_ if (useKafka) { _%>
+# messagebroker
+- messagebroker/kafka.yml
+<%_ } _%>
 <%_ if (monitoring === 'elk') { _%>
 # monitoring elk
 - console/jhipster-elasticsearch.yml
