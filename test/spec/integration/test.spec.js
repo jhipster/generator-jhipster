@@ -34,12 +34,12 @@ describe('integration tests', () => {
 
     before(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({
-        document: JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]),
+        parsedContent: JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]),
         applicationType: ApplicationTypes.MONOLITH
       });
       JDLExporter.exportToJDL(originalContent, 'exported.jdl');
       writtenContent = DocumentParser.parseFromConfigurationObject({
-        document: JDLReader.parseFromFiles(['exported.jdl']),
+        parsedContent: JDLReader.parseFromFiles(['exported.jdl']),
         applicationType: ApplicationTypes.MONOLITH
       });
     });
