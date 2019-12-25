@@ -118,6 +118,48 @@ describe('JDLEntity', () => {
       });
     });
   });
+  describe('addFields', () => {
+    context('when not passing fields', () => {
+      let entity;
+
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Toto'
+        });
+        entity.addFields();
+      });
+
+      it('should not alter the entity', () => {
+        expect(entity.toString()).to.equal('entity Toto');
+      });
+    });
+    context('when passing fields', () => {
+      let entity;
+
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Toto'
+        });
+        entity.addFields([
+          new JDLField({
+            name: 'tata',
+            type: 'String'
+          }),
+          new JDLField({
+            name: 'titi',
+            type: 'Integer'
+          })
+        ]);
+      });
+
+      it('should alter the entity', () => {
+        expect(entity.toString()).to.equal(`entity Toto {
+  tata String,
+  titi Integer
+}`);
+      });
+    });
+  });
   describe('#forEachField', () => {
     context('when not passing a function', () => {
       let entity;
