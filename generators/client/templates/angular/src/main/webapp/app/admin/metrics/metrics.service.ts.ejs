@@ -29,7 +29,6 @@ export type ThreadDump = { threads: Thread[] };
 
 @Injectable({providedIn: 'root'})
 export class MetricsService {
-
     constructor(private http: HttpClient) {}
 
     getMetrics(): Observable<Metrics> {

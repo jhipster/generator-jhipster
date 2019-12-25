@@ -44,13 +44,12 @@ type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
 @Injectable({providedIn: 'root'})
 export class <%= entityAngularName %>Service {
-
     public resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
     <%_ if (searchEngine === 'elasticsearch') { _%>
     public resourceSearchUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/_search/<%= entityApiUrl %>';
     <%_ } _%>
 
-    constructor(protected http: HttpClient) { }
+    constructor(protected http: HttpClient) {}
 
 <%_ if (!readOnly) { _%>
     create(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
@@ -75,7 +74,6 @@ export class <%= entityAngularName %>Service {
 <%_ } _%>
 
     find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
-
         return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }

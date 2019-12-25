@@ -39,7 +39,7 @@ export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnD
         private translateService: TranslateService,
         <%_ } _%>
         private route: ActivatedRoute
-       ) {}
+    ) {}
 
     ngOnInit(): void {
         this.route.data.subscribe((routeData) => {

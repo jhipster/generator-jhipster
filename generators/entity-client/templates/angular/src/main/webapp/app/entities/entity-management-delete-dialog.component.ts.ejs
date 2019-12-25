@@ -30,15 +30,13 @@ import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service
     templateUrl: './<%= entityFileName %>-delete-dialog.component.html'
 })
 export class <%= entityAngularName %>DeleteDialogComponent {
-
     <%= entityInstance %>?: I<%= entityAngularName %>;
 
     constructor(
         protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
         public activeModal: NgbActiveModal,
         protected eventManager: JhiEventManager
-    ) {
-    }
+    ) {}
 
     clear(): void {
         this.activeModal.dismiss();

@@ -27,13 +27,11 @@ import { MockAccountService } from '../../../helpers/mock-account.service';
 import { AccountService } from 'app/core/auth/account.service';
 
 describe('Component Tests', () => {
-
     let sessions: Session[];
     let fixture: ComponentFixture<SessionsComponent>;
     let comp: SessionsComponent;
 
     describe('SessionsComponent', () => {
-
         beforeEach(() => {
             sessions = [new Session('xxxxxx==', new Date(2015, 10, 15), '0:0:0:0:0:0:0:1', 'Mozilla/5.0')];
 

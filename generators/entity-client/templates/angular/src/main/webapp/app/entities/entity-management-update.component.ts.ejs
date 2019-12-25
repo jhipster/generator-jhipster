@@ -95,7 +95,6 @@ _%>
     templateUrl: './<%= entityFileName %>-update.component.html'
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
-
     isSaving = false;
 <%_
 for ( const idx in variables ) { %>
@@ -159,8 +158,7 @@ for ( const idx in variables ) { %>
 <%_ } _%>
         protected activatedRoute: ActivatedRoute,
         private fb: FormBuilder
-    ) {
-    }
+    ) {}
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
