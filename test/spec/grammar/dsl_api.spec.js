@@ -36,14 +36,14 @@ describe('JDL DSL API', () => {
         expect(ast.entities[0]).to.deep.eql({
           name: 'A',
           tableName: 'A',
-          annotations: [{ option: 'service', method: 'serviceClass', type: 'BINARY' }],
+          annotations: [{ optionName: 'service', optionValue: 'serviceClass', type: 'BINARY' }],
           body: [
             {
               name: 'field',
               type: 'String',
               validations: [],
               javadoc: null,
-              annotations: [{ option: 'Id', type: 'UNARY' }]
+              annotations: [{ optionName: 'Id', type: 'UNARY' }]
             }
           ],
           javadoc: null
