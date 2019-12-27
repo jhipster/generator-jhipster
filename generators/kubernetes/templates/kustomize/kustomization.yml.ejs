@@ -1,8 +1,5 @@
 commonLabels:
   app.kubernetes.io/genereted-by: JHipster
-  <%_ if (istio) { _%>
-  istio-injection: enabled
-  <%_ } _%>
 
 <%_ if (kubernetesNamespace !== 'default') { _%>
 namespace: <%= kubernetesNamespace %>
@@ -83,4 +80,55 @@ const appName = appConfig.baseName.toLowerCase(); _%>
 - istio/grafana-gateway.yml
 - istio/zipkin-gateway.yml
 - istio/kiali-gateway.yml
+<%_ } _%>
+
+patchesJson6902:
+<%_ if (istio) { _%>
+- target:
+    version: v1
+    kind: Namespace
+    name: <%= kubernetesNamespace %>
+  path: patch/istio-label.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    kind: Gateway
+    name: grafana-observability-gateway
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    name: grafana-gw-virtualservice
+    kind: VirtualService
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    kind: Gateway
+    name: kiali-observability-gateway
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    name: kiali-gw-virtualservice
+    kind: VirtualService
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    kind: Gateway
+    name: zipkin-observability-gateway
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    name: zipkin-gw-virtualservice
+    kind: VirtualService
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
 <%_ } _%>

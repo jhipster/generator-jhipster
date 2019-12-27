@@ -122,6 +122,10 @@ function writeFiles() {
 
         writeKustomize() {
             this.template('kustomize/kustomization.yml.ejs', 'kustomization.yml');
+            if (this.istio) {
+                this.template('kustomize/patch/istio-label.yml.ejs', 'patch/istio-label.yml');
+                this.template('kustomize/patch/istio-namespace.yml.ejs', 'patch/istio-namespace.yml');
+            }
         }
     };
 }

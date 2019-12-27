@@ -83,6 +83,8 @@ metadata:
   name: consul
   namespace: <%= kubernetesNamespace %>
 spec:
+  # added to circumvent kustomize bug
+  volumeClaimTemplates: []
   serviceName: consul
   replicas: 3
   template:
