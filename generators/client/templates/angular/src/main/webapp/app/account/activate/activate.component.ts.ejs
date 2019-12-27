@@ -35,8 +35,7 @@ export class ActivateComponent implements OnInit {
         private activateService: ActivateService,
         private loginModalService: LoginModalService,
         private route: ActivatedRoute
-    ) {
-    }
+    ) {}
 
     ngOnInit(): void {
         this.route.queryParams.pipe(flatMap(params => this.activateService.get(params.key))).subscribe(

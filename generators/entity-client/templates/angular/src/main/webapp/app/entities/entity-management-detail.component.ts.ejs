@@ -29,7 +29,6 @@ import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileN
     templateUrl: './<%= entityFileName %>-detail.component.html'
 })
 export class <%= entityAngularName %>DetailComponent implements OnInit {
-
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 
     constructor(
@@ -37,13 +36,10 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
         protected dataUtils: JhiDataUtils,
         <%_ } _%>
         protected activatedRoute: ActivatedRoute
-    ) {
-    }
+    ) {}
 
     ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
-            this.<%= entityInstance %> = <%= entityInstance %>;
-        });
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => this.<%= entityInstance %> = <%= entityInstance %>);
     }
 
     <%_ if (fieldsContainBlob) { _%>

@@ -119,7 +119,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
                 sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
             }
         });
-        this.<%= entityInstancePlural %> = data ? data : [];
+        this.<%= entityInstancePlural %> = data || [];
     }
 
     protected onError(): void {

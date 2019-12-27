@@ -23,7 +23,6 @@ import { Observable, of } from 'rxjs';
 import { SpyObject } from './spyobject';
 
 export class MockActivatedRoute extends ActivatedRoute {
-
     constructor(parameters?: any) {
         super();
         this.queryParams = of(parameters);

@@ -27,14 +27,12 @@ import { GatewayRoute } from './gateway-route.model';
     providers: [ GatewayRoutesService ]
 })
 export class GatewayComponent implements OnInit {
-
     gatewayRoutes: GatewayRoute[] = [];
     updatingRoutes = false;
 
     constructor(
         private gatewayRoutesService: GatewayRoutesService
-    ) {
-    }
+    ) {}
 
     ngOnInit(): void {
         this.refresh();

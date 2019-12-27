@@ -24,7 +24,6 @@ import { SERVER_API_URL } from 'app/app.constants';
 
 @Injectable({providedIn: 'root'})
 export class ActivateService {
-
     constructor(private http: HttpClient) {}
 
     get(key: string): Observable<{}> {

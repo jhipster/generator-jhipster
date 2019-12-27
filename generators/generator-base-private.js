@@ -1057,7 +1057,7 @@ module.exports = class extends Generator {
                         this.${relationship.otherEntityName}Service
                             .query({${filter}})
                             .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body ? res.body : [];
+                                return res.body || [];
                             }))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
                                 if (${relationshipFieldNameIdCheck}) {
@@ -1068,9 +1068,9 @@ module.exports = class extends Generator {
                                         .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
                                             return subRes.body ? [subRes.body].concat(resBody) : resBody;
                                         }))
-                                        .subscribe((concatRes: I${relationship.otherEntityAngularName}[]) => {
-                                            this.${variableName} = concatRes;
-                                        });
+                                        .subscribe((concatRes: I${
+                                            relationship.otherEntityAngularName
+                                        }[]) => this.${variableName} = concatRes);
                                 }
                             });`;
                 } else {
@@ -1082,7 +1082,7 @@ module.exports = class extends Generator {
                     query = `
                         this.${relationship.otherEntityName}Service.query()
                             .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body ? res.body : [];
+                                return res.body || [];
                             }))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => this.${variableName} = resBody);`;
                 }
