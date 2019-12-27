@@ -38,14 +38,14 @@ export class LanguageHelper {
 
         this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
             this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
-            <%_ if (enableI18nRTL) { _%>
 
+            <%_ if (enableI18nRTL) { _%>
             this.updatePageDirection();
             <%_ } _%>
         });
     }
-    <%_ if (enableI18nRTL) { _%>
 
+    <%_ if (enableI18nRTL) { _%>
     private updatePageDirection(): void {
         this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
     }

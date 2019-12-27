@@ -49,13 +49,13 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
                 }
                 <%_ } _%>
                 this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
-<%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
+                <%_ if (['session', 'jwt', 'uaa'].includes(authenticationType)) { _%>
                 this.loginService.logout();
                 this.router.navigate(['']);
                 this.loginModalService.open();
-<%_ } else { _%>
+                <%_ } else { _%>
                 this.loginService.login();
-<%_ } _%>
+                <%_ } _%>
             }
         }));
     }

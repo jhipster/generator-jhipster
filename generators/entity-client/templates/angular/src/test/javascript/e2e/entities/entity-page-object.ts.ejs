@@ -39,7 +39,7 @@ export class <%= entityClass %>ComponentsPage {
     <%_ } _%>
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
 
-<%_ if (!readOnly) { _%>
+    <%_ if (!readOnly) { _%>
     async clickOnCreateButton(): Promise<void> {
         await this.createButton.click();
     }
@@ -51,7 +51,7 @@ export class <%= entityClass %>ComponentsPage {
     async countDeleteButtons(): Promise<number> {
         return this.deleteButtons.count();
     }
-<%_ } _%>
+    <%_ } _%>
 
     async getTitle(): Promise<string> {
         return this.title.<%- elementGetter %>;
@@ -103,11 +103,12 @@ export class <%= entityClass %>UpdatePage {
             let fieldInputType = 'text';
             let ngModelOption = '';
     _%>
-            <%_ if (fieldType === 'Boolean') { _%>
+    <%_ if (fieldType === 'Boolean') { _%>
     get<%= fieldNameCapitalized %>Input(): ElementFinder {
         return this.<%= fieldName %>Input;
     }
-            <%_ } else if (fieldIsEnum) { _%>
+
+    <%_ } else if (fieldIsEnum) { _%>
     async set<%= fieldNameCapitalized %>Select(<%= fieldName %>: string): Promise<void> {
         await this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
     }

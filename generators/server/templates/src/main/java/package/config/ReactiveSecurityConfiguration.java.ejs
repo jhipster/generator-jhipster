@@ -160,7 +160,7 @@ public class SecurityConfiguration {
         .and()
             // See https://github.com/spring-projects/spring-security/issues/5766
             .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
-            <%_ } else{ _%>
+            <%_ } else { _%>
             .disable()
             <%_ } _%>
             <%_ if (authenticationType === 'jwt') { _%>

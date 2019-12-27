@@ -37,7 +37,8 @@ export class AuthServerProvider {
     constructor(
         private http: HttpClient
     ) {}
-<%_ if (authenticationType !== 'oauth2') { _%>
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     login(credentials: Login): Observable<{}> {
         const data =
@@ -60,10 +61,12 @@ export class AuthServerProvider {
             })
         );
     }
-<%_ } else { _%>
+
+    <%_ } else { _%>
 
     logout(): Observable<Logout> {
         return this.http.post<Logout>(SERVER_API_URL + 'api/logout', {});
     }
-<%_ } _%>
+
+    <%_ } _%>
 }

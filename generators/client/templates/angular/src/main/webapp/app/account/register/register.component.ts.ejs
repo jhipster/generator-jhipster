@@ -49,9 +49,9 @@ export class RegisterComponent implements AfterViewInit {
     });
 
     constructor(
-<%_ if (enableTranslation) { _%>
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
-<%_ } _%>
+        <%_ } _%>
         private loginModalService: LoginModalService,
         private registerService: RegisterService,
         private renderer: Renderer,

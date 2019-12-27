@@ -55,7 +55,7 @@ import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
         const relationshipValidate = relationships[idx].relationshipValidate;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const isUsingMapsIdL1 = relationships[idx].useJPADerivedIdentifier;
-        if(imported.indexOf(otherEntityNameCapitalized) === -1) {
+        if (imported.indexOf(otherEntityNameCapitalized) === -1) {
             if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%=packageName%>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
 <%_         imported.push(otherEntityNameCapitalized);

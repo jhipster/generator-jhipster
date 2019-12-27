@@ -52,12 +52,13 @@
             return;
         }
         <%_ } _%>
+
         this.<%= entityInstance %>Service.query().subscribe(
             (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body || []
         );
     }
-    <%_ if (searchEngine === 'elasticsearch') { _%>
 
+    <%_ if (searchEngine === 'elasticsearch') { _%>
     search(query: string): void {
         this.currentSearch = query;
         this.loadAll();

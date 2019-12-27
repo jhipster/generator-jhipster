@@ -67,17 +67,20 @@ export class LoginModalComponent implements AfterViewInit {
             username: this.loginForm.get('username')!.value,
             password: this.loginForm.get('password')!.value,
             rememberMe: this.loginForm.get('rememberMe')!.value
-        }).subscribe(() => {
-            this.authenticationError = false;
-            this.activeModal.close();
-            if (
-                this.router.url === '/account/register' ||
-                this.router.url.startsWith('/account/activate') ||
-                this.router.url.startsWith('/account/reset/')
-            ) {
-                this.router.navigate(['']);
-            }
-        }, () => this.authenticationError = true);
+        }).subscribe(
+            () => {
+                this.authenticationError = false;
+                this.activeModal.close();
+                if (
+                    this.router.url === '/account/register' ||
+                    this.router.url.startsWith('/account/activate') ||
+                    this.router.url.startsWith('/account/reset/')
+                ) {
+                    this.router.navigate(['']);
+                }
+            },
+            () => this.authenticationError = true
+        );
     }
 
     register(): void {

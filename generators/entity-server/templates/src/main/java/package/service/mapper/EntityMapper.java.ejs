@@ -28,7 +28,7 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring", uses = {<% var existingMappings = [];
   for (idx in relationships) {
-    if ((relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true)|| relationships[idx].relationshipType === 'many-to-one' ||(relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)){
+    if ((relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true)|| relationships[idx].relationshipType === 'many-to-one' ||(relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)) {
       // if the entity is mapped twice, we should implement the mapping once
       if (!existingMappings.includes(relationships[idx].otherEntityNameCapitalized) && asEntity(relationships[idx].otherEntityNameCapitalized) !== asEntity(entityClass)) {
           existingMappings.push(relationships[idx].otherEntityNameCapitalized);

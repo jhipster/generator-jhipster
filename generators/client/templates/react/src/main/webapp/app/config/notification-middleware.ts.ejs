@@ -95,7 +95,7 @@ export default () => next => action => {
               if (errorHeader) {
                 const entityName = <% if (enableTranslation) { %>translate(
                   'global.menu.entities.' + entityKey
-                )<% }else{ %>entityKey<% } %>;
+                )<% } else { %>entityKey<% } %>;
                 addErrorAlert(errorHeader, errorHeader, { entityName });
               } else if (data !== '' && data.fieldErrors) {
                 const fieldErrors = data.fieldErrors;

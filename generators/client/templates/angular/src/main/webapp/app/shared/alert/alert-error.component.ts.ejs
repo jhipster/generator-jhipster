@@ -132,8 +132,8 @@ export class AlertErrorComponent implements OnDestroy {
     addErrorAlert(message: string<% if (enableTranslation) { %>, key?: string, data?: any<% } %>): void {
         <%_ if (enableTranslation) { _%>
         message = (key && key !== null) ? key : message;
-
         <%_ } _%>
+
         const newAlert: JhiAlert = {
             type: 'danger',
             msg: message,
