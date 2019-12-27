@@ -30,7 +30,7 @@ export default class TrackerService {
     let url;
     url = '//' + loc.host + loc.pathname + 'websocket/tracker';
     <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-    const authToken = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+    const authToken = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
     if (authToken) {
       url += '?access_token=' + authToken;
     }

@@ -4,7 +4,7 @@ import { SERVER_API_URL } from '@/constants';
 describe('Axios interceptor', () => {
   it('should use localStorage to provide bearer', () => {
     <%_ if (authenticationType === 'jwt') { _%>
-    localStorage.setItem('jhi-authenticationToken', 'auth');
+    localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'auth');
     <%_ } _%>
     const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occured'));
 
@@ -16,7 +16,7 @@ describe('Axios interceptor', () => {
 
   it('should use sessionStorage to provide bearer', () => {
     <%_ if (authenticationType === 'jwt') { _%>
-    sessionStorage.setItem('jhi-authenticationToken', 'auth');
+    sessionStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'auth');
     <%_ } _%>
     const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occured'));
 
