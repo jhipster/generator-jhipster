@@ -35,7 +35,7 @@ export const ACTION_TYPES = {
 };
 
 <%_ if (authenticationType === 'jwt') { _%>
-const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+const AUTH_TOKEN_KEY = '<%=jhiPrefixDashed %>-authenticationToken';
 <%_ } _%>
 
 const initialState = {
