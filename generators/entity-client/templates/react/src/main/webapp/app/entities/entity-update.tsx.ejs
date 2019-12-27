@@ -114,7 +114,7 @@ import {
   reset
 } from './<%= entityFileName %>.reducer';
 import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
-import { convertDateTimeFromServer, convertDateTimeToServer } from 'app/shared/util/date-utils';
+import { convertDateTimeFromServer, convertDateTimeToServer, defaultDateTime } from 'app/shared/util/date-utils';
 <%_ if (relationships.filter(e => e.relationshipType === 'many-to-many') !== undefined) { _%>
 import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
@@ -262,7 +262,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               className="form-control"
               name="<%= fieldName %>"
               placeholder={"YYYY-MM-DD HH:mm"}
-              value={isNew ? null : convertDateTimeFromServer(props.<%= entityInstance %>Entity.<%= fieldName %>)}
+              value={isNew ? defaultDateTime() : convertDateTimeFromServer(props.<%= entityInstance %>Entity.<%= fieldName %>)}
               <%- include react_validators %>
             />
           <%_ } else if (fieldType === 'LocalDate') { _%>

@@ -167,6 +167,13 @@ for ( const idx in variables ) { %>
             <%- queries[idx] %>
 <%_ } _%>
         });
+        <%_ for ( idx in fields ) {
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+            if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+        this.<%= fieldName %>SetDefaultValue();
+            <%_ } _%>
+        <%_ } _%>
     }
 
     updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
@@ -286,6 +293,20 @@ _%>
 <%_ } _%>
         };
     }
+    <%_ for ( idx in fields ) {
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+            if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+
+    private <%= fieldName %>SetDefaultValue(): void {
+        const field = this.editForm.get('<%= fieldName %>');
+        if (field && field.value === null) {
+            const t = moment().startOf('day').format(DATE_TIME_FORMAT);
+            field.setValue(t);
+        }
+    }
+            <%_ } _%>
+    <%_ } _%>
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
         result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
