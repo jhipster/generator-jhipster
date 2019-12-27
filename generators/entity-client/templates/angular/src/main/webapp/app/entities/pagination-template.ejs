@@ -47,7 +47,7 @@
     }
 
     loadPage(page?: number): void {
-        const pageToLoad: number = page ? page : this.page;
+        const pageToLoad: number = page || this.page;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({

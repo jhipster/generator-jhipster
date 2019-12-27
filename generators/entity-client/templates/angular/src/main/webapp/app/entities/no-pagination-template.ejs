@@ -47,18 +47,13 @@
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
                 }).subscribe(
-                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body ? res.body : []
+                    (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body || []
                 );
             return;
-       }
-       <%_ } _%>
+        }
+        <%_ } _%>
         this.<%= entityInstance %>Service.query().subscribe(
-            (res: HttpResponse<I<%= entityAngularName %>[]>) => {
-                this.<%= entityInstancePlural %> = res.body ? res.body : [];
-            <%_ if (searchEngine === 'elasticsearch') { _%>
-                this.currentSearch = '';
-            <%_ } _%>
-            }
+            (res: HttpResponse<I<%= entityAngularName %>[]>) => this.<%= entityInstancePlural %> = res.body || []
         );
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
