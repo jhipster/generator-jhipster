@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -120,14 +120,14 @@ describe('Component Tests', () => {
       it('Should convert date from string', () => {
         // GIVEN
         const date = new Date('2019-10-15T11:42:02Z');
-  
+
         // WHEN
         const convertedDate = comp.convertDateTimeFromServer(date);
-  
+
         // THEN
         expect(convertedDate).toEqual(format(date, DATE_TIME_LONG_FORMAT));
       });
-  
+
       it('Should not convert date if date is not present', () => {
         expect(comp.convertDateTimeFromServer(null)).toBeNull();
       });
