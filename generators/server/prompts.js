@@ -123,11 +123,11 @@ function askForServerSideOpts(meta) {
                         name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
                     });
                 }
+                opts.push({
+                    value: 'oauth2',
+                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+                });
                 if (!reactive) {
-                    opts.push({
-                        value: 'oauth2',
-                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
-                    });
                     if (['gateway', 'microservice'].includes(applicationType)) {
                         opts.push({
                             value: 'uaa',
