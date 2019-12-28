@@ -23,7 +23,7 @@ import {SERVER_API_URL} from "@/constants";
 const TIMEOUT = 1000000;
 const onRequestSuccess = config => {
   <%_ if (authenticationType === 'jwt') { _%>
-  const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+  const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
   if (token) {
     if (!config.headers) {
       config.headers = {};

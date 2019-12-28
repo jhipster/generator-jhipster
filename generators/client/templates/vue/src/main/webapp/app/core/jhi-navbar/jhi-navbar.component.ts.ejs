@@ -62,8 +62,8 @@ export default class JhiNavbar extends Vue {
       <%_ } _%>
     });
     <%_ } else { _%>
-    localStorage.removeItem('jhi-authenticationToken');
-    sessionStorage.removeItem('jhi-authenticationToken');
+    localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+    sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
     this.$store.commit('logout');
     this.$router.push('/');
     <%_ } _%>
