@@ -83,7 +83,7 @@ const connect = () => {
   headers['X-XSRF-TOKEN'] = cookie.read('XSRF-TOKEN');
 <%_ } else { _%>
   let url = '//' + loc.host + baseHref + '/websocket/tracker';
-  const authToken = Storage.local.get('jhi-authenticationToken') || Storage.session.get('jhi-authenticationToken');
+  const authToken = Storage.local.get('<%=jhiPrefixDashed %>-authenticationToken') || Storage.session.get('<%=jhiPrefixDashed %>-authenticationToken');
   if (authToken) {
     url += '?access_token=' + authToken;
   }
