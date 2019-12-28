@@ -40,9 +40,6 @@ import <%= packageName %>.repository.UserRepository;
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
-<%_ if (authenticationType !== 'oauth2') { _%>
-import <%= packageName %>.service.MailService;<% } %>
-import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import <%= packageName %>.service.mapper.UserMapper;
 import <%= packageName %>.web.rest.errors.ExceptionTranslator;
@@ -73,6 +70,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
+import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -168,6 +166,9 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ } _%>
 
     @Autowired
+    UserResource userResource;
+
+    @Autowired
     private UserRepository userRepository;
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -179,14 +180,6 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
-
-    @Autowired
-    private MailService mailService;
-    <%_ } _%>
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private UserMapper userMapper;
@@ -226,7 +219,6 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
         <%_ } _%>
-        UserResource userResource = new UserResource(userService<% if (authenticationType !== 'oauth2') { %>, userRepository, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, mockUserSearchRepository<% } %>);
 
         <%_ if (reactive) { _%>
         this.webTestClient = WebTestClient.bindToController(userResource)
@@ -288,6 +280,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -337,6 +330,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -384,6 +378,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -429,6 +424,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void createUserWithExistingEmail() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -588,6 +584,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void updateUser() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -650,6 +647,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void updateUserLogin() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -713,6 +711,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -780,6 +779,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void updateUserExistingLogin() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -847,6 +847,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -884,6 +885,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
+    @WithMockUser(roles = { "ADMIN" })
     public void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/users/authorities")
