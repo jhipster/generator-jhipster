@@ -1234,6 +1234,10 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/errors/ExceptionTranslatorTestController.java',
                     renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java`
+                },
+                {
+                    file: 'package/web/rest/WithUnauthenticatedMockUser.java',
+                    renameTo: generator => `${generator.testDir}web/rest/WithUnauthenticatedMockUser.java`
                 }
             ]
         },
@@ -1794,6 +1798,10 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/AccountResourceIT.java',
                     renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`
+                },
+                {
+                    file: 'package/config/NoOpMailConfiguration.java',
+                    renameTo: generator => `${generator.testDir}config/NoOpMailConfiguration.java`
                 },
                 {
                     file: 'package/web/rest/UserResourceIT.java',

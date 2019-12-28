@@ -29,25 +29,18 @@ import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
-import <%= packageName %>.security.jwt.TokenProvider;
-<%_ if (reactive && !skipUserManagement) { _%>
-import <%= packageName %>.service.AuditEventService;
-<%_ } _%>
-import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 import <%= packageName %>.web.rest.vm.LoginVM;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-<%_ if (reactive) { _%>
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-<%_ } _%>
 <%_ if (!reactive) { _%>
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
+import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (!skipUserManagement) { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
@@ -80,52 +73,31 @@ import static org.hamcrest.Matchers.not;
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
  */
+<%_ if (!reactive) { _%>
+@AutoConfigureMockMvc
+<%_ } else { _%>
+@AutoConfigureWebTestClient
+<%_ } _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
-    @Autowired
-    private TokenProvider tokenProvider;
-
-    @Autowired
-    private <% if (reactive) { %>Reactive<% } %>AuthenticationManager<% if (!reactive) { %>Builder<% } %> authenticationManager;
-
-    <%_ if (reactive && !skipUserManagement) { _%>
-    @Autowired
-    private AuditEventService auditEventService;
-
-    <%_ }  _%>
     <%_ if (!skipUserManagement) { _%>
     @Autowired
     private UserRepository userRepository;
 
+    <%_ }  _%>
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    <%_ }  _%>
     @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
     <%_ if (reactive) { _%>
     private WebTestClient webTestClient;
     <%_ } else { _%>
     private MockMvc mockMvc;
     <%_ }  _%>
-
-    @BeforeEach
-    public void setup() {
-        UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager<% if (reactive && !skipUserManagement) { %>, auditEventService<% } %>);
-        <%_ if (!reactive) { _%>
-        this.mockMvc = MockMvcBuilders.standaloneSetup(userJWTController)
-            .setControllerAdvice(exceptionTranslator)
-        <%_ } else { _%>
-        this.webTestClient = WebTestClient.bindToController(userJWTController)
-            .controllerAdvice(exceptionTranslator)
-        <%_ }  _%>
-            .build();
-    }
 
     @Test
 <%_ if (!skipUserManagement) { _%>
