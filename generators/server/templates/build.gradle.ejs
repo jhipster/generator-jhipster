@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -89,7 +89,7 @@ if (project.hasProperty("gae")) {
             mavenBom 'io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}'
         }
     }
-    appengineStage.dependsOn thinResolve 
+    appengineStage.dependsOn thinResolve
 }
 
 <%_ if (serviceDiscoveryType || applicationType === 'gateway' || applicationType === 'microservice' || applicationType === 'uaa') { _%>

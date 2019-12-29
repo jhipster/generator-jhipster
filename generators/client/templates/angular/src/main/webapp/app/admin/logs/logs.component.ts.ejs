@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -30,7 +30,7 @@ export class LogsComponent implements OnInit {
     filter = '';
     orderProp = 'name';
     reverse = false;
-  
+
     constructor(private logsService: LogsService) {}
 
     ngOnInit(): void {
@@ -40,7 +40,7 @@ export class LogsComponent implements OnInit {
     changeLevel(name: string, level: Level): void {
         this.logsService.changeLevel(name, level).subscribe(() => this.findAndExtractLoggers());
     }
-    
+
     private findAndExtractLoggers(): void {
         this.logsService
             .findAll()

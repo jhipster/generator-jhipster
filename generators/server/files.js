@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -563,16 +563,6 @@ const serverFiles = {
                 {
                     file: 'package/gateway/TokenRelayFilter.java',
                     renameTo: generator => `${generator.javaDir}gateway/TokenRelayFilter.java`
-                }
-            ]
-        },
-        {
-            condition: generator => generator.applicationType === 'gateway' && !generator.serviceDiscoveryType,
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/web/filter/RouteDetectorFilter.java',
-                    renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`
                 }
             ]
         },

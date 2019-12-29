@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -67,7 +67,7 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>3.0.8-SNAPSHOT</jhipster-dependencies.version>
+        <jhipster-dependencies.version>3.1.0</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
         <spring-boot.version>2.2.2.RELEASE</spring-boot.version>
@@ -692,7 +692,7 @@
         </dependency>
 <%_ } _%>
         <!-- Spring Cloud -->
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
