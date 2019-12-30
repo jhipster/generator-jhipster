@@ -572,14 +572,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <%_ if (cucumberTests === false) { _%>
             <exclusions>
-                <%_ if (cucumberTests === false) { _%>
                 <exclusion>
                     <groupId>org.junit.vintage</groupId>
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
-                <%_ } _%>
             </exclusions>
+            <%_ } _%>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
