@@ -27,7 +27,7 @@ import { of } from 'rxjs';
 import { JhiDataUtils } from 'ng-jhipster';
 <%_ } _%>
 
-import { <%=angularXAppName%>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
+import { <%= angularXAppName %>TestModule } from '../../../<%= entityParentPathAddition %>test.module';
 import { <%= entityAngularName %>DetailComponent } from 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.component';
 import { <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 
@@ -42,7 +42,7 @@ describe('Component Tests', () => {
 
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [<%= angularXAppName %>TestModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
                     {provide: ActivatedRoute, useValue: route}
