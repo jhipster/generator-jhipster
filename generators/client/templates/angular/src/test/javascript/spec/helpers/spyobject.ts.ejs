@@ -28,23 +28,6 @@ export interface GuinessCompatibleSpy extends jasmine.Spy {
 }
 
 export class SpyObject {
-    static stub(object: any = null, config: any = null, overrides: any = null): any {
-        if (!(object instanceof SpyObject)) {
-            overrides = config;
-            config = object;
-            object = new SpyObject();
-        }
-
-        const m = {};
-        Object.keys(config).forEach((key) => m[key] = config[key]);
-        Object.keys(overrides).forEach((key) => m[key] = overrides[key]);
-        Object.keys(m).forEach((key) => {
-            object.spy(key).andReturn(m[key]);
-        });
-        return object;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/member-ordering
     constructor(type: any = null) {
         if (type) {
             Object.keys(type.prototype).forEach((prop) => {
