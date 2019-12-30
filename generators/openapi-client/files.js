@@ -76,9 +76,7 @@ function writeFiles() {
                         ' --library spring-cloud ' +
                         ` -i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
-                        ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate ' +
-                        ' --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +
-                        ` -DdateLibrary=custom,basePackage=${this.packageName}.client,configPackage=${cliPackage},` +
+                        ` -DbasePackage=${this.packageName}.client,configPackage=${cliPackage},` +
                         `title=${_.camelCase(cliName)}`;
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
