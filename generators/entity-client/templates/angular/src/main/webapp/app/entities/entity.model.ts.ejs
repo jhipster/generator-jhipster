@@ -26,10 +26,10 @@ const enumImports = generateEntityClientEnumImports(fields);
 <%_ if (fieldsContainInstant || fieldsContainZonedDateTime || fieldsContainLocalDate) { _%>
 import { Moment } from 'moment';
 <%_ } _%>
-<%_ typeImports.forEach( (importedPath, importedType) => { _%>
+<%_ typeImports.forEach((importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
-<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+<%_ enumImports.forEach((importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
@@ -40,9 +40,13 @@ export interface I<%= entityAngularName %> {
 }
 
 export class <%= entityAngularName %> implements I<%= entityAngularName %> {
-    constructor(<% variablesWithTypes.forEach(variablesWithType => { %>
-        public <%- variablesWithType %>,<% }); %>
-    ) {<% for (idx in defaultVariablesValues) { %>
-        <%- defaultVariablesValues[idx] %><% } %>
+    constructor(
+        <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+        public <%- variablesWithType %>,
+        <%_ }); _%>
+    ) {
+        <%_ for (idx in defaultVariablesValues) { _%>
+        <%- defaultVariablesValues[idx] %>
+        <%_ } _%>
     }
 }

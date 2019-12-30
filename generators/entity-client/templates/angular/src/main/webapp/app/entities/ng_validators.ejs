@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%#	Returns a string of all angular validators required for the input field. -%>
-<%
+<%_
 const field = fields[idx];
 let result = '';
 
@@ -54,5 +54,5 @@ if (field.fieldValidate === true) {
 
     result = validators.join(' ');
 }
--%>
+_%>
 <%- result -%>

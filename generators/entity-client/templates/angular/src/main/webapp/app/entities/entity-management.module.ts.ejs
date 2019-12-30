@@ -47,5 +47,4 @@ import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
     ]
     <%_ } _%>
 })
-export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {
-}
+export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {}
