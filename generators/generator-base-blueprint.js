@@ -25,6 +25,18 @@ const BaseGenerator = require('./generator-base');
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends BaseGenerator {
+    constructor(args, opts) {
+        super(args, opts);
+
+        this.jhipsterConfig = this._getStorage('generator-jhipster');
+        this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
+
+        if (this.fromBlueprint) {
+            this.blueprintConfig = this.config;
+            this.config = this.jhipsterConfig;
+        }
+    }
+
     // Public API method used by the getter and also by Blueprints
     _initializing() {
         return {};
