@@ -54,8 +54,8 @@ export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnD
             }
         });
     }
-    <%_ if (enableTranslation) { _%>
 
+    <%_ if (enableTranslation) { _%>
     ngOnDestroy(): void {
         if (this.langChangeSubscription) {
             this.langChangeSubscription.unsubscribe();

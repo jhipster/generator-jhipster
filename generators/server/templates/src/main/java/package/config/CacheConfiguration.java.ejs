@@ -407,7 +407,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     }
         <%_ } _%>
 
-    public static EmbeddedCacheManager getCacheManager(){
+    public static EmbeddedCacheManager getCacheManager() {
         return cacheManager;
     }
 
@@ -499,7 +499,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
      *          &#064;Autowired (or) &#064;Inject
      *          private EmbeddedCacheManager cacheManager;
      *
-     *          void cacheSample(){
+     *          void cacheSample() {
      *              cacheManager.getCache("dist-app-data").put("hi", "there");
      *          }
      *          </pre>

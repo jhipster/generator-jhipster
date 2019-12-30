@@ -81,8 +81,8 @@ describe('Service Tests', () => {
                 req.flush(['ROLE_USER', 'ROLE_ADMIN']);
                 expect(expectedResult).toEqual(['ROLE_USER', 'ROLE_ADMIN']);
             });
-
             <%_ } _%>
+
             it('should propagate not found response', () => {
                 let expectedResult = 0;
 
@@ -98,5 +98,4 @@ describe('Service Tests', () => {
             });
         });
     });
-
 });

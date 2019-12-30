@@ -64,11 +64,11 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
         Title,
         {
             provide: LOCALE_ID,
-        <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
+            <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
             useValue: 'en'
-        <%_ } else { _%>
+            <%_ } else { _%>
             useValue: '<%= localeId %>'
-        <%_ } _%>
+            <%_ } _%>
         },
         { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter},
         <%_ if (enableI18nRTL) { _%>

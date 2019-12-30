@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
 
     <%_ if (authenticationType !== 'oauth2') { _%>
     ngOnDestroy(): void {
-        if(this.authSubscription) {
+        if (this.authSubscription) {
             this.authSubscription.unsubscribe();
         }
     }

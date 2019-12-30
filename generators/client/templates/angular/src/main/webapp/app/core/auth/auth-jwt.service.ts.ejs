@@ -31,21 +31,22 @@ import { Login } from 'app/core/login/login.model';
 type JwtToken = {
   id_token: string;
 };
-
 <%_ } else { _%>
 export const LOGOUT_URL = SERVER_API_URL + 'auth/logout';
-
 <%_ } _%>
+
 @Injectable({providedIn: 'root'})
 export class AuthServerProvider {
     constructor(
-        private http: HttpClient<%_ if (authenticationType !== 'uaa') { _%>,
+        private http: HttpClient,
+        <%_ if (authenticationType !== 'uaa') { _%>
         private $localStorage: LocalStorageService,
         private $sessionStorage: SessionStorageService
-<%_ } _%>
+        <%_ } _%>
     ) {}
 
-<%_ if (authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa') { _%>
+
     login(credentials: Login): Observable<any> {
         return this.http.post(SERVER_API_URL + 'auth/login', credentials);
     }
@@ -53,7 +54,9 @@ export class AuthServerProvider {
     logout(): Observable<{}> {
         return this.http.post(LOGOUT_URL, null);
     }
-<% } else { %>
+
+    <%_ } else { _%>
+
     getToken(): string {
         return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken') || '';
     }
@@ -80,5 +83,6 @@ export class AuthServerProvider {
             this.$sessionStorage.store('authenticationToken', jwt);
         }
     }
-<%_ } _%>
+
+    <%_ } _%>
 }

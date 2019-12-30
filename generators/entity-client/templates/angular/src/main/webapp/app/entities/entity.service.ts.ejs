@@ -51,7 +51,7 @@ export class <%= entityAngularName %>Service {
 
     constructor(protected http: HttpClient) {}
 
-<%_ if (!readOnly) { _%>
+    <%_ if (!readOnly) { _%>
     create(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
         <%_ if (fieldsContainDate) { _%>
         const copy = this.convertDateFromClient(<%= entityInstance %>);
@@ -71,7 +71,7 @@ export class <%= entityAngularName %>Service {
                     { observe: 'response' })
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
-<%_ } _%>
+    <%_ } _%>
 
     find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
         return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
@@ -84,11 +84,11 @@ export class <%= entityAngularName %>Service {
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))<% } %>;
     }
 
-<%_ if (!readOnly) { _%>
+    <%_ if (!readOnly) { _%>
     delete(id: <%= tsKeyType %>): Observable<HttpResponse<{}>> {
         return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response'});
     }
-<%_ } _%>
+    <%_ } _%>
 
     <%_ if (searchEngine === 'elasticsearch') { _%>
     search(req: <%= searchType %>): Observable<EntityArrayResponseType> {
@@ -136,5 +136,5 @@ export class <%= entityAngularName %>Service {
         }
         return res;
     }
-    <%_ } _%>
+<%_ } _%>
 }

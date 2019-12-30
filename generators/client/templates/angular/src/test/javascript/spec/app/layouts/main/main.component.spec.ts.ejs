@@ -158,8 +158,8 @@ describe('Component Tests', () => {
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
       });
-      <%_ if (enableTranslation) { _%>
 
+      <%_ if (enableTranslation) { _%>
       describe('language change', () => {
         it('should set page title to default title if pageTitle is missing on routes', () => {
           // WHEN

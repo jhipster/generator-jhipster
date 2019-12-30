@@ -50,8 +50,8 @@ export class <%= entityAngularName %>DetailComponent implements OnInit {
     openFile(contentType: string, base64String: string): void {
         this.dataUtils.openFile(contentType, base64String);
     }
-
     <%_ } _%>
+
     previousState(): void {
         window.history.back();
     }

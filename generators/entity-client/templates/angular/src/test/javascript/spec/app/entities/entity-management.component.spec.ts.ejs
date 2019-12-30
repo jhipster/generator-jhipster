@@ -81,8 +81,8 @@ describe('Component Tests', () => {
             expect(service.query).toHaveBeenCalled();
             expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
         });
-    <%_ if (pagination !== 'no') { _%>
 
+    <%_ if (pagination !== 'no') { _%>
         it('should load a page', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
@@ -104,6 +104,7 @@ describe('Component Tests', () => {
         });
 
         <%_ if (pagination === 'infinite-scroll') { _%>
+
         it('should re-initialize the page', () => {
             // GIVEN
             const headers = new HttpHeaders().append('link', 'link;link');
@@ -148,7 +149,9 @@ describe('Component Tests', () => {
             // THEN
                 expect(result).toEqual(['name,asc', 'id']);
         });
+
         <%_ } else { _%>
+
         it('should calculate the sort attribute for an id', () => {
             // WHEN
             comp.ngOnInit();
@@ -171,6 +174,7 @@ describe('Component Tests', () => {
             // THEN
             expect(result).toEqual(['name,desc', 'id']);
         });
+
         <%_ } _%>
     <%_ } _%>
     });

@@ -85,7 +85,7 @@ public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else 
         <%_ } _%>
     }
 
-    private String resolveToken(<% if (!reactive) { %>HttpServletRequest<% } else { %>ServerHttpRequest<% } %> request){
+    private String resolveToken(<% if (!reactive) { %>HttpServletRequest<% } else { %>ServerHttpRequest<% } %> request) {
         String bearerToken = request.<% if (!reactive) { %>getHeader<% } else { %>getHeaders().getFirst<% } %>(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);

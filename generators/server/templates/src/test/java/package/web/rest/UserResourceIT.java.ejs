@@ -129,7 +129,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
     <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
     private static final Long DEFAULT_ID = 1L;
-    <%_ } else if (databaseType === 'couchbase'){ _%>
+    <%_ } else if (databaseType === 'couchbase') { _%>
     private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
     private static final String DEFAULT_ID = "id1";

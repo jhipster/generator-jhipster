@@ -337,7 +337,7 @@ public class UserService {
     }
 
     <%_ if (!reactive) { _%>
-    private boolean removeNonActivatedUser(<%= asEntity('User') %> existingUser){
+    private boolean removeNonActivatedUser(<%= asEntity('User') %> existingUser) {
         if (existingUser.getActivated()) {
              return false;
         }

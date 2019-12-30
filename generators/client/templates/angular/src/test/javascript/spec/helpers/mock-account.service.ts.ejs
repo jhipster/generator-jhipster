@@ -43,5 +43,5 @@ export class MockAccountService extends SpyObject {
     setIdentityResponse(account: Account | null): void {
         this.identitySpy = this.spy('identity').andReturn(of(account));
         this.getAuthenticationStateSpy = this.spy('getAuthenticationState').andReturn(of(account));
-      }
+    }
 }

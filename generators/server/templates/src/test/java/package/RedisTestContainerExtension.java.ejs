@@ -30,7 +30,7 @@ public class RedisTestContainerExtension implements BeforeAllCallback {
 
     @Override
     public void beforeAll(ExtensionContext extensionContext) throws Exception {
-        if(!started.get()) {
+        if (!started.get()) {
             GenericContainer redis =
                 new GenericContainer("<%= DOCKER_REDIS %>")
                     .withExposedPorts(6379);

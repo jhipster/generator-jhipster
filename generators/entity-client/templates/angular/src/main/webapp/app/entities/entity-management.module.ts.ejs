@@ -41,11 +41,11 @@ import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
         <%= entityAngularName %>DeleteDialogComponent,
         <%_ } %>
     ],
+    <%_ if (!readOnly) { _%>
     entryComponents: [
-        <%_ if (!readOnly) { _%>
         <%= entityAngularName %>DeleteDialogComponent
-        <%_ } _%>
     ]
+    <%_ } _%>
 })
 export class <%= locals.microserviceName ? upperFirstCamelCase(locals.microserviceName) : angularXAppName %><%= entityAngularName %>Module {
 }

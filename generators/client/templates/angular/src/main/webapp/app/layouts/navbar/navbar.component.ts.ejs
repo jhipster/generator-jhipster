@@ -78,8 +78,8 @@ export class NavbarComponent implements OnInit {
         this.sessionStorage.store('locale', languageKey);
         this.languageService.changeLanguage(languageKey);
     }
-
     <%_ } _%>
+
     collapseNavbar(): void {
         this.isNavbarCollapsed = true;
     }

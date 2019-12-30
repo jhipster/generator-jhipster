@@ -51,8 +51,8 @@ export class AccountService  {
         private stateStorageService: StateStorageService,
         private router: Router
     ) {}
-    <%_ if (!skipUserManagement) { _%>
 
+    <%_ if (!skipUserManagement) { _%>
     save(account: Account): Observable<{}> {
         return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
     }
@@ -88,8 +88,8 @@ export class AccountService  {
               }),
               tap((account: Account | null) => {
                 this.authenticate(account);
-                <%_ if (enableTranslation) { _%>
 
+                <%_ if (enableTranslation) { _%>
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
                 if (account && account.langKey) {
