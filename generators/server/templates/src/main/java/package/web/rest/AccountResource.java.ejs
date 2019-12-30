@@ -443,17 +443,16 @@ public class AccountResource {
     <%_ if (!reactive) { _%>
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userService.requestPasswordReset(mail);
-            if (user.isPresent()) {
-                mailService.sendPasswordResetMail(user.get());
-            } else {
-                // Pretend the request has been successful to prevent checking which emails really exist
-                // but log that an invalid attempt has been made
-                log.warn("Password reset requested for non existing mail '{}'", mail);
-            }
+        if (user.isPresent()) {
+            mailService.sendPasswordResetMail(user.get());
+        } else {
+            // Pretend the request has been successful to prevent checking which emails really exist
+            // but log that an invalid attempt has been made
+            log.warn("Password reset requested for non existing mail '{}'", mail);
+        }
     <%_ } else { _%>
     public Mono<Void> requestPasswordReset(@RequestBody String mail) {
         return userService.requestPasswordReset(mail)
-            .log()
             .doOnSuccess(user -> {
                 if (Objects.nonNull(user)) {
                     mailService.sendPasswordResetMail(user);
