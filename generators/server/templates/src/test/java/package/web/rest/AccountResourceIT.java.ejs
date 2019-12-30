@@ -204,7 +204,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         mockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value("test"))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
         <%_ } else { _%>
