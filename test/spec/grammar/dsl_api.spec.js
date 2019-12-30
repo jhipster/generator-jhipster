@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -36,14 +36,14 @@ describe('JDL DSL API', () => {
         expect(ast.entities[0]).to.deep.eql({
           name: 'A',
           tableName: 'A',
-          annotations: [{ option: 'service', method: 'serviceClass', type: 'BINARY' }],
+          annotations: [{ optionName: 'service', optionValue: 'serviceClass', type: 'BINARY' }],
           body: [
             {
               name: 'field',
               type: 'String',
               validations: [],
               javadoc: null,
-              annotations: [{ option: 'Id', type: 'UNARY' }]
+              annotations: [{ optionName: 'Id', type: 'UNARY' }]
             }
           ],
           javadoc: null

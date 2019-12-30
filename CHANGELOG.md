@@ -1,3 +1,15 @@
+# Latest: v6.0.6
+
+## Bug fixes:
+  - When exporting an application to a JDL file, the following attributes weren't quoted in the JSON file:
+  `jwtSecretKey`, `rememberMeKey` and `changelogDate`. That caused the import of such a JDL file to fail because of
+  "illegal" characters being present. Now, these options are quoted when an application is exported to a JDL file.
+
+## What's new:
+  - Disallowed underscores in application base names where the application is either a microservice or a UAA app.
+
+---
+
 # v6.0.5
 
 ## Bug fixes:

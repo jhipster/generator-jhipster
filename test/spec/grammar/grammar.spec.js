@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -270,17 +270,17 @@ application {
         expect(parsedEntity).to.deep.equal({
           annotations: [
             {
-              method: 'mapstruct',
-              option: 'dto',
+              optionValue: 'mapstruct',
+              optionName: 'dto',
               type: 'BINARY'
             },
             {
-              method: 'serviceClass',
-              option: 'service',
+              optionValue: 'serviceClass',
+              optionName: 'service',
               type: 'BINARY'
             },
             {
-              option: 'readOnly',
+              optionName: 'readOnly',
               type: 'UNARY'
             }
           ],
@@ -351,7 +351,7 @@ application {
           expect(parsedEntity).to.deep.equal({
             annotations: [
               {
-                option: 'id',
+                optionName: 'id',
                 type: 'UNARY'
               }
             ],
@@ -399,7 +399,7 @@ application {
                 {
                   annotations: [
                     {
-                      option: 'something',
+                      optionName: 'something',
                       type: 'UNARY'
                     }
                   ],
@@ -853,7 +853,7 @@ entity A {
       it('should add it', () => {
         expect(relationship.options).to.deep.equal([
           {
-            option: 'jpaDerivedIdentifier',
+            optionName: 'jpaDerivedIdentifier',
             type: 'UNARY'
           }
         ]);
@@ -884,7 +884,7 @@ entity A {
               },
               options: [
                 {
-                  option: 'jpaDerivedIdentifier',
+                  optionName: 'jpaDerivedIdentifier',
                   type: 'UNARY'
                 }
               ],
@@ -917,7 +917,7 @@ entity A {
               },
               options: [
                 {
-                  option: 'jpaDerivedIdentifier',
+                  optionName: 'jpaDerivedIdentifier',
                   type: 'UNARY'
                 }
               ],

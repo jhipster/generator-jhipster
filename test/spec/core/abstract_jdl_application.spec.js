@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -173,6 +173,59 @@ describe('AbstractJDLApplication', () => {
 
       it('uses each entity name', () => {
         expect(result).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
+  describe('setEntityNames', () => {
+    context('when not passing entity names', () => {
+      let application;
+
+      before(() => {
+        application = new AbstractJDLApplication({
+          config: {
+            baseName: 'toto'
+          },
+          entities: ['A', 'B']
+        });
+        application.setEntityNames();
+      });
+
+      it('should not alter the entity names', () => {
+        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B']));
+      });
+    });
+    context('when passing an empty list', () => {
+      let application;
+
+      before(() => {
+        application = new AbstractJDLApplication({
+          config: {
+            baseName: 'toto'
+          },
+          entities: ['A', 'B']
+        });
+        application.setEntityNames([]);
+      });
+
+      it('should not alter the entity names', () => {
+        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B']));
+      });
+    });
+    context('when passing entity names', () => {
+      let application;
+
+      before(() => {
+        application = new AbstractJDLApplication({
+          config: {
+            baseName: 'toto'
+          },
+          entities: ['A', 'B']
+        });
+        application.setEntityNames(['B', 'C']);
+      });
+
+      it('should update the entity names', () => {
+        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B', 'C']));
       });
     });
   });

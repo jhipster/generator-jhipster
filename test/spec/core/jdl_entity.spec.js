@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -115,6 +115,48 @@ describe('JDLEntity', () => {
       it('works', () => {
         entity.addField(validField);
         expect(entity.fields).to.deep.eq({ myField: validField });
+      });
+    });
+  });
+  describe('addFields', () => {
+    context('when not passing fields', () => {
+      let entity;
+
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Toto'
+        });
+        entity.addFields();
+      });
+
+      it('should not alter the entity', () => {
+        expect(entity.toString()).to.equal('entity Toto');
+      });
+    });
+    context('when passing fields', () => {
+      let entity;
+
+      before(() => {
+        entity = new JDLEntity({
+          name: 'Toto'
+        });
+        entity.addFields([
+          new JDLField({
+            name: 'tata',
+            type: 'String'
+          }),
+          new JDLField({
+            name: 'titi',
+            type: 'Integer'
+          })
+        ]);
+      });
+
+      it('should alter the entity', () => {
+        expect(entity.toString()).to.equal(`entity Toto {
+  tata String,
+  titi Integer
+}`);
       });
     });
   });

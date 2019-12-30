@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -34,12 +34,12 @@ describe('integration tests', () => {
 
     before(() => {
       originalContent = DocumentParser.parseFromConfigurationObject({
-        document: JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]),
+        parsedContent: JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]),
         applicationType: ApplicationTypes.MONOLITH
       });
       JDLExporter.exportToJDL(originalContent, 'exported.jdl');
       writtenContent = DocumentParser.parseFromConfigurationObject({
-        document: JDLReader.parseFromFiles(['exported.jdl']),
+        parsedContent: JDLReader.parseFromFiles(['exported.jdl']),
         applicationType: ApplicationTypes.MONOLITH
       });
     });

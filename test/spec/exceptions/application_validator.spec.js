@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -23,7 +23,7 @@ const { expect } = require('chai');
 const ApplicationValidator = require('../../../lib/validators/application_validator');
 
 const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
-const { MONOLITH } = require('../../../lib/core/jhipster/application_types');
+const { MONOLITH, UAA, MICROSERVICE, GATEWAY } = require('../../../lib/core/jhipster/application_types');
 const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE } = require('../../../lib/core/jhipster/database_types');
 
 describe('ApplicationValidator', () => {
@@ -291,6 +291,50 @@ describe('ApplicationValidator', () => {
                 }
               })
             ).to.throw(/^Unknown value 'toto' for option 'prodDatabaseType'\.$/);
+          });
+        });
+      });
+      context('with a name containing an underscore', () => {
+        context('with a UAA application', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate({
+                config: { ...basicValidApplication, baseName: 'test_app', applicationType: UAA }
+              })
+            ).to.throw(
+              /^An application name can't contain underscores if the application is a microservice or a UAA application\.$/
+            );
+          });
+        });
+        context('with a microservice application', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate({
+                config: { ...basicValidApplication, baseName: 'test_app', applicationType: MICROSERVICE }
+              })
+            ).to.throw(
+              /^An application name can't contain underscores if the application is a microservice or a UAA application\.$/
+            );
+          });
+        });
+        context('with any other application type', () => {
+          context('such as a gateway', () => {
+            it('should not fail', () => {
+              expect(() =>
+                validator.validate({
+                  config: { ...basicValidApplication, baseName: 'test_app', applicationType: GATEWAY }
+                })
+              ).not.to.throw();
+            });
+          });
+          context('such as a monolith', () => {
+            it('should not fail', () => {
+              expect(() =>
+                validator.validate({
+                  config: { ...basicValidApplication, baseName: 'test_app', applicationType: MONOLITH }
+                })
+              ).not.to.throw();
+            });
           });
         });
       });

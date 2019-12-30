@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -23,13 +23,6 @@ const { MONOLITH, MICROSERVICE, GATEWAY, UAA } = require('../../../lib/core/jhip
 
 describe('JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
-    context('when passing an invalid config', () => {
-      it('fails', () => {
-        expect(() => {
-          createJDLApplication({ applicationType: 'toto' });
-        }).to.throw('Unknown application type: toto');
-      });
-    });
     context(`when passing a ${MICROSERVICE} config`, () => {
       let application;
 
