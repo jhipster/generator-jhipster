@@ -73,8 +73,6 @@ public class PersistentAuditEvent implements Serializable {
     private Long id;<% } else { %>
     <%_ if (databaseType === 'couchbase') { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    <%_ }  else { _%>
-    @Field("event_id")
     <%_ } _%>
     private String id;<% } %>
 

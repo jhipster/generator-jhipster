@@ -209,7 +209,7 @@ liquibase {
             username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
             password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
             changeLogFile project.ext.diffChangelogFile
-            referenceUrl "hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL8Dialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MariaDB103Dialect<% } else if (devDatabaseType === 'postgresql') { %>io.github.jhipster.domain.util.FixedPostgreSQL95Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServer2012Dialect<% } %>&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+            referenceUrl "hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType === 'mysql') { %>org.hibernate.dialect.MySQL8Dialect<% } else if (devDatabaseType === 'mariadb') { %>org.hibernate.dialect.MariaDB103Dialect<% } else if (devDatabaseType === 'postgresql') { %>io.github.jhipster.domain.util.FixedPostgreSQL10Dialect<% } else if (devDatabaseType === 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } else if (devDatabaseType === 'oracle') { %>org.hibernate.dialect.Oracle12cDialect<% } else if (devDatabaseType === 'mssql') { %>org.hibernate.dialect.SQLServer2012Dialect<% } %>&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
             defaultSchemaName "<% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %>"
             logLevel "debug"
             classpath "$buildDir/classes/java/main"
@@ -240,6 +240,13 @@ nohttp {
 configurations {
     providedRuntime
     implementation.exclude module: "spring-boot-starter-tomcat"
+    all {
+        resolutionStrategy {
+            // Inherited version from Spring Boot can't be used because of regressions:
+            // https://liquibase.jira.com/browse/CORE-3536 and https://liquibase.jira.com/browse/CORE-3522
+            force 'org.liquibase:liquibase-core:3.6.3'
+        }
+    }
 }
 
 repositories {
@@ -500,27 +507,22 @@ dependencies {
     testImplementation "io.cucumber:cucumber-spring"
     <%_ } _%>
     testImplementation ("org.springframework.boot:spring-boot-starter-test") {
-        exclude module: "junit"
+        <%_ if (cucumberTests === false) { _%>
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+        <%_ } _%>
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
-    testImplementation "org.junit.jupiter:junit-jupiter-engine"
-    <%_ if (cucumberTests) { _%>
-    testImplementation "org.junit.vintage:junit-vintage-engine"
-    <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
-    testImplementation "org.assertj:assertj-core"
-    testImplementation "junit:junit"
-    testImplementation "org.mockito:mockito-core"
     <%_ if (databaseType === 'mongodb') { _%>
     testImplementation "de.flapdoodle.embed:de.flapdoodle.embed.mongo"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     testImplementation "org.testcontainers:couchbase"
     <%_ } _%>
-    testImplementation "org.hamcrest:hamcrest-library"
+    testImplementation "org.hamcrest:hamcrest"
     <%_ if (databaseType === 'sql') { _%>
     testImplementation "com.h2database:h2"
     <%_ } _%>

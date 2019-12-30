@@ -97,7 +97,7 @@ public class LogoutResourceIT {
             .getConfigurationMetadata().get("end_session_endpoint").toString();
         restLogoutMockMvc.perform(post("/api/logout"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.logoutUrl").value(logoutUrl))
             .andExpect(jsonPath("$.idToken").value(ID_TOKEN));
     }
