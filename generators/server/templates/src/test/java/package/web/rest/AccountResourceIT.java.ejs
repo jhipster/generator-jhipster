@@ -1441,13 +1441,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restMvc.perform(
             post("/api/account/reset-password/init")
                 .content("password-reset-wrong-email@example.com"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isOk());
     <%_ } else { _%>
     public void testRequestPasswordResetWrongEmail() {
         webTestClient.post().uri("/api/account/reset-password/init")
             .syncBody("password-reset-wrong-email@example.com")
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus().isOk();
     <%_ } _%>
     }
 
