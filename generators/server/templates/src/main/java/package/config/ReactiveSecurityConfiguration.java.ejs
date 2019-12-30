@@ -33,7 +33,6 @@ import io.github.jhipster.web.filter.reactive.CookieCsrfFilter;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 <%_ if (authenticationType === 'session') { _%>
@@ -82,7 +81,6 @@ import reactor.core.publisher.Mono;
 
 import static org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers.pathMatchers;
 
-@Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 @Import(SecurityProblemSupport.class)
