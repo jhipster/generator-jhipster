@@ -567,6 +567,16 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.applicationType === 'gateway' && !generator.serviceDiscoveryType,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/filter/RouteDetectorFilter.java',
+                    renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`
+                }
+            ]
+        },
+        {
             condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
