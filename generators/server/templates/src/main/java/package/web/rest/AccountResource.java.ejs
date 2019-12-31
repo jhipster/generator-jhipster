@@ -443,7 +443,7 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     <%_ if (!reactive) { _%>
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+        Optional<<%= asEntity('User') %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
         } else {
