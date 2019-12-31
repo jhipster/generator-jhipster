@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -773,16 +773,10 @@ module.exports = class extends BaseGenerator {
 
                 if (this.buildTool === 'maven') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw package appengine:run -DskipTests'));
-                    this.log(
-                        chalk.bold('Deploy to App Engine: ./mvnw clean && ./mvnw package appengine:deploy -DskipTests -Pgae,prod-gae')
-                    );
+                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod-gae'));
                 } else if (this.buildTool === 'gradle') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
-                    this.log(
-                        chalk.bold(
-                            'Deploy to App Engine: ./gradlew thinResolve -Pgae -Pprod-gae && ./gradlew appengineDeploy -Pgae -Pprod-gae'
-                        )
-                    );
+                    this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pgae -Pprod-gae'));
                 }
                 /*
                 if (this.gcpSkipBuild || this.gcpDeployType === 'git') {

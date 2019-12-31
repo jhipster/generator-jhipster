@@ -1,5 +1,5 @@
 #
-# Copyright 2013-2019 the original author or authors from the JHipster project.
+# Copyright 2013-2020 the original author or authors from the JHipster project.
 #
 # This file is part of the JHipster project, see https://www.jhipster.tech/
 # for more information.
@@ -23,7 +23,7 @@ env:
     JHI_RUN_APP: 1
     JHI_JDK: 11
     JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-    JHI_LIB_BRANCH: release
+    JHI_LIB_BRANCH: master
     JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
     JHI_GEN_BRANCH: master
     SPRING_OUTPUT_ANSI_ENABLED: ALWAYS
@@ -42,7 +42,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.13.1]
+                node_version: [12.14.0]
                 os: [ubuntu-latest]
                 app-type:
                     - react-default

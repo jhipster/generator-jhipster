@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -46,7 +46,7 @@ This application is configured for Service Discovery and Configuration with <% i
 <%_ if (skipClient) { _%>
 To start your application in the dev profile, run:
 
-    <% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle'){ %>./gradlew<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle') { %>./gradlew<% } %>
 
 <%_ } _%>
 <%_ if (!skipClient) { _%>
@@ -66,7 +66,7 @@ You will only need to run this command when dependencies change in [package.json
 
 We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 
-<%_ if(['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
+<%_ if (['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
 ```
@@ -317,7 +317,7 @@ If you need to re-run the Sonar phase, please be sure to specify at least the `i
 ./mvnw initialize sonar:sonar
 ```
 or
-<%_ } else if(buildTool === 'gradle') { _%>
+<%_ } else if (buildTool === 'gradle') { _%>
 ```
 ./gradlew -Pprod clean check jacocoTestReport sonarqube
 ```

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -138,7 +138,7 @@ describe('<%= entityClass %> e2e test', () => {
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input(absolutePath);
             <%_ } else if (fieldIsEnum) { _%>
             await <%= entityInstance %>UpdatePage.<%=fieldName %>SelectLastOption();
-            <%_ } else if (fieldType === 'UUID'){ _%>
+            <%_ } else if (fieldType === 'UUID') { _%>
             await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
             expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
             <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -98,12 +98,12 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
         <%_ if (!reactive) { _%>
         restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish/topic-produce?message=value-produce"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON));
         <%_ } else { _%>
         client.post().uri("/api/jhipster-kafka/publish/topic-produce?message=value-produce")
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8);
+            .expectHeader().contentType(MediaType.APPLICATION_JSON);
         <%_ } _%>
 
         Map<String, Object> consumerProps = new HashMap<>(getConsumerProps("group-produce"));
@@ -126,7 +126,6 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
         <%_ if (!reactive) { _%>
         MvcResult mvcResult = restMockMvc.perform(get("/api/<%= dasherizedBaseName %>-kafka/consume?topic=topic-consume"))
             .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM))
             .andExpect(request().asyncStarted())
             .andReturn();
 

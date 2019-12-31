@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -48,7 +48,7 @@ const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.7';
 const DOCKER_MEMCACHED = 'memcached:1.5.20-alpine';
 const DOCKER_REDIS = 'redis:5.0.7';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:8.0.1'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
-const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.4.3'; // The version should be coerent with the one from spring-data-elasticsearch project
+const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.5'; // The version should be coerent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:7.9.1-community';

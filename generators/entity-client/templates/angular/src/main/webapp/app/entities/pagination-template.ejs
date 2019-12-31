@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,7 +47,8 @@
     }
 
     loadPage(page?: number): void {
-        const pageToLoad: number = page ? page : this.page;
+        const pageToLoad: number = page || this.page;
+
         <%_ if (searchEngine === 'elasticsearch') { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
@@ -61,6 +62,7 @@
             return;
         }
         <%_ } _%>
+
         this.<%= entityInstance %>Service.query({
             page: pageToLoad - 1,
             size: this.itemsPerPage,
@@ -69,8 +71,8 @@
                 () => this.onError()
             );
     }
-    <%_ if (searchEngine === 'elasticsearch') { _%>
 
+    <%_ if (searchEngine === 'elasticsearch') { _%>
     search(query: string): void {
         this.currentSearch = query;
         this.loadPage(1);

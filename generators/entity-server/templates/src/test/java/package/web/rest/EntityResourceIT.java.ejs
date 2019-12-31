@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -55,7 +55,7 @@ import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
         const relationshipValidate = relationships[idx].relationshipValidate;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const isUsingMapsIdL1 = relationships[idx].useJPADerivedIdentifier;
-        if(imported.indexOf(otherEntityNameCapitalized) === -1) {
+        if (imported.indexOf(otherEntityNameCapitalized) === -1) {
             if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%=packageName%>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
 <%_         imported.push(otherEntityNameCapitalized);
@@ -526,7 +526,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
         <%_ } _%>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
             .andExpect(status().isCreated());
 
@@ -569,7 +569,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
             .andExpect(status().isBadRequest());
 
@@ -624,7 +624,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
         // Update the entity
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%_ if (dto === 'mapstruct') { _%>updated<%= asDto(entityClass) %> <%_ } else { _%> updated<%= asEntity(entityClass) %> <%_ } _%>)))
             .andExpect(status().isOk());
 
@@ -665,7 +665,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);<% } %>
 
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
             .andExpect(status().isBadRequest());
 
@@ -687,7 +687,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         // Get all the <%= entityInstance %>List
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %><% if (databaseType !== 'cassandra') { %>?sort=id,desc<% } %>"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } else if (databaseType === 'sql') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } %><% if (databaseType === 'cassandra') { %>
@@ -762,7 +762,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         // Get the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
             .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId()))<% } else if (databaseType === 'sql') { %>
             .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId().intValue()))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId()))<% } %><% if (databaseType === 'cassandra') { %>
@@ -993,7 +993,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     private void default<%= entityClass %>ShouldBeFound(String filter) throws Exception {
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %><% if (databaseType === 'sql' && hasOauthUser === true) { %>.getId()<% } else { %>.getId().intValue()<% } %>)))<% fields.forEach((field) => { %>
             <%_ if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
             .andExpect(jsonPath("$.[*].<%=field.fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + field.fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
@@ -1003,7 +1003,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         // Check, that the count call also returns 1
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
     }
 
@@ -1013,14 +1013,14 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     private void default<%= entityClass %>ShouldNotBeFound(String filter) throws Exception {
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
     }
 
@@ -1119,7 +1119,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ } _%>
 
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass))%>)))
             .andExpect(status().isOk());
 
@@ -1154,7 +1154,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
             .andExpect(status().isBadRequest());
 
@@ -1185,7 +1185,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
         // Delete the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(TestUtil.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
@@ -1222,7 +1222,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         // Search the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= asEntity(entityInstance) %>.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } else if (databaseType === 'sql') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } %><% if (databaseType === 'cassandra') { %>

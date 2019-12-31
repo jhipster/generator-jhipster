@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -407,7 +407,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     }
         <%_ } _%>
 
-    public static EmbeddedCacheManager getCacheManager(){
+    public static EmbeddedCacheManager getCacheManager() {
         return cacheManager;
     }
 
@@ -499,7 +499,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
      *          &#064;Autowired (or) &#064;Inject
      *          private EmbeddedCacheManager cacheManager;
      *
-     *          void cacheSample(){
+     *          void cacheSample() {
      *              cacheManager.getCache("dist-app-data").put("hi", "there");
      *          }
      *          </pre>

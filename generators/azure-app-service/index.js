@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -144,7 +144,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         });
                         if (this.azureAppServiceResourceGroupName === '') {
                             this.log(
-                                `Your default Azure resource group is not set up. We recommend doing it using the command 
+                                `Your default Azure resource group is not set up. We recommend doing it using the command
                                 '${chalk.yellow('az configure --defaults group=<resource group name>')}`
                             );
                             this.azureAppServiceResourceGroupName = '';
