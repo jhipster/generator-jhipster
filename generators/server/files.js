@@ -424,7 +424,10 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && (generator.applicationType === 'uaa' || generator.authenticationType === 'uaa'),
+                !generator.reactive &&
+                (generator.applicationType === 'uaa' ||
+                    generator.authenticationType === 'uaa' ||
+                    generator.authenticationType === 'oauth2'),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
