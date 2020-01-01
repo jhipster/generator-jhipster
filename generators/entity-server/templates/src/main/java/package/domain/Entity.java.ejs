@@ -171,9 +171,6 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ if (databaseType === 'couchbase') { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
     <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-    @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
-    <%_ } _%>
     private <%= primaryKeyType %> id;
 
 <%_ for (idx in fields) {

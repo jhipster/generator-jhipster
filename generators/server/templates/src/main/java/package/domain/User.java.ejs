@@ -110,7 +110,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch' && authenticationType === 'oauth2') { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
     <%_ } _%>
     private <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;
