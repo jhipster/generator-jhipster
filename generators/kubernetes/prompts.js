@@ -274,7 +274,10 @@ function askForStorageClassName() {
     ];
 
     this.prompt(prompts).then(props => {
-        this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();
+        // Add the StorageClass value only if dynamic storage is enabled
+        if (kubernetesUseDynamicStorage) {
+            this.kubernetesStorageClassName = props.kubernetesStorageClassName.trim();
+        }
         done();
     });
 }
