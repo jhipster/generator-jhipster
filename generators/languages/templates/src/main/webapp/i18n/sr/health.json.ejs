@@ -40,7 +40,8 @@
             "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Veličina diska",
-            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "mail": "Email",
+            "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elastična pretraga"<% } %><% if (databaseType === 'sql') { %>,
             "db": "SQL baza podataka"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
