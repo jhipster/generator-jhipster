@@ -16,7 +16,7 @@ describe('Health Service', () => {
 
     it('should flatten health data with no subsystems', () => {
       const data = {
-        details: {
+        components: {
           status: 'UP',
           db: {
             status: 'UP',
@@ -49,7 +49,7 @@ describe('Health Service', () => {
 
     it('should flatten health data with subsystems at level 1, main system has no additional information', () => {
       const data = {
-        details: {
+        components: {
           status: 'UP',
           db: {
             status: 'UP',
@@ -109,7 +109,7 @@ describe('Health Service', () => {
 
     it('should flatten health data with subsystems at level 1, main system has additional information', () => {
       const data = {
-        details: {
+        components: {
           status: 'UP',
           db: {
             status: 'UP',
@@ -177,7 +177,7 @@ describe('Health Service', () => {
 
     it('should flatten health data with subsystems at level 1, main system has additional error', () => {
       const data = {
-        details: {
+        components: {
           status: 'UP',
           db: {
             status: 'UP',

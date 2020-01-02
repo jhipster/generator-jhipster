@@ -15,7 +15,7 @@ export default class HealthService {
 
   public transformHealthData(data: any): any {
     const response = [];
-    this.flattenHealthData(response, null, data.details);
+    this.flattenHealthData(response, null, data.components);
     return response;
   }
 
