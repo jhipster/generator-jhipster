@@ -212,6 +212,7 @@ import java.net.URLDecoder;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import java.security.Principal;
+import java.util.Objects;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.*;
@@ -442,15 +443,26 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     <%_ if (!reactive) { _%>
     public void requestPasswordReset(@RequestBody String mail) {
-       mailService.sendPasswordResetMail(
-           userService.requestPasswordReset(mail)
-               .orElseThrow(EmailNotFoundException::new)
-       );
+        Optional<<%= asEntity('User') %>> user = userService.requestPasswordReset(mail);
+        if (user.isPresent()) {
+            mailService.sendPasswordResetMail(user.get());
+        } else {
+            // Pretend the request has been successful to prevent checking which emails really exist
+            // but log that an invalid attempt has been made
+            log.warn("Password reset requested for non existing mail '{}'", mail);
+        }
     <%_ } else { _%>
     public Mono<Void> requestPasswordReset(@RequestBody String mail) {
         return userService.requestPasswordReset(mail)
-            .switchIfEmpty(Mono.error(new EmailNotFoundException()))
-            .doOnSuccess(mailService::sendPasswordResetMail)
+            .doOnSuccess(user -> {
+                if (Objects.nonNull(user)) {
+                    mailService.sendPasswordResetMail(user);
+                } else {
+                    // Pretend the request has been successful to prevent checking which emails really exist
+                    // but log that an invalid attempt has been made
+                    log.warn("Password reset requested for non existing mail '{}'", mail);
+                }
+            })
             .then();
     <%_ } _%>
     }
