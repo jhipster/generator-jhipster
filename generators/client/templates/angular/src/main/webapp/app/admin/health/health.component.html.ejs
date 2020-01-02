@@ -33,7 +33,7 @@
                 </tr>
             </thead>
             <tbody *ngIf="health">
-                <tr *ngFor="let componentHealth of health.details | keys">
+                <tr *ngFor="let componentHealth of health.components | keys">
                     <td><% if (enableTranslation) { %>{{'health.indicator.' + componentHealth.key | translate}}<% } else { %><span class="text-capitalize">{{ componentHealth.key }}</span><% } %></td>
                     <td class="text-center">
                         <span class="badge" [ngClass]="getBadgeClass(componentHealth.value.status)" jhiTranslate="{{'health.status.' + componentHealth.value.status}}">
