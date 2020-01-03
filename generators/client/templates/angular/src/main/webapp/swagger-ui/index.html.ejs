@@ -84,8 +84,8 @@
                 <%_ } _%>
                 <%_ if (authenticationType === 'jwt') { _%>
                 requestInterceptor: function (req) {
-                    var authToken = JSON.parse(localStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken")
-                        || sessionStorage.getItem("<%=jhiPrefixDashed %>-authenticationtoken"));
+                    var authToken = JSON.parse(localStorage.getItem("<%= jhiPrefixDashed %>-authenticationtoken")
+                        || sessionStorage.getItem("<%= jhiPrefixDashed %>-authenticationtoken"));
                     if (authToken) {
                         req.headers['Authorization'] = "Bearer " + authToken;
                     }

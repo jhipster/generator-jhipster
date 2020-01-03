@@ -65,13 +65,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.oauth2.AudienceValidator;
-import <%=packageName%>.security.SecurityUtils;
+import <%= packageName %>.security.SecurityUtils;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
         <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-import <%=packageName%>.security.oauth2.AuthorizationHeaderFilter;
-import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
+import <%= packageName %>.security.oauth2.AuthorizationHeaderFilter;
+import <%= packageName %>.security.oauth2.AuthorizationHeaderUtil;
         <%_ } _%>
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -93,7 +93,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-import <%=packageName%>.security.oauth2.JwtAuthorityExtractor;
+import <%= packageName %>.security.oauth2.JwtAuthorityExtractor;
     <%_ } _%>
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;

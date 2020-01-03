@@ -39,7 +39,7 @@ jhipster:
 
 <%_ if (consoleOptions && consoleOptions.includes('zipkin') || !skipClient && gatewayType === 'traefik' && authenticationType === 'oauth2') { _%>
 spring:
-    <%_ if (consoleOptions && consoleOptions.includes('zipkin')) {_%>
+    <%_ if (consoleOptions && consoleOptions.includes('zipkin')) { _%>
     zipkin:
         base-url: http://jhipster-zipkin:9411
         enabled: true

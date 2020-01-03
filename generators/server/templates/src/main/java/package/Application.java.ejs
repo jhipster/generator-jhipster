@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>;
+package <%= packageName %>;
 
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
-import <%=packageName%>.client.OAuth2InterceptedFeignConfiguration;
+import <%= packageName %>.client.OAuth2InterceptedFeignConfiguration;
 <%_ } _%>
-import <%=packageName%>.config.ApplicationProperties;
+import <%= packageName %>.config.ApplicationProperties;
 
 import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;

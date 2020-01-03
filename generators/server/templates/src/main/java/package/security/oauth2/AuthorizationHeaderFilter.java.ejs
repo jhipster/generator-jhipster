@@ -16,11 +16,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-package <%=packageName%>.security.oauth2;
+package <%= packageName %>.security.oauth2;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import <%=packageName%>.client.TokenRelayRequestInterceptor;
+import <%= packageName %>.client.TokenRelayRequestInterceptor;
 import org.springframework.core.Ordered;
 
 import java.util.Optional;

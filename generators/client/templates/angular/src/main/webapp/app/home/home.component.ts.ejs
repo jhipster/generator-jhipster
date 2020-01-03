@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
         this.loginModalService.open();
         <%_ } else { _%>
         this.loginService.login();
-        <%_ }_%>
+        <%_ } _%>
     }
 
     <%_ if (authenticationType !== 'oauth2') { _%>
@@ -78,5 +78,5 @@ export class HomeComponent implements OnInit <%_ if (authenticationType !== 'oau
             this.authSubscription.unsubscribe();
         }
     }
-    <%_ }_%>
+    <%_ } _%>
 }

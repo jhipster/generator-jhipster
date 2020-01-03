@@ -20,7 +20,7 @@ package <%= packageName %>.config.timezone;
 
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 <%_ if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
 import <%= packageName %>.config.SecurityBeanOverrideConfiguration;

@@ -36,7 +36,7 @@ logging:
         ROOT: DEBUG
         io.github.jhipster: DEBUG
         <%_ if (packageName !== 'io.github.jhipster') { _%>
-        <%=packageName%>: DEBUG
+        <%= packageName %>: DEBUG
         <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 

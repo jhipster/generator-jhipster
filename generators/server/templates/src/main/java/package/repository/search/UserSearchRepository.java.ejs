@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository.search;
+package <%= packageName %>.repository.search;
 
-import <%=packageName%>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;<% if (databaseType === 'cassandra') { %>
 
 import java.util.UUID;<% } %>

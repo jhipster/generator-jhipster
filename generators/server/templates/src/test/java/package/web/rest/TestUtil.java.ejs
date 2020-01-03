@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -94,7 +94,7 @@ public final class TestUtil {
     <%_ if (databaseType === 'couchbase') { _%>
 
     /**
-     * Mock user authentication for Spring SpEL expression used in {@link <%=packageName%>.repository.N1qlCouchbaseRepository}.
+     * Mock user authentication for Spring SpEL expression used in {@link <%= packageName %>.repository.N1qlCouchbaseRepository}.
      */
     public static void mockAuthentication() {
         TestSecurityContextHolder.getContext().setAuthentication(new TestingAuthenticationToken("user", null));

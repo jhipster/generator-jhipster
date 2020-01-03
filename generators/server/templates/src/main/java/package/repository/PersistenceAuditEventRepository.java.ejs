@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%= packageName %>.repository;
 
-import <%=packageName%>.domain.PersistentAuditEvent;
+import <%= packageName %>.domain.PersistentAuditEvent;
 <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
 <%_ } _%>

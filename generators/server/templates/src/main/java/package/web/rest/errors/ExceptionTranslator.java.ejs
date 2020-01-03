@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest.errors;
+package <%= packageName %>.web.rest.errors;
 
 import io.github.jhipster.web.util.HeaderUtil;
 
@@ -149,19 +149,19 @@ _%>
     <%_ if (!skipUserManagement) { _%>
 
     @ExceptionHandler
-    public <%- returnType %> handleEmailAlreadyUsedException(<%=packageName%>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
+    public <%- returnType %> handleEmailAlreadyUsedException(<%= packageName %>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
-    public <%- returnType %> handleUsernameAlreadyUsedException(<%=packageName%>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
+    public <%- returnType %> handleUsernameAlreadyUsedException(<%= packageName %>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
         return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
-    public <%- returnType %> handleInvalidPasswordException(<%=packageName%>.service.InvalidPasswordException ex, <%= requestClass %> request) {
+    public <%- returnType %> handleInvalidPasswordException(<%= packageName %>.service.InvalidPasswordException ex, <%= requestClass %> request) {
         return create(new InvalidPasswordException(), request);
     }
     <%_ } _%>

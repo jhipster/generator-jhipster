@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
@@ -30,7 +30,7 @@ import com.mongodb.MongoClient;
 
 import com.couchbase.client.java.Bucket;
 import com.github.couchmove.Couchmove;
-import <%=packageName%>.repository.Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
+import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
 import org.apache.commons.codec.binary.Base64;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -125,18 +125,18 @@ import java.util.UUID;
 
 @Configuration
 <%_ if (databaseType === 'sql') { _%>
-@EnableJpaRepositories("<%=packageName%>.repository")
+@EnableJpaRepositories("<%= packageName %>.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-@EnableElasticsearchRepositories("<%=packageName%>.repository.search")
+@EnableElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-@EnableMongoRepositories(basePackages = "<%=packageName%>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
+@EnableMongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
     <%_ } else { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%=packageName%>.repository")
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -152,9 +152,9 @@ import java.util.UUID;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
     <%_ if (reactive) { _%>
-@EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
+@EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository")
     <%_ } else { _%>
-@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
+@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository")
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
     <%_ } _%>
 @Import(value = CouchbaseAutoConfiguration.class)
@@ -232,7 +232,7 @@ public class DatabaseConfiguration {
         mongobee.setDbName(mongoProperties.getMongoClientDatabase());
         mongobee.setMongoTemplate(mongoTemplate);
         // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("<%=packageName%>.config.dbmigrations");
+        mongobee.setChangeLogsScanPackage("<%= packageName %>.config.dbmigrations");
         mongobee.setEnabled(true);
         return mongobee;
     }<% } %><% if (databaseType === 'couchbase') { %>
