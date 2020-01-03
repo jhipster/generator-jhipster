@@ -18,9 +18,9 @@
 -%>
 version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
 services:
-    <%=baseName.toLowerCase()%>-cassandra-migration:
+    <%= baseName.toLowerCase() %>-cassandra-migration:
         environment:
-            - CASSANDRA_CONTACT_POINT=<%=baseName.toLowerCase()%>-cassandra
+            - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
             - USER=docker-cassandra-migration
             # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
         build:

@@ -49,7 +49,7 @@ _%>
     }
 <%_ } else { _%>
     <%_ if (pagination === 'no') { _%>
-    public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (fieldsContainOwnerManyToMany) { %>@RequestParam(required = false, defaultValue = "false") boolean eagerload<% }%>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+    public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %><% if (fieldsContainOwnerManyToMany && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (fieldsContainOwnerManyToMany) { %>@RequestParam(required = false, defaultValue = "false") boolean eagerload<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClassPlural %>");<% if (viaService) { %>
         return <%= entityInstance %>Service.findAll();<% } else if (dto === 'mapstruct') { %>
         List<<%= asEntity(entityClass) %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();
@@ -75,7 +75,7 @@ _%>
         <%_ if (fieldsContainOwnerManyToMany) { _%>
         Page<<%= instanceType %>> page;
         if (eagerload) {
-            page = <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto === 'mapstruct') {%>.map(<%= entityToDtoReference %>)<% } %>;
+            page = <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto === 'mapstruct') { %>.map(<%= entityToDtoReference %>)<% } %>;
         } else {
             page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
         }

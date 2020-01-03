@@ -24,7 +24,7 @@
 
 runtime: java11
 instance_class: <%= gaeInstanceClass %>
-service: <%=gaeServiceName%>
+service: <%= gaeServiceName %>
 handlers:
 - url: /(.*)
   script: auto

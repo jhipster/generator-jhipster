@@ -44,7 +44,7 @@ import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import <%= packageName %>.repository.<%= entityClass %>Repository;
 <%_ if (isUsingMapsId === true) { _%>
-import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;

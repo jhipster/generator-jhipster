@@ -22,11 +22,11 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'oauth2') { _%>
-import <%=packageName%>.config.TestSecurityConfiguration;
+import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
@@ -172,7 +172,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
-     * This repository is mocked in the <%=packageName%>.repository.search test package.
+     * This repository is mocked in the <%= packageName %>.repository.search test package.
      *
      * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
      */

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 
 <%_ const viaService = service !== 'no';
     let isUsingMapsId = false;
@@ -32,35 +32,35 @@ package <%=packageName%>.web.rest;
         isUsingMapsId = false;
     } _%>
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
-import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
-import <%=packageName%>.service.<%= entityClass %>Service;
+import <%= packageName %>.service.<%= entityClass %>Service;
 <%_ } else { _%>
-import <%=packageName%>.repository.<%= entityClass %>Repository;
+import <%= packageName %>.repository.<%= entityClass %>Repository;
     <%_ if (isUsingMapsId === true) { _%>
-import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
     <%_ } _%>
     <%_ if (reactiveRepositories) { _%>
-import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository;
+import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
+import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
     <%_ } _%>
 <%_ } _%>
 <%_ if (saveUserSnapshot) { _%>
-import <%=packageName%>.repository.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
-import <%=packageName%>.web.rest.errors.BadRequestAlertException;
+import <%= packageName %>.web.rest.errors.BadRequestAlertException;
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
+import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
     <%_ if (service === 'no') { _%>
-import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
     <%_ } _%>
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering) {  _%>
-import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
-import <%=packageName%>.service.<%= entityClass %>QueryService;
+import <%= packageName %>.service.dto.<%= entityClass %>Criteria;
+import <%= packageName %>.service.<%= entityClass %>QueryService;
 <%_ } _%>
 
 import io.github.jhipster.web.util.HeaderUtil;

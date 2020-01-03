@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.domain;
+package <%= packageName %>.domain;
 
-import <%=packageName%>.config.Constants;
+import <%= packageName %>.config.Constants;
 
 <%_ if (databaseType === 'couchbase') { _%>
 import com.couchbase.client.java.repository.annotation.Field;
@@ -72,7 +72,7 @@ import java.util.Locale;
 import java.util.Set;
 
 <%_ if (databaseType === 'couchbase') { _%>
-import static <%=packageName%>.config.Constants.ID_DELIMITER;
+import static <%= packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
 
 <%_ } _%>

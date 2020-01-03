@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.domain;
+package <%= packageName %>.domain;
 
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.mapping.annotations.*;
@@ -55,14 +55,14 @@ import java.util.Date;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 
-import static <%=packageName%>.config.Constants.ID_DELIMITER;
+import static <%= packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
 <%_ } _%>
 
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
- * @see <%=packageName%>.security.PersistentTokenRememberMeServices
+ * @see <%= packageName %>.security.PersistentTokenRememberMeServices
  */
 <%_ if (databaseType === 'sql') { _%>
 @Entity

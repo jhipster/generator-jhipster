@@ -48,7 +48,7 @@
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
-            <li *<%=jhiPrefix%>HasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
                         <fa-icon icon="user-plus"></fa-icon>
@@ -139,7 +139,7 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
                     <li *ngFor="let language of languages">
-                        <a class="dropdown-item" [<%=jhiPrefix%>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
+                        <a class="dropdown-item" [<%= jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
                     </li>
                 </ul>
             </li>

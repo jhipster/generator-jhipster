@@ -35,7 +35,7 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
     imports: [
         HttpClientModule,
         CookieModule.forRoot(),
-        NgxWebstorageModule.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
+        NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-'}),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
             alertAsToast: false,
@@ -99,7 +99,7 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
         }
     ]
 })
-export class <%=angularXAppName%>CoreModule {
+export class <%= angularXAppName %>CoreModule {
     constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
         registerLocaleData(locale);
         iconLibrary.addIconPacks(fas);

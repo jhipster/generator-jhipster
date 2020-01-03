@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service.mapper;
+package <%= packageName %>.service.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ public class <%= entityClass %>MapperTest {
 
     @Test
     public void testEntityFromId() {
-        <%= primaryKeyType %> id = <% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<%} else if (databaseType === 'sql') { %>2L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id2"<% } %>;
+        <%= primaryKeyType %> id = <% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (databaseType === 'sql') { %>2L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id2"<% } %>;
         assertThat(<%= entityInstance %>Mapper.fromId(id).getId()).isEqualTo(id);
         assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
     }

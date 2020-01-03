@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.domain;
+package <%= packageName %>.domain;
 
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.annotation.Id;
@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 <%_ if (databaseType === 'couchbase') { _%>
-import static <%=packageName%>.config.Constants.ID_DELIMITER;
+import static <%= packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.UNIQUE;
 
 <%_ } _%>

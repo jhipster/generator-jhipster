@@ -25,7 +25,7 @@ import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-transla
 <%_ } _%>
 
 import { MainComponent } from 'app/layouts/main/main.component';
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%= angularXAppName %>TestModule } from '../../../test.module';
 import { MockRouter } from '../../../helpers/mock-route.service';
 
 describe('Component Tests', () => {
@@ -42,7 +42,7 @@ describe('Component Tests', () => {
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [
-          <%=angularXAppName%>TestModule,
+          <%= angularXAppName %>TestModule,
           <%_ if (enableTranslation) { _%>
           TranslateModule.forRoot(),
           <%_ } _%>

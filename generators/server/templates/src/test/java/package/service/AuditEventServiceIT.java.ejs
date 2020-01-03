@@ -19,11 +19,11 @@
 package <%= packageName %>.service;
 
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.domain.PersistentAuditEvent;
 import <%= packageName %>.repository.PersistenceAuditEventRepository;
-import <%=packageName%>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service.dto;<%
+package <%= packageName %>.service.dto;<%
 let importApiModelProperty = false;
 let importJsonIgnore = false;
 let importJsonIgnoreProperties = false;
@@ -63,11 +63,11 @@ import java.util.UUID;
 import javax.persistence.Lob;
 <%_ } _%>
 <%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
-import <%=packageName%>.domain.enumeration.<%= element %>;
+import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
 /**
- * A DTO for the {@link <%=packageName%>.domain.<%= asEntity(entityClass) %>} entity.
+ * A DTO for the {@link <%= packageName %>.domain.<%= asEntity(entityClass) %>} entity.
  */
 <%_ if (typeof javadoc !== 'undefined') { _%>
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
@@ -92,7 +92,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
         const fieldValidateRulesPatternJava = fields[idx].fieldValidateRulesPatternJava;
         const fieldType = fields[idx].fieldType;
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-        const fieldName = fields[idx].fieldName;_%>
+        const fieldName = fields[idx].fieldName; _%>
     <%_ if (fieldValidate === true) {
             if (fieldValidateRules.includes('required')) {
                 required = true;

@@ -22,7 +22,7 @@ package <%= packageName %>.web.rest.errors;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa') { _%>

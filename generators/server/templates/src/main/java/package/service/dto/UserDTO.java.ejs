@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service.dto;
+package <%= packageName %>.service.dto;
 
-import <%=packageName%>.config.Constants;
+import <%= packageName %>.config.Constants;
 <% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
-import <%=packageName%>.domain.Authority;<% } %>
+import <%= packageName %>.domain.Authority;<% } %>
 <%_ if (databaseType !== 'no') { _%>
-import <%=packageName%>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
 import javax.validation.constraints.*;

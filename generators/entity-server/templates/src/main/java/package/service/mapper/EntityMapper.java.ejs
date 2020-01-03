@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service.mapper;
+package <%= packageName %>.service.mapper;
 
-import <%=packageName%>.domain.*;
-import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
+import <%= packageName %>.domain.*;
+import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 
 import org.mapstruct.*;
 
@@ -80,12 +80,12 @@ _%>
             <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) { renMapAnotDto = true; _%>
     @Mapping(target = "<%= relationshipName %>", ignore = true)
             <%_ }
-    if ((relationshipType === 'one-to-many' || relationshipType === 'many-to-many') && fluentMethods) {_%>
+    if ((relationshipType === 'one-to-many' || relationshipType === 'many-to-many') && fluentMethods) { _%>
     @Mapping(target = "remove<%= relationshipNameCapitalized %>", ignore = true)
     <%_ } _%>
     <%_ } _%>
     <%_ if (renMapAnotDto === true) { _%>
-    <%= asEntity(entityClass) %> toEntity(<%= asDto(entityClass)%> <%= asDto(entityInstance) %>);
+    <%= asEntity(entityClass) %> toEntity(<%= asDto(entityClass) %> <%= asDto(entityInstance) %>);
     <%_ } _%>
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 

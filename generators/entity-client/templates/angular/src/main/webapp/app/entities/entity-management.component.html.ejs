@@ -64,7 +64,7 @@
             || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
             || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
             const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized; _%>
-            <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= relationships[idx].relationshipName + (fieldName)%>"<% } %>><span jhiTranslate="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon [icon]="'sort'"></fa-icon><% } %></th>
+            <th scope="col" <% if (pagination !== 'no') { %> jhiSortBy="<%= relationships[idx].relationshipName + (fieldName) %>"<% } %>><span jhiTranslate="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></span><% if (pagination !== 'no') { %> <fa-icon [icon]="'sort'"></fa-icon><% } %></th>
             <%_ } _%>
             <%_ } _%>
             <th scope="col"></th>
