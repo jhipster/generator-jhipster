@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -54,12 +54,19 @@ function writeFiles() {
                 let command;
                 if (generatorName === 'spring') {
                     this.log(chalk.green(`\n\nGenerating java client code for client ${cliName} (${inputSpec})`));
-                    const cliPackage = `${this.packageName}.client.${_.snakeCase(cliName)}`;
-                    const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
-                    if (shelljs.test('-d', clientPackageLocation)) {
-                        this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
-                        shelljs.rm('-rf', clientPackageLocation);
-                    }
+                    const baseCliPackage = `${this.packageName}.client.`;
+                    const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
+                    const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
+                    const cleanOldDirectory = cliPackage => {
+                        const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
+                        if (shelljs.test('-d', clientPackageLocation)) {
+                            this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
+                            shelljs.rm('-rf', clientPackageLocation);
+                        }
+                    };
+
+                    cleanOldDirectory(snakeCaseCliPackage);
+                    cleanOldDirectory(cliPackage);
 
                     JAVA_OPTS = ' -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
 
@@ -69,9 +76,7 @@ function writeFiles() {
                         ' --library spring-cloud ' +
                         ` -i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
-                        ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate ' +
-                        ' --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +
-                        ` -DdateLibrary=custom,basePackage=${this.packageName}.client,configPackage=${cliPackage},` +
+                        ` -DbasePackage=${this.packageName}.client,configPackage=${cliPackage},` +
                         `title=${_.camelCase(cliName)}`;
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {

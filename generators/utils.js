@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,10 +24,24 @@ const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const fs = require('fs');
 const crypto = require('crypto');
+const randexp = require('randexp');
+const faker = require('faker');
 
 const constants = require('./generator-constants');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+
+class RandexpWithFaker extends randexp {
+    constructor(regexp, m) {
+        super(regexp, m);
+        this.max = 5;
+    }
+
+    // In order to have consistent results with RandExp, the RNG is seeded.
+    randInt(min, max) {
+        return faker.random.number({ min, max });
+    }
+}
 
 module.exports = {
     rewrite,
@@ -49,7 +63,9 @@ module.exports = {
     checkStringInFile,
     loadBlueprintsFromConfiguration,
     parseBluePrints,
-    normalizeBlueprintName
+    normalizeBlueprintName,
+    stringHashCode,
+    RandexpWithFaker
 };
 
 /**
@@ -544,7 +560,7 @@ function checkStringInFile(path, search, generator) {
  */
 function loadBlueprintsFromConfiguration(config) {
     // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-    const configuration = config && (config.getAll && typeof config.getAll === 'function') ? config.getAll() || {} : config;
+    const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
     // load blueprints from config file
     const blueprints = configuration.blueprints || [];
 
@@ -605,4 +621,24 @@ function normalizeBlueprintName(blueprint) {
         return `generator-jhipster-${blueprint}`;
     }
     return blueprint;
+}
+
+/**
+ * Calculate a hash code for a given string.
+ * @param {string} str - any string
+ * @returns {number} returns the calculated hash code.
+ */
+function stringHashCode(str) {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        const character = str.charCodeAt(i);
+        hash = (hash << 5) - hash + character; // eslint-disable-line no-bitwise
+        hash |= 0; // eslint-disable-line no-bitwise
+    }
+
+    if (hash < 0) {
+        hash *= -1;
+    }
+    return hash;
 }

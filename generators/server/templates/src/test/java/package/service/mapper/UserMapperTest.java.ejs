@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -41,7 +41,7 @@ public class UserMapperTest {
     private static final String DEFAULT_LOGIN = "johndoe";
     <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
     private static final Long DEFAULT_ID = 1L;
-    <%_ } else if (databaseType === 'couchbase'){ _%>
+    <%_ } else if (databaseType === 'couchbase') { _%>
     private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
     private static final String DEFAULT_ID = "id1";

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -43,9 +43,11 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 '/management',
                 '/swagger-resources',
                 '/v2/api-docs',
-                '/h2-console',<% if (authenticationType === 'oauth2') { %>
+                '/h2-console',
+                <%_ if (authenticationType === 'oauth2') { _%>
                 '/oauth2',
-                '/login',<% } %>
+                '/login',
+                <%_ } _%>
                 '/auth'
             ],
             target: `http${options.tls ? 's' : ''}://localhost:<%= serverPort %>`,
@@ -141,8 +143,10 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             host: 'localhost',
             port: 9000,
             proxy: {
-                target: `http${options.tls ? 's' : ''}://localhost:9060`<% if (websocket === 'spring-websocket') { %>,
-                ws: true<% } %>,
+                target: `http${options.tls ? 's' : ''}://localhost:9060`,
+                <%_ if (websocket === 'spring-websocket') { _%>
+                ws: true,
+                <%_ } _%>
                 proxyOptions: {
                     changeOrigin: false  //pass the Host header to the backend unchanged  https://github.com/Browsersync/browser-sync/issues/430
                 }

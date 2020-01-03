@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -55,7 +55,7 @@ function loadBlueprintCommands() {
 const defaultCommands = {
     app: {
         default: true,
-        desc: 'Create a new JHipster application based on the selected options'
+        desc: '[Default] Create a new JHipster application based on the selected options'
     },
     aws: {
         desc: 'Deploy the current application to Amazon Web Services'

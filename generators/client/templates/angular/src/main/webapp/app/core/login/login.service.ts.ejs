@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,9 +28,9 @@ import { Account } from 'app/core/user/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 <%_ } _%>
 <%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
-import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+import { AuthServerProvider<% if (authenticationType === 'uaa') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-jwt.service';
 <%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-import { AuthServerProvider } from 'app/core/auth/auth-session.service';
+import { AuthServerProvider<% if (authenticationType === 'session') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-session.service';
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import { Logout } from './logout.model';
@@ -40,7 +40,6 @@ import { Login } from './login.model';
 
 @Injectable({providedIn: 'root'})
 export class LoginService {
-
     constructor(
         <%_ if (authenticationType === 'oauth2') { _%>
         private location: Location,
@@ -62,9 +61,12 @@ export class LoginService {
     }
     <%_ } _%>
 
-    <%_ if (authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa' || authenticationType === 'session') { _%>
+    logoutUrl(): string {
+        return LOGOUT_URL;
+    }
 
-    logoutDirectly(): void {
+    logoutInClient(): void {
         this.accountService.authenticate(null);
     }
     <%_ } _%>

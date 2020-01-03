@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -567,6 +567,16 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.applicationType === 'gateway' && !generator.serviceDiscoveryType,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/filter/RouteDetectorFilter.java',
+                    renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`
+                }
+            ]
+        },
+        {
             condition: generator => generator.applicationType === 'gateway' && generator.authenticationType === 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -578,10 +588,6 @@ const serverFiles = {
                 {
                     file: 'package/web/filter/RefreshTokenFilterConfigurer.java',
                     renameTo: generator => `${generator.javaDir}web/filter/RefreshTokenFilterConfigurer.java`
-                },
-                {
-                    file: 'package/web/filter/RouteDetectorFilter.java',
-                    renameTo: generator => `${generator.javaDir}web/filter/RouteDetectorFilter.java`
                 },
                 {
                     file: 'package/config/oauth2/OAuth2AuthenticationConfiguration.java',
@@ -811,10 +817,6 @@ const serverFiles = {
                 {
                     file: 'package/aop/logging/LoggingAspect.java',
                     renameTo: generator => `${generator.javaDir}aop/logging/LoggingAspect.java`
-                },
-                {
-                    file: 'package/config/DefaultProfileUtil.java',
-                    renameTo: generator => `${generator.javaDir}config/DefaultProfileUtil.java`
                 },
                 { file: 'package/config/package-info.java', renameTo: generator => `${generator.javaDir}config/package-info.java` },
                 {
@@ -1081,13 +1083,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/service/package-info.java', renameTo: generator => `${generator.javaDir}service/package-info.java` }
-            ]
-        },
-        {
-            condition: generator => !generator.skipUserManagement,
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/service/util/RandomUtil.java', renameTo: generator => `${generator.javaDir}service/util/RandomUtil.java` }
             ]
         },
         {

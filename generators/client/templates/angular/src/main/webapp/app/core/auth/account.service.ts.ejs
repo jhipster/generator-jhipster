@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -52,11 +52,7 @@ export class AccountService  {
         private router: Router
     ) {}
 
-    private fetch(): Observable<Account> {
-        return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
-    }
     <%_ if (!skipUserManagement) { _%>
-
     save(account: Account): Observable<{}> {
         return this.http.post(SERVER_API_URL + '<%- apiUaaPath %>api/account', account);
     }
@@ -92,8 +88,8 @@ export class AccountService  {
               }),
               tap((account: Account | null) => {
                 this.authenticate(account);
-                <%_ if (enableTranslation) { _%>
 
+                <%_ if (enableTranslation) { _%>
                 // After retrieve the account info, the language will be changed to
                 // the user's preferred language configured in the account setting
                 if (account && account.langKey) {
@@ -112,16 +108,6 @@ export class AccountService  {
         return this.accountCache$;
     }
 
-    private navigateToStoredUrl(): void {
-        // previousState can be set in the authExpiredInterceptor and in the userRouteAccessService
-        // if login is successful, go to stored previousState and clear previousState
-        const previousUrl = this.stateStorageService.getUrl();
-        if (previousUrl) {
-            this.stateStorageService.clearUrl();
-            this.router.navigateByUrl(previousUrl);
-        }
-    }
-    
     isAuthenticated(): boolean {
         return this.userIdentity !== null;
     }
@@ -132,5 +118,19 @@ export class AccountService  {
 
     getImageUrl(): string {
         return this.userIdentity ? this.userIdentity.imageUrl : '';
+    }
+
+    private fetch(): Observable<Account> {
+        return this.http.get<Account>(SERVER_API_URL + '<%- apiUaaPath %>api/account');
+    }
+
+    private navigateToStoredUrl(): void {
+        // previousState can be set in the authExpiredInterceptor and in the userRouteAccessService
+        // if login is successful, go to stored previousState and clear previousState
+        const previousUrl = this.stateStorageService.getUrl();
+        if (previousUrl) {
+            this.stateStorageService.clearUrl();
+            this.router.navigateByUrl(previousUrl);
+        }
     }
 }

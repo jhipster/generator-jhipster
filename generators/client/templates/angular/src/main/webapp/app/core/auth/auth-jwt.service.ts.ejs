@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -31,26 +31,32 @@ import { Login } from 'app/core/login/login.model';
 type JwtToken = {
   id_token: string;
 };
-
+<%_ } else { _%>
+export const LOGOUT_URL = SERVER_API_URL + 'auth/logout';
 <%_ } _%>
+
 @Injectable({providedIn: 'root'})
 export class AuthServerProvider {
     constructor(
-        private http: HttpClient<%_ if (authenticationType !== 'uaa') { _%>,
+        private http: HttpClient,
+        <%_ if (authenticationType !== 'uaa') { _%>
         private $localStorage: LocalStorageService,
         private $sessionStorage: SessionStorageService
-<%_ } _%>
+        <%_ } _%>
     ) {}
 
-<%_ if (authenticationType === 'uaa') { _%>
+    <%_ if (authenticationType === 'uaa') { _%>
+
     login(credentials: Login): Observable<any> {
         return this.http.post(SERVER_API_URL + 'auth/login', credentials);
     }
 
     logout(): Observable<{}> {
-        return this.http.post(SERVER_API_URL + 'auth/logout', null);
+        return this.http.post(LOGOUT_URL, null);
     }
-<% } else { %>
+
+    <%_ } else { _%>
+
     getToken(): string {
         return this.$localStorage.retrieve('authenticationToken') || this.$sessionStorage.retrieve('authenticationToken') || '';
     }
@@ -59,6 +65,14 @@ export class AuthServerProvider {
         return this.http
             .post<JwtToken>(SERVER_API_URL + 'api/authenticate', credentials)
             .pipe(map(response => this.authenticateSuccess(response, credentials.rememberMe)));
+    }
+
+    logout(): Observable<void> {
+        return new Observable((observer) => {
+            this.$localStorage.clear('authenticationToken');
+            this.$sessionStorage.clear('authenticationToken');
+            observer.complete();
+        });
     }
 
     private authenticateSuccess(response: JwtToken, rememberMe: boolean): void {
@@ -70,12 +84,5 @@ export class AuthServerProvider {
         }
     }
 
-    logout(): Observable<void> {
-        return new Observable((observer) => {
-            this.$localStorage.clear('authenticationToken');
-            this.$sessionStorage.clear('authenticationToken');
-            observer.complete();
-        });
-    }
-<%_ } _%>
+    <%_ } _%>
 }

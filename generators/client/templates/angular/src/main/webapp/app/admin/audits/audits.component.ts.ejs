@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -61,6 +61,29 @@ export class AuditsComponent implements OnInit {
         });
     }
 
+    loadPage(page: number): void {
+        if (page !== this.previousPage) {
+            this.previousPage = page;
+            this.transition();
+        }
+    }
+
+    canLoad(): boolean {
+        return this.fromDate !== '' && this.toDate !== '';
+    }
+
+    transition(): void {
+        if (this.canLoad()) {
+            this.router.navigate(['/admin/audits'], {
+                queryParams: {
+                    page: this.page,
+                    sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
+                }
+            });
+            this.loadData();
+        }
+    }
+
     private previousMonth(): string {
         let date = new Date();
         if (date.getMonth() === 0) {
@@ -98,35 +121,8 @@ export class AuditsComponent implements OnInit {
         return result;
     }
 
-    loadPage(page: number): void {
-        if (page !== this.previousPage) {
-            this.previousPage = page;
-            this.transition();
-        }
-    }
-
-    canLoad(): boolean {
-        return this.fromDate !== '' && this.toDate !== '';
-    }
-
-    transition(): void {
-        if (this.canLoad()) {
-            this.router.navigate(['/admin/audits'], {
-                queryParams: {
-                    page: this.page,
-                    sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
-                }
-            });
-            this.loadData();
-        }
-    }
-
     private onSuccess(audits: Audit[] | null, headers: HttpHeaders): void {
         this.totalItems = Number(headers.get('X-Total-Count'));
-        if (audits === null) {
-            this.audits = [];
-        } else {
-            this.audits = audits;
-        }
+        this.audits = audits || [];
     }
 }

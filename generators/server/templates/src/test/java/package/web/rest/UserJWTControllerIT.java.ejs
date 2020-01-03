@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (!skipUserManagement) { _%>
@@ -30,7 +30,7 @@ import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.security.jwt.TokenProvider;
-<%_ if (reactive) { _%>
+<%_ if (reactive && !skipUserManagement) { _%>
 import <%= packageName %>.service.AuditEventService;
 <%_ } _%>
 import <%= packageName %>.web.rest.errors.ExceptionTranslator;
@@ -91,7 +91,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
     @Autowired
     private <% if (reactive) { %>Reactive<% } %>AuthenticationManager<% if (!reactive) { %>Builder<% } %> authenticationManager;
 
-    <%_ if (reactive) { _%>
+    <%_ if (reactive && !skipUserManagement) { _%>
     @Autowired
     private AuditEventService auditEventService;
 
@@ -115,7 +115,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
 
     @BeforeEach
     public void setup() {
-        UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager<% if (reactive) { %>, auditEventService<% } %>);
+        UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager<% if (reactive && !skipUserManagement) { %>, auditEventService<% } %>);
         <%_ if (!reactive) { _%>
         this.mockMvc = MockMvcBuilders.standaloneSetup(userJWTController)
             .setControllerAdvice(exceptionTranslator)
@@ -157,7 +157,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         login.setPassword("test");
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
@@ -166,7 +166,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
             .andExpect(header().string("Authorization", not(isEmptyString())));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isOk()
@@ -208,7 +208,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         login.setRememberMe(true);
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
@@ -217,7 +217,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
             .andExpect(header().string("Authorization", not(isEmptyString())));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isOk()
@@ -234,14 +234,14 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         login.setPassword("wrong password");
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.id_token").doesNotExist())
             .andExpect(header().doesNotExist("Authorization"));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isUnauthorized()

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,7 +21,7 @@
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
-const NODE_VERSION = '12.13.1';
+const NODE_VERSION = '12.14.0';
 const YARN_VERSION = '1.21.1';
 const NPM_VERSION = '6.13.4';
 
@@ -35,7 +35,7 @@ const JACOCO_VERSION = '0.8.5';
 const KAFKA_VERSION = '5.3.1';
 
 // Version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.0.1';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.0.2';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.18';
 const DOCKER_MARIADB = 'mariadb:10.4.10';
@@ -48,7 +48,7 @@ const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.7';
 const DOCKER_MEMCACHED = 'memcached:1.5.20-alpine';
 const DOCKER_REDIS = 'redis:5.0.7';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:8.0.1'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
-const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.4.3'; // The version should be coerent with the one from spring-data-elasticsearch project
+const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.5'; // The version should be coerent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:7.9.1-community';
@@ -64,7 +64,7 @@ const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.14.0';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.19.0';
 const DOCKER_GRAFANA = 'grafana/grafana:6.5.1';
-const DOCKER_JENKINS = 'jenkins:latest';
+const DOCKER_JENKINS = 'jenkins/jenkins:lts';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
 const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.34.0';

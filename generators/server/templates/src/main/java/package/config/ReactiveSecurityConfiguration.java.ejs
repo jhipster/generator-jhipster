@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,8 +24,13 @@ import <%= packageName %>.security.jwt.JWTFilter;
 import <%= packageName %>.security.jwt.TokenProvider;
 <%_ } _%>
 <%_ if (authenticationType === 'session') { _%>
+    <%_ if (!skipUserManagement) { _%>
 import <%= packageName %>.service.AuditEventService;
+    <%_ } _%>
 import io.github.jhipster.web.filter.reactive.CookieCsrfFilter;
+<%_ } _%>
+<%_ if (skipUserManagement) { _%>
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,10 +39,8 @@ import org.springframework.http.HttpMethod;
 <%_ if (authenticationType === 'session') { _%>
 import org.springframework.http.HttpStatus;
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
-<%_ } _%>
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -46,11 +49,15 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 <%_ } _%>
-<%_ if (!skipUserManagement) { _%>
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+<%_ if (skipUserManagement) { _%>
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 <%_ } _%>
-<%_ if (authenticationType === 'session') { _%>
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+<%_ if (authenticationType === 'session' || skipUserManagement) { _%>
 import org.springframework.security.core.userdetails.User;
+<%_ } _%>
+<%_ if (skipUserManagement) { _%>
+import org.springframework.security.core.userdetails.UserDetails;
 <%_ } _%>
 <%_ if (!skipUserManagement) { _%>
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -65,6 +72,9 @@ import org.springframework.security.web.server.csrf.CookieServerCsrfTokenReposit
 <%_ } _%>
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+<%_ if (skipUserManagement) { _%>
+import org.springframework.util.StringUtils;
+<%_ } _%>
 import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
 <%_ if (authenticationType === 'session') { _%>
 import reactor.core.publisher.Mono;
@@ -86,20 +96,20 @@ public class SecurityConfiguration {
     private final TokenProvider tokenProvider;
 
     <%_ } _%>
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
     private final AuditEventService auditEventService;
 
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider,  <% } %><% if (authenticationType === 'session') { %>AuditEventService auditEventService,  <% } %>SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (!skipUserManagement) { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider,  <% } %><% if (authenticationType === 'session' && !skipUserManagement) { %>AuditEventService auditEventService, <% } %>SecurityProblemSupport problemSupport) {
         <%_ if (!skipUserManagement) { _%>
         this.userDetailsService = userDetailsService;
         <%_ } _%>
         <%_ if (authenticationType === 'jwt') { _%>
         this.tokenProvider = tokenProvider;
         <%_ } _%>
-        <%_ if (authenticationType === 'session') { _%>
+        <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
         this.auditEventService = auditEventService;
         <%_ } _%>
         this.problemSupport = problemSupport;
@@ -118,9 +128,27 @@ public class SecurityConfiguration {
         return authenticationManager;
     }
 
+    <%_ } else { _%>
+    @Bean
+    public MapReactiveUserDetailsService userDetailsService(SecurityProperties properties) {
+        SecurityProperties.User user = properties.getUser();
+        UserDetails userDetails = User
+            .withUsername(user.getName())
+            .password("{noop}" + user.getPassword())
+            .roles(StringUtils.toStringArray(user.getRoles()))
+            .build();
+        return new MapReactiveUserDetailsService(userDetails);
+    }
+
+    @Bean
+    public ReactiveAuthenticationManager reactiveAuthenticationManager(ReactiveUserDetailsService userDetailsService) {
+        return new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+    }
+
     <%_ } _%>
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
                 pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/index.html", "/test/**"),
@@ -132,7 +160,7 @@ public class SecurityConfiguration {
         .and()
             // See https://github.com/spring-projects/spring-security/issues/5766
             .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
-            <%_ } else{ _%>
+            <%_ } else { _%>
             .disable()
             <%_ } _%>
             <%_ if (authenticationType === 'jwt') { _%>
@@ -178,28 +206,37 @@ public class SecurityConfiguration {
             .pathMatchers("/management/info").permitAll()
             .pathMatchers("/management/prometheus").permitAll()
             .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+        // @formatter:on
         return http.build();
     }
     <%_ if (authenticationType === 'session') { _%>
 
     private Mono<Void> onAuthenticationError(WebFilterExchange exchange, AuthenticationException e) {
         exchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        <%_ if (!skipUserManagement) { _%>
         return exchange.getExchange()
                 .getFormData()
                 .map(data -> data.getFirst("username"))
                 .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
                 .flatMap(login -> auditEventService.saveAuthenticationError(login, e))
                 .then();
+        <%_ } else { _%>
+        return Mono.empty();
+        <%_ } _%>
     }
 
     private Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
         exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
+        <%_ if (!skipUserManagement) { _%>
         return Mono.just(authentication.getPrincipal())
                 .filter(principal -> principal instanceof User)
                 .map(principal -> ((User) principal).getUsername())
                 .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
                 .flatMap(auditEventService::saveAuthenticationSuccess)
                 .then();
+        <%_ } else { _%>
+        return Mono.empty();
+        <%_ } _%>
     }
     <%_ } _%>
 }

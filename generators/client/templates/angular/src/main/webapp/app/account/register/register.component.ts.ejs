@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -34,7 +34,7 @@ import { RegisterService } from './register.service';
 export class RegisterComponent implements AfterViewInit {
     @ViewChild('login', { static: false })
     login?: ElementRef;
-  
+
     doNotMatch = false;
     error = false;
     errorEmailExists = false;
@@ -49,15 +49,14 @@ export class RegisterComponent implements AfterViewInit {
     });
 
     constructor(
-<%_ if (enableTranslation) { _%>
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
-<%_ } _%>
+        <%_ } _%>
         private loginModalService: LoginModalService,
         private registerService: RegisterService,
         private renderer: Renderer,
         private fb: FormBuilder
-    ) {
-    }
+    ) {}
 
     ngAfterViewInit(): void {
         if (this.login) {

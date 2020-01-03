@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { of } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { of } from 'rxjs';
 import { advanceTo } from 'jest-date-mock';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%= angularXAppName %>TestModule } from '../../../test.module';
 import { AuditsComponent } from 'app/admin/audits/audits.component';
 import { AuditsService } from 'app/admin/audits/audits.service';
 import { Audit } from 'app/admin/audits/audit.model';
@@ -50,16 +50,14 @@ function getDate(isToday = true): string {
 }
 
 describe('Component Tests', () => {
-
     describe('AuditsComponent', () => {
-
         let comp: AuditsComponent;
         let fixture: ComponentFixture<AuditsComponent>;
         let service: AuditsService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [<%= angularXAppName %>TestModule],
                 declarations: [AuditsComponent],
                 providers: [
                     AuditsService

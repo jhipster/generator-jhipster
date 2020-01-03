@@ -1,6 +1,6 @@
 #!/bin/bash
 <%#
- Copyright 2013-2018 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,7 +23,7 @@
 kubectl apply -f namespace.yaml
 <%_ } _%>
 <%_ if (istio) { _%>
-kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled
+kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled
 <%_ } _%>
 if [ -d "csvc" ]; then
 helm delete --purge csvc 2>/dev/null

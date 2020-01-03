@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,7 +18,6 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const fs = require('fs');
 const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const cleanup = require('../cleanup');
@@ -26,7 +25,6 @@ const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const jhipsterUtils = require('../utils');
-const generatorTransforms = require('../generator-transforms');
 
 let useBlueprints;
 
@@ -574,12 +572,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
     _end() {
         return {
-            prettierYeomanConfig() {
-                fs.writeFileSync(
-                    '.yo-rc.json',
-                    generatorTransforms.prettierFormat(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }), { parser: 'json' })
-                );
-            },
             gitCommit() {
                 if (!this.options['skip-git']) {
                     this.debug('Committing files to git');

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,16 +38,16 @@ export class LanguageHelper {
 
         this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
             this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
-            <%_ if (enableI18nRTL) { _%>
 
+            <%_ if (enableI18nRTL) { _%>
             this.updatePageDirection();
             <%_ } _%>
         });
     }
-    <%_ if (enableI18nRTL) { _%>
 
+    <%_ if (enableI18nRTL) { _%>
     private updatePageDirection(): void {
         this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
     }
-    <%_ }_%>
+    <%_ } _%>
 }

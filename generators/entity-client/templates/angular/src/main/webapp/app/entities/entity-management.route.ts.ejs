@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -56,25 +56,25 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
     }
 }
 
-
 export const <%= entityInstance %>Route: Routes = [
     {
         path: '',
         component: <%= entityAngularName %>Component,
-        <%_ if (pagination === 'pagination'){ _%>
+        <%_ if (pagination === 'pagination') { _%>
         resolve: {
             'pagingParams': JhiResolvePagingParams
         },
         <%_ } _%>
         data: {
             authorities: ['ROLE_USER'],
-            <%_ if (pagination === 'pagination'){ _%>
+            <%_ if (pagination === 'pagination') { _%>
             defaultSort: 'id,asc',
             <%_ } _%>
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
-    }, {
+    },
+    {
         path: ':id/view',
         component: <%= entityAngularName %>DetailComponent,
         resolve: {
@@ -82,7 +82,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -95,7 +95,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },
@@ -107,7 +107,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         data: {
             authorities: ['ROLE_USER'],
-            pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
     },

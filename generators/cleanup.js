@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -219,6 +219,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`);
         generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`);
         generator.removeFile(`${testDir}web/rest/ClientForwardControllerIT.java`);
+        generator.removeFile(`${javaDir}package/config/DefaultProfileUtil.java`);
+        generator.removeFolder(`${javaDir}package/service/util`);
     }
 }
 

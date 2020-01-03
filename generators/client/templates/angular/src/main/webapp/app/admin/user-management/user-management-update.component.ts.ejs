@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -31,7 +31,6 @@ import { UserService } from 'app/core/user/user.service';
     templateUrl: './user-management-update.component.html'
 })
 export class UserManagementUpdateComponent implements OnInit {
-
     user!: User;
     <%_ if (enableTranslation) { _%>
     languages = LANGUAGES;
@@ -71,6 +70,23 @@ export class UserManagementUpdateComponent implements OnInit {
         });
     }
 
+    previousState(): void {
+        window.history.back();
+    }
+
+    save(): void {
+        this.isSaving = true;
+        this.updateUser(this.user);
+        if (this.user.id !== undefined) {
+            this.userService.update(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+        } else {
+            <%_ if (!enableTranslation) { _%>
+            this.user.langKey = 'en';
+            <%_ } _%>
+            this.userService.create(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+        }
+    }
+
     private updateForm(user: User): void {
         this.editForm.patchValue({
             id: user.id,
@@ -82,21 +98,6 @@ export class UserManagementUpdateComponent implements OnInit {
             langKey: user.langKey,
             authorities: user.authorities
         });
-    }
-
-    previousState(): void {
-        window.history.back();
-    }
-
-    save(): void {
-        this.isSaving = true;
-        this.updateUser(this.user);
-        if (this.user.id !== undefined) {
-            this.userService.update(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
-        } else {<% if (!enableTranslation) { %>
-            this.user.langKey = 'en';<% } %>
-            this.userService.create(this.user).subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
-        }
     }
 
     private updateUser(user: User): void {
