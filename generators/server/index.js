@@ -256,7 +256,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.packageName !== undefined &&
                     this.authenticationType !== undefined &&
                     this.cacheProvider !== undefined &&
-                    this.enableHibernateCache !== undefined &&
                     this.websocket !== undefined &&
                     this.databaseType !== undefined &&
                     this.devDatabaseType !== undefined &&
