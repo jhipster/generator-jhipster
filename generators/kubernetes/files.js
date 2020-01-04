@@ -126,6 +126,10 @@ function writeFiles() {
                 this.template('kustomize/patch/istio-label.yml.ejs', 'patch/istio-label.yml');
                 this.template('kustomize/patch/istio-namespace.yml.ejs', 'patch/istio-namespace.yml');
             }
+        },
+
+        writeSkaffold() {
+            this.template('skaffold/skaffold.yml.ejs', 'skaffold.yml');
         }
     };
 }
