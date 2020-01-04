@@ -31,4 +31,5 @@ try {
     env.run(command, options, done);
 } catch (e) {
     logger.error(e.message, e);
+    process.exitCode = 1;
 }
