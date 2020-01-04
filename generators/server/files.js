@@ -1131,10 +1131,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/errors/EmailAlreadyUsedException.java`
                 },
                 {
-                    file: 'package/web/rest/errors/EmailNotFoundException.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailNotFoundException.java`
-                },
-                {
                     file: 'package/web/rest/errors/InvalidPasswordException.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/InvalidPasswordException.java`
                 },
