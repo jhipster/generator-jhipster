@@ -58,7 +58,6 @@ describe('AbstractJDLApplication', () => {
           serviceDiscoveryType: false,
           skipClient: false,
           skipServer: false,
-          skipUserManagement: false,
           websocket: false
         });
       });
@@ -259,7 +258,6 @@ describe('AbstractJDLApplication', () => {
     serviceDiscoveryType false
     skipClient false
     skipServer false
-    skipUserManagement false
     testFrameworks []
     websocket false
   }
@@ -295,7 +293,6 @@ describe('AbstractJDLApplication', () => {
     serviceDiscoveryType false
     skipClient false
     skipServer false
-    skipUserManagement false
     testFrameworks []
     websocket false
   }
