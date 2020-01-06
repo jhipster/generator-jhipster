@@ -204,7 +204,7 @@ describe('Service Tests', () => {
                     expect(hasAuthority).toBe(false);
                 });
 
-                it('should return false if user is logged and has not authority',  () => {
+                it('should return false if user is logged and has not authority', () => {
                     service.authenticate(accountWithAuthorities(['ROLE_USER']));
 
                     const hasAuthority = service.hasAnyAuthority('ROLE_ADMIN');

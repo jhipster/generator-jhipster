@@ -104,7 +104,7 @@ describe('Service Tests', () => {
 
                 service.find(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.body);
 
-                const req  = httpMock.expectOne({ method: 'GET' });
+                const req = httpMock.expectOne({ method: 'GET' });
                 req.flush(returnedFromService);
                 expect(expectedResult).toMatchObject(elemDefault);
             });
@@ -142,7 +142,7 @@ describe('Service Tests', () => {
 
                 service.create(new <%= entityAngularName %>()).subscribe(resp => expectedResult = resp.body);
 
-                const req  = httpMock.expectOne({ method: 'POST' });
+                const req = httpMock.expectOne({ method: 'POST' });
                 req.flush(returnedFromService);
                 expect(expectedResult).toMatchObject(expected);
             });
@@ -182,7 +182,7 @@ describe('Service Tests', () => {
 
                 service.update(expected).subscribe(resp => expectedResult = resp.body);
 
-                const req  = httpMock.expectOne({ method: 'PUT' });
+                const req = httpMock.expectOne({ method: 'PUT' });
                 req.flush(returnedFromService);
                 expect(expectedResult).toMatchObject(expected);
             });
@@ -221,9 +221,9 @@ describe('Service Tests', () => {
                 <%_ }) _%>
                 }, returnedFromService);
 
-                service.query().subscribe(resp  => expectedResult = resp.body);
+                service.query().subscribe(resp => expectedResult = resp.body);
 
-                const req  = httpMock.expectOne({ method: 'GET' });
+                const req = httpMock.expectOne({ method: 'GET' });
                 req.flush([returnedFromService]);
                 httpMock.verify();
                 expect(expectedResult).toContainEqual(expected);
@@ -233,7 +233,7 @@ describe('Service Tests', () => {
             it('should delete a <%= entityAngularName %>', () => {
                 service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
 
-                const req  = httpMock.expectOne({ method: 'DELETE' });
+                const req = httpMock.expectOne({ method: 'DELETE' });
                 req.flush({ status: 200 });
                 expect(expectedResult);
             });

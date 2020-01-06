@@ -77,7 +77,7 @@ describe('Component Tests', () => {
                 spyOn(service, 'delete');
 
                 // WHEN
-                comp.clear();
+                comp.cancel();
 
                 // THEN
                 expect(service.delete).not.toHaveBeenCalled();

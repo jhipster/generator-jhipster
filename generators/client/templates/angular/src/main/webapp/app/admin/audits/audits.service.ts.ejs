@@ -30,7 +30,7 @@ export interface AuditsQuery extends Pagination {
 }
 
 @Injectable({providedIn: 'root'})
-export class AuditsService  {
+export class AuditsService {
     constructor(private http: HttpClient) {}
 
     query(req: AuditsQuery): Observable<HttpResponse<Audit[]>> {
