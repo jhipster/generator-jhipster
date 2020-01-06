@@ -122,7 +122,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } _%>
 public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
-    private static final String DEFAULT_LOGIN = "johndoe";
+    private static final String DEFAULT_LOGIN = "johndoe@localhost";
     <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_LOGIN = "jhipster";
     <%_ } _%>

@@ -320,10 +320,16 @@ public class UserResource {
      * @param login the login of the user to find.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
+    @GetMapping("/users/{login}")
     <%_ if (!reactive) { _%>
     public ResponseEntity<<%= asDto('User') %>> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
+
+        Pattern pattern = Pattern.compile(Constants.LOGIN_REGEX);
+        if (!pattern.matcher(login).matches()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(<%= asDto('User') %>::new));
