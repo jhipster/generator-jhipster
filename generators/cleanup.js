@@ -219,11 +219,11 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`);
         generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`);
         generator.removeFile(`${testDir}web/rest/ClientForwardControllerIT.java`);
-        generator.removeFile(`${javaDir}package/config/DefaultProfileUtil.java`);
-        generator.removeFolder(`${javaDir}package/service/util`);
     }
     if (generator.isJhipsterVersionLessThan('6.6.1')) {
         generator.removeFile(`${javaDir}web/rest/errors/EmailNotFoundException.java`);
+        generator.removeFile(`${javaDir}config/DefaultProfileUtil.java`);
+        generator.removeFolder(`${javaDir}service/util`);
     }
 }
 
