@@ -183,15 +183,17 @@ describe('ApplicationValidator', () => {
         context('neo4j', () => {
           it('does not fail', () => {
             expect(() => {
-              validator.validate({
-                config: {
-                  ...basicValidApplicationConfig,
-                  databaseType: NEO4J,
-                  devDatabaseType: NEO4J,
-                  prodDatabaseType: NEO4J,
-                  applicationType: MONOLITH
-                }
-              });
+              validator.validate(
+                new JDLApplication({
+                  config: {
+                    ...basicValidApplicationConfig,
+                    databaseType: NEO4J,
+                    devDatabaseType: NEO4J,
+                    prodDatabaseType: NEO4J,
+                    applicationType: MONOLITH
+                  }
+                })
+              );
             }).not.to.throw();
           });
         });
