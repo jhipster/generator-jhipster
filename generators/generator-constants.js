@@ -34,6 +34,8 @@ const JACOCO_VERSION = '0.8.5';
 
 const KAFKA_VERSION = '5.3.1';
 
+const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.0';
+
 // Version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.0.2';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
@@ -322,6 +324,7 @@ const constants = {
     // Libraries
     JIB_VERSION,
     JACOCO_VERSION,
+    JACKSON_DATABIND_NULLABLE_VERSION,
 
     DOCKER_JENKINS,
     DOCKER_SWAGGER_EDITOR,
