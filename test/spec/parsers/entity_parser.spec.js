@@ -24,7 +24,7 @@ const EntityParser = require('../../../lib/parsers/entity_parser');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
-const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
+const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
 const JDLEnum = require('../../../lib/core/jdl_enum');
@@ -621,12 +621,11 @@ describe('EntityParser', () => {
         let content;
 
         before(() => {
-          const application = new JDLMicroserviceApplication({
-            config: {
-              baseName: 'MyApp'
-            },
-            entities: ['A']
+          const application = createJDLApplication({
+            applicationType: ApplicationTypes.MICROSERVICE,
+            baseName: 'MyApp'
           });
+          application.setEntityNames(['A']);
           const entityA = new JDLEntity({ name: 'A' });
           const entityB = new JDLEntity({ name: 'B' });
           const jdlObject = new ValidatedJDLObject();

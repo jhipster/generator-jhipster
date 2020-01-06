@@ -18,10 +18,10 @@
  */
 
 const { expect } = require('chai');
+const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 const { convertApplicationsToJDL } = require('../../../lib/converters/json_to_jdl_application_converter');
 const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
-const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
-const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
+const { MONOLITH } = require('../../../lib/core/jhipster/application_types');
 
 describe('JSONToJDLApplicationConverter', () => {
   describe('convert', () => {
@@ -32,7 +32,7 @@ describe('JSONToJDLApplicationConverter', () => {
         jdlObject = convertApplicationsToJDL();
       });
 
-      it('returns an empty jdl object', () => {
+      it('should return an empty jdl object', () => {
         expect(jdlObject.getApplicationQuantity()).to.equal(0);
       });
     });
@@ -41,12 +41,12 @@ describe('JSONToJDLApplicationConverter', () => {
 
       before(() => {
         jdlObject = convertApplicationsToJDL({
-          applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: ApplicationTypes.MONOLITH } }]
+          applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }]
         });
       });
 
-      it('returns the converted applications', () => {
-        expect(jdlObject.applications.toto).to.deep.equal(new JDLMonolithApplication({ config: { baseName: 'toto' } }));
+      it('should return the converted applications', () => {
+        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ baseName: 'toto' }));
       });
     });
     context('when passing a jdl object', () => {
@@ -54,18 +54,16 @@ describe('JSONToJDLApplicationConverter', () => {
 
       before(() => {
         const previousJDLObject = new ValidatedJDLObject();
-        previousJDLObject.addApplication(
-          new JDLMonolithApplication({ config: { baseName: 'tata', applicationType: ApplicationTypes.MONOLITH } })
-        );
+        previousJDLObject.addApplication(createJDLApplication({ baseName: 'tata', applicationType: MONOLITH }));
         jdlObject = convertApplicationsToJDL({
-          applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: ApplicationTypes.MONOLITH } }],
+          applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],
           jdl: previousJDLObject
         });
       });
 
-      it('adds the converted applications', () => {
-        expect(jdlObject.applications.tata).to.deep.equal(new JDLMonolithApplication({ config: { baseName: 'tata' } }));
-        expect(jdlObject.applications.toto).to.deep.equal(new JDLMonolithApplication({ config: { baseName: 'toto' } }));
+      it('should add the converted applications', () => {
+        expect(jdlObject.applications.tata).to.deep.equal(createJDLApplication({ baseName: 'tata' }));
+        expect(jdlObject.applications.toto).to.deep.equal(createJDLApplication({ baseName: 'toto' }));
       });
     });
   });

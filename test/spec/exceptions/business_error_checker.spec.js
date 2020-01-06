@@ -35,8 +35,7 @@ const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const Validations = require('../../../lib/core/jhipster/validations');
 const ValidatedJDLObject = require('../../../lib/core/validated_jdl_object');
-const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
-const JDLMicroserviceApplication = require('../../../lib/core/jdl_microservice_application');
+const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLEnum = require('../../../lib/core/jdl_enum');
@@ -68,9 +67,8 @@ describe('BusinessErrorChecker', () => {
 
       before(() => {
         const jdlObject = new ValidatedJDLObject();
-        const application = new JDLMonolithApplication({
-          entities: ['MyEntity']
-        });
+        const application = createJDLApplication({ applicationType: ApplicationTypes.MONOLITH });
+        application.setEntityNames(['MyEntity']);
         const entity = new JDLEntity({
           name: 'MyEntity'
         });
@@ -220,14 +218,12 @@ describe('BusinessErrorChecker', () => {
       context('with an entity having a reserved table name', () => {
         let loggerStub;
         before(() => {
-          jdlObject.addApplication(
-            new JDLMonolithApplication({
-              config: {
-                databaseType: DatabaseTypes.SQL
-              },
-              entities: ['valid']
-            })
-          );
+          const application = createJDLApplication({
+            applicationType: ApplicationTypes.MONOLITH,
+            databaseType: DatabaseTypes.SQL
+          });
+          application.setEntityNames(['valid']);
+          jdlObject.addApplication(application);
           jdlObject.addEntity(
             new JDLEntity({
               name: 'valid',
@@ -334,14 +330,12 @@ describe('BusinessErrorChecker', () => {
     context('if the field type is invalid for a database type', () => {
       context('when checking a JDL object with a JDL application', () => {
         before(() => {
-          jdlObject.addApplication(
-            new JDLMonolithApplication({
-              config: {
-                databaseType: DatabaseTypes.SQL
-              },
-              entities: ['Valid']
-            })
-          );
+          const application = createJDLApplication({
+            applicationType: ApplicationTypes.MONOLITH,
+            databaseType: DatabaseTypes.SQL
+          });
+          application.setEntityNames(['Valid']);
+          jdlObject.addApplication(application);
           const validEntity = new JDLEntity({
             name: 'Valid'
           });
@@ -546,31 +540,24 @@ describe('BusinessErrorChecker', () => {
 
       before(() => {
         const jdlObject = new ValidatedJDLObject();
-
-        jdlObject.addApplication(
-          new JDLMicroserviceApplication({
-            config: {
-              baseName: 'app1'
-            },
-            entities: ['A', 'B']
-          })
-        );
-        jdlObject.addApplication(
-          new JDLMicroserviceApplication({
-            config: {
-              baseName: 'app2'
-            },
-            entities: ['B', 'C']
-          })
-        );
-        jdlObject.addApplication(
-          new JDLMicroserviceApplication({
-            config: {
-              baseName: 'app3'
-            },
-            entities: ['A', 'B', 'C']
-          })
-        );
+        const application1 = createJDLApplication({
+          applicationType: ApplicationTypes.MICROSERVICE,
+          baseName: 'app1'
+        });
+        application1.setEntityNames(['A', 'B']);
+        const application2 = createJDLApplication({
+          applicationType: ApplicationTypes.MICROSERVICE,
+          baseName: 'app2'
+        });
+        application2.setEntityNames(['B', 'C']);
+        const application3 = createJDLApplication({
+          applicationType: ApplicationTypes.MICROSERVICE,
+          baseName: 'app3'
+        });
+        application3.setEntityNames(['A', 'B', 'C']);
+        jdlObject.addApplication(application1);
+        jdlObject.addApplication(application2);
+        jdlObject.addApplication(application3);
         jdlObject.addEntity(
           new JDLEntity({
             name: 'A'
@@ -636,14 +623,12 @@ describe('BusinessErrorChecker', () => {
     context('when having a JDL with pagination and Cassandra as database type', () => {
       context('inside a JDL application', () => {
         before(() => {
-          jdlObject.addApplication(
-            new JDLMonolithApplication({
-              config: {
-                databaseType: DatabaseTypes.CASSANDRA
-              },
-              entities: ['A']
-            })
-          );
+          const application = createJDLApplication({
+            applicationType: ApplicationTypes.MONOLITH,
+            databaseType: DatabaseTypes.CASSANDRA
+          });
+          application.setEntityNames(['A']);
+          jdlObject.addApplication(application);
           jdlObject.addEntity(
             new JDLEntity({
               name: 'A'

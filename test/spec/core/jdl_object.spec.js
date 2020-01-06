@@ -21,11 +21,12 @@
 const { expect } = require('chai');
 
 const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
+const { MONOLITH } = require('../../../lib/core/jhipster/application_types');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 const JDLObject = require('../../../lib/core/jdl_object');
-const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
+const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 const JDLDeployment = require('../../../lib/core/jdl_deployment');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLField = require('../../../lib/core/jdl_field');
@@ -54,7 +55,7 @@ describe('JDLObject', () => {
 
       before(() => {
         object = new JDLObject();
-        application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
+        application = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
         object.addApplication(application);
       });
 
@@ -78,7 +79,11 @@ describe('JDLObject', () => {
 
     context('when having one or more applications', () => {
       before(() => {
-        jdlObject.addApplication(new JDLMonolithApplication({}));
+        jdlObject.addApplication(
+          createJDLApplication({
+            applicationType: MONOLITH
+          })
+        );
       });
 
       it('returns the number of applications', () => {
@@ -151,8 +156,8 @@ describe('JDLObject', () => {
 
     before(() => {
       jdlObject = new JDLObject();
-      jdlObject.addApplication(new JDLMonolithApplication({ config: { baseName: 'A' } }));
-      jdlObject.addApplication(new JDLMonolithApplication({ config: { baseName: 'B' } }));
+      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'A' }));
+      jdlObject.addApplication(createJDLApplication({ applicationType: MONOLITH, baseName: 'B' }));
     });
 
     context('when not passing a function', () => {
@@ -860,7 +865,7 @@ describe('JDLObject', () => {
 
     before(() => {
       object = new JDLObject();
-      application = new JDLMonolithApplication({ jhipsterVersion: '4.9.0' });
+      application = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
       object.addApplication(application);
       deployment = new JDLDeployment({
         deploymentType: 'docker-compose',

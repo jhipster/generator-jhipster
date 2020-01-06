@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 
-const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
+const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const JHipsterEntityExporter = require('../../../lib/exporters/jhipster_entity_exporter');
 const FileUtils = require('../../../lib/utils/file_utils');
@@ -709,12 +709,11 @@ describe('JHipsterEntityExporter', () => {
             clientRootFolder: '',
             applications: ['toto']
           };
-          const application = new JDLMonolithApplication({
-            config: {
-              baseName: 'toto'
-            },
-            entities: ['A']
+          const application = createJDLApplication({
+            applicationType: ApplicationTypes.MONOLITH,
+            baseName: 'toto'
           });
+          application.setEntityNames(['A']);
           JHipsterEntityExporter.exportEntitiesInApplications({
             entities: { A: entity },
             applications: {
@@ -783,18 +782,16 @@ describe('JHipsterEntityExporter', () => {
               applications: ['titi']
             }
           };
-          application1 = new JDLMonolithApplication({
-            config: {
-              baseName: 'toto'
-            },
-            entities: ['A']
+          application1 = createJDLApplication({
+            applicationType: ApplicationTypes.MONOLITH,
+            baseName: 'toto'
           });
-          application2 = new JDLMonolithApplication({
-            config: {
-              baseName: 'titi'
-            },
-            entities: ['B']
+          application1.setEntityNames(['A']);
+          application2 = createJDLApplication({
+            applicationType: ApplicationTypes.MONOLITH,
+            baseName: 'titi'
           });
+          application2.setEntityNames(['B']);
           returned = JHipsterEntityExporter.exportEntitiesInApplications({
             entities,
             applications: {

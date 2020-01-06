@@ -19,7 +19,7 @@
 
 const { expect } = require('chai');
 const { MONOLITH } = require('../../../../lib/core/jhipster/application_types');
-const JDLMonolithApplication = require('../../../../lib/core/jdl_monolith_application');
+const { createJDLApplication } = require('../../../../lib/core/jdl_application_factory');
 const { convertApplications } = require('../../../../lib/converters/parsedJDLToJDLObject/application_converter');
 
 describe('ApplicationConverter', () => {
@@ -47,10 +47,9 @@ describe('ApplicationConverter', () => {
             }
           ]);
           expectedApplication = [
-            new JDLMonolithApplication({
-              config: {
-                baseName: 'mono'
-              }
+            createJDLApplication({
+              applicationType: MONOLITH,
+              baseName: 'mono'
             })
           ];
         });
@@ -81,11 +80,10 @@ describe('ApplicationConverter', () => {
               { creationTimestamp: 42 }
             );
             expectedApplication = [
-              new JDLMonolithApplication({
-                config: {
-                  baseName: 'mono',
-                  creationTimestamp: 42
-                }
+              createJDLApplication({
+                applicationType: MONOLITH,
+                baseName: 'mono',
+                creationTimestamp: 42
               })
             ];
           });
@@ -115,11 +113,10 @@ describe('ApplicationConverter', () => {
               { generatorVersion: '7.0.0' }
             );
             expectedApplication = [
-              new JDLMonolithApplication({
-                config: {
-                  baseName: 'mono',
-                  jhipsterVersion: '7.0.0'
-                }
+              createJDLApplication({
+                applicationType: MONOLITH,
+                baseName: 'mono',
+                jhipsterVersion: '7.0.0'
               })
             ];
           });
@@ -149,14 +146,12 @@ describe('ApplicationConverter', () => {
             {},
             ['A', 'B']
           );
-          expectedApplication = [
-            new JDLMonolithApplication({
-              config: {
-                baseName: 'mono'
-              },
-              entities: ['A', 'B']
-            })
-          ];
+          const application = createJDLApplication({
+            applicationType: MONOLITH,
+            baseName: 'mono'
+          });
+          application.setEntityNames(['A', 'B']);
+          expectedApplication = [application];
         });
 
         it('should include them', () => {
@@ -183,14 +178,12 @@ describe('ApplicationConverter', () => {
             {},
             ['A', 'B']
           );
-          expectedApplication = [
-            new JDLMonolithApplication({
-              config: {
-                baseName: 'mono'
-              },
-              entities: ['B']
-            })
-          ];
+          const application = createJDLApplication({
+            applicationType: MONOLITH,
+            baseName: 'mono'
+          });
+          application.setEntityNames(['B']);
+          expectedApplication = [application];
         });
 
         it('should exclude them', () => {

@@ -23,7 +23,8 @@ const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const JHipsterApplicationExporter = require('../../../lib/exporters/jhipster_application_exporter');
-const JDLMonolithApplication = require('../../../lib/core/jdl_monolith_application');
+const { MONOLITH } = require('../../../lib/core/jhipster/application_types');
+const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 
 describe('JHipsterApplicationExporter', () => {
   describe('::exportApplication', () => {
@@ -54,15 +55,14 @@ describe('JHipsterApplicationExporter', () => {
 
         before(done => {
           returned = JHipsterApplicationExporter.exportApplication(
-            new JDLMonolithApplication({
-              config: {
-                baseName: 'toto',
-                packageName: 'com.mathieu.sample',
-                enableTranslation: false,
-                languages: ['en', 'fr'],
-                jhipsterVersion: '4.9.0',
-                otherModules: ['MyModule']
-              }
+            createJDLApplication({
+              applicationType: MONOLITH,
+              baseName: 'toto',
+              packageName: 'com.mathieu.sample',
+              enableTranslation: false,
+              languages: ['en', 'fr'],
+              jhipsterVersion: '4.9.0',
+              otherModules: ['MyModule']
             })
           );
           fs.readFile(path.join('.yo-rc.json'), { encoding: 'utf8' }, (err, data) => {
@@ -177,14 +177,13 @@ describe('JHipsterApplicationExporter', () => {
             )
           );
           JHipsterApplicationExporter.exportApplication(
-            new JDLMonolithApplication({
-              config: {
-                baseName: 'toto',
-                packageName: 'com.mathieu.sample',
-                enableTranslation: false,
-                languages: ['en', 'fr'],
-                jhipsterVersion: '4.9.0'
-              }
+            createJDLApplication({
+              applicationType: MONOLITH,
+              baseName: 'toto',
+              packageName: 'com.mathieu.sample',
+              enableTranslation: false,
+              languages: ['en', 'fr'],
+              jhipsterVersion: '4.9.0'
             })
           );
           content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
@@ -252,23 +251,21 @@ describe('JHipsterApplicationExporter', () => {
 
         before('common setup for both applications', () => {
           returned = JHipsterApplicationExporter.exportApplications({
-            toto: new JDLMonolithApplication({
-              config: {
-                baseName: 'toto',
-                packageName: 'com.mathieu.toto',
-                enableTranslation: false,
-                languages: ['en', 'fr'],
-                jhipsterVersion: '4.9.0'
-              }
+            toto: createJDLApplication({
+              applicationType: MONOLITH,
+              baseName: 'toto',
+              packageName: 'com.mathieu.toto',
+              enableTranslation: false,
+              languages: ['en', 'fr'],
+              jhipsterVersion: '4.9.0'
             }),
-            titi: new JDLMonolithApplication({
-              config: {
-                baseName: 'titi',
-                packageName: 'com.mathieu.titi',
-                enableTranslation: false,
-                languages: ['en', 'fr'],
-                jhipsterVersion: '4.9.0'
-              }
+            titi: createJDLApplication({
+              applicationType: MONOLITH,
+              baseName: 'titi',
+              packageName: 'com.mathieu.titi',
+              enableTranslation: false,
+              languages: ['en', 'fr'],
+              jhipsterVersion: '4.9.0'
             })
           });
         });
