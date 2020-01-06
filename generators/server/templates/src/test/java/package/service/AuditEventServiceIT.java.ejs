@@ -102,20 +102,22 @@ public class AuditEventServiceIT {
     @Transactional
     <%_ } _%>
     public void verifyOldAuditEventsAreDeleted() {
-        persistenceAuditEventRepository.deleteAll();
-        persistenceAuditEventRepository.save(auditEventOld);
-        persistenceAuditEventRepository.save(auditEventWithinRetention);
-        persistenceAuditEventRepository.save(auditEventNew);
-        <% if (databaseType === 'sql') { %>
+        persistenceAuditEventRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
+        persistenceAuditEventRepository.save(auditEventOld)<% if (reactive) { %>.block()<% } %>;
+        persistenceAuditEventRepository.save(auditEventWithinRetention)<% if (reactive) { %>.block()<% } %>;
+        persistenceAuditEventRepository.save(auditEventNew)<% if (reactive) { %>.block()<% } %>;
+
+        <%_ if (databaseType === 'sql') { _%>
         persistenceAuditEventRepository.flush();
-        <% } %>
+        <%_ } _%>
         auditEventService.removeOldAuditEvents();
-        <% if (databaseType === 'sql') { %>
+        <%_ if (databaseType === 'sql') { _%>
         persistenceAuditEventRepository.flush();
-        <% } %>
-        assertThat(persistenceAuditEventRepository.findAll().size()).isEqualTo(2);
-        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")).isEmpty();
-        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-retention")).isNotEmpty();
-        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-new")).isNotEmpty();
+        <%_ } _%>
+
+        assertThat(persistenceAuditEventRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>.size()).isEqualTo(2);
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")<% if (reactive) { %>.collectList().block()<% } %>).isEmpty();
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-retention")<% if (reactive) { %>.collectList().block()<% } %>).isNotEmpty();
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-new")<% if (reactive) { %>.collectList().block()<% } %>).isNotEmpty();
     }
 }

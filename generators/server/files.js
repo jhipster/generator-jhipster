@@ -1735,8 +1735,7 @@ const serverFiles = {
         },
         {
             // TODO : add tests for reactive
-            condition: generator =>
-                !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            condition: generator => !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
