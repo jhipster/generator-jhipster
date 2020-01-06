@@ -105,8 +105,6 @@ function writeFiles() {
                 return;
             }
 
-            const openApiToolsDependencyVersion = '0.2.1';
-
             if (this.buildTool === 'maven') {
                 if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
                     let exclusions;
@@ -122,9 +120,6 @@ function writeFiles() {
                     this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-openfeign', null, exclusions);
                 }
                 this.addMavenDependency('org.springframework.cloud', 'spring-cloud-starter-oauth2');
-                this.addMavenProperty('jackson-databind-nullable.version', openApiToolsDependencyVersion);
-                // eslint-disable-next-line no-template-curly-in-string
-                this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
             } else if (this.buildTool === 'gradle') {
                 if (!['microservice', 'gateway', 'uaa'].includes(this.applicationType)) {
                     if (this.authenticationType === 'session') {
@@ -136,14 +131,27 @@ function writeFiles() {
                     }
                 }
                 this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-starter-oauth2');
-                this.addGradleProperty('jackson_databind_nullable_version', openApiToolsDependencyVersion);
-                this.addGradleDependency(
-                    'compile',
-                    'org.openapitools',
-                    'jackson-databind-nullable',
+            }
+
+            if (!this.enableSwaggerCodegen) {
+                /* This is a hack to avoid non compiling generated code from openapi generator when the
+                 * enableSwaggerCodegen option is not selected (otherwise the jackson-databind-nullable dependency is already added).
+                 * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
+                 */
+                if (this.buildTool === 'maven') {
+                    this.addMavenProperty('jackson-databind-nullable.version', jhipsterConstants.JACKSON_DATABIND_NULLABLE_VERSION);
                     // eslint-disable-next-line no-template-curly-in-string
-                    '${jackson_databind_nullable_version}'
-                );
+                    this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
+                } else if (this.buildTool === 'gradle') {
+                    this.addGradleProperty('jackson_databind_nullable_version', jhipsterConstants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    this.addGradleDependency(
+                        'compile',
+                        'org.openapitools',
+                        'jackson-databind-nullable',
+                        // eslint-disable-next-line no-template-curly-in-string
+                        '${jackson_databind_nullable_version}'
+                    );
+                }
             }
         },
 
