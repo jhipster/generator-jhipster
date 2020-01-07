@@ -636,18 +636,18 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing a JDL microservice application with entities', () => {
-        let jdlObject;
+        let entityNames;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/application_with_entities.jdl']);
-          jdlObject = DocumentParser.parseFromConfigurationObject({
+          const jdlObject = DocumentParser.parseFromConfigurationObject({
             parsedContent: input
           });
+          entityNames = jdlObject.applications.MyApp.getEntityNames();
         });
 
         it('adds the application entities in the application object', () => {
-          expect(jdlObject.applications.MyApp.entityNames.has('BankAccount')).to.be.true;
-          expect(jdlObject.applications.MyApp.entityNames.size).to.equal(1);
+          expect(entityNames.toString()).to.equal('entities BankAccount');
         });
       });
       context('when parsing a relationship with no injected field', () => {

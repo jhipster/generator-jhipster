@@ -68,7 +68,7 @@ describe('BusinessErrorChecker', () => {
       before(() => {
         const jdlObject = new ValidatedJDLObject();
         const application = createJDLApplication({ applicationType: ApplicationTypes.MONOLITH });
-        application.setEntityNames(['MyEntity']);
+        application.addEntityNames(['MyEntity']);
         const entity = new JDLEntity({
           name: 'MyEntity'
         });
@@ -222,7 +222,7 @@ describe('BusinessErrorChecker', () => {
             applicationType: ApplicationTypes.MONOLITH,
             databaseType: DatabaseTypes.SQL
           });
-          application.setEntityNames(['valid']);
+          application.addEntityNames(['valid']);
           jdlObject.addApplication(application);
           jdlObject.addEntity(
             new JDLEntity({
@@ -334,7 +334,7 @@ describe('BusinessErrorChecker', () => {
             applicationType: ApplicationTypes.MONOLITH,
             databaseType: DatabaseTypes.SQL
           });
-          application.setEntityNames(['Valid']);
+          application.addEntityNames(['Valid']);
           jdlObject.addApplication(application);
           const validEntity = new JDLEntity({
             name: 'Valid'
@@ -544,17 +544,17 @@ describe('BusinessErrorChecker', () => {
           applicationType: ApplicationTypes.MICROSERVICE,
           baseName: 'app1'
         });
-        application1.setEntityNames(['A', 'B']);
+        application1.addEntityNames(['A', 'B']);
         const application2 = createJDLApplication({
           applicationType: ApplicationTypes.MICROSERVICE,
           baseName: 'app2'
         });
-        application2.setEntityNames(['B', 'C']);
+        application2.addEntityNames(['B', 'C']);
         const application3 = createJDLApplication({
           applicationType: ApplicationTypes.MICROSERVICE,
           baseName: 'app3'
         });
-        application3.setEntityNames(['A', 'B', 'C']);
+        application3.addEntityNames(['A', 'B', 'C']);
         jdlObject.addApplication(application1);
         jdlObject.addApplication(application2);
         jdlObject.addApplication(application3);
@@ -627,7 +627,7 @@ describe('BusinessErrorChecker', () => {
             applicationType: ApplicationTypes.MONOLITH,
             databaseType: DatabaseTypes.CASSANDRA
           });
-          application.setEntityNames(['A']);
+          application.addEntityNames(['A']);
           jdlObject.addApplication(application);
           jdlObject.addEntity(
             new JDLEntity({

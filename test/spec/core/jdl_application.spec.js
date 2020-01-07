@@ -46,8 +46,7 @@ describe('JDLApplication', () => {
         });
 
         it('should add it', () => {
-          expect(entityNames).to.have.lengthOf(1);
-          expect(entityNames).to.include('A');
+          expect(entityNames.size()).to.equal(1);
         });
       });
       context('that has already been added', () => {
@@ -60,41 +59,38 @@ describe('JDLApplication', () => {
           entityNames = application.getEntityNames();
         });
 
-        it('should add it', () => {
-          expect(entityNames).to.have.lengthOf(1);
-          expect(entityNames).to.include('A');
+        it('should not add it', () => {
+          expect(entityNames.size()).to.equal(1);
         });
       });
     });
   });
   describe('getEntityNames', () => {
     context('when there is no entity', () => {
-      let result;
+      let entityNames;
 
       before(() => {
         const jdlApplication = new JDLApplication();
-        result = jdlApplication.getEntityNames();
+        entityNames = jdlApplication.getEntityNames();
       });
 
       it('should return an empty list', () => {
-        expect(result.size).to.equal(0);
+        expect(entityNames.size()).to.equal(0);
       });
     });
     context('when there are entities', () => {
-      let result;
+      let entityNames;
 
       before(() => {
         const jdlApplication = new JDLApplication({
           config: {},
           entityNames: ['A', 'B']
         });
-        result = jdlApplication.getEntityNames();
+        entityNames = jdlApplication.getEntityNames();
       });
 
       it('should return the entity list', () => {
-        expect(result).to.have.lengthOf(2);
-        expect(result).to.include('A');
-        expect(result).to.include('B');
+        expect(entityNames.size()).to.equal(2);
       });
     });
   });
@@ -124,39 +120,41 @@ describe('JDLApplication', () => {
       });
     });
   });
-  describe('setEntityNames', () => {
+  describe('addEntityNames', () => {
     context('when not passing entity names', () => {
-      let application;
+      let entityNames;
 
       before(() => {
-        application = new JDLApplication({
+        const application = new JDLApplication({
           config: {
             baseName: 'toto'
           },
           entityNames: ['A', 'B']
         });
-        application.setEntityNames();
+        application.addEntityNames();
+        entityNames = application.getEntityNames();
       });
 
       it('should not alter the entity names', () => {
-        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B']));
+        expect(entityNames.size()).to.equal(2);
       });
     });
     context('when passing an empty list', () => {
-      let application;
+      let entityNames;
 
       before(() => {
-        application = new JDLApplication({
+        const application = new JDLApplication({
           config: {
             baseName: 'toto'
           },
           entityNames: ['A', 'B']
         });
-        application.setEntityNames([]);
+        application.addEntityNames([]);
+        entityNames = application.getEntityNames();
       });
 
       it('should not alter the entity names', () => {
-        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B']));
+        expect(entityNames.size()).to.equal(2);
       });
     });
     context('when passing entity names', () => {
@@ -169,11 +167,11 @@ describe('JDLApplication', () => {
           },
           entityNames: ['A', 'B']
         });
-        application.setEntityNames(['B', 'C']);
+        application.addEntityNames(['B', 'C']);
       });
 
       it('should update the entity names', () => {
-        expect(application.getEntityNames()).to.deep.equal(new Set(['A', 'B', 'C']));
+        expect(application.getEntityNames().size()).to.equal(3);
       });
     });
   });

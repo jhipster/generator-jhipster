@@ -150,7 +150,7 @@ describe('ApplicationConverter', () => {
             applicationType: MONOLITH,
             baseName: 'mono'
           });
-          application.setEntityNames(['A', 'B']);
+          application.addEntityNames(['A', 'B']);
           expectedApplication = [application];
         });
 
@@ -182,7 +182,7 @@ describe('ApplicationConverter', () => {
             applicationType: MONOLITH,
             baseName: 'mono'
           });
-          application.setEntityNames(['B']);
+          application.addEntityNames(['B']);
           expectedApplication = [application];
         });
 

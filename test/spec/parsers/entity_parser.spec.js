@@ -625,7 +625,7 @@ describe('EntityParser', () => {
             applicationType: ApplicationTypes.MICROSERVICE,
             baseName: 'MyApp'
           });
-          application.setEntityNames(['A']);
+          application.addEntityNames(['A']);
           const entityA = new JDLEntity({ name: 'A' });
           const entityB = new JDLEntity({ name: 'B' });
           const jdlObject = new ValidatedJDLObject();

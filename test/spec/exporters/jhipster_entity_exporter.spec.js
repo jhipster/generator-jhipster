@@ -713,7 +713,7 @@ describe('JHipsterEntityExporter', () => {
             applicationType: ApplicationTypes.MONOLITH,
             baseName: 'toto'
           });
-          application.setEntityNames(['A']);
+          application.addEntityNames(['A']);
           JHipsterEntityExporter.exportEntitiesInApplications({
             entities: { A: entity },
             applications: {
@@ -786,12 +786,12 @@ describe('JHipsterEntityExporter', () => {
             applicationType: ApplicationTypes.MONOLITH,
             baseName: 'toto'
           });
-          application1.setEntityNames(['A']);
+          application1.addEntityNames(['A']);
           application2 = createJDLApplication({
             applicationType: ApplicationTypes.MONOLITH,
             baseName: 'titi'
           });
-          application2.setEntityNames(['B']);
+          application2.addEntityNames(['B']);
           returned = JHipsterEntityExporter.exportEntitiesInApplications({
             entities,
             applications: {
