@@ -63,6 +63,7 @@
     "@angular/cli": "8.3.20",
     "@angular/compiler-cli": "8.2.14",
     "@ngtools/webpack": "8.3.20",
+    "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.7",
     "@types/chai-string": "1.4.2",
@@ -72,15 +73,15 @@
     "@types/mocha": "5.2.7",
     <%_ } _%>
     "@types/node": "12.12.17",
+    <%_ if (protractorTests) { _%>
+    "@types/selenium-webdriver": "4.0.5",
+    <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     "@types/sockjs-client": "1.1.1",
     <%_ } _%>
     "@typescript-eslint/eslint-plugin": "2.11.0",
     "@typescript-eslint/eslint-plugin-tslint": "2.11.0",
     "@typescript-eslint/parser": "2.11.0",
-    <%_ if (protractorTests) { _%>
-    "@types/selenium-webdriver": "4.0.5",
-    <%_ } _%>
     "angular2-template-loader": "0.6.2",
     "autoprefixer": "9.7.3",
     "base-href-webpack-plugin": "2.0.0",
@@ -151,7 +152,6 @@
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
-    "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0",
