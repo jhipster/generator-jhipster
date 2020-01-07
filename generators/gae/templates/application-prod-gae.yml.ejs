@@ -29,6 +29,10 @@
 # ===================================================================
 server:
     port: ${PORT}
+management:
+    health:
+        diskspace:
+            enabled: false
 <%_ if (gaeCloudSQLInstanceNeeded === 'Y') { _%>
 spring:
     <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
