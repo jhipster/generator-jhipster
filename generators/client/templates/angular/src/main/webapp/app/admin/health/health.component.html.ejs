@@ -19,10 +19,12 @@
 <div>
     <h2>
         <span id="health-page-heading" jhiTranslate="health.title">Health Checks</span>
+
         <button class="btn btn-primary float-right" (click)="refresh()">
             <fa-icon [icon]="'sync'"></fa-icon> <span jhiTranslate="health.refresh.button">Refresh</span>
         </button>
     </h2>
+
     <div class="table-responsive">
         <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
             <thead>
@@ -34,9 +36,15 @@
             </thead>
             <tbody *ngIf="health">
                 <tr *ngFor="let componentHealth of health.components | keys">
-                    <td><% if (enableTranslation) { %>{{'health.indicator.' + componentHealth.key | translate}}<% } else { %><span class="text-capitalize">{{ componentHealth.key }}</span><% } %></td>
+                    <td>
+                        <%_ if (enableTranslation) { _%>
+                        {{ 'health.indicator.' + componentHealth.key | translate }}
+                        <%_ } else { _%>
+                        <span class="text-capitalize">{{ componentHealth.key }}</span>
+                        <%_ } _%>
+                    </td>
                     <td class="text-center">
-                        <span class="badge" [ngClass]="getBadgeClass(componentHealth.value.status)" jhiTranslate="{{'health.status.' + componentHealth.value.status}}">
+                        <span class="badge" [ngClass]="getBadgeClass(componentHealth.value.status)" jhiTranslate="{{ 'health.status.' + componentHealth.value.status }}">
                             {{ componentHealth.value.status }}
                         </span>
                     </td>

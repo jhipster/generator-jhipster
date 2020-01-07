@@ -34,7 +34,7 @@ import { TrackerService } from '../tracker/tracker.service';
 <%_ } _%>
 
 @Injectable({providedIn: 'root'})
-export class AccountService  {
+export class AccountService {
     private userIdentity: Account | null = null;
     private authenticationState = new ReplaySubject<Account | null>(1);
     private accountCache$?: Observable<Account | null>;
