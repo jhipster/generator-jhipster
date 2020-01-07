@@ -29,15 +29,28 @@ module.exports = {
 
 function writeFiles() {
     return {
+        addOpenAPIFilesAndTemplates() {
+            this.copy('.openapi-generator-ignore', '.openapi-generator-ignore');
+
+            if (_.map(this.clientsToGenerate, 'generatorName').includes('spring')) {
+                this.copy(
+                    'swagger-codegen/libraries/spring-cloud/apiClient.mustache',
+                    'swagger-codegen/libraries/spring-cloud/apiClient.mustache'
+                );
+
+                this.copy(
+                    'swagger-codegen/libraries/spring-cloud/clientConfiguration.mustache',
+                    'swagger-codegen/libraries/spring-cloud/clientConfiguration.mustache',
+                );
+            }
+        },
+
         callOpenApiGenerator() {
             this.baseName = this.config.get('baseName');
             this.authenticationType = this.config.get('authenticationType');
             this.packageName = this.config.get('packageName');
-            this.clientPackageManager = this.config.get('clientPackageManager');
             this.packageFolder = this.config.get('packageFolder');
             this.buildTool = this.config.get('buildTool');
-
-            this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
 
             if (Object.keys(this.clientsToGenerate).length === 0) {
                 this.log('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
@@ -49,11 +62,9 @@ function writeFiles() {
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
 
                 // using openapi jar file since so this section can be tested
-                const jarPath = path.resolve('node_modules', '@openapitools', 'openapi-generator-cli', 'bin', 'openapi-generator.jar');
-                let JAVA_OPTS;
-                let command;
+                let openApiCmd;
                 if (generatorName === 'spring') {
-                    this.log(chalk.green(`\n\nGenerating java client code for client ${cliName} (${inputSpec})`));
+                    this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
                     const baseCliPackage = `${this.packageName}.client.`;
                     const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
                     const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
@@ -68,35 +79,21 @@ function writeFiles() {
                     cleanOldDirectory(snakeCaseCliPackage);
                     cleanOldDirectory(cliPackage);
 
-                    JAVA_OPTS = ' -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
-
-                    let params =
-                        '  generate -g spring ' +
-                        ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} ` +
+                    openApiCmd =
+                        'openapi-generator generate -g spring ' +
+                        '-Dmodels -Dapis -DsupportingFiles ' +
+                        ' -t swagger-codegen/libraries/spring-cloud ' +
                         ' --library spring-cloud ' +
                         ` -i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
                         ` -DbasePackage=${this.packageName}.client,configPackage=${cliPackage},` +
-                        `title=${_.camelCase(cliName)}`;
+                        `title=${_.camelCase(cliName)} --skip-validate-spec`;
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
-                        params += ' --additional-properties ribbon=true';
+                        openApiCmd += ' --additional-properties ribbon=true';
                     }
-
-                    command = `java ${JAVA_OPTS} -jar ${jarPath} ${params}`;
                 }
-                this.log(`\n${command}`);
-
-                const done = this.async();
-                shelljs.exec(command, { silent: this.silent }, (code, msg, err) => {
-                    if (code === 0) {
-                        this.success(`Succesfully generated ${cliName} ${generatorName} client`);
-                        done();
-                    } else {
-                        this.error(`Something went wrong while generating ${cliName} ${generatorName} client: ${msg} ${err}`);
-                        done();
-                    }
-                });
+                this.addNpmScript(`openapi-client:${cliName}`, `${openApiCmd}`);
             });
         },
 
@@ -160,6 +157,7 @@ function writeFiles() {
                 return;
             }
 
+            this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
             const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
             if (this.applicationType !== 'microservice' || !['uaa', 'jwt'].includes(this.authenticationType)) {
@@ -177,6 +175,7 @@ function writeFiles() {
                 return;
             }
 
+            this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
             const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
             this.rewriteFile(
