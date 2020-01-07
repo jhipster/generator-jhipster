@@ -42,6 +42,7 @@ logging:
 
 eureka:
     instance:
+        instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
         prefer-ip-address: true
     client:
         service-url:
