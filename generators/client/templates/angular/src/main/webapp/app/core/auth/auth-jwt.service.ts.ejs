@@ -29,7 +29,7 @@ import { Login } from 'app/core/login/login.model';
 
 <%_ if (authenticationType !== 'uaa') { _%>
 type JwtToken = {
-  id_token: string;
+    id_token: string;
 };
 <%_ } else { _%>
 export const LOGOUT_URL = SERVER_API_URL + 'auth/logout';
