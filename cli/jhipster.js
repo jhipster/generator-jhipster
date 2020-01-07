@@ -26,7 +26,7 @@ const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
 
 if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
-    logger.error(
+    logger.fatal(
         `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`
     );
 }
