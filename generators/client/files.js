@@ -164,6 +164,8 @@ const vueFiles = {
                 'core/ribbon/ribbon.vue',
                 'core/ribbon/ribbon.component.ts',
                 'shared/date/filters.ts',
+                'shared/sort/jhi-sort-indicator.component.ts',
+                'shared/sort/jhi-sort-indicator.vue',
                 'shared/sort/sorts.ts',
                 'shared/alert/alert.service.ts',
                 'shared/alert/alert.mixin.ts',
