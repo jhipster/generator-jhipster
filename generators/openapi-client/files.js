@@ -40,7 +40,7 @@ function writeFiles() {
 
                 this.copy(
                     'swagger-codegen/libraries/spring-cloud/clientConfiguration.mustache',
-                    'swagger-codegen/libraries/spring-cloud/clientConfiguration.mustache',
+                    'swagger-codegen/libraries/spring-cloud/clientConfiguration.mustache'
                 );
             }
         },
