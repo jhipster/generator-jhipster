@@ -34,7 +34,7 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
     imports: [
         HttpClientModule,
         CookieModule.forRoot(),
-        NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-'}),
+        NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
             alertAsToast: false,
@@ -69,7 +69,7 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
             useValue: '<%= localeId %>'
             <%_ } _%>
         },
-        { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter},
+        { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter },
         <%_ if (enableI18nRTL) { _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
@@ -102,7 +102,7 @@ export class <%= angularXAppName %>CoreModule {
     constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
         registerLocaleData(locale);
         iconLibrary.addIcons(...fontAwesomeIcons);
-        dpConfig.minDate = {year: moment().year() - 100, month: 1, day: 1};
+        dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
         <%_ if (enableTranslation) { _%>
         languageService.init();
         <%_ } _%>

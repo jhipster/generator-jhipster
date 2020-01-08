@@ -55,7 +55,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new <%= entityAngularName %>(<%- tsKeyId %>);
-                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({body: entity})));
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.updateForm(entity);
                     // WHEN
                     comp.save();
@@ -71,7 +71,7 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new <%= entityAngularName %>();
-                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({body: entity})));
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
                     comp.updateForm(entity);
                     // WHEN
                     comp.save();

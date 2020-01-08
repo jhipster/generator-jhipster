@@ -23,7 +23,8 @@ import { NavBarPage, SignInPage<%_ if (!skipUserManagement) { _%>, PasswordPage,
 let elementGetter = `getText()`;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
-} _%>
+}
+_%>
 
 const expect = chai.expect;
 

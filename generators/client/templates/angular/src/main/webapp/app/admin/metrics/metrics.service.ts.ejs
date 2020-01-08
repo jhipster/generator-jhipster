@@ -27,7 +27,7 @@ export type Metrics = { [key in MetricsKey]: any };
 export type Thread = any;
 export type ThreadDump = { threads: Thread[] };
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class MetricsService {
     constructor(private http: HttpClient) {}
 

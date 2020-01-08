@@ -38,14 +38,14 @@ describe('Component Tests', () => {
         <%_ if (fieldsContainBlob) { _%>
         let dataUtils: JhiDataUtils;
         <%_ } _%>
-        const route = ({data: of({<%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>)})} as any) as ActivatedRoute;
+        const route = ({ data: of({ <%= entityInstance %>: new <%= entityAngularName %>(<%- tsKeyId %>) }) } as any) as ActivatedRoute;
 
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [<%= angularXAppName %>TestModule],
                 declarations: [<%= entityAngularName %>DetailComponent],
                 providers: [
-                    {provide: ActivatedRoute, useValue: route}
+                    { provide: ActivatedRoute, useValue: route }
                 ]
             })
             .overrideTemplate(<%= entityAngularName %>DetailComponent, '')
@@ -63,7 +63,7 @@ describe('Component Tests', () => {
                 comp.ngOnInit();
 
                 // THEN
-                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+                expect(comp.<%= entityInstance %>).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
             });
         });
 

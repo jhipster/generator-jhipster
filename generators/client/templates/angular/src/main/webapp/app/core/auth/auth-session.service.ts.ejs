@@ -32,7 +32,7 @@ import { Login } from 'app/core/login/login.model';
 export const LOGOUT_URL = SERVER_API_URL + 'api/logout';
 <%_ } _%>
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
     constructor(
         private http: HttpClient

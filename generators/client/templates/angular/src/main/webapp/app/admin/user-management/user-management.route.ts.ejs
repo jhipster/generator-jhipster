@@ -27,7 +27,7 @@ import { UserManagementComponent } from './user-management.component';
 import { UserManagementDetailComponent } from './user-management-detail.component';
 import { UserManagementUpdateComponent } from './user-management-update.component';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserManagementResolve implements Resolve<IUser> {
     constructor(private service: UserService) {}
 
@@ -45,7 +45,7 @@ export const userManagementRoute: Routes = [
         path: '',
         component: UserManagementComponent,
         resolve: {
-            'pagingParams': JhiResolvePagingParams
+            pagingParams: JhiResolvePagingParams
         },
         data: {
             defaultSort: 'id,asc'

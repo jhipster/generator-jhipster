@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 <%_ if (authenticationType !== 'uaa') { _%>
-import {map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 <%_ } _%>
 
@@ -35,7 +35,7 @@ type JwtToken = {
 export const LOGOUT_URL = SERVER_API_URL + 'auth/logout';
 <%_ } _%>
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
     constructor(
         private http: HttpClient,

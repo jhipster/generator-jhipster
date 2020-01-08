@@ -41,7 +41,7 @@ import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileN
 type EntityResponseType = HttpResponse<I<%= entityAngularName %>>;
 type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Service {
     public resourceUrl = SERVER_API_URL + '<% if (applicationType === 'gateway' && locals.microserviceName) { %>services/<%= microserviceName.toLowerCase() %>/<% } %>api/<%= entityApiUrl %>';
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -73,7 +73,7 @@ export class <%= entityAngularName %>Service {
     <%_ } _%>
 
     find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
-        return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response'})
+        return this.http.get<I<%= entityAngularName %>>(`${this.resourceUrl}/${id}`, { observe: 'response' })
             <% if (fieldsContainDate) { %>.pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))<% } %>;
     }
 
@@ -85,7 +85,7 @@ export class <%= entityAngularName %>Service {
 
     <%_ if (!readOnly) { _%>
     delete(id: <%= tsKeyType %>): Observable<HttpResponse<{}>> {
-        return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response'});
+        return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
     <%_ } _%>
 

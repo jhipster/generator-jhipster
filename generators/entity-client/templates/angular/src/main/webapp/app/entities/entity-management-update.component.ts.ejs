@@ -166,7 +166,7 @@ _%>
     ) {}
 
     ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (!<%= entityInstance %>.id) {
                 const today = moment().startOf('day');
