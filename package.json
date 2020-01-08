@@ -84,7 +84,7 @@
         "yo": "3.1.1"
     },
     "devDependencies": {
-        "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
+        "@openapitools/openapi-generator-cli": "1.0.8-4.2.2",
         "chai": "4.2.0",
         "ejs-lint": "0.3.0",
         "eslint": "6.2.2",

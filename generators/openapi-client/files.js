@@ -81,12 +81,12 @@ function writeFiles() {
 
                     openApiCmd =
                         'openapi-generator generate -g spring ' +
-                        '-Dmodels -Dapis -DsupportingFiles ' +
-                        ' -t .openapi-generator/libraries/spring-cloud ' +
-                        ' --library spring-cloud ' +
-                        ` -i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api` +
-                        ` --model-package ${cliPackage}.model` +
-                        ` -DbasePackage=${this.packageName}.client,configPackage=${cliPackage},` +
+                        '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
+                        '-t .openapi-generator/libraries/spring-cloud ' +
+                        '--library spring-cloud ' +
+                        `-i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api ` +
+                        `--model-package ${cliPackage}.model ` +
+                        `-p basePackage=${this.packageName}.client,configPackage=${cliPackage},` +
                         `title=${_.camelCase(cliName)} --skip-validate-spec`;
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
