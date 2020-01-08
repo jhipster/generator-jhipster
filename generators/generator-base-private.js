@@ -1074,17 +1074,13 @@ module.exports = class extends Generator {
                                 }
                             });`;
                 } else {
-                    rxjsMapIsUsed = true;
                     variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
                     if (variableName === entityInstance) {
                         variableName += 'Collection';
                     }
                     query = `
                         this.${relationship.otherEntityName}Service.query()
-                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body || [];
-                            }))
-                            .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => this.${variableName} = resBody);`;
+                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
                 }
             }
             if (variableName && !this.contains(queries, query)) {
