@@ -84,6 +84,7 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>ComponentsPage.getTitle())
             .to.eq('<%= entityClassPluralHumanized %>');
         <%_ } _%>
+        await browser.wait(ec.or(ec.visibilityOf(<%= entityInstance %>ComponentsPage.entities), ec.visibilityOf(<%= entityInstance %>ComponentsPage.noResult)), 1000);
     });
 
 <%_ if (!readOnly) { _%>

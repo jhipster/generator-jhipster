@@ -93,7 +93,7 @@ jobs:
                       protractor: 1
                     - app-type: ngx-gradle-mariadb-oauth2-infinispan
                       entity: sql
-                      profile: prod
+                      profile: dev
                       war: 0
                       protractor: 1
                     - app-type: ngx-gradle-mongodb-kafka-cucumber

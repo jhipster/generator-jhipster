@@ -47,8 +47,8 @@ for (idx in relationships) {
     if ( relationships[idx].useJPADerivedIdentifier === true ) {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         if (otherEntityNameCapitalized === 'User') {
-            // there are only 4 user records by default
-            numberOfRows = 4;
+            // Only few user records are generated
+            numberOfRows = (authenticationType === 'oauth2') ? 2 : 4;
         }
         break;
     }
