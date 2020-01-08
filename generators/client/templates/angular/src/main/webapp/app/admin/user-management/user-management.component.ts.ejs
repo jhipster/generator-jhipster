@@ -134,8 +134,9 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         this.userService.query(<% if (databaseType !== 'cassandra') { %>{
             page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()}<% } %>).subscribe(
-                (res: HttpResponse<User[]>) => this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>)
+            sort: this.sort()
+        }<% } %>).subscribe(
+            (res: HttpResponse<User[]>) => this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>)
         );
     }
 

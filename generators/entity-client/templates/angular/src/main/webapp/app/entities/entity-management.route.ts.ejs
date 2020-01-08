@@ -34,7 +34,7 @@ import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 <%_ } _%>
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngularName %>> {
     constructor(private service: <%= entityAngularName %>Service, private router: Router) {}
 
@@ -62,7 +62,7 @@ export const <%= entityInstance %>Route: Routes = [
         component: <%= entityAngularName %>Component,
         <%_ if (pagination === 'pagination') { _%>
         resolve: {
-            'pagingParams': JhiResolvePagingParams
+            pagingParams: JhiResolvePagingParams
         },
         <%_ } _%>
         data: {

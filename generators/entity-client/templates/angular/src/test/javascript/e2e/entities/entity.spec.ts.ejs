@@ -29,7 +29,8 @@ for (let relationship of relationships) {
         closeBlockComment = ` */`;
         break;
     }
-} _%>
+}
+_%>
 import { browser, ExpectedConditions as ec <% if (!readOnly) { %><%= openBlockComment %><% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %>, promise<%= closeBlockComment %><% } %> } from 'protractor';
 import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
 

@@ -32,7 +32,7 @@ import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } _%>
 import { TrackerActivity } from './tracker-activity.model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class TrackerService {
     private stompClient: Stomp.Client | null = null;
     private routerSubscription: Subscription | null = null;
@@ -135,7 +135,7 @@ export class TrackerService {
         if (this.stompClient && this.stompClient.connected) {
             this.stompClient.send(
                 '/topic/activity', // destination
-                JSON.stringify({'page': this.router.routerState.snapshot.url}), // body
+                JSON.stringify({ page: this.router.routerState.snapshot.url }), // body
                 {} // header
             );
         }

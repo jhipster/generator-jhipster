@@ -55,7 +55,7 @@ describe('Service Tests', () => {
                 const req = httpMock.expectOne({ method: 'POST' });
                 const resourceUrl = SERVER_API_URL + 'management/loggers/main';
                 expect(req.request.url).toEqual(resourceUrl);
-                expect(req.request.body).toEqual({configuredLevel: 'ERROR'});
+                expect(req.request.body).toEqual({ configuredLevel: 'ERROR' });
             });
         });
     });

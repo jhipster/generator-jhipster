@@ -38,7 +38,7 @@ import { Logout } from './logout.model';
 import { Login } from './login.model';
 <%_ } _%>
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class LoginService {
     constructor(
         <%_ if (authenticationType === 'oauth2') { _%>
