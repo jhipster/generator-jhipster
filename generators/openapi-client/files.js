@@ -34,13 +34,13 @@ function writeFiles() {
 
             if (_.map(this.clientsToGenerate, 'generatorName').includes('spring')) {
                 this.copy(
-                    'swagger-codegen/libraries/spring-cloud/apiClient.mustache',
-                    'swagger-codegen/libraries/spring-cloud/apiClient.mustache'
+                    'openapi-generator/libraries/spring-cloud/apiClient.mustache',
+                    '.openapi-generator/libraries/spring-cloud/apiClient.mustache'
                 );
 
                 this.copy(
-                    'swagger-codegen/libraries/spring-cloud/clientConfiguration.mustache',
-                    'swagger-codegen/libraries/spring-cloud/clientConfiguration.mustache'
+                    'openapi-generator/libraries/spring-cloud/clientConfiguration.mustache',
+                    '.openapi-generator/libraries/spring-cloud/clientConfiguration.mustache'
                 );
             }
         },
@@ -82,7 +82,7 @@ function writeFiles() {
                     openApiCmd =
                         'openapi-generator generate -g spring ' +
                         '-Dmodels -Dapis -DsupportingFiles ' +
-                        ' -t swagger-codegen/libraries/spring-cloud ' +
+                        ' -t .openapi-generator/libraries/spring-cloud ' +
                         ' --library spring-cloud ' +
                         ` -i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
