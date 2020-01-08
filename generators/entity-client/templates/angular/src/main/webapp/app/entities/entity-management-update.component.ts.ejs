@@ -167,22 +167,23 @@ _%>
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(({<%= entityInstance %>}) => {
-            this.updateForm(<%= entityInstance %>);
-
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (!<%= entityInstance %>.id) {
+                const today = moment().startOf('day');
             <%_ } _%>
             <%_ for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
                 const fieldType = fields[idx].fieldType;
             _%>
                 <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-                this.<%= fieldName %>SetDefaultValue();
+                <%= entityInstance %>.<%= fieldName %> = today;
                 <%_ } _%>
             <%_ } _%>
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             }
             <%_ } _%>
+
+            this.updateForm(<%= entityInstance %>);
 
             <%_ for (idx in queries) { _%>
             <%- queries[idx] %>
@@ -309,22 +310,6 @@ _%>
     <%_ } _%>
         };
     }
-
-<%_ for (idx in fields) {
-    const fieldName = fields[idx].fieldName;
-    const fieldType = fields[idx].fieldType;
-_%>
-
-    <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
-    private <%= fieldName %>SetDefaultValue(): void {
-        const field = this.editForm.get('<%= fieldName %>');
-        if (field && !field.value) {
-            const today = moment().startOf('day').format(DATE_TIME_FORMAT);
-            field.setValue(today);
-        }
-    }
-    <%_ } _%>
-<%_ } _%>
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
         result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
