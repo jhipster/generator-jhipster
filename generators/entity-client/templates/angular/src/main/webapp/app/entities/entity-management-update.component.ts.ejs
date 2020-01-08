@@ -276,7 +276,7 @@ _%>
 
     private createFromForm(): I<%= entityAngularName %> {
         return {
-                       ...new <%= entityAngularName %>(),
+            ...new <%= entityAngularName %>(),
             id: this.editForm.get(['id'])!.value,
     <%_ for (idx in fields) {
         const fieldName = fields[idx].fieldName;

@@ -23,16 +23,16 @@ import { MockRouter } from '../../../helpers/mock-route.service';
 import { MockStateStorageService } from '../../../helpers/mock-state-storage.service';
 
 function accountWithAuthorities(authorities: string[]): Account {
-  return {
-    activated: true,
-    authorities,
-    email: '',
-    firstName: '',
-    langKey: '',
-    lastName: '',
-    login: '',
-    imageUrl: ''
-  };
+    return {
+        activated: true,
+        authorities,
+        email: '',
+        firstName: '',
+        langKey: '',
+        lastName: '',
+        login: '',
+        imageUrl: ''
+    };
 }
 
 describe('Service Tests', () => {
@@ -44,7 +44,7 @@ describe('Service Tests', () => {
         <%_ if (websocket === 'spring-websocket') { _%>
         let trackerService: TrackerService;
         <%_ } _%>
-    
+
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [

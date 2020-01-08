@@ -91,7 +91,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 {
                     loader: 'cache-loader',
                     options: {
-                      cacheDirectory: path.resolve('<%= BUILD_DIR %>cache-loader')
+                        cacheDirectory: path.resolve('<%= BUILD_DIR %>cache-loader')
                     }
                 },
                 {
