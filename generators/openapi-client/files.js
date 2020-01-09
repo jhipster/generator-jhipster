@@ -21,7 +21,7 @@ const path = require('path');
 const shelljs = require('shelljs');
 const _ = require('lodash');
 const chalk = require('chalk');
-const jhipsterConstants = require('../generator-constants');
+const constants = require('../generator-constants');
 
 module.exports = {
     writeFiles
@@ -46,39 +46,27 @@ function writeFiles() {
             }
 
             Object.keys(this.clientsToGenerate).forEach(cliName => {
+                removeClientFiles(cliName);
                 const inputSpec = this.clientsToGenerate[cliName].spec;
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
 
-                // using openapi jar file since so this section can be tested
+                const baseCliPackage = `${this.packageName}.client.`;
+                const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
                 let openApiCmd;
                 if (generatorName === 'spring') {
                     this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
-                    const baseCliPackage = `${this.packageName}.client.`;
-                    const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
-                    const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
-                    const cleanOldDirectory = cliPackage => {
-                        const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
-                        if (shelljs.test('-d', clientPackageLocation)) {
-                            this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
-                            shelljs.rm('-rf', clientPackageLocation);
-                        }
-                    };
-
-                    cleanOldDirectory(snakeCaseCliPackage);
-                    cleanOldDirectory(cliPackage);
-
                     openApiCmd =
                         'openapi-generator generate ' +
                         '-g spring ' +
                         `-i ${inputSpec} ` +
                         '-p library=spring-cloud ' +
                         '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
-                        `-p artifactId=${_.camelCase(cliName)} ` +
                         `-p apiPackage=${cliPackage}.api ` +
                         `-p modelPackage=${cliPackage}.model ` +
                         `-p basePackage=${this.packageName}.client ` +
                         `-p configPackage=${cliPackage} ` +
                         `-p title=${_.camelCase(cliName)} ` +
+                        `-p artifactId=${_.camelCase(cliName)} ` +
                         '--skip-validate-spec';
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
@@ -128,11 +116,11 @@ function writeFiles() {
                  * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
                  */
                 if (this.buildTool === 'maven') {
-                    this.addMavenProperty('jackson-databind-nullable.version', jhipsterConstants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    this.addMavenProperty('jackson-databind-nullable.version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
                     // eslint-disable-next-line no-template-curly-in-string
                     this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
                 } else if (this.buildTool === 'gradle') {
-                    this.addGradleProperty('jackson_databind_nullable_version', jhipsterConstants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    this.addGradleProperty('jackson_databind_nullable_version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
                     this.addGradleDependency(
                         'compile',
                         'org.openapitools',
@@ -149,7 +137,7 @@ function writeFiles() {
                 return;
             }
 
-            this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
+            this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
             const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
             if (this.applicationType !== 'microservice' || !['uaa', 'jwt'].includes(this.authenticationType)) {
@@ -167,7 +155,7 @@ function writeFiles() {
                 return;
             }
 
-            this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
+            this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
             const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
             this.rewriteFile(
@@ -184,4 +172,19 @@ function writeFiles() {
             this.rewriteFile(mainClassFile, '@SpringBootApplication', componentScan);
         }
     };
+}
+
+function removeClientFiles(cliName) {
+    const baseCliPackage = `${this.packageName}.client.`;
+    const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
+    const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
+    removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...cliPackage.split('.')));
+    removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...snakeCaseCliPackage.split('.')));
+}
+
+function removeFolder(folder) {
+    if (shelljs.test('-d', folder)) {
+        this.log(`Removing the folder - ${folder}`);
+        shelljs.rm('-rf', folder);
+    }
 }
