@@ -29,20 +29,8 @@ module.exports = {
 
 function writeFiles() {
     return {
-        addOpenAPIFilesAndTemplates() {
+        addOpenAPIIgnoreFile() {
             this.copy('.openapi-generator-ignore', '.openapi-generator-ignore');
-
-            if (_.map(this.clientsToGenerate, 'generatorName').includes('spring')) {
-                this.copy(
-                    'openapi-generator/libraries/spring-cloud/apiClient.mustache',
-                    '.openapi-generator/libraries/spring-cloud/apiClient.mustache'
-                );
-
-                this.copy(
-                    'openapi-generator/libraries/spring-cloud/clientConfiguration.mustache',
-                    '.openapi-generator/libraries/spring-cloud/clientConfiguration.mustache'
-                );
-            }
         },
 
         callOpenApiGenerator() {
@@ -82,7 +70,6 @@ function writeFiles() {
                     openApiCmd =
                         'openapi-generator generate -g spring ' +
                         '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
-                        '-t .openapi-generator/libraries/spring-cloud ' +
                         '--library spring-cloud ' +
                         `-i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api ` +
                         `--model-package ${cliPackage}.model ` +
@@ -181,18 +168,15 @@ function writeFiles() {
             this.rewriteFile(
                 mainClassFile,
                 'import org.springframework.core.env.Environment;',
-                'import org.springframework.context.annotation.ComponentScan;'
+                'import org.springframework.context.annotation.ComponentScan;\n' +
+                    'import org.springframework.context.annotation.FilterType;'
             );
 
             const componentScan =
-                `${'@ComponentScan( excludeFilters = {\n    @ComponentScan.Filter('}${this.packageName}` +
-                '.client.ExcludeFromComponentScan.class)\n})';
+                '@ComponentScan( excludeFilters = {\n' +
+                '   @ComponentScan.Filter(type = FilterType.REGEX, ' +
+                `pattern = "${this.packageName}.client.*.ClientConfiguration")\n})`;
             this.rewriteFile(mainClassFile, '@SpringBootApplication', componentScan);
-
-            this.template(
-                'src/main/java/package/client/_ExcludeFromComponentScan.java',
-                `${this.javaDir}/client/ExcludeFromComponentScan.java`
-            );
         }
     };
 }
