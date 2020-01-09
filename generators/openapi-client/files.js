@@ -68,13 +68,18 @@ function writeFiles() {
                     cleanOldDirectory(cliPackage);
 
                     openApiCmd =
-                        'openapi-generator generate -g spring ' +
+                        'openapi-generator generate ' +
+                        '-g spring ' +
+                        `-i ${inputSpec} ` +
+                        '-p library=spring-cloud ' +
                         '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
-                        '--library spring-cloud ' +
-                        `-i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api ` +
-                        `--model-package ${cliPackage}.model ` +
-                        `-p basePackage=${this.packageName}.client,configPackage=${cliPackage},` +
-                        `title=${_.camelCase(cliName)} --skip-validate-spec`;
+                        `-p artifactId=${_.camelCase(cliName)} ` +
+                        `-p apiPackage=${cliPackage}.api ` +
+                        `-p modelPackage=${cliPackage}.model ` +
+                        `-p basePackage=${this.packageName}.client ` +
+                        `-p configPackage=${cliPackage} ` +
+                        `-p title=${_.camelCase(cliName)} ` +
+                        '--skip-validate-spec';
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
                         openApiCmd += ' --additional-properties ribbon=true';
