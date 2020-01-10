@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%#	Returns a string of all angular validators required for the input field. -%>
+<%# Returns a string of all angular validators required for the input field. -%>
 <%_
 const field = fields[idx];
 let result = '';
 
 if (field.fieldValidate === true) {
-	const rules = field.fieldValidateRules;
-	const validators = [];
+    const rules = field.fieldValidateRules;
+    const validators = [];
 
     if (rules.includes('required') && field.fieldType !== 'Boolean') {
         validators.push('required');
