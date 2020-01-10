@@ -42,9 +42,9 @@ public class OAuth2TokenServicesConfiguration {
 <%_ if (applicationType === 'microservice' && cacheProvider !== 'no') { _%>
     private final ResourceServerProperties resourceServerProperties;
 
-	public OAuth2TokenServicesConfiguration(ResourceServerProperties resourceServerProperties) {
-		this.resourceServerProperties = resourceServerProperties;
-	}
+    public OAuth2TokenServicesConfiguration(ResourceServerProperties resourceServerProperties) {
+        this.resourceServerProperties = resourceServerProperties;
+    }
 
     @Bean
     public UserInfoTokenServices userInfoTokenServices(PrincipalExtractor principalExtractor, AuthoritiesExtractor authoritiesExtractor) {
