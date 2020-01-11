@@ -19,18 +19,15 @@
 const needleClient = require('./needle-client');
 const constants = require('../../generator-constants');
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 
 module.exports = class extends needleClient {
-    copyExternalAssets(sourceFolder, targetFolder) {
+    copyExternalAssets(source, target) {
         const errorMessage = 'Resource path not added to JHipster app.';
-        const from = `${CLIENT_MAIN_SRC_DIR}content/${sourceFolder}/`;
-        const to = `content/${targetFolder}/`;
         const webpackDevPath = `${CLIENT_WEBPACK_DIR}/webpack.common.js`;
         let assetBlock = '';
-        if (sourceFolder && targetFolder) {
-            assetBlock = `{ from: './${from}', to: '${to}' },`;
+        if (source && target) {
+            assetBlock = `{ from: '${source}', to: '${target}' },`;
         }
         const rewriteFileModel = this.generateFileModel(webpackDevPath, 'jhipster-needle-add-assets-to-webpack', assetBlock);
 
