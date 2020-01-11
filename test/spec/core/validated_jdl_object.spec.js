@@ -47,32 +47,21 @@ describe('ValidatedJDLObject', () => {
           }).to.throw(/^Can't add invalid application\. Error: No application\.$/);
         });
       });
-      context('such as an incomplete application', () => {
-        it('fails', () => {
-          expect(() => {
-            object.addApplication({
-              config: {
-                baseName: 'toto'
-              }
-            });
-          }).to.throw(
-            /Can't add invalid application\. Error: The application attributes authenticationType, buildTool were not found\./
-          );
-        });
-      });
     });
     context('when adding a valid application', () => {
-      let object;
-      let application;
+      let addedApplication;
+      let originalApplication;
 
       before(() => {
-        object = new ValidatedJDLObject();
-        application = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
-        object.addApplication(application);
+        const object = new ValidatedJDLObject();
+        originalApplication = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
+        const baseName = originalApplication.getConfig().getOptionValue('baseName');
+        object.addApplication(originalApplication);
+        addedApplication = object.applications[baseName];
       });
 
       it('works', () => {
-        expect(object.applications[application.config.baseName]).to.deep.eq(application);
+        expect(addedApplication).to.deep.equal(originalApplication);
       });
     });
   });
@@ -189,7 +178,8 @@ describe('ValidatedJDLObject', () => {
 
       before(() => {
         jdlObject.forEachApplication(application => {
-          result.push(application.config.baseName);
+          const applicationConfig = application.getConfig();
+          result.push(applicationConfig.getOptionValue('baseName'));
         });
       });
 

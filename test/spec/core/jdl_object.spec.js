@@ -50,17 +50,19 @@ describe('JDLObject', () => {
       });
     });
     context('when adding a valid application', () => {
-      let object;
-      let application;
+      let addedApplication;
+      let originalApplication;
 
       before(() => {
-        object = new JDLObject();
-        application = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
-        object.addApplication(application);
+        const object = new JDLObject();
+        originalApplication = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
+        const baseName = originalApplication.getConfig().getOptionValue('baseName');
+        object.addApplication(originalApplication);
+        addedApplication = object.applications[baseName];
       });
 
       it('works', () => {
-        expect(object.applications[application.config.baseName]).to.deep.eq(application);
+        expect(addedApplication).to.deep.equal(originalApplication);
       });
     });
   });
@@ -170,7 +172,8 @@ describe('JDLObject', () => {
 
       before(() => {
         jdlObject.forEachApplication(application => {
-          result.push(application.config.baseName);
+          const applicationConfig = application.getConfig();
+          result.push(applicationConfig.getOptionValue('baseName'));
         });
       });
 

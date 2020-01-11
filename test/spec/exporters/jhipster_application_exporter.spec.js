@@ -22,7 +22,7 @@
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const JHipsterApplicationExporter = require('../../../lib/exporters/jhipster_application_exporter');
+const { exportApplication, exportApplications } = require('../../../lib/exporters/jhipster_application_exporter');
 const { MONOLITH } = require('../../../lib/core/jhipster/application_types');
 const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 
@@ -32,19 +32,8 @@ describe('JHipsterApplicationExporter', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
           expect(() => {
-            JHipsterApplicationExporter.exportApplication();
+            exportApplication();
           }).to.throw('An application has to be passed to be exported.');
-        });
-      });
-      context('such as an invalid application', () => {
-        it('throws an error', () => {
-          expect(() => {
-            JHipsterApplicationExporter.exportApplication({
-              config: {}
-            });
-          }).to.throw(
-            /^Can't export invalid application\. Error: The application attributes baseName, authenticationType, buildTool were not found\.$/
-          );
         });
       });
     });
@@ -54,7 +43,7 @@ describe('JHipsterApplicationExporter', () => {
         let returned;
 
         before(done => {
-          returned = JHipsterApplicationExporter.exportApplication(
+          returned = exportApplication(
             createJDLApplication({
               applicationType: MONOLITH,
               baseName: 'toto',
@@ -176,7 +165,7 @@ describe('JHipsterApplicationExporter', () => {
               2
             )
           );
-          JHipsterApplicationExporter.exportApplication(
+          exportApplication(
             createJDLApplication({
               applicationType: MONOLITH,
               baseName: 'toto',
@@ -240,7 +229,7 @@ describe('JHipsterApplicationExporter', () => {
       context('such as undefined', () => {
         it('throws an error', () => {
           expect(() => {
-            JHipsterApplicationExporter.exportApplications();
+            exportApplications();
           }).to.throw('Applications have to be passed to be exported.');
         });
       });
@@ -250,7 +239,7 @@ describe('JHipsterApplicationExporter', () => {
         let returned;
 
         before('common setup for both applications', () => {
-          returned = JHipsterApplicationExporter.exportApplications({
+          returned = exportApplications({
             toto: createJDLApplication({
               applicationType: MONOLITH,
               baseName: 'toto',

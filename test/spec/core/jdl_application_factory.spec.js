@@ -31,7 +31,7 @@ describe('JDLApplicationFactory', () => {
       });
 
       it('creates the app', () => {
-        expect(application.config.applicationType).to.equal(MICROSERVICE);
+        expect(application.getConfig().getOptionValue('applicationType')).to.equal(MICROSERVICE);
       });
     });
     context(`when passing a ${GATEWAY} config`, () => {
@@ -42,7 +42,7 @@ describe('JDLApplicationFactory', () => {
       });
 
       it('creates the app', () => {
-        expect(application.config.applicationType).to.equal(GATEWAY);
+        expect(application.getConfig().getOptionValue('applicationType')).to.equal(GATEWAY);
       });
     });
     context(`when passing a ${MONOLITH} config`, () => {
@@ -53,7 +53,7 @@ describe('JDLApplicationFactory', () => {
       });
 
       it('creates the app', () => {
-        expect(application.config.applicationType).to.equal(MONOLITH);
+        expect(application.getConfig().getOptionValue('applicationType')).to.equal(MONOLITH);
       });
     });
     context(`when passing a ${UAA} config`, () => {
@@ -64,7 +64,7 @@ describe('JDLApplicationFactory', () => {
       });
 
       it('creates the app', () => {
-        expect(application.config.applicationType).to.equal(UAA);
+        expect(application.getConfig().getOptionValue('applicationType')).to.equal(UAA);
       });
     });
   });

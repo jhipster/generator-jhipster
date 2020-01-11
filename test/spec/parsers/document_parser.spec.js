@@ -23,6 +23,7 @@ const { expect } = require('chai');
 const { matchEntity } = require('../../matchers/entity_matcher');
 const JDLReader = require('../../../lib/readers/jdl_reader');
 const DocumentParser = require('../../../lib/parsers/document_parser');
+const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLEnum = require('../../../lib/core/jdl_enum');
 const JDLField = require('../../../lib/core/jdl_field');
@@ -463,23 +464,16 @@ describe('DocumentParser', () => {
         });
       });
       context('when parsing applications', () => {
-        let application;
+        let parsedConfig;
+        let expectedConfig;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/application.jdl']);
           const jdlObject = DocumentParser.parseFromConfigurationObject({
             parsedContent: input
           });
-          application = jdlObject.applications.toto.config;
-        });
-
-        it('parses it', () => {
-          expect(application.languages.has('en') && application.languages.has('fr')).to.be.true;
-          expect(application.testFrameworks.size).to.equal(0);
-          delete application.languages;
-          delete application.testFrameworks;
-
-          expect(application).to.deep.equal({
+          parsedConfig = jdlObject.applications.toto;
+          expectedConfig = createJDLApplication({
             applicationType: 'monolith',
             authenticationType: 'jwt',
             baseName: 'toto',
@@ -508,7 +502,11 @@ describe('DocumentParser', () => {
             skipUserManagement: false,
             useSass: true,
             websocket: false
-          });
+          }).getConfig();
+        });
+
+        it('parses it', () => {
+          expect(parsedConfig.getConfig()).to.deep.equal(expectedConfig);
         });
       });
       context('when parsing deployments', () => {
@@ -647,7 +645,7 @@ describe('DocumentParser', () => {
         });
 
         it('adds the application entities in the application object', () => {
-          expect(entityNames.toString()).to.equal('entities BankAccount');
+          expect(entityNames).to.deep.equal(['BankAccount']);
         });
       });
       context('when parsing a relationship with no injected field', () => {

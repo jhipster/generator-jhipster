@@ -46,7 +46,7 @@ describe('JDLApplication', () => {
         });
 
         it('should add it', () => {
-          expect(entityNames.size()).to.equal(1);
+          expect(entityNames.length).to.equal(1);
         });
       });
       context('that has already been added', () => {
@@ -60,7 +60,7 @@ describe('JDLApplication', () => {
         });
 
         it('should not add it', () => {
-          expect(entityNames.size()).to.equal(1);
+          expect(entityNames.length).to.equal(1);
         });
       });
     });
@@ -75,7 +75,7 @@ describe('JDLApplication', () => {
       });
 
       it('should return an empty list', () => {
-        expect(entityNames.size()).to.equal(0);
+        expect(entityNames.length).to.equal(0);
       });
     });
     context('when there are entities', () => {
@@ -90,7 +90,7 @@ describe('JDLApplication', () => {
       });
 
       it('should return the entity list', () => {
-        expect(entityNames.size()).to.equal(2);
+        expect(entityNames.length).to.equal(2);
       });
     });
   });
@@ -136,7 +136,7 @@ describe('JDLApplication', () => {
       });
 
       it('should not alter the entity names', () => {
-        expect(entityNames.size()).to.equal(2);
+        expect(entityNames.length).to.equal(2);
       });
     });
     context('when passing an empty list', () => {
@@ -154,7 +154,7 @@ describe('JDLApplication', () => {
       });
 
       it('should not alter the entity names', () => {
-        expect(entityNames.size()).to.equal(2);
+        expect(entityNames.length).to.equal(2);
       });
     });
     context('when passing entity names', () => {
@@ -171,7 +171,7 @@ describe('JDLApplication', () => {
       });
 
       it('should update the entity names', () => {
-        expect(application.getEntityNames().size()).to.equal(3);
+        expect(application.getEntityNames().length).to.equal(3);
       });
     });
   });
