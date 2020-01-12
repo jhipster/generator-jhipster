@@ -502,11 +502,11 @@ describe('DocumentParser', () => {
             skipUserManagement: false,
             useSass: true,
             websocket: false
-          }).getConfig();
+          });
         });
 
         it('parses it', () => {
-          expect(parsedConfig.getConfig()).to.deep.equal(expectedConfig);
+          expect(parsedConfig).to.deep.equal(expectedConfig);
         });
       });
       context('when parsing deployments', () => {

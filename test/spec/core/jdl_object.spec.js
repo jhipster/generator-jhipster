@@ -56,7 +56,7 @@ describe('JDLObject', () => {
       before(() => {
         const object = new JDLObject();
         originalApplication = createJDLApplication({ applicationType: MONOLITH, jhipsterVersion: '4.9.0' });
-        const baseName = originalApplication.getConfig().getOptionValue('baseName');
+        const baseName = originalApplication.getOptionValue('baseName');
         object.addApplication(originalApplication);
         addedApplication = object.applications[baseName];
       });
@@ -172,8 +172,7 @@ describe('JDLObject', () => {
 
       before(() => {
         jdlObject.forEachApplication(application => {
-          const applicationConfig = application.getConfig();
-          result.push(applicationConfig.getOptionValue('baseName'));
+          result.push(application.getOptionValue('baseName'));
         });
       });
 

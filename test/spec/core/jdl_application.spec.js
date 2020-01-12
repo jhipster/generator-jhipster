@@ -16,11 +16,144 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
+const { OptionNames } = require('../../../lib/core/jhipster/new_application_options');
+const StringJDLApplicationConfigurationOption = require('../../../lib/core/string_jdl_application_configuration_option');
 const JDLApplication = require('../../../lib/core/jdl_application');
 
 describe('JDLApplication', () => {
+  describe('hasOption', () => {
+    context('when the application does not have the option', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+      });
+
+      it('should return false', () => {
+        expect(application.hasOption(OptionNames.BASE_NAME)).to.be.false;
+      });
+    });
+    context('when the application has the option', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
+      });
+
+      it('should return true', () => {
+        expect(application.hasOption(OptionNames.BASE_NAME)).to.be.true;
+      });
+    });
+  });
+  describe('setOption', () => {
+    context('when not passing an option', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+      });
+
+      it('should fail', () => {
+        expect(() => application.setOption()).to.throw(/^An option has to be passed to set an option\.$/);
+      });
+    });
+    context('when setting a new option', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
+      });
+
+      it('should add it', () => {
+        expect(application.hasOption(OptionNames.BASE_NAME)).to.be.true;
+      });
+    });
+    context('when setting an already present option', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
+        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application2'));
+      });
+
+      it('should replace its value', () => {
+        expect(application.getOptionValue(OptionNames.BASE_NAME)).to.equal('application2');
+      });
+    });
+  });
+  describe('getOptionValue', () => {
+    context('when not passing an option name', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+      });
+
+      it('should fail', () => {
+        expect(() => application.getOptionValue()).to.throw(/^An option name has to be passed to get a value\.$/);
+      });
+    });
+    context('when the application does not have the option', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+      });
+
+      it('should return undefined', () => {
+        expect(application.getOptionValue(OptionNames.BASE_NAME)).to.be.undefined;
+      });
+    });
+    context('when the application has the option', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
+      });
+
+      it('should return its value', () => {
+        expect(application.getOptionValue(OptionNames.BASE_NAME)).to.equal('application');
+      });
+    });
+  });
+  describe('forEachOption', () => {
+    context('when not passing a function', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+      });
+
+      it('should not do anything', () => {
+        expect(() => application.forEachOption()).not.to.throw();
+      });
+    });
+    context('when passing a function', () => {
+      let result;
+
+      before(() => {
+        const application = new JDLApplication();
+        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'toto'));
+        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.JHI_PREFIX, 'prefix'));
+        result = [];
+        application.forEachOption(option => {
+          result.push(`${option.name} is ${option.getValue()}`);
+        });
+        result = result.join(' and ');
+      });
+
+      it('should iterate over the options', () => {
+        expect(result).to.equal('baseName is toto and jhiPrefix is prefix');
+      });
+    });
+  });
   describe('addEntityName', () => {
     context('when not passing an entity name', () => {
       let application;
@@ -62,61 +195,6 @@ describe('JDLApplication', () => {
         it('should not add it', () => {
           expect(entityNames.length).to.equal(1);
         });
-      });
-    });
-  });
-  describe('getEntityNames', () => {
-    context('when there is no entity', () => {
-      let entityNames;
-
-      before(() => {
-        const jdlApplication = new JDLApplication();
-        entityNames = jdlApplication.getEntityNames();
-      });
-
-      it('should return an empty list', () => {
-        expect(entityNames.length).to.equal(0);
-      });
-    });
-    context('when there are entities', () => {
-      let entityNames;
-
-      before(() => {
-        const jdlApplication = new JDLApplication({
-          config: {},
-          entityNames: ['A', 'B']
-        });
-        entityNames = jdlApplication.getEntityNames();
-      });
-
-      it('should return the entity list', () => {
-        expect(entityNames.length).to.equal(2);
-      });
-    });
-  });
-  describe('forEachEntityName', () => {
-    let application;
-
-    before(() => {
-      application = new JDLApplication({ entityNames: ['A', 'B'] });
-    });
-
-    context('when not passing a function', () => {
-      it('does not fail', () => {
-        application.forEachEntityName();
-      });
-    });
-    context('when passing a function', () => {
-      const result = [];
-
-      before(() => {
-        application.forEachEntityName(entityName => {
-          result.push(entityName);
-        });
-      });
-
-      it('uses each entity name', () => {
-        expect(result).to.deep.equal(['A', 'B']);
       });
     });
   });
@@ -172,6 +250,61 @@ describe('JDLApplication', () => {
 
       it('should update the entity names', () => {
         expect(application.getEntityNames().length).to.equal(3);
+      });
+    });
+  });
+  describe('getEntityNames', () => {
+    context('when there is no entity', () => {
+      let entityNames;
+
+      before(() => {
+        const jdlApplication = new JDLApplication();
+        entityNames = jdlApplication.getEntityNames();
+      });
+
+      it('should return an empty list', () => {
+        expect(entityNames.length).to.equal(0);
+      });
+    });
+    context('when there are entities', () => {
+      let entityNames;
+
+      before(() => {
+        const jdlApplication = new JDLApplication({
+          config: {},
+          entityNames: ['A', 'B']
+        });
+        entityNames = jdlApplication.getEntityNames();
+      });
+
+      it('should return the entity list', () => {
+        expect(entityNames.length).to.equal(2);
+      });
+    });
+  });
+  describe('forEachEntityName', () => {
+    let application;
+
+    before(() => {
+      application = new JDLApplication({ entityNames: ['A', 'B'] });
+    });
+
+    context('when not passing a function', () => {
+      it('does not fail', () => {
+        application.forEachEntityName();
+      });
+    });
+    context('when passing a function', () => {
+      const result = [];
+
+      before(() => {
+        application.forEachEntityName(entityName => {
+          result.push(entityName);
+        });
+      });
+
+      it('uses each entity name', () => {
+        expect(result).to.deep.equal(['A', 'B']);
       });
     });
   });
