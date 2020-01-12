@@ -98,6 +98,17 @@ describe('JDLApplicationConfiguration', () => {
     });
   });
   describe('setOption', () => {
+    context('when not passing an option', () => {
+      let configuration;
+
+      before(() => {
+        configuration = new JDLApplicationConfiguration();
+      });
+
+      it('should fail', () => {
+        expect(() => configuration.setOption()).to.throw(/^An option has to be passed to set an option\.$/);
+      });
+    });
     context('when setting a new option', () => {
       let createdConfiguration;
 
