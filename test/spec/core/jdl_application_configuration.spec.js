@@ -61,7 +61,7 @@ describe('JDLApplicationConfiguration', () => {
       });
     });
   });
-  describe('getOptionValue', () => {
+  describe('getOption', () => {
     context('when not passing an option name', () => {
       let configuration;
 
@@ -70,7 +70,7 @@ describe('JDLApplicationConfiguration', () => {
       });
 
       it('should fail', () => {
-        expect(() => configuration.getOptionValue()).to.throw(/^An option name has to be passed to get a value\.$/);
+        expect(() => configuration.getOption()).to.throw(/^An option name has to be passed to get the option\.$/);
       });
     });
     context('when the configuration does not have the option', () => {
@@ -81,7 +81,7 @@ describe('JDLApplicationConfiguration', () => {
       });
 
       it('should return undefined', () => {
-        expect(configuration.getOptionValue(OptionNames.BASE_NAME)).to.be.undefined;
+        expect(configuration.getOption(OptionNames.BASE_NAME)).to.be.undefined;
       });
     });
     context('when the configuration has the option', () => {
@@ -93,7 +93,9 @@ describe('JDLApplicationConfiguration', () => {
       });
 
       it('should return its value', () => {
-        expect(configuration.getOptionValue(OptionNames.BASE_NAME)).to.equal('application');
+        expect(configuration.getOption(OptionNames.BASE_NAME)).to.deep.equal(
+          new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application')
+        );
       });
     });
   });
@@ -137,7 +139,7 @@ describe('JDLApplicationConfiguration', () => {
       });
 
       it('should replace its value', () => {
-        expect(createdConfiguration.getOptionValue(OptionNames.BASE_NAME)).to.equal('application2');
+        expect(createdConfiguration.getOption(OptionNames.BASE_NAME).getValue()).to.equal('application2');
       });
     });
   });
