@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const { tokens } = require('../../../lib/dsl/lexer');
+const { tokens } = require('../../../lib/dsl/lexer/lexer');
 
 const { getSyntacticAutoCompleteSuggestions, parse } = require('../../../lib/dsl/api');
 
