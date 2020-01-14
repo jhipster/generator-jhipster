@@ -72,7 +72,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.emptyString;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 <%_ } _%>
 
@@ -163,7 +164,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
             .andExpect(header().string("Authorization", not(nullValue())))
-            .andExpect(header().string("Authorization", not(isEmptyString())));
+            .andExpect(header().string("Authorization", not(is(emptyString()))));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(TestUtil.APPLICATION_JSON)
@@ -214,7 +215,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
             .andExpect(jsonPath("$.id_token").isString())
             .andExpect(jsonPath("$.id_token").isNotEmpty())
             .andExpect(header().string("Authorization", not(nullValue())))
-            .andExpect(header().string("Authorization", not(isEmptyString())));
+            .andExpect(header().string("Authorization", not(is(emptyString()))));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(TestUtil.APPLICATION_JSON)
