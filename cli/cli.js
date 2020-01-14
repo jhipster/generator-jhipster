@@ -44,7 +44,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     try {
         env.run(command, options, done);
     } catch (e) {
-        logger.fatal(e.message, e);
+        logger.error(e.message, e);
     }
 };
 
