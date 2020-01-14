@@ -156,10 +156,12 @@
             const relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
             if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
+                const idSuffix = relationshipName.toLowerCase() === 'authority' ? 'name' : 'id';
+                const idColumnType = relationshipName.toLowerCase() === 'authority' ? 'varchar(50)' : 'bigint';
           _%>
 
         <createTable tableName="<%= joinTableName %>">
-            <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_<%= idSuffix %>" type="<%= idColumnType %>">
                 <constraints nullable="false"/>
             </column>
             <column name="<%= getColumnName(name) %>_id" type="bigint">
@@ -167,7 +169,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
+        <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_<%= idSuffix %>" tableName="<%= joinTableName %>"/>
         <% } %><% } %>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

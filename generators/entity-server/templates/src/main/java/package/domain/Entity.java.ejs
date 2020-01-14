@@ -282,6 +282,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const ownerSide = relationships[idx].ownerSide;
         const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+        const idSuffix = relationshipName.toLowerCase() === 'authority' ? 'name' : 'id';
         if (otherEntityRelationshipName) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
@@ -349,7 +350,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         <%_ } _%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name = "<%= getColumnName(name) %>_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "<%= getColumnName(relationships[idx].relationshipName) %>_id", referencedColumnName = "id"))
+               inverseJoinColumns = @JoinColumn(name = "<%= getColumnName(relationships[idx].relationshipName) %>_<%= idSuffix %>", referencedColumnName = "<%= idSuffix %>"))
         <%_ }
         } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
             if (databaseType === 'mongodb') { _%>
@@ -473,6 +474,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
         const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
         const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
+        const isOtherEntityFromUserManagement = asEntity(otherEntityNameCapitalized) === 'User' || asEntity(otherEntityNameCapitalized) === 'Authority';
         const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
@@ -499,7 +501,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ } _%>
             <%_ if (relationshipType === 'one-to-many') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(this);
-            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
+            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && !isOtherEntityFromUserManagement && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().add(this);
             <%_ } _%>
@@ -513,7 +515,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ } _%>
             <%_ if (relationshipType === 'one-to-many') { _%>
         <%= otherEntityName %>.set<%= otherEntityRelationshipNameCapitalized %>(null);
-            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && asEntity(otherEntityNameCapitalized)!=='User' && relationshipType === 'many-to-many') {
+            <%_ } else if (otherEntityRelationshipNameCapitalizedPlural !== '' && !isOtherEntityFromUserManagement && relationshipType === 'many-to-many') {
                 // JHipster version < 3.6.0 didn't ask for this relationship name _%>
         <%= otherEntityName %>.get<%= otherEntityRelationshipNameCapitalizedPlural %>().remove(this);
             <%_ } _%>
