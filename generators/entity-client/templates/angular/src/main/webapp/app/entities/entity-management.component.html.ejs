@@ -54,11 +54,11 @@
     </div>
     <%_ } _%>
 
-    <div class="alert alert-warning" *ngIf="<%= entityInstancePlural %>?.length === 0">
+    <div class="alert alert-warning" id="no-result" *ngIf="<%= entityInstancePlural %>?.length === 0">
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.notFound">No <%= entityInstancePlural %> found</span>
     </div>
 
-    <div class="table-responsive" *ngIf="<%= entityInstancePlural %>?.length > 0">
+    <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %>?.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
