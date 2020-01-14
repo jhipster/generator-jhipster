@@ -108,6 +108,7 @@ import org.springframework.security.web.server.authentication.HttpStatusServerEn
 import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 <%_ } _%>
+import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
 <%_ if (skipUserManagement && authenticationType !== 'oauth2') { _%>
