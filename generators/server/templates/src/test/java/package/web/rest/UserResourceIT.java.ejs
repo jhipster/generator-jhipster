@@ -134,9 +134,10 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ } else { _%>
     private static final String DEFAULT_ID = "id1";
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
-    <%_ if (authenticationType !== 'oauth2') { _%>
+
     private static final String UPDATED_PASSWORD = "passjhipster";
     <%_ } _%>
 
