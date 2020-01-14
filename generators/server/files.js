@@ -1152,6 +1152,16 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => !generator.skipClient && generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/filter/SpaWebFilter.java',
+                    renameTo: generator => `${generator.javaDir}web/filter/SpaWebFilter.java`
+                }
+            ]
+        },
+        {
             condition: generator => generator.messageBroker === 'kafka',
             path: SERVER_MAIN_SRC_DIR,
             templates: [

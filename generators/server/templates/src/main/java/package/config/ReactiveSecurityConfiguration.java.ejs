@@ -44,6 +44,9 @@ import io.github.jhipster.config.JHipsterProperties;
 <%_ if (skipUserManagement && authenticationType !== 'oauth2') { _%>
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 <%_ } _%>
+<%_ if (!skipClient) { _%>
+import <%= packageName %>.web.filter.SpaWebFilter;
+<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -210,12 +213,15 @@ public class SecurityConfiguration {
             )))
             .csrf()
             <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
-            .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+                .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
         .and()
             // See https://github.com/spring-projects/spring-security/issues/5766
             .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
             <%_ } else { _%>
-            .disable()
+                .disable()
+            <%_ } _%>
+            <%_ if (!skipClient) { _%>
+            .addFilterAt(new SpaWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
             <%_ } _%>
             <%_ if (authenticationType === 'jwt') { _%>
             .addFilterAt(new JWTFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
@@ -224,8 +230,8 @@ public class SecurityConfiguration {
             .authenticationManager(reactiveAuthenticationManager())
             <%_ } _%>
             .exceptionHandling()
-            .accessDeniedHandler(problemSupport)
-            .authenticationEntryPoint(problemSupport)
+                .accessDeniedHandler(problemSupport)
+                .authenticationEntryPoint(problemSupport)
             <%_ if (authenticationType === 'session') { _%>
         .and()
             .formLogin()
