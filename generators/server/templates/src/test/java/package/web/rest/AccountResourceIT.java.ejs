@@ -588,7 +588,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRegisterValid() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testRegisterValid() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
         validUser.setLogin("test-register-valid");
         validUser.setPassword("password");
@@ -611,7 +611,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(validUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(validUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -621,7 +621,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRegisterInvalidLogin() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testRegisterInvalidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("funky-log!n");// <-- invalid
         invalidUser.setPassword("password");
@@ -644,7 +644,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         userWebTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -655,7 +655,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRegisterInvalidEmail() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testRegisterInvalidEmail() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("bob");
         invalidUser.setPassword("password");
@@ -678,7 +678,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         userWebTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -689,7 +689,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRegisterInvalidPassword() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testRegisterInvalidPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("bob");
         invalidUser.setPassword("123");// password with only 3 digits
@@ -712,7 +712,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         userWebTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -723,7 +723,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRegisterNullPassword() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testRegisterNullPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("bob");
         invalidUser.setPassword(null);// invalid null password
@@ -746,7 +746,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         userWebTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -757,7 +757,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRegisterDuplicateLogin() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testRegisterDuplicateLogin() throws Exception {
         // First registration
         ManagedUserVM firstUser = new ManagedUserVM();
         firstUser.setLogin("alice");
@@ -800,7 +800,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(firstUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(firstUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -815,7 +815,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(secondUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -835,7 +835,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(secondUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -843,7 +843,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRegisterDuplicateEmail() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testRegisterDuplicateEmail() throws Exception {
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
         firstUser.setLogin("test-register-duplicate-email");
@@ -867,7 +867,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(firstUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(firstUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -898,7 +898,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(secondUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -933,7 +933,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -955,7 +955,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(secondUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus().is4xxClientError();
         <%_ } _%>
@@ -963,7 +963,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRegisterAdminIsIgnored() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testRegisterAdminIsIgnored() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
         validUser.setLogin("badguy");
         validUser.setPassword("password");
@@ -986,7 +986,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(validUser))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(validUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -1043,7 +1043,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("save-account")
-    public void testSaveAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testSaveAccount() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1076,7 +1076,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userDTO))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1095,7 +1095,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("save-invalid-email")
-    public void testSaveInvalidEmail() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testSaveInvalidEmail() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1128,7 +1128,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userDTO))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -1139,7 +1139,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("save-existing-email")
-    public void testSaveExistingEmail() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testSaveExistingEmail() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1183,7 +1183,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userDTO))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -1195,7 +1195,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("save-existing-email-and-login")
-    public void testSaveExistingEmailAndLogin() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testSaveExistingEmailAndLogin() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1228,7 +1228,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userDTO))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1240,7 +1240,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("change-password-wrong-existing-password")
-    public void testChangePasswordWrongExistingPassword() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testChangePasswordWrongExistingPassword() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
     <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1259,7 +1259,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -1272,7 +1272,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("change-password")
-    public void testChangePassword() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testChangePassword() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1291,7 +1291,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1303,7 +1303,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("change-password-too-small")
-    public void testChangePasswordTooSmall() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testChangePasswordTooSmall() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1324,7 +1324,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -1336,7 +1336,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("change-password-too-long")
-    public void testChangePasswordTooLong() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testChangePasswordTooLong() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1357,7 +1357,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -1369,7 +1369,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("change-password-empty")
-    public void testChangePasswordEmpty() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testChangePasswordEmpty() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1388,7 +1388,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -1484,7 +1484,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/init")
-            .syncBody("password-reset@example.com")
+            .bodyValue("password-reset@example.com")
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1509,7 +1509,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/init")
-            .syncBody("password-reset@EXAMPLE.COM")
+            .bodyValue("password-reset@EXAMPLE.COM")
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1525,7 +1525,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     <%_ } else { _%>
     public void testRequestPasswordResetWrongEmail() {
         webTestClient.post().uri("/api/account/reset-password/init")
-            .syncBody("password-reset-wrong-email@example.com")
+            .bodyValue("password-reset-wrong-email@example.com")
             .exchange()
             .expectStatus().isOk();
     <%_ } _%>
@@ -1533,7 +1533,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testFinishPasswordReset() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testFinishPasswordReset() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1558,7 +1558,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/finish")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1569,7 +1569,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testFinishPasswordResetTooSmall() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testFinishPasswordResetTooSmall() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1594,7 +1594,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/finish")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -1605,7 +1605,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testFinishPasswordResetWrongKey() <% if (!reactive) { %>throws Exception <% } %>{
+    public void testFinishPasswordResetWrongKey() throws Exception {
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
         keyAndPassword.setKey("wrong reset key");
         keyAndPassword.setNewPassword("new password");
@@ -1619,7 +1619,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/finish")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         <%_ } _%>
