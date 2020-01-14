@@ -197,7 +197,7 @@ const getCommandOptions = (pkg, argv) => {
 
 const done = errorMsg => {
     if (errorMsg) {
-        logger.fatal(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+        logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
     } else {
         logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
     }

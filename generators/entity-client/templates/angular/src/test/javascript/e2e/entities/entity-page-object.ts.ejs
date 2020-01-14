@@ -30,6 +30,8 @@ export class <%= entityClass %>ComponentsPage {
     deleteButtons = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div table .btn-danger'));
     <%_ } _%>
     title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
+    noResult = element(by.id('no-result'));
+    entities = element(by.id('entities'));
 
     <%_ if (!readOnly) { _%>
     async clickOnCreateButton(): Promise<void> {

@@ -31,10 +31,6 @@ import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.*;
     <%_ } _%>
 
-    <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
-import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.beans.factory.InitializingBean;
-    <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 import io.github.jhipster.config.JHipsterProperties;
     <%_ } _%>
