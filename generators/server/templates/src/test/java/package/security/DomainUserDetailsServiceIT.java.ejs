@@ -43,9 +43,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 <%_ if (!reactive) { _%>
 import org.springframework.security.core.userdetails.UserDetailsService;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ } _%>
