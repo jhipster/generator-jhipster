@@ -62,7 +62,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static <%= packageName %>.web.rest.TestUtil.ID_TOKEN;
-import static com.mycompany.myapp.web.rest.TestUtil.authenticationToken;
+import static <%= packageName %>.web.rest.TestUtil.authenticationToken;
 <%_ if (!reactive) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
