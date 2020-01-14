@@ -89,7 +89,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
-<%_ if (authenticationType === 'oauth2') { _%>
+<%_ if (!reactive || authenticationType === 'oauth2') { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
 
