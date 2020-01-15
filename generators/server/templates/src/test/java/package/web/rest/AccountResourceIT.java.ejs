@@ -514,7 +514,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     }
 
     @Test
-    public void testGetExistingAccount()<%_ if (!reactive) { _%> throws Exception<% } %> {<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+    public void testGetExistingAccount()<% if (!reactive) { %> throws Exception<% } %> {<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.ADMIN);
@@ -999,7 +999,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testActivateAccount()<%_ if (!reactive) { _%> throws Exception<% } %> {
+    public void testActivateAccount()<% if (!reactive) { %> throws Exception<% } %> {
         final String activationKey = "some activation key";
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
@@ -1467,7 +1467,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRequestPasswordReset()<%_ if (!reactive) { _%> throws Exception<% } %> {
+    public void testRequestPasswordReset()<% if (!reactive) { %> throws Exception<% } %> {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1492,7 +1492,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testRequestPasswordResetUpperCaseEmail()<%_ if (!reactive) { _%> throws Exception<% } %> {
+    public void testRequestPasswordResetUpperCaseEmail()<% if (!reactive) { %> throws Exception<% } %> {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());

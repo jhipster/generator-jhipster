@@ -181,6 +181,7 @@ public final class TestUtil {
         <%_ } _%>
     }
 <%_ if (!reactive) { _%>
+
     /**
      * Create a {@link FormattingConversionService} which use ISO date format, instead of the localized one.
      * @return the {@link FormattingConversionService}.
@@ -194,6 +195,7 @@ public final class TestUtil {
     }
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
+
     /**
      * Makes a an executes a query to the EntityManager finding all stored objects.
      * @param <T> The type of objects to be searched
