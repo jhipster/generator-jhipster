@@ -532,7 +532,6 @@ dependencies {
     liquibaseRuntime "com.oracle.ojdbc:ojdbc8"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
-    testImplementation "org.testcontainers:database-commons"
     testImplementation "org.testcontainers:kafka"
     <%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
