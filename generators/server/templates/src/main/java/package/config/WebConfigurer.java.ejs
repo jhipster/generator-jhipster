@@ -251,12 +251,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 
         <%_ if (!skipClient) { _%>
     @Bean
-    RouterFunction<ServerResponse> index() {
-        // Redirect "/" to "/index.html"
-        return route(GET("/"), req -> ServerResponse.temporaryRedirect(URI.create("index.html")).build());
-    }
-
-    @Bean
     ResourceHandlerRegistrationCustomizer registrationCustomizer() {
         // Disable built-in cache control to use our custom filter instead
         return registration -> registration.setCacheControl(null);

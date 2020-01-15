@@ -144,7 +144,6 @@ public class UserResource {
 <%_ } _%>
 
     public UserResource(UserService userService<% if (authenticationType !== 'oauth2') { %>, UserRepository userRepository, MailService mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
-
         this.userService = userService;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.userRepository = userRepository;
