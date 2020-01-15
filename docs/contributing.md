@@ -6,7 +6,7 @@
 
 Everything happens in the `lib/dsl` folder.
 
-The `lexer.js` file is where all "tokens", words used in the JDL are like `entity` or the left parenthesis character 
+The `lexer` folder is where all "tokens", words used in the JDL are like `entity` or the left parenthesis character 
 '('.
 This is the place where one can add new keywords to the JDL.
 To add a new keyword to the JDL, simply use the `createToken` function with the following object attributes:
@@ -21,6 +21,10 @@ To add a new keyword to the JDL, simply use the `createToken` function with the 
     - a boolean `BOOLEAN`,
     - an application configuration key `CONFIG_KEY`.
   - For more info, check the [Chevrotain doc][chevrotain-doc-token-config] about other options. 
+
+The folder contains:
+  - token files (one for application config tokens, another for relationship types, etc.)
+  - an "utils" file where a single function exists: one that creates tokens from configs (chevrotain-related)
 
 ---
 
