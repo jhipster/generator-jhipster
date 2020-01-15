@@ -166,13 +166,13 @@ describe('account', () => {
         await passwordPage.save();
 
         <%_ if (enableTranslation) { _%>
-        const expect2 = 'password.messages.success';
+        const successMsg = 'password.messages.success';
         <%_ } else { _%>
-        const expect2 = 'Password changed!';
+        const successMsg = 'Password changed!';
         <%_ } _%>
         const alert = element(by.css('.alert-success'));
-        const value2 = await alert.<%- elementGetter %>;
-        expect(value2).to.eq(expect2);
+        const alertValue = await alert.<%- elementGetter %>;
+        expect(alertValue).to.eq(successMsg);
         await navBarPage.autoSignOut();
         await navBarPage.goToSignInPage();
         await signInPage.autoSignInUsing('admin', 'newpassword');
@@ -183,6 +183,10 @@ describe('account', () => {
         await passwordPage.setPassword('admin');
         await passwordPage.setConfirmPassword('admin');
         await passwordPage.save();
+
+        // wait for success message
+        const alertValue2 = await alert.<%- elementGetter %>;
+        expect(alertValue2).to.eq(successMsg);
     });
 <%_ } _%>
 
