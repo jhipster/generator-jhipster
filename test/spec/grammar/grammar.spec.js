@@ -665,16 +665,9 @@ entity A {
         });
 
         it('should parse it', () => {
-          expect(relationship.cardinality).to.equal(formatRelationshipType(relationshipType));
+          expect(relationship.cardinality).to.equal(relationshipType);
         });
       });
-
-      function formatRelationshipType(relationshipType) {
-        return relationshipType.replace(
-          /([A-Za-z]+?)To([A-Za-z]+)/,
-          (match, firstGroup, secondGroup) => `${firstGroup.toLowerCase()}-to-${secondGroup.toLowerCase()}`
-        );
-      }
     });
     context('with only source & destination entities', () => {
       let relationship;
@@ -687,7 +680,7 @@ entity A {
       it('should parse them', () => {
         expect(relationship).to.deep.equal({
           options: [],
-          cardinality: 'one-to-one',
+          cardinality: 'OneToOne',
           from: {
             injectedField: null,
             javadoc: null,
@@ -876,7 +869,7 @@ entity A {
         it('should add them', () => {
           expect(relationships).to.deep.equal([
             {
-              cardinality: 'one-to-one',
+              cardinality: 'OneToOne',
               from: {
                 injectedField: null,
                 javadoc: null,
@@ -895,7 +888,7 @@ entity A {
               }
             },
             {
-              cardinality: 'one-to-one',
+              cardinality: 'OneToOne',
               from: {
                 injectedField: null,
                 javadoc: null,
@@ -909,7 +902,7 @@ entity A {
               }
             },
             {
-              cardinality: 'one-to-one',
+              cardinality: 'OneToOne',
               from: {
                 injectedField: null,
                 javadoc: null,
