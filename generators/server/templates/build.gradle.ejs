@@ -495,7 +495,6 @@ dependencies {
     annotationProcessor ("org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}") {
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
-    testImplementation "com.jayway.jsonpath:json-path"
     <%_ if (databaseType === 'cassandra') { _%>
     testImplementation ("org.cassandraunit:cassandra-unit-spring") {
         exclude(group: "org.slf4j")
