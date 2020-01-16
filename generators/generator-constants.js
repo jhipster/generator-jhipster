@@ -32,7 +32,7 @@ const JIB_VERSION = '1.8.0';
 
 const JACOCO_VERSION = '0.8.5';
 
-const KAFKA_VERSION = '5.3.1';
+const KAFKA_VERSION = '5.4.0';
 
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.0';
 
