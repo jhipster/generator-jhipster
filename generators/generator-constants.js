@@ -39,7 +39,7 @@ const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 // Version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.0.2';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
-const DOCKER_MYSQL = 'mysql:8.0.18';
+const DOCKER_MYSQL = 'mysql:8.0.19';
 const DOCKER_MARIADB = 'mariadb:10.4.10';
 const DOCKER_POSTGRESQL = 'postgres:11.6';
 const DOCKER_MONGODB = 'mongo:4.0.13';
