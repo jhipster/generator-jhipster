@@ -34,7 +34,7 @@ const JACOCO_VERSION = '0.8.5';
 
 const KAFKA_VERSION = '5.4.0';
 
-const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.0';
+const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // Version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.0.2';
