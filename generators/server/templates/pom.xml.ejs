@@ -261,12 +261,6 @@
             <artifactId>xmemcached</artifactId>
         </dependency>
 <%_ } _%>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <scope>test</scope>
-            <!-- parent POM declares this dependency in default (compile) scope -->
-        </dependency>
 <%_ if (cacheProvider === 'redis' && enableHibernateCache) { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
