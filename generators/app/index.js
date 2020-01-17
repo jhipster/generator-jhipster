@@ -19,6 +19,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
+const path = require('path');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const cleanup = require('../cleanup');
 const prompts = require('./prompts');
@@ -404,7 +405,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 const options = this.options;
                 const configOptions = this.configOptions;
 
-                this.composeWith(require.resolve('../server'), {
+                this.composeWith(require.resolve('../server'), { paths: [path.dirname(this.resolved), __dirname] }), {
                     ...options,
                     configOptions,
                     'client-hook': !this.skipClient,
@@ -417,7 +418,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 const options = this.options;
                 const configOptions = this.configOptions;
 
-                this.composeWith(require.resolve('../client'), {
+                this.composeWith(require.resolve('../client'), { paths: [path.dirname(this.resolved), __dirname] }), {
                     ...options,
                     configOptions,
                     debug: this.isDebugEnabled
@@ -428,7 +429,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 const options = this.options;
                 const configOptions = this.configOptions;
 
-                this.composeWith(require.resolve('../common'), {
+                this.composeWith(require.resolve('../common'), { paths: [path.dirname(this.resolved), __dirname] }), {
                     ...options,
                     'client-hook': !this.skipClient,
                     configOptions,
@@ -529,7 +530,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     const options = this.options;
                     const configOptions = this.configOptions;
                     this.getExistingEntities().forEach(entity => {
-                        this.composeWith(require.resolve('../entity'), {
+                        this.composeWith(require.resolve('../entity'), { paths: [path.dirname(this.resolved), __dirname] }), {
                             ...options,
                             configOptions,
                             regenerate: true,
