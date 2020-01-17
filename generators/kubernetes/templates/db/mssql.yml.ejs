@@ -47,7 +47,7 @@ spec:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>-mssql
-     <%_ if (istio) { _%>
+     <% if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
      <%_ } _%>
