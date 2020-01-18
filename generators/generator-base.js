@@ -1518,6 +1518,7 @@ module.exports = class extends PrivateBase {
             try {
                 shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
             } catch (error) {
+                // noticed that on windows the shelljs.mkdir tends to sometimes fail
                 fs.mkdir(`${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`, { recursive: true }, err => {
                     if (err) throw err;
                 });
