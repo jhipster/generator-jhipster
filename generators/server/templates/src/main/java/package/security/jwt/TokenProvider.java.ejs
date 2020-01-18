@@ -59,7 +59,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         byte[] keyBytes;
         String secret = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
         if (!StringUtils.isEmpty(secret)) {
