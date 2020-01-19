@@ -267,6 +267,7 @@ dependencies {
     implementation group: "io.github.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
+    implementation "javax.annotation:javax.annotation-api"
     <%_ if (cacheProvider !== 'no') { _%>
     implementation "org.springframework.boot:spring-boot-starter-cache"
     <%_ } _%>
