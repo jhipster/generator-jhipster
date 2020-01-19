@@ -93,8 +93,8 @@ function askForApplicationType(meta) {
             default: false
         };
 
-        this.prompt(REACTIVE_PROMPT).then(prompt => {
-            this.reactive = this.configOptions.reactive = prompt.reactive;
+        this.prompt(REACTIVE_PROMPT).then(reactivePrompt => {
+            this.reactive = this.configOptions.reactive = reactivePrompt.reactive;
             done();
         });
     });
