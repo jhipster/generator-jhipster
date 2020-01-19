@@ -1764,12 +1764,7 @@ module.exports = class extends PrivateBase {
             }
         ];
 
-        generator.prompt(prompts).then(prompt => {
-            generator.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
-            done();
-        });
+
     }
 
     /**

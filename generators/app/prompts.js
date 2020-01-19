@@ -65,15 +65,7 @@ function askForApplicationType(meta) {
         },
         {
             value: 'uaa',
-            name: 'JHipster UAA server (for microservice OAuth2 authentication)'
-        },
-        {
-            value: 'reactive',
-            name: '[Alpha] Reactive monolithic application'
-        },
-        {
-            value: 'reactive-micro',
-            name: '[Alpha] Reactive microservice application'
+            name: 'JHipster UAA server'
         }
     ];
 
@@ -91,23 +83,25 @@ function askForApplicationType(meta) {
 
     const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
     promise.then(prompt => {
-        if (prompt.applicationType === 'reactive') {
-            this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
-            this.reactive = this.configOptions.reactive = true;
-        } else if (prompt.applicationType === 'reactive-micro') {
-            this.applicationType = this.configOptions.applicationType = 'microservice';
-            this.reactive = this.configOptions.reactive = true;
-        } else {
-            this.applicationType = this.configOptions.applicationType = prompt.applicationType;
-            this.reactive = this.configOptions.reactive = false;
-        }
-        done();
+        this.applicationType = this.configOptions.applicationType = prompt.applicationType;
+
+        const REACTIVE_PROMPT = {
+            when: () => ['monolith', 'microservice'].includes(this.applicationType),
+            type: 'confirm',
+            name: 'reactive',
+            message: '[Alpha] Do you want to make it reactive with Spring WebFlux?',
+            default: false
+        };
+
+        this.prompt(REACTIVE_PROMPT).then(prompt => {
+            this.reactive = this.configOptions.reactive = prompt.reactive;
+            done();
+        });
     });
 }
 
 function askForModuleName() {
     if (this.existingProject) return;
-
     this.askModuleName(this);
 }
 
