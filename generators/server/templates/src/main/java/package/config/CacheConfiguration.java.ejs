@@ -93,9 +93,10 @@ import org.springframework.cache.support.NoOpCacheManager;
 <%_ } _%>
 import org.springframework.context.annotation.*;
 <%_ if (cacheProvider === 'hazelcast') { _%>
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+
+import javax.annotation.PreDestroy;
 <%_ } _%>
 <%_ if (cacheProvider === 'infinispan') { _%>
 import org.infinispan.configuration.cache.CacheMode;
@@ -164,7 +165,7 @@ import io.github.jhipster.config.JHipsterProperties;
 
 @Configuration
 @EnableCaching
-public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implements DisposableBean<% } %> {
+public class CacheConfiguration {
     <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'caffeine') { _%>
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
@@ -261,8 +262,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     }
         <%_ } _%>
 
-    @Override
-    public void destroy() throws Exception {
+    @PreDestroy
+    public void destroy() {
         log.info("Closing Cache Manager");
         Hazelcast.shutdownAll();
     }

@@ -104,14 +104,13 @@ public class AuditResourceIT {
 
     @Autowired
     private JHipsterProperties jhipsterProperties;
-
     <%_ if (!reactive) { _%>
+
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
     <%_ } _%>
 
     @Autowired
@@ -162,7 +161,7 @@ public class AuditResourceIT {
     }
 
     @Test
-    public void getAllAudits() throws Exception {
+    public void getAllAudits() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
 
@@ -182,7 +181,7 @@ public class AuditResourceIT {
     }
 
     @Test
-    public void getAudit() throws Exception {
+    public void getAudit() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
 
@@ -202,7 +201,7 @@ public class AuditResourceIT {
     }
 
     @Test
-    public void getAuditsByDate() throws Exception {
+    public void getAuditsByDate() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
 
@@ -226,7 +225,7 @@ public class AuditResourceIT {
     }
 
     @Test
-    public void getNonExistingAuditsByDate() throws Exception {
+    public void getNonExistingAuditsByDate() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
 
@@ -250,7 +249,7 @@ public class AuditResourceIT {
     }
 
     @Test
-    public void getNonExistingAudit() throws Exception {
+    public void getNonExistingAudit() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the audit
         <%_ if (!reactive) { _%>
         restAuditMockMvc.perform(get("/management/audits/{id}", Long.MAX_VALUE))

@@ -134,9 +134,9 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ } else { _%>
     private static final String DEFAULT_ID = "id1";
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
-    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_PASSWORD = "passjhipster";
     <%_ } _%>
 
@@ -314,7 +314,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -370,7 +370,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -415,7 +415,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -460,7 +460,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -628,7 +628,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -690,7 +690,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -770,7 +770,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -837,7 +837,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>

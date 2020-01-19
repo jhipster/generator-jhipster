@@ -1515,7 +1515,14 @@ module.exports = class extends PrivateBase {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+            try {
+                shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+            } catch (error) {
+                // noticed that on windows the shelljs.mkdir tends to sometimes fail
+                fs.mkdir(`${SERVER_MAIN_RES_DIR}config/tls`, { recursive: true }, err => {
+                    if (err) throw err;
+                });
+            }
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {

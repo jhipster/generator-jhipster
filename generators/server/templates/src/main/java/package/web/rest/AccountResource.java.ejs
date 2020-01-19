@@ -19,6 +19,9 @@ limitations under the License.
 package <%= packageName %>.web.rest;
 
 <%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (reactive) { %>
+import <%= packageName %>.security.SecurityUtils;
+    <%_ } _%>
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 
@@ -28,8 +31,12 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } else { _%>
 import javax.servlet.http.HttpServletRequest;
+<%_ } _%>
+
 import java.security.Principal;
 
 /**
@@ -59,13 +66,19 @@ public class AccountResource {
     /**
      * {@code GET  /authenticate} : check if the user is authenticated, and return its login.
      *
+     <%_ if (!reactive) { _%>
      * @param request the HTTP request.
+     <%_ } _%>
      * @return the login if the user is authenticated.
      */
     @GetMapping("/authenticate")
-    public String isAuthenticated(HttpServletRequest request) {
+    public <% if (reactive) { %>Mono<String><% } else { %>String<% } %> isAuthenticated(<% if (!reactive) { %>HttpServletRequest request<% } %>) {
         log.debug("REST request to check if the current user is authenticated");
+        <%_ if (reactive) { _%>
+        return SecurityUtils.getCurrentUserLogin();
+        <%_ } else { _%>
         return request.getRemoteUser();
+        <%_ } _%>
     }
 
     /**
@@ -77,7 +90,7 @@ public class AccountResource {
      */
     @GetMapping("/account")
     @SuppressWarnings("unchecked")
-    public <%= asDto('User') %> getAccount(Principal principal) {
+    public <% if (reactive) { %>Mono<<%= asDto('User') %>><% } else { %><%= asDto('User') %><% } %> getAccount(Principal principal) {
         if (principal instanceof AbstractAuthenticationToken) {
             return userService.getUserFromAuthentication((AbstractAuthenticationToken) principal);
         } else {

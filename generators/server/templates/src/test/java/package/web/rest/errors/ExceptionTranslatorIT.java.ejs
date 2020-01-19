@@ -183,7 +183,11 @@ import java.util.List;
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
 public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
@@ -232,7 +236,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     public void testMethodArgumentNotValid() {
          webTestClient.post().uri("/test/method-argument")
              .contentType(MediaType.APPLICATION_JSON)
-             .syncBody("{}")
+             .bodyValue("{}")
              .exchange()
              .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
              .expectBody()
