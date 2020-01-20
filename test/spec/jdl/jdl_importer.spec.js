@@ -239,8 +239,8 @@ describe('JDLImporter', () => {
               fieldName: 'title',
               fieldType: 'String',
               fieldValidateRules: ['minlength', 'maxlength'],
-              fieldValidateRulesMinlength: 5,
-              fieldValidateRulesMaxlength: 25
+              fieldValidateRulesMinlength: '5',
+              fieldValidateRulesMaxlength: '25'
             },
             {
               fieldName: 'type',
