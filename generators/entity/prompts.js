@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -33,6 +33,7 @@ module.exports = {
     askForDTO,
     askForService,
     askForFiltering,
+    askForReadOnly,
     askForPagination
 };
 
@@ -320,6 +321,27 @@ function askForFiltering() {
     ];
     this.prompt(prompts).then(props => {
         context.jpaMetamodelFiltering = props.filtering === 'jpaMetamodel';
+        done();
+    });
+}
+
+function askForReadOnly() {
+    const context = this.context;
+    // don't prompt if data is imported from a file
+    if (context.useConfigurationFile) {
+        return;
+    }
+    const done = this.async();
+    const prompts = [
+        {
+            type: 'confirm',
+            name: 'readOnly',
+            message: 'Is this entity read-only?',
+            default: false
+        }
+    ];
+    this.prompt(prompts).then(props => {
+        context.readOnly = props.readOnly;
         done();
     });
 }
@@ -1008,9 +1030,7 @@ function askForRelationship(done) {
             type: 'input',
             name: 'otherEntityField',
             message: response =>
-                `When you display this relationship on client-side, which field from '${
-                    response.otherEntityName
-                }' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
+                `When you display this relationship on client-side, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
             default: 'id'
         },
         {

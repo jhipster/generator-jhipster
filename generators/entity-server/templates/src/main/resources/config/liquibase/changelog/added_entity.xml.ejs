@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,8 +33,9 @@
                 break;
             }
         }
+        const isAutoIncrementDB = prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb';
     _%>
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <%_ if (isAutoIncrementDB) { _%>
     <property name="autoIncrement" value="<%- autoIncrementValue %>"/>
     <%_ } _%>
 
@@ -47,7 +48,7 @@
         <%_ } else { _%>
         <createTable tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
         <%_ } _%>
-            <column name="id" type="<%= primaryKeyType %>" <%_ if (primaryKeyType === 'varchar(100)' ) { _%> > <% } else { %> autoIncrement="${autoIncrement}"> <%_ } %>
+            <column name="id" type="<%= primaryKeyType %>" <%_ if (primaryKeyType === 'varchar(100)' ) { _%> <% } else if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}" <%_ } %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ for (idx in fields) {
@@ -102,9 +103,9 @@
                 }
                 _%>
                 <%_ if (typeof fields[idx].javadoc == 'undefined') { _%>
-            <column name="<%=columnName %>" type="<%=columnType %>">
+            <column name="<%= columnName %>" type="<%= columnType %>">
                 <%_ } else { _%>
-            <column name="<%=columnName %>" type="<%=columnType %>" remarks="<%- formatAsLiquibaseRemarks(fields[idx].javadoc) %>">
+            <column name="<%= columnName %>" type="<%= columnType %>" remarks="<%- formatAsLiquibaseRemarks(fields[idx].javadoc) %>">
                 <%_ } _%>
                 <%_ if (unique) {
                     const uniqueConstraintName = getUXConstraintName(entityTableName, columnName, prodDatabaseType);
@@ -117,7 +118,7 @@
                 <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
                     let contentTypeColumnType = columnType;
                     contentTypeColumnType = "varchar(255)"; _%>
-            <column name="<%=columnName %>_content_type" type="<%=contentTypeColumnType%>">
+            <column name="<%= columnName %>_content_type" type="<%= contentTypeColumnType %>">
                 <constraints nullable="<%= nullable %>" />
             </column>
                 <%_ }
@@ -132,14 +133,14 @@
                     nullable_relation = false;
                 }
                 if (relationships[idx].relationshipType === 'many-to-one') { _%>
-            <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
             <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true
                             && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) {
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
-            <column name="<%=getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints unique="true" nullable="<%= nullable_relation %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
             </column>
             <%_ }
@@ -148,7 +149,7 @@
         </createTable>
         <%_ for (const idx in fields) {
             if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>
     </changeSet>
@@ -176,11 +177,12 @@
         <% } %><% } %>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+    <%_ if (!skipFakeData) { _%>
 
     <!--
         Load sample data generated with Faker.js
         - This data can be easily edited using a CSV editor (or even MS Excel) and
-          is located in the 'src/main/resources/config/liquibase/data' directory
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
         - By default this data is applied when running with the JHipster 'dev' profile.
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
@@ -208,11 +210,13 @@
                     loadColumnType = 'blob';
                 } else if (columnType === '${clobType}') {
                     loadColumnType = 'clob';
+                } else if (columnType === '${uuidType}' && prodDatabaseType !== 'mysql' && prodDatabaseType !== 'mariadb') {
+                    loadColumnType = '${uuidType}';
                 }
                 _%>
-            <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>" type="<%=loadColumnType%>"/>
+            <column name="<%= fields[idx].fieldNameAsDatabaseColumn %>" type="<%= loadColumnType %>"/>
                 <%_ if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            <column name="<%=fields[idx].fieldNameAsDatabaseColumn%>_content_type" type="string"/>
+            <column name="<%= fields[idx].fieldNameAsDatabaseColumn %>_content_type" type="string"/>
                 <%_ } _%>
             <%_ } _%>
             <%_ for (idx in relationships) {
@@ -226,11 +230,12 @@
                         if (relationships[idx].otherEntityNameCapitalized === 'User' && authenticationType === 'oauth2') {
                             loadColumnType = 'varchar(100)';
                         } _%>
-            <column name="<%=baseColumnName%>" type="<%=loadColumnType%>"/>
+            <column name="<%= baseColumnName %>" type="<%= loadColumnType %>"/>
                 <%_ } _%>
             <%_  } _%>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
+    <%_ } _%>
 
 </databaseChangeLog>

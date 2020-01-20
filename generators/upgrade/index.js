@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,6 +24,7 @@ const fs = require('fs');
 const gitignore = require('parse-gitignore');
 const childProcess = require('child_process');
 const BaseGenerator = require('../generator-base');
+const cleanup = require('../cleanup');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const utils = require('../utils');
@@ -70,10 +71,21 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
+            desc: 'Disable checks during project regeneration',
+            type: Boolean,
+            defaults: false
+        });
+
         this.targetJhipsterVersion = this.options['target-version'];
         this.targetBlueprintVersions = utils.parseBluePrints(this.options['target-blueprint-versions']);
         this.skipInstall = this.options['skip-install'];
         this.silent = this.options.silent;
+        this.skipChecks = this.options['skip-checks'];
+
+        // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
+        this.jhipsterOldVersion = this.config.get('jhipsterVersion');
     }
 
     get initializing() {
@@ -92,17 +104,36 @@ module.exports = class extends BaseGenerator {
                 this.currentJhipsterVersion = this.config.get('jhipsterVersion');
                 this.blueprints = this.config.get('blueprints');
                 this.clientPackageManager = this.config.get('clientPackageManager');
-                this.clientFramework = this.config.get('clientFramework');
             }
         };
     }
 
-    _gitCheckout(branch, callback) {
-        this.gitExec(['checkout', '-q', branch], { silent: this.silent }, (code, msg, err) => {
+    _gitCheckout(branch, options, callback) {
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        }
+        const args = ['checkout', '-q', branch];
+        if (options.force) {
+            args.push('-f');
+        }
+        this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
             if (code !== 0) this.error(`Unable to checkout branch ${branch}:\n${err}`);
             this.success(`Checked out branch "${branch}"`);
             callback();
         });
+    }
+
+    _upgradeFiles(callback) {
+        if (cleanup.upgradeFiles(this)) {
+            this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent }, (code, msg, err) => {
+                if (code !== 0) this.error(`Unable to prepare upgrade:\n${err}`);
+                this.success('Upgrade preparation');
+                callback();
+            });
+        } else {
+            callback();
+        }
     }
 
     _cleanUp() {
@@ -127,7 +158,8 @@ module.exports = class extends BaseGenerator {
                     : shelljs.exec('npm bin', { silent: this.silent }).stdout;
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
-        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight`;
+        const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
+        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight ${skipChecksOption}`;
         this.info(regenerateCmd);
         try {
             childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
@@ -213,7 +245,7 @@ module.exports = class extends BaseGenerator {
             },
 
             checkLatestBlueprintVersions() {
-                if (!this.blueprints || this.blueprints.length < 0) {
+                if (!this.blueprints || this.blueprints.length === 0) {
                     this.log('No blueprints detected, skipping check of last blueprint version');
                     return;
                 }
@@ -349,9 +381,7 @@ module.exports = class extends BaseGenerator {
                         this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
                             if (code !== 0) {
                                 this.error(
-                                    `Unable to record current code has been generated with version ${
-                                        this.currentJhipsterVersion
-                                    }:\n${msg} ${err}`
+                                    `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${msg} ${err}`
                                 );
                             }
                             this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
@@ -460,6 +490,11 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
+            upgradeFiles() {
+                const done = this.async();
+                this._upgradeFiles(done);
+            },
+
             generateWithLatestVersion() {
                 const done = this.async();
                 this._cleanUp();
@@ -472,7 +507,7 @@ module.exports = class extends BaseGenerator {
 
             checkoutSourceBranch() {
                 const done = this.async();
-                this._gitCheckout(this.sourceBranch, done);
+                this._gitCheckout(this.sourceBranch, { force: true }, done);
             },
 
             mergeChangesBack() {

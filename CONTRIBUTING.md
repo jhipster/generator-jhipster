@@ -116,7 +116,7 @@ Before you submit your pull request consider the following guidelines:
     mvnw spring-boot:run
     ```
 
--   You can generate our Continuous Integration (with Travis CI and Azure Pipelines) by following [this](#local-build)
+-   You can generate our Continuous Integration (with GitHub Actions and Azure Pipelines) by following [this](#local-build)
 
 -   Commit your changes using a descriptive commit message that follows our
     [commit message conventions](#commit-message-format).
@@ -255,6 +255,20 @@ jhipster --with-entities
 
 You should see your changes reflected in the generated project.
 
+Note: The generated project might not build properly in case the generator is using a
+snapshot version of [jhipster/jhipster](https://github.com/jhipster/jhipster). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
+this case clone the jhipster/jhipster project and build it using:
+
+```shell script
+./mvnw clean install -Dgpg.skip=true
+```
+
+or on Windows:
+
+```
+.\mvnw.cmd clean install -D"gpg.skip=true"
+```
+
 ### Use a text editor
 
 As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
@@ -265,7 +279,7 @@ It is possible to debug JHipster's code using a Node.js debugger. To achieve thi
 
 #### Debugging with VSCode
 
-To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `travis/samples/app-sample-dev` folder.
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `test-integration/samples/app-sample-dev` folder.
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
@@ -315,6 +329,8 @@ Sub templates can be unit tested.
 ## <a name="commit"></a> Git Commit Guidelines
 
 We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://help.github.com/articles/about-git-rebase/#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
+
+If the commit only involves documentation changes you can skip the continuous integration pipelines using `[ci skip]` or `[skip ci]` in your commit message header.
 
 ### <a name="commit-message-format"></a> Commit Message Format
 

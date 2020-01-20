@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,13 +28,13 @@ services:
             - 7199:7199
             - 9042:9042
             - 9160:9160
-    <%=baseName.toLowerCase()%>-cassandra-node:
+    <%= baseName.toLowerCase() %>-cassandra-node:
         image: <%= DOCKER_CASSANDRA %>
         environment:
             - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
-    <%=baseName.toLowerCase()%>-cassandra-migration:
+    <%= baseName.toLowerCase() %>-cassandra-migration:
         extends:
             file: cassandra-migration.yml
-            service: <%=baseName.toLowerCase()%>-cassandra-migration
+            service: <%= baseName.toLowerCase() %>-cassandra-migration
         environment:
             - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql

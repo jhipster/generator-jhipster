@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,11 +33,11 @@ import { ProfileService } from './profile.service';
     ]
 })
 export class PageRibbonComponent implements OnInit {
-    ribbonEnv$: Observable<string>;
+    ribbonEnv$?: Observable<string | undefined>;
 
     constructor(private profileService: ProfileService) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.ribbonEnv$ = this.profileService.getProfileInfo().pipe(map(profileInfo => profileInfo.ribbonEnv));
     }
 }

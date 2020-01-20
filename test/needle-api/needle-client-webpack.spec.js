@@ -4,7 +4,6 @@ const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const assetFrom = 'source';
 const assetTo = 'target';
@@ -75,9 +74,6 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
             .on('end', done);
     });
     it('Assert external asset is added to webpack.common.js', () => {
-        const from = `${CLIENT_MAIN_SRC_DIR}content/${assetFrom}/`;
-        const to = `content/${assetTo}/`;
-
-        assert.fileContent(`${CLIENT_WEBPACK_DIR}/webpack.common.js`, `{ from: './${from}', to: '${to}' },`);
+        assert.fileContent(`${CLIENT_WEBPACK_DIR}/webpack.common.js`, `{ from: '${assetFrom}', to: '${assetTo}' },`);
     });
 });

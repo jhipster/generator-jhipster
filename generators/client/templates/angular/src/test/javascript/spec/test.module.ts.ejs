@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,21 +18,17 @@
 -%>
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgModule, ElementRef, Renderer } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>JhiDataUtils, JhiDateUtils, JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
 <%_ if (enableTranslation) { _%>
-import { MockLanguageService, MockLanguageHelper } from './helpers/mock-language.service';
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { MockLanguageService } from './helpers/mock-language.service';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationType !== 'oauth2') { _%>
 import { LoginModalService } from 'app/core/login/login-modal.service';
-<%_ } _%>
-<%_ if (websocket === 'spring-websocket') { _%>
-import { <%=jhiPrefixCapitalized%>TrackerService } from 'app/core/tracker/tracker.service';
 <%_ } _%>
 import { MockAccountService } from './helpers/mock-account.service';
 import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service';
@@ -53,20 +49,10 @@ _%>
             provide: JhiLanguageService,
             useClass: MockLanguageService
         },
-        {
-            provide: JhiLanguageHelper,
-            useClass: MockLanguageHelper
-        },
-        <%_ } _%>
-        <%_ if (websocket === 'spring-websocket') { _%>
-        {
-            provide: <%=jhiPrefixCapitalized%>TrackerService,
-            useValue: null
-        },
         <%_ } _%>
         {
             provide: JhiEventManager,
-            useClass:  MockEventManager
+            useClass: MockEventManager
         },
         {
             provide: NgbActiveModal,
@@ -74,7 +60,7 @@ _%>
         },
         {
             provide: ActivatedRoute,
-            useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
+            useValue: new MockActivatedRoute({ id: <%- tsKeyId %> })
         },
         {
             provide: Router,
@@ -91,14 +77,6 @@ _%>
         },
         <%_ } _%>
         {
-            provide: ElementRef,
-            useValue: null
-        },
-        {
-            provide: Renderer,
-            useValue: null
-        },
-        {
             provide: JhiAlertService,
             useValue: null
         },
@@ -109,4 +87,4 @@ _%>
     ],
     imports: [HttpClientTestingModule]
 })
-export class <%=angularXAppName%>TestModule {}
+export class <%= angularXAppName %>TestModule {}

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,34 +16,57 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+<%_ if (enableTranslation) { _%>
+import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+<%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-error',
     templateUrl: './error.component.html'
 })
-export class ErrorComponent implements OnInit {
-    errorMessage: string;
-    error403: boolean;
-    error404: boolean;
+export class ErrorComponent implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
+    errorMessage?: string;
+    <%_ if (enableTranslation) { _%>
+    errorKey?: string;
+    langChangeSubscription?: Subscription;
+    <%_ } _%>
 
     constructor(
+        <%_ if (enableTranslation) { _%>
+        private translateService: TranslateService,
+        <%_ } _%>
         private route: ActivatedRoute
-    ) {
-    }
+    ) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.route.data.subscribe((routeData) => {
-            if (routeData.error403) {
-                this.error403 = routeData.error403;
-            }
-            if (routeData.error404) {
-                this.error404 = routeData.error404;
-            }
             if (routeData.errorMessage) {
+                <%_ if (enableTranslation) { _%>
+                this.errorKey = routeData.errorMessage;
+                this.getErrorMessageTranslation();
+                this.langChangeSubscription = this.translateService.onLangChange.subscribe(() => this.getErrorMessageTranslation());
+                <%_ } else { _%>
                 this.errorMessage = routeData.errorMessage;
+                <%_ } _%>
             }
         });
     }
+
+    <%_ if (enableTranslation) { _%>
+    ngOnDestroy(): void {
+        if (this.langChangeSubscription) {
+            this.langChangeSubscription.unsubscribe();
+        }
+    }
+
+    private getErrorMessageTranslation(): void {
+        this.errorMessage = '';
+        if (this.errorKey) {
+            this.translateService.get(this.errorKey).subscribe(translatedErrorMessage => (this.errorMessage = translatedErrorMessage));
+        }
+    }
+    <%_ } _%>
 }

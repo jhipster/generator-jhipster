@@ -596,6 +596,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with authenticationType "oauth2"', () => {
                 assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.oauth2Client);
                 assert.file(expectedFiles.mysql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
@@ -633,6 +634,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with authenticationType "oauth2" and elasticsearch', () => {
                 assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.oauth2Client);
                 assert.file(expectedFiles.elasticsearch);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.mysql);
@@ -668,6 +670,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with authenticationType "oauth2" and mongodb', () => {
                 assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.oauth2Client);
                 assert.file(expectedFiles.mongodb);
             });
         });

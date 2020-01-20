@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -808,7 +808,21 @@ module.exports = class extends PrivateBase {
      * Generate a date to be used by Liquibase changelogs.
      */
     dateFormatForLiquibase() {
-        const now = new Date();
+        let now = new Date();
+        // Run reproducible timestamp when regenerating the project with with-entities option.
+        if (this.options.withEntities || this.options.creationTimestamp) {
+            if (this.configOptions.lastLiquibaseTimestamp) {
+                // Counter already started.
+                now = this.configOptions.lastLiquibaseTimestamp;
+            } else {
+                // Create a new counter
+                const creationTimestamp = this.parseCreationTimestamp() || this.config.get('creationTimestamp');
+                now = creationTimestamp ? new Date(creationTimestamp) : now;
+            }
+            now.setMinutes(now.getMinutes() + 1);
+            this.configOptions.lastLiquibaseTimestamp = now;
+        }
+
         const nowUTC = new Date(
             now.getUTCFullYear(),
             now.getUTCMonth(),
@@ -858,10 +872,10 @@ module.exports = class extends PrivateBase {
             case 'stripHtml':
                 regex = new RegExp(
                     [
-                        /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
-                        /( \[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
-                        /( translate-compile)/, // translate-compile
-                        /( translate-value-max="[0-9{}()|]*")/ // translate-value-max
+                        /([\s\n\r]+(data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
+                        /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+                        /([\s\n\r]+translate-compile)/, // translate-compile
+                        /([\s\n\r]+translate-value-max="[0-9{}()|]*")/ // translate-value-max
                     ]
                         .map(r => r.source)
                         .join('|'),
@@ -876,8 +890,7 @@ module.exports = class extends PrivateBase {
                         /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
                         /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
                         /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
-                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
-                        /(this\.[a-zA-Z0-9]*(L|l)anguageService\.setLocations\(\[['"a-zA-Z0-9\-_,\s]+\]\);[\s]*)/ // jhiLanguageService invocations
+                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/ // ng2 jhiLanguageService constructor argument
                     ]
                         .map(r => r.source)
                         .join('|'),
@@ -1524,7 +1537,14 @@ module.exports = class extends PrivateBase {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+            try {
+                shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+            } catch (error) {
+                // noticed that on windows the shelljs.mkdir tends to sometimes fail
+                fs.mkdir(`${SERVER_MAIN_RES_DIR}config/tls`, { recursive: true }, err => {
+                    if (err) throw err;
+                });
+            }
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {
@@ -1680,19 +1700,7 @@ module.exports = class extends PrivateBase {
      * @param {string} baseName of application
      */
     getHipster(baseName = this.baseName) {
-        let hash = 0;
-        let i;
-        let chr;
-
-        for (i = 0; i < baseName.length; i++) {
-            chr = baseName.charCodeAt(i);
-            hash = (hash << 5) - hash + chr; // eslint-disable-line no-bitwise
-            hash |= 0; // eslint-disable-line no-bitwise
-        }
-
-        if (hash < 0) {
-            hash *= -1;
-        }
+        const hash = jhipsterUtils.stringHashCode(baseName);
 
         switch (hash % 4) {
             case 0:
@@ -1820,6 +1828,7 @@ module.exports = class extends PrivateBase {
      * @param {String} profile - dev | prod
      * @param {Boolean} buildWar - build a war instead of a jar
      * @param {Function} cb - callback when build is complete
+     * @returns {object} the command line and its result
      */
     buildApplication(buildTool, profile, buildWar, cb) {
         let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
@@ -1840,11 +1849,37 @@ module.exports = class extends PrivateBase {
             buildCmd = `./${buildCmd}`;
         }
         buildCmd += ` -P${profile}`;
-        const child = {};
-        child.stdout = exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout;
-        child.buildCmd = buildCmd;
+        return {
+            stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
+            buildCmd
+        };
+    }
 
-        return child;
+    /**
+     * run a command using the configured Java build tool.
+     *
+     * @param {String} buildTool - maven | gradle
+     * @param {String} profile - dev | prod
+     * @param {String} command - the command (goal/task) to run
+     * @param {Function} cb - callback when build is complete
+     * @returns {object} the command line and its result
+     */
+    runJavaBuildCommand(buildTool, profile, command, cb) {
+        let buildCmd = `mvnw -ntp -DskipTests=true -B ${command}`;
+
+        if (buildTool === 'gradle') {
+            buildCmd = `gradlew -x ${command}`;
+        }
+
+        if (os.platform() !== 'win32') {
+            buildCmd = `./${buildCmd}`;
+        }
+        buildCmd += ` -P${profile}`;
+        this.log(`Running command: '${chalk.bold(buildCmd)}'`);
+        return {
+            stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
+            buildCmd
+        };
     }
 
     /**
@@ -1911,6 +1946,10 @@ module.exports = class extends PrivateBase {
         }
         this.debug(`Time taken to write files: ${new Date() - startTime}ms`);
         return filesOut;
+    }
+
+    setupAppOptions(generator, context = generator, dest = context) {
+        this.setupSharedOptions(generator, context, dest);
     }
 
     /**
