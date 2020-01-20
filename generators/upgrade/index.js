@@ -33,6 +33,7 @@ const packagejs = require('../../package.json');
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const UPGRADE_BRANCH = 'jhipster_upgrade';
+const GLOBAL_VERSION = 'global';
 const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
 const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI support was added
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -152,7 +153,7 @@ module.exports = class extends BaseGenerator {
     _generate(jhipsterVersion, blueprintInfo, callback) {
         this.log(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
         let generatorCommand = 'yo jhipster';
-        if (jhipsterVersion.startsWith('global')) {
+        if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
             shelljs.rm('-rf', 'node_modules');
             generatorCommand = 'jhipster';
         } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
@@ -306,7 +307,7 @@ module.exports = class extends BaseGenerator {
 
             checkLatestJhipsterVersion() {
                 if (this.targetJhipsterVersion) {
-                    if (this.targetJhipsterVersion === 'global') {
+                    if (this.targetJhipsterVersion === GLOBAL_VERSION) {
                         this.originalTargetJhipsterVersion = this.targetJhipsterVersion;
                         this.targetJhipsterVersion = packagejs.version;
                     }
@@ -470,7 +471,7 @@ module.exports = class extends BaseGenerator {
             },
 
             updateJhipster() {
-                if (this.originalTargetJhipsterVersion === 'global') {
+                if (this.originalTargetJhipsterVersion === GLOBAL_VERSION) {
                     return;
                 }
                 const done = this.async();
@@ -509,11 +510,12 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 this._cleanUp();
 
-                const blueprintInfo = this.blueprints
-                    ? ` and ${this.blueprints.map(bp => bp.name + bp.latestBlueprintVersion).join(', ')} `
-                    : '';
+                const blueprintInfo =
+                    this.blueprints && this.blueprints.length > 0
+                        ? ` and ${this.blueprints.map(bp => bp.name + bp.latestBlueprintVersion).join(', ')} `
+                        : '';
                 const targetJhipsterVersion = this.originalTargetJhipsterVersion
-                    ? `${this.originalTargetJhipsterVersion} this.targetJhipsterVersion`
+                    ? `${this.originalTargetJhipsterVersion} ${this.targetJhipsterVersion}`
                     : this.targetJhipsterVersion;
                 this._regenerate(targetJhipsterVersion, blueprintInfo, done);
             },
