@@ -131,11 +131,11 @@ describe('DocumentParser', () => {
                   validations: {
                     minlength: new JDLValidation({
                       name: Validations.MINLENGTH,
-                      value: 5
+                      value: '5'
                     }),
                     maxlength: new JDLValidation({
                       name: Validations.MAXLENGTH,
-                      value: 25
+                      value: '25'
                     })
                   }
                 }),
@@ -417,31 +417,31 @@ describe('DocumentParser', () => {
           expect(jdlObject.entities.A.fields.name.validations).to.deep.equal({
             minlength: {
               name: 'minlength',
-              value: 1
+              value: '1'
             },
             maxlength: {
               name: 'maxlength',
-              value: 42
+              value: '42'
             }
           });
           expect(jdlObject.entities.A.fields.content.validations).to.deep.equal({
             minbytes: {
               name: 'minbytes',
-              value: 20
+              value: '20'
             },
             maxbytes: {
               name: 'maxbytes',
-              value: 40
+              value: '40'
             }
           });
           expect(jdlObject.entities.A.fields.count.validations).to.deep.equal({
             min: {
               name: 'min',
-              value: 0
+              value: '0'
             },
             max: {
               name: 'max',
-              value: 41
+              value: '41'
             }
           });
         });

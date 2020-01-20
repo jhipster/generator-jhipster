@@ -1,3 +1,24 @@
+# Unreleased
+
+## What's new:
+  - JDL:
+    - The `min` and `max` field validations now take decimal values (thanks to @ruddell for reporting this one):
+      ```jdl
+      entity MyEntity {
+        rate Double min(0.42)
+      }
+      ```
+    - Constants also allow decimal values:
+      ```jdl
+      MIN = 0.42
+      
+      entity MyEntity {
+        rate Double min(MIN)
+      }
+      ```
+
+---
+
 # Latest: v6.0.6
 
 ## Bug fixes:

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2017 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -239,8 +239,8 @@ describe('JDLImporter', () => {
               fieldName: 'title',
               fieldType: 'String',
               fieldValidateRules: ['minlength', 'maxlength'],
-              fieldValidateRulesMinlength: 5,
-              fieldValidateRulesMaxlength: 25
+              fieldValidateRulesMinlength: '5',
+              fieldValidateRulesMaxlength: '25'
             },
             {
               fieldName: 'type',
