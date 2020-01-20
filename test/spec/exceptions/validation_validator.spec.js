@@ -75,6 +75,56 @@ describe('ValidationValidator', () => {
           expect(() => validator.validate(validation)).to.throw(/^The validation min requires a value\.$/);
         });
       });
+      context('when passing a decimal value for a numeric validation', () => {
+        context('such as minlength', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLValidation({
+                  name: 'minlength',
+                  value: 0.001
+                })
+              )
+            ).to.throw(/^Decimal values are forbidden for the minlength validation.$/);
+          });
+        });
+        context('such as maxlength', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLValidation({
+                  name: 'maxlength',
+                  value: 0.001
+                })
+              )
+            ).to.throw(/^Decimal values are forbidden for the maxlength validation.$/);
+          });
+        });
+        context('such as minbytes', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLValidation({
+                  name: 'minbytes',
+                  value: 0.001
+                })
+              )
+            ).to.throw(/^Decimal values are forbidden for the minbytes validation.$/);
+          });
+        });
+        context('such as maxbytes', () => {
+          it('should fail', () => {
+            expect(() =>
+              validator.validate(
+                new JDLValidation({
+                  name: 'maxbytes',
+                  value: 0.001
+                })
+              )
+            ).to.throw(/^Decimal values are forbidden for the maxbytes validation.$/);
+          });
+        });
+      });
     });
   });
 });

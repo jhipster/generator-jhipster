@@ -36,16 +36,30 @@ const {
 
 describe('Grammar tests', () => {
   context('when parsing constants', () => {
-    let constants;
+    context('with integer values', () => {
+      let constants;
 
-    before(() => {
-      const content = parseFromContent(`MIN = 42
+      before(() => {
+        const content = parseFromContent(`MIN = 42
 MAX = 43`);
-      constants = content.constants;
-    });
+        constants = content.constants;
+      });
 
-    it('should parse them', () => {
-      expect(constants).to.deep.equal({ MIN: 42, MAX: 43 });
+      it('should parse them', () => {
+        expect(constants).to.deep.equal({ MIN: '42', MAX: '43' });
+      });
+    });
+    context('with decimal values', () => {
+      let constants;
+
+      before(() => {
+        const content = parseFromContent(`MIN = 42.42`);
+        constants = content.constants;
+      });
+
+      it('should parse them', () => {
+        expect(constants).to.deep.equal({ MIN: '42.42' });
+      });
     });
   });
   context('when parsing applications', () => {
@@ -452,47 +466,95 @@ application {
           });
         });
         context(`with the ${MINLENGTH} validation`, () => {
-          let parsedEntity;
+          context('using an integer value', () => {
+            let parsedEntity;
 
-          before(() => {
-            const content = parseFromContent(
-              `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name String ${MINLENGTH}(0)
 }
 `
-            );
-            parsedEntity = content.entities[0];
-          });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-          it('should parse it', () => {
-            expect(parsedEntity.body[0].validations).to.deep.equal([
-              {
-                key: MINLENGTH,
-                value: 0
-              }
-            ]);
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MINLENGTH,
+                  value: '0'
+                }
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
+
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
+  name String ${MINLENGTH}(0.01)
+}
+`
+              );
+              parsedEntity = content.entities[0];
+            });
+
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MINLENGTH,
+                  value: '0.01'
+                }
+              ]);
+            });
           });
         });
         context(`with the ${MAXLENGTH} validation`, () => {
-          let parsedEntity;
+          context('using an integer value', () => {
+            let parsedEntity;
 
-          before(() => {
-            const content = parseFromContent(
-              `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name String ${MAXLENGTH}(42)
 }
 `
-            );
-            parsedEntity = content.entities[0];
-          });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-          it('should parse it', () => {
-            expect(parsedEntity.body[0].validations).to.deep.equal([
-              {
-                key: MAXLENGTH,
-                value: 42
-              }
-            ]);
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAXLENGTH,
+                  value: '42'
+                }
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
+
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
+  name String ${MAXLENGTH}(42.01)
+}
+`
+              );
+              parsedEntity = content.entities[0];
+            });
+
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAXLENGTH,
+                  value: '42.01'
+                }
+              ]);
+            });
           });
         });
         context(`with the ${PATTERN} validation`, () => {
@@ -540,91 +602,187 @@ application {
           });
         });
         context(`with the ${MIN} validation`, () => {
-          let parsedEntity;
+          context('using an integer value', () => {
+            let parsedEntity;
 
-          before(() => {
-            const content = parseFromContent(
-              `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name Integer ${MIN}(0)
 }
 `
-            );
-            parsedEntity = content.entities[0];
-          });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-          it('should parse it', () => {
-            expect(parsedEntity.body[0].validations).to.deep.equal([
-              {
-                key: MIN,
-                value: 0
-              }
-            ]);
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MIN,
+                  value: '0'
+                }
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
+
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
+  name Integer ${MIN}(0.01)
+}
+`
+              );
+              parsedEntity = content.entities[0];
+            });
+
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MIN,
+                  value: '0.01'
+                }
+              ]);
+            });
           });
         });
         context(`with the ${MAX} validation`, () => {
-          let parsedEntity;
+          context('using an integer value', () => {
+            let parsedEntity;
 
-          before(() => {
-            const content = parseFromContent(
-              `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name Integer ${MAX}(0)
 }
 `
-            );
-            parsedEntity = content.entities[0];
-          });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-          it('should parse it', () => {
-            expect(parsedEntity.body[0].validations).to.deep.equal([
-              {
-                key: MAX,
-                value: 0
-              }
-            ]);
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAX,
+                  value: '0'
+                }
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
+
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
+  name Integer ${MAX}(0.01)
+}
+`
+              );
+              parsedEntity = content.entities[0];
+            });
+
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAX,
+                  value: '0.01'
+                }
+              ]);
+            });
           });
         });
         context(`with the ${MINBYTES} validation`, () => {
-          let parsedEntity;
+          context('using an integer value', () => {
+            let parsedEntity;
 
-          before(() => {
-            const content = parseFromContent(
-              `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name TextBlob ${MINBYTES}(0)
 }
 `
-            );
-            parsedEntity = content.entities[0];
-          });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-          it('should parse it', () => {
-            expect(parsedEntity.body[0].validations).to.deep.equal([
-              {
-                key: MINBYTES,
-                value: 0
-              }
-            ]);
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MINBYTES,
+                  value: '0'
+                }
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
+
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
+  name TextBlob ${MINBYTES}(0.01)
+}
+`
+              );
+              parsedEntity = content.entities[0];
+            });
+
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MINBYTES,
+                  value: '0.01'
+                }
+              ]);
+            });
           });
         });
         context(`with the ${MAXBYTES} validation`, () => {
-          let parsedEntity;
+          context('using an integer value', () => {
+            let parsedEntity;
 
-          before(() => {
-            const content = parseFromContent(
-              `entity A {
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
   name TextBlob ${MAXBYTES}(0)
 }
 `
-            );
-            parsedEntity = content.entities[0];
-          });
+              );
+              parsedEntity = content.entities[0];
+            });
 
-          it('should parse it', () => {
-            expect(parsedEntity.body[0].validations).to.deep.equal([
-              {
-                key: MAXBYTES,
-                value: 0
-              }
-            ]);
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAXBYTES,
+                  value: '0'
+                }
+              ]);
+            });
+          });
+          context('using a decimal value', () => {
+            let parsedEntity;
+
+            before(() => {
+              const content = parseFromContent(
+                `entity A {
+  name TextBlob ${MAXBYTES}(0.01)
+}
+`
+              );
+              parsedEntity = content.entities[0];
+            });
+
+            it('should parse it', () => {
+              expect(parsedEntity.body[0].validations).to.deep.equal([
+                {
+                  key: MAXBYTES,
+                  value: '0.01'
+                }
+              ]);
+            });
           });
         });
         context('using constants', () => {
