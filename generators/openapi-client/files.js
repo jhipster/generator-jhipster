@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -54,12 +54,19 @@ function writeFiles() {
                 let command;
                 if (generatorName === 'spring') {
                     this.log(chalk.green(`\n\nGenerating java client code for client ${cliName} (${inputSpec})`));
-                    const cliPackage = `${this.packageName}.client.${_.snakeCase(cliName)}`;
-                    const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
-                    if (shelljs.test('-d', clientPackageLocation)) {
-                        this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
-                        shelljs.rm('-rf', clientPackageLocation);
-                    }
+                    const baseCliPackage = `${this.packageName}.client.`;
+                    const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
+                    const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
+                    const cleanOldDirectory = cliPackage => {
+                        const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
+                        if (shelljs.test('-d', clientPackageLocation)) {
+                            this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
+                            shelljs.rm('-rf', clientPackageLocation);
+                        }
+                    };
+
+                    cleanOldDirectory(snakeCaseCliPackage);
+                    cleanOldDirectory(cliPackage);
 
                     JAVA_OPTS = ' -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
 
@@ -69,9 +76,7 @@ function writeFiles() {
                         ' --library spring-cloud ' +
                         ` -i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api` +
                         ` --model-package ${cliPackage}.model` +
-                        ' --type-mappings DateTime=OffsetDateTime,Date=LocalDate ' +
-                        ' --import-mappings OffsetDateTime=java.time.OffsetDateTime,LocalDate=java.time.LocalDate' +
-                        ` -DdateLibrary=custom,basePackage=${this.packageName}.client,configPackage=${cliPackage},` +
+                        ` -DbasePackage=${this.packageName}.client,configPackage=${cliPackage},` +
                         `title=${_.camelCase(cliName)}`;
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
@@ -126,6 +131,27 @@ function writeFiles() {
                     }
                 }
                 this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-starter-oauth2');
+            }
+
+            if (!this.enableSwaggerCodegen) {
+                /* This is a hack to avoid non compiling generated code from openapi generator when the
+                 * enableSwaggerCodegen option is not selected (otherwise the jackson-databind-nullable dependency is already added).
+                 * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
+                 */
+                if (this.buildTool === 'maven') {
+                    this.addMavenProperty('jackson-databind-nullable.version', jhipsterConstants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    // eslint-disable-next-line no-template-curly-in-string
+                    this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
+                } else if (this.buildTool === 'gradle') {
+                    this.addGradleProperty('jackson_databind_nullable_version', jhipsterConstants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    this.addGradleDependency(
+                        'compile',
+                        'org.openapitools',
+                        'jackson-databind-nullable',
+                        // eslint-disable-next-line no-template-curly-in-string
+                        '${jackson_databind_nullable_version}'
+                    );
+                }
             }
         },
 

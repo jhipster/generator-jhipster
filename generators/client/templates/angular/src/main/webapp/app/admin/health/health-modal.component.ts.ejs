@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,28 +19,19 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
+import { HealthKey, HealthDetails } from './health.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-health-modal',
     templateUrl: './health-modal.component.html'
 })
-export class <%=jhiPrefixCapitalized%>HealthModalComponent {
+export class HealthModalComponent {
+    health?: { key: HealthKey; value: HealthDetails };
 
-    currentHealth: any;
+    constructor(public activeModal: NgbActiveModal) {}
 
-    constructor(private healthService: <%=jhiPrefixCapitalized%>HealthService, public activeModal: NgbActiveModal) {}
-
-    baseName(name) {
-        return this.healthService.getBaseName(name);
-    }
-
-    subSystemName(name) {
-        return this.healthService.getSubSystemName(name);
-    }
-
-    readableValue(value: number) {
-        if (this.currentHealth.name === 'diskSpace') {
+    readableValue(value: any): string {
+        if (this.health && this.health.key === 'diskSpace') {
             // Should display storage space in an human readable unit
             const val = value / 1073741824;
             if (val > 1) { // Value
@@ -55,5 +46,9 @@ export class <%=jhiPrefixCapitalized%>HealthModalComponent {
         } else {
             return value.toString();
         }
+    }
+
+    dismiss(): void {
+        this.activeModal.dismiss();
     }
 }

@@ -1,0 +1,5 @@
+Description:
+    Deploys an application to Azure App Service.
+
+Example:
+    jhipster azure-app-service

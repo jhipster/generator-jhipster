@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,25 +20,23 @@ import { TestBed, async, tick, fakeAsync, inject } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%= angularXAppName %>TestModule } from '../../../test.module';
 import { MockActivatedRoute } from '../../../helpers/mock-route.service';
 import { ActivateService } from 'app/account/activate/activate.service';
 import { ActivateComponent } from 'app/account/activate/activate.component';
 
 describe('Component Tests', () => {
-
     describe('ActivateComponent', () => {
-
         let comp: ActivateComponent;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [<%= angularXAppName %>TestModule],
                 declarations: [ActivateComponent],
                 providers: [
                     {
                         provide: ActivatedRoute,
-                        useValue: new MockActivatedRoute({'key': 'ABC123'})
+                        useValue: new MockActivatedRoute({ key: 'ABC123' })
                     }
                 ]
             })

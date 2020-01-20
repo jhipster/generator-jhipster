@@ -1,4 +1,4 @@
-// This is a RFC template based on the Rust RFC process but simplified: https://github.com/rust-lang/rfcs/
+# JHipster-RFC-1: JHipster Kubernetes Operator
 
 -   Feature Name: JHipster Kubernetes Operator
 -   Start Date: 8/8/19

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,7 +32,7 @@ import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 <%_ } _%>
 import { TrackerActivity } from './tracker-activity.model';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class TrackerService {
     private stompClient: Stomp.Client | null = null;
     private routerSubscription: Subscription | null = null;
@@ -40,7 +40,7 @@ export class TrackerService {
     private connectionSubscription: Subscription | null = null;
     private stompSubscription: Stomp.Subscription | null = null;
     private listenerSubject: Subject<TrackerActivity> = new Subject();
-  
+
     constructor(
         private router: Router,
         <%_ if (authenticationType === 'session') { _%>
@@ -105,21 +105,11 @@ export class TrackerService {
         return this.listenerSubject;
     }
 
-    private sendActivity(): void {
-        if (this.stompClient && this.stompClient.connected) {
-            this.stompClient.send(
-                '/topic/activity', // destination
-                JSON.stringify({'page': this.router.routerState.snapshot.url}), // body
-                {} // header
-            );
-        }
-    }
-
     subscribe(): void {
         if (this.connectionSubscription) {
             return;
         }
-      
+
         this.connectionSubscription = this.connectionSubject.subscribe(() => {
             if (this.stompClient) {
                 this.stompSubscription = this.stompClient.subscribe('/topic/tracker', (data: Stomp.Message) => {
@@ -138,6 +128,16 @@ export class TrackerService {
         if (this.connectionSubscription) {
             this.connectionSubscription.unsubscribe();
             this.connectionSubscription = null;
+        }
+    }
+
+    private sendActivity(): void {
+        if (this.stompClient && this.stompClient.connected) {
+            this.stompClient.send(
+                '/topic/activity', // destination
+                JSON.stringify({ page: this.router.routerState.snapshot.url }), // body
+                {} // header
+            );
         }
     }
 }

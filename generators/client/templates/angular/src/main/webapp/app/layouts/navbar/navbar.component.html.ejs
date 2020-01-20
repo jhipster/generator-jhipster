@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,17 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<nav class="navbar navbar-<% if (clientTheme === 'none') { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientTheme === 'none') { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
+<nav class="navbar navbar-<% if (clientTheme === 'none' || clientThemeVariant === 'primary') { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientTheme === 'none') { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
         <span class="logo-img"></span>
-        <span jhiTranslate="global.title" class="navbar-title"><%= capitalizedBaseName %></span> <span class="navbar-version">{{version}}</span>
+        <span jhiTranslate="global.title" class="navbar-title"><%= capitalizedBaseName %></span> <span class="navbar-version">{{ version }}</span>
     </a>
     <a class="navbar-toggler d-lg-none" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
         <fa-icon icon="bars"></fa-icon>
     </a>
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
                     <span>
                         <fa-icon icon="home"></fa-icon>
@@ -35,7 +35,7 @@
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <fa-icon icon="th-list"></fa-icon>
@@ -48,7 +48,7 @@
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
-            <li *<%=jhiPrefix%>HasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
                         <fa-icon icon="user-plus"></fa-icon>
@@ -139,22 +139,22 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
                     <li *ngFor="let language of languages">
-                        <a class="dropdown-item" [<%=jhiPrefix%>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
+                        <a class="dropdown-item" [<%= jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
                     </li>
                 </ul>
             </li>
             <%_ } _%>
-            <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
-                  <span *ngIf="!getImageUrl()">
-                    <fa-icon icon="user"></fa-icon>
-                    <span jhiTranslate="global.menu.account.main">
-                      Account
+                    <span *ngIf="!getImageUrl()">
+                        <fa-icon icon="user"></fa-icon>
+                        <span jhiTranslate="global.menu.account.main">
+                            Account
+                        </span>
                     </span>
-                  </span>
-                  <span *ngIf="getImageUrl()">
-                      <img [src]="getImageUrl()" class="profile-image rounded-circle" alt="Avatar">
-                  </span>
+                    <span *ngIf="getImageUrl()">
+                        <img [src]="getImageUrl()" class="profile-image rounded-circle" alt="Avatar">
+                    </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
                     <%_ if (!skipUserManagement) { _%>

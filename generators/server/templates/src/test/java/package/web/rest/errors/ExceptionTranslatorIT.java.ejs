@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@ package <%= packageName %>.web.rest.errors;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa') { _%>
@@ -183,7 +183,11 @@ import java.util.List;
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ } _%>
 public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Autowired
@@ -232,7 +236,7 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
     public void testMethodArgumentNotValid() {
          webTestClient.post().uri("/test/method-argument")
              .contentType(MediaType.APPLICATION_JSON)
-             .syncBody("{}")
+             .bodyValue("{}")
              .exchange()
              .expectHeader().contentType(MediaType.APPLICATION_PROBLEM_JSON)
              .expectBody()

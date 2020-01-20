@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -39,7 +39,7 @@ function checkKubernetes() {
         if (stderr) {
             this.log(
                 `${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n` +
-                    'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n'
+                    'Make sure you have Kubernetes installed. Read https://kubernetes.io/docs/setup/\n'
             );
         }
         done();
@@ -50,15 +50,19 @@ function checkHelm() {
     if (this.skipChecks) return;
     const done = this.async();
 
-    shelljs.exec('helm version --client | grep -E "v2\\.1[2-9]{1,2}\\.[0-9]{1,3}"', { silent: true }, (code, stdout, stderr) => {
-        if (stderr || code !== 0) {
-            this.log(
-                `${chalk.yellow.bold('WARNING!')} helm 2.12.x or later is not installed on your computer.\n` +
-                    'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
-            );
+    shelljs.exec(
+        'helm version --client | grep -E "(v2\\.1[2-9]{1,2}\\.[0-9]{1,3})|(v3\\.[0-9]{1,2}\\.[0-9]{1,3})"',
+        { silent: true },
+        (code, stdout, stderr) => {
+            if (stderr || code !== 0) {
+                this.log(
+                    `${chalk.yellow.bold('WARNING!')} helm 2.12.x or later is not installed on your computer.\n` +
+                        'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
+                );
+            }
+            done();
         }
-        done();
-    });
+    );
 }
 
 function loadConfig() {
@@ -69,6 +73,9 @@ function loadConfig() {
     this.ingressDomain = this.config.get('ingressDomain');
     this.istio = this.config.get('istio');
     this.dbRandomPassword = crypto.randomBytes(30).toString('hex');
+    this.kubernetesUseDynamicStorage = this.config.get('kubernetesUseDynamicStorage');
+    this.kubernetesStorageClassName = this.config.get('kubernetesStorageClassName');
+    this.generatorType = this.config.get('generatorType');
 }
 
 function saveConfig() {
@@ -82,6 +89,9 @@ function saveConfig() {
         dockerPushCommand: this.dockerPushCommand,
         kubernetesNamespace: this.kubernetesNamespace,
         kubernetesServiceType: this.kubernetesServiceType,
+        kubernetesUseDynamicStorage: this.kubernetesUseDynamicStorage,
+        kubernetesStorageClassName: this.kubernetesStorageClassName,
+        generatorType: this.generatorType,
         ingressType: this.ingressType,
         ingressDomain: this.ingressDomain,
         monitoring: this.monitoring,

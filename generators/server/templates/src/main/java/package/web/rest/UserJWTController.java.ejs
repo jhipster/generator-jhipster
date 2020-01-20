@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,12 +18,12 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ if (reactive) { _%>
+<%_ if (reactive && ! skipUserManagement) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
 import <%= packageName %>.security.jwt.JWTFilter;
 import <%= packageName %>.security.jwt.TokenProvider;
-<%_ if (reactive) { _%>
+<%_ if (reactive && !skipUserManagement) { _%>
 import <%= packageName %>.service.AuditEventService;
 <%_ } _%>
 import <%= packageName %>.web.rest.vm.LoginVM;
@@ -37,7 +37,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 <%_ } _%>
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-<%_ if (reactive) { _%>
+<%_ if (reactive && !skipUserManagement) { _%>
 import org.springframework.security.core.Authentication;
 <%_ } _%>
 <%_ if (!reactive) { _%>
@@ -88,12 +88,16 @@ public class UserJWTController {
 
     private final ReactiveAuthenticationManager authenticationManager;
 
+        <%_ if (!skipUserManagement) { _%>
     private final AuditEventService auditEventService;
 
-    public UserJWTController(TokenProvider tokenProvider, ReactiveAuthenticationManager authenticationManager, AuditEventService auditEventService) {
+        <%_ } _%>
+    public UserJWTController(TokenProvider tokenProvider, ReactiveAuthenticationManager authenticationManager<% if (!skipUserManagement) { %>, AuditEventService auditEventService<% } %>) {
         this.tokenProvider = tokenProvider;
         this.authenticationManager = authenticationManager;
+        <%_ if (!skipUserManagement) { _%>
         this.auditEventService = auditEventService;
+        <%_ } _%>
     }
 
     @PostMapping("/authenticate")
@@ -101,8 +105,10 @@ public class UserJWTController {
         return loginVM
             .flatMap(login -> authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()))
+                <%_ if (!skipUserManagement) { _%>
                 .onErrorResume(throwable -> onAuthenticationError(login, throwable))
                 .flatMap(auth -> onAuthenticationSuccess(login, auth))
+                <%_ } _%>
                 .map(auth -> tokenProvider.createToken(auth, Boolean.TRUE.equals(login.isRememberMe())))
             )
             .map(jwt -> {
@@ -112,6 +118,7 @@ public class UserJWTController {
             });
     }
 
+        <%_ if (!skipUserManagement) { _%>
     private Mono<? extends Authentication> onAuthenticationSuccess(LoginVM login, Authentication auth) {
         return Mono.just(login)
             .map(LoginVM::getUsername)
@@ -128,8 +135,8 @@ public class UserJWTController {
                 .then(Mono.error(throwable));
     }
 
+        <%_ } _%>
     <%_ } _%>
-
     /**
      * Object to return as body in JWT Authentication.
      */

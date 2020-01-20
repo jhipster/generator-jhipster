@@ -8,7 +8,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
     cd "$JHI_FOLDER_UAA"
-    ./mvnw -ntp verify -DskipTests -Pdev
+    ./mvnw -ntp verify -DskipTests -Pdev --batch-mode
     mv target/*.jar app.jar
 fi
 
@@ -25,31 +25,28 @@ fi
 #-------------------------------------------------------------------------------
 # Package the application
 #-------------------------------------------------------------------------------
-if [ -f "mvnw" ]; then
-    ./mvnw -ntp verify -DskipTests -P"$JHI_PROFILE"
-    mv target/*.jar app.jar
-elif [ -f "gradlew" ]; then
-    ./gradlew bootJar -P"$JHI_PROFILE" -x test
-    mv build/libs/*SNAPSHOT.jar app.jar
-else
-    echo "*** no mvnw or gradlew"
-    exit 0
-fi
-if [ $? -ne 0 ]; then
-    echo "*** error when packaging"
-    exit 1
-fi
-
-#-------------------------------------------------------------------------------
-# Package the application as War
-#-------------------------------------------------------------------------------
 if [ "$JHI_WAR" == 1 ]; then
     if [ -f "mvnw" ]; then
-        ./mvnw -ntp verify -DskipTests -P"$JHI_PROFILE",war
+        ./mvnw -ntp verify -DskipTests -P"$JHI_PROFILE",war --batch-mode
         mv target/*.war app.war
     elif [ -f "gradlew" ]; then
         ./gradlew bootWar -P"$JHI_PROFILE" -Pwar -x test
         mv build/libs/*SNAPSHOT.war app.war
+    else
+        echo "*** no mvnw or gradlew"
+        exit 0
+    fi
+    if [ $? -ne 0 ]; then
+        echo "*** error when packaging"
+        exit 1
+    fi
+else
+    if [ -f "mvnw" ]; then
+        ./mvnw -ntp verify -DskipTests -P"$JHI_PROFILE" --batch-mode
+        mv target/*.jar app.jar
+    elif [ -f "gradlew" ]; then
+        ./gradlew bootJar -P"$JHI_PROFILE" -x test
+        mv build/libs/*SNAPSHOT.jar app.jar
     else
         echo "*** no mvnw or gradlew"
         exit 0

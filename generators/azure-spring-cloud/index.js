@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -118,9 +118,7 @@ ${chalk.red('https://docs.microsoft.com/en-us/cli/azure/install-azure-cli/?WT.mc
                         this.log.error(
                             `You don't have the Azure Spring Cloud extension installed in your Azure CLI.
 Install it by running:
-${chalk.red(
-    'az extension add -y --source https://azureclitemp.blob.core.windows.net/spring-cloud/spring_cloud-0.1.0-py2.py3-none-any.whl'
-)}`
+${chalk.red('az extension add --name spring-cloud')}`
                         );
                         this.abort = true;
                     }
@@ -163,14 +161,14 @@ ${chalk.red(
                         });
                         if (this.azureSpringCloudResourceGroupName === '') {
                             this.log.info(
-                                `Your default Azure resource group is not set up. We recommend doing it using the command 
+                                `Your default Azure resource group is not set up. We recommend doing it using the command
                                 '${chalk.yellow('az configure --defaults group=<resource group name>')}`
                             );
                             this.azureSpringCloudResourceGroupName = '';
                         }
                         if (this.azureSpringCloudServiceName === '') {
                             this.log.info(
-                                `Your default Azure Spring Cloud service name is not set up. We recommend doing it using the command 
+                                `Your default Azure Spring Cloud service name is not set up. We recommend doing it using the command
                                 '${chalk.yellow('az configure --defaults spring-cloud=<service instance name>')}`
                             );
                             this.azureSpringCloudServiceName = '';

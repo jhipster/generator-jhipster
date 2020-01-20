@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -36,7 +36,7 @@ logging:
         ROOT: INFO
         io.github.jhipster: INFO
         <%_ if (packageName !== 'io.github.jhipster') { _%>
-        <%=packageName%>: INFO
+        <%= packageName %>: INFO
         <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
@@ -85,7 +85,7 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'mariadb') { _%>
@@ -116,29 +116,8 @@ spring:
                 useServerPrepStmts: true
         <%_ } _%>
     jpa:
-        <%_ if (prodDatabaseType === 'mysql') { _%>
-        database-platform: org.hibernate.dialect.MySQL8Dialect
-        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        database-platform: org.hibernate.dialect.MariaDB103Dialect
-        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
-        <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        database-platform: org.hibernate.dialect.Oracle12cDialect
-        <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        database-platform: org.hibernate.dialect.SQLServer2012Dialect
-        <%_ } else { _%>
-        database-platform: org.hibernate.dialect.HSQLDialect
-        <%_ } _%>
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-        database: MYSQL
-        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-        database: POSTGRESQL
-        <%_ } else if (prodDatabaseType === 'oracle') { _%>
-        database: ORACLE
-        <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        database: SQL_SERVER
-        <%_ } else { _%>
-        database: HSQL
+        <%_ if (prodDatabaseType === 'postgresql') { _%>
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } _%>
         show-sql: false
         properties:

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,15 +28,17 @@ import { SERVER_API_URL } from 'app/app.constants';
 import { Logout } from 'app/core/login/logout.model';
 <%_ } else { _%>
 import { Login } from 'app/core/login/login.model';
+
+export const LOGOUT_URL = SERVER_API_URL + 'api/logout';
 <%_ } _%>
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-
     constructor(
         private http: HttpClient
     ) {}
-<%_ if (authenticationType !== 'oauth2') { _%>
+
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     login(credentials: Login): Observable<{}> {
         const data =
@@ -52,17 +54,19 @@ export class AuthServerProvider {
 
     logout(): Observable<void> {
         // logout from the server
-        return this.http.post(SERVER_API_URL + 'api/logout', {}).pipe(
+        return this.http.post(LOGOUT_URL, {}).pipe(
             map(() => {
                 // to get a new csrf token call the api
                 this.http.get(SERVER_API_URL + 'api/account').subscribe();
             })
         );
     }
-<%_ } else { _%>
+
+    <%_ } else { _%>
 
     logout(): Observable<Logout> {
         return this.http.post<Logout>(SERVER_API_URL + 'api/logout', {});
     }
-<%_ } _%>
+
+    <%_ } _%>
 }

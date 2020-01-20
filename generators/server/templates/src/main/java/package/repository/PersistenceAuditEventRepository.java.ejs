@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%= packageName %>.repository;
 
-import <%=packageName%>.domain.PersistentAuditEvent;
+import <%= packageName %>.domain.PersistentAuditEvent;
 <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
 <%_ } _%>
@@ -45,9 +45,9 @@ import java.util.List;
 public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') {
  %><PersistentAuditEvent, String><% } %> {
 
-    <%_ if (!reactive) { _%>
-    List<PersistentAuditEvent> findByPrincipal(String principal);
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByPrincipal(String principal);
 
+    <%_ if (!reactive) { _%>
     List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfterAndAuditEventType(String principal, Instant after, String type);
 
     <%_ } _%>
@@ -55,7 +55,7 @@ public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Re
 
     <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByAuditEventDateBefore(Instant before);
     <%_ if (reactive) { _%>
-    
+
     Flux<PersistentAuditEvent> findAllBy(Pageable pageable);
 
     Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate);

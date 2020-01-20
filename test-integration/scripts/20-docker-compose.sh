@@ -39,6 +39,12 @@ fi
 if [ -a src/main/docker/mariadb.yml ]; then
     docker-compose -f src/main/docker/mariadb.yml up -d
 fi
+if [ -a src/main/docker/redis.yml ]; then
+    docker-compose -f src/main/docker/redis.yml up -d
+fi
+if [ -a src/main/docker/memcached.yml ]; then
+    docker-compose -f src/main/docker/memcached.yml up -d
+fi
 if [ -a src/main/docker/jhipster-registry.yml ]; then
     docker-compose -f src/main/docker/jhipster-registry.yml up -d
 fi

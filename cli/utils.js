@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -28,8 +28,6 @@ const SUB_GENERATORS = require('./commands');
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
 
-let exitCode = 0;
-
 const debug = function(msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
@@ -49,8 +47,20 @@ const error = function(msg, trace) {
     if (trace) {
         console.log(trace);
     }
+    process.exitCode = 1;
+};
+
+/**
+ *  Use with carefull.
+ *  process.exit is not recommended by Node.js.
+ *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
+ */
+const fatal = function(msg, trace) {
+    console.error(`${chalk.red(msg)}`);
+    if (trace) {
+        console.log(trace);
+    }
     process.exit(1);
-    exitCode = 1;
 };
 
 const init = function(program) {
@@ -69,7 +79,8 @@ const logger = {
     debug,
     info,
     log,
-    error
+    error,
+    fatal
 };
 
 const toString = item => {
@@ -220,15 +231,5 @@ module.exports = {
     getCommandOptions,
     done,
     createYeomanEnv,
-    getOptionAsArgs,
-
-    getExitCode() {
-        return exitCode;
-    },
-
-    setExitCode(code) {
-        if (code !== 0) {
-            exitCode = code;
-        }
-    }
+    getOptionAsArgs
 };

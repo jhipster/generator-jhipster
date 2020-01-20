@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -55,13 +55,16 @@ function loadBlueprintCommands() {
 const defaultCommands = {
     app: {
         default: true,
-        desc: 'Create a new JHipster application based on the selected options'
+        desc: '[Default] Create a new JHipster application based on the selected options'
     },
     aws: {
         desc: 'Deploy the current application to Amazon Web Services'
     },
     'aws-containers': {
         desc: 'Deploy the current application to Amazon Web Services using ECS'
+    },
+    'azure-app-service': {
+        desc: 'Deploy the current application to Azure App Service'
     },
     'azure-spring-cloud': {
         desc: 'Deploy the current application to Azure Spring Cloud'
@@ -126,11 +129,16 @@ Example:
         desc: 'Display information about your current project and system'
     },
     kubernetes: {
+        alias: 'k8s',
         desc: 'Deploy the current application to Kubernetes'
     },
     'kubernetes-helm': {
         alias: 'k8s-helm',
         desc: 'Deploy the current application to Kubernetes using Helm package manager'
+    },
+    'kubernetes-knative': {
+        alias: 'knative',
+        desc: 'Deploy the current application to Kubernetes using knative constructs'
     },
     languages: {
         argument: ['languages...'],

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -44,9 +44,9 @@ This application is configured for Service Discovery and Configuration with <% i
 ## Development
 
 <%_ if (skipClient) { _%>
-To start your application in the dev profile, simply run:
+To start your application in the dev profile, run:
 
-    <% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle'){ %>./gradlew<% } %>
+    <% if (buildTool === 'maven') { %>./mvnw<% } %><% if (buildTool === 'gradle') { %>./gradlew<% } %>
 
 <%_ } _%>
 <%_ if (!skipClient) { _%>
@@ -66,15 +66,15 @@ You will only need to run this command when dependencies change in [package.json
 
 We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 
-<%_ if(['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
+<%_ if (['hazelcast', 'memcached', 'redis'].includes(cacheProvider)) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
 ```
-docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider%>.yml up -d
+docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider %>.yml up -d
 ```
 <%_ if (cacheProvider === 'redis') { _%>
 
-The cache can also be disabled by adding to the application yaml:
+The cache can also be turned off by adding to the application yaml:
 ```
 spring:
     cache:
@@ -161,7 +161,7 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 ### PWA Support
 
-JHipster ships with PWA (Progressive Web App) support, and it's disabled by default. One of the main components of a PWA is a service worker.
+JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
 The service worker initialization code is commented out by default. To enable it, uncomment the following code in `src/main/webapp/index.html`:
 
@@ -317,7 +317,7 @@ If you need to re-run the Sonar phase, please be sure to specify at least the `i
 ./mvnw initialize sonar:sonar
 ```
 or
-<%_ } else if(buildTool === 'gradle') { _%>
+<%_ } else if (buildTool === 'gradle') { _%>
 ```
 ./gradlew -Pprod clean check jacocoTestReport sonarqube
 ```
@@ -329,13 +329,13 @@ For more information, refer to the [Code quality page][].
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 <% if (databaseType !== 'no') { %>
-For example, to start a <%= prodDatabaseType%> database in a docker container, run:
+For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml up -d
+    docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
 
 To stop it and remove the container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml down
+    docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
 <% } %>
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
@@ -370,7 +370,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: https://gatling.io/<% } %>
-<%_ if (!skipClient) {_%>
+<%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
 [Yarn]: https://yarnpkg.org/
 [Webpack]: https://webpack.github.io/

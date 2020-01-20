@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -418,12 +418,8 @@ module.exports = class extends BaseGenerator {
                         // Encode username/password to avoid errors caused by spaces
                         props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
                         props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
-                        const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${
-                            props.herokuJHipsterRegistryPassword
-                        }@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
-                        const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${
-                            this.herokuAppName
-                        }`;
+                        const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
+                        const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
                         const child = exec(configSetCmd, (err, stdout, stderr) => {
                             if (err) {
                                 this.abort = true;
