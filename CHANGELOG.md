@@ -1,4 +1,4 @@
-# Unreleased
+# Latest: v6.0.7
 
 ## What's new:
   - JDL:
@@ -19,7 +19,7 @@
 
 ---
 
-# Latest: v6.0.6
+# v6.0.6
 
 ## Bug fixes:
   - When exporting an application to a JDL file, the following attributes weren't quoted in the JSON file:
