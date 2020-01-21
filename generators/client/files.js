@@ -134,6 +134,7 @@ const vueFiles = {
                 'shared/config/config-bootstrap-vue.ts',
                 'shared/config/store/account-store.ts',
                 'shared/config/store/alert-store.ts',
+                'shared/security/authority.ts',
                 'router/index.ts'
             ]
         }

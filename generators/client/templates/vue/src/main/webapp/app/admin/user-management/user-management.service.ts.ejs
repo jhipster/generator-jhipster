@@ -1,6 +1,9 @@
 import axios from 'axios';
 import Vue from 'vue';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
+<%_ if (databaseType !== 'sql' && databaseType !== 'mongodb' || databaseType !== 'couchbase') { _%>
+import {Authority} from '@/shared/security/authority'
+<%_ } _%>
 
 export default class UserManagementService {
 
@@ -28,7 +31,7 @@ export default class UserManagementService {
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     return axios.get('<%- apiUaaPath %>api/users/authorities');
     <%_ } else { _%>
-    return Promise.resolve(['ROLE_USER', 'ROLE_ADMIN']);
+    return Promise.resolve([Authority.USER, Authority.ADMIN]);
     <%_ } _%>
   }
 }
