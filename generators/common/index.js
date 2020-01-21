@@ -39,7 +39,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.setupServerOptions(this);
         this.setupClientOptions(this);
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('common', { 'client-hook': !this.skipClient });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common', { 'client-hook': !this.skipClient });
     }
 
     // Public API method used by the getter and also by Blueprints
