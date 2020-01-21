@@ -132,7 +132,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('entity', { arguments: [this.context.name] });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { arguments: [this.context.name] });
     }
 
     // Public API method used by the getter and also by Blueprints

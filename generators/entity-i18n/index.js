@@ -32,7 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.configOptions = opts.configOptions || {};
 
         useBlueprints =
-            !opts.fromBlueprint && this.instantiateBlueprints('entity-i18n', { context: opts.context, debug: opts.context.isDebugEnabled });
+            !this.fromBlueprint && this.instantiateBlueprints('entity-i18n', { context: opts.context, debug: opts.context.isDebugEnabled });
     }
 
     // Public API method used by the getter and also by Blueprints

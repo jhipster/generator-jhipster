@@ -233,7 +233,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.useNpm = this.configOptions.useNpm = !this.options.yarn;
         this.useYarn = !this.useNpm;
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('app');
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
 
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;

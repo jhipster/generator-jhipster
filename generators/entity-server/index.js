@@ -32,7 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.configOptions = opts.configOptions || {};
 
         useBlueprints =
-            !opts.fromBlueprint &&
+            !this.fromBlueprint &&
             this.instantiateBlueprints('entity-server', { context: opts.context, debug: opts.context.isDebugEnabled });
     }
 
