@@ -121,6 +121,13 @@
                 let nullable_relation = true,
                 relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName,
+                idSuffix = relationships[idx].otherEntityName.toLowerCase() === 'authority' ? 'name' : 'id';
+                let relationshipColumnType = 'bigint';
+                if (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') {
+                    relationshipColumnType = 'varchar(100)';
+                } else if (relationships[idx].otherEntityName === 'authority') {
+                    relationshipColumnType = 'varchar(50)';
+                }
                 relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
                 if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
                     nullable_relation = false;
@@ -133,7 +140,7 @@
                             && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) {
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
-            <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_<%= idSuffix %>" type="<%= relationshipColumnType %>">
                 <constraints unique="true" nullable="<%= nullable_relation %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
             </column>
             <%_ }
