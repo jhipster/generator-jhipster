@@ -32,7 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = {};
+        this.configOptions = opts.configOptions || {};
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -400,7 +400,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeServer() {
-                if (this.skipServer) return;
+                if (this.skipServer || this.configOptions.skipComposeServer) return;
+                this.configOptions.skipComposeServer = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -413,7 +414,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeClient() {
-                if (this.skipClient) return;
+                if (this.skipClient || this.configOptions.skipComposeClient) return;
+                this.configOptions.skipComposeClient = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -425,6 +427,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeCommon() {
+                if (this.configOptions.skipComposeCommon) return;
+                this.configOptions.skipComposeCommon = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -460,7 +464,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeLanguages() {
-                if (this.skipI18n) return;
+                if (this.skipI18n || this.configOptions.skipComposeLanguages) return;
+                this.configOptions.skipComposeLanguages = true;
                 this.composeLanguagesSub(this, this.configOptions, this.generatorType);
             },
 
@@ -525,7 +530,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             regenerateEntities() {
-                if (this.withEntities) {
+                if (this.withEntities && !this.configOptions.skipComposeEntity) {
+                    this.configOptions.skipComposeEntity = true;
                     const options = this.options;
                     const configOptions = this.configOptions;
                     this.getExistingEntities().forEach(entity => {
