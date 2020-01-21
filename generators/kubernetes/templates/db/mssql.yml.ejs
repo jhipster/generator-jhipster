@@ -47,7 +47,7 @@ spec:
     metadata:
       labels:
         app: <%= app.baseName.toLowerCase() %>-mssql
-     <% if (istio) { _%>
+     <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
      <%_ } _%>
@@ -104,24 +104,14 @@ spec:
       targetPort: 1433
   type: LoadBalancer
 ---
-kind: StorageClass
-apiVersion: storage.k8s.io/v1beta1
-metadata:
-     name: <%= app.baseName.toLowerCase() %>-mssql
-provisioner: kubernetes.io/azure-disk
-parameters:
-  storageaccounttype: Standard_LRS
-  kind: Managed
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: mssql-data
-  annotations:
-    volume.beta.kubernetes.io/storage-class: azure-disk
 spec:
   accessModes:
   - ReadWriteOnce
+  storageClassName: managed-premium
   resources:
     requests:
       storage: 8Gi
