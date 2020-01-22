@@ -1464,6 +1464,32 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Returns the primary key value based on authentication type, DB, given association and default value
+     *
+     * @param {string} authenticationType - the auth type
+     * @param {string} databaseType - the database type
+     * @param {any} relationships - relationships
+     * @param {string} defaultValue - default value
+     */
+    getPkValueBasedOnDBAndAssociation(authenticationType, databaseType, relationships, defaultValue) {
+        const primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+        let value = defaultValue + 'L';
+        switch (primaryKeyType) {
+            case 'String':
+                value = '"id' + defaultValue + '"';
+                // Special case with a OneToOne relationship with User and @MapsId when using OAuth
+                if (databaseType === 'sql') {
+                    value = 'UUID.randomUUID().toString()';
+                }
+                break;
+            case 'UUID':
+                value = 'UUID.randomUUID()';
+                break;
+        }
+        return value;
+    }
+
+    /**
      * Get a root folder name for entity
      * @param {string} clientRootFolder
      * @param {string} entityFileName

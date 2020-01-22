@@ -21,17 +21,11 @@ package <%= packageName %>.service.mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-<%
-let primaryKeyType = pkType;
-let hasOauthUser = false;
-for (idx in relationships) {
-    const otherEntityName = relationships[idx].otherEntityName;
-    const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-    hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
-    primaryKeyType = (isUsingMapsId === true && otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : primaryKeyType;
-}
-%>
-<%_ if (databaseType === 'sql' && hasOauthUser === true) { _%>
+<%_
+let primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+let id = getPkValueBasedOnDBAndAssociation(authenticationType, databaseType, relationships, '1');
+_%>
+<%_ if (id.includes('UUID')) { _%>
 import java.util.UUID;
 <%_ } _%>
 
@@ -46,7 +40,7 @@ public class <%= entityClass %>MapperTest {
 
     @Test
     public void testEntityFromId() {
-        <%= primaryKeyType %> id = <% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (databaseType === 'sql') { %>2L<% } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>"id2"<% } %>;
+        <%= primaryKeyType %> id = <%- id %>;
         assertThat(<%= entityInstance %>Mapper.fromId(id).getId()).isEqualTo(id);
         assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
     }
