@@ -1473,10 +1473,10 @@ module.exports = class extends Generator {
      */
     getPkValueBasedOnDBAndAssociation(authenticationType, databaseType, relationships, defaultValue) {
         const primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-        let value = defaultValue + 'L';
+        let value;
         switch (primaryKeyType) {
             case 'String':
-                value = '"id' + defaultValue + '"';
+                value = `"id${defaultValue}"`;
                 // Special case with a OneToOne relationship with User and @MapsId when using OAuth
                 if (databaseType === 'sql') {
                     value = 'UUID.randomUUID().toString()';
@@ -1485,6 +1485,8 @@ module.exports = class extends Generator {
             case 'UUID':
                 value = 'UUID.randomUUID()';
                 break;
+            default:
+                value = `${defaultValue}L`;
         }
         return value;
     }
