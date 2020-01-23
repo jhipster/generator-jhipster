@@ -164,7 +164,7 @@
                   identityInsertEnabled="true"
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_authority">
-            <%_ if (devDatabaseType === 'oracle') { _%>
+            <%_ if (devDatabaseType === 'oracle' || prodDatabaseType == 'oracle') { _%>
             <column name="name" type="string"/>
             <%_ } _%>
         </loadData>
@@ -176,7 +176,7 @@
                   identityInsertEnabled="true"
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_user_authority">
-            <%_ if (devDatabaseType === 'oracle') { _%>
+            <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
             <column name="user_id" type="numeric"/>
             <column name="name" type="string"/>
             <%_ } _%>
