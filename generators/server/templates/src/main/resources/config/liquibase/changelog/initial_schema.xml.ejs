@@ -163,7 +163,11 @@
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
-                  tableName="<%= jhiTablePrefix %>_authority"/>
+                  tableName="<%= jhiTablePrefix %>_authority">
+            <%_ if (devDatabaseType === 'oracle') { _%>
+            <column name="name" type="string"/>
+            <%_ } _%>
+        </loadData>
 
         <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/user_authority.csv"
@@ -171,7 +175,12 @@
                   <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
-                  tableName="<%= jhiTablePrefix %>_user_authority"/>
+                  tableName="<%= jhiTablePrefix %>_user_authority">
+            <%_ if (devDatabaseType === 'oracle') { _%>
+            <column name="user_id" type="numeric"/>
+            <column name="name" type="string"/>
+            <%_ } _%>
+        </loadData>
     <%_ } _%>
 <%_ } _%>
         <createTable tableName="<%= jhiTablePrefix %>_persistent_audit_event">
