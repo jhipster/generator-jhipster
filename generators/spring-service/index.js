@@ -44,7 +44,7 @@ module.exports = class extends BaseBlueprintGenerator {
         });
         this.defaultOption = this.options.default;
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('spring-service', { arguments: [this.name] });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('spring-service', { arguments: [this.name] });
     }
 
     // Public API method used by the getter and also by Blueprints

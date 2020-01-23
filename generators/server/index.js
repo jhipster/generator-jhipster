@@ -60,7 +60,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupServerOptions(this);
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
 
         this.registerPrettierTransform();
     }

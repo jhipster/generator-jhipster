@@ -85,6 +85,9 @@ metadata:
 spec:
   serviceName: consul
   replicas: 3
+  selector:
+    matchLabels:
+      app: consul
   template:
     metadata:
       name: consul

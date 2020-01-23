@@ -80,7 +80,7 @@ module.exports = class extends BaseBlueprintGenerator {
         }
 
         useBlueprints =
-            !opts.fromBlueprint &&
+            !this.fromBlueprint &&
             this.instantiateBlueprints('languages', { languages: this.languages, arguments: this.options.languages });
     }
 
