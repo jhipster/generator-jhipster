@@ -243,25 +243,25 @@ function addEntityToRouter(generator, entityName, entityFileName, entityAngularN
                         |      path: '/${entityFileName}',
                         |      name: '${entityAngularName}',
                         |      component: ${entityAngularName},
-                        |      meta: { authorities: ['ROLE_USER'] }
+                        |      meta: { authorities: [Authority.USER] }
                         |    },
                         |    {
                         |      path: '/${entityFileName}/new',
                         |      name: '${entityAngularName}Create',
                         |      component: ${entityAngularName}Update,
-                        |      meta: { authorities: ['ROLE_USER'] }
+                        |      meta: { authorities: [Authority.USER] }
                         |    },
                         |    {
                         |      path: '/${entityFileName}/:${entityName}Id/edit',
                         |      name: '${entityAngularName}Edit',
                         |      component: ${entityAngularName}Update,
-                        |      meta: { authorities: ['ROLE_USER'] }
+                        |      meta: { authorities: [Authority.USER] }
                         |    },
                         |    {
                         |      path: '/${entityFileName}/:${entityName}Id/view',
                         |      name: '${entityAngularName}View',
                         |      component: ${entityAngularName}Details,
-                        |      meta: { authorities: ['ROLE_USER'] }
+                        |      meta: { authorities: [Authority.USER] }
                         |    }`
                 )]
             },
@@ -279,13 +279,13 @@ function addEntityToRouter(generator, entityName, entityFileName, entityAngularN
                         |      path: '/${entityFileName}',
                         |      name: '${entityAngularName}',
                         |      component: ${entityAngularName},
-                        |      meta: { authorities: ['ROLE_USER'] }
+                        |      meta: { authorities: [Authority.USER] }
                         |    },
                         |    {
                         |      path: '/${entityFileName}/:${entityName}Id/view',
                         |      name: '${entityAngularName}View',
                         |      component: ${entityAngularName}Details,
-                        |      meta: { authorities: ['ROLE_USER'] }
+                        |      meta: { authorities: [Authority.USER] }
                         |    }`
                 )]
             },
@@ -349,7 +349,7 @@ function addPageToRouter(generator, pageName, pageFolderName) {
                 |      path: '/pages/${pageFolderName}',
                 |      name: '${pageName}',
                 |      component: ${pageName},
-                |      meta: { authorities: ['ROLE_USER'] }
+                |      meta: { authorities: [Authority.USER] }
                 |    }`
             )]
         },
