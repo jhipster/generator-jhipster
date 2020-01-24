@@ -26,9 +26,9 @@ let primaryKeyType = pkType;
 let hasOauthUser = false;
 for (idx in relationships) {
     const otherEntityName = relationships[idx].otherEntityName;
-    const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+    const usingMapsId = relationships[idx].useJPADerivedIdentifier;
     hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
-    primaryKeyType = (isUsingMapsId === true && otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : primaryKeyType;
+    primaryKeyType = (usingMapsId === true && otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : primaryKeyType;
 }
 _%>
 <%_ if (databaseType === 'cassandra' || (databaseType === 'sql' && hasOauthUser === true)) { _%>
