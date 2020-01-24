@@ -1004,6 +1004,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}config/ElasticsearchConfiguration.java`
                 }
             ]
+        },
+        {
+            condition: generator => generator.searchEngine === 'elasticsearch',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/ElasticsearchTestConfiguration.java',
+                    renameTo: generator => `${generator.testDir}config/ElasticsearchTestConfiguration.java`
+                }
+            ]
         }
     ],
     serverJavaDomain: [
