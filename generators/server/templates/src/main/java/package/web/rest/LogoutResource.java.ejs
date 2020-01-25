@@ -39,7 +39,7 @@ import java.util.Map;
  */
 @RestController
 public class LogoutResource {
-    private <% if (reactive) { %>Mono<<% } %>ClientRegistration<% if (reactive) { %>><% } %> registration;
+    private final <% if (reactive) { %>Mono<<% } %>ClientRegistration<% if (reactive) { %>><% } %> registration;
 
     public LogoutResource(<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository registrations) {
         this.registration = registrations.findByRegistrationId("oidc");
