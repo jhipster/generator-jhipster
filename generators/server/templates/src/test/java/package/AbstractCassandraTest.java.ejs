@@ -20,8 +20,7 @@ package <%= packageName %>;
 
 import io.github.jhipster.config.JHipsterConstants;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.cassandra.exceptions.ConfigurationException;
 import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.CQLDataLoader;
@@ -33,6 +32,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.DirectoryStream;
@@ -59,14 +59,12 @@ public class AbstractCassandraTest {
     public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException {
         if (!started) {
             startTestcontainer();
-            Cluster cluster = new Cluster.Builder()
-                .addContactPoint("127.0.0.1")
-                .withPort(CASSANDRA_CONTAINER.getMappedPort(CASSANDRA_TEST_PORT))
+            CqlSession session = CqlSession.builder()
+                .addContactPoint(new InetSocketAddress("127.0.0.1", CASSANDRA_CONTAINER.getMappedPort(CASSANDRA_TEST_PORT)))
                 .withoutMetrics()
                 .withoutJMXReporting()
                 .build();
 
-            Session session = cluster.connect();
             createTestKeyspace(session);
             CQLDataLoader dataLoader = new CQLDataLoader(session);
             applyScripts(dataLoader, "config/cql/changelog/", "*.cql");
