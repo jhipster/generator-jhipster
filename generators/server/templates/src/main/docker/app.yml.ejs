@@ -75,7 +75,7 @@ services:
             <%_ if (prodDatabaseType === 'cassandra') { _%>
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
                 <%_ if (authenticationType === 'uaa') { _%>
-            - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
+            - JHIPSTER_SLEEP=120 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
                 <%_ } else { _%>
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
                 <%_ } _%>
