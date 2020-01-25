@@ -81,14 +81,12 @@ public class LogoutResourceIT {
     private WebTestClient webTestClient;
 <%_ } _%>
 
-    private OidcIdToken idToken;
-
     @BeforeEach
     public void before() <% if (!reactive) { %>throws Exception <% } %>{
         Map<String, Object> claims = new HashMap<>();
         claims.put("groups", Collections.singletonList("ROLE_USER"));
         claims.put("sub", 123);
-        this.idToken = new OidcIdToken(ID_TOKEN, Instant.now(), Instant.now().plusSeconds(60), claims);
+        OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(), Instant.now().plusSeconds(60), claims);
 
     <%_ if (!reactive) { _%>
         SecurityContextHolder.getContext().setAuthentication(authenticationToken(idToken));
