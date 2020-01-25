@@ -31,7 +31,7 @@ for (idx in relationships) {
     primaryKeyType = (isUsingMapsId === true && otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : primaryKeyType;
 }
 %>
-<%_ if (databaseType === 'sql' && hasOauthUser === true) { _%>
+<%_ if (databaseType === 'sql' && hasOauthUser === true && primaryKeyType === 'String') { _%>
 import java.util.UUID;
 <%_ } _%>
 
