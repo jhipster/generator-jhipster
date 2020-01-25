@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -123,11 +123,11 @@ function askForServerSideOpts(meta) {
                         name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
                     });
                 }
+                opts.push({
+                    value: 'oauth2',
+                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+                });
                 if (!reactive) {
-                    opts.push({
-                        value: 'oauth2',
-                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
-                    });
                     if (['gateway', 'microservice'].includes(applicationType)) {
                         opts.push({
                             value: 'uaa',
@@ -181,7 +181,7 @@ function askForServerSideOpts(meta) {
                     value: 'couchbase',
                     name: 'Couchbase'
                 });
-                if (!reactive && applicationType !== 'uaa') {
+                if (applicationType !== 'uaa') {
                     opts.push({
                         value: 'no',
                         name: 'No database'
@@ -371,11 +371,11 @@ function askForOptionalItems(meta) {
                 value: 'websocket:spring-websocket'
             });
         }
-        choices.push({
-            name: 'Asynchronous messages using Apache Kafka',
-            value: 'messageBroker:kafka'
-        });
     }
+    choices.push({
+        name: 'Asynchronous messages using Apache Kafka',
+        value: 'messageBroker:kafka'
+    });
     choices.push({
         name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'

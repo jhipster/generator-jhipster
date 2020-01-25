@@ -7,6 +7,8 @@ const expectedFiles = require('./utils/expected-files').entity;
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 describe('JHipster generator for entity', () => {
     context('creation from CLI', () => {
@@ -813,6 +815,38 @@ describe('JHipster generator for entity', () => {
                 it('generates swagger annotations on DTO', () => {
                     assert.noFileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/Foo.java`, /@ApiModelProperty/);
                     assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`, /@ApiModelProperty/);
+                });
+            });
+        });
+
+        context('reproducible build', () => {
+            describe('no dto, no service, no pagination', () => {
+                before(done => {
+                    helpers
+                        .run(require.resolve('../generators/entity'))
+                        .inTmpDir(dir => {
+                            fse.copySync(path.join(__dirname, '../test/templates/reproducible'), dir);
+                        })
+                        .withArguments(['foo'])
+                        .on('end', done);
+                });
+
+                it('creates expected default files', () => {
+                    assert.file(expectedFiles.server);
+                    assert.file(expectedFiles.clientNg2);
+                    assert.file(expectedFiles.gatling);
+                    assert.file(expectedFiles.fakeData);
+
+                    assert.fileContent(`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`, /1;New Leu Diverse Illinois;"0646"/);
+
+                    assert.fileContent(
+                        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
+                        /DEFAULT_NUMBER_PATTERN_REQUIRED = "387"/
+                    );
+                    assert.fileContent(
+                        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
+                        /UPDATED_NUMBER_PATTERN_REQUIRED = "468439"/
+                    );
                 });
             });
         });

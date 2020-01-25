@@ -9,7 +9,7 @@ cd "$JHI_FOLDER_APP"
 
 if [[ "$JHI_APP" = "ngx-default" && "$GITHUB_REPOSITORY" = "jhipster/generator-jhipster" && "$GITHUB_REF" = "refs/heads/master" ]]; then
     echo "*** Sonar analyze for master branch"
-    ./mvnw -ntp initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
+    ./mvnw -ntp --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
         -Dsonar.host.url=https://sonarcloud.io \
         -Dsonar.projectKey=jhipster-sample-application \
         -Dsonar.organization=jhipster \
@@ -17,7 +17,7 @@ if [[ "$JHI_APP" = "ngx-default" && "$GITHUB_REPOSITORY" = "jhipster/generator-j
 
 elif [[ $JHI_SONAR = 1 ]]; then
     echo "*** Sonar analyze locally"
-    ./mvnw -ntp initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
+    ./mvnw -ntp --batch-mode initialize org.jacoco:jacoco-maven-plugin:prepare-agent sonar:sonar \
         -Dsonar.host.url=http://localhost:9001 \
         -Dsonar.projectKey=JHipsterSonar
         

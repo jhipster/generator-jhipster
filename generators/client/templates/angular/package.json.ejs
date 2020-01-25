@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,62 +27,63 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "8.2.4",
-    "@angular/compiler": "8.2.4",
-    "@angular/core": "8.2.4",
-    "@angular/forms": "8.2.4",
-    "@angular/platform-browser": "8.2.4",
-    "@angular/platform-browser-dynamic": "8.2.4",
-    "@angular/router": "8.2.4",
+    "@angular/common": "8.2.14",
+    "@angular/compiler": "8.2.14",
+    "@angular/core": "8.2.14",
+    "@angular/forms": "8.2.14",
+    "@angular/platform-browser": "8.2.14",
+    "@angular/platform-browser-dynamic": "8.2.14",
+    "@angular/router": "8.2.14",
     "@fortawesome/angular-fontawesome": "0.5.0",
-    "@fortawesome/fontawesome-svg-core": "1.2.22",
-    "@fortawesome/free-solid-svg-icons": "5.10.2",
-    "@ng-bootstrap/ng-bootstrap": "5.1.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.26",
+    "@fortawesome/free-solid-svg-icons": "5.12.0",
+    "@ng-bootstrap/ng-bootstrap": "5.1.4",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
-    "bootstrap": "4.3.1",
+    "bootstrap": "4.4.1",
     <%_ if (clientTheme !== 'none') { _%>
-    "bootswatch": "4.3.1",
+    "bootswatch": "4.4.1",
     <%_ } _%>
-    "core-js": "3.2.1",
+    "core-js": "3.5.0",
     "moment": "2.24.0",
     "ng-jhipster": "0.11.5",
     "ngx-cookie": "4.0.2",
-    "ngx-infinite-scroll": "8.0.0",
+    "ngx-infinite-scroll": "8.0.1",
     "ngx-webstorage": "4.0.1",
-    "rxjs": "6.5.2",
-    "swagger-ui": "2.2.10",
+    "rxjs": "6.5.3",
+    "swagger-ui-dist": "3.24.3",
     <%_ if (websocket === 'spring-websocket') { _%>
-    "sockjs-client": "1.3.0",
+    "sockjs-client": "1.4.0",
     "webstomp-client": "1.2.6",
     <%_ } _%>
     "tslib": "1.10.0",
     "zone.js": "0.10.2"
   },
   "devDependencies": {
-    "@angular/cli": "8.3.1",
-    "@angular/compiler-cli": "8.2.4",
-    "@ngtools/webpack": "8.3.1",
+    "@angular/cli": "8.3.20",
+    "@angular/compiler-cli": "8.2.14",
+    "@ngtools/webpack": "8.3.20",
+    "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
     <%_ if (protractorTests) { _%>
-    "@types/chai": "4.2.0",
+    "@types/chai": "4.2.7",
     "@types/chai-string": "1.4.2",
     <%_ } _%>
-    "@types/jest": "24.0.18",
+    "@types/jest": "24.0.23",
     <%_ if (protractorTests) { _%>
     "@types/mocha": "5.2.7",
     <%_ } _%>
-    "@types/node": "10.12.27",
+    "@types/node": "12.12.17",
+    <%_ if (protractorTests) { _%>
+    "@types/selenium-webdriver": "4.0.5",
+    <%_ } _%>
     <%_ if (websocket === 'spring-websocket') { _%>
     "@types/sockjs-client": "1.1.1",
     <%_ } _%>
-    "@typescript-eslint/eslint-plugin": "2.7.0",
-    "@typescript-eslint/eslint-plugin-tslint": "2.7.0",
-    "@typescript-eslint/parser": "2.7.0",
-    <%_ if (protractorTests) { _%>
-    "@types/selenium-webdriver": "4.0.2",
-    <%_ } _%>
+    "@typescript-eslint/eslint-plugin": "2.11.0",
+    "@typescript-eslint/eslint-plugin-tslint": "2.11.0",
+    "@typescript-eslint/parser": "2.11.0",
     "angular2-template-loader": "0.6.2",
-    "autoprefixer": "9.6.1",
+    "autoprefixer": "9.7.3",
     "base-href-webpack-plugin": "2.0.0",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
@@ -92,58 +93,59 @@
     "chai-as-promised": "7.1.1",
     "chai-string": "1.5.0",
     <%_ } _%>
-    "codelyzer": "5.1.0",
-    "copy-webpack-plugin": "5.0.4",
-    "css-loader": "3.2.0",
-    "eslint": "6.2.2",
+    "codelyzer": "5.2.0",
+    "copy-webpack-plugin": "5.1.1",
+    "css-loader": "3.3.2",
+    "eslint": "6.7.2",
     "eslint-config-jhipster": "0.0.1",
-    "eslint-config-prettier": "6.1.0",
-    "eslint-loader": "3.0.0",
-    "file-loader": "4.2.0",
-    "fork-ts-checker-webpack-plugin": "1.5.0",
+    "eslint-config-prettier": "6.7.0",
+    "eslint-loader": "3.0.3",
+    "file-loader": "5.0.2",
+    "fork-ts-checker-webpack-plugin": "3.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.5.5",
     "html-webpack-plugin": "3.2.0",
     <%_ if (!skipCommitHook) { _%>
-    "husky": "3.0.4",
+    "husky": "3.1.0",
     <%_ } _%>
     "jest": "24.9.0",
     "jest-date-mock": "1.0.7",
-    "jest-junit": "8.0.0",
-    "jest-preset-angular": "7.1.1",
+    "jest-junit": "10.0.0",
+    "jest-preset-angular": "8.0.0",
     "jest-sonar-reporter": "2.0.0",
     <%_ if (!skipCommitHook) { _%>
+    <%# Not using the latest version because of https://github.com/jhipster/generator-jhipster/issues/10312 -%>
     "lint-staged": "8.2.1",
     <%_ } _%>
     <%_ if (enableTranslation) { _%>
-    "merge-jsons-webpack-plugin": "1.0.19",
+    "merge-jsons-webpack-plugin": "1.0.20",
     <%_ } _%>
     "mini-css-extract-plugin": "0.8.0",
     <%_ if (protractorTests) { _%>
-    "mocha": "6.2.0",
+    "mocha": "6.2.2",
     <%_ } _%>
-    "moment-locales-webpack-plugin": "1.1.0",
+    "moment-locales-webpack-plugin": "1.1.2",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
-    "prettier": "1.18.2",
+    "prettier": "1.19.1",
     <%_ if (protractorTests) { _%>
     "protractor": "5.4.2",
     <%_ } _%>
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.0",
-    "sass": "1.22.10",
-    "sass-loader": "7.3.1",
+    "sass": "1.23.7",
+    "sass-loader": "8.0.0",
     "simple-progress-webpack-plugin": "1.1.2",
-    "style-loader": "1.0.0",
-    "terser-webpack-plugin": "1.4.1",
+    "style-loader": "1.0.1",
+    "terser-webpack-plugin": "2.3.0",
     "thread-loader": "2.1.3",
-    "to-string-loader": "1.1.5",
-    "ts-loader": "6.0.4",
+    "to-string-loader": "1.1.6",
+    "ts-loader": "6.2.1",
     <%_ if (protractorTests) { _%>
-    "ts-node": "8.3.0",
+    "ts-node": "8.5.4",
     <%_ } _%>
-    "tslint": "5.19.0",
+    "tslint": "5.20.1",
     "typescript": "3.4.5",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
@@ -151,10 +153,9 @@
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
-    "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
-    "webpack": "4.39.3",
-    "webpack-cli": "3.3.7",
-    "webpack-dev-server": "3.8.0",
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "3.9.0",
     "webpack-merge": "4.2.2",
     "webpack-notifier": "1.8.0",
     "webpack-visualizer-plugin": "0.1.11",

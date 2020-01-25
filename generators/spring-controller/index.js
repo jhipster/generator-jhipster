@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -48,7 +48,7 @@ module.exports = class extends BaseBlueprintGenerator {
         });
         this.defaultOption = this.options.default;
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('spring-controller', { arguments: [this.name] });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('spring-controller', { arguments: [this.name] });
     }
 
     // Public API method used by the getter and also by Blueprints

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -224,7 +224,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   <%_ } _%>
 
-  const { <%=entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = props;
+  const { <%= entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = props;
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading">
@@ -272,13 +272,13 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                 <tr>
                   <th<% if (pagination !== 'no') { %> className="hand" onClick={sort('id')} <%_ } _%>><Translate contentKey="global.field.id">ID</Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                   <%_ for (idx in fields) { _%>
-                  <th<% if (pagination !== 'no') { %> className="hand" onClick={sort('<%=fields[idx].fieldName%>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
+                  <th<% if (pagination !== 'no') { %> className="hand" onClick={sort('<%= fields[idx].fieldName %>')} <%_ } _%>><Translate contentKey="<%= `${i18nKeyPrefix}.${fields[idx].fieldName}` %>"><%= fields[idx].fieldNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                   <%_ } _%>
                   <%_ for (idx in relationships) { _%>
                       <%_ if (relationships[idx].relationshipType === 'many-to-one'
                       || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)
                       || (relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true && pagination === 'no')) {
-                      const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
+                      const fieldName = dto === 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized; _%>
                   <th<% if (pagination !== 'no') { %> <% } %>><Translate contentKey="<%= `${i18nKeyPrefix}.${relationships[idx].relationshipName}` %>"><%= relationships[idx].relationshipNameHumanized %></Translate><% if (pagination !== 'no') { %> <FontAwesomeIcon icon="sort" /><% } %></th>
                       <%_ } _%>
                   <%_ } _%>
@@ -287,10 +287,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               </thead>
               <tbody>
                 {
-                  <%= entityInstance %>List.map((<%=entityInstance %>, i) => (
+                  <%= entityInstance %>List.map((<%= entityInstance %>, i) => (
                   <tr key={`entity-${i}`}>
                     <td>
-                      <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="link" size="sm">
+                      <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="link" size="sm">
                         {<%= entityInstance %>.id}
                       </Button>
                     </td>
@@ -301,11 +301,11 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                     _%>
                     <td>
                     <%_ if (fieldType === 'Boolean') { _%>
-                      {<%= entityInstance %>.<%=fields[idx].fieldName%> ? 'true' : 'false'}
+                      {<%= entityInstance %>.<%= fields[idx].fieldName %> ? 'true' : 'false'}
                     <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                      <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_DATE_FORMAT} />
+                      <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_DATE_FORMAT} />
                     <%_ } else if (fieldType === 'LocalDate') { _%>
-                      <TextFormat type="date" value={<%= entityInstance %>.<%=fieldName%>} format={APP_LOCAL_DATE_FORMAT} />
+                      <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_LOCAL_DATE_FORMAT} />
                     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
                       <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
@@ -392,13 +392,13 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       <%_ } _%>
                       <td className="text-right">
                         <div className="btn-group flex-btn-group-container">
-                          <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}`} color="info" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="info" size="sm">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
-                          <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/edit<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button tag={Link} to={`${match.url}/${<%=entityInstance %>.id}/delete<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
                         </div>
@@ -428,7 +428,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               page={paginationState.activePage}
               total={totalItems}
               itemsPerPage={paginationState.itemsPerPage}
-              <%{ if (enableTranslation) { %>i18nEnabled<% }}%>
+              <% { if (enableTranslation) { %>i18nEnabled<% }} %>
             />
           </Row>
           <Row className="justify-content-center">

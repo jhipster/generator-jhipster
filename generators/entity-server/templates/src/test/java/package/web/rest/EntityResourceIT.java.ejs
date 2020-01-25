@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 
 <%_ let isUsingMapsId = false;
     let mapsIdAssoc;
@@ -36,53 +36,53 @@ package <%=packageName%>.web.rest;
         }
     } _%>
 <%_ if (databaseType === 'cassandra') { _%>
-import <%=packageName%>.AbstractCassandraTest;
+import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
-import <%=packageName%>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>;
 <%_ if (authenticationType === 'uaa') { _%>
-import <%=packageName%>.config.SecurityBeanOverrideConfiguration;
+import <%= packageName %>.config.SecurityBeanOverrideConfiguration;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
-import <%=packageName%>.config.TestSecurityConfiguration;
+import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_
     var imported = [];
     for (idx in relationships) { // import entities in required relationships
         const relationshipValidate = relationships[idx].relationshipValidate;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const isUsingMapsIdL1 = relationships[idx].useJPADerivedIdentifier;
-        if(imported.indexOf(otherEntityNameCapitalized) === -1) {
+        if (imported.indexOf(otherEntityNameCapitalized) === -1) {
             if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%=packageName%>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
+import <%= packageName %>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
 <%_         imported.push(otherEntityNameCapitalized);
         } } } _%>
 <%_ if (saveUserSnapshot) { _%>
-import <%=packageName%>.repository.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
-import <%=packageName%>.repository.<%= entityClass %>Repository;
+import <%= packageName %>.repository.<%= entityClass %>Repository;
 <%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
-import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;
+import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (service !== 'no') { _%>
-import <%=packageName%>.service.<%= entityClass %>Service;
+import <%= packageName %>.service.<%= entityClass %>Service;
 <%_ } else if (reactiveRepositories) { _%>
-import <%=packageName%>.repository.reactive.<%= entityClass %>ReactiveRepository;
+import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
-import <%=packageName%>.service.mapper.<%= entityClass %>Mapper;
+import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
+import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
-import <%=packageName%>.web.rest.errors.ExceptionTranslator;
+import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 <%_ if (jpaMetamodelFiltering) { _%>
-import <%=packageName%>.service.dto.<%= entityClass %>Criteria;
-import <%=packageName%>.service.<%= entityClass %>QueryService;
+import <%= packageName %>.service.dto.<%= entityClass %>Criteria;
+import <%= packageName %>.service.<%= entityClass %>QueryService;
 <%_ } _%>
 
 import org.junit.jupiter.api.BeforeEach;
@@ -142,9 +142,9 @@ import java.util.UUID;
 <%_ } _%>
 
 <%_ if (fieldsContainZonedDateTime === true) { _%>
-import static <%=packageName%>.web.rest.TestUtil.sameInstant;
+import static <%= packageName %>.web.rest.TestUtil.sameInstant;
 <%_ } _%>
-import static <%=packageName%>.web.rest.TestUtil.createFormattingConversionService;
+import static <%= packageName %>.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
@@ -156,7 +156,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-<%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;
+<%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
 /**
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
@@ -172,12 +172,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
-<%_
-    let oldSource = '';
-    try {
-        oldSource = this.fs.readFileSync(this.SERVER_TEST_SRC_DIR + packageFolder + '/web/rest/' + entityClass + 'ResourceIT.java', 'utf8');
-    } catch (e) {}
-_%>
     <%_ for (idx in fields) {
     const defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
     const updatedValueName = 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -237,23 +231,11 @@ _%>
             updatedTextString += "B";
         }
         if (!this._.isUndefined(fields[idx].fieldValidateRulesPattern)) {
-            if (oldSource !== '') {
-                // Check for old values
-                const sampleTextStringSearchResult = new RegExp('private static final String ' + defaultValueName + ' = "(.*)";', 'm').exec(oldSource);
-                if (sampleTextStringSearchResult != null) {
-                    sampleTextString = sampleTextStringSearchResult[1];
-                }
-                const updatedTextStringSearchResult = new RegExp('private static final String ' + updatedValueName + ' = "(.*)";', 'm').exec(oldSource);
-                if (updatedTextStringSearchResult != null) {
-                    updatedTextString = updatedTextStringSearchResult[1];
-                }
-            }
             // Generate Strings, using pattern
             try {
                 const patternRegExp = new RegExp(fields[idx].fieldValidateRulesPattern);
                 const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern);
                 // set infinite repetitions max range
-                randExp.max = 1;
                 if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
                     sampleTextString = randExp.gen().replace(/\\/g, '\\\\').replace(/"/g, '\\"');
                 }
@@ -271,103 +253,103 @@ _%>
                     '" field "' + fields[idx].fieldName + '" with pattern "' + fields[idx].fieldValidateRulesPattern +
                     '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.'));
             }
-        }_%>
+        } _%>
 
-    private static final String <%=defaultValueName %> = "<%-sampleTextString %>";
-    private static final String <%=updatedValueName %> = "<%-updatedTextString %>";
+    private static final String <%= defaultValueName %> = "<%- sampleTextString %>";
+    private static final String <%= updatedValueName %> = "<%- updatedTextString %>";
     <%_ } else if (fieldType === 'Integer') { _%>
 
-    private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
-    private static final Integer <%=updatedValueName %> = <%= updatedValue %>;
+    private static final Integer <%= defaultValueName %> = <%= defaultValue %>;
+    private static final Integer <%= updatedValueName %> = <%= updatedValue %>;
         <%_ if (needsSmallerValueName) { _%>
-    private static final Integer <%=smallerValueName %> = <%= defaultValue %> - 1;
+    private static final Integer <%= smallerValueName %> = <%= defaultValue %> - 1;
         <%_ } _%>
     <%_ } else if (fieldType === 'Long') { _%>
 
-    private static final Long <%=defaultValueName %> = <%= defaultValue %>L;
-    private static final Long <%=updatedValueName %> = <%= updatedValue %>L;
+    private static final Long <%= defaultValueName %> = <%= defaultValue %>L;
+    private static final Long <%= updatedValueName %> = <%= updatedValue %>L;
         <%_ if (needsSmallerValueName) { _%>
-    private static final Long <%=smallerValueName %> = <%= defaultValue %>L - 1L;
+    private static final Long <%= smallerValueName %> = <%= defaultValue %>L - 1L;
         <%_ } _%>
     <%_ } else if (fieldType === 'Float') { _%>
 
-    private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>F;
-    private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>F;
+    private static final <%= fieldType %> <%= defaultValueName %> = <%= defaultValue %>F;
+    private static final <%= fieldType %> <%= updatedValueName %> = <%= updatedValue %>F;
         <%_ if (needsSmallerValueName) { _%>
-    private static final <%=fieldType %> <%=smallerValueName %> = <%= defaultValue %>F - 1F;
+    private static final <%= fieldType %> <%= smallerValueName %> = <%= defaultValue %>F - 1F;
         <%_ } _%>
     <%_ } else if (fieldType === 'Double') { _%>
 
-    private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>D;
-    private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>D;
+    private static final <%= fieldType %> <%= defaultValueName %> = <%= defaultValue %>D;
+    private static final <%= fieldType %> <%= updatedValueName %> = <%= updatedValue %>D;
         <%_ if (needsSmallerValueName) { _%>
-    private static final <%=fieldType %> <%=smallerValueName %> = <%= defaultValue %>D - 1D;
+    private static final <%= fieldType %> <%= smallerValueName %> = <%= defaultValue %>D - 1D;
         <%_ } _%>
     <%_ } else if (fieldType === 'BigDecimal') { _%>
 
-    private static final BigDecimal <%=defaultValueName %> = new BigDecimal(<%= defaultValue %>);
-    private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);
+    private static final BigDecimal <%= defaultValueName %> = new BigDecimal(<%= defaultValue %>);
+    private static final BigDecimal <%= updatedValueName %> = new BigDecimal(<%= updatedValue %>);
         <%_ if (needsSmallerValueName) { _%>
-    private static final BigDecimal <%=smallerValueName %> = new BigDecimal(<%= defaultValue %> - 1);
+    private static final BigDecimal <%= smallerValueName %> = new BigDecimal(<%= defaultValue %> - 1);
         <%_ } _%>
     <%_ } else if (fieldType === 'UUID') { _%>
 
-    private static final UUID <%=defaultValueName %> = UUID.randomUUID();
-    private static final UUID <%=updatedValueName %> = UUID.randomUUID();
+    private static final UUID <%= defaultValueName %> = UUID.randomUUID();
+    private static final UUID <%= updatedValueName %> = UUID.randomUUID();
     <%_ } else if (fieldType === 'LocalDate') { _%>
 
-    private static final LocalDate <%=defaultValueName %> = LocalDate.ofEpochDay(0L);
-    private static final LocalDate <%=updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate <%= defaultValueName %> = LocalDate.ofEpochDay(0L);
+    private static final LocalDate <%= updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
         <%_ if (needsSmallerValueName) { _%>
-    private static final LocalDate <%=smallerValueName %> = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate <%= smallerValueName %> = LocalDate.ofEpochDay(-1L);
         <%_ } _%>
     <%_ } else if (fieldType === 'Instant') { _%>
 
-    private static final Instant <%=defaultValueName %> = Instant.ofEpochMilli(0L);
-    private static final Instant <%=updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant <%= defaultValueName %> = Instant.ofEpochMilli(0L);
+    private static final Instant <%= updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
         <%_ if (needsSmallerValueName) { _%>
-    private static final Instant <%=smallerValueName %> = Instant.ofEpochMilli(-1L);
+    private static final Instant <%= smallerValueName %> = Instant.ofEpochMilli(-1L);
         <%_ } _%>
     <%_ } else if (fieldType === 'ZonedDateTime') { _%>
 
-    private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime <%=updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime <%= defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime <%= updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
         <%_ if (needsSmallerValueName) { _%>
-    private static final ZonedDateTime <%=smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    private static final ZonedDateTime <%= smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
         <%_ } _%>
     <%_ } else if (fieldType === 'Duration') { _%>
 
-    private static final Duration <%=defaultValueName %> = Duration.ofHours(6);
-    private static final Duration <%=updatedValueName %> = Duration.ofHours(12);
+    private static final Duration <%= defaultValueName %> = Duration.ofHours(6);
+    private static final Duration <%= updatedValueName %> = Duration.ofHours(12);
         <%_ if (needsSmallerValueName) { _%>
-    private static final Duration <%=smallerValueName %> = Duration.ofHours(5);
+    private static final Duration <%= smallerValueName %> = Duration.ofHours(5);
         <%_ } _%>
     <%_ } else if (fieldType === 'Boolean') { _%>
 
-    private static final Boolean <%=defaultValueName %> = false;
-    private static final Boolean <%=updatedValueName %> = true;
+    private static final Boolean <%= defaultValueName %> = false;
+    private static final Boolean <%= updatedValueName %> = true;
     <%_ } else if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
 
     <%_ if (databaseType !== 'cassandra') { _%>
-    private static final byte[] <%=defaultValueName %> = TestUtil.createByteArray(1, "0");
-    private static final byte[] <%=updatedValueName %> = TestUtil.createByteArray(1, "1");
+    private static final byte[] <%= defaultValueName %> = TestUtil.createByteArray(1, "0");
+    private static final byte[] <%= updatedValueName %> = TestUtil.createByteArray(1, "1");
     <%_ } else { _%>
-    private static final ByteBuffer <%=defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
-    private static final ByteBuffer <%=updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
+    private static final ByteBuffer <%= defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
+    private static final ByteBuffer <%= updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
     <%_ } _%>
-    private static final String <%=defaultValueName %>_CONTENT_TYPE = "image/jpg";
-    private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";
+    private static final String <%= defaultValueName %>_CONTENT_TYPE = "image/jpg";
+    private static final String <%= updatedValueName %>_CONTENT_TYPE = "image/png";
     <%_ } else if (isEnum) { _%>
 
-    private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
-    private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;
+    private static final <%= fieldType %> <%= defaultValueName %> = <%= fieldType %>.<%= enumValue1 %>;
+    private static final <%= fieldType %> <%= updatedValueName %> = <%= fieldType %>.<%= enumValue2 %>;
     <%_ } } _%>
 
     @Autowired
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
     <%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
     @Autowired
-    private <%=mapsIdEntity%>Repository <%= mapsIdRepoInstance %>;
+    private <%= mapsIdEntity %>Repository <%= mapsIdRepoInstance %>;
     <%_ } _%>
     <%_ if (saveUserSnapshot) { _%>
 
@@ -400,9 +382,9 @@ _%>
     <%_ } if (searchEngine === 'elasticsearch') { _%>
 
     /**
-     * This repository is mocked in the <%=packageName%>.repository.search test package.
+     * This repository is mocked in the <%= packageName %>.repository.search test package.
      *
-     * @see <%= packageName %>.repository.search.<%=entityClass%>SearchRepositoryMockConfiguration
+     * @see <%= packageName %>.repository.search.<%= entityClass %>SearchRepositoryMockConfiguration
      */
     @Autowired
     private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;
@@ -460,14 +442,14 @@ _%>
     public static <%= asEntity(entityClass) %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         <%_ if (fluentMethods) { _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = new <%= asEntity(entityClass) %>()<% for (idx in fields) { %>
-            .<%= fields[idx].fieldName %>(<%=fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
-            .<%= fields[idx].fieldName %>ContentType(<%=fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)<% } %><% } %>;
+            .<%= fields[idx].fieldName %>(<%= fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
+            .<%= fields[idx].fieldName %>ContentType(<%= fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
         <%_ } else { _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = new <%= asEntity(entityClass) %>();
             <%_ for (idx in fields) { _%>
-        <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%=fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>);
+        <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%= fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>);
                 <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-        <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%=fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%= fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
                 <%_ } _%>
             <%_ } _%>
         <%_ } _%>
@@ -544,8 +526,8 @@ _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
         <%_ } _%>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
@@ -553,14 +535,14 @@ _%>
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate + 1);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>ContentType()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
         <%_ } else if (fields[idx].fieldType.toLowerCase() === 'boolean') { _%>
-        assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.is<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ }} _%>
         <%_ if (isUsingMapsId === true) { _%>
 
@@ -587,8 +569,8 @@ _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
@@ -642,7 +624,7 @@ _%>
 
         // Update the entity
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%_ if (dto === 'mapstruct') { _%>updated<%= asDto(entityClass) %> <%_ } else { _%> updated<%= asEntity(entityClass) %> <%_ } _%>)))
             .andExpect(status().isOk());
 
@@ -683,8 +665,8 @@ _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);<% } %>
 
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
@@ -705,15 +687,15 @@ _%>
         // Get all the <%= entityInstance %>List
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %><% if (databaseType !== 'cassandra') { %>?sort=id,desc<% } %>"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } else if (databaseType === 'sql') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } %><% if (databaseType === 'cassandra') { %>
-            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().toString())))<% } %><% for (idx in fields) {%>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().toString())))<% } %><% for (idx in fields) { %>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].<%= fields[idx].fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
             <%_ } _%>
-            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>)))<% } %>;
+            .andExpect(jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>)))<% } %>;
     }
     <% if (fieldsContainOwnerManyToMany === true) { %>
     @SuppressWarnings({"unchecked"})
@@ -780,15 +762,15 @@ _%>
         // Get the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
             .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId()))<% } else if (databaseType === 'sql') { %>
             .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId().intValue()))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId()))<% } %><% if (databaseType === 'cassandra') { %>
-            .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId().toString()))<% } %><% for (idx in fields) {%>
+            .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId().toString()))<% } %><% for (idx in fields) { %>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            .andExpect(jsonPath("$.<%=fields[idx].fieldName%>ContentType").value(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE))
+            .andExpect(jsonPath("$.<%= fields[idx].fieldName %>ContentType").value(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
             <%_ } _%>
-            .andExpect(jsonPath("$.<%=fields[idx].fieldName%>").value(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<% } %>;
+            .andExpect(jsonPath("$.<%= fields[idx].fieldName %>").value(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<% } %>;
     }
 <%_ if (jpaMetamodelFiltering) {  %>
 
@@ -822,11 +804,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.equals=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.equals=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.equals=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.equals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
     @Test<% if (databaseType === 'sql') { %>
@@ -835,11 +817,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.notEquals=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.notEquals=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.notEquals=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.notEquals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
     @Test<% if (databaseType === 'sql') { %>
@@ -848,11 +830,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> in <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%> or <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.in=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%> + "," + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> in <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> or <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.in=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> + "," + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.in=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.in=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
     @Test<% if (databaseType === 'sql') { %>
@@ -877,11 +859,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.contains=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.contains=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.contains=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.contains=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
     @Test<% if (databaseType === 'sql') { %>
@@ -890,11 +872,11 @@ _%>
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%='DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>
-        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%='UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase()%>);
+        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
     }
 
 <%_
@@ -1011,17 +993,17 @@ _%>
     private void default<%= entityClass %>ShouldBeFound(String filter) throws Exception {
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %><% if (databaseType === 'sql' && hasOauthUser === true) { %>.getId()<% } else { %>.getId().intValue()<% } %>)))<% fields.forEach((field) => { %>
             <%_ if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
-            .andExpect(jsonPath("$.[*].<%=field.fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + field.fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
             <%_ } _%>
-            .andExpect(jsonPath("$.[*].<%=field.fieldName%>").value(hasItem(<% if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (field.fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + field.fieldNameUnderscored.toUpperCase()%><% if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (field.fieldType === 'Integer') { %><% } else if (field.fieldType === 'Long') { %>.intValue()<% } else if (field.fieldType === 'Float' || field.fieldType === 'Double') { %>.doubleValue()<% } else if (field.fieldType === 'BigDecimal') { %>.intValue()<% } else if (field.fieldType === 'Boolean') { %>.booleanValue()<% } else if (field.fieldType === 'ZonedDateTime') { %>)<% } else if (field.fieldType !== 'String') { %>.toString()<% } %>)))<% }); %>;
+            .andExpect(jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<% if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (field.fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><% if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (field.fieldType === 'Integer') { %><% } else if (field.fieldType === 'Long') { %>.intValue()<% } else if (field.fieldType === 'Float' || field.fieldType === 'Double') { %>.doubleValue()<% } else if (field.fieldType === 'BigDecimal') { %>.intValue()<% } else if (field.fieldType === 'Boolean') { %>.booleanValue()<% } else if (field.fieldType === 'ZonedDateTime') { %>)<% } else if (field.fieldType !== 'String') { %>.toString()<% } %>)))<% }); %>;
 
         // Check, that the count call also returns 1
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
     }
 
@@ -1031,14 +1013,14 @@ _%>
     private void default<%= entityClass %>ShouldNotBeFound(String filter) throws Exception {
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/count?sort=id,desc&" + filter))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
     }
 
@@ -1063,7 +1045,7 @@ _%>
         List<<%= entityClass %>> <%= entityInstance %>List = client.get().uri("/api/<%= entityApiUrl %>").accept(MediaType.APPLICATION_STREAM_JSON).exchange()
             .expectStatus().isOk()
             .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_STREAM_JSON)
-            .returnResult(<%=(dto !== 'no' ? asDto(entityInstance) : asEntity(entityInstance))%>.class)
+            .returnResult(<%= (dto !== 'no' ? asDto(entityInstance) : asEntity(entityInstance)) %>.class)
             .getResponseBody()
             <%_ if (dto !== 'no') { _%>
             .map(<%= entityInstance %>Mapper::toEntity)
@@ -1076,14 +1058,14 @@ _%>
         assertThat(<%= entityInstance %>List).hasSize(1);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(0);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>ContentType()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
         <%_ } else if (fields[idx].fieldType.toLowerCase() === 'boolean') { _%>
-        assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.is<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ }} _%>
     }
     <%_  } _%>
@@ -1122,13 +1104,13 @@ _%>
         em.detach(updated<%= asEntity(entityClass) %>);<% } %>
         <%_ if (fluentMethods && fields.length > 0) { _%>
         updated<%= asEntity(entityClass) %><% for (idx in fields) { %>
-            .<%= fields[idx].fieldName %>(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
-            .<%= fields[idx].fieldName %>ContentType(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)<% } %><% } %>;
+            .<%= fields[idx].fieldName %>(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
+            .<%= fields[idx].fieldName %>ContentType(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
         <%_ } else { _%>
             <%_ for (idx in fields) { _%>
-        updated<%= asEntity(entityClass) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        updated<%= asEntity(entityClass) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
                 <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-        updated<%= asEntity(entityClass) %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
+        updated<%= asEntity(entityClass) %>.set<%= fields[idx].fieldInJavaBeanMethod %>ContentType(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
                 <%_ } _%>
             <%_ } _%>
         <%_ } _%>
@@ -1137,8 +1119,8 @@ _%>
         <%_ } _%>
 
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass))%>)))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass)) %>)))
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
@@ -1146,14 +1128,14 @@ _%>
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>ContentType()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
         <%_ } else if (fields[idx].fieldType.toLowerCase() === 'boolean') { _%>
-        assertThat(test<%= entityClass %>.is<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.is<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } else { _%>
-        assertThat(test<%= entityClass %>.get<%=fields[idx].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase()%>);
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } } _%>
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -1172,8 +1154,8 @@ _%>
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(<%=(dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
@@ -1203,7 +1185,7 @@ _%>
 
         // Delete the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(TestUtil.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
@@ -1240,15 +1222,15 @@ _%>
         // Search the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/_search/<%= entityApiUrl %>?query=id:" + <%= asEntity(entityInstance) %>.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } else if (databaseType === 'sql') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
             .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } %><% if (databaseType === 'cassandra') { %>
-            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().toString())))<% } %><% for (idx in fields) {%>
+            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().toString())))<% } %><% for (idx in fields) { %>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].<%= fields[idx].fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
             <%_ } _%>
-            .andExpect(jsonPath("$.[*].<%=fields[idx].fieldName%>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%='DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase()%><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>)))<% } %>;
+            .andExpect(jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>)))<% } %>;
     }
     <%_ } _%>
 }

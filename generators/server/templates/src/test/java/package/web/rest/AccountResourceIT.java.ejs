@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,7 +23,7 @@ package <%= packageName %>.web.rest;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.TestSecurityConfiguration;
@@ -37,6 +37,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+<%_ if (!reactive) { _%>
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -45,19 +46,33 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-<%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
-<%_ } _%>
+    <%_ } _%>
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Collection;
+<%_ } else { _%>
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.web.server.context.SecurityContextServerWebExchangeWebFilter;
+import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.time.Instant;
+<%_ } _%>
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+<%_ if (!reactive) { _%>
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+<%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ if (reactive) { _%>
+import static <%= packageName %>.web.rest.TestUtil.ID_TOKEN;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
+<%_ } _%>
 
 /**
  * Integration tests for the {@link AccountResource} REST controller.
@@ -74,31 +89,61 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Autowired
     private UserService userService;
 
+<%_ if (!reactive) { _%>
     private MockMvc restUserMockMvc;
 
     @Autowired
     private WebApplicationContext context;
+<%_ } else { _%>
+    private OidcIdToken idToken;
+
+    private WebTestClient webTestClient;
+<%_ } _%>
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        AccountResource accountUserMockResource = new AccountResource(userService);
+        AccountResource accountResource = new AccountResource(userService);
 
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
+    <%_ if (!reactive) { _%>
+        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setControllerAdvice(exceptionTranslator)
             .build();
+    <%_ } else { _%>
+        this.webTestClient = WebTestClient.bindToController(accountResource)
+            .apply(springSecurity())
+            .controllerAdvice(exceptionTranslator)
+            .webFilter(new SecurityContextServerWebExchangeWebFilter())
+            .build();
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("groups", Collections.singletonList(AuthoritiesConstants.ADMIN));
+        claims.put("sub", "jane");
+        claims.put("email", "jane.doe@jhipster.com");
+        this.idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
+            Instant.now().plusSeconds(60), claims);
+    <%_ } _%>
     }
 
     @Test
-    public void testNonAuthenticatedUser() throws Exception {
+    public void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(""));
+    <%_ } else { _%>
+        webTestClient.get().uri("/api/authenticate")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody().isEmpty();
+    <%_ } _%>
     }
 
     @Test
-    public void testAuthenticatedUser() throws Exception {
+    public void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/authenticate")
             .with(request -> {
                 request.setRemoteUser("test");
@@ -107,11 +152,25 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string("test"));
+    <%_ } else { _%>
+        Jwt jwt = Jwt.withTokenValue("token")
+            .header("alg", "none")
+            .claim("preferred_username", "user").build();
+
+        webTestClient.mutateWith(mockJwt(jwt))
+            .mutateWith(csrf())
+            .get().uri("/api/authenticate")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(String.class).isEqualTo("user");
+    <%_ } _%>
     }
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void testGetExistingAccount() throws Exception {
+    public void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    <%_ if (!reactive) { _%>
         // create security-aware mockMvc
         restUserMockMvc = MockMvcBuilders
             .webAppContextSetup(context)
@@ -129,17 +188,38 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restUserMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value("test"))
             .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
             .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+    <%_ } else { _%>
+        webTestClient
+            .mutateWith(mockAuthentication(TestUtil.authenticationToken(idToken)))
+            .mutateWith(csrf())
+            .get().uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+            .expectBody()
+            .jsonPath("$.login").isEqualTo("jane")
+            .jsonPath("$.email").isEqualTo("jane.doe@jhipster.com")
+            .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
+    <%_ } _%>
     }
 
     @Test
-    public void testGetUnknownAccount() throws Exception {
+    public void testGetUnknownAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isInternalServerError());
+    <%_ } else { _%>
+        webTestClient.get().uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().is5xxServerError();
+    <%_ } _%>
     }
 }
 <%_ } else if (skipUserManagement) { // not oauth, skipUserManagement _%>
@@ -159,11 +239,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+<%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } else { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
 
 /**
  * Integration tests for the {@link AccountResource} REST controller.
@@ -174,32 +258,59 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
 
+    <%_ if (!reactive) { _%>
     private MockMvc mockMvc;
+    <%_ } else { _%>
+    private WebTestClient webTestClient;
+    <%_ } _%>
 
     @BeforeEach
     public void setup() {
         AccountResource accountUserMockResource = new AccountResource();
+        <%_ if (!reactive) { _%>
         this.mockMvc = MockMvcBuilders.standaloneSetup(accountUserMockResource)
-                .setControllerAdvice(exceptionTranslator)
-                .build();
+            .setControllerAdvice(exceptionTranslator)
+        <%_ } else { _%>
+        this.webTestClient = WebTestClient.bindToController(accountUserMockResource)
+            .controllerAdvice(exceptionTranslator)
+        <%_ } _%>
+            .build();
     }
 
     @Test
     @WithMockUser(username = "test", roles = "ADMIN")
-    public void testGetExistingAccount() throws Exception {
+    public void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+        <%_ if (!reactive) { _%>
         mockMvc.perform(get("/api/account")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("$.login").value("test"))
-                .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.login").value("test"))
+            .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+        <%_ } else { _%>
+        webTestClient.get().uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+            .expectBody()
+            .jsonPath("$.login").isEqualTo("test")
+            .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
+        <%_ } _%>
     }
 
     @Test
-    public void testGetUnknownAccount() throws Exception {
+    public void testGetUnknownAccount() <% if (!reactive) { %>throws Exception <% } %>{
+        <%_ if (!reactive) { _%>
         mockMvc.perform(get("/api/account")
-                .accept(MediaType.APPLICATION_PROBLEM_JSON))
-                .andExpect(status().isInternalServerError());
+            .accept(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(status().isInternalServerError());
+        <%_ } else { _%>
+        webTestClient.get().uri("/api/account")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().is5xxServerError();
+        <%_ } _%>
     }
 }
 <%_ } else {  // not oauth, not skipUserManagement _%>
@@ -364,7 +475,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test
     <%_ if (!reactive) { _%>
-    public void testNonAuthenticatedUser() throws Exception {
+    public void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
         restUserMockMvc.perform(get("/api/authenticate")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -381,7 +492,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test
     <%_ if (!reactive) { _%>
-    public void testAuthenticatedUser() throws Exception {
+    public void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
         restUserMockMvc.perform(get("/api/authenticate")
             .with(request -> {
                 request.setRemoteUser("test");
@@ -427,7 +538,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restUserMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value("test"))
             .andExpect(jsonPath("$.firstName").value("john"))
             .andExpect(jsonPath("$.lastName").value("doe"))
@@ -442,7 +553,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
             .jsonPath("$.login").isEqualTo("test")
             .jsonPath("$.firstName").isEqualTo("john")
@@ -494,13 +605,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(validUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(validUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -527,13 +638,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         userWebTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -561,13 +672,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         userWebTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -595,13 +706,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         userWebTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -629,13 +740,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(invalidUser)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         userWebTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(invalidUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(invalidUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -683,13 +794,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(firstUser)))
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(firstUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(firstUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -698,13 +809,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser)))
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(secondUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -718,13 +829,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser)))
             .andExpect(status().is4xxClientError());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(secondUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -750,13 +861,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(firstUser)))
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(firstUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(firstUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -781,13 +892,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser)))
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(secondUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -816,13 +927,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail)))
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -838,13 +949,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(secondUser)))
             .andExpect(status().is4xxClientError());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(secondUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(secondUser))
             .exchange()
             .expectStatus().is4xxClientError();
         <%_ } _%>
@@ -869,13 +980,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/register")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/register")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(validUser))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(validUser))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
@@ -911,14 +1022,14 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .expectStatus().isOk();
         <%_ } _%>
 
-        user = userRepository.findOneByLogin(user.getLogin())<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        user = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(user.getActivated()).isTrue();
     }
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     <%_ if (!reactive) { _%>
-    public void testActivateAccountWithWrongKey() throws Exception {
+    public void testActivateAccountWithWrongKey() <% if (!reactive) { %>throws Exception <% } %>{
         restMvc.perform(get("/api/activate?key=wrongActivationKey"))
             .andExpect(status().isInternalServerError());
     <%_ } else { _%>
@@ -959,18 +1070,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/account")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userDTO))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -1011,13 +1122,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/account")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userDTO))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
@@ -1066,18 +1177,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/account")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userDTO))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("save-existing-email")<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("save-existing-email")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
     }
 
@@ -1111,18 +1222,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/account")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(userDTO)))
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(userDTO))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(userDTO))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("save-existing-email-and-login")<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("save-existing-email-and-login")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
     }
 
@@ -1142,18 +1253,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
         <%_ if (!reactive) { _%>
         restMvc.perform(post("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password"))))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password")<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
     }
@@ -1174,18 +1285,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
         <%_ if (!reactive) { _%>
         restMvc.perform(post("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password"))))
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password")<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
     }
 
@@ -1207,18 +1318,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
         <%_ if (!reactive) { _%>
         restMvc.perform(post("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword))))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-too-small")<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-too-small")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
@@ -1240,18 +1351,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
         <%_ if (!reactive) { _%>
         restMvc.perform(post("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword))))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-too-long")<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-too-long")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
@@ -1271,18 +1382,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
         <%_ if (!reactive) { _%>
         restMvc.perform(post("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, ""))))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/change-password")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-empty")<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin("change-password-empty")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
     <%_ if (authenticationType === 'session' && !reactive) { _%>
@@ -1290,7 +1401,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("current-sessions")
-    public void testGetCurrentSessions() throws Exception {
+    public void testGetCurrentSessions() <% if (!reactive) { %>throws Exception <% } %>{
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1323,7 +1434,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     @WithMockUser("invalidate-session")
-    public void testInvalidateSession() throws Exception {
+    public void testInvalidateSession() <% if (!reactive) { %>throws Exception <% } %>{
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1373,7 +1484,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/init")
-            .syncBody("password-reset@example.com")
+            .bodyValue("password-reset@example.com")
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1398,7 +1509,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/init")
-            .syncBody("password-reset@EXAMPLE.COM")
+            .bodyValue("password-reset@EXAMPLE.COM")
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1406,17 +1517,17 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test
     <%_ if (!reactive) { _%>
-    public void testRequestPasswordResetWrongEmail() throws Exception {
+    public void testRequestPasswordResetWrongEmail() <% if (!reactive) { %>throws Exception <% } %>{
         restMvc.perform(
             post("/api/account/reset-password/init")
                 .content("password-reset-wrong-email@example.com"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isOk());
     <%_ } else { _%>
     public void testRequestPasswordResetWrongEmail() {
         webTestClient.post().uri("/api/account/reset-password/init")
-            .syncBody("password-reset-wrong-email@example.com")
+            .bodyValue("password-reset-wrong-email@example.com")
             .exchange()
-            .expectStatus().isBadRequest();
+            .expectStatus().isOk();
     <%_ } _%>
     }
 
@@ -1441,18 +1552,18 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/account/reset-password/finish")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/finish")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isTrue();
     }
 
@@ -1477,21 +1588,20 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/account/reset-password/finish")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/finish")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<% if (!reactive) { %>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isFalse();
     }
-
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
@@ -1503,13 +1613,13 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restMvc.perform(
             post("/api/account/reset-password/finish")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(TestUtil.APPLICATION_JSON)
                 .content(TestUtil.convertObjectToJsonBytes(keyAndPassword)))
             .andExpect(status().isInternalServerError());
         <%_ } else { _%>
         webTestClient.post().uri("/api/account/reset-password/finish")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(keyAndPassword))
+            .contentType(TestUtil.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(keyAndPassword))
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         <%_ } _%>

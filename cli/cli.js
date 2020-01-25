@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,18 +20,7 @@ const program = require('commander');
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const {
-    CLI_NAME,
-    initHelp,
-    logger,
-    createYeomanEnv,
-    toString,
-    getCommand,
-    getCommandOptions,
-    getArgs,
-    done,
-    getExitCode
-} = require('./utils');
+const { CLI_NAME, initHelp, logger, createYeomanEnv, toString, getCommand, getCommandOptions, getArgs, done } = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 
@@ -41,10 +30,6 @@ const env = createYeomanEnv();
 
 /* setup debugging */
 logger.init(program);
-
-process.on('exit', code => {
-    process.exit(code || getExitCode());
-});
 
 /**
  *  Run a yeoman command

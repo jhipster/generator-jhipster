@@ -255,6 +255,20 @@ jhipster --with-entities
 
 You should see your changes reflected in the generated project.
 
+Note: The generated project might not build properly in case the generator is using a
+snapshot version of [jhipster/jhipster](https://github.com/jhipster/jhipster). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
+this case clone the jhipster/jhipster project and build it using:
+
+```shell script
+./mvnw clean install -Dgpg.skip=true
+```
+
+or on Windows:
+
+```
+.\mvnw.cmd clean install -D"gpg.skip=true"
+```
+
 ### Use a text editor
 
 As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
@@ -315,6 +329,8 @@ Sub templates can be unit tested.
 ## <a name="commit"></a> Git Commit Guidelines
 
 We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://help.github.com/articles/about-git-rebase/#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
+
+If the commit only involves documentation changes you can skip the continuous integration pipelines using `[ci skip]` or `[skip ci]` in your commit message header.
 
 ### <a name="commit-message-format"></a> Commit Message Format
 

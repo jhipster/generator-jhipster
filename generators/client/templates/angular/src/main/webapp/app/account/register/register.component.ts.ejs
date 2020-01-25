@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -34,7 +34,7 @@ import { RegisterService } from './register.service';
 export class RegisterComponent implements AfterViewInit {
     @ViewChild('login', { static: false })
     login?: ElementRef;
-  
+
     doNotMatch = false;
     error = false;
     errorEmailExists = false;
@@ -49,15 +49,14 @@ export class RegisterComponent implements AfterViewInit {
     });
 
     constructor(
-<%_ if (enableTranslation) { _%>
+        <%_ if (enableTranslation) { _%>
         private languageService: JhiLanguageService,
-<%_ } _%>
+        <%_ } _%>
         private loginModalService: LoginModalService,
         private registerService: RegisterService,
         private renderer: Renderer,
         private fb: FormBuilder
-    ) {
-    }
+    ) {}
 
     ngAfterViewInit(): void {
         if (this.login) {
@@ -75,22 +74,11 @@ export class RegisterComponent implements AfterViewInit {
         if (password !== this.registerForm.get(['confirmPassword'])!.value) {
             this.doNotMatch = true;
         } else {
-<%_ if (enableTranslation) { _%>
-            this.languageService.getCurrent().then((langKey) => {
-                const login = this.registerForm.get(['login'])!.value;
-                const email = this.registerForm.get(['email'])!.value;
-                this.registerService.save({ login, email, password, langKey }).subscribe(() => {
-                    this.success = true;
-                }, (response) => this.processError(response));
-            });
-<%_ } else { _%>
             const login = this.registerForm.get(['login'])!.value;
             const email = this.registerForm.get(['email'])!.value;
-            const langKey = 'en';
-            this.registerService.save({ login, email, password, langKey }).subscribe(() => {
-                this.success = true;
-            }, (response) => this.processError(response));
-<%_ } _%>
+            this.registerService
+                .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.languageService.getCurrentLanguage()<% } else { %>'en'<% } %> })
+                .subscribe(() => (this.success = true), response => this.processError(response));
         }
     }
 

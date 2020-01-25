@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,21 +29,20 @@ import { LoginService } from 'app/core/login/login.service';
 <%_ } _%>
 import { StateStorageService } from './state-storage.service';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserRouteAccessService implements CanActivate {
-
-    constructor(private router: Router,
-                <%_ if (authenticationType !== 'oauth2') { _%>
-                private loginModalService: LoginModalService,
-                <%_ } else { _%>
-                private loginService: LoginService,
-                <%_ } _%>
-                private accountService: AccountService,
-                private stateStorageService: StateStorageService) {
-    }
+    constructor(
+        private router: Router,
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        private loginModalService: LoginModalService,
+        <%_ } else { _%>
+        private loginService: LoginService,
+        <%_ } _%>
+        private accountService: AccountService,
+        private stateStorageService: StateStorageService
+    ) {}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-
         const authorities = route.data['authorities'];
         // We need to call the checkLogin / and so the accountService.identity() function, to ensure,
         // that the client has a principal too, if they already logged in by the server.
@@ -53,7 +52,6 @@ export class UserRouteAccessService implements CanActivate {
 
     checkLogin(authorities: string[], url: string): Observable<boolean> {
         return this.accountService.identity().pipe(map((account) => {
-
             if (!authorities || authorities.length === 0) {
                 return true;
             }

@@ -1,6 +1,6 @@
 {
     "name": "generator-jhipster",
-    "version": "6.5.1",
+    "version": "6.6.0",
     "description": "Spring Boot + Angular/React in one handy generator",
     "files": [
         "cli",
@@ -60,7 +60,7 @@
         "glob": "7.1.3",
         "gulp-filter": "5.1.0",
         "insight": "0.10.1",
-        "jhipster-core": "6.0.5",
+        "jhipster-core": "6.0.7",
         "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.13.1",
         "lodash": "4.17.13",
@@ -70,7 +70,7 @@
         "os-locale": "3.1.0",
         "parse-gitignore": "1.0.1",
         "pluralize": "7.0.0",
-        "prettier": "1.16.4",
+        "prettier": "1.19.1",
         "progress": "2.0.3",
         "randexp": "0.5.3",
         "semver": "5.6.0",
@@ -79,9 +79,9 @@
         "tabtab": "2.2.2",
         "through2": "3.0.1",
         "uuid": "3.3.3",
-        "yeoman-environment": "2.3.4",
-        "yeoman-generator": "3.2.0",
-        "yo": "3.1.0"
+        "yeoman-environment": "2.7.0",
+        "yeoman-generator": "4.4.0",
+        "yo": "3.1.1"
     },
     "devDependencies": {
         "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",

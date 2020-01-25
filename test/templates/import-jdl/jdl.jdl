@@ -1,23 +1,23 @@
 entity Region {
-	regionName String
-	guid UUID
+    regionName String
+    guid UUID
 }
 
 entity Country {
-	countryName String
+    countryName String
 }
 
 // an ignored comment
 /** not an ignored comment */
 entity Location {
-	streetAddress String,
-	postalCode String,
-	city String,
-	stateProvince String
+    streetAddress String,
+    postalCode String,
+    city String,
+    stateProvince String
 }
 
 entity Department {
-	departmentName String required
+    departmentName String required
 }
 
 /**
@@ -25,36 +25,36 @@ entity Department {
  * @author The JHipster team.
  */
 entity Task {
-	title String,
-	description String
+    title String,
+    description String
 }
 
 /**
  * The Employee entity.
  */
 entity Employee {
-	/**
-	* The firstname attribute.
-	*/
-	firstName String,
-	lastName String,
-	email String,
-	phoneNumber String,
-	hireDate ZonedDateTime,
-	salary Long,
-	commissionPct Long
+    /**
+    * The firstname attribute.
+    */
+    firstName String,
+    lastName String,
+    email String,
+    phoneNumber String,
+    hireDate ZonedDateTime,
+    salary Long,
+    commissionPct Long
 }
 
 entity Job {
-	jobTitle String,
-	minSalary Long,
-	maxSalary Long
+    jobTitle String,
+    minSalary Long,
+    maxSalary Long
 }
 
 entity JobHistory {
-	startDate ZonedDateTime,
-	endDate ZonedDateTime,
-	language Language
+    startDate ZonedDateTime,
+    endDate ZonedDateTime,
+    language Language
 }
 
 enum Language {
@@ -62,44 +62,44 @@ enum Language {
 }
 
 relationship OneToOne {
-	Country{region} to Region
+    Country{region} to Region
 }
 
 relationship OneToOne {
-	Location{country} to Country
+    Location{country} to Country
 }
 
 relationship OneToOne {
-	Department{location} to Location
+    Department{location} to Location
 }
 
 relationship ManyToMany {
-	Job{task(title)} to Task{job}
+    Job{task(title)} to Task{job}
 }
 
 // defining multiple OneToMany relationships with comments
 relationship OneToMany {
-	Employee{job} to Job,
-	/**
-	* A relationship
-	*/
-	Department{employee} to
-	/**
-	* Another side of the same relationship
-	*/
-	Employee
+    Employee{job} to Job,
+    /**
+    * A relationship
+    */
+    Department{employee} to
+    /**
+    * Another side of the same relationship
+    */
+    Employee
 }
 
 relationship ManyToOne {
-	Employee{manager} to Employee,
+    Employee{manager} to Employee,
     Employee{user} to User
 }
 
 // defining multiple oneToOne relationships
 relationship OneToOne {
-	JobHistory{job} to Job,
-	JobHistory{department} to Department,
-	JobHistory{employee} to Employee
+    JobHistory{job} to Job,
+    JobHistory{department} to Department,
+    JobHistory{employee} to Employee
 }
 
 // Set pagination options

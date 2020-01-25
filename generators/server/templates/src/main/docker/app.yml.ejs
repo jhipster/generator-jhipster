@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,7 +33,7 @@ services:
             - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mysql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mariadb') { _%>
             - SPRING_DATASOURCE_URL=jdbc:mariadb://<%= baseName.toLowerCase() %>-mariadb:3306/<%= baseName.toLowerCase() %>
@@ -89,14 +89,7 @@ services:
             - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
-            - KAFKA_CONSUMER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_CONSUMER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9092
-            - KAFKA_CONSUMER_GROUP_ID=<%= dasherizedBaseName %>
-            - KAFKA_CONSUMER_AUTO_OFFSET_RESET=earliest
-            - KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092
-            - KAFKA_PRODUCER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_PRODUCER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
+            - KAFKA_BOOTSTRAPSERVERS=kafka:9092
             <%_ } _%>
             <%_ if (cacheProvider === 'infinispan') { _%>
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true

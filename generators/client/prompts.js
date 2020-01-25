@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -174,7 +174,11 @@ function askForClientThemeVariant(meta) {
 
     const skipClient = this.skipClient;
 
-    const choices = [{ value: 'primary', name: 'Primary' }, { value: 'dark', name: 'Dark' }, { value: 'light', name: 'Light' }];
+    const choices = [
+        { value: 'primary', name: 'Primary' },
+        { value: 'dark', name: 'Dark' },
+        { value: 'light', name: 'Light' }
+    ];
 
     const PROMPT = {
         type: 'list',

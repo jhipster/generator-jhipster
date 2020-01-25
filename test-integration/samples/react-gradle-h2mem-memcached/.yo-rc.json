@@ -24,19 +24,14 @@
         "clientFramework": "react",
         "clientTheme": "none",
         "clientThemeVariant": "",
-        "testFrameworks": [
-            "gatling",
-            "protractor"
-        ],
+        "testFrameworks": ["gatling", "protractor"],
         "jhiPrefix": "jhi",
         "entitySuffix": "",
         "dtoSuffix": "DTO",
         "otherModules": [],
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "languages": [
-            "en"
-        ],
+        "languages": ["en"],
         "blueprints": []
     }
 }

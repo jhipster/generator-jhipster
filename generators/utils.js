@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,10 +24,24 @@ const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const fs = require('fs');
 const crypto = require('crypto');
+const randexp = require('randexp');
+const faker = require('faker');
 
 const constants = require('./generator-constants');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+
+class RandexpWithFaker extends randexp {
+    constructor(regexp, m) {
+        super(regexp, m);
+        this.max = 5;
+    }
+
+    // In order to have consistent results with RandExp, the RNG is seeded.
+    randInt(min, max) {
+        return faker.random.number({ min, max });
+    }
+}
 
 module.exports = {
     rewrite,
@@ -49,7 +63,9 @@ module.exports = {
     checkStringInFile,
     loadBlueprintsFromConfiguration,
     parseBluePrints,
-    normalizeBlueprintName
+    normalizeBlueprintName,
+    stringHashCode,
+    RandexpWithFaker
 };
 
 /**
@@ -183,6 +199,9 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
                     break;
                 case 'js':
                     body = replaceTitle(body, generator);
+                    if (dest.endsWith('error.route.ts')) {
+                        body = replaceErrorMessage(body, generator);
+                    }
                     break;
                 case 'jsx':
                     body = replaceTranslation(body, generator);
@@ -221,11 +240,33 @@ function renderContent(source, generator, context, options, cb) {
  * @returns string with pageTitle replaced
  */
 function replaceTitle(body, generator) {
-    const re = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
+    const regex = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
+    return replaceTranslationKeysWithText(body, generator, regex);
+}
+
+/**
+ *
+ * @param {string} body html body
+ * @param {object} generator reference to the generator
+ * @returns string with pageTitle replaced
+ */
+function replaceErrorMessage(body, generator) {
+    const regex = /errorMessage[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
+    return replaceTranslationKeysWithText(body, generator, regex);
+}
+
+/**
+ *
+ * @param {string} body html body
+ * @param {object} generator reference to the generator
+ * @param {object} regex regular expression to find keys
+ * @returns string with pageTitle replaced
+ */
+function replaceTranslationKeysWithText(body, generator, regex) {
     let match;
 
     // eslint-disable-next-line no-cond-assign
-    while ((match = re.exec(body)) !== null) {
+    while ((match = regex.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
         const key = match[1];
         const target = key;
@@ -245,7 +286,7 @@ function replaceTitle(body, generator) {
  * @returns string with placeholders replaced
  */
 function replacePlaceholders(body, generator) {
-    const re = /placeholder=['|"]([{]{2}['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)[}]{2})['|"]/g;
+    const re = /placeholder=['|"]([{]{2}\s*['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)\s*[}]{2})['|"]/g;
     let match;
 
     // eslint-disable-next-line no-cond-assign
@@ -305,27 +346,39 @@ function replaceTranslation(body, generator) {
  */
 function geti18nJson(key, generator) {
     const i18nDirectory = `${LANGUAGES_MAIN_SRC_DIR}i18n/en/`;
-    let name = _.kebabCase(key.split('.')[0]);
-    if (['entity', 'error', 'footer'].includes(name)) {
-        name = 'global';
+    const names = [];
+    let result;
+    const namePrefix = _.kebabCase(key.split('.')[0]);
+    if (['entity', 'error', 'footer'].includes(namePrefix)) {
+        names.push('global');
+        if (namePrefix === 'error') {
+            names.push('error');
+        }
+    } else {
+        names.push(namePrefix);
     }
-    let filename = `${i18nDirectory + name}.json`;
-    let render;
-    if (!shelljs.test('-f', filename)) {
-        filename = `${filename}.ejs`;
-        render = true;
+    for (let i = 0; i < names.length; i++) {
+        let filename = `${i18nDirectory + names[i]}.json`;
+        let render;
+        if (!shelljs.test('-f', filename)) {
+            filename = `${filename}.ejs`;
+            render = true;
+        }
+        try {
+            let file = generator.fs.read(filename);
+            file = render ? ejs.render(file, generator, {}) : file;
+            file = JSON.parse(file);
+            if (result === undefined) {
+                result = file;
+            } else {
+                result = { ...result, ...file };
+            }
+        } catch (err) {
+            generator.log(err);
+            generator.log(`Error in file: ${filename}`);
+        }
     }
-    try {
-        let file = generator.fs.read(filename);
-        file = render ? ejs.render(file, generator, {}) : file;
-        file = JSON.parse(file);
-        return file;
-    } catch (err) {
-        generator.log(err);
-        generator.log(`Error in file: ${filename}`);
-        // 'Error reading translation file!'
-        return undefined;
-    }
+    return result;
 }
 
 /**
@@ -379,22 +432,42 @@ function getJavadoc(text, indentSize) {
  * @param {any} field : entity field
  * @param {string} angularAppName
  * @param {string} packageName
+ * @param {string} clientRootFolder
  */
 function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
     field.enumInstance = _.lowerFirst(fieldType);
-    const enumInfo = {
+    const enums = field.fieldValues.replace(/\s/g, '').split(',');
+    const enumsWithCustomValue = getEnumsWithCustomValue(enums);
+    return {
         enumName: fieldType,
         enumValues: field.fieldValues.split(',').join(', '),
         enumInstance: field.enumInstance,
-        enums: field.fieldValues.replace(/\s/g, '').split(','),
+        enums,
+        enumsWithCustomValue,
         angularAppName,
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
-    return enumInfo;
 }
 
+function getEnumsWithCustomValue(enums) {
+    return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
+        if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
+            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
+            const enumValueName = matches[1];
+            const enumValueCustomValue = matches[3];
+            enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
+        } else {
+            enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
+        }
+        return enumsWithCustomValueArray;
+    }, []);
+}
+
+function doesTheEnumValueHaveACustomValue(enumValue) {
+    return enumValue.includes('(');
+}
 /**
  * Copy object props from source to destination
  * @param {*} toObj
@@ -487,7 +560,7 @@ function checkStringInFile(path, search, generator) {
  */
 function loadBlueprintsFromConfiguration(config) {
     // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-    const configuration = config && (config.getAll && typeof config.getAll === 'function') ? config.getAll() || {} : config;
+    const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
     // load blueprints from config file
     const blueprints = configuration.blueprints || [];
 
@@ -548,4 +621,24 @@ function normalizeBlueprintName(blueprint) {
         return `generator-jhipster-${blueprint}`;
     }
     return blueprint;
+}
+
+/**
+ * Calculate a hash code for a given string.
+ * @param {string} str - any string
+ * @returns {number} returns the calculated hash code.
+ */
+function stringHashCode(str) {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        const character = str.charCodeAt(i);
+        hash = (hash << 5) - hash + character; // eslint-disable-line no-bitwise
+        hash |= 0; // eslint-disable-line no-bitwise
+    }
+
+    if (hash < 0) {
+        hash *= -1;
+    }
+    return hash;
 }

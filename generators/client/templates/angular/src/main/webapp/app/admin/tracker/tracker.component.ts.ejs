@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -32,11 +32,11 @@ export class TrackerComponent implements OnInit, OnDestroy {
 
     constructor(
         private trackerService: TrackerService
-    ) {
-    }
+    ) {}
 
     showActivity(activity: TrackerActivity): void {
         let existingActivity = false;
+
         for (let index = 0; index < this.activities.length; index++) {
             if (this.activities[index].sessionId === activity.sessionId) {
                 existingActivity = true;
@@ -47,6 +47,7 @@ export class TrackerComponent implements OnInit, OnDestroy {
                 }
             }
         }
+
         if (!existingActivity && (activity.page !== 'logout')) {
             this.activities.push(activity);
         }
