@@ -1464,15 +1464,14 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Returns the primary key value based on authentication type, DB, given association and default value
+     * Returns the primary key value based on the primary key type, DB and default value
      *
-     * @param {string} authenticationType - the auth type
+     * @param {string} primaryKeyType - the primary key type
      * @param {string} databaseType - the database type
-     * @param {any} relationships - relationships
      * @param {string} defaultValue - default value
+     * @returns {string} java primary key value
      */
-    getPkValueBasedOnDBAndAssociation(authenticationType, databaseType, relationships, defaultValue) {
-        const primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+    getPrimaryKeyValue(primaryKeyType, databaseType, defaultValue) {
         let value;
         switch (primaryKeyType) {
             case 'String':
