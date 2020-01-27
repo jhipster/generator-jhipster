@@ -120,6 +120,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
         const relationshipFieldName = relationships[idx].relationshipFieldName;
         const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
         const relationshipType = relationships[idx].relationshipType;
+        const otherEntityName = relationships[idx].otherEntityName;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
         const ownerSide = relationships[idx].ownerSide;
@@ -132,7 +133,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
     private Set<<%= asDto(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
-    private <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> <%= relationshipFieldName %>Id;
+    private <% if (otherEntityName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> <%= relationshipFieldName %>Id;
     <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
 
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
@@ -201,11 +202,11 @@ public class <%= asDto(entityClass) %> implements Serializable {
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     <%_ if (relationshipNameCapitalized.length > 1) { _%>
-    public <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> get<%= relationshipNameCapitalized %>Id() {
+    public <% if (otherEntityName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> get<%= relationshipNameCapitalized %>Id() {
         return <%= relationshipFieldName %>Id;
     }
 
-    public void set<%= relationshipNameCapitalized %>Id(<% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> <%= otherEntityName %>Id) {
+    public void set<%= relationshipNameCapitalized %>Id(<% if (otherEntityName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> <%= otherEntityName %>Id) {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
     }
     <%_ } else { // special case when the entity name has one character _%>
@@ -263,10 +264,11 @@ public class <%= asDto(entityClass) %> implements Serializable {
                 const relationshipFieldName = relationships[idx].relationshipFieldName;
                 const relationshipType = relationships[idx].relationshipType;
                 const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+                const otherEntityName = relationships[idx].otherEntityName;
                 const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
                 const ownerSide = relationships[idx].ownerSide; _%>
                 <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
-            ", <%= relationshipFieldName %>Id=<% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>'<% } %>" + get<%= relationshipNameCapitalized %>Id() <% if (relationshipFieldName === 'user' && authenticationType === 'oauth2') { %>+ "'" <% } %>+
+            ", <%= relationshipFieldName %>Id=<% if (otherEntityName === 'user' && authenticationType === 'oauth2') { %>'<% } %>" + get<%= relationshipNameCapitalized %>Id() <% if (otherEntityName === 'user' && authenticationType === 'oauth2') { %>+ "'" <% } %>+
                     <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
             ", <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>='" + get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() + "'" +
             <%_ } } } _%>

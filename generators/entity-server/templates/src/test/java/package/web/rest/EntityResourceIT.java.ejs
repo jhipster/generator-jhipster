@@ -977,7 +977,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ } _%>
         <%_ } _%>
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
-        <% if (authenticationType === 'oauth2' && relationship.relationshipFieldName === 'user') { _%>String<%_ } else { _%>Long<% } %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.getId();
+        <% if (authenticationType === 'oauth2' && relationship.otherEntityName === 'user') { _%>String<%_ } else { _%>Long<% } %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.getId();
 
         // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id
         default<%= entityClass %>ShouldBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= relationship.relationshipFieldName %>Id);
