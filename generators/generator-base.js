@@ -1426,6 +1426,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 61;
+        } else if (prodDatabaseType === 'mariadb' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 characters limit). It will be truncated!`
+            );
+
+            limit = 62;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
