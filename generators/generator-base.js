@@ -1375,6 +1375,12 @@ module.exports = class extends PrivateBase {
             );
 
             limit = 63;
+        } else if (prodDatabaseType === 'mariadb' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for MariaDB (which has a 64 characters limit). It will be truncated!`
+            );
+
+            limit = 64;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
