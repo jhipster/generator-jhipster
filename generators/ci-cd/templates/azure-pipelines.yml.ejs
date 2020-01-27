@@ -82,11 +82,11 @@ jobs:
 <%_ if (!skipServer) { _%>
   <%_ if (buildTool === 'maven') { _%>
     <%_ if (clientPackageManager === 'yarn') { _%>
-        - script: yarn install
-        - script: yarn test
+  - script: yarn install
+  - script: yarn test
           <%_ } else if (clientPackageManager === 'npm') { _%>
-        - script: npm install
-        - script: npm test
+  - script: npm install
+  - script: npm test
           <%_ } _%>
   - script: ./mvnw -ntp verify -Pprod -DskipTests
   <%_ } else if (buildTool === 'gradle') { _%>
