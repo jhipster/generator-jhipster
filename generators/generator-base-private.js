@@ -1464,6 +1464,33 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Returns the primary key value based on the primary key type, DB and default value
+     *
+     * @param {string} primaryKeyType - the primary key type
+     * @param {string} databaseType - the database type
+     * @param {string} defaultValue - default value
+     * @returns {string} java primary key value
+     */
+    getPrimaryKeyValue(primaryKeyType, databaseType, defaultValue) {
+        let value;
+        switch (primaryKeyType) {
+            case 'String':
+                value = `"id${defaultValue}"`;
+                // Special case with a OneToOne relationship with User and @MapsId when using OAuth
+                if (databaseType === 'sql') {
+                    value = 'UUID.randomUUID().toString()';
+                }
+                break;
+            case 'UUID':
+                value = 'UUID.randomUUID()';
+                break;
+            default:
+                value = `${defaultValue}L`;
+        }
+        return value;
+    }
+
+    /**
      * Get a root folder name for entity
      * @param {string} clientRootFolder
      * @param {string} entityFileName
