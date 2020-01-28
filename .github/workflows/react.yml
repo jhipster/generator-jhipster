@@ -61,10 +61,10 @@ jobs:
                       war: 0
                       protractor: 1
                     - app-type: react-maven-psql-es-noi18n-mapsid
-                      entity: sql # TODO: need change to sqlfull, when react is fixed
+                      entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 0 # TODO: instead of sql, because of flacky tests
+                      protractor: 1
                     - app-type: react-maven-h2mem-memcached
                       entity: none # TODO: instead of sql, because of flacky tests
                       profile: dev
