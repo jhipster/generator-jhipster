@@ -1090,6 +1090,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}config/ElasticsearchTestConfiguration.java`
                 }
             ]
+        },
+        {
+            condition: generator => !!generator.enableSwaggerCodegen,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/apidoc/OpenApiSpecResourceProvider.java',
+                    renameTo: generator => `${generator.javaDir}config/apidoc/OpenApiSpecResourceProvider.java`
+                }
+            ]
         }
     ],
     serverJavaDomain: [
@@ -1166,6 +1176,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}config/KafkaProperties.java`
                 }
             ]
+        },
+        {
+            condition: generator => !!generator.enableSwaggerCodegen,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/service/OpenApiSpecService.java',
+                    renameTo: generator => `${generator.javaDir}service/OpenApiSpecService.java`
+                }
+            ]
         }
     ],
     serverJavaWebError: [
@@ -1209,6 +1229,16 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/errors/LoginAlreadyUsedException.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/LoginAlreadyUsedException.java`
+                }
+            ]
+        },
+        {
+            condition: generator => !!generator.enableSwaggerCodegen,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/OpenApiSpecController.java',
+                    renameTo: generator => `${generator.javaDir}web/rest/OpenApiSpecController.java`
                 }
             ]
         }

@@ -1,0 +1,105 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.service;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+
+import java.io.IOException;
+
+@Service
+public class OpenApiSpecService {
+
+    public static final String OPENAPI_SPEC_FILE = "api.yml";
+
+    private final ObjectMapper ymlObjectMapper = new ObjectMapper(new YAMLFactory());
+
+    private final JsonNode ymlJsonNode;
+    private final String basePath;
+
+    public OpenApiSpecService(@Value("${openapi.<%= dasherizedBaseName %>.base-path:/api}") String basePath) {
+        this.basePath = basePath;
+        try {
+            ClassPathResource classPathResource = new ClassPathResource("swagger/" + OPENAPI_SPEC_FILE);
+            byte[] ymlContent = IOUtils.toByteArray(classPathResource.getInputStream());
+            ymlJsonNode = ymlObjectMapper.readTree(ymlContent);
+        } catch (Exception e){
+            throw new IllegalStateException("Failed to load api yml file", e);
+        }
+    }
+
+    /**
+     * Returns the yml file content. Replaces servers list to add the endpoint passed as parameter
+     * @param apiEndpoint the api endpoint to be inserted into the yml file
+     * @return the content of the yml, with the dynamically replaced server list
+     * @throws IOException
+     */
+    public byte[] getContent(String apiEndpoint) throws IOException {
+        ArrayNode servers = (ArrayNode) ymlJsonNode.get("servers");
+        if(servers != null){
+            //remove servers (if any)
+            servers.removeAll();
+        } else {
+            servers = ymlObjectMapper.createArrayNode();
+        }
+
+        ObjectNode objectNode = ymlObjectMapper.createObjectNode();
+        objectNode.put("url", apiEndpoint);
+        servers.add(objectNode);
+
+        return ymlObjectMapper.writeValueAsBytes(ymlJsonNode);
+    }
+
+
+    /**
+     * Returns the api version written into the api.yml file
+     * @return the api version
+     * @throws IOException
+     */
+    public String getApiVersion() {
+        return ymlJsonNode.get("info").get("version").textValue();
+    }
+
+    /**
+     * Openapi version (swagger 2.0, openapi 3.0)
+     * @return the spec version (swagger/openapi)
+     * @throws IOException
+     */
+    public String getSpecVersion() {
+        if(ymlJsonNode.has("openapi")) {
+            return ymlJsonNode.get("openapi").textValue();
+        } else if(ymlJsonNode.has("swagger")){
+            return ymlJsonNode.get("swagger").textValue();
+        } else {
+            return null;
+        }
+    }
+
+    public String getSpecLocation(){
+        return basePath + "/" + OPENAPI_SPEC_FILE;
+    }
+
+}
