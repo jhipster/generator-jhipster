@@ -25,19 +25,16 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 
 @Component
-public class JwtAuthorityExtractor implements Converter<Jwt, Collection<GrantedAuthority>> {
+public class JwtGrantedAuthorityConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
-    public JwtAuthorityExtractor() {
+    public JwtGrantedAuthorityConverter() {
         // Bean extracting authority.
     }
 
     @Override
-    protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
-        return Stream.concat(SecurityUtils.extractAuthorityFromClaims(jwt.getClaims()).stream(), super.extractAuthorities(jwt).stream()).collect(Collectors.toSet());
+    public Collection<GrantedAuthority> convert(Jwt jwt) {
+        return SecurityUtils.extractAuthorityFromClaims(jwt.getClaims());
     }
 }

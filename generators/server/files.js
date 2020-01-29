@@ -450,8 +450,8 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidator.java`
                 },
                 {
-                    file: 'package/security/oauth2/JwtAuthorityExtractor.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/JwtAuthorityExtractor.java`
+                    file: 'package/security/oauth2/JwtGrantedAuthorityConverter.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/JwtGrantedAuthorityConverter.java`
                 },
                 {
                     file: 'package/security/oauth2/OAuthIdpTokenResponseDTO.java',

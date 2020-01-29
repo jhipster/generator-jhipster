@@ -27,7 +27,7 @@ import <%= packageName %>.security.jwt.TokenProvider;
     <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.security.oauth2.AudienceValidator;
-import <%= packageName %>.security.oauth2.JwtAuthorityExtractor;
+import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 import <%= packageName %>.service.AuditEventService;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -279,7 +279,7 @@ public class SecurityConfiguration {
         .and()
             <%_ } _%>.oauth2ResourceServer()
             .jwt()
-            .jwtAuthenticationConverter(grantedAuthoritiesExtractor())
+            .jwtAuthenticationConverter(jwtAuthenticationConverter())
         .and()
             .and()
             .oauth2Client();
@@ -289,9 +289,9 @@ public class SecurityConfiguration {
     }
     <%_ if (authenticationType === 'oauth2') { _%>
 
-    Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
+    Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtAuthorityExtractor());
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
     }
 

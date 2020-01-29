@@ -221,6 +221,7 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${testDir}web/rest/ClientForwardControllerIT.java`);
     }
     if (generator.isJhipsterVersionLessThan('6.6.1')) {
+        generator.removeFile(`${javaDir}security/oauth2/JwtAuthorityExtractor.java`);
         generator.removeFile(`${javaDir}web/rest/errors/EmailNotFoundException.java`);
         generator.removeFile(`${javaDir}config/DefaultProfileUtil.java`);
         generator.removeFolder(`${javaDir}service/util`);
