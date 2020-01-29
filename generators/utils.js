@@ -120,7 +120,8 @@ function rewrite(args) {
     // check if splicable is already in the body text
     const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(line)}`).join('\n'));
 
-    if (re.test(args.haystack)) {
+    // if in Windows is Git autocrlf used then need to replace \r\n with \n to avoid multiple additions
+    if (re.test(args.haystack.replace(/\r\n/g, '\n'))) {
         return args.haystack;
     }
 
