@@ -358,12 +358,12 @@ import static org.hamcrest.Matchers.hasItem;
 <%_ } _%>
 import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 <%_ if (!reactive) { _%>
-    <%_ if (authenticationType === 'session') { _%>
+    <%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
     <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-<%_ } else if (authenticationType === 'session') { _%>
+<%_ } else if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } _%>
 
@@ -413,7 +413,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     }
 
     <%_ } _%>
-    <%_ if (reactive && authenticationType === 'session') { _%>
+    <%_ if (reactive && testsNeedCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
         accountWebTestClient = accountWebTestClient.mutateWith(csrf());
@@ -545,7 +545,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(validUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(validUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
@@ -579,7 +579,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -614,7 +614,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -649,7 +649,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -684,7 +684,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(invalidUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -739,7 +739,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(firstUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(firstUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
@@ -755,7 +755,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
@@ -776,7 +776,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().is4xxClientError());
         <%_ } else { _%>
@@ -809,7 +809,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(firstUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(firstUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
@@ -841,7 +841,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
@@ -877,7 +877,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(userWithUpperCaseEmail))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
@@ -900,7 +900,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(secondUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().is4xxClientError());
         <%_ } else { _%>
@@ -932,7 +932,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(validUser))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(validUser))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
@@ -1023,7 +1023,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/account")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
@@ -1076,7 +1076,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/account")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -1132,7 +1132,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/account")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -1178,7 +1178,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/account")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(userDTO))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
@@ -1211,7 +1211,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (testsNeedCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -1245,7 +1245,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "new password")))
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (testsNeedCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
         <%_ } else { _%>
@@ -1280,7 +1280,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (testsNeedCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -1315,7 +1315,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, newPassword)))
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (testsNeedCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -1348,7 +1348,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(new PasswordChangeDTO(currentPassword, "")))
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (testsNeedCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -1424,7 +1424,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
 
-        restAccountMockMvc.perform(delete("/api/account/sessions/invalidate-session")<%_ if (authenticationType === 'session') { _%>.with(csrf())<%_ } _%>)
+        restAccountMockMvc.perform(delete("/api/account/sessions/invalidate-session")<%_ if (testsNeedCsrf) { _%>.with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
 
         assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
@@ -1447,7 +1447,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@example.com")
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (testsNeedCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
         <%_ } else { _%>
@@ -1474,7 +1474,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@EXAMPLE.COM")
-            <%_ if (authenticationType === 'session') { _%>
+            <%_ if (testsNeedCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
         <%_ } else { _%>
@@ -1490,7 +1490,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     public void testRequestPasswordResetWrongEmail() <% if (!reactive) { %>throws Exception <% } %>{
         restAccountMockMvc.perform(
             post("/api/account/reset-password/init")
-                .content("password-reset-wrong-email@example.com")<% if (authenticationType === 'session') { %>
+                .content("password-reset-wrong-email@example.com")<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isOk());
     <%_ } else { _%>
@@ -1524,7 +1524,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
@@ -1561,7 +1561,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -1587,7 +1587,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         restAccountMockMvc.perform(
             post("/api/account/reset-password/finish")
                 .contentType(TestUtil.APPLICATION_JSON)
-                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (authenticationType === 'session') { %>
+                .content(TestUtil.convertObjectToJsonBytes(keyAndPassword))<% if (testsNeedCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isInternalServerError());
         <%_ } else { _%>

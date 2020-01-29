@@ -99,12 +99,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItems;
     <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
-<%_ if (authenticationType === 'session') { _%>
+<%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-<%_ } else if (authenticationType === 'session') { _%>
+<%_ } else if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } _%>
 
@@ -215,7 +215,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     }
 
     <%_ } _%>
-    <%_ if (reactive && authenticationType === 'session') { _%>
+    <%_ if (reactive && testsNeedCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
         webTestClient = webTestClient.mutateWith(csrf());
@@ -287,7 +287,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationType === 'session') { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
@@ -345,7 +345,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationType === 'session') { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -390,7 +390,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationType === 'session') { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -435,7 +435,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationType === 'session') { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -603,7 +603,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationType === 'session') { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
@@ -667,7 +667,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationType === 'session') { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
@@ -749,7 +749,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationType === 'session') { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -817,7 +817,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (authenticationType === 'session') { %>
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
@@ -845,7 +845,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Delete the user
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(delete("/api/users/{login}", user.getLogin())
-            .accept(TestUtil.APPLICATION_JSON)<% if (authenticationType === 'session') { %>
+            .accept(TestUtil.APPLICATION_JSON)<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isNoContent());
         <%_ } else { _%>
