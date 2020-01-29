@@ -172,6 +172,8 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
 
+        await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
+
         await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
         expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
     });<%= closeBlockComment %>
@@ -192,8 +194,11 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await isVisible(deleteModal)).to.be.false;
 
-        await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount);
-        expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount);
+        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
+        <%= entityInstance %>ComponentsPage.table]);
+    
+        const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
+        expect(afterCount).to.eq(beforeRecordsCount);
     });<%= closeBlockComment %>
 <%_ } _%>
 

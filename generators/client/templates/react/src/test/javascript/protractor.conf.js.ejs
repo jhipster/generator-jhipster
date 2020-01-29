@@ -46,9 +46,9 @@ exports.config = {
 
   mochaOpts: {
     reporter: 'spec',
-    slow: 3000,
+    slow: 6000,
     ui: 'bdd',
-    timeout: 720000
+    timeout: 60000
   },
 
   beforeLaunch () {
@@ -70,5 +70,9 @@ exports.config = {
     chai.use(chaiAsPromised);
     // @ts-ignore
     global.chai = chai;
+  },
+  params: {
+    waitTimeoutInMillis: 40000,
+    logWaitErrors: false
   }
 };
