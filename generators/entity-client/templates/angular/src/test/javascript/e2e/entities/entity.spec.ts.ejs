@@ -29,7 +29,8 @@ for (let relationship of relationships) {
         closeBlockComment = ` */`;
         break;
     }
-} _%>
+}
+_%>
 import { browser, ExpectedConditions as ec <% if (!readOnly) { %><%= openBlockComment %><% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %>, promise<%= closeBlockComment %><% } %> } from 'protractor';
 import { NavBarPage, SignInPage } from '../../<%= entityParentPathAddition %>page-objects/jhi-page-objects';
 
@@ -83,6 +84,7 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>ComponentsPage.getTitle())
             .to.eq('<%= entityClassPluralHumanized %>');
         <%_ } _%>
+        await browser.wait(ec.or(ec.visibilityOf(<%= entityInstance %>ComponentsPage.entities), ec.visibilityOf(<%= entityInstance %>ComponentsPage.noResult)), 1000);
     });
 
 <%_ if (!readOnly) { _%>
@@ -99,7 +101,7 @@ describe('<%= entityClass %> e2e test', () => {
         await <%= entityInstance %>UpdatePage.cancel();
     });
 
-   <%= openBlockComment %>it('should create and save <%= entityClassPlural %>', async () => {
+    <%= openBlockComment %>it('should create and save <%= entityClassPlural %>', async () => {
         const nbButtonsBeforeCreate = await <%= entityInstance %>ComponentsPage.countDeleteButtons();
 
         await <%= entityInstance %>ComponentsPage.clickOnCreateButton();

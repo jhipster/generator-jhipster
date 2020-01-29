@@ -52,7 +52,7 @@ _%>
         <%_ } _%>
         {
             provide: JhiEventManager,
-            useClass:  MockEventManager
+            useClass: MockEventManager
         },
         {
             provide: NgbActiveModal,
@@ -60,7 +60,7 @@ _%>
         },
         {
             provide: ActivatedRoute,
-            useValue: new MockActivatedRoute({id: <%- tsKeyId %>})
+            useValue: new MockActivatedRoute({ id: <%- tsKeyId %> })
         },
         {
             provide: Router,
@@ -87,4 +87,4 @@ _%>
     ],
     imports: [HttpClientTestingModule]
 })
-export class <%=angularXAppName%>TestModule {}
+export class <%= angularXAppName %>TestModule {}

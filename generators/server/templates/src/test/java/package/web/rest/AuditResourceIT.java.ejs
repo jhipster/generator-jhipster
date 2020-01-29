@@ -16,21 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 
-import <%=packageName%>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>;
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
-import <%=packageName%>.config.TestSecurityConfiguration;
+import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
-import <%=packageName%>.config.audit.AuditEventConverter;
-import <%=packageName%>.domain.PersistentAuditEvent;
-import <%=packageName%>.repository.PersistenceAuditEventRepository;
+import <%= packageName %>.config.audit.AuditEventConverter;
+import <%= packageName %>.domain.PersistentAuditEvent;
+import <%= packageName %>.repository.PersistenceAuditEventRepository;
 
-import <%=packageName%>.service.AuditEventService;
+import <%= packageName %>.service.AuditEventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
@@ -40,13 +43,25 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (!reactive) { _%>
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+<%_ } _%>
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+<%_ if (!reactive) { _%>
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType === 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
 
 import java.time.Instant;
 
@@ -55,8 +70,10 @@ import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+<%_ if (!reactive) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } _%>
 
 /**
  * Integration tests for the {@link AuditResource} REST controller.
@@ -87,20 +104,26 @@ public class AuditResourceIT {
 
     @Autowired
     private JHipsterProperties jhipsterProperties;
+    <%_ if (!reactive) { _%>
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
-    @Qualifier("mvcConversionService")
-    private FormattingConversionService formattingConversionService;
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    <%_ } _%>
 
     @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    @Qualifier("<% if (!reactive) { %>mvc<% } else { %>webFlux<% } %>ConversionService")
+    private FormattingConversionService formattingConversionService;
 
     private PersistentAuditEvent auditEvent;
 
+    <%_ if (!reactive) { _%>
     private MockMvc restAuditMockMvc;
+    <%_ } else { _%>
+    private WebTestClient webTestClient;
+    <%_ } _%>
 
     @BeforeEach
     public void setup() {
@@ -108,10 +131,21 @@ public class AuditResourceIT {
         AuditEventService auditEventService =
             new AuditEventService(auditEventRepository, auditEventConverter, jhipsterProperties);
         AuditResource auditResource = new AuditResource(auditEventService);
+        <%_ if (!reactive) { _%>
         this.restAuditMockMvc = MockMvcBuilders.standaloneSetup(auditResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setConversionService(formattingConversionService)
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+        <%_ } else { _%>
+        this.webTestClient = WebTestClient.bindToController(auditResource)
+            .argumentResolvers(configurer -> configurer.addCustomResolver(new ReactivePageableHandlerMethodArgumentResolver()))
+            .formatters(registry -> {
+                DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+                registrar.setUseIsoFormat(true);
+                registrar.registerFormatters(registry);
+            })
+        <%_ } _%>
+            .build();
     }
 
     @BeforeEach
@@ -119,7 +153,7 @@ public class AuditResourceIT {
         <%_ if (databaseType === 'couchbase') { _%>
         mockAuthentication();
         <%_ } _%>
-        auditEventRepository.deleteAll();
+        auditEventRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         auditEvent = new PersistentAuditEvent();
         auditEvent.setAuditEventType(SAMPLE_TYPE);
         auditEvent.setPrincipal(SAMPLE_PRINCIPAL);
@@ -127,66 +161,104 @@ public class AuditResourceIT {
     }
 
     @Test
-    public void getAllAudits() throws Exception {
+    public void getAllAudits() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        auditEventRepository.save(auditEvent);
+        auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
 
         // Get all the audits
+        <%_ if (!reactive) { _%>
         restAuditMockMvc.perform(get("/management/audits"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].principal").value(hasItem(SAMPLE_PRINCIPAL)));
+        <%_ } else { _%>
+        webTestClient.get().uri("/management/audits")
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody().jsonPath("$.[*].principal").value(hasItem(SAMPLE_PRINCIPAL));
+        <%_ } _%>
     }
 
     @Test
-    public void getAudit() throws Exception {
+    public void getAudit() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        auditEventRepository.save(auditEvent);
+        auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
 
         // Get the audit
+        <%_ if (!reactive) { _%>
         restAuditMockMvc.perform(get("/management/audits/{id}", auditEvent.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.principal").value(SAMPLE_PRINCIPAL));
+        <%_ } else { _%>
+        webTestClient.get().uri("/management/audits/{id}", auditEvent.getId())
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody().jsonPath("$.principal").isEqualTo(SAMPLE_PRINCIPAL);
+        <%_ } _%>
     }
 
     @Test
-    public void getAuditsByDate() throws Exception {
+    public void getAuditsByDate() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        auditEventRepository.save(auditEvent);
+        auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
 
         // Generate dates for selecting audits by date, making sure the period will contain the audit
         String fromDate = SAMPLE_TIMESTAMP.minusSeconds(SECONDS_PER_DAY).toString().substring(0, 10);
         String toDate = SAMPLE_TIMESTAMP.plusSeconds(SECONDS_PER_DAY).toString().substring(0, 10);
 
         // Get the audit
+        <%_ if (!reactive) { _%>
         restAuditMockMvc.perform(get("/management/audits?fromDate="+fromDate+"&toDate="+toDate))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].principal").value(hasItem(SAMPLE_PRINCIPAL)));
+        <%_ } else { _%>
+        webTestClient.get().uri("/management/audits?fromDate="+fromDate+"&toDate="+toDate)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody().jsonPath("$.[*].principal").value(hasItem(SAMPLE_PRINCIPAL));
+        <%_ } _%>
     }
 
     @Test
-    public void getNonExistingAuditsByDate() throws Exception {
+    public void getNonExistingAuditsByDate() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        auditEventRepository.save(auditEvent);
+        auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
 
         // Generate dates for selecting audits by date, making sure the period will not contain the sample audit
         String fromDate  = SAMPLE_TIMESTAMP.minusSeconds(2*SECONDS_PER_DAY).toString().substring(0, 10);
         String toDate = SAMPLE_TIMESTAMP.minusSeconds(SECONDS_PER_DAY).toString().substring(0, 10);
 
         // Query audits but expect no results
+        <%_ if (!reactive) { _%>
         restAuditMockMvc.perform(get("/management/audits?fromDate=" + fromDate + "&toDate=" + toDate))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(header().string("X-Total-Count", "0"));
+        <%_ } else { _%>
+        webTestClient.get().uri("/management/audits?fromDate="+fromDate+"&toDate="+toDate)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectHeader().valueEquals("X-Total-Count", "0");
+        <%_ } _%>
     }
 
     @Test
-    public void getNonExistingAudit() throws Exception {
+    public void getNonExistingAudit() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the audit
+        <%_ if (!reactive) { _%>
         restAuditMockMvc.perform(get("/management/audits/{id}", Long.MAX_VALUE))
             .andExpect(status().isNotFound());
+        <%_ } else { _%>
+        webTestClient.get().uri("/management/audits/{id}", Long.MAX_VALUE)
+            .exchange()
+            .expectStatus().isNotFound();
+        <%_ } _%>
     }
 
     @Test

@@ -16,30 +16,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service;
+package <%= packageName %>.service;
 
-import <%=packageName%>.config.Constants;
+import <%= packageName %>.config.Constants;
 <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-import <%=packageName%>.domain.Authority;
+import <%= packageName %>.domain.Authority;
 <%_ } _%>
 <%_ if (databaseType !== 'no') { _%>
-import <%=packageName%>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-import <%=packageName%>.repository.AuthorityRepository;
+import <%= packageName %>.repository.AuthorityRepository;
         <%_ if (authenticationType === 'session' && !reactive) { _%>
-import <%=packageName%>.repository.PersistentTokenRepository;
+import <%= packageName %>.repository.PersistentTokenRepository;
         <%_ } _%>
     <%_ } _%>
-import <%=packageName%>.repository.UserRepository;
+import <%= packageName %>.repository.UserRepository;
     <%_ if (searchEngine === 'elasticsearch') { _%>
-import <%=packageName%>.repository.search.UserSearchRepository;
+import <%= packageName %>.repository.search.UserSearchRepository;
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.security.AuthoritiesConstants;
+import <%= packageName %>.security.AuthoritiesConstants;
     <%_ } _%>
-import <%=packageName%>.security.SecurityUtils;
+import <%= packageName %>.security.SecurityUtils;
 <%_ } _%>
-import <%=packageName%>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
 
 import io.github.jhipster.security.RandomUtil;
@@ -89,7 +89,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
-<%_ if (!reactive) { _%>
+<%_ if (!reactive || authenticationType === 'oauth2') { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
 
@@ -432,7 +432,7 @@ public class UserService {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 if (email != null) {
-	                user.setEmail(email.toLowerCase());
+                    user.setEmail(email.toLowerCase());
                 }
                 user.setLangKey(langKey);
                 <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
@@ -738,8 +738,9 @@ public class UserService {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 
-    private <%= asEntity('User') %> syncUserWithIdP(Map<String, Object> details, <%= asEntity('User') %> user) {
+    private <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> syncUserWithIdP(Map<String, Object> details, <%= asEntity('User') %> user) {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
+        <%_ if (!reactive) { _%>
         Collection<String> dbAuthorities = getAuthorities();
         <%_ if (databaseType !== 'couchbase') { _%>
         Collection<String> userAuthorities =
@@ -781,6 +782,46 @@ public class UserService {
             <%_ } _%>
         }
         return user;
+        <%_ } else { _%>
+        Collection<String> userAuthorities =
+            user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
+
+        return getAuthorities().collectList()
+            .flatMapMany(dbAuthorities -> {
+                List<Authority> authoritiesToSave = userAuthorities.stream()
+                    .filter(authority -> !dbAuthorities.contains(authority))
+                    .map(authority -> {
+                        Authority authorityToSave = new Authority();
+                        authorityToSave.setName(authority);
+                        return authorityToSave;
+                    })
+                    .collect(Collectors.toList());
+                return Flux.fromIterable(authoritiesToSave);
+            })
+            .doOnNext(authority -> log.debug("Saving authority '{}' in local database", authority))
+            .flatMap(authorityRepository::save)
+            .then(userRepository.findOneByLogin(user.getLogin()))
+            .switchIfEmpty(userRepository.save(user))
+            .flatMap(existingUser -> {
+                // if IdP sends last updated information, use it to determine if an update should happen
+                if (details.get("updated_at") != null) {
+                    Instant dbModifiedDate = existingUser.getLastModifiedDate();
+                    Instant idpModifiedDate = Date.from((Instant) details.get("updated_at")).toInstant();
+                    if (idpModifiedDate.isAfter(dbModifiedDate)) {
+                        log.debug("Updating user '{}' in local database", user.getLogin());
+                        return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
+                            user.getLangKey(), user.getImageUrl());
+                    }
+                    // no last updated info, blindly update
+                } else {
+                    log.debug("Updating user '{}' in local database", user.getLogin());
+                    return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
+                        user.getLangKey(), user.getImageUrl());
+                }
+                return Mono.empty();
+            })
+            .thenReturn(user);
+        <%_ } _%>
     }
     <%_ } _%>
 
@@ -795,7 +836,7 @@ public class UserService {
      * @param authToken the authentication token.
      * @return the user from the authentication.
      */
-    public UserDTO getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+    public <% if (!reactive) { %>UserDTO<% } else { %>Mono<UserDTO><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
         if (authToken instanceof OAuth2AuthenticationToken) {
             attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
@@ -815,7 +856,7 @@ public class UserService {
             })
             <%_ } _%>
             .collect(Collectors.toSet()));
-        return <% if (databaseType !== 'no') { %>new UserDTO(syncUserWithIdP(attributes, user))<% } else { %>user<% } %>;
+        return <% if (databaseType !== 'no' && !reactive) { %>new UserDTO(syncUserWithIdP(attributes, user))<% } else if (!reactive) { %>user<% } %><% if (databaseType === 'no' && reactive) { %>Mono.just(user)<% } else if (reactive) { %>syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new UserDTO(u)))<% } %>;
     }
 
     private static <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> getUser(Map<String, Object> details) {
@@ -852,9 +893,9 @@ public class UserService {
             // trim off country code if it exists
             String locale = (String) details.get("locale");
             if (locale.contains("_")) {
-                locale = locale.substring(0, locale.indexOf("_"));
+                locale = locale.substring(0, locale.indexOf('_'));
             } else if (locale.contains("-")) {
-                locale = locale.substring(0, locale.indexOf("-"));
+                locale = locale.substring(0, locale.indexOf('-'));
             }
             user.setLangKey(locale.toLowerCase());
         } else {

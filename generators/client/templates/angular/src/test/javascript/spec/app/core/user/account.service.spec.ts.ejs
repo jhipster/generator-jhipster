@@ -23,16 +23,16 @@ import { MockRouter } from '../../../helpers/mock-route.service';
 import { MockStateStorageService } from '../../../helpers/mock-state-storage.service';
 
 function accountWithAuthorities(authorities: string[]): Account {
-  return {
-    activated: true,
-    authorities,
-    email: '',
-    firstName: '',
-    langKey: '',
-    lastName: '',
-    login: '',
-    imageUrl: ''
-  };
+    return {
+        activated: true,
+        authorities,
+        email: '',
+        firstName: '',
+        langKey: '',
+        lastName: '',
+        login: '',
+        imageUrl: ''
+    };
 }
 
 describe('Service Tests', () => {
@@ -44,7 +44,7 @@ describe('Service Tests', () => {
         <%_ if (websocket === 'spring-websocket') { _%>
         let trackerService: TrackerService;
         <%_ } _%>
-    
+
         beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [
@@ -204,7 +204,7 @@ describe('Service Tests', () => {
                     expect(hasAuthority).toBe(false);
                 });
 
-                it('should return false if user is logged and has not authority',  () => {
+                it('should return false if user is logged and has not authority', () => {
                     service.authenticate(accountWithAuthorities(['ROLE_USER']));
 
                     const hasAuthority = service.hasAnyAuthority('ROLE_ADMIN');

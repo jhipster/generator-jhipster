@@ -35,7 +35,7 @@
                 let baseColumnName = getColumnName(relationshipName) + '_id';
                 if (relationshipType === 'one-to-one' && ownerSide && relationships[idx].useJPADerivedIdentifier === true) {
                     baseColumnName = 'id';
-                }%>
+                } %>
         <addForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"

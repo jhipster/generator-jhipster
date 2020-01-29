@@ -424,20 +424,6 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive &&
-                (generator.applicationType === 'uaa' ||
-                    generator.authenticationType === 'uaa' ||
-                    generator.authenticationType === 'oauth2'),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/MethodSecurityConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/MethodSecurityConfiguration.java`
-                }
-            ]
-        },
-        {
-            condition: generator =>
                 !shouldSkipUserManagement(generator) && generator.authenticationType === 'session' && !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -761,7 +747,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2',
+            condition: generator => !generator.reactive && generator.authenticationType === 'oauth2',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1131,10 +1117,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/errors/EmailAlreadyUsedException.java`
                 },
                 {
-                    file: 'package/web/rest/errors/EmailNotFoundException.java',
-                    renameTo: generator => `${generator.javaDir}web/rest/errors/EmailNotFoundException.java`
-                },
-                {
                     file: 'package/web/rest/errors/InvalidPasswordException.java',
                     renameTo: generator => `${generator.javaDir}web/rest/errors/InvalidPasswordException.java`
                 },
@@ -1166,6 +1148,16 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/ClientForwardController.java',
                     renameTo: generator => `${generator.javaDir}web/rest/ClientForwardController.java`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.skipClient && generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/filter/SpaWebFilter.java',
+                    renameTo: generator => `${generator.javaDir}web/filter/SpaWebFilter.java`
                 }
             ]
         },
@@ -1739,8 +1731,7 @@ const serverFiles = {
         },
         {
             // TODO : add tests for reactive
-            condition: generator =>
-                !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            condition: generator => !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

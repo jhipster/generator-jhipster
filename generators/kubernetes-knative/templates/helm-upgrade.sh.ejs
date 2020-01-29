@@ -1,5 +1,6 @@
+#!/bin/bash
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2013-2018 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,16 +17,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest.errors;
-
-import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Status;
-
-public class EmailNotFoundException extends AbstractThrowableProblem {
-
-    private static final long serialVersionUID = 1L;
-
-    public EmailNotFoundException() {
-        super(ErrorConstants.EMAIL_NOT_FOUND_TYPE, "Email address not registered", Status.BAD_REQUEST);
-    }
-}
+# Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
+# Usage: bash helm-apply.sh
+if [ -d "csvc" ]; then
+helm dep up ./csvc
+helm upgrade --install csvc ./csvc --namespace <%- kubernetesNamespace %>
+fi
+<%_ appConfigs.forEach((appConfig, index) =>  { _%>
+helm dep up ./<%- appConfig.baseName.toLowerCase() %>
+helm upgrade --install <%- appConfig.baseName.toLowerCase() %> ./<%- appConfig.baseName.toLowerCase() %> --namespace <%- kubernetesNamespace %>
+<%_ }) _%>

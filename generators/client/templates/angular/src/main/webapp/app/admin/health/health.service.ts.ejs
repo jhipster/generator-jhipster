@@ -39,6 +39,7 @@ export type HealthKey =
     <%_ } _%>
     | 'diskSpace'
     | 'mail'
+    | 'ping'
     <%_ if (searchEngine === 'elasticsearch') { _%>
     | 'elasticsearch'
     <%_ } _%>
@@ -55,17 +56,17 @@ export type HealthKey =
 
 export interface Health {
     status: HealthStatus;
-    details: {
+    components: {
         [key in HealthKey]?: HealthDetails;
     };
 }
 
 export interface HealthDetails {
-  status: HealthStatus;
-  details: any;
+    status: HealthStatus;
+    details: any;
 }
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class HealthService {
     constructor(private http: HttpClient) {}
 

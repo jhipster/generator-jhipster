@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>;
+package <%= packageName %>;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
@@ -32,15 +32,15 @@ class ArchTest {
 
         JavaClasses importedClasses = new ClassFileImporter()
             .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-            .importPackages("<%=packageName%>");
+            .importPackages("<%= packageName %>");
 
         noClasses()
             .that()
-                .resideInAnyPackage("..service..")
+                .resideInAnyPackage("<%= packageName %>.service..")
             .or()
-                .resideInAnyPackage("..repository..")
+                .resideInAnyPackage("<%= packageName %>.repository..")
             .should().dependOnClassesThat()
-                .resideInAnyPackage("..<%=packageName%>.web..")
+                .resideInAnyPackage("..<%= packageName %>.web..")
         .because("Services and repositories should not depend on web layer")
         .check(importedClasses);
     }

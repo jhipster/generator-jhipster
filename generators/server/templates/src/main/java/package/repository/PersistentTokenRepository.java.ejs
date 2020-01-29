@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%= packageName %>.repository;
 <% if (databaseType === 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.<%= asEntity('User') %>;<% if (databaseType !== 'cassandra') { %>
+import <%= packageName %>.domain.PersistentToken;
+import <%= packageName %>.domain.<%= asEntity('User') %>;<% if (databaseType !== 'cassandra') { %>
 import java.time.LocalDate;<% } %><% if (databaseType === 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
 <% } %><% if (databaseType === 'mongodb') { %>
@@ -43,7 +43,7 @@ import java.util.Optional;
 import java.util.Set;
 <%_ } _%>
 <% if (databaseType === 'couchbase') { %>
-import static <%=packageName%>.config.Constants.ID_DELIMITER;
+import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <% } %>
 <% if (databaseType === 'sql') { %>/**
  * Spring Data JPA repository for the {@link PersistentToken} entity.

@@ -70,7 +70,7 @@ We use <%= clientPackageManager %> scripts and [Webpack][] as our build system.
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
 ```
-docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider%>.yml up -d
+docker-compose -f src/main/docker/<%= cacheProvider==='hazelcast'?'hazelcast-management-center':cacheProvider %>.yml up -d
 ```
 <%_ if (cacheProvider === 'redis') { _%>
 
@@ -111,7 +111,7 @@ To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up a
 docker-compose -f src/main/docker/keycloak.yml up
 ```
 
-The security settings in `src/main/resources/application.yml` are configured for this image.
+The security settings in `src/main/resources/config/application.yml` are configured for this image.
 
 ```yaml
 spring:
@@ -132,7 +132,7 @@ spring:
 
 If you'd like to use Okta instead of Keycloak, you'll need to change a few things. First, you'll need to create a free developer account at <https://developer.okta.com/signup/>. After doing so, you'll get your own Okta domain, that has a name like `https://dev-123456.okta.com`.
 
-Modify `src/main/resources/application.yml` to use your Okta settings.
+Modify `src/main/resources/config/application.yml` to use your Okta settings.
 
 ```yaml
 spring:
@@ -329,13 +329,13 @@ For more information, refer to the [Code quality page][].
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 <% if (databaseType !== 'no') { %>
-For example, to start a <%= prodDatabaseType%> database in a docker container, run:
+For example, to start a <%= prodDatabaseType %> database in a docker container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml up -d
+    docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml up -d
 
 To stop it and remove the container, run:
 
-    docker-compose -f src/main/docker/<%= prodDatabaseType%>.yml down
+    docker-compose -f src/main/docker/<%= prodDatabaseType %>.yml down
 <% } %>
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
@@ -370,7 +370,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [Setting up Continuous Integration]: <%= DOCUMENTATION_ARCHIVE_URL %>/setting-up-ci/
 
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: https://gatling.io/<% } %>
-<%_ if (!skipClient) {_%>
+<%_ if (!skipClient) { _%>
 [Node.js]: https://nodejs.org/
 [Yarn]: https://yarnpkg.org/
 [Webpack]: https://webpack.github.io/

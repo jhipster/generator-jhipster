@@ -115,7 +115,7 @@ management:
                 include: ["configprops", "env", "health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
     endpoint:
         health:
-            show-details: when-authorized
+            show-details: when_authorized
             roles: "ROLE_ADMIN"
         jhimetrics:
             enabled: true
@@ -291,8 +291,8 @@ jhipster:
         from: <%= baseName %>@localhost
     swagger:
         default-include-pattern: /api/.*
-        title: <%=baseName%> API
-        description: <%=baseName%> API documentation
+        title: <%= baseName %> API
+        description: <%= baseName %> API documentation
         version: 0.0.1
         terms-of-service-url:
         contact-name:

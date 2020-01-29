@@ -16,15 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service;<%
+package <%= packageName %>.service;
+
+<%_
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-%>
-<%  const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance); %>
+const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+_%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
+import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 <%_ } else { _%>
-import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
 <%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 

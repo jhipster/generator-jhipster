@@ -56,7 +56,7 @@ export class UserManagementUpdateComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.route.data.subscribe(({user}) => {
+        this.route.data.subscribe(({ user }) => {
             if (user) {
                 this.user = user;
                 if (this.user.id === undefined) {

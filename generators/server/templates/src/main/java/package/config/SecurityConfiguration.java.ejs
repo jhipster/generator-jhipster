@@ -31,21 +31,18 @@ import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.security.*;
     <%_ } _%>
 
-    <%_ if (authenticationType !== 'oauth2' && !skipUserManagement) { _%>
-import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.beans.factory.InitializingBean;
-    <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 import io.github.jhipster.config.JHipsterProperties;
     <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+    <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.core.convert.converter.Converter;
+    <%_ } _%>
     <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
 import org.springframework.http.HttpMethod;
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-    <%_ } _%>
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
     <%_ if (authenticationType !== 'uaa' && !(applicationType === 'microservice' && authenticationType === 'oauth2')) { _%>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -65,13 +62,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.oauth2.AudienceValidator;
-import <%=packageName%>.security.SecurityUtils;
+import <%= packageName %>.security.SecurityUtils;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
         <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
-import <%=packageName%>.security.oauth2.AuthorizationHeaderFilter;
-import <%=packageName%>.security.oauth2.AuthorizationHeaderUtil;
+import <%= packageName %>.security.oauth2.AuthorizationHeaderFilter;
+import <%= packageName %>.security.oauth2.AuthorizationHeaderUtil;
         <%_ } _%>
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -93,7 +92,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-import <%=packageName%>.security.oauth2.JwtAuthorityExtractor;
+import <%= packageName %>.security.oauth2.JwtAuthorityExtractor;
     <%_ } _%>
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -105,9 +104,7 @@ import org.springframework.web.filter.CorsFilter;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @EnableWebSecurity
-    <%_ if (authenticationType !== 'oauth2') { _%>
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-    <%_ } _%>
 @Import(SecurityProblemSupport.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
@@ -130,11 +127,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private String issuerUri;
 
     private final JHipsterProperties jHipsterProperties;
-    private final JwtAuthorityExtractor jwtAuthorityExtractor;
     <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %><% if (authenticationType === 'oauth2') { %>JwtAuthorityExtractor jwtAuthorityExtractor, JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (authenticationType === 'session' && !skipUserManagement) { %>JHipsterProperties jHipsterProperties, RememberMeServices rememberMeServices, <% } if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (applicationType !== 'microservice') { %>CorsFilter corsFilter, <% } %><% if (authenticationType === 'oauth2') { %>JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport) {
     <%_ if (authenticationType === 'session' && !skipUserManagement) { _%>
         this.jHipsterProperties = jHipsterProperties;
         this.rememberMeServices = rememberMeServices;
@@ -147,7 +143,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
         this.problemSupport = problemSupport;
     <%_ if (authenticationType === 'oauth2') { _%>
-        this.jwtAuthorityExtractor = jwtAuthorityExtractor;
         this.jHipsterProperties = jHipsterProperties;
     <%_ } _%>
     }
@@ -300,7 +295,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .oauth2ResourceServer()
                 .jwt()
-                .jwtAuthenticationConverter(jwtAuthorityExtractor)
+                .jwtAuthenticationConverter(grantedAuthoritiesExtractor())
                 .and()
             .and()
                 .oauth2Client();
@@ -315,6 +310,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 
+    Converter<Jwt, AbstractAuthenticationToken> grantedAuthoritiesExtractor() {
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtAuthorityExtractor());
+        return jwtAuthenticationConverter;
+    }
         <%_ if (applicationType !== 'microservice') { _%>
     /**
      * Map authorities from "groups" or "roles" claim in ID Token.
@@ -440,7 +440,7 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
     }
 
     @Bean
-	@Qualifier("loadBalancedRestTemplate")
+    @Qualifier("loadBalancedRestTemplate")
     public RestTemplate loadBalancedRestTemplate(RestTemplateCustomizer customizer) {
         RestTemplate restTemplate = new RestTemplate();
         customizer.customize(restTemplate);

@@ -40,7 +40,8 @@
             "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Szabad hely a diszken",
-            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "mail": "Email",
+            "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "Adatbázis"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,

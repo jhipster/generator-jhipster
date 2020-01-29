@@ -286,7 +286,7 @@ function replaceTranslationKeysWithText(body, generator, regex) {
  * @returns string with placeholders replaced
  */
 function replacePlaceholders(body, generator) {
-    const re = /placeholder=['|"]([{]{2}['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)[}]{2})['|"]/g;
+    const re = /placeholder=['|"]([{]{2}\s*['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)\s*[}]{2})['|"]/g;
     let match;
 
     // eslint-disable-next-line no-cond-assign

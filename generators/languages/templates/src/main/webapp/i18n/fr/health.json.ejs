@@ -40,7 +40,8 @@
             "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Espace disque",
-            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "mail": "Email",
+            "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "Base de données"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,

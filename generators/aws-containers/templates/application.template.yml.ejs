@@ -227,7 +227,7 @@ Resources:
       DBParameterGroupName: !Ref JHipsterRDSDBParameterGroup
       Engine: <%= app.auroraEngine %>
       DBClusterIdentifier: !Ref JHipsterRDSCluster
-      DBInstanceClass: !Ref databaseSize<%} %>
+      DBInstanceClass: !Ref databaseSize<% } %>
   JHipsterRDSDBParameterGroup:
     Type: AWS::RDS::DBParameterGroup
     Properties:

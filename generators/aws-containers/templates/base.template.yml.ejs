@@ -26,7 +26,7 @@ Parameters:
     Type: String
     Description: Aurora master database password for <%= app.baseName %>
     NoEcho: true
-<%} %>
+<% } %>
   shouldDeployService:
     Type: String
     Description: Should the ECS service be initialised
@@ -44,9 +44,9 @@ Resources:
         shouldDeployService: !Ref shouldDeployService
         databasePassword: !Ref <%= app.baseName %>DBPassword
       TemplateURL: !Join [ '', [ 'https://s3.amazonaws.com/',!Ref applicationStackS3Bucket, '/<%= app.baseName %>.template.yml'] ]
-<%} %>
+<% } %>
 Outputs:
 <% for (app of appConfigs) { %>  LoadBalancerOutput<%= app.baseName %>:
     Description: The external DNS address of the load-balancers
     Value: !GetAtt <%= app.baseName %>.Outputs.LoadBalancerOutput
-<%} %>
+<% } %>

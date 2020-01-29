@@ -42,12 +42,14 @@ describe('Component Tests', () => {
             TestBed.configureTestingModule({
                 imports: [<%= angularXAppName %>TestModule],
                 declarations: [<%= entityAngularName %>Component],
+                <%_ if (pagination !== 'no') { _%>
                 providers: [
-                    <% if (pagination !== 'no') { %> {
-                    provide: ActivatedRoute,
-                    useValue: {
-                        data: {
-                            subscribe: (fn: (value: Data) => void) => fn({pagingParams: {
+                    {
+                        provide: ActivatedRoute,
+                        useValue: {
+                            data: {
+                                subscribe: (fn: (value: Data) => void) => fn({
+                                    pagingParams: {
                                         predicate: 'id',
                                         reverse: false,
                                         page: 0
@@ -55,8 +57,9 @@ describe('Component Tests', () => {
                                 })
                             }
                         }
-                    }<% } %>
+                    }
                 ]
+                <%_ } _%>
             })
             .overrideTemplate(<%= entityAngularName %>Component, '')
             .compileComponents();
@@ -79,7 +82,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
 
     <%_ if (pagination !== 'no') { _%>
@@ -100,7 +103,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
 
         <%_ if (pagination === 'infinite-scroll') { _%>
@@ -124,7 +127,7 @@ describe('Component Tests', () => {
             // THEN
             expect(comp.page).toEqual(0);
             expect(service.query).toHaveBeenCalledTimes(2);
-            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({id: <%- tsKeyId %>}));
+            expect(comp.<%= entityInstancePlural %> && comp.<%= entityInstancePlural %>[0]).toEqual(jasmine.objectContaining({ id: <%- tsKeyId %> }));
         });
 
         it('should calculate the sort attribute for an id', () => {

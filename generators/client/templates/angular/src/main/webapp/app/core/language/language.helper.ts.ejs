@@ -23,7 +23,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class LanguageHelper {
     private renderer: Renderer2;
 
@@ -49,5 +49,5 @@ export class LanguageHelper {
     private updatePageDirection(): void {
         this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
     }
-    <%_ }_%>
+    <%_ } _%>
 }

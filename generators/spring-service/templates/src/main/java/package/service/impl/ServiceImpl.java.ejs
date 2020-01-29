@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service.impl;
+package <%= packageName %>.service.impl;
 
-import <%=packageName%>.service.<%= serviceClass %>;
+import <%= packageName %>.service.<%= serviceClass %>;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;<% if (databaseType === 'sql') { %>

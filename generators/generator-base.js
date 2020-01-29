@@ -872,10 +872,10 @@ module.exports = class extends PrivateBase {
             case 'stripHtml':
                 regex = new RegExp(
                     [
-                        /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
-                        /( \[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
-                        /( translate-compile)/, // translate-compile
-                        /( translate-value-max="[0-9{}()|]*")/ // translate-value-max
+                        /([\s\n\r]+(data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
+                        /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+                        /([\s\n\r]+translate-compile)/, // translate-compile
+                        /([\s\n\r]+translate-value-max="[0-9{}()|]*")/ // translate-value-max
                     ]
                         .map(r => r.source)
                         .join('|'),
@@ -1359,22 +1359,28 @@ module.exports = class extends PrivateBase {
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated join table "${joinTableName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`
+                `The generated join table "${joinTableName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
             );
 
             limit = 30;
         } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated join table "${joinTableName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`
+                `The generated join table "${joinTableName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
             );
 
             limit = 64;
         } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
             );
 
             limit = 63;
+        } else if (prodDatabaseType === 'mariadb' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
+            );
+
+            limit = 64;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -1404,22 +1410,28 @@ module.exports = class extends PrivateBase {
         let limit = 0;
         if (prodDatabaseType === 'oracle' && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`
+                `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
             );
 
             limit = 28;
         } else if (prodDatabaseType === 'mysql' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`
+                `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
             );
 
             limit = 62;
         } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
             );
 
             limit = 61;
+        } else if (prodDatabaseType === 'mariadb' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
+            );
+
+            limit = 62;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -1515,7 +1527,14 @@ module.exports = class extends PrivateBase {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+            try {
+                shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+            } catch (error) {
+                // noticed that on windows the shelljs.mkdir tends to sometimes fail
+                fs.mkdir(`${SERVER_MAIN_RES_DIR}config/tls`, { recursive: true }, err => {
+                    if (err) throw err;
+                });
+            }
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {

@@ -27,7 +27,9 @@ const enumImports = generateEntityClientEnumImports(fields);
 import { Moment } from 'moment';
 <%_ } _%>
 <%_ typeImports.forEach((importedPath, importedType) => { _%>
+    <%_ if (importedType !== `I${entityAngularName}`) { _%> 
 import { <%- importedType %> } from '<%- importedPath %>';
+    <%_ } _%>
 <%_ }); _%>
 <%_ enumImports.forEach((importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';

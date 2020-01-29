@@ -87,6 +87,7 @@ function importJDL(jdlImporter) {
             logger.log(chalk.red(`${errorName} ${errorMessage}`));
         }
         logger.error(`Error while parsing applications and entities from the JDL ${error}`, error);
+        throw error;
     }
     return importState;
 }
@@ -335,6 +336,7 @@ class JDLProcessor {
                 previousApp = getBaseName(application);
             } catch (error) {
                 logger.error(`Error while generating applications from the parsed JDL\n${error}`, error);
+                throw error;
             }
         };
         this.importState.exportedApplications.forEach(application => {
@@ -378,6 +380,7 @@ class JDLProcessor {
                     previousDeployment = getDeploymentType(deployment);
                 } catch (error) {
                     logger.error(`Error while generating deployments from the parsed JDL\n${error}`, error);
+                    throw error;
                 }
             };
             this.importState.exportedDeployments.forEach(deployment => {
@@ -437,6 +440,7 @@ class JDLProcessor {
             });
         } catch (error) {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`, error);
+            throw error;
         }
     }
 }
@@ -445,7 +449,7 @@ const validateFiles = jdlFiles => {
     if (jdlFiles) {
         jdlFiles.forEach(key => {
             if (!shelljs.test('-f', key)) {
-                logger.error(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
+                logger.fatal(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
             }
         });
     }

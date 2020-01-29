@@ -28,7 +28,7 @@ jobs:
           JHI_JDK: 11
           # if JHI_LIB_BRANCH value is release, use the release from Maven
           JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-          JHI_LIB_BRANCH: master
+          JHI_LIB_BRANCH: release
           # if JHI_GEN_BRANCH value is release, use the release from NPM
           JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
           JHI_GEN_BRANCH: master
@@ -76,6 +76,15 @@ jobs:
               webflux-mongodb:
                   JHI_APP: webflux-mongodb
                   JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-mongodb-session:
+                  JHI_APP: webflux-mongodb-session
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-mongodb-oauth2:
+                  JHI_APP: webflux-mongodb-oauth2
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
       steps:
           #----------------------------------------------------------------------
           # Install all tools and check configuration

@@ -1074,17 +1074,13 @@ module.exports = class extends Generator {
                                 }
                             });`;
                 } else {
-                    rxjsMapIsUsed = true;
                     variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
                     if (variableName === entityInstance) {
                         variableName += 'Collection';
                     }
                     query = `
                         this.${relationship.otherEntityName}Service.query()
-                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body || [];
-                            }))
-                            .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => this.${variableName} = resBody);`;
+                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
                 }
             }
             if (variableName && !this.contains(queries, query)) {
@@ -1465,6 +1461,33 @@ module.exports = class extends Generator {
             }
         });
         return primaryKeyType;
+    }
+
+    /**
+     * Returns the primary key value based on the primary key type, DB and default value
+     *
+     * @param {string} primaryKeyType - the primary key type
+     * @param {string} databaseType - the database type
+     * @param {string} defaultValue - default value
+     * @returns {string} java primary key value
+     */
+    getPrimaryKeyValue(primaryKeyType, databaseType, defaultValue) {
+        let value;
+        switch (primaryKeyType) {
+            case 'String':
+                value = `"id${defaultValue}"`;
+                // Special case with a OneToOne relationship with User and @MapsId when using OAuth
+                if (databaseType === 'sql') {
+                    value = 'UUID.randomUUID().toString()';
+                }
+                break;
+            case 'UUID':
+                value = 'UUID.randomUUID()';
+                break;
+            default:
+                value = `${defaultValue}L`;
+        }
+        return value;
     }
 
     /**
