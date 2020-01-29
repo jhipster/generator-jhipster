@@ -183,16 +183,14 @@ describe('<%= entityClass %> e2e test', () => {
         const deleteButton = <%= entityInstance %>ComponentsPage.getDeleteButton(<%= entityInstance %>ComponentsPage.records.last());
         await click(deleteButton);
 
-        const deleteModal = element(by.className('modal'));
-        await waitUntilDisplayed(deleteModal);
-
         <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
+        await waitUntilDisplayed(<%= entityInstance %>DeleteDialog.deleteModal);
         expect(await <%= entityInstance %>DeleteDialog.getDialogTitle().getAttribute('id')).to.match(/<%= i18nKeyPrefix %>.delete.question/);
         await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
 
-        await waitUntilHidden(deleteModal);
+        await waitUntilHidden(<%= entityInstance %>DeleteDialog.deleteModal);
 
-        expect(await isVisible(deleteModal)).to.be.false;
+        expect(await isVisible(<%= entityInstance %>DeleteDialog.deleteModal)).to.be.false;
 
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
         <%= entityInstance %>ComponentsPage.table]);
