@@ -18,23 +18,25 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ let isUsingMapsId = false;
-    let mapsIdAssoc;
-    let mapsIdEntity;
-    let mapsIdEntityInstance;
-    let mapsIdRepoInstance;
-    let hasOauthUser = false;
-    for (idx in relationships) {
-        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-        if ( isUsingMapsId === true) {
-            mapsIdAssoc = relationships[idx];
-            mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
-            mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
-            mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
-            hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
-            break;
-        }
-    } _%>
+<%_
+let isUsingMapsId = false;
+let mapsIdAssoc;
+let mapsIdEntity;
+let mapsIdEntityInstance;
+let mapsIdRepoInstance;
+let hasOauthUser = false;
+for (idx in relationships) {
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+    if ( isUsingMapsId === true) {
+        mapsIdAssoc = relationships[idx];
+        mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+        mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+        mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+        hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
+        break;
+    }
+}
+_%>
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>

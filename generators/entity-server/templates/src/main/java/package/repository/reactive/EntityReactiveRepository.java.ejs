@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 package <%= packageName %>.repository.reactive;
-<%
+
+<%_
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-%>
+_%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ if (databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
