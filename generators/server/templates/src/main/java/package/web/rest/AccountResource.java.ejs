@@ -19,7 +19,7 @@ limitations under the License.
 package <%= packageName %>.web.rest;
 
 <%_ if (authenticationType === 'oauth2') { _%>
-    <%_ if (reactive) { %>
+    <%_ if (reactive) { _%>
 import <%= packageName %>.security.SecurityUtils;
     <%_ } _%>
 import <%= packageName %>.service.UserService;
@@ -190,7 +190,6 @@ public class AccountResource {
     }
 }
 <%_ } else {  // not oauth, not skipUserManagement _%>
-
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 import <%= packageName %>.repository.PersistentTokenRepository;
