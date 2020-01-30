@@ -276,6 +276,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()
     <%_ } _%>
+    <%_ if (enableSwaggerCodegen) { _%>
+            .antMatchers("/openapi-docs").permitAll()
+    <%_ } _%>
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()

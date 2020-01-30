@@ -112,6 +112,9 @@ public class UaaConfiguration extends AuthorizationServerConfigurerAdapter imple
                 .antMatchers("/management/health").permitAll()
                 .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/v2/api-docs/**").permitAll()
+                <%_ if (enableSwaggerCodegen) { _%>
+                .antMatchers("/openapi-docs").permitAll()
+                <%_ } _%>
                 .antMatchers("/swagger-resources/configuration/ui").permitAll()
                 .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN);
         }

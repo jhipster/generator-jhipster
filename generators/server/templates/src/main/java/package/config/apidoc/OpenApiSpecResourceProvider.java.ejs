@@ -56,8 +56,8 @@ public class OpenApiSpecResourceProvider extends InMemorySwaggerResourcesProvide
 
         SwaggerResource swaggerResource = new SwaggerResource();
         swaggerResource.setName("openapi");
-        swaggerResource.setUrl(openApiSpecService.getSpecLocation());
-        swaggerResource.setLocation(openApiSpecService.getSpecLocation());
+        swaggerResource.setUrl("/openapi-docs");
+        swaggerResource.setLocation("/openapi-docs");
         swaggerResource.setSwaggerVersion(openApiSpecService.getSpecVersion());
         swaggerResources.add(swaggerResource);
 

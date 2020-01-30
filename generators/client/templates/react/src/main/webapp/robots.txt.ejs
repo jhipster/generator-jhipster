@@ -31,3 +31,6 @@ Disallow: /api/logs/
 Disallow: /api/users/
 Disallow: /management/
 Disallow: /v2/api-docs/
+<%_ if (enableSwaggerCodegen) { _%>
+Disallow: /openapi-docs
+<%_ } _%>

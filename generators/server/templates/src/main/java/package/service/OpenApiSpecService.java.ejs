@@ -18,7 +18,6 @@
 -%>
 package <%= packageName %>.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -33,22 +32,15 @@ import java.io.IOException;
 @Service
 public class OpenApiSpecService {
 
-    public static final String OPENAPI_SPEC_FILE = "api.yml";
-
-    private final ObjectMapper ymlObjectMapper = new ObjectMapper(new YAMLFactory());
-
-    private final JsonNode ymlJsonNode;
     private final String basePath;
+    private final ObjectMapper objectMapper;
+    private final ObjectNode ymlJsonNode;
 
-    public OpenApiSpecService(@Value("${openapi.<%= dasherizedBaseName %>.base-path:/api}") String basePath) {
+    public OpenApiSpecService(@Value("${openapi.apispec-2.base-path:/api}") String basePath) throws IOException {
         this.basePath = basePath;
-        try {
-            ClassPathResource classPathResource = new ClassPathResource("swagger/" + OPENAPI_SPEC_FILE);
-            byte[] ymlContent = IOUtils.toByteArray(classPathResource.getInputStream());
-            ymlJsonNode = ymlObjectMapper.readTree(ymlContent);
-        } catch (Exception e){
-            throw new IllegalStateException("Failed to load api yml file", e);
-        }
+        objectMapper = new ObjectMapper(new YAMLFactory());
+        byte[] ymlContent = IOUtils.toByteArray(new ClassPathResource("swagger/api.yml").getInputStream());
+        ymlJsonNode = (ObjectNode) objectMapper.readTree(ymlContent);
     }
 
     /**
@@ -57,20 +49,17 @@ public class OpenApiSpecService {
      * @return the content of the yml, with the dynamically replaced server list
      * @throws IOException
      */
-    public byte[] getContent(String apiEndpoint) throws IOException {
-        ArrayNode servers = (ArrayNode) ymlJsonNode.get("servers");
-        if(servers != null){
-            //remove servers (if any)
-            servers.removeAll();
-        } else {
-            servers = ymlObjectMapper.createArrayNode();
+    public byte[] getYmlContent(String apiEndpoint) throws IOException {
+
+        ObjectNode objectNode = objectMapper.createObjectNode()
+            .put("url", apiEndpoint + basePath);
+
+        if(!ymlJsonNode.has("servers")) {
+            ymlJsonNode.set("servers", objectMapper.createArrayNode());
         }
 
-        ObjectNode objectNode = ymlObjectMapper.createObjectNode();
-        objectNode.put("url", apiEndpoint);
-        servers.add(objectNode);
-
-        return ymlObjectMapper.writeValueAsBytes(ymlJsonNode);
+        ((ArrayNode) ymlJsonNode.get("servers")).set(0, objectNode);
+        return objectMapper.writeValueAsBytes(ymlJsonNode);
     }
 
 
@@ -96,10 +85,6 @@ public class OpenApiSpecService {
         } else {
             return null;
         }
-    }
-
-    public String getSpecLocation(){
-        return basePath + "/" + OPENAPI_SPEC_FILE;
     }
 
 }

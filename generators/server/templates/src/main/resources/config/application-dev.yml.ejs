@@ -303,7 +303,7 @@ jhipster:
             duration-in-seconds: 3600
         <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-            app1: /api,/v2/api-docs # recommended dev configuration
+            app1: /api,/v2/api-docs<%_ if (enableSwaggerCodegen) { _%>,/openapi-docs<%_ } _%> # recommended dev configuration
         <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider !== 'no') { _%>

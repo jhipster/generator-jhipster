@@ -109,6 +109,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
                 this.clientThemeVariant = configuration.get('clientThemeVariant');
 
+                this.enableSwaggerCodegen = configuration.get('enableSwaggerCodegen');
                 this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
