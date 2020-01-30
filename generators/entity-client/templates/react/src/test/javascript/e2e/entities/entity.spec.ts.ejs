@@ -172,6 +172,8 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
 
+        expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
+
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
 
         await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);

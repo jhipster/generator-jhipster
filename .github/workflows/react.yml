@@ -64,7 +64,7 @@ jobs:
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      protractor:  0 # TODO: need change to 1, when elasticsearch + useEffect issue is fixed
                     - app-type: react-maven-h2mem-memcached
                       entity: sql
                       profile: dev
@@ -84,7 +84,7 @@ jobs:
                       entity: sqlfull
                       profile: prod
                       war: 0
-                      protractor: 1
+                      protractor:  0 # TODO: need change to 1, when elasticsearch + useEffect issue is fixed
                     - app-type: react-gradle-h2mem-memcached
                       entity: sql
                       profile: dev
