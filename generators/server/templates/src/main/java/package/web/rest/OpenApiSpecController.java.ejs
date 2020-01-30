@@ -18,21 +18,15 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import <%= packageName %>.OpenApiSpecService;
 import io.github.jhipster.config.JHipsterConstants;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-
-import <%=packageName%>.service.OpenApiSpecService;
 
 /**
  * Serves the open api yml file.
@@ -48,12 +42,8 @@ public class OpenApiSpecController {
     }
 
     @GetMapping(value = "/openapi-docs")
-    public ResponseEntity<byte[]> getApis(HttpServletRequest httpServletRequest) throws IOException {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/application+json");
-        String apiEndpoint = httpServletRequest.getRequestURL().toString()
-            .replace("/openapi-docs", "");
-        return new ResponseEntity<>(openApiSpecService.getYmlContent(apiEndpoint), headers, HttpStatus.OK);
+    public ResponseEntity<byte[]> getApis() throws IOException {
+        return new ResponseEntity<>(openApiSpecService.getYmlContent(), HttpStatus.OK);
     }
 
 }

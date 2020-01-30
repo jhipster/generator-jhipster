@@ -19,13 +19,12 @@
 package <%= packageName %>.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import org.apache.commons.io.IOUtils;
+import io.github.jhipster.config.JHipsterConstants;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 
@@ -33,56 +32,40 @@ import java.io.IOException;
 @Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class OpenApiSpecService {
 
-    private final String basePath;
     private final ObjectMapper objectMapper;
-    private final ObjectNode ymlJsonNode;
+    private final ObjectNode openApiSpec;
 
-    public OpenApiSpecService(@Value("${openapi.apispec-2.base-path:/api}") String basePath) throws IOException {
-        this.basePath = basePath;
+    public OpenApiSpecService() throws IOException {
         objectMapper = new ObjectMapper(new YAMLFactory());
-        byte[] ymlContent = IOUtils.toByteArray(new ClassPathResource("swagger/api.yml").getInputStream());
-        ymlJsonNode = (ObjectNode) objectMapper.readTree(ymlContent);
+        openApiSpec = (ObjectNode) objectMapper.readTree(new ClassPathResource("swagger/api.yml").getInputStream());
     }
 
     /**
-     * Returns the yml file content. Replaces servers list to add the endpoint passed as parameter
-     * @param apiEndpoint the api endpoint to be inserted into the yml file
-     * @return the content of the yml, with the dynamically replaced server list
+     * Returns the yml file content
+     * @return the content of the yml
      * @throws IOException
      */
-    public byte[] getYmlContent(String apiEndpoint) throws IOException {
-
-        ObjectNode objectNode = objectMapper.createObjectNode()
-            .put("url", apiEndpoint + basePath);
-
-        if(!ymlJsonNode.has("servers")) {
-            ymlJsonNode.set("servers", objectMapper.createArrayNode());
-        }
-
-        ((ArrayNode) ymlJsonNode.get("servers")).set(0, objectNode);
-        return objectMapper.writeValueAsBytes(ymlJsonNode);
+    public byte[] getYmlContent() throws IOException {
+        return objectMapper.writeValueAsBytes(openApiSpec);
     }
-
 
     /**
      * Returns the api version written into the api.yml file
      * @return the api version
-     * @throws IOException
      */
     public String getApiVersion() {
-        return ymlJsonNode.get("info").get("version").textValue();
+        return openApiSpec.get("info").get("version").textValue();
     }
 
     /**
      * Openapi version (swagger 2.0, openapi 3.0)
      * @return the spec version (swagger/openapi)
-     * @throws IOException
      */
     public String getSpecVersion() {
-        if(ymlJsonNode.has("openapi")) {
-            return ymlJsonNode.get("openapi").textValue();
-        } else if(ymlJsonNode.has("swagger")){
-            return ymlJsonNode.get("swagger").textValue();
+        if(openApiSpec.has("openapi")) {
+            return openApiSpec.get("openapi").textValue();
+        } else if(openApiSpec.has("swagger")){
+            return openApiSpec.get("swagger").textValue();
         } else {
             return null;
         }
