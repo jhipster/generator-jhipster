@@ -49,6 +49,20 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
+     * Add a new icon to icon imports.
+     *
+     * @param {string} iconName - The name of the Font Awesome icon.
+     */
+    addIcon(iconName, clientFramework) {
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addIcon(iconName);
+        } else if (clientFramework === 'react') {
+            // React
+            // TODO:
+        }
+    }
+
+    /**
      * Add a new menu element, at the root of the menu.
      *
      * @param {string} routerName - The name of the Angular router that is added to the menu.

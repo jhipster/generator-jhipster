@@ -125,6 +125,32 @@ module.exports = class extends needleClientBase {
         return this.generateFileModel(modulePath, needle, this.generator.stripMargin(`|${appName}${angularName}Module,`));
     }
 
+    addIcon(iconName) {
+        const iconsPath = `${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`;
+        const iconImport = `fa${this.generator.upperFirstCamelCase(iconName)}`;
+        if (!jhipsterUtils.checkRegexInFile(iconsPath, new RegExp(`${iconImport}[,|\\r|\\n]`), this.generator)) {
+            try {
+                jhipsterUtils.replaceContent(
+                    {
+                        file: iconsPath,
+                        pattern: /\n {2}\/\/ jhipster-needle-add-icon-import/g,
+                        content: `,\n  ${iconImport}\n  // jhipster-needle-add-icon-import`
+                    },
+                    this.generator
+                );
+            } catch (e) {
+                this.generator.log(
+                    chalk.yellow('\nUnable to find ') +
+                        iconsPath +
+                        chalk.yellow(' or other error. Icon imports not updated with icon ') +
+                        iconImport +
+                        chalk.yellow('.\n')
+                );
+                this.generator.debug('Error:', e);
+            }
+        }
+    }
+
     addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
@@ -154,6 +180,7 @@ module.exports = class extends needleClientBase {
         const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-element-to-menu', entityEntry);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
+        this.addIcon(iconName);
     }
 
     addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName) {
@@ -169,6 +196,7 @@ module.exports = class extends needleClientBase {
         const rewriteFileModel = this.generateFileModel(navbarAdminPath, 'jhipster-needle-add-element-to-admin-menu', entityEntry);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
+        this.addIcon(iconName);
     }
 
     addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
