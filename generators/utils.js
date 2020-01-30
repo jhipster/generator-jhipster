@@ -118,7 +118,8 @@ function escapeRegExp(str) {
  */
 function rewrite(args) {
     // check if splicable is already in the body text
-    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(line)}`).join('\n'));
+    // replacing \r\n with \n as this replacement is done also in haystack to resolve Windows Git autocrlf issue
+    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(line.replace(/\r\n/g, '\n'))}`).join('\n'));
 
     // if in Windows is Git autocrlf used then need to replace \r\n with \n to avoid multiple additions
     if (re.test(args.haystack.replace(/\r\n/g, '\n'))) {
