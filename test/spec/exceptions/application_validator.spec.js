@@ -266,6 +266,31 @@ describe('ApplicationValidator', () => {
               );
             });
           });
+          context('when the hibernate cache is enabled', () => {
+            [COUCHBASE, CASSANDRA, MONGODB].forEach(databaseType => {
+              context(`for ${databaseType}`, () => {
+                it('should fail', () => {
+                  expect(() => {
+                    validator.validate(
+                      new JDLApplication({
+                        config: {
+                          ...basicValidApplicationConfig,
+                          databaseType,
+                          devDatabaseType: databaseType,
+                          prodDatabaseType: databaseType,
+                          enableHibernateCache: true
+                        }
+                      })
+                    );
+                  }).to.throw(
+                    new RegExp(
+                      `An application having ${databaseType} as database type can't have the hibernate cache enabled.`
+                    )
+                  );
+                });
+              });
+            });
+          });
         });
       });
       context('with unknown options', () => {
