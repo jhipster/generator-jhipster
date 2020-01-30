@@ -89,15 +89,15 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
-<%_ if (!reactive) { _%>
+    <%_ if (!reactive) { _%>
     @Autowired
     private MockMvc restAccountMockMvc;
-<%_ } else { _%>
+    <%_ } else { _%>
     private OidcIdToken idToken;
 
     @Autowired
     private WebTestClient webTestClient;
-<%_ } _%>
+    <%_ } _%>
 
     <%_ if (reactive) { _%>
     @BeforeEach
@@ -109,51 +109,8 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         this.idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
             Instant.now().plusSeconds(60), claims);
     }
+
     <%_ } _%>
-
-    @Test
-    @WithUnauthenticatedMockUser
-    public void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
-    <%_ if (!reactive) { _%>
-        restAccountMockMvc.perform(get("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().string(""));
-    <%_ } else { _%>
-        webTestClient.get().uri("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isOk()
-            .expectBody().isEmpty();
-    <%_ } _%>
-    }
-
-    @Test
-    public void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
-    <%_ if (!reactive) { _%>
-        restAccountMockMvc.perform(get("/api/authenticate")
-            .with(request -> {
-                request.setRemoteUser(TEST_USER_LOGIN);
-                return request;
-            })
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().string(TEST_USER_LOGIN));
-    <%_ } else { _%>
-        Jwt jwt = Jwt.withTokenValue("token")
-            .header("alg", "none")
-            .claim("preferred_username", TEST_USER_LOGIN).build();
-
-        webTestClient.mutateWith(mockJwt(jwt))
-            .mutateWith(csrf())
-            .get().uri("/api/authenticate")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isOk()
-            .expectBody(String.class).isEqualTo(TEST_USER_LOGIN);
-    <%_ } _%>
-    }
-
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{

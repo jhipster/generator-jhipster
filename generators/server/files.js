@@ -1244,10 +1244,6 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/errors/ExceptionTranslatorTestController.java',
                     renameTo: generator => `${generator.testDir}web/rest/errors/ExceptionTranslatorTestController.java`
-                },
-                {
-                    file: 'package/web/rest/WithUnauthenticatedMockUser.java',
-                    renameTo: generator => `${generator.testDir}web/rest/WithUnauthenticatedMockUser.java`
                 }
             ]
         },
@@ -1816,6 +1812,16 @@ const serverFiles = {
                 {
                     file: 'package/web/rest/UserResourceIT.java',
                     renameTo: generator => `${generator.testDir}web/rest/UserResourceIT.java`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement && generator.authenticationType !== 'oauth2',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/WithUnauthenticatedMockUser.java',
+                    renameTo: generator => `${generator.testDir}web/rest/WithUnauthenticatedMockUser.java`
                 }
             ]
         }
