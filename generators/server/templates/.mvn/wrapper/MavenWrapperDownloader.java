@@ -20,7 +20,7 @@ import java.util.Properties;
 
 public class MavenWrapperDownloader {
 
-    private static final String WRAPPER_VERSION = "0.5.5";
+    private static final String WRAPPER_VERSION = "0.5.6";
     /**
      * Default URL to download the maven-wrapper.jar from, if no 'downloadUrl' is provided.
      */

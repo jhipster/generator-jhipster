@@ -210,7 +210,6 @@ export * from './entityFolderName/entityFileName.state';`;
             });
             describe('when having quotes', () => {
                 it('formats the text to make the string valid', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsApiDescription('JHipster is "the" best')).to.equal('JHipster is \\"the\\" best');
                 });
             });
@@ -252,13 +251,11 @@ export * from './entityFolderName/entityFileName.state';`;
             });
             describe('when having quotes', () => {
                 it('formats the text to escape it', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsLiquibaseRemarks('JHipster is "the" best')).to.equal('JHipster is &quot;the&quot; best');
                 });
             });
             describe('when having apostrophe', () => {
                 it('formats the text to escape it', () => {
-                    // eslint-disable-next-line quotes
                     expect(BaseGenerator.formatAsLiquibaseRemarks("JHipster is 'the' best")).to.equal('JHipster is &apos;the&apos; best');
                 });
             });
@@ -266,6 +263,59 @@ export * from './entityFolderName/entityFileName.state';`;
                 it('formats the text to escape it', () => {
                     expect(BaseGenerator.formatAsLiquibaseRemarks('Not boldy\n<b>boldy</b>')).to.equal('Not boldy&lt;b&gt;boldy&lt;/b&gt;');
                 });
+            });
+        });
+    });
+
+    describe('getEntityParentPathAddition', () => {
+        describe('when passing /', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('/')).to.equal('');
+            });
+        });
+        describe('when passing /foo/', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('/foo/')).to.equal('../');
+            });
+        });
+        describe('when passing undefined', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition()).to.equal('');
+            });
+        });
+        describe('when passing empty', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('')).to.equal('');
+            });
+        });
+        describe('when passing foo', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('foo')).to.equal('../');
+            });
+        });
+        describe('when passing foo/bar', () => {
+            it('returns ../../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal('../../');
+            });
+        });
+        describe('when passing ../foo', () => {
+            it('returns an empty string', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo')).to.equal('');
+            });
+        });
+        describe('when passing ../foo/bar', () => {
+            it('returns ../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar')).to.equal('../');
+            });
+        });
+        describe('when passing ../foo/bar/foo2', () => {
+            it('returns ../../', () => {
+                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal('../../');
+            });
+        });
+        describe('when passing ../../foo', () => {
+            it('throw an error', () => {
+                expect(() => BaseGenerator.getEntityParentPathAddition('../../foo')).to.throw();
             });
         });
     });

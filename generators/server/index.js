@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -60,7 +60,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupServerOptions(this);
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
 
         this.registerPrettierTransform();
     }
@@ -123,11 +123,14 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
+                this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
                 this.JIB_VERSION = constants.JIB_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
+
+                this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
 
                 this.packagejs = packagejs;
                 const configuration = this.getAllJhipsterConfig(this, true);
@@ -255,7 +258,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.packageName !== undefined &&
                     this.authenticationType !== undefined &&
                     this.cacheProvider !== undefined &&
-                    this.enableHibernateCache !== undefined &&
                     this.websocket !== undefined &&
                     this.databaseType !== undefined &&
                     this.devDatabaseType !== undefined &&

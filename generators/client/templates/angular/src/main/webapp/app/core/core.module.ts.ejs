@@ -3,7 +3,6 @@ import { DatePipe, registerLocaleData } from '@angular/common';
 import { <% if (enableTranslation) { %>HttpClient, <% } %>HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Title } from '@angular/platform-browser';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 import { CookieModule } from 'ngx-cookie';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
@@ -35,7 +34,7 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
     imports: [
         HttpClientModule,
         CookieModule.forRoot(),
-        NgxWebstorageModule.forRoot({ prefix: '<%=jhiPrefixDashed %>', separator: '-'}),
+        NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
         NgJhipsterModule.forRoot({
             // set below to true to make alerts look like toast
             alertAsToast: false,
@@ -64,13 +63,13 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
         Title,
         {
             provide: LOCALE_ID,
-        <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
+            <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
             useValue: 'en'
-        <%_ } else { _%>
+            <%_ } else { _%>
             useValue: '<%= localeId %>'
-        <%_ } _%>
+            <%_ } _%>
         },
-        { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter},
+        { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter },
         <%_ if (enableI18nRTL) { _%>
         FindLanguageFromKeyPipe,
         <%_ } _%>
@@ -99,12 +98,11 @@ import { fontAwesomeIcons } from './icons/font-awesome-icons';
         }
     ]
 })
-export class <%=angularXAppName%>CoreModule {
+export class <%= angularXAppName %>CoreModule {
     constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
         registerLocaleData(locale);
-        iconLibrary.addIconPacks(fas);
         iconLibrary.addIcons(...fontAwesomeIcons);
-        dpConfig.minDate = {year: moment().year() - 100, month: 1, day: 1};
+        dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
         <%_ if (enableTranslation) { _%>
         languageService.init();
         <%_ } _%>

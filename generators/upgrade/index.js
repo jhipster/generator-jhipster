@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,13 +24,16 @@ const fs = require('fs');
 const gitignore = require('parse-gitignore');
 const childProcess = require('child_process');
 const BaseGenerator = require('../generator-base');
+const cleanup = require('../cleanup');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const utils = require('../utils');
+const packagejs = require('../../package.json');
 
 /* Constants used throughout */
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 const UPGRADE_BRANCH = 'jhipster_upgrade';
+const GLOBAL_VERSION = 'global';
 const GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES = '2.9.0';
 const FIRST_CLI_SUPPORTED_VERSION = '4.5.1'; // The first version in which CLI support was added
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -70,10 +73,21 @@ module.exports = class extends BaseGenerator {
             defaults: false
         });
 
+        // This adds support for a `--skip-checks` flag
+        this.option('skip-checks', {
+            desc: 'Disable checks during project regeneration',
+            type: Boolean,
+            defaults: false
+        });
+
         this.targetJhipsterVersion = this.options['target-version'];
         this.targetBlueprintVersions = utils.parseBluePrints(this.options['target-blueprint-versions']);
         this.skipInstall = this.options['skip-install'];
         this.silent = this.options.silent;
+        this.skipChecks = this.options['skip-checks'];
+
+        // Used for isJhipsterVersionLessThan on cleanup.upgradeFiles
+        this.jhipsterOldVersion = this.config.get('jhipsterVersion');
     }
 
     get initializing() {
@@ -92,17 +106,36 @@ module.exports = class extends BaseGenerator {
                 this.currentJhipsterVersion = this.config.get('jhipsterVersion');
                 this.blueprints = this.config.get('blueprints');
                 this.clientPackageManager = this.config.get('clientPackageManager');
-                this.clientFramework = this.config.get('clientFramework');
             }
         };
     }
 
-    _gitCheckout(branch, callback) {
-        this.gitExec(['checkout', '-q', branch], { silent: this.silent }, (code, msg, err) => {
+    _gitCheckout(branch, options, callback) {
+        if (typeof options === 'function') {
+            callback = options;
+            options = {};
+        }
+        const args = ['checkout', '-q', branch];
+        if (options.force) {
+            args.push('-f');
+        }
+        this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
             if (code !== 0) this.error(`Unable to checkout branch ${branch}:\n${err}`);
             this.success(`Checked out branch "${branch}"`);
             callback();
         });
+    }
+
+    _upgradeFiles(callback) {
+        if (cleanup.upgradeFiles(this)) {
+            this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent }, (code, msg, err) => {
+                if (code !== 0) this.error(`Unable to prepare upgrade:\n${err}`);
+                this.success('Upgrade preparation');
+                callback();
+            });
+        } else {
+            callback();
+        }
     }
 
     _cleanUp() {
@@ -120,14 +153,18 @@ module.exports = class extends BaseGenerator {
     _generate(jhipsterVersion, blueprintInfo, callback) {
         this.log(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
         let generatorCommand = 'yo jhipster';
-        if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
+        if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
+            shelljs.rm('-rf', 'node_modules');
+            generatorCommand = 'jhipster';
+        } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
             const generatorDir =
                 this.clientPackageManager === 'yarn'
                     ? shelljs.exec('yarn bin', { silent: this.silent }).stdout
                     : shelljs.exec('npm bin', { silent: this.silent }).stdout;
             generatorCommand = `"${generatorDir.replace('\n', '')}/jhipster"`;
         }
-        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight`;
+        const skipChecksOption = this.skipChecks ? '--skip-checks' : '';
+        const regenerateCmd = `${generatorCommand} --with-entities --force --skip-install --skip-git --no-insight ${skipChecksOption}`;
         this.info(regenerateCmd);
         try {
             childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
@@ -213,7 +250,7 @@ module.exports = class extends BaseGenerator {
             },
 
             checkLatestBlueprintVersions() {
-                if (!this.blueprints || this.blueprints.length < 0) {
+                if (!this.blueprints || this.blueprints.length === 0) {
                     this.log('No blueprints detected, skipping check of last blueprint version');
                     return;
                 }
@@ -270,16 +307,19 @@ module.exports = class extends BaseGenerator {
 
             checkLatestJhipsterVersion() {
                 if (this.targetJhipsterVersion) {
+                    if (this.targetJhipsterVersion === GLOBAL_VERSION) {
+                        this.originalTargetJhipsterVersion = this.targetJhipsterVersion;
+                        this.targetJhipsterVersion = packagejs.version;
+                    }
                     this.log(`Upgrading to the target JHipster version: ${this.targetJhipsterVersion}`);
-                    this.latestJhipsterVersion = this.targetJhipsterVersion;
                     return;
                 }
                 this.log(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
                 const done = this.async();
                 this._retrieveLatestVersion(GENERATOR_JHIPSTER, latestVersion => {
-                    this.latestJhipsterVersion = latestVersion;
-                    if (semver.lt(this.currentJhipsterVersion, this.latestJhipsterVersion)) {
-                        this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.latestJhipsterVersion}`);
+                    this.targetJhipsterVersion = latestVersion;
+                    if (semver.lt(this.currentJhipsterVersion, this.targetJhipsterVersion)) {
+                        this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.targetJhipsterVersion}`);
                     } else if (this.force) {
                         this.log(chalk.yellow('Forced re-generation'));
                     } else if (!this.newBlueprintVersionFound) {
@@ -349,9 +389,7 @@ module.exports = class extends BaseGenerator {
                         this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
                             if (code !== 0) {
                                 this.error(
-                                    `Unable to record current code has been generated with version ${
-                                        this.currentJhipsterVersion
-                                    }:\n${msg} ${err}`
+                                    `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${msg} ${err}`
                                 );
                             }
                             this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
@@ -433,8 +471,11 @@ module.exports = class extends BaseGenerator {
             },
 
             updateJhipster() {
+                if (this.originalTargetJhipsterVersion === GLOBAL_VERSION) {
+                    return;
+                }
                 const done = this.async();
-                this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.latestJhipsterVersion, done);
+                this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.targetJhipsterVersion, done);
             },
 
             updateBlueprints() {
@@ -460,19 +501,28 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
-            generateWithLatestVersion() {
+            upgradeFiles() {
+                const done = this.async();
+                this._upgradeFiles(done);
+            },
+
+            generateWithTargetVersion() {
                 const done = this.async();
                 this._cleanUp();
 
-                const blueprintInfo = this.blueprints
-                    ? ` and ${this.blueprints.map(bp => bp.name + bp.latestBlueprintVersion).join(', ')} `
-                    : '';
-                this._regenerate(this.latestJhipsterVersion, blueprintInfo, done);
+                const blueprintInfo =
+                    this.blueprints && this.blueprints.length > 0
+                        ? ` and ${this.blueprints.map(bp => bp.name + bp.latestBlueprintVersion).join(', ')} `
+                        : '';
+                const targetJhipsterVersion = this.originalTargetJhipsterVersion
+                    ? `${this.originalTargetJhipsterVersion} ${this.targetJhipsterVersion}`
+                    : this.targetJhipsterVersion;
+                this._regenerate(targetJhipsterVersion, blueprintInfo, done);
             },
 
             checkoutSourceBranch() {
                 const done = this.async();
-                this._gitCheckout(this.sourceBranch, done);
+                this._gitCheckout(this.sourceBranch, { force: true }, done);
             },
 
             mergeChangesBack() {

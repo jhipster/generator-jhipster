@@ -8,7 +8,7 @@ source $(dirname $0)/00-init-env.sh
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw -ntp enforcer:display-info
+    ./mvnw -ntp enforcer:display-info --batch-mode
 elif [ -f "gradlew" ]; then
     ./gradlew -v
 fi
@@ -25,9 +25,18 @@ fi
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
 if [ -f "mvnw" ]; then
-    ./mvnw -ntp javadoc:javadoc
+    ./mvnw -ntp javadoc:javadoc --batch-mode
 elif [ -f "gradlew" ]; then
     ./gradlew javadoc $JHI_GRADLE_EXCLUDE_WEBPACK
+fi
+
+#-------------------------------------------------------------------------------
+# Check no-http
+#-------------------------------------------------------------------------------
+if [ -f "mvnw" ]; then
+    ./mvnw -ntp checkstyle:check --batch-mode
+elif [ -f "gradlew" ]; then
+    ./gradlew checkstyleNohttp $JHI_GRADLE_EXCLUDE_WEBPACK
 fi
 
 #-------------------------------------------------------------------------------
@@ -35,7 +44,7 @@ fi
 #-------------------------------------------------------------------------------
 if [[ "$JHI_APP" == *"uaa"* ]]; then
     cd "$JHI_FOLDER_UAA"
-    ./mvnw -ntp verify
+    ./mvnw -ntp verify --batch-mode
 fi
 
 #-------------------------------------------------------------------------------
@@ -43,12 +52,11 @@ fi
 #-------------------------------------------------------------------------------
 cd "$JHI_FOLDER_APP"
 if [ -f "mvnw" ]; then
-    ./mvnw -ntp -P-webpack verify \
+    ./mvnw -ntp -P-webpack verify --batch-mode \
         -Dlogging.level.ROOT=OFF \
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
         -Dlogging.level.io.github.jhipster.sample=OFF \
-        -Dlogging.level.io.github.jhipster.travis=OFF \
         -Dlogging.level.org.springframework=OFF \
         -Dlogging.level.org.springframework.web=OFF \
         -Dlogging.level.org.springframework.security=OFF
@@ -59,7 +67,6 @@ elif [ -f "gradlew" ]; then
         -Dlogging.level.org.zalando=OFF \
         -Dlogging.level.io.github.jhipster=OFF \
         -Dlogging.level.io.github.jhipster.sample=OFF \
-        -Dlogging.level.io.github.jhipster.travis=OFF \
         -Dlogging.level.org.springframework=OFF \
         -Dlogging.level.org.springframework.web=OFF \
         -Dlogging.level.org.springframework.security=OFF

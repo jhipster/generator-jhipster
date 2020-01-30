@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,7 +28,10 @@ import { RouterModule } from '@angular/router';
         <%_ if (!skipUserManagement) { _%>
         {
           path: 'user-management',
-          loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule)
+          loadChildren: () => import('./user-management/user-management.module').then(m => m.UserManagementModule),
+          data: {
+            pageTitle: 'userManagement.home.title'
+          }
         },
         <%_ } _%>
         <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>

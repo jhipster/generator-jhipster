@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -61,11 +61,11 @@ module.exports = class extends BaseGenerator {
             description: 'Automatically configure Azure'
         });
 
-        // Automatically configure GitHub CI
+        // Automatically configure GitHub Actions
         this.argument('autoconfigure-github', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Github CI'
+            description: 'Automatically configure GitHub Actions'
         });
 
         this.registerPrettierTransform();
@@ -81,17 +81,22 @@ module.exports = class extends BaseGenerator {
             },
             getConfig() {
                 this.jhipsterVersion = packagejs.version;
-                this.baseName = this.config.get('baseName');
-                this.applicationType = this.config.get('applicationType');
-                this.skipClient = this.config.get('skipClient');
-                this.clientPackageManager = this.config.get('clientPackageManager');
-                this.buildTool = this.config.get('buildTool');
-                this.herokuAppName = this.config.get('herokuAppName');
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.baseName = configuration.get('baseName');
+                this.dasherizedBaseName = _.kebabCase(this.baseName);
+                this.applicationType = configuration.get('applicationType');
+                this.databaseType = configuration.get('databaseType');
+                this.prodDatabaseType = configuration.get('prodDatabaseType');
+                this.skipClient = configuration.get('skipClient');
+                this.skipServer = configuration.get('skipServer');
+                this.clientPackageManager = configuration.get('clientPackageManager');
+                this.buildTool = configuration.get('buildTool');
+                this.herokuAppName = configuration.get('herokuAppName');
                 if (this.herokuAppName === undefined) {
                     this.herokuAppName = _.kebabCase(this.baseName);
                 }
-                this.clientFramework = this.config.get('clientFramework');
-                this.testFrameworks = this.config.get('testFrameworks');
+                this.clientFramework = configuration.get('clientFramework');
+                this.testFrameworks = configuration.get('testFrameworks');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
                 this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -139,9 +139,15 @@ module.exports = class extends BaseGenerator {
                 awsClient.initAwsStuff();
             },
             setOutputs() {
-                dockerCli.setOutputs(data => this.log(chalk.white(data.toString().trim())), data => this.log.error(data.toString().trim()));
+                dockerCli.setOutputs(
+                    data => this.log(chalk.white(data.toString().trim())),
+                    data => this.log.error(data.toString().trim())
+                );
 
-                awsClient.CF().setOutputs(message => this.log(message), message => this.log.error(message));
+                awsClient.CF().setOutputs(
+                    message => this.log(message),
+                    message => this.log.error(message)
+                );
             },
             fetchRegion() {
                 if (this.abort) return;
@@ -329,9 +335,7 @@ module.exports = class extends BaseGenerator {
                     if (config.cacheProvider !== 'no') {
                         this.log(
                             chalk.yellow(
-                                `Warning ${
-                                    config.baseName
-                                } is using a cache provider, scaling will not be available. Refer to an AWS native scaling service.`
+                                `Warning ${config.baseName} is using a cache provider, scaling will not be available. Refer to an AWS native scaling service.`
                             )
                         );
                     }
@@ -722,7 +726,6 @@ module.exports = class extends BaseGenerator {
             },
             saveConf() {
                 delete this.aws.dockerLogin;
-                // eslint-disable-next-line no-undef
                 this._writeFileErrorHandler(this);
             }
         };

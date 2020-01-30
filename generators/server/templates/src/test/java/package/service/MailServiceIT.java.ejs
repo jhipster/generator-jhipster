@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,16 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service;
+package <%= packageName %>.service;
 
-import <%=packageName%>.config.Constants;
+import <%= packageName %>.config.Constants;
 <% if (databaseType === 'cassandra') { %>
-import <%=packageName%>.AbstractCassandraTest;<% } %>
+import <%= packageName %>.AbstractCassandraTest;<% } %>
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
-import <%=packageName%>.<%= mainClass %>;
-import <%=packageName%>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.<%= mainClass %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +71,7 @@ import static org.mockito.Mockito.*;
 <%_ } _%>
 public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
-    private static String[] languages = {
+    private static final String[] languages = {
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array
     };
     private static final Pattern PATTERN_LOCALE_3 = Pattern.compile("([a-z]{2})-([a-zA-Z]{4})-([a-z]{2})");
@@ -225,9 +225,13 @@ public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ } _%>
 
     @Test
-    public void testSendEmailWithException() throws Exception {
+    public void testSendEmailWithException() {
         doThrow(MailSendException.class).when(javaMailSender).send(any(MimeMessage.class));
-        mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
+        try {
+            mailService.sendEmail("john.doe@example.com", "testSubject", "testContent", false, false);
+        } catch (Exception e) {
+            fail("Exception shouldn't have been thrown");
+        }
     }
 
     @Test

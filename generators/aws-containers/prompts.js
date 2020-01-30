@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -20,8 +20,8 @@ const _ = require('lodash');
 const chalk = require('chalk');
 const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
 
-const AURORA_DB_PASSORD_REGEX = /^[^@"\/]{8,42}$/; // eslint-disable-line
-const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/; // eslint-disable-line
+const AURORA_DB_PASSWORD_REGEX = /^[^@"/]{8,42}$/;
+const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/;
 
 const SCALING_TO_CONFIG = {
     low: {
@@ -481,8 +481,8 @@ function promptDBPassword(config) {
                 'This value will be stored within Amazon SSM, and not within .yo-rc.json'
             )}`,
             validate: input =>
-                _.isEmpty(input) || !input.match(AURORA_DB_PASSORD_REGEX)
-                    ? 'Password must be between 8 - 42 characters, and not contain an """, "/" or "@"'
+                _.isEmpty(input) || !input.match(AURORA_DB_PASSWORD_REGEX)
+                    ? 'Password must be between 8 - 42 characters, and not contain a """, "/" or "@"'
                     : true
         }
     ];

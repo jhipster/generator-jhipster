@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,34 +17,38 @@
  limitations under the License.
 -%>
 package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% } %>;
-<%  const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
-    let viaService = false;
-    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
-    const mapper = entityInstance  + 'Mapper';
-    const dtoToEntity = mapper + '.'+ 'toEntity';
-    const entityToDto = 'toDto';
-    const entityToDtoReference = mapper + '::'+ 'toDto';
-    const repository = entityInstance  + 'Repository';
-    const searchRepository = entityInstance  + 'SearchRepository';
-    let isUsingMapsId = false;
-    let primaryKeyType = pkType;
-    let mapsIdAssoc;
-    for (idx in relationships) {
-        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-        if ( isUsingMapsId === true) {
-            mapsIdAssoc = relationships[idx];
-            primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
-            break;
-        }
-        isUsingMapsId = false;
+
+<%_
+const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
+let viaService = false;
+const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+const mapper = entityInstance  + 'Mapper';
+const dtoToEntity = mapper + '.'+ 'toEntity';
+const entityToDto = 'toDto';
+const entityToDtoReference = mapper + '::'+ 'toDto';
+const repository = entityInstance  + 'Repository';
+const searchRepository = entityInstance  + 'SearchRepository';
+let isUsingMapsId = false;
+let primaryKeyType = pkType;
+let mapsIdAssoc;
+for (idx in relationships) {
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+    if ( isUsingMapsId === true) {
+        mapsIdAssoc = relationships[idx];
+        primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
+        break;
     }
-    if (service === 'serviceImpl') { %>
-import <%= packageName %>.service.<%= entityClass %>Service;<% } %>
+    isUsingMapsId = false;
+}
+_%>
+<%_ if (service === 'serviceImpl') { _%>
+import <%= packageName %>.service.<%= entityClass %>Service;
+<%_ } _%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import <%= packageName %>.repository.<%= entityClass %>Repository;
 <%_ if (isUsingMapsId === true) { _%>
-import <%=packageName%>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
+import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
 import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -37,6 +37,9 @@ node {
 <%= indent %>    stage('clean') {
 <%= indent %>        sh "chmod +x mvnw"
 <%= indent %>        sh "./mvnw -ntp clean"
+<%= indent %>    }
+<%= indent %>    stage('nohttp') {
+<%= indent %>        sh "./mvnw -ntp checkstyle:check"
 <%= indent %>    }
 
     <%_ if (!skipClient) { _%>
@@ -95,6 +98,9 @@ node {
 <%= indent %>    stage('clean') {
 <%= indent %>        sh "chmod +x gradlew"
 <%= indent %>        sh "./gradlew clean --no-daemon"
+<%= indent %>    }
+<%= indent %>    stage('nohttp') {
+<%= indent %>        sh "./gradlew checkstyleNohttp --no-daemon"
 <%= indent %>    }
 
     <%_ if (!skipClient) { _%>
