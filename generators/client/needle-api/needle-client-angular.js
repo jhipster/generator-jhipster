@@ -147,7 +147,7 @@ module.exports = class extends needleClientBase {
         // prettier-ignore
         const entityEntry = `<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <fa-icon [icon]="'${iconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
+                                    <fa-icon icon="${iconName}" fixedWidth="true"></fa-icon>
                                     <span${enableTranslation ? ` jhiTranslate="global.menu.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`;
@@ -162,7 +162,7 @@ module.exports = class extends needleClientBase {
         // prettier-ignore
         const entityEntry = `<li>
                         <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'${iconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
+                            <fa-icon icon="${iconName}" fixedWidth="true"></fa-icon>
                             <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                         </a>
                     </li>`;
