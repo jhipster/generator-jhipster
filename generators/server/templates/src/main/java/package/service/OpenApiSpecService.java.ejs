@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.IOException;
 
 @Service
+@Profile(JHipsterConstants.SPRING_PROFILE_SWAGGER)
 public class OpenApiSpecService {
 
     private final String basePath;
