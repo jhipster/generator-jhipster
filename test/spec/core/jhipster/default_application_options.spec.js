@@ -576,6 +576,7 @@ describe('DefaultApplicationOptions', () => {
     context('when the database type option is MongoDB', () => {
       let devDatabaseTypeOption;
       let prodDatabaseTypeOption;
+      let enableHibernateCacheOption;
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
@@ -583,6 +584,7 @@ describe('DefaultApplicationOptions', () => {
         });
         devDatabaseTypeOption = options.devDatabaseType;
         prodDatabaseTypeOption = options.prodDatabaseType;
+        enableHibernateCacheOption = options.enableHibernateCache;
       });
 
       it('should set the devDatabaseType option to mongodb', () => {
@@ -591,10 +593,14 @@ describe('DefaultApplicationOptions', () => {
       it('should set the prodDatabaseType option to mongodb', () => {
         expect(prodDatabaseTypeOption).to.equal('mongodb');
       });
+      it('should set the enableHibernateCache option to false', () => {
+        expect(enableHibernateCacheOption).to.be.false;
+      });
     });
     context('when the database type option is couchbase', () => {
       let devDatabaseTypeOption;
       let prodDatabaseTypeOption;
+      let enableHibernateCacheOption;
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
@@ -602,6 +608,7 @@ describe('DefaultApplicationOptions', () => {
         });
         devDatabaseTypeOption = options.devDatabaseType;
         prodDatabaseTypeOption = options.prodDatabaseType;
+        enableHibernateCacheOption = options.enableHibernateCache;
       });
 
       it('should set the devDatabaseType option to couchbase', () => {
@@ -610,10 +617,14 @@ describe('DefaultApplicationOptions', () => {
       it('should set the prodDatabaseType option to couchbase', () => {
         expect(prodDatabaseTypeOption).to.equal('couchbase');
       });
+      it('should set the enableHibernateCache option to false', () => {
+        expect(enableHibernateCacheOption).to.be.false;
+      });
     });
     context('when the database type option is cassandra', () => {
       let devDatabaseTypeOption;
       let prodDatabaseTypeOption;
+      let enableHibernateCacheOption;
 
       before(() => {
         const options = getDefaultConfigForNewApplication({
@@ -621,6 +632,7 @@ describe('DefaultApplicationOptions', () => {
         });
         devDatabaseTypeOption = options.devDatabaseType;
         prodDatabaseTypeOption = options.prodDatabaseType;
+        enableHibernateCacheOption = options.enableHibernateCache;
       });
 
       it('should set the devDatabaseType option to cassandra', () => {
@@ -628,6 +640,9 @@ describe('DefaultApplicationOptions', () => {
       });
       it('should set the prodDatabaseType option to cassandra', () => {
         expect(prodDatabaseTypeOption).to.equal('cassandra');
+      });
+      it('should set the enableHibernateCache option to false', () => {
+        expect(enableHibernateCacheOption).to.be.false;
       });
     });
     context('when the database type option is no', () => {
