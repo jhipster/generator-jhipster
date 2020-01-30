@@ -276,7 +276,13 @@ application {
       let parsedEntity;
 
       before(() => {
-        const content = parseFromContent('@dto(mapstruct)\n@service(serviceClass)\n@readOnly\nentity A');
+        const content = parseFromContent(`@dto(mapstruct)
+@service(serviceClass)
+@readOnly
+@customAnnotation(value1)
+@customAnnotation2(2)
+@customAnnotation3(2.42)
+entity A`);
         parsedEntity = content.entities[0];
       });
 
@@ -296,6 +302,21 @@ application {
             {
               optionName: 'readOnly',
               type: 'UNARY'
+            },
+            {
+              optionName: 'customAnnotation',
+              optionValue: 'value1',
+              type: 'BINARY'
+            },
+            {
+              optionName: 'customAnnotation2',
+              optionValue: '2',
+              type: 'BINARY'
+            },
+            {
+              optionName: 'customAnnotation3',
+              optionValue: '2.42',
+              type: 'BINARY'
             }
           ],
           body: [],
