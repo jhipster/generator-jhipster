@@ -141,13 +141,13 @@ module.exports = class extends needleClientBase {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addElementToMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu = routerName) {
+    addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         // prettier-ignore
         const entityEntry = `<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
-                                    <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
+                                    <fa-icon [icon]="'${iconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
                                     <span${enableTranslation ? ` jhiTranslate="global.menu.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                                 </a>
                             </li>`;
@@ -156,13 +156,13 @@ module.exports = class extends needleClientBase {
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
 
-    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu = routerName) {
+    addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`;
         const navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         // prettier-ignore
         const entityEntry = `<li>
                         <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
-                            <fa-icon [icon]="'${glyphiconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
+                            <fa-icon [icon]="'${iconName}'" [fixedWidth]="true"></fa-icon>&nbsp;
                             <span${enableTranslation ? ` jhiTranslate="global.menu.admin.${translationKeyMenu}"` : ''}>${_.startCase(routerName)}</span>
                         </a>
                     </li>`;

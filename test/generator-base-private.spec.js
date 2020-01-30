@@ -27,16 +27,13 @@ export * from './entityFolderName/entityFileName.state';`;
         it('should produce correct indented output without margin', () => {
             const routerName = 'routerName';
             const enableTranslation = true;
-            const glyphiconName = 'glyphiconName';
             const content = `|<li ui-sref-active="active">
                  |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                 |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
                  |        <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${routerName}</span>
                  |    </a>
                  |</li>`;
             const out = `<li ui-sref-active="active">
     <a ui-sref="routerName" ng-click="vm.collapseNavbar()">
-        <span class="glyphicon glyphicon-glyphiconName"></span>&nbsp;
         <span data-translate="global.menu.routerName">routerName</span>
     </a>
 </li>`;
