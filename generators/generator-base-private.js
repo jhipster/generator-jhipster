@@ -1522,7 +1522,7 @@ module.exports = class extends Generator {
             }
             this.error(message);
         }
-        const entityFolderPathAddition = relative.replace(/[/]?..\/entities/, '').replace('entities', '..');
+        const entityFolderPathAddition = relative.replace(/[/|\\]?..[/|\\]entities/, '').replace('entities', '..');
         if (!entityFolderPathAddition) {
             return '';
         }
