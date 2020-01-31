@@ -1,0 +1,61 @@
+"theme: cli":
+    - cli/*
+
+"theme: CI Builds":
+    - .github/workflows/*
+    - azure-pipelines.yml
+
+"theme: dependencies":
+    - package.json
+    - package-lock.json
+
+"theme: front":
+    - generators/client/index.js
+    - generators/client/prompts.js
+    - generators/needle-api/*
+    - generators/entity-client/*
+
+"theme: angular":
+    - generators/client/files-angular.js
+    - generators/client/templates/angular/**/*
+    - generators/entity-client/templates/angular/**/*
+
+"theme: react":
+    - generators/client/files-react.js
+    - generators/client/templates/react/**/*
+    - generators/entity-client/templates/react/**/*
+
+"theme: jhipster-internals":
+    - generators/generator-*.js
+    - generators/statistics.js
+    - generators/utils.js
+    # client/server common
+    - generators/app/**/*.js
+    - generators/common/**/*.js
+    - generators/needle-*.js
+    - generators/cleanup.js
+    - generators/entity/**/*
+
+"theme: i18n":
+    - generators/languages/**/*
+    - generators/entity-i18n/**/*
+
+"theme: java":
+    - generators/server/**/*
+    - generators/entity-server/**/*
+
+"theme: upgrade":
+    - generators/upgrade/**/*
+
+"theme: docker :whale:":
+    - generators/docker*.js
+    - generators/docker-compose/**/*
+
+"theme: aws":
+    - generators/aws/**/*
+    - generators/aws-containers/**/*
+
+"theme: kubernetes":
+    - generators/kubernetes/**/*
+    - generators/kubernetes-helm/**/*
+    - generators/kubernetes-knative/**/*
