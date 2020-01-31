@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
+const { OptionNames } = require('../../../lib/core/jhipster/application_options');
 const { MONOLITH } = require('../../../lib/core/jhipster/application_types');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
@@ -786,7 +786,7 @@ describe('JDLObject', () => {
         jdlObject = new JDLObject();
         jdlObject.addOption(
           new JDLUnaryOption({
-            name: ApplicationOptions.names.SKIP_USER_MANAGEMENT
+            name: OptionNames.SKIP_USER_MANAGEMENT
           })
         );
       });
@@ -798,7 +798,7 @@ describe('JDLObject', () => {
       });
       context('for an existing option', () => {
         it('should return false', () => {
-          expect(jdlObject.hasOption(ApplicationOptions.names.SKIP_USER_MANAGEMENT)).to.be.true;
+          expect(jdlObject.hasOption(OptionNames.SKIP_USER_MANAGEMENT)).to.be.true;
         });
       });
     });

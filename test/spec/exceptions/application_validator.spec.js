@@ -22,7 +22,7 @@ const { expect } = require('chai');
 
 const ApplicationValidator = require('../../../lib/validators/application_validator');
 
-const ApplicationOptions = require('../../../lib/core/jhipster/application_options');
+const { OptionNames, OptionValues } = require('../../../lib/core/jhipster/application_options');
 const { MONOLITH, UAA, MICROSERVICE, GATEWAY } = require('../../../lib/core/jhipster/application_types');
 const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE } = require('../../../lib/core/jhipster/database_types');
 const JDLApplication = require('../../../lib/core/jdl_application');
@@ -48,9 +48,9 @@ describe('ApplicationValidator', () => {
       beforeEach(() => {
         basicValidApplicationConfig = {
           applicationType: MONOLITH,
-          authenticationType: ApplicationOptions.authenticationType.jwt,
+          authenticationType: OptionValues[OptionNames.AUTHENTICATION_TYPE].jwt,
           baseName: 'toto',
-          buildTool: ApplicationOptions.buildTool.maven
+          buildTool: OptionValues[OptionNames.BUILD_TOOL].maven
         };
       });
 
@@ -183,7 +183,7 @@ describe('ApplicationValidator', () => {
                     config: {
                       ...basicValidApplicationConfig,
                       databaseType: SQL,
-                      devDatabaseType: ApplicationOptions.devDatabaseType.h2Memory,
+                      devDatabaseType: OptionValues[OptionNames.DEV_DATABASE_TYPE].h2Memory,
                       prodDatabaseType: MONGODB
                     }
                   })

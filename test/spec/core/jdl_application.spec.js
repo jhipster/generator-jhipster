@@ -19,7 +19,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { OptionNames } = require('../../../lib/core/jhipster/new_application_options');
+const { OptionNames } = require('../../../lib/core/jhipster/application_options');
 const StringJDLApplicationConfigurationOption = require('../../../lib/core/string_jdl_application_configuration_option');
 const JDLApplication = require('../../../lib/core/jdl_application');
 
