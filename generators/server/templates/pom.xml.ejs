@@ -691,10 +691,17 @@
 <%_ } _%>
         <!-- Spring Cloud -->
 <%_ if (applicationType === 'gateway') { _%>
+        <%_ if (!reactive) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
+        <%_ } else { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-gateway</artifactId>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>com.github.vladimir-bukhtoyarov</groupId>
             <artifactId>bucket4j-core</artifactId>
@@ -742,7 +749,7 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationType === 'uaa') { _%>
+<%_ if (authenticationType === 'uaa' || (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive)) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-security</artifactId>
