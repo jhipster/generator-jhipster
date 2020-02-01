@@ -87,7 +87,7 @@ jobs:
                       protractor: 0 # TODO: instead of sql, because of flacky tests
                     - app-type: react-gradle-h2mem-memcached
                       entity: none # TODO: instead of sql, because of flacky tests
-                      profile: dev
+                      profile: dev,webpack
                       war: 1
                       protractor: 0 # TODO: instead of sql, because of flacky tests
                     - app-type: react-gradle-cassandra-session-redis

@@ -1387,22 +1387,9 @@
         <profile>
             <id>webpack</id>
             <activation>
-                <file>
-                    <missing>${basedir}/<%= CLIENT_DIST_DIR %>app/main.bundle.js</missing>
-                </file>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <dependencies>
-    <%_ if (!reactive) { _%>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-undertow</artifactId>
-                </dependency>
-    <%_ } _%>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-devtools</artifactId>
-                    <optional>true</optional>
-                </dependency>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
                 <dependency>
                     <groupId>com.h2database</groupId>
