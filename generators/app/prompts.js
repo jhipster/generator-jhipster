@@ -86,7 +86,7 @@ function askForApplicationType(meta) {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
 
         const REACTIVE_PROMPT = {
-            when: () => ['monolith', 'microservice'].includes(this.applicationType),
+            when: () => ['gateway', 'monolith', 'microservice'].includes(this.applicationType),
             type: 'confirm',
             name: 'reactive',
             message: '[Alpha] Do you want to make it reactive with Spring WebFlux?',
