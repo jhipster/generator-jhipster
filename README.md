@@ -101,22 +101,17 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://edusson.co.uk/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edusson.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://www.crosswordsolver.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/crosswordsolver.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://fair-laan.se/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/fair-laan.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://superkredit.net" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/superkredit.png">
@@ -137,13 +132,12 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/vpngorilla.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://papersowl.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">
         </a>
-      </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://www.banksecrets.eu/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
