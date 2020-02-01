@@ -18,19 +18,21 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ const viaService = service !== 'no';
-    let isUsingMapsId = false;
-    let mapsIdAssoc;
-    let primaryKeyType = pkType;
-    for (idx in relationships) {
-        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-        if ( isUsingMapsId === true) {
-            mapsIdAssoc = relationships[idx];
-            primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
-            break;
-        }
-        isUsingMapsId = false;
-    } _%>
+<%_
+const viaService = service !== 'no';
+let isUsingMapsId = false;
+let mapsIdAssoc;
+let primaryKeyType = pkType;
+for (idx in relationships) {
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+    if ( isUsingMapsId === true) {
+        mapsIdAssoc = relationships[idx];
+        primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
+        break;
+    }
+    isUsingMapsId = false;
+}
+_%>
 <%_ if (dto !== 'mapstruct' || service === 'no') { _%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>

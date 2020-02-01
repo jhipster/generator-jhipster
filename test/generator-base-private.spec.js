@@ -1,3 +1,4 @@
+const path = require('path');
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
@@ -295,7 +296,7 @@ export * from './entityFolderName/entityFileName.state';`;
         });
         describe('when passing foo/bar', () => {
             it('returns ../../', () => {
-                expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal('../../');
+                expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal(`..${path.sep}../`);
             });
         });
         describe('when passing ../foo', () => {
@@ -310,7 +311,7 @@ export * from './entityFolderName/entityFileName.state';`;
         });
         describe('when passing ../foo/bar/foo2', () => {
             it('returns ../../', () => {
-                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal('../../');
+                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal(`..${path.sep}../`);
             });
         });
         describe('when passing ../../foo', () => {
