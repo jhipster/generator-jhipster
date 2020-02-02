@@ -95,6 +95,10 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}admin/admin.route.ts`);
         generator.removeFile(`${ANGULAR_DIR}admin/admin.module.ts`);
     }
+
+    if (generator.isJhipsterVersionLessThan('6.6.1') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+        generator.removeFile(`${ANGULAR_DIR}core/language/language.helper.ts`);
+    }
 }
 
 /**
