@@ -26,6 +26,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const randexp = require('randexp');
 const faker = require('faker');
+const os = require('os');
 
 const constants = require('./generator-constants');
 
@@ -112,6 +113,19 @@ function escapeRegExp(str) {
 }
 
 /**
+ * Normalize line endings.
+ * If in Windows is Git autocrlf used then need to replace \r\n with \n
+ * to achieve consistent comparison result when comparing strings read from file.
+ *
+ * @param {string} str string
+ * @returns {string} string where CRLF is replaced with LF in Windows
+ */
+function normalizeLineEndings(str) {
+    const isWin32 = os.platform() === 'win32';
+    return isWin32 ? str.replace(/\r\n/g, '\n') : str;
+}
+
+/**
  * Rewrite using the passed argument object.
  *
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
@@ -119,9 +133,9 @@ function escapeRegExp(str) {
  */
 function rewrite(args) {
     // check if splicable is already in the body text
-    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(line)}`).join('\n'));
+    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n'));
 
-    if (re.test(args.haystack)) {
+    if (re.test(normalizeLineEndings(args.haystack))) {
         return args.haystack;
     }
 
