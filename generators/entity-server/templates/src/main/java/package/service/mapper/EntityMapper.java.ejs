@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.service.mapper;
 
-<%_ 
+<%_
 let existingMappings = [];
 let uuidMapMethod = false;
 let byteMapMethod = false;
@@ -28,12 +28,17 @@ for (idx in relationships) {
         if (!existingMappings.includes(relationships[idx].otherEntityNameCapitalized) && asEntity(relationships[idx].otherEntityNameCapitalized) !== asEntity(entityClass)) {
             existingMappings.push(relationships[idx].otherEntityNameCapitalized);
         }
-        let otherEntityField = getExistingEntities().find(e => e.name === relationships[idx].otherEntityNameCapitalized).definition.fields.find(f => f.fieldName === relationships[idx].otherEntityField);
-        if (otherEntityField.fieldType === 'UUID') {
-            uuidMapMethod = true;
-        }
-        if (otherEntityField.fieldType === 'byte[]') {
-            byteMapMethod = true;
+        let otherEntity = getExistingEntities().find(e => e.name === relationships[idx].otherEntityNameCapitalized);
+        if (otherEntity) {
+            let otherEntityField = otherEntity.definition.fields.find(f => f.fieldName === relationships[idx].otherEntityField);
+            if (otherEntityField) {
+                if (otherEntityField.fieldType === 'UUID') {
+                    uuidMapMethod = true;
+                }
+                if (otherEntityField.fieldType === 'byte[]') {
+                    byteMapMethod = true;
+                }
+            }
         }
     }
 }
