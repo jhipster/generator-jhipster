@@ -127,6 +127,11 @@ spring:
         username: <%= baseName %>
         password:
         <%_ } _%>
+        <%_ } else if (prodDatabaseType === 'db2') { _%>
+        url: jdbc:db2://localhost:50000/DB2INST1;
+        username: db2inst1
+        password: db2inst1
+        <%_ } _%>
         hikari:
             poolName: Hikari
             auto-commit: false
@@ -148,6 +153,11 @@ spring:
         <%_ } else if (devDatabaseType === 'h2disk' || devDatabaseType === 'h2Memory') { _%>
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
+        <%_ else if (prodDatabaseType === 'db2') { _%>
+        database-platform: org.hibernate.dialect.DB2400Dialect
+        database: DB2
+        <%_ } _%>
+
         show-sql: true
         properties:
             hibernate.id.new_generator_mappings: true

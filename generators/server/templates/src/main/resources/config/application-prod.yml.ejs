@@ -105,6 +105,11 @@ spring:
         username: system
         password: oracle
         <%_ } _%>
+        <%_ } else if (prodDatabaseType === 'db2') { _%>
+        url: jdbc:db2://localhost:50000/DB2INST1;
+        username: db2inst1
+        password: db2inst1
+        <%_ } _%>
         hikari:
             poolName: Hikari
             auto-commit: false
@@ -118,6 +123,10 @@ spring:
     jpa:
         <%_ if (prodDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
+        <%_ } _%>
+        <%_ else if (prodDatabaseType === 'db2') { _%>
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
+        database: DB2
         <%_ } _%>
         show-sql: false
         properties:
