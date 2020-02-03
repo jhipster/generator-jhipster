@@ -45,8 +45,8 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                 this.addVendorSCSSStyle('@import style_without_comment');
             },
             addToMenuStep() {
-                this.addElementToMenu('routerName1', 'glyphiconName1', true, 'angularX');
-                this.addElementToAdminMenu('routerName2', 'glyphiconName2', true, 'angularX');
+                this.addElementToMenu('routerName1', 'iconName1', true, 'angularX');
+                this.addElementToAdminMenu('routerName2', 'iconName2', true, 'angularX');
                 this.addEntityToMenu('routerName3', true, 'angularX', 'routerName3');
             },
             addToModuleStep() {
@@ -133,11 +133,15 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">\n' +
                 '                                <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">\n' +
-                '                                    <fa-icon [icon]="\'glyphiconName1\'" [fixedWidth]="true"></fa-icon>&nbsp;\n' +
+                '                                    <fa-icon icon="iconName1" fixedWidth="true"></fa-icon>\n' +
                 '                                    <span jhiTranslate="global.menu.routerName1">Router Name 1</span>\n' +
                 '                                </a>\n' +
                 '                            </li>'
         );
+    });
+
+    it('icon imports contains a new icon added by a new menu method of needle api ', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`, '  faIconName1');
     });
 
     it('admin menu contains the admin element added by needle api', () => {
@@ -145,11 +149,15 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '                    <li>\n' +
                 '                        <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">\n' +
-                '                            <fa-icon [icon]="\'glyphiconName2\'" [fixedWidth]="true"></fa-icon>&nbsp;\n' +
+                '                            <fa-icon icon="iconName2" fixedWidth="true"></fa-icon>\n' +
                 '                            <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>\n' +
                 '                        </a>\n' +
                 '                    </li>'
         );
+    });
+
+    it('icon imports contains a new icon added by a new admin menu method of needle api ', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`, '  faIconName2');
     });
 
     it('entity menu contains the entity added by needle api', () => {

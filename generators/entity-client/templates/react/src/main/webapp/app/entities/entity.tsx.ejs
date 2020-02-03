@@ -224,7 +224,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   <%_ } _%>
 
-  const { <%= entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = props;
+  const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = props;
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading">
@@ -409,7 +409,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               </tbody>
             </Table>
           ) : (
-            <div className="alert alert-warning">
+              !loading && <div className="alert alert-warning">
               <Translate contentKey="<%= i18nKeyPrefix %>.home.notFound">
                 No <%= entityClassPluralHumanized %> found
               </Translate>
@@ -449,6 +449,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
 const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
   <%= entityInstance %>List: <%= entityInstance %>.entities,
+  loading: <%= entityInstance %>.loading,
   <%_ if (pagination !== 'no') { _%>
   totalItems: <%= entityInstance %>.totalItems,
   <%_ } _%>

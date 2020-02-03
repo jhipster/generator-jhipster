@@ -12,7 +12,7 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 
 ## Contributing
 
-We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md) for any information about contributing to the project. 
+We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md) for any information about contributing to the project.
 
 ## Sponsors
 
@@ -69,11 +69,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://www.intesys.it/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/intesys.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://www.codefirst.co.uk" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/codefirst.png">
         </a>
@@ -83,13 +78,13 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/blokt.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://clay.global/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/clay.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://uxplanet.org/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/uxplanet.png">
@@ -101,17 +96,10 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://edusson.co.uk/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edusson.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://www.crosswordsolver.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/crosswordsolver.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://fair-laan.se/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/fair-laan.png">
@@ -122,6 +110,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/superkredit.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://matchbanker.pl/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
@@ -137,13 +127,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/vpngorilla.png">
         </a>
       </td>
-    </tr>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://papersowl.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">
-        </a>
-      </td>
       <td align="center" valign="middle">
         <a href="https://www.banksecrets.eu/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
@@ -154,6 +137,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
