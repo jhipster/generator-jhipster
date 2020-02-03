@@ -126,7 +126,6 @@ spring:
         url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
         username: <%= baseName %>
         password:
-        <%_ } _%>
         <%_ } else if (prodDatabaseType === 'db2') { _%>
         url: jdbc:db2://localhost:50000/DB2INST1;
         username: db2inst1
@@ -152,7 +151,6 @@ spring:
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } else if (devDatabaseType === 'h2disk' || devDatabaseType === 'h2Memory') { _%>
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
-        <%_ } _%>
         <%_ else if (prodDatabaseType === 'db2') { _%>
         database-platform: org.hibernate.dialect.DB2400Dialect
         database: DB2
