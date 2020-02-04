@@ -1178,8 +1178,8 @@ describe('JHipster generator', () => {
                     })
                 );
             });
-            it('contains updatePageDirection in language helper', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`, /private updatePageDirection/);
+            it('contains updatePageDirection in main component', () => {
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/layouts/main/main.component.ts`, /private updatePageDirection/);
             });
         });
     });

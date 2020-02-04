@@ -18,23 +18,25 @@
 -%>
 package <%= packageName %>.web.rest;
 
-<%_ let isUsingMapsId = false;
-    let mapsIdAssoc;
-    let mapsIdEntity;
-    let mapsIdEntityInstance;
-    let mapsIdRepoInstance;
-    let hasOauthUser = false;
-    for (idx in relationships) {
-        isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-        if ( isUsingMapsId === true) {
-            mapsIdAssoc = relationships[idx];
-            mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
-            mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
-            mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
-            hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
-            break;
-        }
-    } _%>
+<%_
+let isUsingMapsId = false;
+let mapsIdAssoc;
+let mapsIdEntity;
+let mapsIdEntityInstance;
+let mapsIdRepoInstance;
+let hasOauthUser = false;
+for (idx in relationships) {
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
+    if ( isUsingMapsId === true) {
+        mapsIdAssoc = relationships[idx];
+        mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+        mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+        mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+        hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
+        break;
+    }
+}
+_%>
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
@@ -701,10 +703,10 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @SuppressWarnings({"unchecked"})
     public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() throws Exception {
         <%_ if (service !== 'no') { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } else { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
         when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } _%>
 
@@ -727,10 +729,10 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @SuppressWarnings({"unchecked"})
     public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() throws Exception {
         <%_ if (service !== 'no') { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
             when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } else { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
             when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } _%>
             MockMvc rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
@@ -1036,9 +1038,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
 
         <%_ if (service !== 'no') { _%>
-        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
         <%_ } else { _%>
-        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %>);
+        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
         <%_ } _%>
         WebTestClient client = WebTestClient.bindToController(<%= entityInstance %>Resource).build();
 

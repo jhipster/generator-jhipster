@@ -17,10 +17,12 @@
  limitations under the License.
 -%>
 package <%= packageName %>.repository;
-<%
+
+<%_
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-%>
+_%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,18 +44,22 @@ import org.springframework.data.couchbase.core.query.Query;
 import org.springframework.data.cassandra.repository.CassandraRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
-
-    <%_ let importList = fieldsContainOwnerManyToMany;
+<%_
+if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') {
+    let importList = fieldsContainOwnerManyToMany;
     for (r of relationships) {
         if (r.relationshipType === 'many-to-one' && r.otherEntityName === 'user') {
             importList = true;
         }
     }
-    if (importList) { _%>
+_%>
+    <%_ if (importList || fieldsContainOwnerManyToMany) { _%>
+
+    <%_ } _%>
+    <%_ if (importList) { _%>
 import java.util.List;
     <%_ } _%>
-<%_ if (fieldsContainOwnerManyToMany) { _%>
+    <%_ if (fieldsContainOwnerManyToMany) { _%>
 import java.util.Optional;
     <%_ } _%>
 <%_ } _%>

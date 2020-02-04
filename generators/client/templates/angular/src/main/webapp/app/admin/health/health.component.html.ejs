@@ -21,7 +21,7 @@
         <span id="health-page-heading" jhiTranslate="health.title">Health Checks</span>
 
         <button class="btn btn-primary float-right" (click)="refresh()">
-            <fa-icon [icon]="'sync'"></fa-icon> <span jhiTranslate="health.refresh.button">Refresh</span>
+            <fa-icon icon="sync"></fa-icon> <span jhiTranslate="health.refresh.button">Refresh</span>
         </button>
     </h2>
 
@@ -50,7 +50,7 @@
                     </td>
                     <td class="text-center">
                         <a class="hand" (click)="showHealth(componentHealth)" *ngIf="componentHealth.value.details">
-                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <fa-icon icon="eye"></fa-icon>
                         </a>
                     </td>
                 </tr>
