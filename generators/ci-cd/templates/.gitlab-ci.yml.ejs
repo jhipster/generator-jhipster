@@ -175,7 +175,7 @@ nohttp:
 maven-compile:
     stage: build
     script:
-        - ./mvnw compile -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw -ntp compile -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/classes/
@@ -185,7 +185,7 @@ maven-compile:
 maven-test:
     stage: test
     script:
-        - ./mvnw verify -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw -ntp verify -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
             junit: target/test-results/**/TEST-*.xml
@@ -201,7 +201,7 @@ frontend-test:
 <%_ if (insideDocker) { _%>
     <%_ if (clientPackageManager === 'yarn') { _%>
         - yarn install
-        - yarn test    
+        - yarn test
         <%_ } else if (clientPackageManager === 'npm') { _%>
         - npm install
         - npm test
