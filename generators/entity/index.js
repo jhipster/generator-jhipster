@@ -296,6 +296,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.service = 'no';
                     context.jpaMetamodelFiltering = false;
                     context.readOnly = false;
+                    context.embedded = false;
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
@@ -730,6 +731,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.fieldsContainOwnerOneToOne = false;
                 context.fieldsContainOneToMany = false;
                 context.fieldsContainManyToOne = false;
+                context.fieldsContainEmbedded = false;
                 context.fieldsIsReactAvField = false;
                 context.blobFields = [];
                 context.differentTypes = [context.entityClass];
@@ -877,6 +879,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.relationships.forEach(relationship => {
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
+                    relationship.otherEntityEmbedded = otherEntityData.embedded;
                     if (otherEntityData && otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
                         otherEntityData.clientRootFolder = otherEntityData.microserviceName;
                     }
@@ -1082,6 +1085,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.fieldsContainOneToMany = true;
                     } else if (relationship.relationshipType === 'many-to-one') {
                         context.fieldsContainManyToOne = true;
+                    }
+                    if (relationship.otherEntityEmbedded) {
+                        context.fieldsContainEmbedded = true;
                     }
 
                     if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {

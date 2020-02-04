@@ -35,6 +35,7 @@ public class <%= asDto(entityClass) %>Test {
     @Test
     public void dtoEqualsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= asDto(entityClass) %>.class);
+        <%_if (!embedded) { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %>1 = new <%= asDto(entityClass) %>();
         <%= asDto(entityInstance) %>1.setId(<%- id1 %>);
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %>2 = new <%= asDto(entityClass) %>();
@@ -45,5 +46,6 @@ public class <%= asDto(entityClass) %>Test {
         assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
         <%= asDto(entityInstance) %>1.setId(null);
         assertThat(<%= asDto(entityInstance) %>1).isNotEqualTo(<%= asDto(entityInstance) %>2);
+        <%_} _%>
     }
 }
