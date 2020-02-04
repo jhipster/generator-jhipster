@@ -37,7 +37,7 @@ const KAFKA_VERSION = '5.4.0';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // Version of docker images
-const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.1.0';
+const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.1.1';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.19';
 const DOCKER_MARIADB = 'mariadb:10.4.11';
