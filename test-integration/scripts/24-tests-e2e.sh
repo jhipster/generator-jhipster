@@ -11,6 +11,11 @@ if [ -a src/main/docker/couchbase.yml ]; then
     sleep 20
     docker ps -a
 fi
+if [ -a src/main/docker/cassandra.yml ]; then
+    docker-compose -f src/main/docker/cassandra.yml up -d
+    sleep 30
+    docker ps -a
+fi
 
 #-------------------------------------------------------------------------------
 # Functions

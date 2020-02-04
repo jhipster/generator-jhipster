@@ -18,17 +18,19 @@
 -%>
 package <%= packageName %>.service;
 
-<%_ const serviceClassName = entityClass + 'QueryService';
-    const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
-    const mapper = entityInstance  + 'Mapper';
-    const dtoToEntity = mapper + '.'+ 'toEntity';
-    const entityToDto = mapper + '.'+ 'toDto';
-    const entityListToDto = mapper + '.' + 'toDto';
-    const entityToDtoReference = mapper + '::'+ 'toDto';
-    const repository = entityInstance  + 'Repository';
-    const criteria = entityClass + 'Criteria';
-    const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships); _%>
+<%_
+const serviceClassName = entityClass + 'QueryService';
+const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+const mapper = entityInstance  + 'Mapper';
+const dtoToEntity = mapper + '.'+ 'toEntity';
+const entityToDto = mapper + '.'+ 'toDto';
+const entityListToDto = mapper + '.' + 'toDto';
+const entityToDtoReference = mapper + '::'+ 'toDto';
+const repository = entityInstance  + 'Repository';
+const criteria = entityClass + 'Criteria';
+const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
+_%>
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
