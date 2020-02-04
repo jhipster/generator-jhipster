@@ -67,7 +67,7 @@ jobs:
                       war: 0
                       protractor: 1
                     - app-type: ngx-mariadb-oauth2-infinispan
-                      entity: sql
+                      entity: sqlfull
                       profile: prod
                       war: 0
                       protractor: 1

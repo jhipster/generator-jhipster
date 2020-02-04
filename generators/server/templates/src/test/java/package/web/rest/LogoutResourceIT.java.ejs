@@ -23,9 +23,6 @@ import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
-<%_ if (!reactive) { _%>
-import <%= packageName %>.security.AuthoritiesConstants;
-<%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
@@ -37,15 +34,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 <%_ } _%>
 import org.springframework.http.MediaType;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.registration.<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 <%_ if (!reactive) { _%>
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -55,8 +47,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
