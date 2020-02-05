@@ -879,9 +879,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.relationships.forEach(relationship => {
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
-                    relationship.otherEntityEmbedded = otherEntityData.embedded;
-                    if (otherEntityData && otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
-                        otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+                    if (otherEntityData) {
+                        if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
+                            otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+                        }
+                        relationship.otherEntityEmbedded = otherEntityData.embedded;
                     }
                     const jhiTablePrefix = context.jhiTablePrefix;
 

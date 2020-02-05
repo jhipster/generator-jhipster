@@ -43,6 +43,17 @@ const angularFiles = {
             path: ANGULAR_DIR,
             templates: [
                 {
+                    file: 'entities/entity.model.ts',
+                    // using entityModelFileName so that there is no conflict when genertaing microservice entities
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.embedded,
+            path: ANGULAR_DIR,
+            templates: [
+                {
                     file: 'entities/entity-management.component.html',
                     method: 'processHtml',
                     template: true,
@@ -63,11 +74,6 @@ const angularFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.route.ts`
                 },
                 {
-                    file: 'entities/entity.model.ts',
-                    // using entityModelFileName so that there is no conflict when genertaing microservice entities
-                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
-                },
-                {
                     file: 'entities/entity-management.component.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
                 },
@@ -82,7 +88,7 @@ const angularFiles = {
             ]
         },
         {
-            condition: generator => !generator.readOnly,
+            condition: generator => !generator.readOnly && !generator.embedded,
             path: ANGULAR_DIR,
             templates: [
                 {
@@ -110,6 +116,7 @@ const angularFiles = {
     ],
     test: [
         {
+            condition: generator => !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -128,7 +135,7 @@ const angularFiles = {
             ]
         },
         {
-            condition: generator => !generator.readOnly,
+            condition: generator => !generator.readOnly && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -144,7 +151,7 @@ const angularFiles = {
             ]
         },
         {
-            condition: generator => generator.protractorTests,
+            condition: generator => generator.protractorTests && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -308,7 +315,7 @@ function writeFiles() {
                 files = reactFiles;
                 destDir = REACT_DIR;
                 templatesDir = CLIENT_REACT_TEMPLATES_DIR;
-            } else {
+            } else if (!this.embedded) {
                 this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
                 return;
             }
@@ -317,17 +324,19 @@ function writeFiles() {
             this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
             addEnumerationFiles(this, templatesDir, destDir);
 
-            this.addEntityToModule(
-                this.entityInstance,
-                this.entityClass,
-                this.entityAngularName,
-                this.entityFolderName,
-                this.entityFileName,
-                this.entityUrl,
-                this.clientFramework,
-                microserviceName
-            );
-            this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+            if (!this.embedded) {
+                this.addEntityToModule(
+                    this.entityInstance,
+                    this.entityClass,
+                    this.entityAngularName,
+                    this.entityFolderName,
+                    this.entityFileName,
+                    this.entityUrl,
+                    this.clientFramework,
+                    microserviceName
+                );
+                this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+            }
         }
     };
 }
