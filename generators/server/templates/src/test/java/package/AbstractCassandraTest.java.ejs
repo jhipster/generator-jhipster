@@ -18,29 +18,27 @@
 -%>
 package <%= packageName %>;
 
-import io.github.jhipster.config.JHipsterConstants;
-
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import org.apache.cassandra.exceptions.ConfigurationException;
-import org.apache.thrift.transport.TTransportException;
-import org.cassandraunit.CQLDataLoader;
-import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
+import io.github.jhipster.config.JHipsterConstants;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,13 +48,13 @@ import java.util.List;
 @ActiveProfiles(JHipsterConstants.SPRING_PROFILE_TEST)
 public class AbstractCassandraTest {
 
-    public static final String CASSANDRA_UNIT_KEYSPACE = "cassandra_unit_keyspace";
+    public static final String CASSANDRA_TEST_KEYSPACE = "cassandra_test_keyspace";
     public static GenericContainer CASSANDRA_CONTAINER = null;
     public static final int CASSANDRA_TEST_PORT = 9042;
     private static boolean started = false;
 
     @BeforeAll
-    public static void startServer() throws TTransportException, ConfigurationException, IOException, URISyntaxException {
+    public static void startServer() throws IOException, URISyntaxException {
         if (!started) {
             startTestcontainer();
             Cluster cluster = new Cluster.Builder()
@@ -68,13 +66,12 @@ public class AbstractCassandraTest {
 
             Session session = cluster.connect();
             createTestKeyspace(session);
-            CQLDataLoader dataLoader = new CQLDataLoader(session);
-            applyScripts(dataLoader, "config/cql/changelog/", "*.cql");
+            applyScripts(session, "config/cql/changelog/", "*.cql");
             started = true;
         }
     }
 
-    private static void startTestcontainer() throws TTransportException, IOException {
+    private static void startTestcontainer() {
         CASSANDRA_CONTAINER =
             new GenericContainer("<%= DOCKER_CASSANDRA %>")
                 .waitingFor(Wait.forListeningPort().withStartupTimeout(Duration.ofSeconds(30)))
@@ -84,13 +81,13 @@ public class AbstractCassandraTest {
     }
 
     private static void createTestKeyspace(Session session) {
-        String createQuery = "CREATE KEYSPACE " + CASSANDRA_UNIT_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
+        String createQuery = "CREATE KEYSPACE " + CASSANDRA_TEST_KEYSPACE + " WITH replication={'class' : 'SimpleStrategy', 'replication_factor':1}";
         session.execute(createQuery);
-        String useKeyspaceQuery = "USE " + CASSANDRA_UNIT_KEYSPACE;
+        String useKeyspaceQuery = "USE " + CASSANDRA_TEST_KEYSPACE;
         session.execute(useKeyspaceQuery);
     }
 
-    private static void applyScripts(CQLDataLoader dataLoader, String cqlDir, String pattern) throws IOException, URISyntaxException {
+    private static void applyScripts(Session session, String cqlDir, String pattern) throws IOException, URISyntaxException {
         URL dirUrl = ClassLoader.getSystemResource(cqlDir);
         if (dirUrl == null) { // protect for empty directory
             return;
@@ -105,7 +102,13 @@ public class AbstractCassandraTest {
         Collections.sort(scripts);
 
         for (String fileName : scripts) {
-            dataLoader.load(new ClassPathCQLDataSet(cqlDir + fileName, false, false, CASSANDRA_UNIT_KEYSPACE));
+            String cqlFileAsString = IOUtils.toString(AbstractCassandraTest.class.getResourceAsStream("/" + cqlDir + fileName), StandardCharsets.UTF_8);
+            String[] statements = StringUtils.split(cqlFileAsString, ";");
+
+            Arrays.stream(statements)
+                .map(StringUtils::normalizeSpace)
+                .filter(StringUtils::isNotBlank)
+                .forEach(cql -> session.execute(cql + ";"));
         }
     }
 }
