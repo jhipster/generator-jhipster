@@ -170,6 +170,7 @@ const angularFiles = {
 const reactFiles = {
     client: [
         {
+            condition: generator => !generator.embedded,
             path: REACT_DIR,
             templates: [
                 {
@@ -187,10 +188,6 @@ const reactFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`
                 },
                 {
-                    file: 'entities/entity.model.ts',
-                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
-                },
-                {
                     file: 'entities/index.tsx',
                     method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
@@ -198,7 +195,16 @@ const reactFiles = {
             ]
         },
         {
-            condition: generator => !generator.readOnly,
+            path: REACT_DIR,
+            templates: [
+                {
+                    file: 'entities/entity.model.ts',
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.readOnly && !generator.embedded,
             path: REACT_DIR,
             templates: [
                 {
@@ -216,6 +222,7 @@ const reactFiles = {
     ],
     test: [
         {
+            condition: generator => !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -225,7 +232,7 @@ const reactFiles = {
             ]
         },
         {
-            condition: generator => generator.protractorTests,
+            condition: generator => generator.protractorTests && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -239,7 +246,7 @@ const reactFiles = {
             ]
         },
         {
-            condition: generator => generator.protractorTests && !generator.readOnly,
+            condition: generator => generator.protractorTests && !generator.readOnly && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
