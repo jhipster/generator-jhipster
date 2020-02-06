@@ -38,7 +38,7 @@ function askForModuleName() {
 }
 
 function askForClient(meta) {
-    if (!meta && this.existingProject) return;
+    if (!meta && this.existingProject) return true;
 
     const applicationType = this.applicationType;
 
@@ -68,21 +68,18 @@ function askForClient(meta) {
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
 
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
+    return this.prompt(PROMPT).then(prompt => {
         this.clientFramework = prompt.clientFramework;
         if (this.clientFramework === 'no') {
             this.skipClient = true;
         }
-        done();
     });
 }
 
 function askForI18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
+    if (this.existingProject || this.configOptions.skipI18nQuestion) return undefined;
 
-    this.aski18n(this);
+    return this.aski18n(this);
 }
 
 /**
@@ -101,7 +98,6 @@ function askForClientTheme(meta) {
     }
 
     const skipClient = this.skipClient;
-    const done = this.async();
     const defaultChoices = [
         {
             value: 'none',
@@ -139,6 +135,14 @@ function askForClientTheme(meta) {
         default: 'none',
     };
 
+    const self = this;
+    const promptClientTheme = function (PROMPT) {
+        return self.prompt(PROMPT).then(prompt => {
+            self.clientTheme = prompt.clientTheme;
+        });
+    };
+
+    const done = this.async();
     this.httpsGet(
         'https://bootswatch.com/api/4.json',
         // eslint-disable-next-line consistent-return
@@ -158,33 +162,25 @@ function askForClientTheme(meta) {
                 ];
 
                 if (meta) return PROMPT;
-                promptQuestion(PROMPT, done, this);
             } catch (err) {
                 this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-                promptQuestion(PROMPT, done, this);
             }
+            done(undefined, promptClientTheme(PROMPT));
         },
         () => {
             this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-            promptQuestion(PROMPT, done, this);
+            done(undefined, promptClientTheme(PROMPT));
         }
     );
 }
 
-function promptQuestion(PROMPT, done, generator) {
-    generator.prompt(PROMPT).then(prompt => {
-        generator.clientTheme = prompt.clientTheme;
-        done();
-    });
-}
-
 function askForClientThemeVariant(meta) {
     if (!meta && this.existingProject) {
-        return;
+        return undefined;
     }
     if (this.clientTheme === 'none') {
         this.clientThemeVariant = '';
-        return;
+        return undefined;
     }
 
     const skipClient = this.skipClient;
@@ -206,10 +202,7 @@ function askForClientThemeVariant(meta) {
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
 
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
+    return this.prompt(PROMPT).then(prompt => {
         this.clientThemeVariant = prompt.clientThemeVariant;
-        done();
     });
 }

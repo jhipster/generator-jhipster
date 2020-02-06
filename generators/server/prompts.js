@@ -37,7 +37,7 @@ function askForModuleName() {
 }
 
 function askForServerSideOpts(meta) {
-    if (!meta && this.existingProject) return;
+    if (!meta && this.existingProject) return undefined;
 
     const applicationType = this.applicationType;
     const reactive = this.reactive;
@@ -296,9 +296,7 @@ function askForServerSideOpts(meta) {
 
     if (meta) return prompts; // eslint-disable-line consistent-return
 
-    const done = this.async();
-
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         this.serviceDiscoveryType = props.serviceDiscoveryType;
         this.authenticationType = props.authenticationType;
 
@@ -351,12 +349,11 @@ function askForServerSideOpts(meta) {
             this.prodDatabaseType = this.databaseType;
             this.enableHibernateCache = false;
         }
-        done();
     });
 }
 
 function askForOptionalItems(meta) {
-    if (!meta && this.existingProject) return;
+    if (!meta && this.existingProject) return undefined;
 
     const applicationType = this.applicationType;
     const choices = [];
@@ -400,9 +397,8 @@ function askForOptionalItems(meta) {
 
     if (meta) return PROMPTS; // eslint-disable-line consistent-return
 
-    const done = this.async();
     if (choices.length > 0) {
-        this.prompt(PROMPTS).then(prompt => {
+        return this.prompt(PROMPTS).then(prompt => {
             this.serverSideOptions = prompt.serverSideOptions;
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
@@ -412,11 +408,9 @@ function askForOptionalItems(meta) {
             if (!this.serviceDiscoveryType) {
                 this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
             }
-            done();
         });
-    } else {
-        done();
     }
+    return undefined;
 }
 
 function askForI18n() {

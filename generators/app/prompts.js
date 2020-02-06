@@ -30,24 +30,20 @@ module.exports = {
     askForMoreModules,
 };
 
-function askForInsightOptIn() {
-    const done = this.async();
-
-    this.prompt({
+async function askForInsightOptIn() {
+    const answers = await this.prompt({
         when: () => statistics.shouldWeAskForOptIn(),
         type: 'confirm',
         name: 'insight',
         message: `May ${chalk.cyan('JHipster')} anonymously report usage statistics to improve the tool over time?`,
         default: true,
-    }).then(prompt => {
-        if (prompt.insight !== undefined) {
-            statistics.setOptOutStatus(!prompt.insight);
-        }
-        done();
     });
+    if (answers.insight !== undefined) {
+        statistics.setOptoutStatus(!answers.insight);
+    }
 }
 
-function askForApplicationType(meta) {
+async function askForApplicationType(meta) {
     if (!meta && this.existingProject) return;
 
     const DEFAULT_APPTYPE = 'monolith';
@@ -81,30 +77,24 @@ function askForApplicationType(meta) {
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
 
-    const done = this.async();
+    const answers = await this.prompt(PROMPT);
+    this.applicationType = this.configOptions.applicationType = answers.applicationType;
 
-    const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
-    promise.then(prompt => {
-        this.applicationType = this.configOptions.applicationType = prompt.applicationType;
+    const REACTIVE_PROMPT = {
+        when: () => ['gateway', 'monolith', 'microservice'].includes(this.applicationType),
+        type: 'confirm',
+        name: 'reactive',
+        message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
+        default: false,
+    };
 
-        const REACTIVE_PROMPT = {
-            when: () => ['gateway', 'monolith', 'microservice'].includes(this.applicationType),
-            type: 'confirm',
-            name: 'reactive',
-            message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
-            default: false,
-        };
-
-        this.prompt(REACTIVE_PROMPT).then(reactivePrompt => {
-            this.reactive = this.configOptions.reactive = reactivePrompt.reactive;
-            done();
-        });
-    });
+    const reactiveAnswers = await this.prompt(REACTIVE_PROMPT);
+    this.reactive = this.configOptions.reactive = reactiveAnswers.reactive || false;
 }
 
 function askForModuleName() {
-    if (this.existingProject) return;
-    this.askModuleName(this);
+    if (this.existingProject) return undefined;
+    return this.askModuleName(this);
 }
 
 function askForI18n() {
@@ -122,8 +112,8 @@ function askFori18n() {
     this.askForI18n();
 }
 
-function askForTestOpts(meta) {
-    if (!meta && this.existingProject) return;
+async function askForTestOpts(meta) {
+    if (!meta && this.existingProject) return undefined;
 
     const choices = [];
     const defaultChoice = [];
@@ -145,31 +135,26 @@ function askForTestOpts(meta) {
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
 
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
-        this.testFrameworks = prompt.testFrameworks;
-        done();
-    });
+    const answers = await this.prompt(PROMPT);
+    this.testFrameworks = answers.testFrameworks;
+    return answers;
 }
 
 function askForMoreModules() {
     if (this.existingProject) {
-        return;
+        return undefined;
     }
 
-    const done = this.async();
-    this.prompt({
+    return this.prompt({
         type: 'confirm',
         name: 'installModules',
         message: 'Would you like to install other generators from the JHipster Marketplace?',
         default: false,
-    }).then(prompt => {
-        if (prompt.installModules) {
-            askModulesToBeInstalled(done, this);
-        } else {
-            done();
+    }).then(answers => {
+        if (answers.installModules) {
+            return new Promise(resolve => askModulesToBeInstalled(resolve, this));
         }
+        return undefined;
     });
 }
 
@@ -197,9 +182,9 @@ function askModulesToBeInstalled(done, generator) {
                             choices,
                             default: [],
                         })
-                        .then(prompt => {
+                        .then(answers => {
                             // [ {name: [moduleName], version:[version]}, ...]
-                            prompt.otherModules.forEach(module => {
+                            answers.otherModules.forEach(module => {
                                 generator.otherModules.push({ name: module.name, version: module.version });
                             });
                             generator.configOptions.otherModules = generator.otherModules;

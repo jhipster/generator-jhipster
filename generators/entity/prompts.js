@@ -44,10 +44,9 @@ module.exports = {
 function askForMicroserviceJson() {
     const context = this.context;
     if (context.applicationType !== 'gateway' || context.useConfigurationFile) {
-        return;
+        return undefined;
     }
 
-    const done = this.async();
     const databaseType = context.databaseType;
 
     const prompts = [
@@ -80,7 +79,7 @@ function askForMicroserviceJson() {
         },
     ];
 
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.microservicePath) {
             this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
             if (path.isAbsolute(props.microservicePath)) {
@@ -93,7 +92,6 @@ function askForMicroserviceJson() {
             const fromPath = `${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
             this.loadEntityJson(fromPath);
         }
-        done();
     });
 }
 
@@ -103,9 +101,8 @@ function askForUpdate() {
     const isForce = context.options.force || context.regenerate;
     context.updateEntity = 'regenerate'; // default if skipping questions by --force
     if (isForce || !context.useConfigurationFile) {
-        return;
+        return undefined;
     }
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
@@ -133,12 +130,11 @@ function askForUpdate() {
             default: 0,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         context.updateEntity = props.updateEntity;
         if (context.updateEntity === 'none') {
             this.error(chalk.green('Aborting entity update, no changes were made.'));
         }
-        done();
     });
 }
 
@@ -146,25 +142,22 @@ function askForFields() {
     const context = this.context;
     // don't prompt if data is imported from a file
     if (context.useConfigurationFile && context.updateEntity !== 'add') {
-        return;
+        return undefined;
     }
 
     if (context.updateEntity === 'add') {
         logFieldsAndRelationships.call(this);
     }
 
-    const done = this.async();
-
-    askForField.call(this, done);
+    return askForField.call(this);
 }
 
 function askForFieldsToRemove() {
     const context = this.context;
     // prompt only if data is imported from a file
     if (!context.useConfigurationFile || context.updateEntity !== 'remove' || context.fieldNameChoices.length === 0) {
-        return;
+        return undefined;
     }
-    const done = this.async();
 
     const prompts = [
         {
@@ -181,7 +174,7 @@ function askForFieldsToRemove() {
             default: true,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
             for (let i = context.fields.length - 1; i >= 0; i -= 1) {
@@ -191,7 +184,6 @@ function askForFieldsToRemove() {
                 }
             }
         }
-        done();
     });
 }
 
@@ -199,28 +191,24 @@ function askForRelationships() {
     const context = this.context;
     // don't prompt if data is imported from a file
     if (context.useConfigurationFile && context.updateEntity !== 'add') {
-        return;
+        return undefined;
     }
     if (context.databaseType === 'cassandra') {
-        return;
+        return undefined;
     }
 
-    const done = this.async();
-
-    askForRelationship.call(this, done);
+    return askForRelationship.call(this);
 }
 
 function askForRelationsToRemove() {
     const context = this.context;
     // prompt only if data is imported from a file
     if (!context.useConfigurationFile || context.updateEntity !== 'remove' || context.relNameChoices.length === 0) {
-        return;
+        return undefined;
     }
     if (context.databaseType === 'cassandra') {
-        return;
+        return undefined;
     }
-
-    const done = this.async();
 
     const prompts = [
         {
@@ -237,7 +225,7 @@ function askForRelationsToRemove() {
             default: true,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
             for (let i = context.relationships.length - 1; i >= 0; i -= 1) {
@@ -247,7 +235,6 @@ function askForRelationsToRemove() {
                 }
             }
         }
-        done();
     });
 }
 
@@ -263,9 +250,8 @@ function askForTableName() {
         context.relationships.length === 0 ||
         !((prodDatabaseType === 'oracle' && entityTableName.length > 14) || entityTableName.length > 30)
     ) {
-        return;
+        return undefined;
     }
-    const done = this.async();
     const prompts = [
         {
             type: 'input',
@@ -289,12 +275,11 @@ function askForTableName() {
             default: entityTableName,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         /* overwrite the table name for the entity using name obtained from the user */
         if (props.entityTableName !== context.entityTableName) {
             context.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
         }
-        done();
     });
 }
 
@@ -302,9 +287,8 @@ function askForFiltering() {
     const context = this.context;
     // don't prompt if server is skipped, or the backend is not sql, or no service requested
     if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || context.service === 'no') {
-        return;
+        return undefined;
     }
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
@@ -323,9 +307,8 @@ function askForFiltering() {
             default: 0,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         context.jpaMetamodelFiltering = props.filtering === 'jpaMetamodel';
-        done();
     });
 }
 
@@ -333,9 +316,8 @@ function askForReadOnly() {
     const context = this.context;
     // don't prompt if data is imported from a file
     if (context.useConfigurationFile) {
-        return;
+        return undefined;
     }
-    const done = this.async();
     const prompts = [
         {
             type: 'confirm',
@@ -344,9 +326,8 @@ function askForReadOnly() {
             default: false,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         context.readOnly = props.readOnly;
-        done();
     });
 }
 
@@ -355,9 +336,8 @@ function askForDTO() {
     // don't prompt if data is imported from a file or server is skipped or if no service layer
     if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
         context.dto = context.dto || 'no';
-        return;
+        return undefined;
     }
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
@@ -376,9 +356,8 @@ function askForDTO() {
             default: 0,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         context.dto = props.dto;
-        done();
     });
 }
 
@@ -386,9 +365,8 @@ function askForService() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped
     if (context.useConfigurationFile || context.skipServer) {
-        return;
+        return undefined;
     }
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
@@ -411,9 +389,8 @@ function askForService() {
             default: 0,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         context.service = props.service;
-        done();
     });
 }
 
@@ -421,12 +398,11 @@ function askForPagination() {
     const context = this.context;
     // don't prompt if data are imported from a file
     if (context.useConfigurationFile) {
-        return;
+        return undefined;
     }
     if (context.databaseType === 'cassandra') {
-        return;
+        return undefined;
     }
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
@@ -449,17 +425,16 @@ function askForPagination() {
             default: 0,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         context.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
-        done();
     });
 }
 
 /**
  * ask question for a field creation
  */
-function askForField(done) {
+function askForField() {
     const context = this.context;
     this.log(chalk.green(`\nGenerating field #${context.fields.length + 1}\n`));
     const skipServer = context.skipServer;
@@ -868,7 +843,7 @@ function askForField(done) {
             default: '^[a-zA-Z0-9]*$',
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.fieldAdd) {
             if (props.fieldIsEnum) {
                 props.fieldType = _.upperFirst(props.fieldType);
@@ -895,17 +870,16 @@ function askForField(done) {
         }
         logFieldsAndRelationships.call(this);
         if (props.fieldAdd) {
-            askForField.call(this, done);
-        } else {
-            done();
+            return askForField.call(this);
         }
+        return undefined;
     });
 }
 
 /**
  * ask question for a relationship creation
  */
-function askForRelationship(done) {
+function askForRelationship() {
     const context = this.context;
     const name = context.name;
     this.log(chalk.green('\nGenerating relationships to other entities\n'));
@@ -1065,7 +1039,7 @@ function askForRelationship(done) {
             default: 0,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.relationshipAdd) {
             const relationship = {
                 relationshipName: props.relationshipName,
@@ -1089,11 +1063,10 @@ function askForRelationship(done) {
         }
         logFieldsAndRelationships.call(this);
         if (props.relationshipAdd) {
-            askForRelationship.call(this, done);
-        } else {
-            this.log('\n');
-            done();
+            return askForRelationship.call(this);
         }
+        this.log('\n');
+        return undefined;
     });
 }
 
