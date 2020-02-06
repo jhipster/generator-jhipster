@@ -1315,6 +1315,10 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
+                    file: 'package/config/OAuth2TestConfiguration.java',
+                    renameTo: generator => `${generator.testDir}config/OAuth2TestConfiguration.java`
+                },
+                {
                     file: 'package/security/OAuth2TokenMockUtil.java',
                     renameTo: generator => `${generator.testDir}security/OAuth2TokenMockUtil.java`
                 },
