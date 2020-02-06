@@ -107,8 +107,8 @@ public class RefreshTokenFilter extends GenericFilterBean {
             } else if (accessTokenCookie != null) {
                 log.warn("access token found, but no refresh token, stripping them all");
                 OAuth2AccessToken token = tokenStore.readAccessToken(accessTokenCookie.getValue());
-                if (token.isExpired()) {
-                    throw new InvalidTokenException("access token has expired, but there's no refresh token");
+                if (token.isExpired() || token.getExpiresIn() < REFRESH_WINDOW_SECS) {
+                    throw new InvalidTokenException("access token has expired or expires within " + REFRESH_WINDOW_SECS + " seconds, but there's no refresh token");
                 }
             }
         }
