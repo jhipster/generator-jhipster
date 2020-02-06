@@ -22,7 +22,7 @@ jobs:
       pool:
           vmImage: 'ubuntu-18.04'
       variables:
-          JHI_PROFILE: dev
+          JHI_PROFILE: dev,webpack
           JHI_RUN_APP: 1
           JHI_PROTRACTOR: 0
           JHI_JDK: 11

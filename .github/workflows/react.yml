@@ -87,7 +87,7 @@ jobs:
                       protractor:  0 # TODO: need change to 1, when elasticsearch + useEffect issue is fixed
                     - app-type: react-gradle-h2mem-memcached
                       entity: sql
-                      profile: dev
+                      profile: dev,webpack
                       war: 1
                       protractor: 1
                     - app-type: react-gradle-cassandra-session-redis
