@@ -165,7 +165,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     public Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
     }
-    <% } %>
+    <%_ } _%>
 <%- include('../../common/get_filtered_template', {asEntity, asDto}); -%>
     /**
      * Get one <%= entityInstance %> by id.

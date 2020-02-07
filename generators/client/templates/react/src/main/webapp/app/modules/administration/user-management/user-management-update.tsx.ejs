@@ -174,7 +174,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
           </AvGroup>
           <AvGroup check>
             <Label>
-              <AvInput type="checkbox" name="activated" value={user.activated} /> <Translate contentKey="userManagement.activated">Activated</Translate>
+              <AvInput type="checkbox" name="activated" value={user.activated} checked={user.activated} disabled={!user.id} /> <Translate contentKey="userManagement.activated">Activated</Translate>
             </Label>
           </AvGroup>
   <%_ if (enableTranslation) { _%>
