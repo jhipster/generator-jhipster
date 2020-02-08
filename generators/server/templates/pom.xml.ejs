@@ -383,6 +383,11 @@
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
         <dependency>
+            <groupId>org.cassandraunit</groupId>
+            <artifactId>cassandra-unit-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>database-commons</artifactId>
             <scope>test</scope>
