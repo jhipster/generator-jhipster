@@ -106,7 +106,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <%_ } else { _%>
     props.getEntities();
     <%_ } _%>
-  }, []);
+  }, [<%_ if (searchEngine === 'elasticsearch' && pagination === 'no') { _%>search<%_ } _%>]);
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   useEffect(() => {
@@ -132,12 +132,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       <%_ } _%>
     }
   };
-
-  <%_ if (pagination === 'no') { _%>
-  useEffect(() => {
-    props.getEntities()
-  }, [search]);
-  <%_ } _%>
 
   const clear = () => {
     <%_ if (pagination === 'infinite-scroll') { _%>
