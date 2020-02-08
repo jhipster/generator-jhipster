@@ -4,10 +4,6 @@
             <div class="col-md-8">
                 <h1 v-text="$t('reset.request.title')">Reset your password</h1>
 
-                <div class="alert alert-danger" v-html="$t('reset.request.messages.notfound')" v-if="errorEmailNotExists">
-                    <strong>Email address isn't registered!</strong> Please check and try again.
-                </div>
-
                 <div class="alert alert-warning" v-if="!success">
                     <p v-text="$t('reset.request.messages.info')">Enter the email address you used to register.</p>
                 </div>
