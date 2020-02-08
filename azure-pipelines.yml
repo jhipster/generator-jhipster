@@ -22,7 +22,7 @@ jobs:
       pool:
           vmImage: 'Ubuntu 16.04'
       variables:
-          JHI_PROFILE: dev
+          JHI_PROFILE: dev,webpack
           JHI_RUN_APP: 1
           JHI_PROTRACTOR: 1
           JHI_ENTITY: sql
