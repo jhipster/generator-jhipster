@@ -41,10 +41,12 @@
         },
         "importHelpers": true
     },
+    "include": ["src/main/webapp/app/app.main.ts"],
     "angularCompilerOptions": {
         "genDir": "<%= AOT_DIR %>",
         "skipMetadataEmit" : true,
         "fullTemplateTypeCheck": true,
-        "preserveWhitespaces": true
+        "preserveWhitespaces": true,
+        "enableIvy": true
     }
 }

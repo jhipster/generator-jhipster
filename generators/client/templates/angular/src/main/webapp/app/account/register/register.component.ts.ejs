@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, AfterViewInit, Renderer, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
@@ -54,13 +54,12 @@ export class RegisterComponent implements AfterViewInit {
         <%_ } _%>
         private loginModalService: LoginModalService,
         private registerService: RegisterService,
-        private renderer: Renderer,
         private fb: FormBuilder
     ) {}
 
     ngAfterViewInit(): void {
         if (this.login) {
-            this.renderer.invokeElementMethod(this.login.nativeElement, 'focus', []);
+            this.login.nativeElement.focus();
         }
     }
 
