@@ -200,7 +200,7 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
-@SpringBootTest(classes = {<%= mainClass %>.class, NoOpMailConfiguration.class})
+@SpringBootTest(classes = <%= mainClass %>.class)
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
@@ -254,7 +254,6 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
-import <%= packageName %>.config.NoOpMailConfiguration;
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
@@ -333,7 +332,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 @AutoConfigureWebTestClient
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
-@SpringBootTest(classes = {<%= mainClass %>.class, NoOpMailConfiguration.class})
+@SpringBootTest(classes = <%= mainClass %>.class)
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
