@@ -91,6 +91,9 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   <%_ if (!readOnly) { _%>
   public prepareRemove(instance: I<%= entityAngularName %>) : void {
     this.removeId = instance.id;
+    if (<any>this.$refs.removeEntity) {
+      (<any>this.$refs.removeEntity).show();
+    }
   }
 
   public remove<%= entityAngularName %>() : void {

@@ -156,7 +156,7 @@
                         const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
                     <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName === 'user')) { _%>
                     <div class="form-group">
-                        <label class="form-control-label" v-bind:value="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
+                        <label class="form-control-label" v-text="$t('<%= translationKey %>')" for="<%= entityFileName %>-<%= relationshipName %>"><%= relationshipNameHumanized %></label>
                         <%_ if (dto === 'no') { _%>
                         <select class="form-control" id="<%= entityFileName %>-<%= relationshipName %>" name="<%= relationshipName %>" v-model="<%= entityInstance %>.<%=relationshipFieldName %>"<% if (relationshipRequired) { %> required<% } %>>
                             <%_ if (!relationshipRequired) { _%>
