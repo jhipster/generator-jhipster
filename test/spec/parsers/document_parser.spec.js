@@ -727,6 +727,7 @@ describe('DocumentParser', () => {
         let skipClientOptions;
         let skipServerOptions;
         let readOnlyOptions;
+        let embeddedOptions;
 
         before(() => {
           const input = JDLReader.parseFromFiles(['./test/test_files/annotations_and_options.jdl']);
@@ -741,6 +742,7 @@ describe('DocumentParser', () => {
           skipClientOptions = jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT);
           skipServerOptions = jdlObject.getOptionsForName(UnaryOptions.SKIP_SERVER);
           readOnlyOptions = jdlObject.getOptionsForName(UnaryOptions.READ_ONLY);
+          embeddedOptions = jdlObject.getOptionsForName(UnaryOptions.EMBEDDED);
         });
 
         it('correctly sets the options', () => {
@@ -765,6 +767,9 @@ describe('DocumentParser', () => {
 
           expect(readOnlyOptions).to.have.length(1);
           expect(readOnlyOptions[0].entityNames).to.deep.equal(new Set(['A', 'C']));
+
+          expect(embeddedOptions).to.have.length(1);
+          expect(embeddedOptions[0].entityNames).to.deep.equal(new Set(['B', 'C']));
         });
       });
       context('when having a pattern validation with a quote in it', () => {

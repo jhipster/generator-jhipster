@@ -165,6 +165,11 @@ describe('EntityParser', () => {
           entityNames: [entityA.name],
           excludedNames: [entityB.name]
         });
+        const embeddedOption = new JDLUnaryOption({
+          name: UnaryOptions.EMBEDDED,
+          entityNames: [entityB.name],
+          excludedNames: [entityA.name]
+        });
         const paginationOption = new JDLBinaryOption({
           name: BinaryOptions.PAGINATION,
           value: BinaryOptionValues.pagination.PAGINATION,
@@ -181,6 +186,7 @@ describe('EntityParser', () => {
         jdlObject.addRelationship(oneToOneRelationship);
         jdlObject.addOption(skipClientOption);
         jdlObject.addOption(readOnlyOption);
+        jdlObject.addOption(embeddedOption);
         jdlObject.addOption(paginationOption);
         jdlObject.addOption(microserviceOption);
         expectedResult = {
@@ -209,6 +215,7 @@ describe('EntityParser', () => {
             microserviceName: 'myMs',
             pagination: 'pagination',
             readOnly: true,
+            embedded: false,
             relationships: [
               {
                 otherEntityField: 'id',
@@ -243,6 +250,7 @@ describe('EntityParser', () => {
             microserviceName: 'myMs',
             pagination: 'no',
             readOnly: false,
+            embedded: true,
             relationships: [
               {
                 otherEntityName: 'entityA',
@@ -281,6 +289,7 @@ describe('EntityParser', () => {
             microserviceName: 'myMs',
             pagination: 'pagination',
             readOnly: true,
+            embedded: false,
             relationships: [],
             service: 'no',
             skipClient: true
@@ -305,6 +314,7 @@ describe('EntityParser', () => {
             microserviceName: 'myMs',
             pagination: 'no',
             readOnly: false,
+            embedded: true,
             relationships: [],
             service: 'no'
           }
@@ -809,6 +819,7 @@ describe('EntityParser', () => {
             jpaMetamodelFiltering: false,
             pagination: 'no',
             readOnly: false,
+            embedded: false,
             relationships: [],
             service: 'no'
           }

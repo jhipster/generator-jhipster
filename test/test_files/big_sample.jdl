@@ -108,6 +108,8 @@ microservice all with mymicroservice
 
 readOnly JobHistory
 
+embedded Department
+
 search Employee with elasticsearch
 
 skipServer Country
