@@ -1,4 +1,26 @@
-# Latest: v6.0.7
+# Unreleased
+
+## Breaking changes
+  - API:
+    - Replaced the `MonolithJDLApplication`, and other concrete classes related to JDL applications by the JDLApplication
+      class.
+      - Check [this](https://github.com/jhipster/jhipster-core/commit/09647308ff12552243377b805bc130499a62d99b) commit for
+        more details.
+    - Kept the previous API instead of the new one as the new API didn't really solve the "bloated API problem"
+      (nothing changes if you didn't change your code).
+
+## What's new
+  - JDL:
+    - Allowed integers & decimal when using annotations, and also for constants (thanks to @murdos for the request!).
+    - Disallowed apps with non-SQL DB types and with the hibernate cache enabled (thanks to @Falydoor for the report!).
+    - Added the `embedded` option (thanks to @tchlyah for the feature!)
+
+## Bug fixes
+  - Set the `enableHibernateCache` to false when having non-SQL dbs (thanks to @Falydoor for the report!).
+
+---
+
+# Latest v6.0.7
 
 ## What's new:
   - JDL:
