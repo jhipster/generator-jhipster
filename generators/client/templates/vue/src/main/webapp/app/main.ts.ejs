@@ -8,6 +8,7 @@ import router from './router';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
+import JhiSortIndicatorComponent from "./shared/sort/jhi-sort-indicator.vue";
 <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
 import AuditsService from './admin/audits/audits.service';
 <%_ } %>
@@ -43,6 +44,7 @@ bootstrapVueConfig.initBootstrapVue(Vue);
 Vue.use(Vue2Filters)
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('jhi-item-count', JhiItemCountComponent);
+Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 
 <%_ if (enableTranslation) { _%>
 const i18n = config.initI18N(Vue);

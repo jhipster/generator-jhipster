@@ -26,10 +26,10 @@
             <table class="table table-sm table-striped">
                 <thead>
                 <tr>
-                    <th v-on:click="changeOrder('auditEventDate', 'timestamp')"><span v-text="$t('audits.table.header.date')">Date</span><font-awesome-icon v-if="propOrder === 'auditEventDate'" icon="sort"></font-awesome-icon></th>
-                    <th v-on:click="changeOrder('principal', 'principal')"><span v-text="$t('audits.table.header.principal')">User</span><font-awesome-icon v-if="propOrder === 'principal'" icon="sort"></font-awesome-icon></th>
-                    <th v-on:click="changeOrder('auditEventType', 'type')"><span v-text="$t('audits.table.header.status')">State</span><font-awesome-icon v-if="propOrder === 'auditEventType'" icon="sort"></font-awesome-icon></th>
-                    <th><span v-text="$t('audits.table.header.data')">Extra data</span></th>
+                  <th v-on:click="changeOrder('auditEventDate', 'timestamp')"><span v-text="$t('audits.table.header.date')">Date</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'auditEventDate'"></jhi-sort-indicator></th>
+                  <th v-on:click="changeOrder('principal', 'principal')"><span v-text="$t('audits.table.header.principal')">User</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'principal'"></jhi-sort-indicator></th>
+                  <th v-on:click="changeOrder('auditEventType', 'type')"><span v-text="$t('audits.table.header.status')">State</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'auditEventType'"></jhi-sort-indicator></th>
+                  <th><span v-text="$t('audits.table.header.data')">Extra data</span></th>
                 </tr>
                 </thead>
                 <tbody>
