@@ -38,6 +38,15 @@ if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
 } from '@/shared/model/<%= entityModelFileName %>.model';
 
 const mockedAxios: any = axios;
+const error = {
+  response: {
+    status: null,
+    data: {
+      type: null
+    }
+  }
+};
+
 jest.mock('axios', () => ({
   get: jest.fn(),
   post: jest.fn(),
@@ -106,6 +115,16 @@ describe('Service Tests', () => {
             expect(res).toMatchObject(elemDefault);
         });
       });
+
+      it('should not find an element', async () => {
+        mockedAxios.get.mockReturnValue(Promise.reject(error));
+        return service.find(<%- tsKeyId %>)
+          .then()
+          .catch(err => {
+            expect(err).toMatchObject(error);
+          });
+      });
+
 <%_ if (!readOnly) { _%>
       it('should create a <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
@@ -138,6 +157,16 @@ describe('Service Tests', () => {
           return service.create({}).then((res) => {
             expect(res).toMatchObject(expected);
         });
+      });
+
+      it('should not create a <%= entityAngularName %>', async () => {
+        mockedAxios.post.mockReturnValue(Promise.reject(error));
+
+        return service.create({})
+          .then()
+          .catch(err => {
+            expect(err).toMatchObject(error);
+          });
       });
 
       it('should update a <%= entityAngularName %>', async () => {
@@ -176,6 +205,17 @@ describe('Service Tests', () => {
             expect(res).toMatchObject(expected);
         });
       });
+
+      it('should not update a <%= entityAngularName %>', async () => {
+        mockedAxios.put.mockReturnValue(Promise.reject(error));
+
+        return service.update({})
+          .then()
+          .catch(err => {
+            expect(err).toMatchObject(error);
+          });
+      });
+
 <%_ } _%>
       it('should return a list of <%= entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
@@ -211,11 +251,32 @@ describe('Service Tests', () => {
           expect(res).toContainEqual(expected);
         });
       });
+
+      it('should not return a list of <%= entityAngularName %>', async () => {
+        mockedAxios.get.mockReturnValue(Promise.reject(error));
+
+        return service.retrieve()
+          .then()
+          .catch(err => {
+            expect(err).toMatchObject(error);
+          });
+      });
+
 <%_ if (!readOnly) { _%>
       it('should delete a <%= entityAngularName %>', async () => {
           mockedAxios.delete.mockReturnValue(Promise.resolve({ok: true}));
           return service.delete(<%- tsKeyId %>).then((res) => {
               expect(res.ok).toBeTruthy();
+          });
+      });
+
+      it('should not delete a <%= entityAngularName %>', async () => {
+        mockedAxios.delete.mockReturnValue(Promise.reject(error));
+
+        return service.delete(<%- tsKeyId %>)
+          .then()
+          .catch(err => {
+            expect(err).toMatchObject(error);
           });
       });
 <%_ } _%>
