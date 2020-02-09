@@ -234,8 +234,10 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/UserResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/ManagedUserVM.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/NoOpMailConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/AuditEventServiceIT.java`,
@@ -606,6 +608,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/IatTokenEnhancer.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/OAuth2TestConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`
     ],
@@ -734,6 +737,7 @@ const expectedFiles = {
 
     elasticsearch: [
         `${DOCKER_DIR}elasticsearch.yml`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/ElasticsearchTestConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`
     ],
