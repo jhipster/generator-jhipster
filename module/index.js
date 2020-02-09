@@ -60,10 +60,7 @@ const ObjectUtils = require('../lib/utils/object_utils');
 const FormatUtils = require('../lib/utils/format_utils');
 const StringUtils = require('../lib/utils/string_utils');
 
-const newAPI = require('./new_index');
-
 module.exports = {
-  ...newAPI,
   /* JHipster notions */
   JHipsterApplicationTypes: ApplicationTypes,
   JHipsterBinaryOptions: BinaryOptions,
