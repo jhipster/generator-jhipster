@@ -133,7 +133,7 @@ module.exports = class extends needleClientBase {
                 jhipsterUtils.replaceContent(
                     {
                         file: iconsPath,
-                        pattern: /\n {2}\/\/ jhipster-needle-add-icon-import/g,
+                        pattern: /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
                         content: `,\n  ${iconImport}\n  // jhipster-needle-add-icon-import`
                     },
                     this.generator
