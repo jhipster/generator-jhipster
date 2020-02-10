@@ -86,7 +86,7 @@ if (project.hasProperty("gae")) {
 
     dependencyManagement {
         imports {
-            mavenBom 'io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}'
+            mavenBom "io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}"
         }
     }
     appengineStage.dependsOn thinResolve
