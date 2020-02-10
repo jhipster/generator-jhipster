@@ -1835,10 +1835,10 @@ module.exports = class extends PrivateBase {
      * @returns {object} the command line and its result
      */
     buildApplication(buildTool, profile, buildWar, cb) {
-        let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
+        let buildCmd = 'mvnw -ntp verify -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew -x test';
+            buildCmd = 'gradlew';
             if (buildWar) {
                 buildCmd += ' bootWar';
             } else {
