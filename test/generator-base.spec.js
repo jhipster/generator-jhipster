@@ -102,15 +102,16 @@ describe('Generator Base', () => {
     describe('getJoinTableName', () => {
         describe('when called with a value', () => {
             it('returns a join table name', () => {
-                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'mysql')).to.equal(
+                expect(BaseGenerator.getJoinTableName('entityName', 'relationshipName', 'mysql', '__')).to.equal(
                     'entity_name__relationship_name'
                 );
             });
         });
         describe('when called with a long name', () => {
             it('returns a proper join table name', () => {
-                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.have.length(30);
-                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle')).to.equal(
+                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle', '__')).to.have.length(30);
+                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle', '_')).to.have.length(30);
+                expect(BaseGenerator.getJoinTableName('entityNameLonger', 'relationshipName', 'oracle', '__')).to.equal(
                     'entity_name_lon__relationship_'
                 );
             });

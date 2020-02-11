@@ -1353,9 +1353,10 @@ module.exports = class extends PrivateBase {
      * @param {string} entityName - name of the entity
      * @param {string} relationshipName - name of the related entity
      * @param {string} prodDatabaseType - database type
+     * @param {string} [separator] - relationship name prefix
      */
-    getJoinTableName(entityName, relationshipName, prodDatabaseType) {
-        const separator = '__';
+    getJoinTableName(entityName, relationshipName, prodDatabaseType, separator) {
+        separator = separator || this.config.get('joinTableSeparator') || '__';
         const joinTableName = `${this.getTableName(entityName)}${separator}${this.getTableName(relationshipName)}`;
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {

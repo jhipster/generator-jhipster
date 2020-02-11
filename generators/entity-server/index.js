@@ -34,6 +34,17 @@ module.exports = class extends BaseBlueprintGenerator {
         useBlueprints =
             !opts.fromBlueprint &&
             this.instantiateBlueprints('entity-server', { context: opts.context, debug: opts.context.isDebugEnabled });
+
+        // Setup jhipsterOldVersion for isJhipsterVersionLessThan
+        this.jhipsterOldVersion = this.config.get('jhipsterVersion');
+
+        // Create a upgrade path to jhipster 7. Should be removed for jhipster 7 release.
+        // Every upgrade path should be jhipster 6.x => 6.8.0 => 7.x
+        if (this.config.get('joinTableSeparator') === undefined && this.config.existed) {
+            this.config.set('joinTableSeparator', '_');
+        } else {
+            this.config.set('joinTableSeparator', '__');
+        }
     }
 
     // Public API method used by the getter and also by Blueprints
