@@ -883,7 +883,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
                             otherEntityData.clientRootFolder = otherEntityData.microserviceName;
                         }
-                        relationship.otherEntityEmbedded = otherEntityData.embedded;
+                        relationship.otherEntityIsEmbedded = otherEntityData.embedded;
                     }
                     const jhiTablePrefix = context.jhiTablePrefix;
 
@@ -1088,7 +1088,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     } else if (relationship.relationshipType === 'many-to-one') {
                         context.fieldsContainManyToOne = true;
                     }
-                    if (relationship.otherEntityEmbedded) {
+                    if (relationship.otherEntityIsEmbedded) {
                         context.fieldsContainEmbedded = true;
                     }
 
