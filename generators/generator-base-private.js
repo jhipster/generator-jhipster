@@ -252,7 +252,7 @@ module.exports = class extends Generator {
     updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
         const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
         try {
-            let content = 'private static String languages[] = {\n';
+            let content = 'private static final String languages[] = {\n';
             languages.forEach((language, i) => {
                 content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
             });
