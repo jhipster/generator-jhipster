@@ -57,7 +57,7 @@ import java.util.UUID;
 /**
  * Mapper for the entity {@link <%= asEntity(entityClass) %>} and its DTO {@link <%= asDto(entityClass) %>}.
  */
-@Mapper(componentModel = "spring", uses = {<%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %>})
+@Mapper(componentModel = "spring", uses = { <%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %> })
 public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityClass) %>, <%= asEntity(entityClass) %>> {
 
 <%_

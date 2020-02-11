@@ -155,19 +155,20 @@ public class <%= entityClass %>Criteria implements Serializable, Criteria {
         return Objects.hash(
 <%_ filterVariables.forEach((filterVariable, index) => { _%>
     <%_ if (filterVariables.length === (index + 1)) { _%>
-        <%= filterVariable.name %>
+            <%= filterVariable.name %>
     <%_ } else { _%>
-        <%= filterVariable.name %>,
+            <%= filterVariable.name %>,
     <%_ } _%>
 <%_ }); _%>
         );
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "<%= entityClass %>Criteria{" +
 <%_ filterVariables.forEach((field) => { _%>
-                (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
+            (<%= field.name %> != null ? "<%= field.name %>=" + <%= field.name %> + ", " : "") +
 <%_ }); _%>
             "}";
     }
