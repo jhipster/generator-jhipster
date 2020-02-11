@@ -41,7 +41,7 @@ for (idx in relationships) {
     isUsingMapsId = false;
 }
 for (idx in fields) {
-    if ((prodDatabaseType === 'postgresql' || devDatabaseType === 'postgresql') && fields[idx].fieldTypeBlobContent === 'text') {
+    if (prodDatabaseType === 'postgresql' && fields[idx].fieldTypeBlobContent === 'text') {
         hasTextBlob = true;
         break;
     }
