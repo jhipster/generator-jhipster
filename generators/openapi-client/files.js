@@ -46,12 +46,15 @@ function writeFiles() {
             }
 
             Object.keys(this.clientsToGenerate).forEach(cliName => {
-                removeClientFiles(cliName);
+                const baseCliPackage = `${this.packageName}.client.`;
+                const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
+                const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
+                this.removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...cliPackage.split('.')));
+                this.removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...snakeCaseCliPackage.split('.')));
+
                 const inputSpec = this.clientsToGenerate[cliName].spec;
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
 
-                const baseCliPackage = `${this.packageName}.client.`;
-                const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
                 let openApiCmd;
                 if (generatorName === 'spring') {
                     this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
@@ -172,19 +175,4 @@ function writeFiles() {
             this.rewriteFile(mainClassFile, '@SpringBootApplication', componentScan);
         }
     };
-}
-
-function removeClientFiles(cliName) {
-    const baseCliPackage = `${this.packageName}.client.`;
-    const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
-    const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
-    removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...cliPackage.split('.')));
-    removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...snakeCaseCliPackage.split('.')));
-}
-
-function removeFolder(folder) {
-    if (shelljs.test('-d', folder)) {
-        this.log(`Removing the folder - ${folder}`);
-        shelljs.rm('-rf', folder);
-    }
 }
