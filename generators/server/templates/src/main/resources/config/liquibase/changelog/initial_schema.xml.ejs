@@ -165,7 +165,7 @@
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_authority">
             <column name="name" type="string"/>
-        </loadData>
+        </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
 
         <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/user_authority.csv"
@@ -175,7 +175,7 @@
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_user_authority">
             <column name="user_id" type="numeric"/>
-        </loadData>
+        </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
     <%_ } _%>
 <%_ } _%>
         <createTable tableName="<%= jhiTablePrefix %>_persistent_audit_event">
