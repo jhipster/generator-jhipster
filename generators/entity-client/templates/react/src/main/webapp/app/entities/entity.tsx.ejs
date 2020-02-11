@@ -98,6 +98,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
+  <%_ if (pagination === 'no' || pagination === 'infinite-scroll') { _%>
   useEffect(() => {
     <%_ if (pagination !== 'no') { _%>
       <%_ if (pagination === 'infinite-scroll') { _%>
@@ -107,6 +108,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     props.getEntities();
     <%_ } _%>
   }, [<%_ if (searchEngine === 'elasticsearch' && pagination === 'no') { _%>search<%_ } _%>]);
+  <%_ } _%>
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   useEffect(() => {
