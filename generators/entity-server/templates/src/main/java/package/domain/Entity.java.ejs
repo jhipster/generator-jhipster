@@ -297,11 +297,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             if (databaseType === 'mongodb' && !otherEntityIsEmbedded) { _%>
     @DBRef
         <%_ } _%>
-    @Field("<%= relationshipFieldNamePlural %>")
+    @Field("<%= relationshipFieldName %>")
         <%_ if (databaseType === 'couchbase'&& !otherEntityIsEmbedded) { _%>
     private Set<String> <%= relationshipFieldName %>Ids = new HashSet<>();
 
-    @N1qlJoin(on = "lks.<%= relationshipFieldNamePlural %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
+    @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
         <%_ } _%>
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();

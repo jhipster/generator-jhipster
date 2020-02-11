@@ -1142,7 +1142,7 @@ module.exports = class extends Generator {
      * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, embedded, customDateType = 'Moment') {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
         const variablesWithTypes = [];
         const tsKeyType = this.getTypescriptKeyType(pkType);
         if (!embedded) {

@@ -18,7 +18,7 @@
 -%>
 <%
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, embedded);
+const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, 'Moment', embedded);
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields, 'react');
 const enumImports = generateEntityClientEnumImports(fields);
