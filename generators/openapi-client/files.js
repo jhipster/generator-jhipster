@@ -18,7 +18,6 @@
  */
 
 const path = require('path');
-const shelljs = require('shelljs');
 const _ = require('lodash');
 const chalk = require('chalk');
 const constants = require('../generator-constants');
