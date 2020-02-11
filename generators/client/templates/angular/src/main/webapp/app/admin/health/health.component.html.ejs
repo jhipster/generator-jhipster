@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,10 +19,12 @@
 <div>
     <h2>
         <span id="health-page-heading" jhiTranslate="health.title">Health Checks</span>
+
         <button class="btn btn-primary float-right" (click)="refresh()">
-            <fa-icon [icon]="'sync'"></fa-icon> <span jhiTranslate="health.refresh.button">Refresh</span>
+            <fa-icon icon="sync"></fa-icon> <span jhiTranslate="health.refresh.button">Refresh</span>
         </button>
     </h2>
+
     <div class="table-responsive">
         <table id="healthCheck" class="table table-striped" aria-describedby="health-page-heading">
             <thead>
@@ -33,16 +35,22 @@
                 </tr>
             </thead>
             <tbody *ngIf="health">
-                <tr *ngFor="let componentHealth of health.details | keys">
-                    <td><% if (enableTranslation) { %>{{'health.indicator.' + componentHealth.key | translate}}<% } else { %><span class="text-capitalize">{{ componentHealth.key }}</span><% } %></td>
+                <tr *ngFor="let componentHealth of health.components | keys">
+                    <td>
+                        <%_ if (enableTranslation) { _%>
+                        {{ 'health.indicator.' + componentHealth.key | translate }}
+                        <%_ } else { _%>
+                        <span class="text-capitalize">{{ componentHealth.key }}</span>
+                        <%_ } _%>
+                    </td>
                     <td class="text-center">
-                        <span class="badge" [ngClass]="getBadgeClass(componentHealth.value.status)" jhiTranslate="{{'health.status.' + componentHealth.value.status}}">
+                        <span class="badge" [ngClass]="getBadgeClass(componentHealth.value.status)" jhiTranslate="{{ 'health.status.' + componentHealth.value.status }}">
                             {{ componentHealth.value.status }}
                         </span>
                     </td>
                     <td class="text-center">
                         <a class="hand" (click)="showHealth(componentHealth)" *ngIf="componentHealth.value.details">
-                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <fa-icon icon="eye"></fa-icon>
                         </a>
                     </td>
                 </tr>

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -88,6 +88,7 @@ module.exports = class extends BaseGenerator {
                 this.databaseType = configuration.get('databaseType');
                 this.prodDatabaseType = configuration.get('prodDatabaseType');
                 this.skipClient = configuration.get('skipClient');
+                this.skipServer = configuration.get('skipServer');
                 this.clientPackageManager = configuration.get('clientPackageManager');
                 this.buildTool = configuration.get('buildTool');
                 this.herokuAppName = configuration.get('herokuAppName');

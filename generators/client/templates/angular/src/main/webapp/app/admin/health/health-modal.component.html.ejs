@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,15 +17,23 @@
  limitations under the License.
 -%>
 <div class="modal-header">
-    <h4 class="modal-title" id="showHealthLabel" *ngIf="health"><% if (enableTranslation) { %>
-        {{ 'health.indicator.' + health.key | translate }}<% } else { %><span class="text-capitalize">{{ health.key }}</span><% } %>
+    <h4 class="modal-title" id="showHealthLabel" *ngIf="health">
+        <%_ if (enableTranslation) { _%>
+        {{ 'health.indicator.' + health.key | translate }}
+        <%_ } else { _%>
+        <span class="text-capitalize">{{ health.key }}</span>
+        <%_ } _%>
     </h4>
-    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="dismiss()"><span aria-hidden="true">&times;</span>
+
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" (click)="dismiss()">
+        <span aria-hidden="true">&times;</span>
     </button>
 </div>
+
 <div class="modal-body pad">
     <div *ngIf="health">
         <h5 jhiTranslate="health.details.properties">Properties</h5>
+
         <div class="table-responsive">
             <table class="table table-striped" aria-describedby="showHealthLabel">
                 <thead>
@@ -44,6 +52,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal-footer">
     <button data-dismiss="modal" class="btn btn-secondary float-left" type="button" (click)="dismiss()">Done</button>
 </div>

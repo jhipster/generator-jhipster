@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,7 +18,6 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const fs = require('fs');
 const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const cleanup = require('../cleanup');
@@ -26,7 +25,6 @@ const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const jhipsterUtils = require('../utils');
-const generatorTransforms = require('../generator-transforms');
 
 let useBlueprints;
 
@@ -34,7 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = {};
+        this.configOptions = opts.configOptions || {};
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -235,7 +233,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.useNpm = this.configOptions.useNpm = !this.options.yarn;
         this.useYarn = !this.useNpm;
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('app');
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
 
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;
@@ -402,7 +400,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeServer() {
-                if (this.skipServer) return;
+                if (this.skipServer || this.configOptions.skipComposeServer) return;
+                this.configOptions.skipComposeServer = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -415,7 +414,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeClient() {
-                if (this.skipClient) return;
+                if (this.skipClient || this.configOptions.skipComposeClient) return;
+                this.configOptions.skipComposeClient = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -427,6 +427,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeCommon() {
+                if (this.configOptions.skipComposeCommon) return;
+                this.configOptions.skipComposeCommon = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -462,7 +464,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeLanguages() {
-                if (this.skipI18n) return;
+                if (this.skipI18n || this.configOptions.skipComposeLanguages) return;
+                this.configOptions.skipComposeLanguages = true;
                 this.composeLanguagesSub(this, this.configOptions, this.generatorType);
             },
 
@@ -527,7 +530,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             regenerateEntities() {
-                if (this.withEntities) {
+                if (this.withEntities && !this.configOptions.skipComposeEntity) {
+                    this.configOptions.skipComposeEntity = true;
                     const options = this.options;
                     const configOptions = this.configOptions;
                     this.getExistingEntities().forEach(entity => {
@@ -574,12 +578,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
     _end() {
         return {
-            prettierYeomanConfig() {
-                fs.writeFileSync(
-                    '.yo-rc.json',
-                    generatorTransforms.prettierFormat(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }), { parser: 'json' })
-                );
-            },
             gitCommit() {
                 if (!this.options['skip-git']) {
                     this.debug('Committing files to git');

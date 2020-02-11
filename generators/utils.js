@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,10 +24,25 @@ const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const fs = require('fs');
 const crypto = require('crypto');
+const randexp = require('randexp');
+const faker = require('faker');
+const os = require('os');
 
 const constants = require('./generator-constants');
 
 const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+
+class RandexpWithFaker extends randexp {
+    constructor(regexp, m) {
+        super(regexp, m);
+        this.max = 5;
+    }
+
+    // In order to have consistent results with RandExp, the RNG is seeded.
+    randInt(min, max) {
+        return faker.random.number({ min, max });
+    }
+}
 
 module.exports = {
     rewrite,
@@ -47,9 +62,12 @@ module.exports = {
     getBase64Secret,
     getRandomHex,
     checkStringInFile,
+    checkRegexInFile,
     loadBlueprintsFromConfiguration,
     parseBluePrints,
-    normalizeBlueprintName
+    normalizeBlueprintName,
+    stringHashCode,
+    RandexpWithFaker
 };
 
 /**
@@ -95,6 +113,19 @@ function escapeRegExp(str) {
 }
 
 /**
+ * Normalize line endings.
+ * If in Windows is Git autocrlf used then need to replace \r\n with \n
+ * to achieve consistent comparison result when comparing strings read from file.
+ *
+ * @param {string} str string
+ * @returns {string} string where CRLF is replaced with LF in Windows
+ */
+function normalizeLineEndings(str) {
+    const isWin32 = os.platform() === 'win32';
+    return isWin32 ? str.replace(/\r\n/g, '\n') : str;
+}
+
+/**
  * Rewrite using the passed argument object.
  *
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
@@ -102,9 +133,9 @@ function escapeRegExp(str) {
  */
 function rewrite(args) {
     // check if splicable is already in the body text
-    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(line)}`).join('\n'));
+    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n'));
 
-    if (re.test(args.haystack)) {
+    if (re.test(normalizeLineEndings(args.haystack))) {
         return args.haystack;
     }
 
@@ -270,7 +301,7 @@ function replaceTranslationKeysWithText(body, generator, regex) {
  * @returns string with placeholders replaced
  */
 function replacePlaceholders(body, generator) {
-    const re = /placeholder=['|"]([{]{2}['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)[}]{2})['|"]/g;
+    const re = /placeholder=['|"]([{]{2}\s*['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)\s*[}]{2})['|"]/g;
     let match;
 
     // eslint-disable-next-line no-cond-assign
@@ -523,6 +554,7 @@ function getDBTypeFromDBValue(db) {
 function getRandomHex(len = 50) {
     return crypto.randomBytes(len).toString('hex');
 }
+
 /**
  * Generates a base64 secret from given string or random hex
  * @param {string} value the value used to get base64 secret
@@ -532,9 +564,28 @@ function getBase64Secret(value, len = 50) {
     return Buffer.from(value || getRandomHex(len)).toString('base64');
 }
 
+/**
+ * Checks if string is already in file
+ * @param {string} path file path
+ * @param {string} search search string
+ * @param {object} generator reference to generator
+ * @returns {boolean} true if string is in file, false otherwise
+ */
 function checkStringInFile(path, search, generator) {
     const fileContent = generator.fs.read(path);
     return fileContent.includes(search);
+}
+
+/**
+ * Checks if regex is found in file
+ * @param {string} path file path
+ * @param {regex} regex regular expression
+ * @param {object} generator reference to generator
+ * @returns {boolean} true if regex is matched in file, false otherwise
+ */
+function checkRegexInFile(path, regex, generator) {
+    const fileContent = generator.fs.read(path);
+    return fileContent.match(regex);
 }
 
 /**
@@ -544,7 +595,7 @@ function checkStringInFile(path, search, generator) {
  */
 function loadBlueprintsFromConfiguration(config) {
     // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
-    const configuration = config && (config.getAll && typeof config.getAll === 'function') ? config.getAll() || {} : config;
+    const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
     // load blueprints from config file
     const blueprints = configuration.blueprints || [];
 
@@ -605,4 +656,24 @@ function normalizeBlueprintName(blueprint) {
         return `generator-jhipster-${blueprint}`;
     }
     return blueprint;
+}
+
+/**
+ * Calculate a hash code for a given string.
+ * @param {string} str - any string
+ * @returns {number} returns the calculated hash code.
+ */
+function stringHashCode(str) {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        const character = str.charCodeAt(i);
+        hash = (hash << 5) - hash + character; // eslint-disable-line no-bitwise
+        hash |= 0; // eslint-disable-line no-bitwise
+    }
+
+    if (hash < 0) {
+        hash *= -1;
+    }
+    return hash;
 }

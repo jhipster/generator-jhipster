@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { element, by, ElementFinder } from 'protractor';
-
-import { waitUntilCount, waitUntilDisplayed } from '<% if (clientRootFolder && !skipUiGrouping) { %>../<% } %>../../util/utils';
+import { element, by, ElementFinder, ElementArrayFinder } from 'protractor';
 
 export default class <%= entityClass %>ComponentsPage {
     <%_ if (!readOnly) { _%>
@@ -26,38 +24,29 @@ export default class <%= entityClass %>ComponentsPage {
     deleteButtons = element.all(by.css('div table .btn-danger'));
     <%_ } _%>
     title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
+    noRecords: ElementFinder = element(by.css('#app-view-container .table-responsive div.alert.alert-warning'));
+    table: ElementFinder = element(by.css('#app-view-container div.table-responsive > table'));
 
-    <%_ if (!readOnly) { _%>
-    async clickOnCreateButton() {
-        await this.createButton.click();
-    }
+    records: ElementArrayFinder = this.table.all(by.css('tbody tr'));
 
-    async clickOnLastDeleteButton() {
-        await this.deleteButtons.last().click();
-    }
-
-    async countDeleteButtons() {
-        return this.deleteButtons.count();
-    }
-    <%_ } _%>
-
-    getTitle() {
-        return this.title;
+    getDetailsButton(record: ElementFinder) {
+      return record.element(by.css('a.btn.btn-info.btn-sm'));
     }
 
     <%_ if (!readOnly) { _%>
-    async waitUntilLoaded() {
-        await waitUntilDisplayed(this.deleteButtons.first());
+    getEditButton(record: ElementFinder) {
+      return record.element(by.css('a.btn.btn-primary.btn-sm'));
     }
-
-    async waitUntilDeleteButtonsLength(length) {
-        await waitUntilCount(this.deleteButtons, length);
+  
+    getDeleteButton(record: ElementFinder) {
+      return record.element(by.css('a.btn.btn-danger.btn-sm'));
     }
     <%_ } _%>
 }
 
 <%_ if (!readOnly) { _%>
 export class <%= entityClass %>DeleteDialog {
+    deleteModal = element(by.className('modal'));
     private dialogTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
     private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
 

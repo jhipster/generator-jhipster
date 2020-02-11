@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,18 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%= packageName %>.repository;
 
-import <%=packageName%>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>;
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
-import <%=packageName%>.config.Constants;
+import <%= packageName %>.config.Constants;
 <%_ if (authenticationType === 'oauth2') { _%>
-import <%=packageName%>.config.TestSecurityConfiguration;
+import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
-import <%=packageName%>.config.audit.AuditEventConverter;
-import <%=packageName%>.domain.PersistentAuditEvent;
+import <%= packageName %>.config.audit.AuditEventConverter;
+import <%= packageName %>.domain.PersistentAuditEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
@@ -58,7 +58,7 @@ import java.util.Map;
 import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
-import static <%=packageName%>.repository.CustomAuditEventRepository.EVENT_DATA_COLUMN_MAX_LENGTH;
+import static <%= packageName %>.repository.CustomAuditEventRepository.EVENT_DATA_COLUMN_MAX_LENGTH;
 
 /**
  * Integration tests for {@link CustomAuditEventRepository}.
@@ -84,12 +84,6 @@ public class CustomAuditEventRepositoryIT {
 
     private CustomAuditEventRepository customAuditEventRepository;
 
-    private PersistentAuditEvent testUserEvent;
-
-    private PersistentAuditEvent testOtherUserEvent;
-
-    private PersistentAuditEvent testOldUserEvent;
-
     @BeforeEach
     public void setup() {
         <%_ if (databaseType === 'couchbase') { _%>
@@ -99,7 +93,7 @@ public class CustomAuditEventRepositoryIT {
         persistenceAuditEventRepository.deleteAll();
         Instant oneHourAgo = Instant.now().minusSeconds(3600);
 
-        testUserEvent = new PersistentAuditEvent();
+        PersistentAuditEvent testUserEvent = new PersistentAuditEvent();
         testUserEvent.setPrincipal("test-user");
         testUserEvent.setAuditEventType("test-type");
         testUserEvent.setAuditEventDate(oneHourAgo);
@@ -107,12 +101,12 @@ public class CustomAuditEventRepositoryIT {
         data.put("test-key", "test-value");
         testUserEvent.setData(data);
 
-        testOldUserEvent = new PersistentAuditEvent();
+        PersistentAuditEvent testOldUserEvent = new PersistentAuditEvent();
         testOldUserEvent.setPrincipal("test-user");
         testOldUserEvent.setAuditEventType("test-type");
         testOldUserEvent.setAuditEventDate(oneHourAgo.minusSeconds(10000));
 
-        testOtherUserEvent = new PersistentAuditEvent();
+        PersistentAuditEvent testOtherUserEvent = new PersistentAuditEvent();
         testOtherUserEvent.setPrincipal("other-test-user");
         testOtherUserEvent.setAuditEventType("test-type");
         testOtherUserEvent.setAuditEventDate(oneHourAgo);

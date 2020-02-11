@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,12 +27,12 @@ import { UserManagementComponent } from './user-management.component';
 import { UserManagementDetailComponent } from './user-management-detail.component';
 import { UserManagementUpdateComponent } from './user-management-update.component';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserManagementResolve implements Resolve<IUser> {
     constructor(private service: UserService) {}
 
     resolve(route: ActivatedRouteSnapshot): Observable<IUser> {
-        const id = route.params['login'] ? route.params['login'] : null;
+        const id = route.params['login'];
         if (id) {
             return this.service.find(id);
         }
@@ -45,7 +45,7 @@ export const userManagementRoute: Routes = [
         path: '',
         component: UserManagementComponent,
         resolve: {
-            'pagingParams': JhiResolvePagingParams
+            pagingParams: JhiResolvePagingParams
         },
         data: {
             defaultSort: 'id,asc'

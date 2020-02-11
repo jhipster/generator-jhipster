@@ -1,3 +1,4 @@
+const path = require('path');
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
@@ -27,16 +28,13 @@ export * from './entityFolderName/entityFileName.state';`;
         it('should produce correct indented output without margin', () => {
             const routerName = 'routerName';
             const enableTranslation = true;
-            const glyphiconName = 'glyphiconName';
             const content = `|<li ui-sref-active="active">
                  |    <a ui-sref="${routerName}" ng-click="vm.collapseNavbar()">
-                 |        <span class="glyphicon glyphicon-${glyphiconName}"></span>&nbsp;
                  |        <span ${enableTranslation ? `data-translate="global.menu.${routerName}"` : ''}>${routerName}</span>
                  |    </a>
                  |</li>`;
             const out = `<li ui-sref-active="active">
     <a ui-sref="routerName" ng-click="vm.collapseNavbar()">
-        <span class="glyphicon glyphicon-glyphiconName"></span>&nbsp;
         <span data-translate="global.menu.routerName">routerName</span>
     </a>
 </li>`;
@@ -267,22 +265,6 @@ export * from './entityFolderName/entityFileName.state';`;
         });
     });
 
-    describe('seededRandomNumberGenerator', () => {
-        describe('generates the same random number when provided the same seed', () => {
-            it('generates the same random values', () => {
-                const seededRandomNumberGenerator1 = BaseGenerator.seededRandomNumberGenerator(1);
-                const seededRandomNumberGenerator2 = BaseGenerator.seededRandomNumberGenerator(1);
-                expect(seededRandomNumberGenerator1(1, 10)).to.equal(seededRandomNumberGenerator2(1, 10));
-            });
-        });
-        describe('generates a different random number when provided a different seed', () => {
-            it('generates different random values', () => {
-                const seededRandomNumberGenerator1 = BaseGenerator.seededRandomNumberGenerator(1);
-                const seededRandomNumberGenerator2 = BaseGenerator.seededRandomNumberGenerator(2);
-                expect(seededRandomNumberGenerator1(1, 10)).to.not.equal(seededRandomNumberGenerator2(1, 10));
-            });
-        });
-    });
     describe('getEntityParentPathAddition', () => {
         describe('when passing /', () => {
             it('returns an empty string', () => {
@@ -311,7 +293,7 @@ export * from './entityFolderName/entityFileName.state';`;
         });
         describe('when passing foo/bar', () => {
             it('returns ../../', () => {
-                expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal('../../');
+                expect(BaseGenerator.getEntityParentPathAddition('foo/bar')).to.equal(`..${path.sep}../`);
             });
         });
         describe('when passing ../foo', () => {
@@ -326,7 +308,7 @@ export * from './entityFolderName/entityFileName.state';`;
         });
         describe('when passing ../foo/bar/foo2', () => {
             it('returns ../../', () => {
-                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal('../../');
+                expect(BaseGenerator.getEntityParentPathAddition('../foo/bar/foo2')).to.equal(`..${path.sep}../`);
             });
         });
         describe('when passing ../../foo', () => {

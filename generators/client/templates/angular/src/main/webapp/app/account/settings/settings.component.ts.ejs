@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,8 +47,10 @@ export class SettingsComponent implements OnInit {
 
     constructor(
         private accountService: AccountService,
-        private fb: FormBuilder<% if (enableTranslation) { %>,
-        private languageService: JhiLanguageService<% } %>
+        private fb: FormBuilder,
+        <%_ if (enableTranslation) { _%>
+        private languageService: JhiLanguageService
+        <%_ } _%>
     ) {}
 
     ngOnInit(): void {
@@ -60,7 +62,7 @@ export class SettingsComponent implements OnInit {
                     email: account.email<% if (enableTranslation) { %>,
                     langKey: account.langKey<% } %>
                 });
-        
+
                 this.account = account;
             }
         });
@@ -80,8 +82,8 @@ export class SettingsComponent implements OnInit {
             this.success = true;
 
             this.accountService.authenticate(this.account);
-            <%_ if (enableTranslation) { _%>
 
+            <%_ if (enableTranslation) { _%>
             if (this.account.langKey !== this.languageService.getCurrentLanguage()) {
                 this.languageService.changeLanguage(this.account.langKey);
             }

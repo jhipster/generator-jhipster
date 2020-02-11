@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -25,8 +25,11 @@ import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-transla
 <%_ } _%>
 
 import { MainComponent } from 'app/layouts/main/main.component';
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%= angularXAppName %>TestModule } from '../../../test.module';
 import { MockRouter } from '../../../helpers/mock-route.service';
+<%_ if (enableI18nRTL) { _%>
+import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
+<%_ } _%>
 
 describe('Component Tests', () => {
   describe('MainComponent', () => {
@@ -38,17 +41,22 @@ describe('Component Tests', () => {
     <%_ if (enableTranslation) { _%>
     let translateService: TranslateService;
     <%_ } _%>
-  
+
     beforeEach(async(() => {
       TestBed.configureTestingModule({
         imports: [
-          <%=angularXAppName%>TestModule,
+          <%= angularXAppName %>TestModule,
           <%_ if (enableTranslation) { _%>
           TranslateModule.forRoot(),
           <%_ } _%>
         ],
         declarations: [MainComponent],
-        providers: [Title]
+        providers: [
+          Title,
+          <%_ if (enableI18nRTL) { _%>
+          FindLanguageFromKeyPipe,
+          <%_ } _%>
+        ]
       })
         .overrideTemplate(MainComponent, '')
         .compileComponents();
@@ -72,7 +80,7 @@ describe('Component Tests', () => {
       const childRoutePageTitle = 'childTitle';
       const navigationEnd = new NavigationEnd(1, '', '');
       <%_ if (enableTranslation) { _%>
-      const langChangeEvent: LangChangeEvent = { lang: 'en', translations: null };
+      const langChangeEvent: LangChangeEvent = { lang: '<%= nativeLanguage %>', translations: null };
       <%_ } _%>
 
       beforeEach(() => {
@@ -82,6 +90,7 @@ describe('Component Tests', () => {
         spyOn(translateService, 'get').and.callFake((key: string) => {
           return of(key + ' translated');
         });
+        translateService.currentLang = '<%= nativeLanguage %>';
         <%_ } _%>
         spyOn(titleService, 'setTitle');
         comp.ngOnInit();
@@ -158,8 +167,8 @@ describe('Component Tests', () => {
           expect(titleService.setTitle).toHaveBeenCalledWith(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
         });
       });
-      <%_ if (enableTranslation) { _%>
 
+      <%_ if (enableTranslation) { _%>
       describe('language change', () => {
         it('should set page title to default title if pageTitle is missing on routes', () => {
           // WHEN

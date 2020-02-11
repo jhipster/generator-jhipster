@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -139,9 +139,15 @@ module.exports = class extends BaseGenerator {
                 awsClient.initAwsStuff();
             },
             setOutputs() {
-                dockerCli.setOutputs(data => this.log(chalk.white(data.toString().trim())), data => this.log.error(data.toString().trim()));
+                dockerCli.setOutputs(
+                    data => this.log(chalk.white(data.toString().trim())),
+                    data => this.log.error(data.toString().trim())
+                );
 
-                awsClient.CF().setOutputs(message => this.log(message), message => this.log.error(message));
+                awsClient.CF().setOutputs(
+                    message => this.log(message),
+                    message => this.log.error(message)
+                );
             },
             fetchRegion() {
                 if (this.abort) return;

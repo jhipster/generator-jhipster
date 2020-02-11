@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,11 +19,11 @@
 package <%= packageName %>.service;
 
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.domain.PersistentAuditEvent;
 import <%= packageName %>.repository.PersistenceAuditEventRepository;
-import <%=packageName%>.<%= mainClass %>;
+import <%= packageName %>.<%= mainClass %>;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,7 +89,7 @@ public class AuditEventServiceIT {
         auditEventWithinRetention = new PersistentAuditEvent();
         auditEventWithinRetention.setAuditEventDate(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod() - 1, ChronoUnit.DAYS));
         auditEventWithinRetention.setPrincipal("test-user-retention");
-        auditEventWithinRetention.setAuditEventType("test-type");;
+        auditEventWithinRetention.setAuditEventType("test-type");
 
         auditEventNew = new PersistentAuditEvent();
         auditEventNew.setAuditEventDate(Instant.now());
@@ -102,20 +102,22 @@ public class AuditEventServiceIT {
     @Transactional
     <%_ } _%>
     public void verifyOldAuditEventsAreDeleted() {
-        persistenceAuditEventRepository.deleteAll();
-        persistenceAuditEventRepository.save(auditEventOld);
-        persistenceAuditEventRepository.save(auditEventWithinRetention);
-        persistenceAuditEventRepository.save(auditEventNew);
-        <% if (databaseType === 'sql') { %>
+        persistenceAuditEventRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
+        persistenceAuditEventRepository.save(auditEventOld)<% if (reactive) { %>.block()<% } %>;
+        persistenceAuditEventRepository.save(auditEventWithinRetention)<% if (reactive) { %>.block()<% } %>;
+        persistenceAuditEventRepository.save(auditEventNew)<% if (reactive) { %>.block()<% } %>;
+
+        <%_ if (databaseType === 'sql') { _%>
         persistenceAuditEventRepository.flush();
-        <% } %>
+        <%_ } _%>
         auditEventService.removeOldAuditEvents();
-        <% if (databaseType === 'sql') { %>
+        <%_ if (databaseType === 'sql') { _%>
         persistenceAuditEventRepository.flush();
-        <% } %>
-        assertThat(persistenceAuditEventRepository.findAll().size()).isEqualTo(2);
-        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")).isEmpty();
-        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-retention")).isNotEmpty();
-        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-new")).isNotEmpty();
+        <%_ } _%>
+
+        assertThat(persistenceAuditEventRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>.size()).isEqualTo(2);
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-old")<% if (reactive) { %>.collectList().block()<% } %>).isEmpty();
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-retention")<% if (reactive) { %>.collectList().block()<% } %>).isNotEmpty();
+        assertThat(persistenceAuditEventRepository.findByPrincipal("test-user-new")<% if (reactive) { %>.collectList().block()<% } %>).isNotEmpty();
     }
 }

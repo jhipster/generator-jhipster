@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,8 +47,8 @@ for (idx in relationships) {
     if ( relationships[idx].useJPADerivedIdentifier === true ) {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         if (otherEntityNameCapitalized === 'User') {
-            // there are only 4 user records by default
-            numberOfRows = 4;
+            // Only few user records are generated
+            numberOfRows = (authenticationType === 'oauth2') ? 2 : 4;
         }
         break;
     }
@@ -146,7 +146,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         }
         if (columnType === 'blob' || columnType === 'longblob') {
             data = '../fake-data/blob/hipster.png'
-        } else if (columnType === '${clobType}'){
+        } else if (columnType === '${clobType}') {
             data = '../fake-data/blob/hipster.txt'
         }
 
@@ -154,9 +154,6 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         if (fields[idx].fieldValidate === true) {
             if (fields[idx].fieldValidateRules.includes('pattern')) {
                 const randExp = new this.randexp(fields[idx].fieldValidateRulesPattern)
-                randExp.max = 5;
-                // In order to have consistent results with RandExp, the RNG is seeded.
-                randExp.randInt = seededRandomNumberGenerator(lineNb);
                 data = `"${randExp.gen().replace(/"/g, '')}"`;
             }
 
@@ -226,4 +223,4 @@ let result = table
         .map(line => line.join(';'))
         .join('\n');
  _%>
-<%-result%>
+<%- result %>

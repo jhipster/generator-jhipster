@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -54,7 +54,9 @@ module.exports = class extends BaseDockerGenerator {
             askForIstioSupport: prompts.askForIstioSupport,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
             askForIngressType: prompts.askForIngressType,
-            askForIngressDomain: prompts.askForIngressDomain
+            askForIngressDomain: prompts.askForIngressDomain,
+            askForPersistentStorage: prompts.askForPersistentStorage,
+            askForStorageClassName: prompts.askForStorageClassName
         };
     }
 

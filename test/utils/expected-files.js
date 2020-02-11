@@ -222,22 +222,22 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/AuditEventService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/MailService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/UserService.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/util/RandomUtil.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/UserDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/PasswordChangeDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapper.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/EmailAlreadyUsedException.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/EmailNotFoundException.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/InvalidPasswordException.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/LoginAlreadyUsedException.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AuditResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/UserResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/ManagedUserVM.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/NoOpMailConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/AuditEventServiceIT.java`,
@@ -456,7 +456,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/pagination.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.html`,
@@ -543,7 +542,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
@@ -554,7 +552,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
@@ -611,6 +608,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/IatTokenEnhancer.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/OAuth2TestConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`
     ],
@@ -739,6 +737,7 @@ const expectedFiles = {
 
     elasticsearch: [
         `${DOCKER_DIR}elasticsearch.yml`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/ElasticsearchTestConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`
     ],

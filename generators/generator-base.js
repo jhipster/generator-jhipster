@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -49,16 +49,30 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
+     * Add a new icon to icon imports.
+     *
+     * @param {string} iconName - The name of the Font Awesome icon.
+     */
+    addIcon(iconName, clientFramework) {
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addIcon(iconName);
+        } else if (clientFramework === 'react') {
+            // React
+            // TODO:
+        }
+    }
+
+    /**
      * Add a new menu element, at the root of the menu.
      *
      * @param {string} routerName - The name of the Angular router that is added to the menu.
-     * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
+     * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
+    addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
+            this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -79,13 +93,13 @@ module.exports = class extends PrivateBase {
      * Add a new menu element to the admin menu.
      *
      * @param {string} routerName - The name of the Angular router that is added to the admin menu.
-     * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
+     * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
+    addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -872,10 +886,10 @@ module.exports = class extends PrivateBase {
             case 'stripHtml':
                 regex = new RegExp(
                     [
-                        /( (data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
-                        /( \[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
-                        /( translate-compile)/, // translate-compile
-                        /( translate-value-max="[0-9{}()|]*")/ // translate-value-max
+                        /([\s\n\r]+(data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
+                        /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
+                        /([\s\n\r]+translate-compile)/, // translate-compile
+                        /([\s\n\r]+translate-value-max="[0-9{}()|]*")/ // translate-value-max
                     ]
                         .map(r => r.source)
                         .join('|'),
@@ -1359,22 +1373,28 @@ module.exports = class extends PrivateBase {
         let limit = 0;
         if (prodDatabaseType === 'oracle' && joinTableName.length > 30 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated join table "${joinTableName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`
+                `The generated join table "${joinTableName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
             );
 
             limit = 30;
         } else if (prodDatabaseType === 'mysql' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated join table "${joinTableName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`
+                `The generated join table "${joinTableName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
             );
 
             limit = 64;
         } else if (prodDatabaseType === 'postgresql' && joinTableName.length >= 63 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+                `The generated join table "${joinTableName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
             );
 
             limit = 63;
+        } else if (prodDatabaseType === 'mariadb' && joinTableName.length > 64 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated join table "${joinTableName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
+            );
+
+            limit = 64;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -1404,22 +1424,28 @@ module.exports = class extends PrivateBase {
         let limit = 0;
         if (prodDatabaseType === 'oracle' && constraintName.length >= 27 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 characters limit). It will be truncated!`
+                `The generated constraint name "${constraintName}" is too long for Oracle (which has a 30 character limit). It will be truncated!`
             );
 
             limit = 28;
         } else if (prodDatabaseType === 'mysql' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 characters limit). It will be truncated!`
+                `The generated constraint name "${constraintName}" is too long for MySQL (which has a 64 character limit). It will be truncated!`
             );
 
             limit = 62;
         } else if (prodDatabaseType === 'postgresql' && constraintName.length >= 60 && !this.skipCheckLengthOfIdentifier) {
             this.warning(
-                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 characters limit). It will be truncated!`
+                `The generated constraint name "${constraintName}" is too long for PostgreSQL (which has a 63 character limit). It will be truncated!`
             );
 
             limit = 61;
+        } else if (prodDatabaseType === 'mariadb' && constraintName.length >= 61 && !this.skipCheckLengthOfIdentifier) {
+            this.warning(
+                `The generated constraint name "${constraintName}" is too long for MariaDB (which has a 64 character limit). It will be truncated!`
+            );
+
+            limit = 62;
         }
         if (limit > 0) {
             const halfLimit = Math.floor(limit / 2);
@@ -1515,7 +1541,14 @@ module.exports = class extends PrivateBase {
             this.log(chalk.cyan(`\nKeyStore '${keyStoreFile}' already exists. Leaving unchanged.\n`));
             done();
         } else {
-            shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+            try {
+                shelljs.mkdir('-p', `${SERVER_MAIN_RES_DIR}config/tls`);
+            } catch (error) {
+                // noticed that on windows the shelljs.mkdir tends to sometimes fail
+                fs.mkdir(`${SERVER_MAIN_RES_DIR}config/tls`, { recursive: true }, err => {
+                    if (err) throw err;
+                });
+            }
             const javaHome = shelljs.env.JAVA_HOME;
             let keytoolPath = '';
             if (javaHome) {
@@ -1671,19 +1704,7 @@ module.exports = class extends PrivateBase {
      * @param {string} baseName of application
      */
     getHipster(baseName = this.baseName) {
-        let hash = 0;
-        let i;
-        let chr;
-
-        for (i = 0; i < baseName.length; i++) {
-            chr = baseName.charCodeAt(i);
-            hash = (hash << 5) - hash + chr; // eslint-disable-line no-bitwise
-            hash |= 0; // eslint-disable-line no-bitwise
-        }
-
-        if (hash < 0) {
-            hash *= -1;
-        }
+        const hash = jhipsterUtils.stringHashCode(baseName);
 
         switch (hash % 4) {
             case 0:
@@ -1814,10 +1835,10 @@ module.exports = class extends PrivateBase {
      * @returns {object} the command line and its result
      */
     buildApplication(buildTool, profile, buildWar, cb) {
-        let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
+        let buildCmd = 'mvnw -ntp verify -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew -x test';
+            buildCmd = 'gradlew';
             if (buildWar) {
                 buildCmd += ' bootWar';
             } else {

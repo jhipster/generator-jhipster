@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,7 +26,7 @@ const currentNodeVersion = process.versions.node;
 const minimumNodeVersion = packageJson.engines.node;
 
 if (!semver.satisfies(currentNodeVersion, minimumNodeVersion)) {
-    logger.error(
+    logger.fatal(
         `You are running Node version ${currentNodeVersion}\nJHipster requires Node version ${minimumNodeVersion}\nPlease update your version of Node.`
     );
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 
 <%_ if (cacheProvider === 'ehcache') { _%>
 import java.time.Duration;
@@ -70,7 +70,7 @@ import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (cacheProvider === 'memcached') { _%>
     <%_ if (databaseType !== 'no') { _%>
-import <%=packageName%>.repository.UserRepository;
+import <%= packageName %>.repository.UserRepository;
     <%_ } _%>
 
 import java.util.ArrayList;
@@ -93,9 +93,10 @@ import org.springframework.cache.support.NoOpCacheManager;
 <%_ } _%>
 import org.springframework.context.annotation.*;
 <%_ if (cacheProvider === 'hazelcast') { _%>
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+
+import javax.annotation.PreDestroy;
 <%_ } _%>
 <%_ if (cacheProvider === 'infinispan') { _%>
 import org.infinispan.configuration.cache.CacheMode;
@@ -164,7 +165,7 @@ import io.github.jhipster.config.JHipsterProperties;
 
 @Configuration
 @EnableCaching
-public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implements DisposableBean<% } %> {
+public class CacheConfiguration {
     <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'caffeine') { _%>
 
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
@@ -203,15 +204,15 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
             createCache(cm, "oAuth2Authentication");
             <%_ } _%>
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
-            createCache(cm, <%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, <%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
+            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
                 <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName());
-            createCache(cm, <%=packageName%>.domain.Authority.class.getName());
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities");
+            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName());
+            createCache(cm, <%= packageName %>.domain.Authority.class.getName());
+            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".authorities");
                     <%_ if (authenticationType === 'session') { _%>
-            createCache(cm, <%=packageName%>.domain.PersistentToken.class.getName());
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens");
+            createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName());
+            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens");
                     <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
@@ -226,10 +227,9 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache != null) {
-            cm.destroyCache(cacheName);
+        if (cache == null) {
+            cm.createCache(cacheName, jcacheConfiguration);
         }
-        cm.createCache(cacheName, jcacheConfiguration);
     }
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -261,8 +261,8 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     }
         <%_ } _%>
 
-    @Override
-    public void destroy() throws Exception {
+    @PreDestroy
+    public void destroy() {
         log.info("Closing Cache Manager");
         Hazelcast.shutdownAll();
     }
@@ -276,13 +276,13 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     @Bean
     public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {
         log.debug("Configuring Hazelcast");
-        HazelcastInstance hazelCastInstance = Hazelcast.getHazelcastInstanceByName("<%=baseName%>");
+        HazelcastInstance hazelCastInstance = Hazelcast.getHazelcastInstanceByName("<%= baseName %>");
         if (hazelCastInstance != null) {
             log.debug("Hazelcast already initialized");
             return hazelCastInstance;
         }
         Config config = new Config();
-        config.setInstanceName("<%=baseName%>");
+        config.setInstanceName("<%= baseName %>");
         <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         if (this.registration == null) {
@@ -333,7 +333,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
         // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
         config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
         <%_ if (enableHibernateCache) { _%>
-        config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));
+        config.getMapConfigs().put("<%= packageName %>.domain.*", initializeDomainMapConfig(jHipsterProperties));
         <%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
     }
@@ -407,7 +407,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     }
         <%_ } _%>
 
-    public static EmbeddedCacheManager getCacheManager(){
+    public static EmbeddedCacheManager getCacheManager() {
         return cacheManager;
     }
 
@@ -443,31 +443,31 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
             if (this.registration == null) { // if registry is not defined, use native discovery
                 log.warn("No discovery service is set up, Infinispan will use default discovery for cluster formation");
                 return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport().defaultTransport()
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%= baseName %>-cluster-cache").transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
-                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .clusterName("infinispan-<%= baseName %>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
             } else if (discoveryClient.getInstances(registration.getServiceId()).size() == 0) {
                 return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport()
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%= baseName %>-cluster-cache").transport()
                     .transport(new JGroupsTransport())
-                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .clusterName("infinispan-<%= baseName %>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
             } else {
                 return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport()
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%= baseName %>-cluster-cache").transport()
                     .transport(new JGroupsTransport(getTransportChannel()))
-                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .clusterName("infinispan-<%= baseName %>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
             }
         <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%=baseName%>-cluster-cache").transport().defaultTransport()
+                    .defaultClusteredBuilder().defaultCacheName("infinispan-<%= baseName %>-cluster-cache").transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
-                    .clusterName("infinispan-<%=baseName%>-cluster").globalJmxStatistics()
+                    .clusterName("infinispan-<%= baseName %>-cluster").globalJmxStatistics()
                     .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .allowDuplicateDomains(true).build();
         <%_ } _%>
@@ -499,7 +499,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
      *          &#064;Autowired (or) &#064;Inject
      *          private EmbeddedCacheManager cacheManager;
      *
-     *          void cacheSample(){
+     *          void cacheSample() {
      *              cacheManager.getCache("dist-app-data").put("hi", "there");
      *          }
      *          </pre>
@@ -553,7 +553,7 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
                 .simpleCache(true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).template(true).build());
 
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
-            Stream.of(<%=packageName%>.repository.UserRepository.USERS_BY_LOGIN_CACHE, <%=packageName%>.repository.UserRepository.USERS_BY_EMAIL_CACHE)
+            Stream.of(<%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE)
                 .forEach(cacheName -> manager.defineConfiguration(cacheName, new ConfigurationBuilder().clustering()
                     .cacheMode(CacheMode.INVALIDATION_SYNC)
                     .jmxStatistics()
@@ -743,15 +743,15 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
     public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         return cm -> {
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
-            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
-            createCache(cm, <%=packageName%>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            createCache(cm, <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            createCache(cm, <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
                 <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
-            createCache(cm, <%=packageName%>.domain.Authority.class.getName(), jcacheConfiguration);
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName(), jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".authorities", jcacheConfiguration);
                     <%_ if (authenticationType === 'session') { _%>
-            createCache(cm, <%=packageName%>.domain.PersistentToken.class.getName(), jcacheConfiguration);
-            createCache(cm, <%=packageName%>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName(), jcacheConfiguration);
+            createCache(cm, <%= packageName %>.domain.<%= asEntity('User') %>.class.getName() + ".persistentTokens", jcacheConfiguration);
                     <%_ } _%>
                 <%_ } _%>
             <%_ } _%>
@@ -761,10 +761,9 @@ public class CacheConfiguration<% if (cacheProvider === 'hazelcast') { %> implem
 
     private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache != null) {
-            cm.destroyCache(cacheName);
+        if (cache == null) {
+            cm.createCache(cacheName, jcacheConfiguration);
         }
-        cm.createCache(cacheName, jcacheConfiguration);
     }
 
     <%_ } _%>

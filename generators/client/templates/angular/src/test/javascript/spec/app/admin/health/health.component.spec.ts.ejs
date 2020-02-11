@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,21 +20,19 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%= angularXAppName %>TestModule } from '../../../test.module';
 import { HealthComponent } from 'app/admin/health/health.component';
 import { HealthService, Health } from 'app/admin/health/health.service';
 
 describe('Component Tests', () => {
-
     describe('HealthComponent', () => {
-
         let comp: HealthComponent;
         let fixture: ComponentFixture<HealthComponent>;
         let service: HealthService;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [<%= angularXAppName %>TestModule],
                 declarations: [HealthComponent]
             })
             .overrideTemplate(HealthComponent, '')
@@ -59,7 +57,7 @@ describe('Component Tests', () => {
         describe('refresh', () => {
             it('should call refresh on init', () => {
                 // GIVEN
-                const health: Health = { status: 'UP', details: { mail: { status: 'UP', details: 'mailDetails' } } };
+                const health: Health = { status: 'UP', components: { mail: { status: 'UP', details: 'mailDetails' } } };
                 spyOn(service, 'checkHealth').and.returnValue(of(health));
 
                 // WHEN
@@ -72,7 +70,7 @@ describe('Component Tests', () => {
 
             it('should handle a 503 on refreshing health data', () => {
                 // GIVEN
-                const health: Health = { status: 'DOWN', details: { mail: { status: 'DOWN', details: 'mailDetails' } } };
+                const health: Health = { status: 'DOWN', components: { mail: { status: 'DOWN', details: 'mailDetails' } } };
                 spyOn(service, 'checkHealth').and.returnValue(throwError(new HttpErrorResponse({ status: 503, error: health })));
 
                 // WHEN

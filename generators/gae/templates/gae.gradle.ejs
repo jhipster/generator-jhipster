@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,9 +20,8 @@ apply plugin: "com.google.cloud.tools.appengine"
 
 appengine {
     deploy {
-        projectId = "<%=gcpProjectId%>"
+        projectId = "<%= gcpProjectId %>"
         version = "1"
-        artifact = "build"
     }
 }
 
@@ -36,12 +35,9 @@ processResources {
     }
 }
 
-task unzip(type: Copy) {
-    def jarFile = file("build/libs/" + rootProject.name + "-" + rootProject.version + ".jar")
-    def outputDir = file("build/staged-app")
-
-    from zipTree(jarFile)
-    into outputDir
+task copyFolders(type: Copy) {
+    into "$buildDir/staged-app/"
+    from "$buildDir/thin/root/"
 }
 
-appengineStage.finalizedBy unzip
+appengineStage.finalizedBy copyFolders

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -63,7 +63,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupClientOptions(this);
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('client');
     }
 
     // Public API method used by the getter and also by Blueprints

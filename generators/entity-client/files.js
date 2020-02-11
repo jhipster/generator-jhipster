@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,9 +17,12 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const Randexp = require('randexp');
+const faker = require('faker');
 const utils = require('../utils');
 const constants = require('../generator-constants');
+
+/* Use customized randexp */
+const Randexp = utils.RandexpWithFaker;
 
 /* Constants use throughout */
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
@@ -271,9 +274,6 @@ function addSampleRegexTestingStrings(generator) {
     generator.fields.forEach(field => {
         if (field.fieldValidateRulesPattern !== undefined) {
             const randExp = new Randexp(field.fieldValidateRulesPattern);
-            randExp.max = 5;
-            // In order to have consistent results with RandExp, the RNG is seeded.
-            randExp.randInt = generator.seededRandomNumberGenerator(10);
             field.fieldValidateSampleString = randExp.gen();
         }
     });
@@ -281,9 +281,18 @@ function addSampleRegexTestingStrings(generator) {
 
 function writeFiles() {
     return {
+        setupReproducibility() {
+            if (this.skipClient) return;
+
+            // In order to have consistent results with Faker, restart seed with current entity name hash.
+            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
+        },
+
         writeClientFiles() {
             if (this.skipClient) return;
-            addSampleRegexTestingStrings(this);
+            if (this.protractorTests) {
+                addSampleRegexTestingStrings(this);
+            }
             if (this.clientFramework === 'angularX') {
                 // write client side files for angular 2.x +
                 this.writeFilesToDisk(

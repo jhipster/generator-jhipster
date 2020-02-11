@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,7 @@ package <%= packageName %>.service;
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
-import <%=packageName%>.RedisTestContainerExtension;
+import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
@@ -49,7 +49,8 @@ import <%= packageName %>.security.AuthoritiesConstants;
 <%_ } _%>
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
-import <%= packageName %>.service.util.RandomUtil;
+
+import io.github.jhipster.security.RandomUtil;
 <%_ } _%>
 
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -102,6 +103,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
+import java.util.List;
+<%_ } _%>
+<%_ if (reactive && authenticationType === 'oauth2') { _%>
 import java.util.List;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -174,7 +178,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
-     * This repository is mocked in the <%=packageName%>.repository.search test package.
+     * This repository is mocked in the <%= packageName %>.repository.search test package.
      *
      * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
      */
@@ -450,7 +454,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ } _%>
     public void testDefaultUserDetails() {
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -470,7 +474,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         userDetails.put("preferred_username", "TEST");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLogin()).isEqualTo("test");
     }
@@ -484,7 +488,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
@@ -497,7 +501,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         userDetails.put("locale", "it-IT");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("it");
     }
@@ -510,7 +514,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         userDetails.put("locale", "en_US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("en");
     }
@@ -523,7 +527,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication);
+        <%= asDto('User') %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("en");
     }

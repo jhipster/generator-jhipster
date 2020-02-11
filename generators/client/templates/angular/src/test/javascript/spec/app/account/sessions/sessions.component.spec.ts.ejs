@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed, inject, tick, fakeAsync } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%= angularXAppName %>TestModule } from '../../../test.module';
 import { Session } from 'app/account/sessions/session.model';
 import { SessionsComponent } from 'app/account/sessions/sessions.component';
 import { SessionsService } from 'app/account/sessions/sessions.service';
@@ -27,18 +27,16 @@ import { MockAccountService } from '../../../helpers/mock-account.service';
 import { AccountService } from 'app/core/auth/account.service';
 
 describe('Component Tests', () => {
-
     let sessions: Session[];
     let fixture: ComponentFixture<SessionsComponent>;
     let comp: SessionsComponent;
 
     describe('SessionsComponent', () => {
-
         beforeEach(() => {
             sessions = [new Session('xxxxxx==', new Date(2015, 10, 15), '0:0:0:0:0:0:0:1', 'Mozilla/5.0')];
 
             fixture = TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [<%= angularXAppName %>TestModule],
                 declarations: [SessionsComponent]
             })
             .overrideTemplate(SessionsComponent, '')

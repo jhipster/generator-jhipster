@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,12 +23,12 @@ import { NavBarPage, SignInPage } from '../page-objects/jhi-page-objects';
 let elementGetter = `getText()`;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
-} _%>
+}
+_%>
 
 const expect = chai.expect;
 
 describe('administration', () => {
-
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
 
@@ -95,7 +95,7 @@ describe('administration', () => {
         expect(value1).to.eq(expect1);
     });
 
-<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     it('should load audits', async () => {
         await navBarPage.clickOnAdmin('audits');
         await browser.sleep(500);
@@ -107,8 +107,8 @@ describe('administration', () => {
         const value1 = await element(by.id('audits-page-heading')).<%- elementGetter %>;
         expect(value1).to.eq(expect1);
     });
+    <%_ } _%>
 
-<%_ } _%>
     it('should load logs', async () => {
         await navBarPage.clickOnAdmin('logs');
         await browser.sleep(500);

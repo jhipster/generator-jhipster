@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 const _ = require('lodash');
-const randexp = require('randexp');
 const chalk = require('chalk');
 const faker = require('faker');
 const fs = require('fs');
 const utils = require('../utils');
 const constants = require('../generator-constants');
+
+/* Use customized randexp */
+const randexp = utils.RandexpWithFaker;
 
 /* Constants use throughout */
 const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
@@ -30,9 +32,6 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const TEST_DIR = constants.TEST_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
-
-// In order to have consistent results with Faker, the seed is fixed.
-faker.seed(42);
 
 /*
  * Current faker version is 4.1.0 and was release in 2017
@@ -61,7 +60,10 @@ const getRecentDate = function(days, refDate) {
 const getRecentForLiquibase = function(days, changelogDate) {
     let formatedDate;
     if (changelogDate !== undefined) {
-        formatedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(6, 8)}`;
+        formatedDate = `${changelogDate.substring(0, 4)}-${changelogDate.substring(4, 6)}-${changelogDate.substring(
+            6,
+            8
+        )}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
     }
     return getRecentDate(1, formatedDate);
 };
@@ -334,6 +336,13 @@ function writeFiles() {
                 `${this.microservicePath}/${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`,
                 this.destinationPath(`${this.jhipsterConfigDirectory}/${this.entityNameCapitalized}.json`)
             );
+        },
+
+        setupReproducibility() {
+            if (this.skipServer) return;
+
+            // In order to have consistent results with Faker, restart seed with current entity name hash.
+            faker.seed(utils.stringHashCode(this.name.toLowerCase()));
         },
 
         writeServerFiles() {

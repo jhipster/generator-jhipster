@@ -2,20 +2,19 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
-import { <%=angularXAppName%>TestModule } from '../../../test.module';
+import { <%= angularXAppName %>TestModule } from '../../../test.module';
 import { UserManagementDetailComponent } from 'app/admin/user-management/user-management-detail.component';
 import { User } from 'app/core/user/user.model';
 
 describe('Component Tests', () => {
-
     describe('User Management Detail Component', () => {
         let comp: UserManagementDetailComponent;
         let fixture: ComponentFixture<UserManagementDetailComponent>;
-        const route: ActivatedRoute = ({data: of({user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin')})} as any) as ActivatedRoute;
+        const route: ActivatedRoute = ({ data: of({ user: new User(1, 'user', 'first', 'last', 'first@last.com', true, 'en', ['ROLE_USER'], 'admin') }) } as any) as ActivatedRoute;
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [<%=angularXAppName%>TestModule],
+                imports: [<%= angularXAppName %>TestModule],
                 declarations: [UserManagementDetailComponent],
                 providers: [
                     {
@@ -55,5 +54,4 @@ describe('Component Tests', () => {
             });
         });
     });
-
 });

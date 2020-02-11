@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -28,10 +28,8 @@ const options = getCommandOptions(packageJson, process.argv.slice(3));
 logger.info(chalk.yellow(`Executing ${command} on ${process.cwd()}`));
 logger.info(chalk.yellow(`Options: ${toString(options)}`));
 try {
-    env.run(command, options, () => {
-        done();
-        process.exit(0);
-    });
+    env.run(command, options, done);
 } catch (e) {
     logger.error(e.message, e);
+    process.exitCode = 1;
 }

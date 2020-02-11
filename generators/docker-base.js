@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -105,7 +105,7 @@ function loadConfigs() {
     this.appsFolders.forEach(appFolder => {
         const path = this.destinationPath(`${this.directoryPath + appFolder}`);
         if (this.fs.exists(`${path}/.yo-rc.json`)) {
-            const config = getAllJhipsterConfig(this, false, path);
+            const config = getAllJhipsterConfig(this, true, path);
 
             if (config.applicationType === 'monolith') {
                 this.monolithicNb++;

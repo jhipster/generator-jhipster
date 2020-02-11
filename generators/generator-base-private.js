@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -56,6 +56,13 @@ module.exports = class extends Generator {
     /* ======================================================================== */
     /* private methods use within generator (not exposed to modules) */
     /* ======================================================================== */
+
+    /**
+     * Override yeoman generator's usage function to fine tune --help message.
+     */
+    usage() {
+        return super.usage().replace('yo jhipster:', 'jhipster ');
+    }
 
     /**
      * Install I18N Client Files By Language
@@ -245,7 +252,7 @@ module.exports = class extends Generator {
     updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
         const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
         try {
-            let content = 'private static String languages[] = {\n';
+            let content = 'private static final String[] languages = {\n';
             languages.forEach((language, i) => {
                 content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
             });
@@ -1050,7 +1057,7 @@ module.exports = class extends Generator {
                         this.${relationship.otherEntityName}Service
                             .query({${filter}})
                             .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body ? res.body : [];
+                                return res.body || [];
                             }))
                             .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
                                 if (${relationshipFieldNameIdCheck}) {
@@ -1061,23 +1068,19 @@ module.exports = class extends Generator {
                                         .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
                                             return subRes.body ? [subRes.body].concat(resBody) : resBody;
                                         }))
-                                        .subscribe((concatRes: I${relationship.otherEntityAngularName}[]) => {
-                                            this.${variableName} = concatRes;
-                                        });
+                                        .subscribe((concatRes: I${
+                                            relationship.otherEntityAngularName
+                                        }[]) => this.${variableName} = concatRes);
                                 }
                             });`;
                 } else {
-                    rxjsMapIsUsed = true;
                     variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
                     if (variableName === entityInstance) {
                         variableName += 'Collection';
                     }
                     query = `
                         this.${relationship.otherEntityName}Service.query()
-                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
-                                return res.body ? res.body : [];
-                            }))
-                            .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => this.${variableName} = resBody);`;
+                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
                 }
             }
             if (variableName && !this.contains(queries, query)) {
@@ -1461,6 +1464,33 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Returns the primary key value based on the primary key type, DB and default value
+     *
+     * @param {string} primaryKeyType - the primary key type
+     * @param {string} databaseType - the database type
+     * @param {string} defaultValue - default value
+     * @returns {string} java primary key value
+     */
+    getPrimaryKeyValue(primaryKeyType, databaseType, defaultValue) {
+        let value;
+        switch (primaryKeyType) {
+            case 'String':
+                value = `"id${defaultValue}"`;
+                // Special case with a OneToOne relationship with User and @MapsId when using OAuth
+                if (databaseType === 'sql') {
+                    value = 'UUID.randomUUID().toString()';
+                }
+                break;
+            case 'UUID':
+                value = 'UUID.randomUUID()';
+                break;
+            default:
+                value = `${defaultValue}L`;
+        }
+        return value;
+    }
+
+    /**
      * Get a root folder name for entity
      * @param {string} clientRootFolder
      * @param {string} entityFileName
@@ -1492,7 +1522,7 @@ module.exports = class extends Generator {
             }
             this.error(message);
         }
-        const entityFolderPathAddition = relative.replace(/[/]?..\/entities/, '').replace('entities', '..');
+        const entityFolderPathAddition = relative.replace(/[/|\\]?..[/|\\]entities/, '').replace('entities', '..');
         if (!entityFolderPathAddition) {
             return '';
         }
@@ -1505,7 +1535,7 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        const prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }
@@ -1521,17 +1551,5 @@ module.exports = class extends Generator {
                 )} instead of ${chalk.red('yo jhipster:<command>')}`
             );
         }
-    }
-
-    /**
-     * Returns a seeded random number generator, used for RandExp regex generation.
-     * @param {number} id - seeds the random number generator
-     */
-    seededRandomNumberGenerator(id) {
-        let seed = 42 + id;
-        return (a, b) => {
-            seed = seed ** 2 % 969421;
-            return (seed % (1 + b - a)) + a;
-        };
     }
 };

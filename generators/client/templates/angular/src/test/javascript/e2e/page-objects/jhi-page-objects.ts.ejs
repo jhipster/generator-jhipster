@@ -4,7 +4,8 @@ import { element, by, ElementFinder<% if (authenticationType === 'oauth2') { _%>
 let elementGetter = `getText()`;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
-} _%>
+}
+_%>
 /* eslint @typescript-eslint/no-use-before-define: 0 */
 export class NavBarPage {
     entityMenu = element(by.id('entity-menu'));
@@ -67,6 +68,7 @@ export class NavBarPage {
         await this.clickOnSignIn();
         return new SignInPage();
     }
+
     <%_ if (!skipUserManagement) { _%>
     async getPasswordPage(): Promise<PasswordPage> {
         await this.clickOnAccountMenu();
@@ -136,15 +138,14 @@ export class SignInPage {
     async clearPassword(): Promise<void> {
         await this.password.clear();
     }
-    <%_ if (authenticationType !== 'oauth2') { _%>
 
+    <%_ if (authenticationType !== 'oauth2') { _%>
     async autoSignInUsing(username: string, password: string): Promise<void> {
         await this.setUserName(username);
         await this.setPassword(password);
         await this.login();
     }
     <%_ } else { _%>
-
     async loginWithOAuth(username: string, password: string): Promise<void> {
         // Entering non angular site, tell webdriver to switch to synchronous mode.
         await browser.waitForAngularEnabled(false);
@@ -166,6 +167,7 @@ export class SignInPage {
         await this.loginButton.click();
     }
 }
+
 <%_ if (!skipUserManagement) { _%>
 export class PasswordPage {
     currentPassword = element(by.id('currentPassword'));

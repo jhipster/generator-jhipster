@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,6 +24,7 @@
     <div class="row">
         <div class="col-md-5">
             <h4 jhiTranslate="audits.filter.title">Filter by date</h4>
+
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text" jhiTranslate="audits.filter.from">from</span>
@@ -43,31 +44,31 @@
     </div>
 
     <div class="table-responsive" *ngIf="audits?.length > 0">
-        <table class="table table-sm table-striped"  aria-describedby="audits-page-heading">
+        <table class="table table-sm table-striped" aria-describedby="audits-page-heading">
             <thead [ngSwitch]="canLoad()">
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)" *ngSwitchCase="true">
-                <th scope="col" jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                <th scope="col" jhiSortBy="principal"><span jhiTranslate="audits.table.header.principal">User</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                <th scope="col" jhiSortBy="auditEventType"><span jhiTranslate="audits.table.header.status">State</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                <th scope="col"><span jhiTranslate="audits.table.header.data">Extra data</span></th>
-            </tr>
-            <tr *ngSwitchCase="false">
-                <th scope="col"><span jhiTranslate="audits.table.header.date">Date</span></th>
-                <th scope="col"><span jhiTranslate="audits.table.header.principal">User</span></th>
-                <th scope="col"><span jhiTranslate="audits.table.header.status">State</span></th>
-                <th scope="col"><span jhiTranslate="audits.table.header.data">Extra data</span></th>
-            </tr>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)" *ngSwitchCase="true">
+                    <th scope="col" jhiSortBy="auditEventDate"><span jhiTranslate="audits.table.header.date">Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" jhiSortBy="principal"><span jhiTranslate="audits.table.header.principal">User</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" jhiSortBy="auditEventType"><span jhiTranslate="audits.table.header.status">State</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col"><span jhiTranslate="audits.table.header.data">Extra data</span></th>
+                </tr>
+                <tr *ngSwitchCase="false">
+                    <th scope="col"><span jhiTranslate="audits.table.header.date">Date</span></th>
+                    <th scope="col"><span jhiTranslate="audits.table.header.principal">User</span></th>
+                    <th scope="col"><span jhiTranslate="audits.table.header.status">State</span></th>
+                    <th scope="col"><span jhiTranslate="audits.table.header.data">Extra data</span></th>
+                </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let audit of audits">
-                <td><span>{{audit.timestamp| date:'medium'}}</span></td>
-                <td><small>{{audit.principal}}</small></td>
-                <td>{{audit.type}}</td>
-                <td>
-                    <span *ngIf="audit.data" ng-show="audit.data.message">{{audit.data.message}}</span>
-                    <span *ngIf="audit.data" ng-show="audit.data.remoteAddress"><span jhiTranslate="audits.table.data.remoteAddress">Remote Address</span> {{audit.data.remoteAddress}}</span>
-                </td>
-            </tr>
+                <tr *ngFor="let audit of audits">
+                    <td><span>{{ audit.timestamp | date:'medium' }}</span></td>
+                    <td><small>{{ audit.principal }}</small></td>
+                    <td>{{ audit.type }}</td>
+                    <td>
+                        <span *ngIf="audit.data" ng-show="audit.data.message">{{ audit.data.message }}</span>
+                        <span *ngIf="audit.data" ng-show="audit.data.remoteAddress"><span jhiTranslate="audits.table.data.remoteAddress">Remote Address</span> {{ audit.data.remoteAddress }}</span>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -76,6 +77,7 @@
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
+
         <div class="row justify-content-center">
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)" [disabled]="!canLoad()"></ngb-pagination>
         </div>
