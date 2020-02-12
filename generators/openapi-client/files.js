@@ -18,10 +18,9 @@
  */
 
 const path = require('path');
-const shelljs = require('shelljs');
 const _ = require('lodash');
 const chalk = require('chalk');
-const jhipsterConstants = require('../generator-constants');
+const constants = require('../generator-constants');
 
 module.exports = {
     writeFiles
@@ -29,15 +28,16 @@ module.exports = {
 
 function writeFiles() {
     return {
+        addOpenAPIIgnoreFile() {
+            this.copy('.openapi-generator-ignore', '.openapi-generator-ignore');
+        },
+
         callOpenApiGenerator() {
             this.baseName = this.config.get('baseName');
             this.authenticationType = this.config.get('authenticationType');
             this.packageName = this.config.get('packageName');
-            this.clientPackageManager = this.config.get('clientPackageManager');
             this.packageFolder = this.config.get('packageFolder');
             this.buildTool = this.config.get('buildTool');
-
-            this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
 
             if (Object.keys(this.clientsToGenerate).length === 0) {
                 this.log('No openapi client configured. Please run "jhipster openapi-client" to generate your first OpenAPI client.');
@@ -45,58 +45,37 @@ function writeFiles() {
             }
 
             Object.keys(this.clientsToGenerate).forEach(cliName => {
+                const baseCliPackage = `${this.packageName}.client.`;
+                const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
+                const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
+                this.removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...cliPackage.split('.')));
+                this.removeFolder(path.resolve(constants.SERVER_MAIN_SRC_DIR, ...snakeCaseCliPackage.split('.')));
+
                 const inputSpec = this.clientsToGenerate[cliName].spec;
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
 
-                // using openapi jar file since so this section can be tested
-                const jarPath = path.resolve('node_modules', '@openapitools', 'openapi-generator-cli', 'bin', 'openapi-generator.jar');
-                let JAVA_OPTS;
-                let command;
+                let openApiCmd;
                 if (generatorName === 'spring') {
-                    this.log(chalk.green(`\n\nGenerating java client code for client ${cliName} (${inputSpec})`));
-                    const baseCliPackage = `${this.packageName}.client.`;
-                    const cliPackage = `${baseCliPackage}${_.toLower(cliName)}`;
-                    const snakeCaseCliPackage = `${baseCliPackage}${_.snakeCase(cliName)}`;
-                    const cleanOldDirectory = cliPackage => {
-                        const clientPackageLocation = path.resolve('src', 'main', 'java', ...cliPackage.split('.'));
-                        if (shelljs.test('-d', clientPackageLocation)) {
-                            this.log(`cleanup generated java code for client ${cliName} in directory ${clientPackageLocation}`);
-                            shelljs.rm('-rf', clientPackageLocation);
-                        }
-                    };
-
-                    cleanOldDirectory(snakeCaseCliPackage);
-                    cleanOldDirectory(cliPackage);
-
-                    JAVA_OPTS = ' -Dmodels -Dapis -DsupportingFiles=ApiKeyRequestInterceptor.java,ClientConfiguration.java ';
-
-                    let params =
-                        '  generate -g spring ' +
-                        ` -t ${path.resolve(__dirname, 'templates/swagger-codegen/libraries/spring-cloud')} ` +
-                        ' --library spring-cloud ' +
-                        ` -i ${inputSpec} --artifact-id ${_.camelCase(cliName)} --api-package ${cliPackage}.api` +
-                        ` --model-package ${cliPackage}.model` +
-                        ` -DbasePackage=${this.packageName}.client,configPackage=${cliPackage},` +
-                        `title=${_.camelCase(cliName)}`;
+                    this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
+                    openApiCmd =
+                        'openapi-generator generate ' +
+                        '-g spring ' +
+                        `-i ${inputSpec} ` +
+                        '-p library=spring-cloud ' +
+                        '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
+                        `-p apiPackage=${cliPackage}.api ` +
+                        `-p modelPackage=${cliPackage}.model ` +
+                        `-p basePackage=${this.packageName}.client ` +
+                        `-p configPackage=${cliPackage} ` +
+                        `-p title=${_.camelCase(cliName)} ` +
+                        `-p artifactId=${_.camelCase(cliName)} ` +
+                        '--skip-validate-spec';
 
                     if (this.clientsToGenerate[cliName].useServiceDiscovery) {
-                        params += ' --additional-properties ribbon=true';
+                        openApiCmd += ' --additional-properties ribbon=true';
                     }
-
-                    command = `java ${JAVA_OPTS} -jar ${jarPath} ${params}`;
                 }
-                this.log(`\n${command}`);
-
-                const done = this.async();
-                shelljs.exec(command, { silent: this.silent }, (code, msg, err) => {
-                    if (code === 0) {
-                        this.success(`Succesfully generated ${cliName} ${generatorName} client`);
-                        done();
-                    } else {
-                        this.error(`Something went wrong while generating ${cliName} ${generatorName} client: ${msg} ${err}`);
-                        done();
-                    }
-                });
+                this.addNpmScript(`openapi-client:${cliName}`, `${openApiCmd}`);
             });
         },
 
@@ -139,11 +118,11 @@ function writeFiles() {
                  * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
                  */
                 if (this.buildTool === 'maven') {
-                    this.addMavenProperty('jackson-databind-nullable.version', jhipsterConstants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    this.addMavenProperty('jackson-databind-nullable.version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
                     // eslint-disable-next-line no-template-curly-in-string
                     this.addMavenDependency('org.openapitools', 'jackson-databind-nullable', '${jackson-databind-nullable.version}');
                 } else if (this.buildTool === 'gradle') {
-                    this.addGradleProperty('jackson_databind_nullable_version', jhipsterConstants.JACKSON_DATABIND_NULLABLE_VERSION);
+                    this.addGradleProperty('jackson_databind_nullable_version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
                     this.addGradleDependency(
                         'compile',
                         'org.openapitools',
@@ -160,6 +139,7 @@ function writeFiles() {
                 return;
             }
 
+            this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
             const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
             if (this.applicationType !== 'microservice' || !['uaa', 'jwt'].includes(this.authenticationType)) {
@@ -177,23 +157,21 @@ function writeFiles() {
                 return;
             }
 
+            this.javaDir = `${constants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
             const mainClassFile = `${this.javaDir + this.getMainClassName()}.java`;
 
             this.rewriteFile(
                 mainClassFile,
                 'import org.springframework.core.env.Environment;',
-                'import org.springframework.context.annotation.ComponentScan;'
+                'import org.springframework.context.annotation.ComponentScan;\n' +
+                    'import org.springframework.context.annotation.FilterType;'
             );
 
             const componentScan =
-                `${'@ComponentScan( excludeFilters = {\n    @ComponentScan.Filter('}${this.packageName}` +
-                '.client.ExcludeFromComponentScan.class)\n})';
+                '@ComponentScan( excludeFilters = {\n' +
+                '   @ComponentScan.Filter(type = FilterType.REGEX, ' +
+                `pattern = "${this.packageName}.client.*.ClientConfiguration")\n})`;
             this.rewriteFile(mainClassFile, '@SpringBootApplication', componentScan);
-
-            this.template(
-                'src/main/java/package/client/_ExcludeFromComponentScan.java',
-                `${this.javaDir}/client/ExcludeFromComponentScan.java`
-            );
         }
     };
 }
