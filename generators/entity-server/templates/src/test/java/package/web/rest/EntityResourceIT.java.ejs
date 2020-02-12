@@ -94,7 +94,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (!reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (searchEngine === 'elasticsearch' && pagination !== 'no' || fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.PageImpl;
@@ -112,7 +116,6 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (fieldsContainBlob === true) { _%>
 import org.springframework.util.Base64Utils;
 <%_ } _%>
-
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
@@ -146,7 +149,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
-<%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
+<%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
@@ -170,7 +173,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true || cacheProvider === 'redis') { _%>
 @ExtendWith(<% if (cacheProvider === 'redis') { %>{ RedisTestContainerExtension.class, MockitoExtension.class }%><% } else if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { %>MockitoExtension.class<%}%>)
 <%_ } _%>
+<%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
+<%_ } else { _%>
+@AutoConfigureWebTestClient
+<%_ } _%>
 @WithMockUser
 public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     <%_ for (idx in fields) {
@@ -395,14 +402,20 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @Autowired
     private <%= entityClass %>QueryService <%= entityInstance %>QueryService;
     <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
 
-<%_ if (databaseType === 'sql') { _%>
     @Autowired
     private EntityManager em;
-<%_ } _%>
+    <%_ } _%>
+    <%_ if (!reactive) { _%>
 
     @Autowired
     private MockMvc rest<%= entityClass %>MockMvc;
+    <%_ } else { _%>
+        
+    @Autowired
+    private WebTestClient webTestClient;
+    <%_ } _%>
 
     private <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>;
 
@@ -478,6 +491,13 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 <%_ }); _%>
 
+    <%_ if (reactive && testsNeedCsrf) { _%>
+    @BeforeEach
+    public void setupCsrf() {
+        webTestClient = webTestClient.mutateWith(csrf());
+    }
+    <%_ } _%>
+
     @BeforeEach
     public void initTest() {
         <%_ if (databaseType === 'couchbase') { _%>
@@ -499,12 +519,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (dto === 'mapstruct') { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
         <%_ } _%>
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>))<% if (!['session','oauth2'].includes(authenticationType) || applicationType === 'microservice') { %>)<% }%>
-            <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
-            .with(csrf()))
-            <%_ } _%>
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
             .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
@@ -545,12 +562,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ } _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))<% if (!['session','oauth2'].includes(authenticationType) || applicationType === 'microservice') { %>)<% }%>
-            <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
-            .with(csrf()))
-            <%_ } _%>
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
@@ -603,12 +617,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ } _%>
 
         // Update the entity
-        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%_ if (dto === 'mapstruct') { _%>updated<%= asDto(entityClass) %> <%_ } else { _%> updated<%= asEntity(entityClass) %> <%_ } _%>))<% if (!['session','oauth2'].includes(authenticationType) || applicationType === 'microservice') { %>)<% }%>
-            <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
-            .with(csrf()))
-            <%_ } _%>
+            .content(TestUtil.convertObjectToJsonBytes(<%_ if (dto === 'mapstruct') { _%>updated<%= asDto(entityClass) %> <%_ } else { _%> updated<%= asEntity(entityClass) %> <%_ } _%>)))
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
@@ -647,12 +658,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         // Create the <%= entityClass %>, which fails.<% if (dto === 'mapstruct') { %>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);<% } %>
 
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))<% if (!['session','oauth2'].includes(authenticationType) || applicationType === 'microservice') { %>)<% }%>
-            <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
-            .with(csrf()))
-            <%_ } _%>
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
@@ -1091,12 +1099,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(updated<%= asEntity(entityClass) %>);
         <%_ } _%>
 
-        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass)) %>))<% if (!['session','oauth2'].includes(authenticationType) || applicationType === 'microservice') { %>)<% }%>
-            <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
-            .with(csrf()))
-            <%_ } _%>
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass)) %>)))
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
@@ -1129,12 +1134,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);<% } %>
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))<% if (!['session','oauth2'].includes(authenticationType) || applicationType === 'microservice') { %>)<% }%>
-            <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
-            .with(csrf()))
-            <%_ } _%>
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
@@ -1163,11 +1165,8 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
         // Delete the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId())
-            .accept(TestUtil.APPLICATION_JSON)<% if (!['session','oauth2'].includes(authenticationType) || applicationType === 'microservice') { %>)<% }%>
-            <%_ if (['session','oauth2'].includes(authenticationType) && applicationType !== 'microservice') { _%>
-            .with(csrf()))
-            <%_ } _%>
+        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
+            .accept(TestUtil.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
