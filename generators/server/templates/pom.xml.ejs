@@ -347,13 +347,13 @@
             <artifactId>cache-api</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
+<%_ if (prodDatabaseType === 'mysql') { _%>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
+<%_ if (prodDatabaseType === 'mariadb') { _%>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
@@ -365,13 +365,13 @@
             <artifactId>lz4-java</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
+<%_ if (prodDatabaseType === 'oracle') { _%>
         <dependency>
             <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+<%_ if (prodDatabaseType === 'mssql') { _%>
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
@@ -465,7 +465,7 @@
             <artifactId>couchmove</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
+<%_ if (prodDatabaseType === 'postgresql') { _%>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
