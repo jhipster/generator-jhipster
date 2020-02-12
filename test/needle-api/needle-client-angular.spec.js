@@ -62,6 +62,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                 );
                 this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, 'angularX');
                 this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, 'angularX');
+                this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule');
             }
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
@@ -188,6 +189,13 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             "import { appNameadminAngularNameModule } from './adminFolderName/adminFileName.module';"
         );
         assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`, 'appNameadminAngularNameModule,');
+    });
+
+    it('admin module contains the routing added by needle api', () => {
+        assert.fileContent(
+            `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
+            ",\n      {\n        path: 'entity-audit',\n        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule)\n      }"
+        );
     });
 
     it('app module contains the import and the module added by needle api', () => {

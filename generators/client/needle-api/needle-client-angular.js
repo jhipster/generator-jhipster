@@ -244,4 +244,13 @@ module.exports = class extends needleClientBase {
             this.generator.debug('Error:', e);
         }
     }
+
+    addAdminRoute(route, modulePath, moduleName) {
+        const errorMessage = `${chalk.yellow('Reference to ') + route} ${chalk.yellow('not added to admin routing module.\n')}`;
+        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
+        const adminModuleRoutingEntry = `,\n      {\n        path: '${route}',\n        loadChildren: () => import('${modulePath}').then(m => m.${moduleName})\n      }`;
+        const rewriteFileModel = this.generateFileModel(adminModulePath, 'jhipster-needle-add-admin-route', adminModuleRoutingEntry);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
 };

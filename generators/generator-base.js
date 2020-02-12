@@ -181,6 +181,17 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a new lazy loaded module to admin routing file.
+     *
+     * @param {string} route - The route for the module. For example 'entity-audit'.
+     * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
+     * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
+     */
+    addAdminRoute(route, modulePath, moduleName) {
+        this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName);
+    }
+
+    /**
      * Add a new element in the "global.json" translations.
      *
      * @param {string} key - Key for the menu entry
