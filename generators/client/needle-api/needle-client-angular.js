@@ -199,14 +199,23 @@ module.exports = class extends needleClientBase {
         this.addIcon(iconName);
     }
 
+    _addRoute(route, modulePath, moduleName, needleName, filePath, prefix = ',') {
+        const isRouteAlreadyAdded = jhipsterUtils.checkStringInFile(filePath, `path: '${route}'`, this.generator);
+        if (isRouteAlreadyAdded) {
+            return;
+        }
+        const errorMessage = `${chalk.yellow('Route ') + route + chalk.yellow(` not added to ${filePath}.\n`)}`;
+        const routingEntry = this.generator.stripMargin(`${prefix}
+            |      {
+            |        path: '${route}',
+            |        loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
+            |      }`);
+        const rewriteFileModel = this.generateFileModel(filePath, needleName, routingEntry);
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
     addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
         const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
-        const errorMessage = `${chalk.yellow('Reference to ') +
-            entityInstance +
-            entityClass +
-            entityFolderName +
-            entityFileName} ${chalk.yellow(`not added to ${entityModulePath}.\n`)}`;
-
         try {
             const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
                 entityModulePath,
@@ -217,31 +226,22 @@ module.exports = class extends needleClientBase {
             if (!isSpecificEntityAlreadyGenerated) {
                 const appName = this.generator.getAngularXAppName();
                 const isAnyEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(entityModulePath, 'loadChildren', this.generator);
+                const prefix = isAnyEntityAlreadyGenerated ? ',' : '';
 
                 const modulePath = `./${entityFolderName}/${entityFileName}.module`;
                 const moduleName = microServiceName
                     ? `${this.generator.upperFirstCamelCase(microServiceName)}${entityAngularName}Module`
                     : `${appName}${entityAngularName}Module`;
 
-                const splicable = isAnyEntityAlreadyGenerated
-                    ? `|,{
-                            |                path: '${entityUrl}',
-                            |                loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
-                            |            }`
-                    : `|{
-                                |                path: '${entityUrl}',
-                                |                loadChildren: () => import('${modulePath}').then(m => m.${moduleName})
-                                |            }`;
-                const rewriteFileModel = this.generateFileModel(
-                    entityModulePath,
-                    'jhipster-needle-add-entity-route',
-                    this.generator.stripMargin(splicable)
-                );
-
-                this.addBlockContentToFile(rewriteFileModel, errorMessage);
+                this._addRoute(entityUrl, modulePath, moduleName, 'jhipster-needle-add-entity-route', entityModulePath, prefix);
             }
         } catch (e) {
             this.generator.debug('Error:', e);
         }
+    }
+
+    addAdminRoute(route, modulePath, moduleName) {
+        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
+        this._addRoute(route, modulePath, moduleName, 'jhipster-needle-add-admin-route', adminModulePath);
     }
 };
