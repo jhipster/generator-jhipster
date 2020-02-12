@@ -883,7 +883,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
                             otherEntityData.clientRootFolder = otherEntityData.microserviceName;
                         }
-                        relationship.otherEntityIsEmbedded = otherEntityData.embedded;
+                        if (otherEntityData.embedded) {
+                            relationship.otherEntityIsEmbedded = true;
+                        }
                     }
                     const jhiTablePrefix = context.jhiTablePrefix;
 
