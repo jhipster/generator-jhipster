@@ -716,7 +716,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
 
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?eagerload=true"))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>"))
         .andExpect(status().isOk());
 
         <%_ if (service !== 'no') { _%>
@@ -741,7 +741,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
 
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?eagerload=true"))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>"))
         .andExpect(status().isOk());
 
         <%_ if (service !== 'no') { _%>
