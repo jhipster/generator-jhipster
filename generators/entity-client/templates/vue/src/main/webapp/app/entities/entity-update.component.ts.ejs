@@ -3,7 +3,7 @@ import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vu
   import { mixins } from 'vue-class-component';
   import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
-import { numeric, required, minLength, maxLength } from 'vuelidate/lib/validators';
+import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 <%_
     let dateFnsIncluded = false;
     for (idx in fields) {
@@ -59,7 +59,13 @@ const validations: any = {
       maxLength: maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),
     <%_ } _%>
     <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
-    numeric
+    numeric,
+    <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
+      min: minValue(<%= fields[idx].fieldValidateRulesMin %>),
+    <%_ } _%>
+    <%_ if (fields[idx].fieldValidateRules.includes('max')) { _%>
+      max: maxValue(<%= fields[idx].fieldValidateRulesMax %>),
+    <%_ } _%>
     <%_ } _%>
 
     <%_ } _%>

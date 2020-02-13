@@ -107,27 +107,32 @@
                             </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('minlength')) { _%>
-                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-bind:value="$t('entity.validation.minlength')">
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-text="$t('entity.validation.minlength', {min: <%= fields[idx].fieldValidateRulesMinlength %>})">
                                 This field is required to be at least <%= fields[idx].fieldValidateRulesMinlength %> characters.
                             </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('maxlength')) { _%>
-                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-bind:value="$t('entity.validation.maxlength')">
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-text="$t('entity.validation.maxlength', {max: <%= fields[idx].fieldValidateRulesMaxlength %>})">
                                 This field cannot be longer than <%= fields[idx].fieldValidateRulesMaxlength %> characters.
                             </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('min')) { _%>
-                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.minLength" v-bind:value="$t('entity.validation.min')">
-                                This field should be at least <%= fields[idx].fieldValidateRulesMin %> characters.
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.min" v-text="$t('entity.validation.min', {min: <%= fields[idx].fieldValidateRulesMin %>})">
+                                This field should be at least <%= fields[idx].fieldValidateRulesMin %>.
                             </small>
                             <%_ } _%>
                             <%_ if (fields[idx].fieldValidateRules.includes('max')) { _%>
-                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.maxLength" v-bind:value="$t('entity.validation.max')">
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.max" v-text="$t('entity.validation.max', {max: <%= fields[idx].fieldValidateRulesMax %>})">
                                 This field cannot be longer than <%= fields[idx].fieldValidateRulesMax %> characters.
                             </small>
                             <%_ } _%>
+                            <%_ if (fields[idx].fieldValidateRules.includes('pattern')) { _%>
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.pattern" v-text="$t('entity.validation.pattern', {pattern: '<%= fieldNameHumanized %>'})">
+                                This field should follow pattern for "<%= fieldNameHumanized %>".
+                            </small>
+                            <%_ } _%>
                             <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
-                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.number" v-text="$t('entity.validation.number')">
+                            <small class="form-text text-danger" v-if="!$v.<%= entityInstance %>.<%= fieldName %>.numeric" v-text="$t('entity.validation.number')">
                                 This field should be a number.
                             </small>
                             <%_ } _%>
