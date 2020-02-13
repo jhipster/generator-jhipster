@@ -322,8 +322,10 @@ function writeFiles() {
                 files = reactFiles;
                 destDir = REACT_DIR;
                 templatesDir = CLIENT_REACT_TEMPLATES_DIR;
-            } else if (!this.embedded) {
-                this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+            } else {
+                if (!this.embedded) {
+                    this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+                }
                 return;
             }
 
