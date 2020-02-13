@@ -293,46 +293,40 @@ function writeFiles() {
             if (this.protractorTests) {
                 addSampleRegexTestingStrings(this);
             }
+
+            let files;
+            let destDir;
+            let templatesDir;
+            let microserviceName = this.microserviceName;
+
             if (this.clientFramework === 'angularX') {
-                // write client side files for angular 2.x +
-                this.writeFilesToDisk(
-                    angularFiles,
-                    this,
-                    false,
-                    this.fetchFromInstalledJHipster(`entity-client/templates/${CLIENT_NG2_TEMPLATES_DIR}`)
-                );
-                this.addEntityToModule(
-                    this.entityInstance,
-                    this.entityClass,
-                    this.entityAngularName,
-                    this.entityFolderName,
-                    this.entityFileName,
-                    this.entityUrl,
-                    this.clientFramework,
-                    this.microserviceName
-                );
-
-                addEnumerationFiles(this, CLIENT_NG2_TEMPLATES_DIR, ANGULAR_DIR);
+                files = angularFiles;
+                destDir = ANGULAR_DIR;
+                templatesDir = CLIENT_NG2_TEMPLATES_DIR;
+                microserviceName = this.microserviceName;
             } else if (this.clientFramework === 'react') {
-                // write client side files for react
-                this.writeFilesToDisk(
-                    reactFiles,
-                    this,
-                    false,
-                    this.fetchFromInstalledJHipster(`entity-client/templates/${CLIENT_REACT_TEMPLATES_DIR}`)
-                );
-                this.addEntityToModule(
-                    this.entityInstance,
-                    this.entityClass,
-                    this.entityAngularName,
-                    this.entityFolderName,
-                    this.entityFileName,
-                    this.entityUrl,
-                    this.clientFramework
-                );
-
-                addEnumerationFiles(this, CLIENT_REACT_TEMPLATES_DIR, REACT_DIR);
+                files = reactFiles;
+                destDir = REACT_DIR;
+                templatesDir = CLIENT_REACT_TEMPLATES_DIR;
+            } else {
+                this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+                return;
             }
+
+            const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
+            this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
+            addEnumerationFiles(this, templatesDir, destDir);
+
+            this.addEntityToModule(
+                this.entityInstance,
+                this.entityClass,
+                this.entityAngularName,
+                this.entityFolderName,
+                this.entityFileName,
+                this.entityUrl,
+                this.clientFramework,
+                microserviceName
+            );
             this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
     };
