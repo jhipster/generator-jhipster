@@ -33,6 +33,14 @@ const {
   REQUIRED,
   UNIQUE
 } = require('../../../lib/core/jhipster/validations');
+const {
+  READ_ONLY,
+  NO_FLUENT_METHOD,
+  FILTER,
+  SKIP_SERVER,
+  SKIP_CLIENT,
+  EMBEDDED
+} = require('../../../lib/core/jhipster/unary_options');
 
 describe('Grammar tests', () => {
   context('when parsing constants', () => {
@@ -1118,6 +1126,23 @@ entity A {
           expect(parsedOption).to.deep.equal({
             excluded: ['A'],
             list: ['*']
+          });
+        });
+      });
+      [READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER, FILTER, NO_FLUENT_METHOD].forEach(option => {
+        context(option, () => {
+          let parsedOption;
+
+          before(() => {
+            const content = parseFromContent(`${option} A`);
+            parsedOption = content.options[option];
+          });
+
+          it('should parse it', () => {
+            expect(parsedOption).to.deep.equal({
+              list: ['A'],
+              excluded: []
+            });
           });
         });
       });
