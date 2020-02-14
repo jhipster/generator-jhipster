@@ -42,7 +42,7 @@ function loadBlueprintCommands() {
                 /* eslint-disable import/no-dynamic-require */
                 /* eslint-disable global-require */
                 try {
-                    const namespace = packageName.replace('generator-', blueprint);
+                    const namespace = blueprint.replace('generator-', '');
                     const blueprintPackage = Env.lookupGenerator(namespace, { packagePath: true });
                     const blueprintCommands = require(`${blueprintPackage}/cli/commands`);
                     result = { ...result, ...blueprintCommands };
