@@ -94,7 +94,9 @@ module.exports = class extends BaseGenerator {
             // Verify blueprints, should be executed only once
             if (!this.configOptions.blueprintsVerified) {
                 // Run a lookup to find blueprints.
-                const packagePatterns = blueprints.map(bp => bp.name);
+                const packagePatterns = blueprints
+                    .filter(bp => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(bp.name)))
+                    .map(bp => bp.name);
                 this.env.lookup({ packagePatterns });
 
                 if (!this.options.skipChecks) {
