@@ -252,7 +252,7 @@ const loadBlueprintCommands = (env, blueprints) => {
             const blueprintCommands = require(`${packagePath}/cli/commands`);
             result = { ...result, ...blueprintCommands };
         } catch (e) {
-            const msg = `No custom commands found within blueprint: ${blueprint}`;
+            const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
             /* eslint-disable no-console */
             console.info(`${chalk.green.bold('INFO!')} ${msg}`);
         }
