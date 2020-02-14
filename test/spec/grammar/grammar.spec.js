@@ -42,6 +42,10 @@ const {
   EMBEDDED
 } = require('../../../lib/core/jhipster/unary_options');
 
+const { Options, Values } = require('../../../lib/core/jhipster/binary_options');
+
+const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
+
 describe('Grammar tests', () => {
   context('when parsing constants', () => {
     context('with integer values', () => {
@@ -1198,6 +1202,43 @@ entity A {
               excluded: ['A'],
               list: ['*']
             }
+          });
+        });
+      });
+      [SEARCH, SERVICE, PAGINATION, DTO].forEach(option => {
+        context(option, () => {
+          Object.keys(Values[option]).forEach(key => {
+            let parsedOption;
+
+            before(() => {
+              const value = Values[option][key];
+              const content = parseFromContent(`${option === PAGINATION ? 'paginate' : option} A with ${value}`);
+              parsedOption = content.options[option][value];
+            });
+
+            it('should parse it', () => {
+              expect(parsedOption).to.deep.equal({
+                list: ['A'],
+                excluded: []
+              });
+            });
+          });
+        });
+      });
+      [MICROSERVICE, ANGULAR_SUFFIX].forEach(option => {
+        context(option, () => {
+          let parsedOption;
+
+          before(() => {
+            const content = parseFromContent(`${option} A with toto`);
+            parsedOption = content.options[option].toto;
+          });
+
+          it('should parse it', () => {
+            expect(parsedOption).to.deep.equal({
+              list: ['A'],
+              excluded: []
+            });
           });
         });
       });
