@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const Env = require('yeoman-environment');
+
 const jhipsterUtils = require('../generators/utils');
 
 const customCommands = loadBlueprintCommands();
@@ -40,7 +42,9 @@ function loadBlueprintCommands() {
                 /* eslint-disable import/no-dynamic-require */
                 /* eslint-disable global-require */
                 try {
-                    const blueprintCommands = require(`${blueprint}/cli/commands`);
+                    const namespace = jhipsterUtils.packageNameToNamespace(blueprint);
+                    const blueprintPackage = Env.lookupGenerator(namespace, { packagePath: true });
+                    const blueprintCommands = require(`${blueprintPackage}/cli/commands`);
                     result = { ...result, ...blueprintCommands };
                 } catch (e) {
                     const msg = `No custom commands found within blueprint: ${blueprint}`;
