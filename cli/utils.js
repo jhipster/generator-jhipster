@@ -24,6 +24,8 @@ const yeoman = require('yeoman-environment');
 const _ = require('lodash');
 const path = require('path');
 
+const { normalizeBlueprintName, packageNameToNamespace } = require('../generators/utils');
+
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
 
@@ -176,7 +178,7 @@ const getCommand = (cmd, args, opts) => {
     }
     const cmdArgs = options.join(' ').trim();
     logger.debug(`cmdArgs: ${cmdArgs}`);
-    return `${CLI_NAME}:${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
+    return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
 const getCommandOptions = (pkg, argv) => {
@@ -202,11 +204,60 @@ const done = errorMsg => {
     }
 };
 
-const createYeomanEnv = () => {
+const createYeomanEnv = packagePatterns => {
     const env = yeoman.createEnv();
     // Register jhipster generators.
     env.lookup({ packagePaths: [path.join(__dirname, '..')] });
+    if (packagePatterns) {
+        // Lookup for blueprints.
+        env.lookup({ packagePatterns });
+    }
     return env;
+};
+
+const loadBlueprints = () => {
+    const blueprintNames = [];
+    const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
+    if (indexOfBlueprintArgv > -1) {
+        blueprintNames.push(process.argv[indexOfBlueprintArgv + 1]);
+    }
+    const indexOfBlueprintsArgv = process.argv.indexOf('--blueprints');
+    if (indexOfBlueprintsArgv > -1) {
+        blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
+    }
+    if (!blueprintNames.length) {
+        return undefined;
+    }
+    return blueprintNames.filter((v, i, a) => a.indexOf(v) === i).map(v => normalizeBlueprintName(v));
+};
+
+const loadBlueprintCommands = (env, blueprints) => {
+    if (!blueprints) {
+        return undefined;
+    }
+    let result;
+    blueprints.forEach(blueprint => {
+        const namespace = packageNameToNamespace(blueprint);
+        const packagePath = env.getPackagePath(namespace);
+        if (!packagePath) {
+            logger.fatal(
+                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
+                    `npm i -g ${blueprint}`
+                )}`
+            );
+        }
+        /* eslint-disable import/no-dynamic-require */
+        /* eslint-disable global-require */
+        try {
+            const blueprintCommands = require(`${packagePath}/cli/commands`);
+            result = { ...result, ...blueprintCommands };
+        } catch (e) {
+            const msg = `No custom commands found within blueprint: ${blueprint}`;
+            /* eslint-disable no-console */
+            console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+        }
+    });
+    return result;
 };
 
 module.exports = {
@@ -221,5 +272,7 @@ module.exports = {
     getCommandOptions,
     done,
     createYeomanEnv,
+    loadBlueprints,
+    loadBlueprintCommands,
     getOptionAsArgs
 };
