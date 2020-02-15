@@ -86,7 +86,7 @@ if (project.hasProperty("gae")) {
 
     dependencyManagement {
         imports {
-            mavenBom 'io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}'
+            mavenBom "io.github.jhipster:jhipster-dependencies:${jhipster_dependencies_version}"
         }
     }
     appengineStage.dependsOn thinResolve
@@ -469,19 +469,19 @@ dependencies {
     }
     implementation "io.springfox:springfox-bean-validators"
     <%_ } _%>
-    <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
+    <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"
     <%_ } _%>
-    <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     implementation "org.postgresql:postgresql"
     liquibaseRuntime "org.postgresql:postgresql"
     <%_ } _%>
-    <%_ if (devDatabaseType === 'mariadb' || prodDatabaseType === 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mariadb') { _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
     <%_ } _%>
-    <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
     implementation "com.github.sabomichal:liquibase-mssql"
     liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
@@ -525,7 +525,7 @@ dependencies {
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
     liquibaseRuntime "com.h2database:h2"
     <%_ } _%>
-    <%_ if (devDatabaseType === 'oracle' || prodDatabaseType === 'oracle') { _%>
+    <%_ if (prodDatabaseType === 'oracle') { _%>
     implementation "com.oracle.ojdbc:ojdbc8"
     liquibaseRuntime "com.oracle.ojdbc:ojdbc8"
     <%_ } _%>

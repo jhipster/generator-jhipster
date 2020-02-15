@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const shelljs = require('shelljs');
 const chalk = require('chalk');
 const BaseGenerator = require('../generator-base');
 const prompts = require('./prompts');
@@ -86,6 +87,23 @@ module.exports = class extends BaseGenerator {
 
     get writing() {
         return writeFiles();
+    }
+
+    install() {
+        this.clientPackageManager = this.config.get('clientPackageManager');
+        Object.keys(this.clientsToGenerate).forEach(cliName => {
+            const done = this.async();
+            this.log(chalk.green(`\nGenerating client for ${cliName}`));
+            const generatorName = this.clientsToGenerate[cliName].generatorName;
+            const { stdout, stderr } = shelljs.exec(`${this.clientPackageManager} run openapi-client:${cliName}`, { silent: this.silent });
+            if (!stderr) {
+                this.success(`Succesfully generated ${cliName} ${generatorName} client`);
+                done();
+            } else {
+                this.log(`Something went wrong while generating client ${cliName}: ${stdout} ${stderr}`);
+                done();
+            }
+        });
     }
 
     end() {

@@ -28,7 +28,7 @@ jobs:
           JHI_JDK: 11
           # if JHI_LIB_BRANCH value is release, use the release from Maven
           JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-          JHI_LIB_BRANCH: release
+          JHI_LIB_BRANCH: master
           # if JHI_GEN_BRANCH value is release, use the release from NPM
           JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
           JHI_GEN_BRANCH: master
@@ -62,12 +62,12 @@ jobs:
                   JHI_APP: ms-react-gateway-consul-jwt
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 0
+                  JHI_PROTRACTOR: 1
               ms-react-gateway-consul-oauth2:
                   JHI_APP: ms-react-gateway-consul-oauth2
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 0
+                  JHI_PROTRACTOR: 1
               jdl-default:
                   JHI_APP: jdl-default
                   JHI_ENTITY: jdl
@@ -89,6 +89,9 @@ jobs:
           #----------------------------------------------------------------------
           # Install all tools and check configuration
           #----------------------------------------------------------------------
+          - bash: exit 0
+            condition: or(contains(variables['Build.SourceVersionMessage'], '[skip ci]'), contains(variables['Build.SourceVersionMessage'], '[ci skip]'))
+            displayName: 'CHECK: check if commit contains CI skip'
           - task: NodeTool@0
             inputs:
                 versionSpec: '12.14.0'
