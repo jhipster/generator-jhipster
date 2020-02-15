@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable no-console */
 
 const path = require('path');
 const shelljs = require('shelljs');
@@ -67,7 +68,9 @@ module.exports = {
     parseBluePrints,
     normalizeBlueprintName,
     stringHashCode,
-    RandexpWithFaker
+    RandexpWithFaker,
+    gitExec,
+    isGitInstalled
 };
 
 /**
@@ -676,4 +679,40 @@ function stringHashCode(str) {
         hash *= -1;
     }
     return hash;
+}
+
+/**
+ * Executes a Git command using shellJS
+ * gitExec(args [, options, callback])
+ *
+ * @param {string|array} args - can be an array of arguments or a string command
+ * @param {object} options[optional] - takes any of child process options
+ * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+ * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
+ */
+function gitExec(args, options = {}, callback) {
+    if (options.async === undefined) options.async = callback !== undefined;
+    if (options.silent === undefined) options.silent = true;
+    if (options.trace === undefined) options.trace = true;
+
+    if (!Array.isArray(args)) {
+        args = [args];
+    }
+    const command = `git ${args.join(' ')}`;
+    if (options.trace) {
+        console.info(command);
+    }
+    if (callback) {
+        return shelljs.exec(command, options, callback);
+    }
+    return shelljs.exec(command, options);
+}
+
+/**
+ * Checks if git is installed.
+ *
+ * @return {boolean} true if installed; false otherwise..
+ */
+function isGitInstalled() {
+    return gitExec('--version', { trace: false }).code === 0;
 }
