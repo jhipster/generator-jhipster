@@ -691,6 +691,11 @@ function stringHashCode(str) {
  * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
  */
 function gitExec(args, options = {}, callback) {
+    if (typeof options === 'function') {
+        callback = options;
+        options = {};
+    }
+
     if (options.async === undefined) options.async = callback !== undefined;
     if (options.silent === undefined) options.silent = true;
     if (options.trace === undefined) options.trace = true;
@@ -711,8 +716,12 @@ function gitExec(args, options = {}, callback) {
 /**
  * Checks if git is installed.
  *
+ * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
+ *
  * @return {boolean} true if installed; false otherwise..
  */
-function isGitInstalled() {
-    return gitExec('--version', { trace: false }).code === 0;
+function isGitInstalled(callback) {
+    const code = gitExec('--version', { trace: false }).code;
+    if (callback) callback(code);
+    return code === 0;
 }

@@ -627,10 +627,12 @@ module.exports = class extends Generator {
     /**
      * Checks if git is installed.
      *
-     * @return {boolean} true if installed; false otherwise..
+     * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
+     *
+     * @return {boolean} true if installed; false otherwise.
      */
-    isGitInstalled() {
-        const gitInstalled = jhipsterUtils.isGitInstalled();
+    isGitInstalled(callback) {
+        const gitInstalled = jhipsterUtils.isGitInstalled(callback);
         if (!gitInstalled) {
             this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
         }
