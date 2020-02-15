@@ -110,14 +110,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   }, [<%_ if (searchEngine === 'elasticsearch' && pagination === 'no') { _%>search<%_ } _%>]);
   <%_ } _%>
 
-  <%_ if (pagination === 'infinite-scroll') { _%>
-  useEffect(() => {
-    if (props.updateSuccess) {
-      getAllEntities();
-    }
-  });
-  <%_ } _%>
-
   <%_ if (searchEngine === 'elasticsearch') { _%>
   const startSearching = () => {
     if (search) {
