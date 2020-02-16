@@ -103,7 +103,7 @@ const serverFiles = {
         {
             condition: generator => generator.cacheProvider === 'redis',
             path: DOCKER_DIR,
-            templates: ['redis.yml']
+            templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh']
         },
         {
             condition: generator => generator.searchEngine === 'elasticsearch',

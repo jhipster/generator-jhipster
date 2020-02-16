@@ -247,7 +247,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'redis',
-                    name: 'Yes, with the Redis implementation (single server)'
+                    name: 'Yes, with the Redis implementation'
                 },
                 {
                     value: 'no',
