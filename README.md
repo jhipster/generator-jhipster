@@ -9,7 +9,7 @@
 
 [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url]
 
-[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Vue.js Build Status][github-actions-vuejs-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
+[![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Vue.js Build Status][github-actions-vuejs-image]][github-actions-url]
 
 # Introduction
 
@@ -112,8 +112,6 @@ Apache-2.0 © [Deepu K Sasidharan](https://deepu.js.org)
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-vuejs/latest.svg?style=flat
 [npm-url]: https://npmjs.org/package/generator-jhipster-vuejs
-[azure-devops-image]: https://dev.azure.com/jhipster/jhipster-vuejs/_apis/build/status/jhipster-vuejs?branchName=master
-[azure-devops-url-main]: https://dev.azure.com/jhipster/jhipster-vuejs/_build
 [github-actions-generator-image]: https://github.com/jhipster/jhipster-vuejs/workflows/Generator/badge.svg
 [github-actions-vuejs-image]: https://github.com/jhipster/jhipster-vuejs/workflows/Vue.js/badge.svg
 [github-actions-url]: https://github.com/jhipster/jhipster-vuejs/actions
