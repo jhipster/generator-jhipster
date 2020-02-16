@@ -1,6 +1,6 @@
 -   Please make sure the below checklist is followed for Pull Requests.
 
--   [ ] [Azure tests](https://dev.azure.com/jhipster/jhipster-vuejs/_build) are green
+-   [ ] [All continuous integration tests](https://github.com/jhipster/jhipster-vuejs/actions) are green
 -   [ ] Tests are added where necessary
 -   [ ] Documentation is added/updated where necessary
 -   [ ] Coding Rules & Commit Guidelines as per our [CONTRIBUTING.md document](https://github.com/jhipster/jhipster-vuejs/blob/master/CONTRIBUTING.md) are followed

@@ -95,7 +95,7 @@ Before you submit your pull request consider the following guidelines:
     mvn spring-boot:run
     ```
 
--   You can generate our Continuous Integration (with Travis CI and Azure Pipelines) by following [this](#local-build)
+-   You can generate our Continuous Integration (with GitHub Actions) by following [this](#local-build)
 
 -   Commit your changes using a descriptive commit message that follows our
     [commit message conventions](#commit-message-format).
