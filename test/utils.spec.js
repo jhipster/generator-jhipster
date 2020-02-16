@@ -1,5 +1,6 @@
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
+const sinon = require('sinon');
 const utils = require('../generators/utils');
 
 describe('JHipster Utils', () => {
@@ -193,6 +194,59 @@ describe('JHipster Utils', () => {
     describe('::stringHashCode', () => {
         it('calculates hash', () => {
             assert.equal(utils.stringHashCode('some text'), 642107175);
+        });
+    });
+    describe('::gitExec', () => {
+        it('Executes command synchronously without options', () => {
+            const result = utils.gitExec('--version');
+            assert.strictEqual(result.code, 0);
+            assert.strictEqual(result.stdout.length > 0, true);
+            assert.strictEqual(result.stdout.startsWith('git version '), true);
+            assert.strictEqual(result.stderr.length, 0);
+        });
+
+        it('Executes command synchronously with options', () => {
+            const result = utils.gitExec('--version', { trace: true });
+            assert.strictEqual(result.code, 0);
+            assert.strictEqual(result.stdout.length > 0, true);
+            assert.strictEqual(result.stdout.startsWith('git version '), true);
+            assert.strictEqual(result.stderr.length, 0);
+        });
+
+        before(done => {
+            this.callback = sinon.spy();
+            this.result = utils.gitExec('rev-parse --is-inside-work-tree', this.callback);
+            done();
+        });
+        it('Executes command asynchronously without options', () => {
+            sinon.assert.calledOnce(this.callback);
+            assert.strictEqual(this.callback.getCall(0).args[0], 0);
+            assert.strictEqual(this.callback.getCall(0).args[1].trim(), 'true');
+            assert.strictEqual(this.callback.getCall(0).args[2], '');
+        });
+
+        before(done => {
+            this.callback = sinon.spy();
+            this.result = utils.gitExec('rev-parse --is-inside-work-tree', { trace: true }, this.callback);
+            done();
+        });
+        it('Executes command asynchronously with options', () => {
+            sinon.assert.calledOnce(this.callback);
+            assert.strictEqual(this.callback.getCall(0).args[0], 0);
+            assert.strictEqual(this.callback.getCall(0).args[1].trim(), 'true');
+            assert.strictEqual(this.callback.getCall(0).args[2], '');
+        });
+    });
+    describe('::isGitInstalled', () => {
+        it('Check installed without callback', () => {
+            const isGitInstalled = utils.isGitInstalled();
+            assert.strictEqual(isGitInstalled, true);
+        });
+        it('Check installed and execute callback', () => {
+            const callback = sinon.spy();
+            const isGitInstalled = utils.isGitInstalled(callback);
+            assert.strictEqual(isGitInstalled, true);
+            sinon.assert.calledOnce(callback);
         });
     });
 });

@@ -242,11 +242,10 @@ module.exports = class extends BaseGenerator {
             },
 
             assertGitPresent() {
-                const done = this.async();
-                this.isGitInstalled(code => {
-                    if (code !== 0) this.error('Exiting the process.');
-                    done();
-                });
+                if (this.isGitInstalled() === false) {
+                    this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
+                    this.error('Exiting the process.');
+                }
             },
 
             checkLatestBlueprintVersions() {
@@ -280,7 +279,7 @@ module.exports = class extends BaseGenerator {
                                     blueprint.latestBlueprintVersion = latestVersion;
                                     if (semver.lt(blueprint.version, blueprint.latestBlueprintVersion)) {
                                         this.newBlueprintVersionFound = true;
-                                        this.success(`New ${blueprint.name} version found: ${this.latestBlueprintVersion}`);
+                                        this.success(`New ${blueprint.name} version found: ${blueprint.latestBlueprintVersion}`);
                                     } else if (this.force) {
                                         this.newBlueprintVersionFound = true;
                                         this.log(chalk.yellow('Forced re-generation'));
