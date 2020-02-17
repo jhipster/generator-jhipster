@@ -18,7 +18,19 @@ $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 You can deploy all your apps by running the below bash command:
 
 ```
-./kubectl-apply.sh
+./kubectl-apply.sh -f (default option)  [or] ./kubectl-apply.sh -k (kustomize option) [or] ./kubectl-apply.sh -s (skaffold run)
+```
+
+If you want to apply kustomize manifest directly using kubectl, then run
+
+```
+kubectl apply -k ./
+```
+
+If you want to deploy using skaffold binary, then run
+
+```
+skaffold run [or] skaffold deploy
 ```
 
 ## Exploring your services
