@@ -31,7 +31,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   public infiniteId = +new Date();
   public infiniteLoadingState = null;
   public links = {};
-  public page = 0;
+  public page = 1;
   <%_ } _%>
     
   public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
@@ -60,7 +60,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
     this.page = 1;
     <%_ } _%>
     <%_ if (pagination === 'infinite-scroll') { _%>
-    this.page = 0;
+    this.page = 1;
     this.links = {};
     this.infiniteId += 1;
     this.<%= entityInstancePlural %> = [];
@@ -70,7 +70,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   public reset(): void {
-    this.page = 0;
+    this.page = 1;
     this.infiniteId += 1;
     this.<%= entityInstancePlural %> = [];
     this.retrieveAll<%= entityAngularName %>s();
@@ -87,7 +87,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
     };<% } %>
     <%_ if (pagination === 'infinite-scroll') { _%>
     const paginationQuery = {
-      page: this.page,
+      page: this.page - 1,
       size: this.itemsPerPage,
       sort: this.sort()
     };<% } %>
