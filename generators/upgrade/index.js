@@ -151,7 +151,7 @@ module.exports = class extends BaseGenerator {
         this.success('Cleaned up project directory');
     }
 
-    _generate(jhipsterVersion, blueprintInfo, callback) {
+    _generate(jhipsterVersion, blueprintInfo) {
         this.log(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
         let generatorCommand = 'yo jhipster';
         if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
@@ -170,7 +170,6 @@ module.exports = class extends BaseGenerator {
         try {
             childProcess.execSync(regenerateCmd, { stdio: 'inherit' });
             this.success(`Successfully regenerated application with JHipster ${jhipsterVersion}${blueprintInfo}`);
-            callback();
         } catch (err) {
             this.error(`Something went wrong while generating project! ${err}`);
         }
@@ -188,13 +187,12 @@ module.exports = class extends BaseGenerator {
     }
 
     _regenerate(jhipsterVersion, blueprintInfo, callback) {
-        this._generate(jhipsterVersion, blueprintInfo, () => {
-            const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
-            this.info(`Removing ${keystore}`);
-            shelljs.rm('-Rf', keystore);
-            this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
-            callback();
-        });
+        this._generate(jhipsterVersion, blueprintInfo);
+        const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
+        this.info(`Removing ${keystore}`);
+        shelljs.rm('-Rf', keystore);
+        this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
+        callback();
     }
 
     _retrieveLatestVersion(npmPackage, callback) {
