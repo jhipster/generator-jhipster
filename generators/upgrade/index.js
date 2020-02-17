@@ -309,20 +309,15 @@ module.exports = class extends BaseGenerator {
             },
 
             assertGitRepository() {
-                const done = this.async();
                 const gitInit = () => {
                     const gitInit = this.gitExec('init', { silent: this.silent });
                     if (gitInit.code !== 0) this.error(`Unable to initialize a new Git repository:\n${gitInit.stdout} ${gitInit.stderr}`);
                     this.success('Initialized a new Git repository');
                     this._gitCommitAll('Initial');
-                    done();
                 };
                 const gitRevParse = this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], { silent: this.silent });
                 if (gitRevParse.code !== 0) gitInit();
-                else {
-                    this.success('Git repository detected');
-                    done();
-                }
+                else this.success('Git repository detected');
             },
 
             assertNoLocalChanges() {
