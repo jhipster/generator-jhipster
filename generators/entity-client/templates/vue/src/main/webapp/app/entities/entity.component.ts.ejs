@@ -4,13 +4,13 @@ import { Component, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import AlertMixin from '@/shared/alert/alert.mixin';
-<% if (fieldsContainBlob) { %>
+<% if (fieldsContainBlob || pagination === 'infinite-scroll') { %>
 import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
 @Component
-export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils, Vue2Filters.mixin, AlertMixin)<% } else { %> mixins(Vue2Filters.mixin, AlertMixin)<% } %> {
+export default class <%= entityAngularName %> extends <% if (fieldsContainBlob || pagination === 'infinite-scroll') { %>mixins(JhiDataUtils, Vue2Filters.mixin, AlertMixin)<% } else { %> mixins(Vue2Filters.mixin, AlertMixin)<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public currentSearch = '';
@@ -19,12 +19,21 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
   <%_ if (pagination !== 'no') { _%>
   public itemsPerPage = 20;
   public queryCount: number = null;
-  public page = 1;
   public previousPage = 1;
   public propOrder = 'id';
   public reverse = <%_ if (pagination === 'infinite-scroll') { _%>true<%_ } else { _%>false<%_ } _%>;
   public totalItems = 0;
   <%_ } _%>
+  <%_ if (pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
+  public page = 1;
+  <%_ } _%>
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  public infiniteId = +new Date();
+  public infiniteLoadingState = null;
+  public links = {};
+  public page = 0;
+  <%_ } _%>
+    
   public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
 
   public isFetching = false;
@@ -47,29 +56,71 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
     <%_ if (searchEngine === 'elasticsearch') { _%>
     this.currentSearch = '';
     <%_ } _%>
-    <%_ if (pagination !== 'no') { _%>
+    <%_ if (pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
     this.page = 1;
+    <%_ } _%>
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    this.page = 0;
+    this.links = {};
+    this.infiniteId += 1;
+    this.<%= entityInstancePlural %> = [];
     <%_ } _%>
     this.retrieveAll<%= entityAngularName %>s();
   }
 
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  public reset(): void {
+    this.page = 0;
+    this.infiniteId += 1;
+    this.<%= entityInstancePlural %> = [];
+    this.retrieveAll<%= entityAngularName %>s();
+  }
+  <%_ } _%>
+
   public retrieveAll<%= entityAngularName %>s() :void {
     this.isFetching = true;
-    <% if (pagination !== 'no') { %>
+    <% if (pagination !== 'no' && pagination !== 'infinite-scroll') { %>
     const paginationQuery = {
       page: this.page - 1,
+      size: this.itemsPerPage,
+      sort: this.sort()
+    };<% } %>
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    const paginationQuery = {
+      page: this.page,
       size: this.itemsPerPage,
       sort: this.sort()
     };<% } %>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     if (this.currentSearch) {
       this.<%= entityInstance %>Service().search(this.currentSearch<%_ if (pagination !== 'no') { _%>, paginationQuery<%_ } _%>).then(res => {
-        this.<%= entityInstancePlural %> = <%_ if (pagination !== 'no') { _%>res.data<%_ } else { _%>res<%_ } _%>;
+        <%_ if (pagination === 'no') { _%>
+        this.<%= entityInstancePlural %> = res;
+        <%_ } else if (pagination !== 'infinite-scroll') { _%>
+        this.<%= entityInstancePlural %> = res.data;
+        <%_ } else if (pagination === 'infinite-scroll') { _%>
+        if(res.data && res.data.length > 0){
+          for (let i = 0; i < res.data.length; i++) {
+            this.<%= entityInstancePlural %>.push(res.data[i]);
+          }
+          if(res.headers && res.headers['link']){
+            this.links = this.parseLinks(res.headers['link']);
+          }
+        }
+        <%_ } _%>
         <%_ if (pagination !== 'no') { _%>
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         <%_ } _%>
         this.isFetching = false;
+        <%_ if (pagination === 'infinite-scroll') { _%>
+        if(this.infiniteLoadingState !== null) {
+          this.infiniteLoadingState.loaded();
+          if(this.links !== {} && this.page >= this.links['last']){
+            this.infiniteLoadingState.complete();
+          }
+        }
+        <%_ } _%>
       }, err => {
         this.isFetching = false;
       });
@@ -77,12 +128,31 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
     }
     <%_ } _%>
     this.<%= entityInstance %>Service().retrieve(<%_ if (pagination !== 'no') { _%>paginationQuery<%_ } _%>).then(res => {
+      <%_ if (pagination !== 'infinite-scroll') { _%>
       this.<%= entityInstancePlural %> = res.data;
+      <%_ } else { _%>
+      if(res.data && res.data.length > 0){
+        for (let i = 0; i < res.data.length; i++) {
+          this.<%= entityInstancePlural %>.push(res.data[i]);
+        }
+        if(res.headers && res.headers['link']){
+          this.links = this.parseLinks(res.headers['link']);
+        }
+      }
+      <%_ } _%>
       <%_ if (pagination !== 'no') { _%>
       this.totalItems = Number(res.headers['x-total-count']);
       this.queryCount = this.totalItems;
       <%_ } _%>
       this.isFetching = false;
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      if(this.infiniteLoadingState !== null) {
+        this.infiniteLoadingState.loaded();
+        if(this.links !== {} && this.page >= this.links['last']){
+          this.infiniteLoadingState.complete();
+        }
+      }
+      <%_ } _%>
     }, err => {
       this.isFetching = false;
     });
@@ -110,6 +180,21 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob) 
       this.retrieveAll<%= entityAngularName %>s();
       this.closeDialog();
     });
+  }
+
+  <%_ } _%>
+  <%_ if (pagination === 'infinite-scroll') { _%>
+  public loadMore($state): void {
+    this.infiniteLoadingState = $state;
+    if (this.page >= this.links['last']){ 
+      this.infiniteLoadingState.complete();
+    }
+    if (this.isFetching) {
+      return;
+    } else {
+      this.previousPage = this.page++;
+      this.transition();
+    }
   }
 
   <%_ } _%>
