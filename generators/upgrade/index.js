@@ -511,23 +511,20 @@ module.exports = class extends BaseGenerator {
     }
 
     install() {
-        const done = this.async();
         if (!this.skipInstall) {
             this.log('Installing dependencies, please wait...');
             this.info('Removing the node_modules directory');
             shelljs.rm('-rf', 'node_modules');
             const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
             this.info(installCommand);
-            shelljs.exec(installCommand, { silent: this.silent }, (code, msg, err) => {
-                if (code !== 0) {
-                    this.error(`${installCommand} failed.`);
-                }
-                done();
-            });
+
+            const pkgInstall = shelljs.exec(installCommand, { silent: this.silent });
+            if (pkgInstall.code !== 0) {
+                this.error(`${installCommand} failed.`);
+            }
         } else {
             const logMsg = `Start your Webpack development server with:\n${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
             this.success(logMsg);
-            done();
         }
     }
 
