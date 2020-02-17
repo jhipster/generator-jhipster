@@ -210,18 +210,17 @@ module.exports = class extends BaseGenerator {
         });
     }
 
-    _installNpmPackageLocally(npmPackage, version, callback) {
+    _installNpmPackageLocally(npmPackage, version) {
         this.log(`Installing ${npmPackage} ${version} locally`);
         const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn add' : 'npm install';
         const devDependencyParam = this.clientPackageManager === 'yarn' ? '--dev' : '--save-dev';
         const noPackageLockParam = this.clientPackageManager === 'yarn' ? '--no-lockfile' : '--no-package-lock';
         const generatorCommand = `${commandPrefix} ${npmPackage}@${version} ${devDependencyParam} ${noPackageLockParam} --ignore-scripts`;
         this.info(generatorCommand);
-        shelljs.exec(generatorCommand, { silent: this.silent }, (code, msg, err) => {
-            if (code === 0) this.success(`Installed ${npmPackage}@${version}`);
-            else this.error(`Something went wrong while installing ${npmPackage}! ${msg} ${err}`);
-            callback();
-        });
+
+        const npmIntall = shelljs.exec(generatorCommand, { silent: this.silent });
+        if (npmIntall.code === 0) this.success(`Installed ${npmPackage}@${version}`);
+        else this.error(`Something went wrong while installing ${npmPackage}! ${npmIntall.stdout} ${npmIntall.stderr}`);
     }
 
     get configuring() {
@@ -394,7 +393,8 @@ module.exports = class extends BaseGenerator {
                 };
 
                 const installJhipsterLocally = (version, callback) => {
-                    this._installNpmPackageLocally(GENERATOR_JHIPSTER, version, callback);
+                    this._installNpmPackageLocally(GENERATOR_JHIPSTER, version);
+                    callback();
                 };
 
                 const installBlueprintsLocally = callback => {
@@ -408,10 +408,9 @@ module.exports = class extends BaseGenerator {
                     Promise.all(
                         this.blueprints.map(blueprint => {
                             return new Promise(resolve => {
-                                this._installNpmPackageLocally(blueprint.name, blueprint.version, () => {
-                                    this.success(`Done installing blueprint: ${blueprint.name}@${blueprint.version}`);
-                                    resolve();
-                                });
+                                this._installNpmPackageLocally(blueprint.name, blueprint.version);
+                                this.success(`Done installing blueprint: ${blueprint.name}@${blueprint.version}`);
+                                resolve();
                             });
                         })
                     ).then(() => {
@@ -465,8 +464,7 @@ module.exports = class extends BaseGenerator {
                 if (this.originalTargetJhipsterVersion === GLOBAL_VERSION) {
                     return;
                 }
-                const done = this.async();
-                this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.targetJhipsterVersion, done);
+                this._installNpmPackageLocally(GENERATOR_JHIPSTER, this.targetJhipsterVersion);
             },
 
             updateBlueprints() {
@@ -480,10 +478,9 @@ module.exports = class extends BaseGenerator {
                 Promise.all(
                     this.blueprints.map(blueprint => {
                         return new Promise(resolve => {
-                            this._installNpmPackageLocally(blueprint.name, blueprint.latestBlueprintVersion, () => {
-                                this.success(`Done upgrading blueprint ${blueprint.name} to version ${blueprint.latestBlueprintVersion}`);
-                                resolve();
-                            });
+                            this._installNpmPackageLocally(blueprint.name, blueprint.latestBlueprintVersion);
+                            this.success(`Done upgrading blueprint ${blueprint.name} to version ${blueprint.latestBlueprintVersion}`);
+                            resolve();
                         });
                     })
                 ).then(() => {
