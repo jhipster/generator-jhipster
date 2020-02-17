@@ -186,13 +186,12 @@ module.exports = class extends BaseGenerator {
         this.success(`Committed with message "${commitMsg}"`);
     }
 
-    _regenerate(jhipsterVersion, blueprintInfo, callback) {
+    _regenerate(jhipsterVersion, blueprintInfo) {
         this._generate(jhipsterVersion, blueprintInfo);
         const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
         this.info(`Removing ${keystore}`);
         shelljs.rm('-Rf', keystore);
         this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
-        callback();
     }
 
     _retrieveLatestVersion(npmPackage, callback) {
@@ -421,10 +420,9 @@ module.exports = class extends BaseGenerator {
                                 this.blueprints && this.blueprints.length > 0
                                     ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} `
                                     : '';
-                            this._regenerate(this.currentJhipsterVersion, blueprintInfo, () => {
-                                this._gitCheckout(this.sourceBranch);
-                                recordCodeHasBeenGenerated();
-                            });
+                            this._regenerate(this.currentJhipsterVersion, blueprintInfo);
+                            this._gitCheckout(this.sourceBranch);
+                            recordCodeHasBeenGenerated();
                         });
                     });
                 };
@@ -486,7 +484,6 @@ module.exports = class extends BaseGenerator {
             },
 
             generateWithTargetVersion() {
-                const done = this.async();
                 this._cleanUp();
 
                 const blueprintInfo =
@@ -496,7 +493,7 @@ module.exports = class extends BaseGenerator {
                 const targetJhipsterVersion = this.originalTargetJhipsterVersion
                     ? `${this.originalTargetJhipsterVersion} ${this.targetJhipsterVersion}`
                     : this.targetJhipsterVersion;
-                this._regenerate(targetJhipsterVersion, blueprintInfo, done);
+                this._regenerate(targetJhipsterVersion, blueprintInfo);
             },
 
             checkoutSourceBranch() {
