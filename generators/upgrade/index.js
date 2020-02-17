@@ -356,28 +356,27 @@ module.exports = class extends BaseGenerator {
 
             prepareUpgradeBranch() {
                 const done = this.async();
-                const getGitVersion = callback => {
+                const getGitVersion = () => {
                     const gitVersion = this.gitExec(['--version'], { silent: this.silent });
-                    callback(String(gitVersion.stdout.match(/([0-9]+\.[0-9]+\.[0-9]+)/g)));
+                    return String(gitVersion.stdout.match(/([0-9]+\.[0-9]+\.[0-9]+)/g));
                 };
 
                 const recordCodeHasBeenGenerated = () => {
-                    getGitVersion(gitVersion => {
-                        let args;
-                        if (semver.lt(gitVersion, GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES)) {
-                            args = ['merge', '--strategy=ours', '-q', '--no-edit', UPGRADE_BRANCH];
-                        } else {
-                            args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', UPGRADE_BRANCH];
-                        }
-                        const gitMerge = this.gitExec(args, { silent: this.silent });
-                        if (gitMerge.code !== 0) {
-                            this.error(
-                                `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${gitMerge.stdout} ${gitMerge.stderr}`
-                            );
-                        }
-                        this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
-                        done();
-                    });
+                    const gitVersion = getGitVersion();
+                    let args;
+                    if (semver.lt(gitVersion, GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES)) {
+                        args = ['merge', '--strategy=ours', '-q', '--no-edit', UPGRADE_BRANCH];
+                    } else {
+                        args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', UPGRADE_BRANCH];
+                    }
+                    const gitMerge = this.gitExec(args, { silent: this.silent });
+                    if (gitMerge.code !== 0) {
+                        this.error(
+                            `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${gitMerge.stdout} ${gitMerge.stderr}`
+                        );
+                    }
+                    this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
+                    done();
                 };
 
                 const installJhipsterLocally = (version, callback) => {
