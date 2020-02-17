@@ -349,8 +349,7 @@ module.exports = class extends BaseGenerator {
                 );
             },
 
-            prepareUpgradeBranch() {
-                const done = this.async();
+            async prepareUpgradeBranch() {
                 const getGitVersion = () => {
                     const gitVersion = this.gitExec(['--version'], { silent: this.silent });
                     return String(gitVersion.stdout.match(/([0-9]+\.[0-9]+\.[0-9]+)/g));
@@ -371,22 +370,20 @@ module.exports = class extends BaseGenerator {
                         );
                     }
                     this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
-                    done();
                 };
 
                 const installJhipsterLocally = version => {
                     this._installNpmPackageLocally(GENERATOR_JHIPSTER, version);
                 };
 
-                const installBlueprintsLocally = callback => {
+                const installBlueprintsLocally = () => {
                     if (!this.blueprints || this.blueprints.length < 1) {
                         this.log('Skipping local blueprint installation since no blueprint has been detected');
-                        callback();
-                        return;
+                        return Promise.resolve(false);
                     }
 
                     this.success('Installing blueprints locally...');
-                    Promise.all(
+                    return Promise.all(
                         this.blueprints.map(blueprint => {
                             return new Promise(resolve => {
                                 this._installNpmPackageLocally(blueprint.name, blueprint.version);
@@ -396,21 +393,7 @@ module.exports = class extends BaseGenerator {
                         })
                     ).then(() => {
                         this.success('Done installing blueprints locally');
-                        callback();
-                    });
-                };
-
-                const regenerate = () => {
-                    this._cleanUp();
-                    installJhipsterLocally(this.currentJhipsterVersion);
-                    installBlueprintsLocally(() => {
-                        const blueprintInfo =
-                            this.blueprints && this.blueprints.length > 0
-                                ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} `
-                                : '';
-                        this._regenerate(this.currentJhipsterVersion, blueprintInfo);
-                        this._gitCheckout(this.sourceBranch);
-                        recordCodeHasBeenGenerated();
+                        return true;
                     });
                 };
 
@@ -419,12 +402,29 @@ module.exports = class extends BaseGenerator {
                     if (gitCheckout.code !== 0)
                         this.error(`Unable to create ${UPGRADE_BRANCH} branch:\n${gitCheckout.stdout} ${gitCheckout.stderr}`);
                     this.success(`Created branch ${UPGRADE_BRANCH}`);
-                    regenerate();
                 };
 
                 const gitRevParse = this.gitExec(['rev-parse', '-q', '--verify', UPGRADE_BRANCH], { silent: this.silent });
-                if (gitRevParse.code !== 0) createUpgradeBranch();
-                else done();
+                if (gitRevParse.code !== 0) {
+                    // Create and checkout upgrade branch
+                    createUpgradeBranch();
+                    // Remove/rename old files
+                    this._cleanUp();
+                    // Install jhipster
+                    installJhipsterLocally(this.currentJhipsterVersion);
+                    // Install blueprints
+                    await installBlueprintsLocally();
+                    const blueprintInfo =
+                        this.blueprints && this.blueprints.length > 0
+                            ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} `
+                            : '';
+                    // Regenerate the project
+                    this._regenerate(this.currentJhipsterVersion, blueprintInfo);
+                    // Checkout original branch
+                    this._gitCheckout(this.sourceBranch);
+                    // Register reference for merging
+                    recordCodeHasBeenGenerated();
+                }
             }
         };
     }
