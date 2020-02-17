@@ -130,20 +130,18 @@ module.exports = class extends BaseGenerator {
         if (options.force) {
             args.push('-f');
         }
-        this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
-            if (code !== 0) this.error(`Unable to checkout branch ${branch}:\n${err}`);
-            this.success(`Checked out branch "${branch}"`);
-            callback();
-        });
+        const gitCheckout = this.gitExec(args, { silent: this.silent });
+        if (gitCheckout.code !== 0) this.error(`Unable to checkout branch ${branch}:\n${gitCheckout.stderr}`);
+        this.success(`Checked out branch "${branch}"`);
+        callback();
     }
 
     _upgradeFiles(callback) {
         if (cleanup.upgradeFiles(this)) {
-            this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent }, (code, msg, err) => {
-                if (code !== 0) this.error(`Unable to prepare upgrade:\n${err}`);
-                this.success('Upgrade preparation');
-                callback();
-            });
+            const gitCommit = this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent });
+            if (gitCommit.code !== 0) this.error(`Unable to prepare upgrade:\n${gitCommit.stderr}`);
+            this.success('Upgrade preparation');
+            callback();
         } else {
             callback();
         }
@@ -188,20 +186,16 @@ module.exports = class extends BaseGenerator {
 
     _gitCommitAll(commitMsg, callback) {
         const commit = () => {
-            this.gitExec(
-                ['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'],
-                { silent: this.silent },
-                (code, msg, err) => {
-                    if (code !== 0) this.error(`Unable to commit in git:\n${err}`);
-                    this.success(`Committed with message "${commitMsg}"`);
-                    callback();
-                }
-            );
+            const gitCommit = this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], {
+                silent: this.silent
+            });
+            if (gitCommit.code !== 0) this.error(`Unable to commit in git:\n${gitCommit.stderr}`);
+            this.success(`Committed with message "${commitMsg}"`);
+            callback();
         };
-        this.gitExec(['add', '-A'], { maxBuffer: 1024 * 10000, silent: this.silent }, (code, msg, err) => {
-            if (code !== 0) this.error(`Unable to add resources in git:\n${err}`);
-            commit();
-        });
+        const gitAdd = this.gitExec(['add', '-A'], { maxBuffer: 1024 * 10000, silent: this.silent });
+        if (gitAdd.code !== 0) this.error(`Unable to add resources in git:\n${gitAdd.stderr}`);
+        commit();
     }
 
     _regenerate(jhipsterVersion, blueprintInfo, callback) {
@@ -342,42 +336,34 @@ module.exports = class extends BaseGenerator {
             assertGitRepository() {
                 const done = this.async();
                 const gitInit = () => {
-                    this.gitExec('init', { silent: this.silent }, (code, msg, err) => {
-                        if (code !== 0) this.error(`Unable to initialize a new Git repository:\n${msg} ${err}`);
-                        this.success('Initialized a new Git repository');
-                        this._gitCommitAll('Initial', () => {
-                            done();
-                        });
+                    const gitInit = this.gitExec('init', { silent: this.silent });
+                    if (gitInit.code !== 0) this.error(`Unable to initialize a new Git repository:\n${gitInit.stdout} ${gitInit.stderr}`);
+                    this.success('Initialized a new Git repository');
+                    this._gitCommitAll('Initial', () => {
+                        done();
                     });
                 };
-                this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], { silent: this.silent }, (code, msg, err) => {
-                    if (code !== 0) gitInit();
-                    else {
-                        this.success('Git repository detected');
-                        done();
-                    }
-                });
+                const gitRevParse = this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], { silent: this.silent });
+                if (gitRevParse.code !== 0) gitInit();
+                else {
+                    this.success('Git repository detected');
+                    done();
+                }
             },
 
             assertNoLocalChanges() {
-                const done = this.async();
-                this.gitExec(['status', '--porcelain'], { silent: this.silent }, (code, msg, err) => {
-                    if (code !== 0) this.error(`Unable to check for local changes:\n${msg} ${err}`);
-                    if (msg) {
-                        this.warning(' local changes found.\n\tPlease commit/stash them before upgrading');
-                        this.error('Exiting process');
-                    }
-                    done();
-                });
+                const gitStatus = this.gitExec(['status', '--porcelain'], { silent: this.silent });
+                if (gitStatus.code !== 0) this.error(`Unable to check for local changes:\n${gitStatus.stdout} ${gitStatus.stderr}`);
+                if (gitStatus.stdout) {
+                    this.warning(' local changes found.\n\tPlease commit/stash them before upgrading');
+                    this.error('Exiting process');
+                }
             },
 
             detectCurrentBranch() {
-                const done = this.async();
-                this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], { silent: this.silent }, (code, msg, err) => {
-                    if (code !== 0) this.error(`Unable to detect current Git branch:\n${msg} ${err}`);
-                    this.sourceBranch = msg.replace('\n', '');
-                    done();
-                });
+                const gitRevParse = this.gitExec(['rev-parse', '-q', '--abbrev-ref', 'HEAD'], { silent: this.silent });
+                if (gitRevParse.code !== 0) this.error(`Unable to detect current Git branch:\n${gitRevParse.stdout} ${gitRevParse.stderr}`);
+                this.sourceBranch = gitRevParse.stdout.replace('\n', '');
             },
 
             async upgradeConfig() {
@@ -397,9 +383,8 @@ module.exports = class extends BaseGenerator {
             prepareUpgradeBranch() {
                 const done = this.async();
                 const getGitVersion = callback => {
-                    this.gitExec(['--version'], { silent: this.silent }, (code, msg) => {
-                        callback(String(msg.match(/([0-9]+\.[0-9]+\.[0-9]+)/g)));
-                    });
+                    const gitVersion = this.gitExec(['--version'], { silent: this.silent });
+                    callback(String(gitVersion.stdout.match(/([0-9]+\.[0-9]+\.[0-9]+)/g)));
                 };
 
                 const recordCodeHasBeenGenerated = () => {
@@ -410,15 +395,14 @@ module.exports = class extends BaseGenerator {
                         } else {
                             args = ['merge', '--strategy=ours', '-q', '--no-edit', '--allow-unrelated-histories', UPGRADE_BRANCH];
                         }
-                        this.gitExec(args, { silent: this.silent }, (code, msg, err) => {
-                            if (code !== 0) {
-                                this.error(
-                                    `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${msg} ${err}`
-                                );
-                            }
-                            this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
-                            done();
-                        });
+                        const gitMerge = this.gitExec(args, { silent: this.silent });
+                        if (gitMerge.code !== 0) {
+                            this.error(
+                                `Unable to record current code has been generated with version ${this.currentJhipsterVersion}:\n${gitMerge.stdout} ${gitMerge.stderr}`
+                            );
+                        }
+                        this.success(`Current code has been generated with version ${this.currentJhipsterVersion}`);
+                        done();
                     });
                 };
 
@@ -468,17 +452,16 @@ module.exports = class extends BaseGenerator {
                 };
 
                 const createUpgradeBranch = () => {
-                    this.gitExec(['checkout', '--orphan', UPGRADE_BRANCH], { silent: this.silent }, (code, msg, err) => {
-                        if (code !== 0) this.error(`Unable to create ${UPGRADE_BRANCH} branch:\n${msg} ${err}`);
-                        this.success(`Created branch ${UPGRADE_BRANCH}`);
-                        regenerate();
-                    });
+                    const gitCheckout = this.gitExec(['checkout', '--orphan', UPGRADE_BRANCH], { silent: this.silent });
+                    if (gitCheckout.code !== 0)
+                        this.error(`Unable to create ${UPGRADE_BRANCH} branch:\n${gitCheckout.stdout} ${gitCheckout.stderr}`);
+                    this.success(`Created branch ${UPGRADE_BRANCH}`);
+                    regenerate();
                 };
 
-                this.gitExec(['rev-parse', '-q', '--verify', UPGRADE_BRANCH], { silent: this.silent }, (code, msg, err) => {
-                    if (code !== 0) createUpgradeBranch();
-                    else done();
-                });
+                const gitRevParse = this.gitExec(['rev-parse', '-q', '--verify', UPGRADE_BRANCH], { silent: this.silent });
+                if (gitRevParse.code !== 0) createUpgradeBranch();
+                else done();
             }
         };
     }
@@ -551,24 +534,18 @@ module.exports = class extends BaseGenerator {
 
             mergeChangesBack() {
                 this.log(`Merging changes back to ${this.sourceBranch}...`);
-                const done = this.async();
-                this.gitExec(['merge', '-q', UPGRADE_BRANCH], { silent: this.silent }, (code, msg, err) => {
-                    this.success('Merge done!');
-                    done();
-                });
+                this.gitExec(['merge', '-q', UPGRADE_BRANCH], { silent: this.silent });
+                this.success('Merge done!');
             },
 
             checkConflictsInPackageJson() {
-                const done = this.async();
-                this.gitExec(['diff', '--name-only', '--diff-filter=U', 'package.json'], { silent: this.silent }, (code, msg, err) => {
-                    if (code !== 0) this.error(`Unable to check for conflicts in package.json:\n${msg} ${err}`);
-                    if (msg) {
-                        const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
-                        this.warning(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
-                        this.skipInstall = true;
-                    }
-                    done();
-                });
+                const gitDiff = this.gitExec(['diff', '--name-only', '--diff-filter=U', 'package.json'], { silent: this.silent });
+                if (gitDiff.code !== 0) this.error(`Unable to check for conflicts in package.json:\n${gitDiff.stdout} ${gitDiff.stderr}`);
+                if (gitDiff.stdout) {
+                    const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
+                    this.warning(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
+                    this.skipInstall = true;
+                }
             }
         };
     }
@@ -595,14 +572,11 @@ module.exports = class extends BaseGenerator {
     }
 
     end() {
-        const done = this.async();
-        this.gitExec(['diff', '--name-only', '--diff-filter=U'], { silent: this.silent }, (code, msg, err) => {
-            if (code !== 0) this.error(`Unable to check for conflicts:\n${msg} ${err}`);
-            this.success(chalk.bold('Upgraded successfully.'));
-            if (msg) {
-                this.warning(`Please fix conflicts listed below and commit!\n${msg}`);
-            }
-            done();
-        });
+        const gitDiff = this.gitExec(['diff', '--name-only', '--diff-filter=U'], { silent: this.silent });
+        if (gitDiff.code !== 0) this.error(`Unable to check for conflicts:\n${gitDiff.stdout} ${gitDiff.stderr}`);
+        this.success(chalk.bold('Upgraded successfully.'));
+        if (gitDiff.stdout) {
+            this.warning(`Please fix conflicts listed below and commit!\n${gitDiff.stdout}`);
+        }
     }
 };
