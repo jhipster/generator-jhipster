@@ -176,18 +176,15 @@ module.exports = class extends BaseGenerator {
         }
     }
 
-    _gitCommitAll(commitMsg, callback) {
-        const commit = () => {
-            const gitCommit = this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], {
-                silent: this.silent
-            });
-            if (gitCommit.code !== 0) this.error(`Unable to commit in git:\n${gitCommit.stderr}`);
-            this.success(`Committed with message "${commitMsg}"`);
-            callback();
-        };
+    _gitCommitAll(commitMsg) {
         const gitAdd = this.gitExec(['add', '-A'], { maxBuffer: 1024 * 10000, silent: this.silent });
         if (gitAdd.code !== 0) this.error(`Unable to add resources in git:\n${gitAdd.stderr}`);
-        commit();
+
+        const gitCommit = this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], {
+            silent: this.silent
+        });
+        if (gitCommit.code !== 0) this.error(`Unable to commit in git:\n${gitCommit.stderr}`);
+        this.success(`Committed with message "${commitMsg}"`);
     }
 
     _regenerate(jhipsterVersion, blueprintInfo, callback) {
@@ -195,9 +192,8 @@ module.exports = class extends BaseGenerator {
             const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
             this.info(`Removing ${keystore}`);
             shelljs.rm('-Rf', keystore);
-            this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`, () => {
-                callback();
-            });
+            this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
+            callback();
         });
     }
 
@@ -331,9 +327,8 @@ module.exports = class extends BaseGenerator {
                     const gitInit = this.gitExec('init', { silent: this.silent });
                     if (gitInit.code !== 0) this.error(`Unable to initialize a new Git repository:\n${gitInit.stdout} ${gitInit.stderr}`);
                     this.success('Initialized a new Git repository');
-                    this._gitCommitAll('Initial', () => {
-                        done();
-                    });
+                    this._gitCommitAll('Initial');
+                    done();
                 };
                 const gitRevParse = this.gitExec(['rev-parse', '-q', '--is-inside-work-tree'], { silent: this.silent });
                 if (gitRevParse.code !== 0) gitInit();
