@@ -379,9 +379,8 @@ module.exports = class extends BaseGenerator {
                     done();
                 };
 
-                const installJhipsterLocally = (version, callback) => {
+                const installJhipsterLocally = version => {
                     this._installNpmPackageLocally(GENERATOR_JHIPSTER, version);
-                    callback();
                 };
 
                 const installBlueprintsLocally = callback => {
@@ -408,16 +407,15 @@ module.exports = class extends BaseGenerator {
 
                 const regenerate = () => {
                     this._cleanUp();
-                    installJhipsterLocally(this.currentJhipsterVersion, () => {
-                        installBlueprintsLocally(() => {
-                            const blueprintInfo =
-                                this.blueprints && this.blueprints.length > 0
-                                    ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} `
-                                    : '';
-                            this._regenerate(this.currentJhipsterVersion, blueprintInfo);
-                            this._gitCheckout(this.sourceBranch);
-                            recordCodeHasBeenGenerated();
-                        });
+                    installJhipsterLocally(this.currentJhipsterVersion);
+                    installBlueprintsLocally(() => {
+                        const blueprintInfo =
+                            this.blueprints && this.blueprints.length > 0
+                                ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} `
+                                : '';
+                        this._regenerate(this.currentJhipsterVersion, blueprintInfo);
+                        this._gitCheckout(this.sourceBranch);
+                        recordCodeHasBeenGenerated();
                     });
                 };
 
