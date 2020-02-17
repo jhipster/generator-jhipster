@@ -226,15 +226,13 @@ module.exports = class extends BaseGenerator {
     get configuring() {
         return {
             assertJHipsterProject() {
-                const done = this.async();
                 if (!this.config.get('baseName')) {
                     this.error('Current directory does not contain a JHipster project.');
                 }
-                done();
             },
 
             assertGitPresent() {
-                if (this.isGitInstalled() === false) {
+                if (!this.isGitInstalled()) {
                     this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
                     this.error('Exiting the process.');
                 }
@@ -243,12 +241,11 @@ module.exports = class extends BaseGenerator {
             checkLatestBlueprintVersions() {
                 if (!this.blueprints || this.blueprints.length === 0) {
                     this.log('No blueprints detected, skipping check of last blueprint version');
-                    return;
+                    return undefined;
                 }
 
                 this.success('Checking for new blueprint versions');
-                const done = this.async();
-                Promise.all(
+                return Promise.all(
                     this.blueprints
                         .filter(blueprint => {
                             if (this.targetBlueprintVersions && this.targetBlueprintVersions.length > 0) {
@@ -292,7 +289,6 @@ module.exports = class extends BaseGenerator {
                         })
                 ).then(() => {
                     this.success('Done checking for new version of blueprints');
-                    done();
                 });
             },
 
@@ -470,12 +466,11 @@ module.exports = class extends BaseGenerator {
             updateBlueprints() {
                 if (!this.blueprints || this.blueprints.length < 1) {
                     this.log('Skipping blueprint update since no blueprint has been detected');
-                    return;
+                    return undefined;
                 }
 
                 this.success('Upgrading blueprints...');
-                const done = this.async();
-                Promise.all(
+                return Promise.all(
                     this.blueprints.map(blueprint => {
                         return new Promise(resolve => {
                             this._installNpmPackageLocally(blueprint.name, blueprint.latestBlueprintVersion);
@@ -485,7 +480,6 @@ module.exports = class extends BaseGenerator {
                     })
                 ).then(() => {
                     this.success('Done upgrading blueprints');
-                    done();
                 });
             },
 
