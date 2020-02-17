@@ -44,7 +44,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.14.0]
+                node_version: [12.16.0]
                 os: [ubuntu-latest]
                 app-type:
                     - vuejs-default
