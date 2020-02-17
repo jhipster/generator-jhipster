@@ -194,17 +194,16 @@ module.exports = class extends BaseGenerator {
         this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
     }
 
-    _retrieveLatestVersion(npmPackage, callback) {
+    _retrieveLatestVersion(npmPackage) {
         this.log(`Looking for latest ${npmPackage} version...`);
         const commandPrefix = this.clientPackageManager === 'yarn' ? 'yarn info' : 'npm show';
-        shelljs.exec(`${commandPrefix} ${npmPackage} version`, { silent: this.silent }, (code, msg, err) => {
-            if (err) {
-                this.warning(`Something went wrong fetching the latest ${npmPackage} version number...\n${err}`);
-                this.error('Exiting process');
-            }
-            const latestVersion = this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
-            callback(latestVersion);
-        });
+        const pkgInfo = shelljs.exec(`${commandPrefix} ${npmPackage} version`, { silent: this.silent });
+        if (pkgInfo.stderr) {
+            this.warning(`Something went wrong fetching the latest ${npmPackage} version number...\n${pkgInfo.stderr}`);
+            this.error('Exiting process');
+        }
+        const msg = pkgInfo.stdout;
+        return this.clientPackageManager === 'yarn' ? msg.split('\n')[1] : msg.replace('\n', '');
     }
 
     _installNpmPackageLocally(npmPackage, version) {
@@ -261,27 +260,26 @@ module.exports = class extends BaseGenerator {
                         })
                         .map(blueprint => {
                             return new Promise(resolve => {
-                                this._retrieveLatestVersion(blueprint.name, latestVersion => {
-                                    blueprint.latestBlueprintVersion = latestVersion;
-                                    if (semver.lt(blueprint.version, blueprint.latestBlueprintVersion)) {
-                                        this.newBlueprintVersionFound = true;
-                                        this.success(`New ${blueprint.name} version found: ${blueprint.latestBlueprintVersion}`);
-                                    } else if (this.force) {
-                                        this.newBlueprintVersionFound = true;
-                                        this.log(chalk.yellow('Forced re-generation'));
-                                    } else {
-                                        if (this.newBlueprintVersionFound === undefined) {
-                                            this.newBlueprintVersionFound = false;
-                                        }
-                                        this.warning(
-                                            `${chalk.green(
-                                                'No update available.'
-                                            )} Application has already been generated with latest version for blueprint: ${blueprint.name}`
-                                        );
+                                const latestVersion = this._retrieveLatestVersion(blueprint.name);
+                                blueprint.latestBlueprintVersion = latestVersion;
+                                if (semver.lt(blueprint.version, blueprint.latestBlueprintVersion)) {
+                                    this.newBlueprintVersionFound = true;
+                                    this.success(`New ${blueprint.name} version found: ${blueprint.latestBlueprintVersion}`);
+                                } else if (this.force) {
+                                    this.newBlueprintVersionFound = true;
+                                    this.log(chalk.yellow('Forced re-generation'));
+                                } else {
+                                    if (this.newBlueprintVersionFound === undefined) {
+                                        this.newBlueprintVersionFound = false;
                                     }
-                                    this.success(`Done checking for new version for blueprint ${blueprint.name}`);
-                                    resolve();
-                                });
+                                    this.warning(
+                                        `${chalk.green(
+                                            'No update available.'
+                                        )} Application has already been generated with latest version for blueprint: ${blueprint.name}`
+                                    );
+                                }
+                                this.success(`Done checking for new version for blueprint ${blueprint.name}`);
+                                resolve();
                             });
                         })
                 ).then(() => {
@@ -299,18 +297,15 @@ module.exports = class extends BaseGenerator {
                     return;
                 }
                 this.log(`Looking for latest ${GENERATOR_JHIPSTER} version...`);
-                const done = this.async();
-                this._retrieveLatestVersion(GENERATOR_JHIPSTER, latestVersion => {
-                    this.targetJhipsterVersion = latestVersion;
-                    if (semver.lt(this.currentJhipsterVersion, this.targetJhipsterVersion)) {
-                        this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.targetJhipsterVersion}`);
-                    } else if (this.force) {
-                        this.log(chalk.yellow('Forced re-generation'));
-                    } else if (!this.newBlueprintVersionFound) {
-                        this.error(`${chalk.green('No update available.')} Application has already been generated with latest version.`);
-                    }
-                    done();
-                });
+                const latestVersion = this._retrieveLatestVersion(GENERATOR_JHIPSTER);
+                this.targetJhipsterVersion = latestVersion;
+                if (semver.lt(this.currentJhipsterVersion, this.targetJhipsterVersion)) {
+                    this.success(`New ${GENERATOR_JHIPSTER} version found: ${this.targetJhipsterVersion}`);
+                } else if (this.force) {
+                    this.log(chalk.yellow('Forced re-generation'));
+                } else if (!this.newBlueprintVersionFound) {
+                    this.error(`${chalk.green('No update available.')} Application has already been generated with latest version.`);
+                }
             },
 
             assertGitRepository() {
