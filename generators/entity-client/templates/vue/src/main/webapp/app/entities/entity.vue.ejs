@@ -169,7 +169,6 @@
                 <%_ if (databaseType !== 'cassandra') { _%>
                 <%_ if (pagination === 'infinite-scroll') { _%>
                 <infinite-loading
-                    ref="infiniteLoading"
                     v-if="links !== {} && page <= links['last']"
                     :identifier="infiniteId"
                     slot="append"
