@@ -121,11 +121,7 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    _gitCheckout(branch, options, callback) {
-        if (typeof options === 'function') {
-            callback = options;
-            options = {};
-        }
+    _gitCheckout(branch, options = {}) {
         const args = ['checkout', '-q', branch];
         if (options.force) {
             args.push('-f');
@@ -133,7 +129,6 @@ module.exports = class extends BaseGenerator {
         const gitCheckout = this.gitExec(args, { silent: this.silent });
         if (gitCheckout.code !== 0) this.error(`Unable to checkout branch ${branch}:\n${gitCheckout.stderr}`);
         this.success(`Checked out branch "${branch}"`);
-        callback();
     }
 
     _upgradeFiles(callback) {
@@ -442,10 +437,8 @@ module.exports = class extends BaseGenerator {
                                     ? ` and ${this.blueprints.map(bp => bp.name + bp.version).join(', ')} `
                                     : '';
                             this._regenerate(this.currentJhipsterVersion, blueprintInfo, () => {
-                                this._gitCheckout(this.sourceBranch, () => {
-                                    // consider code up-to-date
-                                    recordCodeHasBeenGenerated();
-                                });
+                                this._gitCheckout(this.sourceBranch);
+                                recordCodeHasBeenGenerated();
                             });
                         });
                     });
@@ -473,8 +466,7 @@ module.exports = class extends BaseGenerator {
             },
 
             checkoutUpgradeBranch() {
-                const done = this.async();
-                this._gitCheckout(UPGRADE_BRANCH, done);
+                this._gitCheckout(UPGRADE_BRANCH);
             },
 
             updateJhipster() {
@@ -528,8 +520,7 @@ module.exports = class extends BaseGenerator {
             },
 
             checkoutSourceBranch() {
-                const done = this.async();
-                this._gitCheckout(this.sourceBranch, { force: true }, done);
+                this._gitCheckout(this.sourceBranch, { force: true });
             },
 
             mergeChangesBack() {
