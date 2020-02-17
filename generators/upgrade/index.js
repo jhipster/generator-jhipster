@@ -131,14 +131,11 @@ module.exports = class extends BaseGenerator {
         this.success(`Checked out branch "${branch}"`);
     }
 
-    _upgradeFiles(callback) {
+    _upgradeFiles() {
         if (cleanup.upgradeFiles(this)) {
             const gitCommit = this.gitExec(['commit', '-q', '-m', '"Upgrade preparation."', '--no-verify'], { silent: this.silent });
             if (gitCommit.code !== 0) this.error(`Unable to prepare upgrade:\n${gitCommit.stderr}`);
             this.success('Upgrade preparation');
-            callback();
-        } else {
-            callback();
         }
     }
 
@@ -501,8 +498,7 @@ module.exports = class extends BaseGenerator {
             },
 
             upgradeFiles() {
-                const done = this.async();
-                this._upgradeFiles(done);
+                this._upgradeFiles();
             },
 
             generateWithTargetVersion() {
