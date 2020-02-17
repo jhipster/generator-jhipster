@@ -124,7 +124,7 @@ module.exports = (options) => ({
         }),
         new BaseHrefWebpackPlugin({ baseHref: '/' }),
         new AngularCompilerPlugin({
-            mainPath: utils.root('src/main/webapp/app/app.main.ts'),
+            mainPath: utils.root('<%= MAIN_SRC_DIR %>app/app.main.ts'),
             tsConfigPath: utils.root('tsconfig-aot.json'),
             sourceMap: true
         })
