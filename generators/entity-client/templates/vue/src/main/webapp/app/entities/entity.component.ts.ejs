@@ -175,9 +175,12 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       <%_ } _%>
       this.alertService().showAlert(message, 'danger');
       this.getAlertFromStore();
-
       this.removeId = null;
+      <%_ if (pagination === 'infinite-scroll') { _%>
+      this.reset();
+      <%_ } else {_%>
       this.retrieveAll<%= entityAngularName %>s();
+      <%_ } _%>
       this.closeDialog();
     });
   }
@@ -186,13 +189,8 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   <%_ if (pagination === 'infinite-scroll') { _%>
   public loadMore($state): void {
     this.infiniteLoadingState = $state;
-    if (this.page > this.links['last']){ 
-      this.infiniteLoadingState.complete();
-    }
-    if (this.isFetching) {
-      return;
-    } else {
-      this.previousPage = this.page++;
+    if (!this.isFetching) {
+      this.page++;
       this.transition();
     }
   }
