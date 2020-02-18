@@ -819,6 +819,15 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     *
+     * @param {string} logName - name of the log we want to track
+     * @param {string} level - tracking level
+     */
+    addlog(logName, level) {
+        this.needleApi.serverLog.addlog(logName, level);
+    }
+
+    /**
      * Add a remote Maven Repository to the Gradle build.
      *
      * @param {string} url - url of the repository
