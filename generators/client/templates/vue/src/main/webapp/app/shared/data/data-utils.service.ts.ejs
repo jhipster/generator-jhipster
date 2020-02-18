@@ -162,9 +162,12 @@ export default class JhiDataUtils extends Vue {
     // Parse each part into a named link
     parts.forEach((p) => {
       if(p.indexOf('>;') === -1) {
-        throw new Error('section could not be split on ">;"');
+        return;
       }
       const section = p.split('>;');
+      if (section.length !== 2) {
+        return;
+      }
       const url = section[0].replace(/<(.*)/, '$1').trim();
       const queryString = {page:null};
       url.replace(
