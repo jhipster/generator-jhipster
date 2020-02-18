@@ -89,9 +89,6 @@ jobs:
           #----------------------------------------------------------------------
           # Install all tools and check configuration
           #----------------------------------------------------------------------
-          - bash: exit 0
-            condition: or(contains(variables['Build.SourceVersionMessage'], '[skip ci]'), contains(variables['Build.SourceVersionMessage'], '[ci skip]'))
-            displayName: 'CHECK: check if commit contains CI skip'
           - task: NodeTool@0
             inputs:
                 versionSpec: '12.16.0'
