@@ -37,7 +37,6 @@ const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -50,6 +49,25 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+    /**
+     * Apply output customizer.
+     *
+     * @param {string} path - Path to customize.
+     */
+    applyOutputPathCustomizer(path) {
+        const outputPathCustomizer = this.options.outputPathCustomizer;
+        if (!outputPathCustomizer) {
+            return path;
+        }
+        if (Array.isArray(outputPathCustomizer)) {
+            outputPathCustomizer.forEach(customizer => {
+                path = customizer.call(this, path);
+            });
+            return path;
+        }
+        return outputPathCustomizer.call(this, path);
+    }
+
     /**
      * Add a new icon to icon imports.
      *
@@ -234,7 +252,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addGlobalTranslationKey(key, value, language) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
         try {
             jhipsterUtils.rewriteJSONFile(
                 fullPath,
@@ -276,7 +294,7 @@ module.exports = class extends PrivateBase {
         const languages = [];
         this.getAllSupportedLanguages().forEach(language => {
             try {
-                const stats = fs.lstatSync(`${CLIENT_MAIN_SRC_DIR}i18n/${language}`);
+                const stats = fs.lstatSync(`${this.CLIENT_MAIN_SRC_DIR}i18n/${language}`);
                 if (stats.isDirectory()) {
                     languages.push(language);
                 }

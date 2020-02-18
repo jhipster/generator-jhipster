@@ -33,7 +33,6 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -49,9 +48,12 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
-        this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         // expose lodash to templates
         this._ = _;
+        // expose custom constants to templates and needles
+        this.CLIENT_MAIN_SRC_DIR = this.applyOutputPathCustomizer(constants.CLIENT_MAIN_SRC_DIR) || constants.CLIENT_MAIN_SRC_DIR;
+
+        this.env.options.appPath = this.config.get('appPath') || this.CLIENT_MAIN_SRC_DIR;
     }
 
     /* ======================================================================== */
@@ -63,6 +65,15 @@ module.exports = class extends Generator {
      */
     usage() {
         return super.usage().replace('yo jhipster:', 'jhipster ');
+    }
+
+    /**
+     * Override yeoman generator's destinationPath to apply custom output dir.
+     */
+    destinationPath(...paths) {
+        paths = path.join(...paths);
+        paths = this.applyOutputPathCustomizer(paths);
+        return paths ? super.destinationPath(paths) : paths;
     }
 
     /**
@@ -140,7 +151,7 @@ module.exports = class extends Generator {
             const fileName = this.entityTranslationKey;
             this.template(
                 `${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
+                `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
             );
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
@@ -161,7 +172,7 @@ module.exports = class extends Generator {
         try {
             this.template(
                 `${prefix ? `${prefix}/` : ''}i18n/enum.json.ejs`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
+                `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
                 this,
                 {},
                 enumInfo
@@ -179,7 +190,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstant(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
         try {
             let content = ".constant('LANGUAGES', [\n";
             languages.forEach((language, i) => {
@@ -217,7 +228,7 @@ module.exports = class extends Generator {
         if (this.clientFramework !== ANGULAR) {
             return;
         }
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -287,8 +298,8 @@ module.exports = class extends Generator {
     updateLanguagesInLanguagePipe(languages) {
         const fullPath =
             this.clientFramework === ANGULAR
-                ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
-                : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
+                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+                : `${this.CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
             this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
@@ -431,7 +442,7 @@ module.exports = class extends Generator {
      * @param file
      */
     removeFile(file) {
-        file = this.detisnationPath(file);
+        file = this.destinationPath(file);
         if (file && shelljs.test('-f', file)) {
             this.log(`Removing the file - ${file}`);
             shelljs.rm(file);
@@ -751,8 +762,13 @@ module.exports = class extends Generator {
     template(source, destination, generator, options = {}, context) {
         const _this = generator || this;
         const _context = context || _this;
+        const customDestination = _this.destinationPath(destination);
+        if (!customDestination) {
+            this.debug(`File ${destination} ignored`);
+            return;
+        }
         jhipsterUtils.renderContent(source, _this, _context, options, res => {
-            _this.fs.write(_this.destinationPath(destination), res);
+            _this.fs.write(customDestination, res);
         });
     }
 
@@ -780,7 +796,12 @@ module.exports = class extends Generator {
      * @param {string} destination - The resulting file.
      */
     copy(source, destination) {
-        this.fs.copy(this.templatePath(source), this.destinationPath(destination));
+        const customDestination = this.destinationPath(destination);
+        if (!customDestination) {
+            this.debug(`File ${destination} ignored`);
+            return;
+        }
+        this.fs.copy(this.templatePath(source), customDestination);
     }
 
     /**

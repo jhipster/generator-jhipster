@@ -18,11 +18,17 @@
  */
 const needleBase = require('../../needle-base');
 
-const constants = require('../../generator-constants');
-
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-
 module.exports = class extends needleBase {
+    constructor(generator) {
+        super(generator);
+
+        this.CLIENT_MAIN_SRC_DIR = generator.CLIENT_MAIN_SRC_DIR;
+
+        if (!this.CLIENT_MAIN_SRC_DIR) {
+            generator.error('Client destination folder is missing');
+        }
+    }
+
     addStyle(style, comment, filePath, needle) {
         const styleBlock = this._mergeStyleAndComment(style, comment);
         const rewriteFileModel = this.generateFileModel(filePath, needle, styleBlock);
@@ -45,7 +51,7 @@ module.exports = class extends needleBase {
 
     addExternalResourcesToRoot(resources, comment) {
         const errorMessage = 'Resources are not added to JHipster app.';
-        const indexFilePath = `${CLIENT_MAIN_SRC_DIR}index.html`;
+        const indexFilePath = `${this.CLIENT_MAIN_SRC_DIR}index.html`;
         let resourcesBlock = '';
         if (comment) {
             resourcesBlock += `<!-- ${comment} -->\n`;
