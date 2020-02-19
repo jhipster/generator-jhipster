@@ -60,9 +60,26 @@ describe('Formatter i18n', () => {
     expect(result['last']).toBe(2);
   });
 
-  it('should not parse text with no links', () => {
+  it('should return empty JSON object for empty string', () => {
+    const result = dataUtilsService.parseLinks('');
+
+    expect(result).toStrictEqual({});
+  });
+
+  it('should return empty JSON object for text with no link header', () => {
     const result = dataUtilsService.parseLinks('JHipster rocks!');
 
     expect(result).toStrictEqual({});
   });
+
+  it('should return empty JSON object for text with no comma separated link header', () => {
+    const result = dataUtilsService.parseLinks('<http://localhost/api/entities?' +
+    'sort=id%2Cdesc&sort=id&page=1&size=12>; rel="next"<http://localhost/api' +
+    '/entities?sort=id%2Cdesc&sort=id&page=2&size=12>; rel="last"<http://localhost'+
+    '/api/entities?sort=id%2Cdesc&sort=id&page=0&size=12>; rel="first"');
+
+    expect(result).toStrictEqual({});
+  });
+
+  
 });

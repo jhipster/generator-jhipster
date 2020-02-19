@@ -150,7 +150,7 @@ export default class JhiDataUtils extends Vue {
    */
   parseLinks(header) {
     const links = {};
-    
+
     if (header === null || header.indexOf(',') === -1) {
       return links;
     }
@@ -163,9 +163,6 @@ export default class JhiDataUtils extends Vue {
         return;
       }
       const section = p.split('>;');
-      if (section.length !== 2) {
-        return;
-      }
       const url = section[0].replace(/<(.*)/, '$1').trim();
       const queryString = {page:null};
       url.replace(
