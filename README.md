@@ -170,6 +170,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | :------------------- | :----------------------------------------------------- |
 | Docker               | [![Build Status][img-docker]][azure-url]               |
 | Official             | [![Build Status][img-official]][azure-url]             |
+| Windows Official     | [![Build Status][img-windows-official]][azure-url]     |
 | Angular.Maven        | [![Build Status][img-angular-maven]][azure-url]        |
 | Angular.Maven.NoSQL  | [![Build Status][img-angular-maven-nosql]][azure-url]  |
 | Angular.Gradle       | [![Build Status][img-angular-gradle]][azure-url]       |
@@ -194,6 +195,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [azure-url]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_build
 [img-docker]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Docker.Image
 [img-official]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Official
+[img-windows-official]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Windows.GitBash.Official?branchName=master
 [img-angular-maven]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven
 [img-angular-maven-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven.NoSQL
 [img-angular-gradle]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Gradle

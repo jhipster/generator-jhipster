@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -161,19 +161,19 @@ module.exports = class extends BaseDockerGenerator {
                 );
             }
         } else {
-            this.log(`  ${chalk.cyan('bash helm-apply.sh')}`);
+            this.log(`  ${chalk.cyan('bash helm-knative-apply.sh or ./helm-knative-apply.sh')}`);
             this.log('\nYou can upgrade (after any changes) all your apps by running the following script:');
-            this.log(`  ${chalk.cyan('bash helm-upgrade.sh')}`);
+            this.log(`  ${chalk.cyan('bash helm-knative-upgrade.sh or ./helm-knative-upgrade.sh')}`);
 
             // Make the apply script executable
             try {
-                fs.chmodSync('helm-apply.sh', '755');
-                fs.chmodSync('helm-upgrade.sh', '755');
+                fs.chmodSync('helm-knative-apply.sh', '755');
+                fs.chmodSync('helm-knative-upgrade.sh', '755');
             } catch (err) {
                 this.log(
                     `${chalk.yellow.bold(
                         'WARNING!'
-                    )}Failed to make 'helm-apply.sh', 'helm-upgrade.sh' executable, you may need to run 'chmod +x helm-apply.sh helm-upgrade.sh`
+                    )}Failed to make 'helm-knative-apply.sh', 'helm-knative-upgrade.sh' executable, you may need to run 'chmod +x helm-knative-apply.sh helm-knative-upgrade.sh`
                 );
             }
         }

@@ -21,7 +21,7 @@
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
-const NODE_VERSION = '12.14.0';
+const NODE_VERSION = '12.16.0';
 const YARN_VERSION = '1.22.0';
 const NPM_VERSION = '6.13.7';
 
@@ -77,7 +77,7 @@ const KUBERNETES_CORE_API_VERSION = 'v1';
 const KUBERNETES_BATCH_API_VERSION = 'batch/v1';
 const KUBERNETES_DEPLOYMENT_API_VERSION = 'apps/v1';
 const KUBERNETES_STATEFULSET_API_VERSION = 'apps/v1';
-const KUBERNETES_INGRESS_API_VERSION = 'extensions/v1beta1';
+const KUBERNETES_INGRESS_API_VERSION = 'networking.k8s.io/v1beta1';
 const KUBERNETES_ISTIO_NETWORKING_API_VERSION = 'networking.istio.io/v1alpha3';
 const KUBERNETES_RBAC_API_VERSION = 'rbac.authorization.k8s.io/v1';
 
