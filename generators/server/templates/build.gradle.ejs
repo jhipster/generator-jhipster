@@ -23,7 +23,7 @@ buildscript {
         gradlePluginPortal()
         maven { url "https://repo.spring.io/plugins-release" }
         <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
-        maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local/" }
+        maven { url "https://oss.jfrog.org/artifactory/oss-snapshot-local/" }
         <%_ } _%>
     }
     dependencies {
