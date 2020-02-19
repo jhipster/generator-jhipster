@@ -169,7 +169,8 @@
                 <%_ if (databaseType !== 'cassandra') { _%>
                 <%_ if (pagination === 'infinite-scroll') { _%>
                 <infinite-loading
-                    v-if="totalItems > itemsPerPage && links !== {} && page <= links['last']"
+                    ref="infiniteLoading"
+                    v-if="totalItems > itemsPerPage"
                     :identifier="infiniteId"
                     slot="append"
                     @infinite="loadMore"

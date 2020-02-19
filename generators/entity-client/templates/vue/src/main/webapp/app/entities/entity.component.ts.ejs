@@ -19,19 +19,15 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   <%_ if (pagination !== 'no') { _%>
   public itemsPerPage = 20;
   public queryCount: number = null;
+  public page = 1;
   public previousPage = 1;
   public propOrder = 'id';
   public reverse = <%_ if (pagination === 'infinite-scroll') { _%>true<%_ } else { _%>false<%_ } _%>;
   public totalItems = 0;
   <%_ } _%>
-  <%_ if (pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
-  public page = 1;
-  <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
   public infiniteId = +new Date();
-  public infiniteLoadingState = null;
   public links = {};
-  public page = 1;
   <%_ } _%>
     
   public <%= entityInstancePlural %>: I<%= entityAngularName %>[] = [];
@@ -56,11 +52,10 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
     <%_ if (searchEngine === 'elasticsearch') { _%>
     this.currentSearch = '';
     <%_ } _%>
-    <%_ if (pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
+    <%_ if (pagination !== 'no') { _%>
     this.page = 1;
     <%_ } _%>
     <%_ if (pagination === 'infinite-scroll') { _%>
-    this.page = 1;
     this.links = {};
     this.infiniteId += 1;
     this.<%= entityInstancePlural %> = [];
@@ -79,13 +74,7 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
 
   public retrieveAll<%= entityAngularName %>s() :void {
     this.isFetching = true;
-    <% if (pagination !== 'no' && pagination !== 'infinite-scroll') { %>
-    const paginationQuery = {
-      page: this.page - 1,
-      size: this.itemsPerPage,
-      sort: this.sort()
-    };<% } %>
-    <%_ if (pagination === 'infinite-scroll') { _%>
+    <% if (pagination !== 'no') { %>
     const paginationQuery = {
       page: this.page - 1,
       size: this.itemsPerPage,
@@ -114,10 +103,10 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
         <%_ } _%>
         this.isFetching = false;
         <%_ if (pagination === 'infinite-scroll') { _%>
-        if(this.infiniteLoadingState !== null) {
-          this.infiniteLoadingState.loaded();
+        if((<any>this.$refs.infiniteLoading)) {
+          (<any>this.$refs.infiniteLoading).stateChanger.loaded();
           if(this.links !== {} && this.page > this.links['last']){
-            this.infiniteLoadingState.complete();
+            (<any>this.$refs.infiniteLoading).stateChanger.complete();
           }
         }
         <%_ } _%>
@@ -146,10 +135,10 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       <%_ } _%>
       this.isFetching = false;
       <%_ if (pagination === 'infinite-scroll') { _%>
-      if(this.infiniteLoadingState !== null) {
-        this.infiniteLoadingState.loaded();
+      if((<any>this.$refs.infiniteLoading)) {
+        (<any>this.$refs.infiniteLoading).stateChanger.loaded();
         if(this.links !== {} && this.page > this.links['last']){
-          this.infiniteLoadingState.complete();
+          (<any>this.$refs.infiniteLoading).stateChanger.complete();
         }
       }
       <%_ } _%>
@@ -188,7 +177,6 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
   <%_ } _%>
   <%_ if (pagination === 'infinite-scroll') { _%>
   public loadMore($state): void {
-    this.infiniteLoadingState = $state;
     if (!this.isFetching) {
       this.page++;
       this.transition();
