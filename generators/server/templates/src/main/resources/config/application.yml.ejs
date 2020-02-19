@@ -60,7 +60,7 @@ ribbon:
     eureka:
         enabled: true
 <%_ } _%>
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && !reactive) { _%>
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
 zuul: # those values must be configured depending on the application specific needs
     sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
@@ -73,6 +73,8 @@ zuul: # those values must be configured depending on the application specific ne
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     ignoredServices: 'consul,<%= baseName %>' # Prevent Consul and the "<%= baseName %>" app itself from having a Zuul route automatically created for them
     <%_ } _%>
+<%_ } _%>
+<%_ if (applicationType === 'gateway') { _%>
 
 # See https://github.com/Netflix/Hystrix/wiki/Configuration
 hystrix:
@@ -112,7 +114,7 @@ management:
         web:
             base-path: /management
             exposure:
-                include: ["configprops", "env", "health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
+                include: ["configprops", "env", <% if (applicationType === 'gateway' && reactive) { %>"gateway", <% } %>"health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
     endpoint:
         health:
             show-details: when_authorized
@@ -146,7 +148,9 @@ management:
             application: ${spring.application.name}
         web:
             server:
-                auto-time-requests: true
+                request:
+                    autotime:
+                        enabled: true
 
 spring:
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -168,6 +172,28 @@ spring:
             config:
                 watch:
                     enabled: false
+    <%_ } _%>
+    <%_ if (applicationType === 'gateway' && reactive && serviceDiscoveryType === 'eureka') { _%>
+    cloud:
+        gateway:
+            default-filters:
+                - TokenRelay
+            discovery:
+                locator:
+                    enabled: true
+                    lower-case-service-id: true
+                    predicates:
+                        - name: Path
+                          args:
+                              pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
+                    filters:
+                        - name: RewritePath
+                          args:
+                              regexp: "'/services/' + serviceId.toLowerCase() + '/(?<remaining>.*)'"
+                              replacement: "'/${remaining}'"
+            httpclient:
+                pool:
+                    max-connections: 1000
     <%_ } _%>
     <%_ if (!serviceDiscoveryType) { _%>
     profiles:
@@ -197,9 +223,11 @@ spring:
         basename: i18n/messages
     main:
         allow-bean-definition-overriding: true
+    <%_ if (!reactive) { _%>
     mvc:
         favicon:
             enabled: false
+    <%_ } _%>
     <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
     security:
         user:

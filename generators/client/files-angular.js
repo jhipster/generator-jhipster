@@ -94,6 +94,7 @@ const files = {
     ],
     swagger: [
         {
+            condition: generator => !generator.reactive,
             path: MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
         }

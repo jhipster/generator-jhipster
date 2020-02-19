@@ -117,6 +117,10 @@ function askForServerSideOpts(meta) {
                         name: 'JWT authentication (stateless, with a token)'
                     }
                 ];
+                // todo: add support for JWT authentication to Spring Cloud Gateway
+                if (applicationType === 'gateway' && reactive) {
+                    opts.shift();
+                }
                 if (applicationType === 'monolith' && response.serviceDiscoveryType !== 'eureka') {
                     opts.push({
                         value: 'session',

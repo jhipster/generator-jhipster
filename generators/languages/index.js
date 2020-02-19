@@ -106,6 +106,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
                 this.applicationType = configuration.get('applicationType');
+                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
                 this.baseName = configuration.get('baseName');
                 this.packageFolder = configuration.get('packageFolder');
                 this.capitalizedBaseName = _.upperFirst(this.baseName);

@@ -22,6 +22,9 @@ buildscript {
         mavenCentral()
         gradlePluginPortal()
         maven { url "https://repo.spring.io/plugins-release" }
+        <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
+        maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local/" }
+        <%_ } _%>
     }
     dependencies {
         //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
@@ -427,7 +430,7 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
     <%_ } _%>
     <%_ if (authenticationType === 'uaa' || (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive)) { _%>
-    implementation "org.springframework.cloud:spring-cloud-security"
+    implementation "org.springframework.cloud:spring-cloud-starter-security"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
@@ -472,6 +475,10 @@ dependencies {
         exclude module: "mapstruct"
     }
     implementation "io.springfox:springfox-bean-validators"
+    <%_ } else if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+    implementation "io.springfox:springfox-swagger2:3.0.0-SNAPSHOT"
+    implementation "io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT"
+    implementation "io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT"
     <%_ } _%>
     <%_ if (devDatabaseType === 'mysql' || prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
