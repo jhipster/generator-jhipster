@@ -1136,12 +1136,15 @@ module.exports = class extends Generator {
      * @param {Array|Object} fields - array of fields
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
+     * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
         const variablesWithTypes = [];
         const tsKeyType = this.getTypescriptKeyType(pkType);
-        variablesWithTypes.push(`id?: ${tsKeyType}`);
+        if (!embedded) {
+            variablesWithTypes.push(`id?: ${tsKeyType}`);
+        }
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
@@ -1170,10 +1173,11 @@ module.exports = class extends Generator {
             let fieldType;
             let fieldName;
             const relationshipType = relationship.relationshipType;
+            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 fieldType = `I${relationship.otherEntityAngularName}[]`;
                 fieldName = relationship.relationshipFieldNamePlural;
-            } else if (dto === 'no') {
+            } else if (dto === 'no' || otherEntityIsEmbedded) {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
             } else {
@@ -1216,8 +1220,9 @@ module.exports = class extends Generator {
         const typeImports = new Map();
         relationships.forEach(relationship => {
             const relationshipType = relationship.relationshipType;
+            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             let toBeImported = false;
-            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many' || otherEntityIsEmbedded) {
                 toBeImported = true;
             } else if (dto === 'no') {
                 toBeImported = true;

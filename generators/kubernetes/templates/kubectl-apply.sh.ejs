@@ -20,6 +20,22 @@
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
+usage(){
+ cat << EOF
+
+ Usage: $0 -f
+ Description: To apply k8s manifests using the default \`kubectl apply -f\` command
+[OR]
+ Usage: $0 -k
+ Description: To apply k8s manifests using the kustomize \`kubectl apply -k\` command
+[OR]
+ Usage: $0 -s
+ Description: To apply k8s manifests using the skaffold binary \`skaffold run\` command
+
+EOF
+exit 0
+}
+
 logSummary() {
     echo ""
     echo "#####################################################"
@@ -32,9 +48,9 @@ logSummary() {
     <%_ } _%>
     <%_ if (kubernetesServiceType === 'Ingress') { _%>
     <%_ appConfigs.forEach((appConfig) =>  { _%>
-    <%_ if (appConfig.applicationType === 'gateway') { _%>
+    <%_ if (appConfig.applicationType === 'gateway') {_%>
     echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
-    <%_ } _%><%_ if (appConfig.applicationType === 'monolith') { _%>
+    <%_ } _%><%_ if (appConfig.applicationType === 'monolith') {_%>
     echo "<%= appConfig.baseName %> - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
     <%_ } _%>
     <%_ }) _%>
@@ -47,31 +63,55 @@ logSummary() {
     echo "#####################################################"
 }
 
-<%_ if (kubernetesNamespace !== 'default') { _%>
-kubectl apply -f namespace.yml
-<%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-kubectl apply -f registry/
-<%_ } _%> <%_ if (istio) { _%>
-kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled --overwrite=true
-<%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
-kubectl apply -f <%- appConfig.baseName.toLowerCase() %>/
-<%_ }) _%>
-<%_ if (useKafka === true) { _%>
-kubectl apply -f messagebroker/
-<%_ } _%> <%_ if (monitoring === 'elk') { _%>
-kubectl apply -f console/
-<%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
-kubectl apply -f monitoring/jhipster-prometheus-crd.yml
-until [ $(kubectl get crd prometheuses.monitoring.coreos.com 2>>/dev/null | wc -l) -ge 2 ]; do
-    echo "Waiting for the custom resource prometheus operator to get initialised";
-    sleep 5;
-done
-kubectl apply -f monitoring/jhipster-prometheus-cr.yml
-kubectl apply -f monitoring/jhipster-grafana.yml
-kubectl apply -f monitoring/jhipster-grafana-dashboard.yml
-<%_ } _%>
+default() {
+    <%_ if (kubernetesNamespace !== 'default') { _%>
+    kubectl apply -f namespace.yml
+    <%_ } _%> <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+    kubectl apply -f registry/
+    <%_ } _%> <%_ if (istio) { _%>
+    kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
+    <%_ } _%> <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+    kubectl apply -f <%- appConfig.baseName.toLowerCase() %>/
+    <%_ }) _%>
+    <%_ if (useKafka === true) { _%>
+    kubectl apply -f messagebroker/
+    <%_ } _%> <%_ if (monitoring === 'elk') { _%>
+    kubectl apply -f console/
+    <%_ } _%> <%_ if (monitoring === 'prometheus') { _%>
+    kubectl apply -f monitoring/jhipster-prometheus-crd.yml
+    until [ $(kubectl get crd prometheuses.monitoring.coreos.com 2>>/dev/null | wc -l) -ge 2 ]; do
+        echo "Waiting for the custom resource prometheus operator to get initialised";
+        sleep 5;
+    done
+    kubectl apply -f monitoring/jhipster-prometheus-cr.yml
+    kubectl apply -f monitoring/jhipster-grafana.yml
+    kubectl apply -f monitoring/jhipster-grafana-dashboard.yml
+    <%_ } _%>
 
-<%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
-kubectl apply -f istio/
-<%_ } _%>
+    <%_ if (istio && kubernetesServiceType === 'Ingress') { _%>
+    kubectl apply -f istio/
+    <%_ } _%>
+}
+
+kustomize() {
+    kubectl apply -k ./
+}
+
+scaffold() {
+    // this will build the source and apply the manifests the K8s target. To turn the working directory
+    // into a CI/CD space, initilaize it with `skaffold dev`
+    skaffold run
+}
+
+[[ "$@" =~ ^-[fks]{1}$ ]]  || usage;
+
+while getopts ":fks" opt; do
+    case ${opt} in
+    f ) echo "Applying default \`kubectl apply -f\`"; default ;;
+    k ) echo "Applying kustomize \`kubectl apply -k\`"; kustomize ;;
+    s ) echo "Applying using skaffold \`skaffold run\`"; scaffold ;;
+    \? | * ) usage ;;
+    esac
+done
+
 logSummary
