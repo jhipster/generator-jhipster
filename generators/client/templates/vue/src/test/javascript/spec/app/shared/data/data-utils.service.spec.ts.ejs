@@ -63,6 +63,6 @@ describe('Formatter i18n', () => {
   it('should not parse text with no links', () => {
     const result = dataUtilsService.parseLinks('JHipster rocks!');
 
-    expect(result).toBe({});
+    expect(result).toStrictEqual({});
   });
 });
