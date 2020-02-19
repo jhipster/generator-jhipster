@@ -88,11 +88,11 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
         <%_ } else if (pagination !== 'infinite-scroll') { _%>
         this.<%= entityInstancePlural %> = res.data;
         <%_ } else if (pagination === 'infinite-scroll') { _%>
-        if(res.data && res.data.length > 0){
+        if (res.data && res.data.length > 0) {
           for (let i = 0; i < res.data.length; i++) {
             this.<%= entityInstancePlural %>.push(res.data[i]);
           }
-          if(res.headers && res.headers['link']){
+          if (res.headers && res.headers['link']) {
             this.links = this.parseLinks(res.headers['link']);
           }
         }
@@ -103,9 +103,9 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
         <%_ } _%>
         this.isFetching = false;
         <%_ if (pagination === 'infinite-scroll') { _%>
-        if((<any>this.$refs.infiniteLoading)) {
+        if ((<any>this.$refs.infiniteLoading)) {
           (<any>this.$refs.infiniteLoading).stateChanger.loaded();
-          if(this.links !== {} && this.page > this.links['last']){
+          if (this.links !== {} && this.page > this.links['last']) {
             (<any>this.$refs.infiniteLoading).stateChanger.complete();
           }
         }
@@ -120,11 +120,11 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       <%_ if (pagination !== 'infinite-scroll') { _%>
       this.<%= entityInstancePlural %> = res.data;
       <%_ } else { _%>
-      if(res.data && res.data.length > 0){
+      if (res.data && res.data.length > 0) {
         for (let i = 0; i < res.data.length; i++) {
           this.<%= entityInstancePlural %>.push(res.data[i]);
         }
-        if(res.headers && res.headers['link']){
+        if (res.headers && res.headers['link']) {
           this.links = this.parseLinks(res.headers['link']);
         }
       }
@@ -135,9 +135,9 @@ export default class <%= entityAngularName %> extends <% if (fieldsContainBlob |
       <%_ } _%>
       this.isFetching = false;
       <%_ if (pagination === 'infinite-scroll') { _%>
-      if((<any>this.$refs.infiniteLoading)) {
+      if ((<any>this.$refs.infiniteLoading)) {
         (<any>this.$refs.infiniteLoading).stateChanger.loaded();
-        if(this.links !== {} && this.page > this.links['last']){
+        if (this.links !== {} && this.page > this.links['last']) {
           (<any>this.$refs.infiniteLoading).stateChanger.complete();
         }
       }
