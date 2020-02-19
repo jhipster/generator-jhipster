@@ -48,7 +48,7 @@ public class RefreshTokenFilter extends GenericFilterBean {
      * requests downstream. Otherwise, access tokens may still be valid when we check here but may then be expired
      * when relayed to another microservice a wee bit later.
      */
-    private static final int REFRESH_WINDOW_SECS = 90;
+    private static final int REFRESH_WINDOW_SECS = 30;
 
     private final Logger log = LoggerFactory.getLogger(RefreshTokenFilter.class);
 
@@ -107,8 +107,8 @@ public class RefreshTokenFilter extends GenericFilterBean {
             } else if (accessTokenCookie != null) {
                 log.warn("access token found, but no refresh token, stripping them all");
                 OAuth2AccessToken token = tokenStore.readAccessToken(accessTokenCookie.getValue());
-                if (token.isExpired()) {
-                    throw new InvalidTokenException("access token has expired, but there's no refresh token");
+                if (token.isExpired() || token.getExpiresIn() < REFRESH_WINDOW_SECS) {
+                    throw new InvalidTokenException("access token has expired or expires within " + REFRESH_WINDOW_SECS + " seconds, but there's no refresh token");
                 }
             }
         }

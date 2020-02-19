@@ -21,7 +21,7 @@
         <span id="user-management-page-heading" jhiTranslate="userManagement.home.title">Users</span>
 
         <button class="btn btn-primary float-right jh-create-entity" [routerLink]="['./new']">
-            <fa-icon [icon]="'plus'"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
+            <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
         </button>
     </h2>
 
@@ -33,18 +33,18 @@
         <table class="table table-striped" aria-describedby="user-management-page-heading">
             <thead>
                 <tr<% if (databaseType !== 'cassandra') { %> jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)"<% } %>>
-                    <th scope="col" <% if (databaseType !== 'cassandra') { %> jhiSortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <fa-icon [icon]="'sort'"></fa-icon><% } %></th>
-                    <th scope="col" <% if (databaseType !== 'cassandra') { %> jhiSortBy="login"<% } %>><span jhiTranslate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <fa-icon [icon]="'sort'"></fa-icon><% } %></th>
-                    <th scope="col" <% if (databaseType !== 'cassandra') { %> jhiSortBy="email"<% } %>><span jhiTranslate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <fa-icon [icon]="'sort'"></fa-icon><% } %></th>
+                    <th scope="col" <% if (databaseType !== 'cassandra') { %> jhiSortBy="id"<% } %>><span jhiTranslate="global.field.id">ID</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <% if (databaseType !== 'cassandra') { %> jhiSortBy="login"<% } %>><span jhiTranslate="userManagement.login">Login</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
+                    <th scope="col" <% if (databaseType !== 'cassandra') { %> jhiSortBy="email"<% } %>><span jhiTranslate="userManagement.email">Email</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <th scope="col"></th>
                     <%_ if (enableTranslation) { _%>
-                    <th scope="col" <% if (databaseType !== 'cassandra') { %> jhiSortBy="langKey"<% } %>> <span jhiTranslate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <fa-icon [icon]="'sort'"></fa-icon><% } %></th>
+                    <th scope="col" <% if (databaseType !== 'cassandra') { %> jhiSortBy="langKey"<% } %>> <span jhiTranslate="userManagement.langKey">Lang Key</span><% if (databaseType !== 'cassandra') { %> <fa-icon icon="sort"></fa-icon><% } %></th>
                     <%_ } _%>
                     <th scope="col"><span jhiTranslate="userManagement.profiles">Profiles</span></th>
                     <%_ if (databaseType !== 'cassandra') { _%>
-                    <th scope="col" jhiSortBy="createdDate"><span jhiTranslate="userManagement.createdDate">Created Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                    <th scope="col" jhiSortBy="lastModifiedBy"><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-                    <th scope="col" jhiSortBy="lastModifiedDate"><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                    <th scope="col" jhiSortBy="createdDate"><span jhiTranslate="userManagement.createdDate">Created Date</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" jhiSortBy="lastModifiedBy"><span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
+                    <th scope="col" jhiSortBy="lastModifiedDate"><span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span> <fa-icon icon="sort"></fa-icon></th>
                     <%_ } _%>
                     <th scope="col"></th>
                 </tr>
@@ -78,7 +78,7 @@
                             <button type="submit"
                                     [routerLink]="['./', user.login, 'view']"
                                     class="btn btn-info btn-sm">
-                                <fa-icon [icon]="'eye'"></fa-icon>
+                                <fa-icon icon="eye"></fa-icon>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                             </button>
 
@@ -86,13 +86,13 @@
                                     [routerLink]="['./', user.login, 'edit']"
                                     queryParamsHandling="merge"
                                     class="btn btn-primary btn-sm">
-                                <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                                <fa-icon icon="pencil-alt"></fa-icon>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                             </button>
 
                             <button type="button" (click)="deleteUser(user)"
                                     class="btn btn-danger btn-sm" [disabled]="!currentAccount || currentAccount.login === user.login">
-                                <fa-icon [icon]="'times'"></fa-icon>
+                                <fa-icon icon="times"></fa-icon>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                             </button>
                         </div>

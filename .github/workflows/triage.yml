@@ -24,8 +24,9 @@ jobs:
     apply-label:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/github-script@0.3.0
+            - uses: actions/github-script@0.5.0
               with:
                   github-token: ${{secrets.GITHUB_TOKEN}}
                   script: |
-                      github.issues.addLabels({...context.issue, labels: ['area: triage', 'theme: undefined']})
+                      const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
+                      github.issues.addLabels({...issue, labels: ['area: triage', 'theme: undefined']})

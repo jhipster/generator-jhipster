@@ -773,7 +773,7 @@ module.exports = class extends BaseGenerator {
 
                 if (this.buildTool === 'maven') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./mvnw package appengine:run -DskipTests'));
-                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod-gae'));
+                    this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod,prod-gae'));
                 } else if (this.buildTool === 'gradle') {
                     this.log(chalk.bold('\nRun App Engine DevServer Locally: ./gradlew appengineRun'));
                     this.log(chalk.bold('Deploy to App Engine: ./gradlew appengineDeploy -Pgae -Pprod-gae'));

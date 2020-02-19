@@ -12,7 +12,7 @@ Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submit
 
 ## Contributing
 
-We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md) for any information about contributing to the project. 
+We are honoured by any contributions you may have small or large. Please refer to our [contribution guidelines and instructions document](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md) for any information about contributing to the project.
 
 ## Sponsors
 
@@ -69,11 +69,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://www.intesys.it/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/intesys.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://www.codefirst.co.uk" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/codefirst.png">
         </a>
@@ -83,13 +78,13 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/blokt.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://clay.global/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/clay.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://uxplanet.org/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/uxplanet.png">
@@ -101,17 +96,10 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://edusson.co.uk/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edusson.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://www.crosswordsolver.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/crosswordsolver.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://fair-laan.se/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/fair-laan.png">
@@ -122,6 +110,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/superkredit.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://matchbanker.pl/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
@@ -137,8 +127,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/vpngorilla.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://papersowl.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">
@@ -149,6 +137,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://edubirdie.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">
@@ -157,6 +147,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
       <td align="center" valign="middle">
         <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.minitool.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
         </a>
       </td>
     </tr>
@@ -175,6 +170,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | :------------------- | :----------------------------------------------------- |
 | Docker               | [![Build Status][img-docker]][azure-url]               |
 | Official             | [![Build Status][img-official]][azure-url]             |
+| Windows Official     | [![Build Status][img-windows-official]][azure-url]     |
 | Angular.Maven        | [![Build Status][img-angular-maven]][azure-url]        |
 | Angular.Maven.NoSQL  | [![Build Status][img-angular-maven-nosql]][azure-url]  |
 | Angular.Gradle       | [![Build Status][img-angular-gradle]][azure-url]       |
@@ -199,6 +195,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [azure-url]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_build
 [img-docker]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Docker.Image
 [img-official]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Official
+[img-windows-official]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Windows.GitBash.Official?branchName=master
 [img-angular-maven]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven
 [img-angular-maven-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven.NoSQL
 [img-angular-gradle]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Gradle

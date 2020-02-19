@@ -103,7 +103,7 @@ const serverFiles = {
         {
             condition: generator => generator.cacheProvider === 'redis',
             path: DOCKER_DIR,
-            templates: ['redis.yml']
+            templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh']
         },
         {
             condition: generator => generator.searchEngine === 'elasticsearch',
@@ -1004,6 +1004,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}config/ElasticsearchConfiguration.java`
                 }
             ]
+        },
+        {
+            condition: generator => generator.searchEngine === 'elasticsearch',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/ElasticsearchTestConfiguration.java',
+                    renameTo: generator => `${generator.testDir}config/ElasticsearchTestConfiguration.java`
+                }
+            ]
         }
     ],
     serverJavaDomain: [
@@ -1304,6 +1314,10 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'uaa',
             path: SERVER_TEST_SRC_DIR,
             templates: [
+                {
+                    file: 'package/config/OAuth2TestConfiguration.java',
+                    renameTo: generator => `${generator.testDir}config/OAuth2TestConfiguration.java`
+                },
                 {
                     file: 'package/security/OAuth2TokenMockUtil.java',
                     renameTo: generator => `${generator.testDir}security/OAuth2TokenMockUtil.java`
@@ -1796,8 +1810,22 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}web/rest/AccountResourceIT.java`
                 },
                 {
+                    file: 'package/config/NoOpMailConfiguration.java',
+                    renameTo: generator => `${generator.testDir}config/NoOpMailConfiguration.java`
+                },
+                {
                     file: 'package/web/rest/UserResourceIT.java',
                     renameTo: generator => `${generator.testDir}web/rest/UserResourceIT.java`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.skipUserManagement && generator.authenticationType !== 'oauth2',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/web/rest/WithUnauthenticatedMockUser.java',
+                    renameTo: generator => `${generator.testDir}web/rest/WithUnauthenticatedMockUser.java`
                 }
             ]
         }

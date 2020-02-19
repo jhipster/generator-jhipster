@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
  */
 public class AudienceValidatorTest {
 
-    private AudienceValidator validator = new AudienceValidator(Arrays.asList("api://default"));
+    private final AudienceValidator validator = new AudienceValidator(Arrays.asList("api://default"));
 
     @Test
     @SuppressWarnings("unchecked")

@@ -49,16 +49,30 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
+     * Add a new icon to icon imports.
+     *
+     * @param {string} iconName - The name of the Font Awesome icon.
+     */
+    addIcon(iconName, clientFramework) {
+        if (clientFramework === 'angularX') {
+            this.needleApi.clientAngular.addIcon(iconName);
+        } else if (clientFramework === 'react') {
+            // React
+            // TODO:
+        }
+    }
+
+    /**
      * Add a new menu element, at the root of the menu.
      *
      * @param {string} routerName - The name of the Angular router that is added to the menu.
-     * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
+     * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
+    addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
+            this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -79,13 +93,13 @@ module.exports = class extends PrivateBase {
      * Add a new menu element to the admin menu.
      *
      * @param {string} routerName - The name of the Angular router that is added to the admin menu.
-     * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
+     * @param {string} iconName - The name of the Font Awesome icon that will be displayed.
      * @param {boolean} enableTranslation - If translations are enabled or not
      * @param {string} clientFramework - The name of the client framework
      */
-    addElementToAdminMenu(routerName, glyphiconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
+    addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
         if (clientFramework === 'angularX') {
-            this.needleApi.clientAngular.addElementToAdminMenu(routerName, glyphiconName, enableTranslation, translationKeyMenu);
+            this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu);
         } else if (clientFramework === 'react') {
             // React
             // TODO:
@@ -164,6 +178,17 @@ module.exports = class extends PrivateBase {
             enableTranslation,
             clientFramework
         );
+    }
+
+    /**
+     * Add a new lazy loaded module to admin routing file.
+     *
+     * @param {string} route - The route for the module. For example 'entity-audit'.
+     * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
+     * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
+     */
+    addAdminRoute(route, modulePath, moduleName) {
+        this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName);
     }
 
     /**
@@ -1295,29 +1320,15 @@ module.exports = class extends PrivateBase {
 
     /**
      * executes a Git command using shellJS
-     * gitExec(args [, options ], callback)
+     * gitExec(args [, options] [, callback])
      *
      * @param {string|array} args - can be an array of arguments or a string command
      * @param {object} options[optional] - takes any of child process options
-     * @param {function} callback - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+     * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+     * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
      */
     gitExec(args, options, callback) {
-        callback = arguments[arguments.length - 1]; // eslint-disable-line prefer-rest-params
-        if (arguments.length < 3) {
-            options = {};
-        }
-        if (options.async === undefined) options.async = true;
-        if (options.silent === undefined) options.silent = true;
-        if (options.trace === undefined) options.trace = true;
-
-        if (!Array.isArray(args)) {
-            args = [args];
-        }
-        const command = `git ${args.join(' ')}`;
-        if (options.trace) {
-            this.info(command);
-        }
-        shelljs.exec(command, options, callback);
+        return jhipsterUtils.gitExec(args, options, callback);
     }
 
     /**
@@ -1821,10 +1832,10 @@ module.exports = class extends PrivateBase {
      * @returns {object} the command line and its result
      */
     buildApplication(buildTool, profile, buildWar, cb) {
-        let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
+        let buildCmd = 'mvnw -ntp verify -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew -x test';
+            buildCmd = 'gradlew';
             if (buildWar) {
                 buildCmd += ' bootWar';
             } else {
