@@ -149,11 +149,9 @@ export default class JhiDataUtils extends Vue {
    * Method to parse header links
    */
   parseLinks(header) {
-    if (header.length === 0) {
-      throw new Error('input must not be of zero length');
-    }
     const links = {};
-    if(header === null || header.indexOf(',') === -1) {
+    
+    if (header === null || header.indexOf(',') === -1) {
       return links;
     }
     // Split parts by comma
@@ -161,7 +159,7 @@ export default class JhiDataUtils extends Vue {
     
     // Parse each part into a named link
     parts.forEach((p) => {
-      if(p.indexOf('>;') === -1) {
+      if (p.indexOf('>;') === -1) {
         return;
       }
       const section = p.split('>;');
