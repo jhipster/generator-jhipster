@@ -66,8 +66,9 @@ var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conv
 for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
     const relationshipName = relationships[idx].relationshipName;
+    const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
     const ownerSide = relationships[idx].ownerSide;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+    if ((relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) && !otherEntityIsEmbedded) {
         renMapAnotEnt = true;
 _%>
     @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")
@@ -89,12 +90,13 @@ for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
     const relationshipName = relationships[idx].relationshipName;
     const otherEntityName = relationships[idx].otherEntityName;
+    const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
     const relationshipNamePlural = relationships[idx].relationshipNamePlural;
     const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
     const ownerSide = relationships[idx].ownerSide;
     const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
     primaryKeyType = (isUsingMapsId === true && otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : primaryKeyType;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+    if ((relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true) && !otherEntityIsEmbedded)) {
         renMapAnotDto = true;
 _%>
     @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")
@@ -112,7 +114,7 @@ _%>
     <%_ if (renMapAnotDto === true) { _%>
     <%= asEntity(entityClass) %> toEntity(<%= asDto(entityClass) %> <%= asDto(entityInstance) %>);
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && !embedded) { _%>
 
     default <%= asEntity(entityClass) %> fromId(<%= primaryKeyType %> id) {
         if (id == null) {

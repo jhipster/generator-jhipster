@@ -54,7 +54,7 @@ import java.math.BigDecimal;
 <%_ if (fieldsContainBlob && databaseType === 'cassandra') { _%>
 import java.nio.ByteBuffer;
 <%_ } _%>
-<%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (fieldsContainOwnerManyToMany || fieldsContainEmbedded) { _%>
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>
@@ -76,8 +76,9 @@ import <%= packageName %>.domain.enumeration.<%= element %>;
 @ApiModel(description = "<%- formatAsApiDescription(javadoc) %>")
 <%_ } _%>
 public class <%= asDto(entityClass) %> implements Serializable {
-
+    <% if (!embedded) { %>
     private <%= primaryKeyType %> id;
+    <%_ } _%>
 
     <%_ for (idx in fields) {
         if (typeof fields[idx].javadoc !== 'undefined') { _%>
@@ -126,14 +127,17 @@ public class <%= asDto(entityClass) %> implements Serializable {
         const otherEntityName = relationships[idx].otherEntityName;
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+        const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
         const ownerSide = relationships[idx].ownerSide;
         if (typeof relationships[idx].javadoc != 'undefined') { _%>
 <%- formatAsFieldJavadoc(relationships[idx].javadoc) %>
     @ApiModelProperty(value = "<%- formatAsApiDescription(relationships[idx].javadoc) %>")
     <%_ }
-        if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
-
+        if ((relationshipType === 'many-to-many' && ownerSide === true)
+            || (relationshipType === 'one-to-many' && otherEntityIsEmbedded)) { _%>
     private Set<<%= asDto(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
+    <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityIsEmbedded) { _%>
+    private <%= asDto(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     private <% if (otherEntityName === 'user' && authenticationType === 'oauth2') { %>String<% } else { %><%= primaryKeyType %><% } %> <%= relationshipFieldName %>Id;
@@ -141,7 +145,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
 
     private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
-
+    <% if (!embedded) { %>
     public <%= primaryKeyType %> getId() {
         return id;
     }
@@ -149,7 +153,8 @@ public class <%= asDto(entityClass) %> implements Serializable {
     public void setId(<%= primaryKeyType %> id) {
         this.id = id;
     }
-    <%_ for (idx in fields) {
+    <%_ }
+        for (idx in fields) {
         const fieldType = fields[idx].fieldType;
         const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
         const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
@@ -187,13 +192,15 @@ public class <%= asDto(entityClass) %> implements Serializable {
         relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural,
         otherEntityName = relationships[idx].otherEntityName,
         otherEntityNamePlural = relationships[idx].otherEntityNamePlural,
+        otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded,
         relationshipType = relationships[idx].relationshipType,
         otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
         otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
         relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
         relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural,
         ownerSide = relationships[idx].ownerSide;
-        if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
+        if ((relationshipType === 'many-to-many' && ownerSide === true)
+                || (relationshipType === 'one-to-many' && otherEntityIsEmbedded)) { _%>
 
     public Set<<%= asDto(otherEntityNameCapitalized) %>> get<%= relationshipNameCapitalizedPlural %>() {
         return <%= relationshipFieldNamePlural %>;
@@ -201,6 +208,15 @@ public class <%= asDto(entityClass) %> implements Serializable {
 
     public void set<%= relationshipNameCapitalizedPlural %>(Set<<%= asDto(otherEntityNameCapitalized) %>> <%= otherEntityNamePlural %>) {
         this.<%= relationshipFieldNamePlural %> = <%= otherEntityNamePlural %>;
+    }
+    <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityIsEmbedded) { _%>
+
+    public <%= asDto(otherEntityNameCapitalized) %> get<%= relationshipNameCapitalized %>() {
+        return <%= relationshipFieldName %>;
+    }
+
+    public void set<%= relationshipNameCapitalized %>(<%= asDto(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
+        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
     }
     <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
@@ -241,23 +257,33 @@ public class <%= asDto(entityClass) %> implements Serializable {
             return false;
         }
 
+        <%_ if (!embedded) { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = (<%= asDto(entityClass) %>) o;
         if (<%= asDto(entityInstance) %>.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), <%= asDto(entityInstance) %>.getId());
+        <%_ } else { _%>
+        return false;
+        <%_ } _%>
     }
 
     @Override
     public int hashCode() {
+    <%_ if (!embedded) { _%>
         return Objects.hashCode(getId());
+    <%_ } else { _%>
+        return 31;
+    <%_ } _%>
     }
 
     @Override
     public String toString() {
         return "<%= asDto(entityClass) %>{" +
+            <%_ if (!embedded) { _%>
             "id=" + getId() +
-            <%_ for (idx in fields) {
+            <%_ }
+                for (idx in fields) {
                 const fieldName = fields[idx].fieldName;
                 const fieldType = fields[idx].fieldType;
                 const isNumeric = ['integer', 'long', 'float', 'double', 'bigdecimal'].includes(fieldType.toLowerCase()); _%>
@@ -267,10 +293,18 @@ public class <%= asDto(entityClass) %> implements Serializable {
                 const relationshipFieldName = relationships[idx].relationshipFieldName;
                 const relationshipType = relationships[idx].relationshipType;
                 const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
+                const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                const relationshipNameCapitalizedPlural = relationships[idx].relationshipNameCapitalizedPlural;
                 const otherEntityName = relationships[idx].otherEntityName;
                 const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
                 const ownerSide = relationships[idx].ownerSide; _%>
-                <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+                <%_ if ((relationshipType === 'many-to-many' && ownerSide === true)
+                        || (relationshipType === 'one-to-many' && otherEntityIsEmbedded)) { _%>
+            ", <%= relationshipFieldNamePlural %>='" + get<%= relationshipNameCapitalizedPlural %>() + "'" +
+                <%_ } else if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityIsEmbedded) { _%>
+            ", <%= relationshipFieldName %>='" + get<%= relationshipNameCapitalized %>() + "'" +
+                <%_ } else if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
             ", <%= relationshipFieldName %>Id=<% if (otherEntityName === 'user' && authenticationType === 'oauth2') { %>'<% } %>" + get<%= relationshipNameCapitalized %>Id() <% if (otherEntityName === 'user' && authenticationType === 'oauth2') { %>+ "'" <% } %>+
                     <%_ if (otherEntityFieldCapitalized !== 'Id' && otherEntityFieldCapitalized !== '') { _%>
             ", <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>='" + get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() + "'" +

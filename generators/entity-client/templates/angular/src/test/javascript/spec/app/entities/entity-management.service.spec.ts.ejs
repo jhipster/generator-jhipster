@@ -19,7 +19,7 @@
 <%_
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const tsKeyId = generateTestEntityId(primaryKeyType);
-const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
+const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, undefined, embedded);
 const enumImports = generateEntityClientEnumImports(fields);
 _%>
 import { TestBed, getTestBed } from '@angular/core/testing';
