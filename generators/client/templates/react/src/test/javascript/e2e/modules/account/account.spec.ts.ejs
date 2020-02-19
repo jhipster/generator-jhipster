@@ -300,6 +300,7 @@ describe('Account', () => {
     await waitUntilDisplayed(navBarPage.accountMenu);
 
     settingsPage = await navBarPage.getSettingsPage();
+    await waitUntilDisplayed(settingsPage.title);
     expect(await settingsPage.getTitle()).to.eq(settingsPageTitle);
 
     await settingsPage.firstName.sendKeys('jhipster');

@@ -118,6 +118,18 @@ function writeFiles() {
             this.template('istio/gateway/grafana-gateway.yml.ejs', 'istio/grafana-gateway.yml');
             this.template('istio/gateway/zipkin-gateway.yml.ejs', 'istio/zipkin-gateway.yml');
             this.template('istio/gateway/kiali-gateway.yml.ejs', 'istio/kiali-gateway.yml');
+        },
+
+        writeKustomize() {
+            this.template('kustomize/kustomization.yml.ejs', 'kustomization.yml');
+            if (this.istio) {
+                this.template('kustomize/patch/istio-label.yml.ejs', 'patch/istio-label.yml');
+                this.template('kustomize/patch/istio-namespace.yml.ejs', 'patch/istio-namespace.yml');
+            }
+        },
+
+        writeSkaffold() {
+            this.template('skaffold/skaffold.yml.ejs', 'skaffold.yml');
         }
     };
 }

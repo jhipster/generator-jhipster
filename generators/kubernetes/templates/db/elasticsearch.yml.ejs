@@ -52,11 +52,13 @@ spec:
         sidecar.istio.io/inject: "false"
      <%_ } _%>
     spec:
+      securityContext:
+        fsGroup: 1000
       volumes:
       - name: data
         <%_ if (kubernetesUseDynamicStorage) { _%>
         persistentVolumeClaim:
-          claimName: <%= app.baseName.toLowerCase() %>-mariadb-pvc
+          claimName: <%= app.baseName.toLowerCase() %>-elasticsearch-pvc
         <%_ } else { _%>
         emptyDir: {}
         <%_ } _%>
@@ -87,7 +89,7 @@ spec:
             memory: "512Mi"
             cpu: "500m"
           limits:
-            memory: "1Gi"
+            memory: "2Gi"
             cpu: "1"
 ---
 apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>

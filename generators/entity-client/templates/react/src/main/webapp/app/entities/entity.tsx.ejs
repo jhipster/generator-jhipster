@@ -98,17 +98,17 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
+  <%_ if (pagination === 'no' || pagination === 'infinite-scroll') { _%>
   useEffect(() => {
     <%_ if (pagination !== 'no') { _%>
       <%_ if (pagination === 'infinite-scroll') { _%>
     resetAll();
-      <%_ } else { _%>
-    getAllEntities();
       <%_ } _%>
     <%_ } else { _%>
     props.getEntities();
     <%_ } _%>
-  }, []);
+  }, [<%_ if (searchEngine === 'elasticsearch' && pagination === 'no') { _%>search<%_ } _%>]);
+  <%_ } _%>
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   useEffect(() => {
@@ -119,12 +119,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
 
   <%_ if (searchEngine === 'elasticsearch') { _%>
-    <%_ if (pagination !== 'no') { _%>
-  useEffect(() => {
-    props.getSearchEntities(search, paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
-  }, [paginationState.activePage]);
-
-    <%_ } _%>
   const startSearching = () => {
     if (search) {
       <%_ if (pagination === 'infinite-scroll') { _%>
@@ -140,10 +134,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       <%_ } _%>
     }
   };
-
-  useEffect(() => {
-    props.getEntities()
-  }, [<%_ if (pagination !== 'no') { _%>paginationState.activePage, <%_ } _%>search]);
 
   const clear = () => {
     <%_ if (pagination === 'infinite-scroll') { _%>
@@ -194,7 +184,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <% } else { %>
     sortEntities();
     <% } %>
-  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %>]);
+  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %><%_ if (searchEngine === 'elasticsearch') { _%>, search<% } %>]);
 
   const sort = p => () => {
     <% if (pagination === 'infinite-scroll') { %>
@@ -224,7 +214,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   <%_ } _%>
 
-  const { <%= entityInstance %>List, match<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = props;
+  const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = props;
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading">
@@ -409,7 +399,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
               </tbody>
             </Table>
           ) : (
-            <div className="alert alert-warning">
+              !loading && <div className="alert alert-warning">
               <Translate contentKey="<%= i18nKeyPrefix %>.home.notFound">
                 No <%= entityClassPluralHumanized %> found
               </Translate>
@@ -449,6 +439,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
 const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
   <%= entityInstance %>List: <%= entityInstance %>.entities,
+  loading: <%= entityInstance %>.loading,
   <%_ if (pagination !== 'no') { _%>
   totalItems: <%= entityInstance %>.totalItems,
   <%_ } _%>

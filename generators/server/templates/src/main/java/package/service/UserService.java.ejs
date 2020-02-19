@@ -280,7 +280,7 @@ public class UserService {
                     <%_ } _%>
                     return userRepository.delete(existingUser);
                 } else {
-                    throw new UsernameAlreadyUsedException();
+                    return Mono.error(new UsernameAlreadyUsedException());
                 }
             })
             .then(userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()))
@@ -291,7 +291,7 @@ public class UserService {
                     <%_ } _%>
                     return userRepository.delete(existingUser);
                 } else {
-                    throw new EmailAlreadyUsedException();
+                    return Mono.error(new EmailAlreadyUsedException());
                 }
             })
             .thenReturn(new <%= asEntity('User') %>())
@@ -601,7 +601,7 @@ public class UserService {
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
                 String currentEncryptedPassword = user.getPassword();
                 if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
-                    throw new InvalidPasswordException();
+                    <% if (reactive) { %>return Mono.error(new InvalidPasswordException());<% } else { %>throw new InvalidPasswordException();<% } %>
                 }
                 String encryptedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encryptedPassword);
@@ -762,7 +762,7 @@ public class UserService {
             // if IdP sends last updated information, use it to determine if an update should happen
             if (details.get("updated_at") != null) {
                 Instant dbModifiedDate = existingUser.get().getLastModifiedDate();
-                Instant idpModifiedDate = new Date(Long.valueOf((Integer) details.get("updated_at"))).toInstant();
+                Instant idpModifiedDate = (Instant) details.get("updated_at");
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
                     log.debug("Updating user '{}' in local database", user.getLogin());
                     updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
@@ -806,7 +806,7 @@ public class UserService {
                 // if IdP sends last updated information, use it to determine if an update should happen
                 if (details.get("updated_at") != null) {
                     Instant dbModifiedDate = existingUser.getLastModifiedDate();
-                    Instant idpModifiedDate = Date.from((Instant) details.get("updated_at")).toInstant();
+                    Instant idpModifiedDate = (Instant) details.get("updated_at");
                     if (idpModifiedDate.isAfter(dbModifiedDate)) {
                         log.debug("Updating user '{}' in local database", user.getLogin());
                         return updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),

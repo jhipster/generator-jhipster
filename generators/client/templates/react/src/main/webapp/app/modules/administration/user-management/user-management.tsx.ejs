@@ -39,27 +39,17 @@ export interface IUserManagementProps extends StateProps, DispatchProps, RouteCo
 export const UserManagement = (props: IUserManagementProps) => {
   const [pagination, setPagination] = useState(getSortState(props.location, ITEMS_PER_PAGE));
 
-  const getAllUsers = () =>
-    props.getUsers(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`);
-
   useEffect(() => {
-    getAllUsers();
-  }, []);
+    props.getUsers(pagination.activePage - 1, pagination.itemsPerPage, `${pagination.sort},${pagination.order}`)
+    props.history.push(`${props.location.pathname}?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`);
+  }, [pagination]);
 
-  const sortUsers = () => getAllUsers();
-
-  useEffect(() => {
-    sortUsers();
-  }, [pagination.activePage, pagination.order, pagination.sort]);
-
-  const sort = p => () => {
+  const sort = p => () =>
     setPagination({
       ...pagination,
       order: pagination.order === 'asc' ? 'desc' : 'asc',
       sort: p
     });
-    props.history.push(`${props.location.pathname}?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`);
-  };
 
   const handlePagination = currentPage =>
     setPagination({
@@ -122,11 +112,11 @@ export const UserManagement = (props: IUserManagementProps) => {
               <td>
                 {user.activated ? (
                   <Button color="success" onClick={toggleActive(user) }>
-                    Activated
+                    <Translate contentKey="userManagement.activated">Activated</Translate>
                   </Button>
                 ) : (
                   <Button color="danger" onClick={toggleActive(user) }>
-                    Deactivated
+                    <Translate contentKey="userManagement.deactivated">Deactivated</Translate>
                   </Button>
                 )}
               </td>

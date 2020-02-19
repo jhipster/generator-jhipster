@@ -18,21 +18,46 @@
 -%>
 package <%= packageName %>.service.mapper;
 
+<%_
+let existingMappings = [];
+let uuidMapMethod = false;
+let byteMapMethod = false;
+for (idx in relationships) {
+    if ((relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) || relationships[idx].relationshipType === 'many-to-one' || (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)) {
+        // if the entity is mapped twice, we should implement the mapping once
+        if (!existingMappings.includes(relationships[idx].otherEntityNameCapitalized) && asEntity(relationships[idx].otherEntityNameCapitalized) !== asEntity(entityClass)) {
+            existingMappings.push(relationships[idx].otherEntityNameCapitalized);
+        }
+        let otherEntity = getExistingEntities().find(e => e.name === relationships[idx].otherEntityNameCapitalized);
+        if (otherEntity) {
+            let otherEntityField = otherEntity.definition.fields.find(f => f.fieldName === relationships[idx].otherEntityField);
+            if (otherEntityField) {
+                if (otherEntityField.fieldType === 'UUID') {
+                    uuidMapMethod = true;
+                }
+                if (otherEntityField.fieldType === 'byte[]') {
+                    byteMapMethod = true;
+                }
+            }
+        }
+    }
+}
+_%>
+
 import <%= packageName %>.domain.*;
 import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 
 import org.mapstruct.*;
+<%_ if (uuidMapMethod) { _%>
+
+import java.util.Objects;
+import java.util.UUID;
+<%_ } _%>
 
 /**
  * Mapper for the entity {@link <%= asEntity(entityClass) %>} and its DTO {@link <%= asDto(entityClass) %>}.
  */
-@Mapper(componentModel = "spring", uses = {<% var existingMappings = [];
-  for (idx in relationships) {
-    if ((relationships[idx].relationshipType === 'many-to-many' && relationships[idx].ownerSide === true)|| relationships[idx].relationshipType === 'many-to-one' ||(relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide === true)) {
-      // if the entity is mapped twice, we should implement the mapping once
-      if (!existingMappings.includes(relationships[idx].otherEntityNameCapitalized) && asEntity(relationships[idx].otherEntityNameCapitalized) !== asEntity(entityClass)) {
-          existingMappings.push(relationships[idx].otherEntityNameCapitalized);
-      } } } %><%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %>})
+@Mapper(componentModel = "spring", uses = {<%= existingMappings.map(otherEntityNameCapitalized => otherEntityNameCapitalized + 'Mapper.class').join(', ') %>})
 public interface <%= entityClass %>Mapper extends EntityMapper<<%= asDto(entityClass) %>, <%= asEntity(entityClass) %>> {
 
 <%_
@@ -41,8 +66,9 @@ var renMapAnotEnt = false; //Render Mapping Annotation during Entity to DTO conv
 for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
     const relationshipName = relationships[idx].relationshipName;
+    const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
     const ownerSide = relationships[idx].ownerSide;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+    if ((relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) && !otherEntityIsEmbedded) {
         renMapAnotEnt = true;
 _%>
     @Mapping(source = "<%= relationshipName %>.id", target = "<%= relationships[idx].relationshipFieldName %>Id")
@@ -64,12 +90,13 @@ for (idx in relationships) {
     const relationshipType = relationships[idx].relationshipType;
     const relationshipName = relationships[idx].relationshipName;
     const otherEntityName = relationships[idx].otherEntityName;
+    const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
     const relationshipNamePlural = relationships[idx].relationshipNamePlural;
     const relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized;
     const ownerSide = relationships[idx].ownerSide;
     const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
     primaryKeyType = (isUsingMapsId === true && otherEntityName === 'user' && authenticationType === 'oauth2') ? 'String' : primaryKeyType;
-    if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) {
+    if ((relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true) && !otherEntityIsEmbedded)) {
         renMapAnotDto = true;
 _%>
     @Mapping(source = "<%= relationshipName %>Id", target = "<%= relationshipName %>")
@@ -87,7 +114,7 @@ _%>
     <%_ if (renMapAnotDto === true) { _%>
     <%= asEntity(entityClass) %> toEntity(<%= asDto(entityClass) %> <%= asDto(entityInstance) %>);
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') && !embedded) { _%>
 
     default <%= asEntity(entityClass) %> fromId(<%= primaryKeyType %> id) {
         if (id == null) {
@@ -98,4 +125,16 @@ _%>
         return <%= asEntity(entityInstance) %>;
     }
 <%_ } _%>
+    <%_ if (uuidMapMethod) { _%>
+
+    default String map(UUID value) {
+        return Objects.toString(value, null);
+    }
+    <%_ } _%>
+    <%_ if (byteMapMethod) { _%>
+
+    default String map(byte[] value) {
+        return new String(value);
+    }
+    <%_ } _%>
 }

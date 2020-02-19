@@ -20,22 +20,22 @@ $ <%= dockerPushCommand %> <%= appConfigs[i].targetImageName %>
 ## Deployment
 
 You can deploy all your apps by running the below terminal command:
-<%_ if (this.generatorType === 'k8s') { _%>
+<%_ if (generatorType === 'k8s') { _%>
 ```
 bash kubectl-knative-apply.sh (or) ./kubectl-knative-apply.sh
 ```
-
-```
-bash helm-apply.sh (or) ./helm-apply.sh
-```
 <%_ } _%>
-<%_ if (this.generatorType === 'helm') { _%>
+<%_ if (generatorType === 'helm') { _%>
+```
+bash helm-knative-apply.sh (or) ./helm-knative-apply.sh
+```
+    
 `helm-apply.sh` will always do a clean install. Any of the existing charts with the same identity gets removed first and then it does a clean install.
 
 You can upgrade all your apps (if you have made any changes to the generated manifests) by running the following bash command:
 
 ```
-bash helm-upgrade.sh (or) ./helm-upgrade.sh
+bash helm-knative-upgrade.sh (or) ./helm-knative-upgrade.sh
 ```
 <%_ } _%>
 

@@ -1,0 +1,134 @@
+commonLabels:
+  app.kubernetes.io/genereted-by: JHipster
+
+<%_ if (kubernetesNamespace !== 'default') { _%>
+namespace: <%= kubernetesNamespace %>
+<%_ } _%>
+
+resources:
+<%_
+if (kubernetesNamespace !== 'default') { _%>
+- namespace.yml
+<%_ } _%>
+# Individual apps
+<%_
+appConfigs.forEach((appConfig) =>  {
+const appName = appConfig.baseName.toLowerCase(); _%>
+- <%= appName %>/<%= appName %>-deployment.yml
+- <%= appName %>/<%= appName %>-service.yml
+<%_
+  if (appConfig.prodDatabaseType !== 'no') { _%>
+- <%= appName %>/<%= appName %>-<%= appConfig.prodDatabaseType %>.yml
+<%_  }
+  if (appConfig.searchEngine === 'elasticsearch') { _%>
+- <%= appName %>/<%= appName %>-elasticsearch.yml
+<%_  }
+  if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
+    if (istio) { _%>
+- <%= appName %>/<%= appName %>-gateway.yml
+<%_    } else if (kubernetesServiceType === 'Ingress') { _%>
+- <%= appName %>/<%= appName %>-ingress.yml
+<%_    }
+  }
+  if (!appConfig.serviceDiscoveryType && appConfig.authenticationType === 'jwt') { _%>
+- <%= appName %>/jwt-secret.yml
+<%_  }
+  if (monitoring === 'prometheus') { _%>
+- <%= appName %>/<%= appName %>-prometheus-sm.yml
+<%_  }
+  if (istio) { _%>
+- <%= appName %>/<%= appName %>-destination-rule.yml
+- <%= appName %>/<%= appName %>-virtual-service.yml
+<%_  } _%>
+<%_ }) _%>
+<%_ if (useKafka) { _%>
+# messagebroker
+- messagebroker/kafka.yml
+<%_ } _%>
+<%_ if (monitoring === 'elk') { _%>
+# monitoring elk
+- console/jhipster-elasticsearch.yml
+- console/jhipster-logstash.yml
+- console/jhipster-console.yml
+- console/jhipster-dashboard-console.yml
+<%_ if (deploymentApplicationType === 'microservice') { _%>
+- console/jhipster-zipkin.yml
+<%_ } _%>
+<%_ if (istio) { _%>
+- console/jhipster-console-gateway.yml
+<%_ } } _%>
+<%_ if (monitoring === 'prometheus') { _%>
+# monitoring prometheus
+- monitoring/jhipster-prometheus-cr.yml
+- monitoring/jhipster-prometheus-crd.yml
+- monitoring/jhipster-grafana.yml
+- monitoring/jhipster-grafana-dashboard.yml
+<%_ if (istio) { _%>
+- monitoring/jhipster-grafana-gateway.yml
+<%_ } } _%>
+# service discovery eureka/consul
+<%_ if (serviceDiscoveryType === 'eureka') { _%>
+- registry/jhipster-registry.yml
+- registry/application-configmap.yml
+<%_ }  else if (serviceDiscoveryType === 'consul') { _%>
+- registry/consul.yml
+- registry/consul-config-loader.yml
+- registry/application-configmap.yml
+<%_ } _%>
+<%_ if (istio) { _%>
+# istio
+- istio/grafana-gateway.yml
+- istio/zipkin-gateway.yml
+- istio/kiali-gateway.yml
+<%_ } _%>
+
+patchesJson6902:
+<%_ if (istio) { _%>
+- target:
+    version: v1
+    kind: Namespace
+    name: <%= kubernetesNamespace %>
+  path: patch/istio-label.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    kind: Gateway
+    name: grafana-observability-gateway
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    name: grafana-gw-virtualservice
+    kind: VirtualService
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    kind: Gateway
+    name: kiali-observability-gateway
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    name: kiali-gw-virtualservice
+    kind: VirtualService
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    kind: Gateway
+    name: zipkin-observability-gateway
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+- target:
+    group: networking.istio.io
+    version: v1alpha3
+    name: zipkin-gw-virtualservice
+    kind: VirtualService
+    namespace: <%= kubernetesNamespace %>
+  path: patch/istio-namespace.yml
+<%_ } _%>

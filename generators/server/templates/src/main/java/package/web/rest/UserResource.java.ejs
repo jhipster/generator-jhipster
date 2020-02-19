@@ -194,15 +194,15 @@ public class UserResource {
         return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
             .hasElement()
             .flatMap(loginExists -> {
-                if (loginExists) {
-                    throw new LoginAlreadyUsedException();
+                if (Boolean.TRUE.equals(loginExists)) {
+                    return Mono.error(new LoginAlreadyUsedException());
                 }
                 return userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
             })
             .hasElement()
             .flatMap(emailExists -> {
-                if (emailExists) {
-                    throw new EmailAlreadyUsedException();
+                if (Boolean.TRUE.equals(emailExists)) {
+                    return Mono.error(new EmailAlreadyUsedException());
                 }
                 return userService.createUser(userDTO);
             })
@@ -251,16 +251,16 @@ public class UserResource {
             .filter(user -> !user.getId().equals(userDTO.getId()))
             .hasElement()
             .flatMap(emailExists -> {
-                if (emailExists) {
-                    throw new EmailAlreadyUsedException();
+                if (Boolean.TRUE.equals(emailExists)) {
+                    return Mono.error(new EmailAlreadyUsedException());
                 }
                 return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
             })
             .filter(user -> !user.getId().equals(userDTO.getId()))
             .hasElement()
             .flatMap(loginExists -> {
-                if (loginExists) {
-                    throw new LoginAlreadyUsedException();
+                if (Boolean.TRUE.equals(loginExists)) {
+                    return Mono.error(new LoginAlreadyUsedException());
                 }
                 return userService.updateUser(userDTO);
             })

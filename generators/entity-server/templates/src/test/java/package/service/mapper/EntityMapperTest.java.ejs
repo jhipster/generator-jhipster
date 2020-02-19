@@ -38,10 +38,12 @@ public class <%= entityClass %>MapperTest {
         <%= entityInstance %>Mapper = new <%= entityClass %>MapperImpl();
     }
 
+    <%_if (!embedded) { _%>
     @Test
     public void testEntityFromId() {
         <%= primaryKeyType %> id = <%- id %>;
         assertThat(<%= entityInstance %>Mapper.fromId(id).getId()).isEqualTo(id);
         assertThat(<%= entityInstance %>Mapper.fromId(null)).isNull();
     }
+    <%_} _%>
 }

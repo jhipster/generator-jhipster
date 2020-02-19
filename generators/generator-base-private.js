@@ -252,7 +252,7 @@ module.exports = class extends Generator {
     updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
         const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
         try {
-            let content = 'private static String languages[] = {\n';
+            let content = 'private static final String[] languages = {\n';
             languages.forEach((language, i) => {
                 content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
             });
@@ -625,17 +625,18 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Execute callback if git is installed
+     * Checks if git is installed.
      *
-     * @param {function} callback - function to be called if git is installed
+     * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
+     *
+     * @return {boolean} true if installed; false otherwise.
      */
     isGitInstalled(callback) {
-        this.gitExec('--version', { trace: false }, code => {
-            if (code !== 0) {
-                this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
-            }
-            if (callback) callback(code);
-        });
+        const gitInstalled = jhipsterUtils.isGitInstalled(callback);
+        if (!gitInstalled) {
+            this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
+        }
+        return gitInstalled;
     }
 
     /**
@@ -978,11 +979,7 @@ module.exports = class extends Generator {
      */
     checkGit() {
         if (this.skipChecks || this.skipClient) return;
-        const done = this.async();
-        this.isGitInstalled(code => {
-            this.gitInstalled = code === 0;
-            done();
-        });
+        this.gitInstalled = this.isGitInstalled();
     }
 
     /**
@@ -1139,12 +1136,15 @@ module.exports = class extends Generator {
      * @param {Array|Object} fields - array of fields
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
+     * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
         const variablesWithTypes = [];
         const tsKeyType = this.getTypescriptKeyType(pkType);
-        variablesWithTypes.push(`id?: ${tsKeyType}`);
+        if (!embedded) {
+            variablesWithTypes.push(`id?: ${tsKeyType}`);
+        }
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
@@ -1173,10 +1173,11 @@ module.exports = class extends Generator {
             let fieldType;
             let fieldName;
             const relationshipType = relationship.relationshipType;
+            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 fieldType = `I${relationship.otherEntityAngularName}[]`;
                 fieldName = relationship.relationshipFieldNamePlural;
-            } else if (dto === 'no') {
+            } else if (dto === 'no' || otherEntityIsEmbedded) {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
             } else {
@@ -1219,8 +1220,9 @@ module.exports = class extends Generator {
         const typeImports = new Map();
         relationships.forEach(relationship => {
             const relationshipType = relationship.relationshipType;
+            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             let toBeImported = false;
-            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many' || otherEntityIsEmbedded) {
                 toBeImported = true;
             } else if (dto === 'no') {
                 toBeImported = true;

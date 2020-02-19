@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpHeaders } from '@angular/common/http';
+import { HttpResponse, <%_ if (prodDatabaseType !== 'cassandra') { _%> HttpHeaders <%_ } _%>} from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
