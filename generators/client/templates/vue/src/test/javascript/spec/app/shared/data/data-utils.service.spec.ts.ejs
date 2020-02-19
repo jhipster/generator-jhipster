@@ -57,7 +57,7 @@ describe('Formatter i18n', () => {
       '/entities?sort=date%2Cdesc&sort=id&page=2&size=12>; rel="last",<http://localhost'+
       '/api/entities?sort=date%2Cdesc&sort=id&page=0&size=12>; rel="first"');
 
-    expect(result.last).toBe(2);
+    expect(result['last']).toBe(2);
   });
 
   it('should not parse text with no links', () => {
