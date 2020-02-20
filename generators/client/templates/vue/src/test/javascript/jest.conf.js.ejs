@@ -14,7 +14,7 @@ module.exports = {
     [ 'jest-junit', { outputDirectory: './<%= BUILD_DIR %>test-results/', outputName: 'TESTS-results-jest.xml' } ]
   ],
   testResultsProcessor: 'jest-sonar-reporter',
-  testMatch: ['<rootDir>/src/test/javascript/spec/**/+(*.)+(spec.ts)'],
+  testMatch: ['<rootDir>/src/test/javascript/spec/**/@(*.)@(spec.ts)'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   rootDir: '../../../',
   coverageThreshold: {
