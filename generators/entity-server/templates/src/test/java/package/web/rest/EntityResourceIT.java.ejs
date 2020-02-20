@@ -81,7 +81,6 @@ import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveReposito
 import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 import <%= packageName %>.service.mapper.<%= entityClass %>Mapper;
 <%_ } _%>
-import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 <%_ if (jpaMetamodelFiltering) { _%>
 import <%= packageName %>.service.dto.<%= entityClass %>Criteria;
 import <%= packageName %>.service.<%= entityClass %>QueryService;
@@ -89,35 +88,38 @@ import <%= packageName %>.service.<%= entityClass %>QueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
-<%_ if (fieldsContainOwnerManyToMany) { _%>
+<%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany || cacheProvider === 'redis') { _%>
 import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 <%_ } _%>
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (!reactive) { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (searchEngine === 'elasticsearch' && pagination !== 'no' || fieldsContainOwnerManyToMany) { _%>
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 <%_ } _%>
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.TestSecurityContextHolder;
+<%_ } _%>
+import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 <%_ if (fieldsContainBlob === true) { _%>
 import org.springframework.util.Base64Utils;
 <%_ } _%>
-import org.springframework.validation.Validator;
-
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
@@ -139,19 +141,18 @@ import java.util.List;
 <%_ if (databaseType === 'cassandra' || fieldsContainUUID === true || (databaseType === 'sql' && hasOauthUser === true)) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (databaseType === 'couchbase') { _%>
-    import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
-<%_ } _%>
 
 <%_ if (fieldsContainZonedDateTime === true) { _%>
 import static <%= packageName %>.web.rest.TestUtil.sameInstant;
 <%_ } _%>
-import static <%= packageName %>.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
+<%_ if (testsNeedCsrf) { _%>
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
@@ -164,15 +165,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
 <%_ if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = { <%= mainClass %>.class, TestSecurityConfiguration.class })
 <%_ } else if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
-@SpringBootTest(classes = {SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class})
+@SpringBootTest(classes = { SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class })
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
-<%_ if (cacheProvider === 'redis') { _%>
-@ExtendWith(RedisTestContainerExtension.class)
+<% if (cacheProvider === 'redis') { %>@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })<% } else if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { %>@ExtendWith(MockitoExtension.class)<% } %>
+<%_ if (!reactive) { _%>
+@AutoConfigureMockMvc
+<%_ } else { _%>
+@AutoConfigureWebTestClient
 <%_ } _%>
+@WithMockUser
 public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     <%_ for (idx in fields) {
     const defaultValueName = 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase();
@@ -396,43 +401,22 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @Autowired
     private <%= entityClass %>QueryService <%= entityInstance %>QueryService;
     <%_ } _%>
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-<%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     @Autowired
     private EntityManager em;
-<%_ } _%>
+    <%_ } _%>
+    <%_ if (!reactive) { _%>
 
     @Autowired
-    private Validator validator;
-
     private MockMvc rest<%= entityClass %>MockMvc;
+    <%_ } else { _%>
+
+    @Autowired
+    private WebTestClient webTestClient;
+    <%_ } _%>
 
     private <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %>;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        <%_ if (service !== 'no') { _%>
-        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Service<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
-        <%_ } else { _%>
-        final <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>Repository<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (reactiveRepositories) { %>, <%= entityInstance %>ReactiveRepository<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %><% if (isUsingMapsId === true && dto !== 'mapstruct') { %>, <%= mapsIdRepoInstance _%> <% } %>);
-        <%_ } _%>
-        this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
     /**
@@ -506,11 +490,15 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 <%_ }); _%>
 
+    <%_ if (reactive && testsNeedCsrf) { _%>
+    @BeforeEach
+    public void setupCsrf() {
+        webTestClient = webTestClient.mutateWith(csrf());
+    }
+
+    <%_ } _%>
     @BeforeEach
     public void initTest() {
-        <%_ if (databaseType === 'couchbase') { _%>
-        mockAuthentication();
-        <%_ } _%>
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
         <%= entityInstance %>Repository.deleteAll();
         <%_ } _%>
@@ -527,12 +515,15 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (dto === 'mapstruct') { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
         <%_ } _%>
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
+            .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
             .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate + 1);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
@@ -570,12 +561,15 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ } _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -625,12 +619,15 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ } _%>
 
         // Update the entity
-        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%_ if (dto === 'mapstruct') { _%>updated<%= asDto(entityClass) %> <%_ } else { _%> updated<%= asEntity(entityClass) %> <%_ } _%>)))
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
@@ -666,11 +663,14 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         // Create the <%= entityClass %>, which fails.<% if (dto === 'mapstruct') { %>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);<% } %>
 
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeTest);
     }
@@ -703,21 +703,14 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @SuppressWarnings({"unchecked"})
     public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() throws Exception {
         <%_ if (service !== 'no') { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } else { _%>
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
         when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } _%>
 
-        MockMvc rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
-
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?eagerload=true"))
-        .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         <%_ if (service !== 'no') { _%>
         verify(<%= entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
@@ -729,25 +722,19 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @SuppressWarnings({"unchecked"})
     public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() throws Exception {
         <%_ if (service !== 'no') { _%>
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>ServiceMock<% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
-            when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } else { _%>
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource(<%= entityInstance %>RepositoryMock<% if (dto === 'mapstruct') { %>, <%= entityInstance %>Mapper<% } %><% if (searchEngine === 'elasticsearch') { %>, mock<%= entityClass %>SearchRepository<% } %><% if (jpaMetamodelFiltering) { %>, <%= entityInstance %>QueryService<% } %><% if (saveUserSnapshot) { %>, userRepository<% } %>);
-            when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
         <%_ } _%>
-            MockMvc rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
 
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?eagerload=true"))
-        .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         <%_ if (service !== 'no') { _%>
-            verify(<%= entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(<%= entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
         <%_ } else { _%>
-            verify(<%= entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        verify(<%= entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
         <%_ } _%>
     }
     <%_ } _%>
@@ -1120,12 +1107,15 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(updated<%= asEntity(entityClass) %>);
         <%_ } _%>
 
-        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass)) %>)))
             .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
@@ -1155,12 +1145,15 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);<% } %>
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(TestUtil.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
         // Validate the <%= entityClass %> in the database
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -1186,11 +1179,14 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
         // Delete the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId())
+        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .accept(TestUtil.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
+        <%_ if (databaseType === 'couchbase') { _%>
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
         List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeDelete - 1);
         <%_ if (searchEngine === 'elasticsearch') { _%>
