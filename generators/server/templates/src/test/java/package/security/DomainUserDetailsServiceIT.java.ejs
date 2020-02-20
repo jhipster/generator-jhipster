@@ -21,6 +21,9 @@ package <%= packageName %>.security;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
@@ -71,7 +74,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 <%_ if (databaseType === 'couchbase') { _%>
 @WithMockUser("test-user-one")
 <%_ } _%>
-public class DomainUserDetailsServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class DomainUserDetailsServiceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %><% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String USER_ONE_LOGIN = "test-user-one";
     private static final String USER_ONE_EMAIL = "test-user-one@localhost";

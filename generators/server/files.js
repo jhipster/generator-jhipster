@@ -293,6 +293,44 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator =>
+                generator.databaseType === 'neo4j' && (!generator.skipUserManagement || generator.authenticationType === 'oauth2'),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/neo4j/Neo4jMigrations.java',
+                    renameTo: generator => `${generator.javaDir}config/neo4j/Neo4jMigrations.java`
+                },
+                {
+                    file: 'package/config/neo4j/package-info.java',
+                    renameTo: generator => `${generator.javaDir}config/neo4j/package-info.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
+                generator.databaseType === 'neo4j' && (!generator.skipUserManagement || generator.authenticationType === 'oauth2'),
+            path: SERVER_MAIN_RES_DIR,
+            templates: [
+                {
+                    file: 'config/couchmove/changelog/V0.1__initial_setup/user__admin.json',
+                    renameTo: () => 'config/neo4j/migrations/user__admin.json'
+                },
+                {
+                    file: 'config/couchmove/changelog/V0.1__initial_setup/user__anonymoususer.json',
+                    renameTo: () => 'config/neo4j/migrations/user__anonymoususer.json'
+                },
+                {
+                    file: 'config/couchmove/changelog/V0.1__initial_setup/user__system.json',
+                    renameTo: () => 'config/neo4j/migrations/user__system.json'
+                },
+                {
+                    file: 'config/couchmove/changelog/V0.1__initial_setup/user__user.json',
+                    renameTo: () => 'config/neo4j/migrations/user__user.json'
+                }
+            ]
+        },
+        {
             condition: generator => generator.databaseType === 'cassandra',
             path: SERVER_MAIN_RES_DIR,
             templates: [
@@ -890,7 +928,10 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.databaseType === 'sql' || generator.databaseType === 'mongodb' || generator.databaseType === 'couchbase',
+                generator.databaseType === 'sql' ||
+                generator.databaseType === 'mongodb' ||
+                generator.databaseType === 'neo4j' ||
+                generator.databaseType === 'couchbase',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1022,7 +1063,7 @@ const serverFiles = {
             templates: [{ file: 'package/domain/package-info.java', renameTo: generator => `${generator.javaDir}domain/package-info.java` }]
         },
         {
-            condition: generator => ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            condition: generator => ['sql', 'mongodb', 'neo4j', 'couchbase'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1230,6 +1271,16 @@ const serverFiles = {
                 {
                     file: 'package/config/DatabaseConfigurationIT.java',
                     renameTo: generator => `${generator.testDir}config/DatabaseConfigurationIT.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.databaseType === 'neo4j',
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/AbstractNeo4jIT.java',
+                    renameTo: generator => `${generator.testDir}/AbstractNeo4jIT.java`
                 }
             ]
         },
@@ -1615,7 +1666,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            condition: generator =>
+                !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/domain/Authority.java', renameTo: generator => `${generator.javaDir}domain/Authority.java` },

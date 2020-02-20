@@ -374,6 +374,45 @@ describe('JHipster generator', () => {
             shouldBeV3DockerfileCompatible('couchbase');
         });
 
+        describe('neo4j', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'no',
+                        enableHibernateCache: false,
+                        databaseType: 'neo4j',
+                        devDatabaseType: 'neo4j',
+                        prodDatabaseType: 'neo4j',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with "Neo4j"', () => {
+                assert.file(expectedFiles.neo4j);
+            });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
+            });
+            shouldBeV3DockerfileCompatible('neo4j');
+        });
+
         describe('mssql', () => {
             before(done => {
                 helpers

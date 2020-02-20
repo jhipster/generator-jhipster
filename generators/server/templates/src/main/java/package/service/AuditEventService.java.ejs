@@ -119,7 +119,7 @@ public class AuditEventService {
             .map(auditEventConverter::convertToAuditEvent);
     }
 
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><AuditEvent> find(<% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String <% } %>id) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><AuditEvent> find(<% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String <% } %>id) {
         return persistenceAuditEventRepository.findById(id)
             .map(auditEventConverter::convertToAuditEvent);
     }

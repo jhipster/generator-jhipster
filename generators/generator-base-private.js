@@ -1411,6 +1411,7 @@ module.exports = class extends Generator {
         let pk = '';
         switch (databaseType) {
             case 'mongodb':
+            case 'neo4j':
             case 'couchbase':
                 pk = 'String';
                 break;

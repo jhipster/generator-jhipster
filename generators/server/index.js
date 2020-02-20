@@ -98,6 +98,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
                 this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
+                this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
                 this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
                 this.DOCKER_REDIS = constants.DOCKER_REDIS;

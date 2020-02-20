@@ -29,6 +29,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<%_ } _%>
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -42,7 +45,7 @@ import java.util.List;
 /**
  * Spring Data <% if (databaseType === 'sql') { %>JPA<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } %> repository for the {@link PersistentAuditEvent} entity.
  */
-public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') {
+public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') {
  %><PersistentAuditEvent, String><% } %> {
 
     <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByPrincipal(String principal);

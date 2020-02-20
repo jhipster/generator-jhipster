@@ -98,6 +98,11 @@
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 <%_ } _%>
         <archunit-junit5.version>0.13.1</archunit-junit5.version>
+<%_ if (databaseType === 'neo4j') { _%>
+        <!-- Should be added to jhipster-dependencies -->
+        <spring-data-neo4j-rx.version>1.0.0-beta03</spring-data-neo4j-rx.version>
+        <neo4j-migrations.version>0.0.10</neo4j-migrations.version>
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
         <log4j2-mock.version>0.0.2</log4j2-mock.version>
 <%_ } _%>
@@ -339,6 +344,35 @@
         <dependency>
             <groupId>com.couchbase.client</groupId>
             <artifactId>encryption</artifactId>
+        </dependency>
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+        <dependency>
+            <groupId>org.neo4j.springframework.data</groupId>
+            <artifactId>spring-data-neo4j-rx-spring-boot-starter</artifactId>
+            <version>${spring-data-neo4j-rx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.michael-simons.neo4j</groupId>
+            <artifactId>neo4j-migrations-spring-boot-starter</artifactId>
+            <version>${neo4j-migrations.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>neo4j</artifactId>
+            <version>1.12.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.12.4</version>
+            <scope>test</scope>
         </dependency>
 <%_ } _%>
 <%_ if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached'].includes(cacheProvider)) { _%>

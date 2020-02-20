@@ -46,6 +46,7 @@ const DOCKER_MONGODB = 'mongo:4.2.3';
 const DOCKER_COUCHBASE = 'couchbase:6.0.3';
 const DOCKER_CASSANDRA = 'cassandra:3.11.5';
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2017-latest-ubuntu';
+const DOCKER_NEO4J = 'neo4j:4.0';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.8';
 const DOCKER_MEMCACHED = 'memcached:1.5.21-alpine';
 const DOCKER_REDIS = 'redis:5.0.7';
@@ -294,6 +295,7 @@ const constants = {
     DOCKER_COUCHBASE,
     DOCKER_CASSANDRA,
     DOCKER_MSSQL,
+    DOCKER_NEO4J,
     DOCKER_HAZELCAST_MANAGEMENT_CENTER,
     DOCKER_MEMCACHED,
     DOCKER_REDIS,

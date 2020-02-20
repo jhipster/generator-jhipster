@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.service.mapper;
 
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
@@ -71,7 +71,7 @@ public class UserMapper {
             <%_ } _%>
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
-            <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+            <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
             <%_ } _%>
@@ -83,7 +83,7 @@ public class UserMapper {
         }
     }
 
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
 
     private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
         Set<Authority> authorities = new HashSet<>();
@@ -114,7 +114,7 @@ public class UserMapper {
     }
     <%_ } _%>
 
-    public <%= asEntity('User') %> userFromId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
+    public <%= asEntity('User') %> userFromId(<% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
         if (id == null) {
             return null;
         }
