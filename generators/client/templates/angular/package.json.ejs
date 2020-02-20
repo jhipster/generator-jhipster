@@ -50,7 +50,7 @@
     "ng-jhipster": "0.11.5",
     "ngx-cookie": "4.0.2",
     "ngx-infinite-scroll": "8.0.1",
-    "ngx-webstorage": "4.0.1",
+    "ngx-webstorage": "5.0.0",
     "rxjs": "6.5.3",
     "swagger-ui-dist": "3.24.3",
     <%_ if (websocket === 'spring-websocket') { _%>
@@ -171,7 +171,7 @@
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
-    "ngc": "ngc -p tsconfig-aot.json",
+    "ngc": "ngc -p tsconfig.app.json",
     "cleanup": "rimraf <%= DIST_DIR %> <%= AOT_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests) { _%>
