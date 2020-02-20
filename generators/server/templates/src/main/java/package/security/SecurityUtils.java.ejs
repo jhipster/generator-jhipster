@@ -55,8 +55,7 @@ import java.util.stream.Stream;
  */
 public final class SecurityUtils {
 
-    private SecurityUtils() {
-    }
+    private SecurityUtils() {}
 
     /**
      * Get the login of the current user.
@@ -105,7 +104,8 @@ public final class SecurityUtils {
     public static <% if (!reactive) { %>Optional<% } else { %>Mono<% } %><String> getCurrentUserJWT() {
         <%_ if (!reactive) { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
+        return Optional
+            .ofNullable(securityContext.getAuthentication())
         <%_ } else { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -123,8 +123,7 @@ public final class SecurityUtils {
     public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> isAuthenticated() {
 <%_ if (!reactive) { _%>
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-            getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
+        return authentication != null && getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
 <%_ } else { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -147,8 +146,7 @@ public final class SecurityUtils {
     public static <% if (!reactive) { %>boolean<% } else { %>Mono<Boolean><% } %> isCurrentUserInRole(String authority) {
 <%_ if (!reactive) { _%>
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-            getAuthorities(authentication).anyMatch(authority::equals);
+        return authentication != null && getAuthorities(authentication).anyMatch(authority::equals);
 <%_ } else { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)

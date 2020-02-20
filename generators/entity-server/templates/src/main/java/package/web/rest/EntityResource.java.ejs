@@ -191,7 +191,8 @@ public class <%= entityClass %>Resource {
         <%= instanceName %>.setId(UUID.randomUUID());
         <%_ } _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
-        return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
+        return ResponseEntity
+            .created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -225,7 +226,8 @@ public class <%= entityClass %>Resource {
             <%_ } _%>
         <%_ } _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc}); -%>
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
     }
@@ -301,7 +303,10 @@ public class <%= entityClass %>Resource {
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= primaryKeyType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: viaService}); -%>
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>))
+            .build();
     }
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>

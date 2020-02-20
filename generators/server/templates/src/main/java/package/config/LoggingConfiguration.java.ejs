@@ -52,16 +52,19 @@ import static io.github.jhipster.config.logging.LoggingUtils.*;
 <%_ } _%>
 public class LoggingConfiguration {
 
-    public LoggingConfiguration(@Value("${spring.application.name}") String appName,
-                                @Value("${server.port}") String serverPort,
-                                JHipsterProperties jHipsterProperties,
-                                <%_ if (serviceDiscoveryType === "consul") { _%>
-                                ObjectProvider<ConsulRegistration> consulRegistration,
-                                <%_ } _%>
-                                <%_ if (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType)) { _%>
-                                ObjectProvider<BuildProperties> buildProperties,
-                                <%_ } _%>
-                                ObjectMapper mapper) throws JsonProcessingException {
+    public LoggingConfiguration(
+        @Value("${spring.application.name}") String appName,
+        @Value("${server.port}") String serverPort,
+        JHipsterProperties jHipsterProperties,
+        <%_ if (serviceDiscoveryType === "consul") { _%>
+        ObjectProvider<ConsulRegistration> consulRegistration,
+        <%_ } _%>
+        <%_ if (serviceDiscoveryType && ['microservice', 'gateway', 'uaa'].includes(applicationType)) { _%>
+        ObjectProvider<BuildProperties> buildProperties,
+        <%_ } _%>
+        ObjectMapper mapper
+    )
+        throws JsonProcessingException {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 

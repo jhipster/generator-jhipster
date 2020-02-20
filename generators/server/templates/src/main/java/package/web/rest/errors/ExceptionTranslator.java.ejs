@@ -103,7 +103,8 @@ _%>
             return Mono.just(entity);
             <%_ } _%>
         }
-        ProblemBuilder builder = Problem.builder()
+        ProblemBuilder builder = Problem
+            .builder()
             .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
             .withStatus(problem.getStatus())
             .withTitle(problem.getTitle())
@@ -133,11 +134,14 @@ _%>
     @Override
     public <%- returnType %> handle<%_ if (!reactive) { _%>MethodArgumentNotValid(MethodArgumentNotValidException<% } else { %>BindingResult(WebExchangeBindException<% } %> ex, @Nonnull <%= requestClass %> request) {
         BindingResult result = ex.getBindingResult();
-        List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
+        List<FieldErrorVM> fieldErrors = result
+            .getFieldErrors()
+            .stream()
             .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), f.getCode()))
             .collect(Collectors.toList());
 
-        Problem problem = Problem.builder()
+        Problem problem = Problem
+            .builder()
             .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
             .withTitle("<%_ if (!reactive) { _%>Method argument not valid<% } else { %>Data binding and validation failure<% } %>")
             .withStatus(<% if (!reactive) { %>defaultConstraintViolationStatus()<% } else { %>Status.BAD_REQUEST<% } %>)
@@ -168,7 +172,11 @@ _%>
 
     @ExceptionHandler
     public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
-        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+        return create(
+            ex,
+            request,
+            HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage())
+        );
     }
     <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
 

@@ -75,7 +75,8 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test
     public void testConcurrencyFailure() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/concurrency-failure")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+        mockMvc
+            .perform(get("/api/exception-translator-test/concurrency-failure")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isConflict())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_CONCURRENCY_FAILURE));
@@ -84,18 +85,20 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test
     public void testMethodArgumentNotValid() throws Exception {
-         mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
-             .andExpect(status().isBadRequest())
-             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
-             .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
-             .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("test"))
-             .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
-             .andExpect(jsonPath("$.fieldErrors.[0].message").value("NotNull"));
+        mockMvc
+            .perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON)<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+            .andExpect(status().isBadRequest())
+            .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
+            .andExpect(jsonPath("$.fieldErrors.[0].objectName").value("test"))
+            .andExpect(jsonPath("$.fieldErrors.[0].field").value("test"))
+            .andExpect(jsonPath("$.fieldErrors.[0].message").value("NotNull"));
     }
 
     @Test
     public void testMissingServletRequestPartException() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-part")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+        mockMvc
+            .perform(get("/api/exception-translator-test/missing-servlet-request-part")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"));
@@ -103,7 +106,8 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test
     public void testMissingServletRequestParameterException() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-parameter")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+        mockMvc
+            .perform(get("/api/exception-translator-test/missing-servlet-request-parameter")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"));
@@ -111,7 +115,8 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test
     public void testAccessDenied() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/access-denied")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+        mockMvc
+            .perform(get("/api/exception-translator-test/access-denied")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isForbidden())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.403"))
@@ -120,7 +125,8 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test
     public void testUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/unauthorized")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+        mockMvc
+            .perform(get("/api/exception-translator-test/unauthorized")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.401"))
@@ -130,7 +136,8 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test
     public void testMethodNotSupported() throws Exception {
-        mockMvc.perform(post("/api/exception-translator-test/access-denied")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+        mockMvc
+            .perform(post("/api/exception-translator-test/access-denied")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.405"))
@@ -139,7 +146,8 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test
     public void testExceptionWithResponseStatus() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/response-status")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+        mockMvc
+            .perform(get("/api/exception-translator-test/response-status")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"))
@@ -148,7 +156,8 @@ public class ExceptionTranslatorIT <% if (databaseType === 'cassandra') { %>exte
 
     @Test
     public void testInternalServerError() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/internal-server-error")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
+        mockMvc
+            .perform(get("/api/exception-translator-test/internal-server-error")<% if (testsNeedCsrf) { %>.with(csrf())<% } %>)
             .andExpect(status().isInternalServerError())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.500"))

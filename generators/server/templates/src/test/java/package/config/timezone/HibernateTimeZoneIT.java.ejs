@@ -190,9 +190,7 @@ public class HibernateTimeZoneIT {
 
         String request = generateSqlRequest("local_date", dateTimeWrapper.getId());
         SqlRowSet resultSet = jdbcTemplate.queryForRowSet(request);
-        String expectedValue = dateTimeWrapper
-            .getLocalDate()
-            .format(dateFormatter);
+        String expectedValue = dateTimeWrapper.getLocalDate().format(dateFormatter);
 
         assertThatDateStoredValueIsEqualToInsertDateValueOnGMTTimeZone(resultSet, expectedValue);
     }

@@ -59,7 +59,7 @@ import java.util.Collection;
 )
 <%_ } _%>
 @SpringBootApplication
-@EnableConfigurationProperties({<% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
+@EnableConfigurationProperties({ <% if (databaseType === 'sql') { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class })
 <%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient
 <%_ } _%>
@@ -86,13 +86,21 @@ public class <%= mainClass %> {
     @PostConstruct
     public void initApplication() {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-            log.error("You have misconfigured your application! It should not run " +
-                "with both the 'dev' and 'prod' profiles at the same time.");
+        if (
+            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) &&
+            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)
+        ) {
+            log.error(
+                "You have misconfigured your application! It should not run " + "with both the 'dev' and 'prod' profiles at the same time."
+            );
         }
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
-            log.error("You have misconfigured your application! It should not " +
-                "run with both the 'dev' and 'cloud' profiles at the same time.");
+        if (
+            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) &&
+            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)
+        ) {
+            log.error(
+                "You have misconfigured your application! It should not " + "run with both the 'dev' and 'cloud' profiles at the same time."
+            );
         }
     }
 
@@ -124,11 +132,12 @@ public class <%= mainClass %> {
         } catch (UnknownHostException e) {
             log.warn("The host name could not be determined, using `localhost` as fallback");
         }
-        log.info("\n----------------------------------------------------------\n\t" +
-                "Application '{}' is running! Access URLs:\n\t" +
-                "Local: \t\t{}://localhost:{}{}\n\t" +
-                "External: \t{}://{}:{}{}\n\t" +
-                "Profile(s): \t{}\n----------------------------------------------------------",
+        log.info(
+            "\n----------------------------------------------------------\n\t" +
+            "Application '{}' is running! Access URLs:\n\t" +
+            "Local: \t\t{}://localhost:{}{}\n\t" +
+            "External: \t{}://{}:{}{}\n\t" +
+            "Profile(s): \t{}\n----------------------------------------------------------",
             env.getProperty("spring.application.name"),
             protocol,
             serverPort,
@@ -137,15 +146,19 @@ public class <%= mainClass %> {
             hostAddress,
             serverPort,
             contextPath,
-            env.getActiveProfiles());
+            env.getActiveProfiles()
+        );
         <%_ if (serviceDiscoveryType && (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa')) { _%>
 
         String configServerStatus = env.getProperty("configserver.status");
         if (configServerStatus == null) {
             configServerStatus = "Not found or not setup for this application";
         }
-        log.info("\n----------------------------------------------------------\n\t" +
-                "Config Server: \t{}\n----------------------------------------------------------", configServerStatus);
+        log.info(
+            "\n----------------------------------------------------------\n\t" +
+            "Config Server: \t{}\n----------------------------------------------------------",
+            configServerStatus
+        );
         <%_ } _%>
     }
 }

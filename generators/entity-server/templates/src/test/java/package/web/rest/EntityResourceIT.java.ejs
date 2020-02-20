@@ -855,7 +855,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             }
             if (searchBy.fieldType === 'String') {
                 _%>
-                @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() throws Exception {
         // Initialize the database
