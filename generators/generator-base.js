@@ -1054,7 +1054,7 @@ module.exports = class extends PrivateBase {
             let error;
             let duplicate;
             const moduleName = _.startCase(npmPackageName.replace(`${GENERATOR_JHIPSTER}-`, ''));
-            const generatorName = npmPackageName.replace('generator-', '');
+            const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
             const generatorCallback = `${generatorName}:${callbackSubGenerator || 'app'}`;
             const moduleConfig = {
                 name: `${moduleName} generator`,
@@ -1156,22 +1156,9 @@ module.exports = class extends PrivateBase {
      * @param {any} options - options to pass
      */
     composeExternalModule(npmPackageName, subGen, options) {
-        let generatorTocall = path.join(process.cwd(), 'node_modules', npmPackageName, 'generators', subGen);
-        try {
-            if (!fs.existsSync(generatorTocall)) {
-                this.debug('using global module as local version could not be found in node_modules');
-                generatorTocall = path.join(npmPackageName, 'generators', subGen);
-            }
-            this.debug('Running yeoman compose with options: ', generatorTocall, options);
-            this.composeWith(require.resolve(generatorTocall), options);
-        } catch (err) {
-            this.debug('ERROR:', err);
-            const generatorName = npmPackageName.replace('generator-', '');
-            const generatorCallback = `${generatorName}:${subGen}`;
-            // Fallback for legacy modules
-            this.debug('Running yeoman legacy compose with options: ', generatorCallback, options);
-            this.composeWith(generatorCallback, options);
-        }
+        const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
+        const generatorCallback = `${generatorName}:${subGen}`;
+        this.composeWith(generatorCallback, options);
     }
 
     /**
