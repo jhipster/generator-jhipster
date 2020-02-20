@@ -25,6 +25,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 -   react-default
 -   react-noi18n-es-ws-gradle-session
 -   uaa
+-   webflux-gateway-oauth2
 -   webflux-mongodb
 -   webflux-mongodb-session
 -   webflux-mongodb-oauth2
