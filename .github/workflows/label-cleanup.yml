@@ -32,11 +32,8 @@ jobs:
                       github.issues.listLabelsOnIssue({...issue}).then(response => {
                         const labels = response.data
                         for (const label of labels) {
-                            if (label.name == 'area: needs-reproduction') {
-                                github.issues.removeLabel({...issue, name: 'area: needs-reproduction'})
-                            }
-                            if (label.name == 'area: waiting for information') {
-                                github.issues.removeLabel({...issue, name: 'area: waiting for information'})
+                            if (label.name == 'area: needs-reproduction' || label.name == 'area: waiting for information' || label.name.includes('status: ')) {
+                                github.issues.removeLabel({...issue, name: label.name})
                             }
                         }
                       })
