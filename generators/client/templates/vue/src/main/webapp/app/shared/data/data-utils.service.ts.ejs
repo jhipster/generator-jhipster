@@ -144,4 +144,38 @@ export default class JhiDataUtils extends Vue {
     tempLink.target = '_blank';
     tempLink.click();
   }
+
+  /**
+   * Method to parse header links
+   */
+  parseLinks(header) {
+    const links = {};
+
+    if (header === null || header.indexOf(',') === -1) {
+      return links;
+    }
+    // Split parts by comma
+    const parts = header.split(',');
+    
+    // Parse each part into a named link
+    parts.forEach((p) => {
+      if (p.indexOf('>;') === -1) {
+        return;
+      }
+      const section = p.split('>;');
+      const url = section[0].replace(/<(.*)/, '$1').trim();
+      const queryString = {page:null};
+      url.replace(
+        new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
+        function($0, $1, $2, $3) { queryString[$1] = $3; }
+      );
+      let page = queryString.page;
+      if (typeof page  === 'string') {
+        page = parseInt(page, 10);
+      }
+      const name = section[1].replace(/rel="(.*)"/, '$1').trim();
+      links[name] = page;
+    });
+    return links;
+  }
 }

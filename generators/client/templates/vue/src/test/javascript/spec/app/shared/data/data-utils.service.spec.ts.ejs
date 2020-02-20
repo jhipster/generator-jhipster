@@ -44,4 +44,42 @@ describe('Formatter i18n', () => {
       ' style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; ' +
       'height:100%;" allowfullscreen></iframe>');
   });
+
+  it('should check text ends with suffix', () => {
+    const result = dataUtilsService.endsWith('rocky', 'JHipster rocks!');
+
+    expect(result).toBe(false);
+  });
+
+  it('should parse links', () => {
+    const result = dataUtilsService.parseLinks('<http://localhost/api/entities?' +
+      'sort=date%2Cdesc&sort=id&page=1&size=12>; rel="next",<http://localhost/api' +
+      '/entities?sort=date%2Cdesc&sort=id&page=2&size=12>; rel="last",<http://localhost'+
+      '/api/entities?sort=date%2Cdesc&sort=id&page=0&size=12>; rel="first"');
+
+    expect(result['last']).toBe(2);
+  });
+
+  it('should return empty JSON object for empty string', () => {
+    const result = dataUtilsService.parseLinks('');
+
+    expect(result).toStrictEqual({});
+  });
+
+  it('should return empty JSON object for text with no link header', () => {
+    const result = dataUtilsService.parseLinks('JHipster rocks!');
+
+    expect(result).toStrictEqual({});
+  });
+
+  it('should return empty JSON object for text with no comma separated link header', () => {
+    const result = dataUtilsService.parseLinks('<http://localhost/api/entities?' +
+    'sort=id%2Cdesc&sort=id&page=1&size=12>; rel="next"<http://localhost/api' +
+    '/entities?sort=id%2Cdesc&sort=id&page=2&size=12>; rel="last"<http://localhost'+
+    '/api/entities?sort=id%2Cdesc&sort=id&page=0&size=12>; rel="first"');
+
+    expect(result).toStrictEqual({});
+  });
+
+  
 });
