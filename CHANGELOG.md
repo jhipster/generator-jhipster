@@ -14,6 +14,7 @@
     - Allowed integers & decimal when using annotations, and also for constants (thanks to @murdos for the request!).
     - Disallowed apps with non-SQL DB types and with the hibernate cache enabled (thanks to @Falydoor for the report!).
     - Added the `embedded` option (thanks to @tchlyah for the feature!)
+  - Neo4j has been added as a new database type! (thanks to @atomfrede for this feature!)
 
 ## Bug fixes
   - Set the `enableHibernateCache` to false when having non-SQL dbs (thanks to @Falydoor for the report!).
