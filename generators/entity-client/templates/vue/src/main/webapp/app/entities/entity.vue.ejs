@@ -88,7 +88,7 @@
                     <td v-text="$t('<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>)">{{<%= entityInstance %>.<%= fieldName %>}}</td>
                         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
                         <%_ if (enableTranslation) { _%>
-                    <td v-if="<%=entityInstance %>.<%=fieldName%>"> {{$d(Date.parse(<%=entityInstance %>.<%=fieldName%>), 'short') }}</td>
+                    <td>{{<%=entityInstance %>.<%=fieldName%> ? $d(Date.parse(<%=entityInstance %>.<%=fieldName%>), 'short') : ''}}</td>
                         <%_ } else { _%>
                     <td>{{<%=entityInstance %>.<%=fieldName%> | formatDate}}</td>
                         <%_ } _%>
