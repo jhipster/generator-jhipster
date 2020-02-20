@@ -235,23 +235,25 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
 function upgradeFiles(generator) {
     let atLeastOneSuccess = false;
     if (generator.isJhipsterVersionLessThan('6.1.0')) {
-        const langNameDiffer = function(lang) {
-            const langProp = lang.replace(/-/g, '_');
-            // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-            const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
-            return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
-        };
         const languages = generator.config.get('languages');
-        languages
-            .map(langNameDiffer)
-            .filter(props => props)
-            .forEach(props => {
-                const code = generator.renameFile(
-                    `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
-                    `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
-                );
-                atLeastOneSuccess = atLeastOneSuccess || code;
-            });
+        if (languages) {
+            const langNameDiffer = function(lang) {
+                const langProp = lang.replace(/-/g, '_');
+                // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+                const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+                return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
+            };
+            languages
+                .map(langNameDiffer)
+                .filter(props => props)
+                .forEach(props => {
+                    const code = generator.renameFile(
+                        `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
+                        `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
+                    );
+                    atLeastOneSuccess = atLeastOneSuccess || code;
+                });
+        }
     }
     return atLeastOneSuccess;
 }
