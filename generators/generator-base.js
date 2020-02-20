@@ -819,6 +819,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a logger to the logback-spring.xml
+     *
+     * @param {string} logName - name of the log we want to track
+     * @param {string} level - tracking level
+     */
+    addLoggerForLogbackSpring(logName, level) {
+        this.needleApi.serverLog.addlog(logName, level);
+    }
+
+    /**
      * Add a remote Maven Repository to the Gradle build.
      *
      * @param {string} url - url of the repository
