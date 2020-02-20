@@ -28,4 +28,15 @@ jobs:
               with:
                   github-token: ${{secrets.GITHUB_TOKEN}}
                   script: |
-                      github.issues.deleteLabels({...context.issue, labels: ['area: triage', 'theme: undefined', 'area: needs-reproduction', 'area: waiting for information']})
+                      const issue = { owner: context.issue.owner, repo: context.issue.repo, issue_number: context.issue.number }
+                      github.issues.listLabelsOnIssue({...issue}).then(response => {
+                        const labels = response.data
+                        for (const label of labels) {
+                            if (label.name == 'area: needs-reproduction') {
+                                github.issues.removeLabel({...issue, name: 'area: needs-reproduction'})
+                            }
+                            if (label.name == 'area: waiting for information') {
+                                github.issues.removeLabel({...issue, name: 'area: waiting for information'})
+                            }
+                        }
+                      })
