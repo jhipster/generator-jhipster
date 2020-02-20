@@ -24,7 +24,15 @@ const ApplicationValidator = require('../../../lib/validators/application_valida
 
 const { OptionNames, OptionValues } = require('../../../lib/core/jhipster/application_options');
 const { MONOLITH, UAA, MICROSERVICE, GATEWAY } = require('../../../lib/core/jhipster/application_types');
-const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE } = require('../../../lib/core/jhipster/database_types');
+const {
+  SQL,
+  MYSQL,
+  POSTGRESQL,
+  MONGODB,
+  CASSANDRA,
+  COUCHBASE,
+  NEO4J
+} = require('../../../lib/core/jhipster/database_types');
 const JDLApplication = require('../../../lib/core/jdl_application');
 
 describe('ApplicationValidator', () => {
@@ -172,6 +180,23 @@ describe('ApplicationValidator', () => {
             }).not.to.throw();
           });
         });
+        context('neo4j', () => {
+          it('does not fail', () => {
+            expect(() => {
+              validator.validate(
+                new JDLApplication({
+                  config: {
+                    ...basicValidApplicationConfig,
+                    databaseType: NEO4J,
+                    devDatabaseType: NEO4J,
+                    prodDatabaseType: NEO4J,
+                    applicationType: MONOLITH
+                  }
+                })
+              );
+            }).not.to.throw();
+          });
+        });
       });
       context('with an invalid combination for databaseType, devDatabaseType and prodDatabaseType', () => {
         context("for 'sql' as databaseType", () => {
@@ -230,7 +255,7 @@ describe('ApplicationValidator', () => {
             });
           });
         });
-        context("for either 'mongodb', 'couchbase' or 'cassandra'", () => {
+        context("for either 'mongodb', 'couchbase', 'neo4j' or 'cassandra'", () => {
           context('when the devDatabaseType is not the same as the databaseType', () => {
             it('fails', () => {
               expect(() => {
@@ -245,7 +270,7 @@ describe('ApplicationValidator', () => {
                   })
                 );
               }).to.throw(
-                /^When the databaseType is either 'mongodb', 'couchbase', 'cassandra', the devDatabaseType and prodDatabaseType must be the same\.$/
+                /^When the databaseType is either 'mongodb', 'couchbase', 'cassandra', 'neo4j', the devDatabaseType and prodDatabaseType must be the same\.$/
               );
             });
           });

@@ -112,7 +112,7 @@ describe('FieldTypes', () => {
         FieldTypes.getIsType('thing', () => {});
       }).to.throw(
         "The passed database type must either be 'sql', 'mysql', 'mariadb', 'postgresql'," +
-          " 'oracle', 'mssql', 'mongodb', 'couchbase', or 'cassandra'"
+          " 'oracle', 'mssql', 'mongodb', 'couchbase', 'neo4j' or 'cassandra'"
       );
     });
     context("when passing 'no' as argument", () => {
