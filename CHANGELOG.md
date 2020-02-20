@@ -1,4 +1,4 @@
-# Unreleased
+# Latest v7.0.0
 
 ## Breaking changes
   - API:
@@ -21,7 +21,7 @@
 
 ---
 
-# Latest v6.0.7
+# v6.0.7
 
 ## What's new:
   - JDL:
