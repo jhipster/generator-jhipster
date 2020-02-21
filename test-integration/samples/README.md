@@ -15,6 +15,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 -   ms-ngx-gateway-eureka-oauth2
 -   ms-ngx-gateway-uaa
 -   ngx-couchbase
+-   ngx-neo4j
 -   ngx-default
 -   ngx-gradle-fr
 -   ngx-h2mem-ws-nol2
