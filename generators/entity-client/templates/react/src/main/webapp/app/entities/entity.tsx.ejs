@@ -107,7 +107,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <%_ } else { _%>
     props.getEntities();
     <%_ } _%>
-  }, [<%_ if (searchEngine === 'elasticsearch' && pagination === 'no') { _%>search<%_ } _%>]);
+  }, []);
   <%_ } _%>
 
   <%_ if (searchEngine === 'elasticsearch') { _%>
