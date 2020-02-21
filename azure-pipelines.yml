@@ -89,6 +89,10 @@ jobs:
                   JHI_APP: webflux-gateway-oauth2
                   JHI_ENTITY: none
                   JHI_PROTRACTOR: 1
+              webflux-gateway-jwt:
+                  JHI_APP: webflux-gateway-jwt
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
       steps:
           #----------------------------------------------------------------------
           # Install all tools and check configuration

@@ -140,7 +140,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueMatches("Authorization", "Bearer .+")
@@ -191,7 +191,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isOk()
             .expectHeader().valueMatches("Authorization", "Bearer .+")
@@ -215,7 +215,7 @@ public class UserJWTControllerIT <% if (databaseType === 'cassandra') { %>extend
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
             .contentType(TestUtil.APPLICATION_JSON)
-            .syncBody(TestUtil.convertObjectToJsonBytes(login))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isUnauthorized()
             .expectHeader().doesNotExist("Authorization")

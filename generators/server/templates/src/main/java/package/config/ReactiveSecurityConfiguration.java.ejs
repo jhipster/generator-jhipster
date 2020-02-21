@@ -208,7 +208,7 @@ public class SecurityConfiguration {
         // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/test/**"<% if (applicationType === 'gateway') { %>, "/webjars/**"<% } %>),
+                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/test/**"<% if (applicationType === 'gateway' || applicationType === 'monolith') { %>, "/webjars/**"<% } %>),
                 pathMatchers(HttpMethod.OPTIONS, "/**")
             )))
             .csrf()

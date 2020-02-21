@@ -381,6 +381,16 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.reactive && generator.applicationType === 'gateway' && generator.authenticationType === 'jwt',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/jwt/JWTRelayGatewayFilterFactory.java',
+                    renameTo: generator => `${generator.testDir}security/jwt/JWTRelayGatewayFilterFactory.java`
+                }
+            ]
+        },
+        {
             condition: generator => !generator.reactive && generator.applicationType !== 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -559,7 +569,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
+            condition: generator => !generator.reactive &&
                 generator.applicationType === 'gateway' && generator.authenticationType === 'jwt' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [

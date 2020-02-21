@@ -37,6 +37,19 @@
             </snapshots>
         </repository>
         <%_ } _%>
+        <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+        <repository>
+            <id>spring-snapshots</id>
+            <url>https://repo.spring.io/libs-snapshot-local/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <url>https://repo.spring.io/libs-milestone-local/</url>
+        </repository>
+        <%_ } _%>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
@@ -725,6 +738,9 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -740,14 +756,23 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
@@ -758,20 +783,32 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
 <%_ } _%>
 <%_ if (serviceDiscoveryType === 'consul') { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-config</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
 <%_ } _%>
 <%_ if (authenticationType === 'uaa' || (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive)) { _%>
@@ -784,6 +821,9 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <%_ if (reactive && (applicationType === 'gateway' && authenticationType === 'jwt')) { _%>
+            <version>2.2.2.BUILD-SNAPSHOT</version>
+            <%_ } _%>
         </dependency>
 <%_ } _%>
         <dependency>

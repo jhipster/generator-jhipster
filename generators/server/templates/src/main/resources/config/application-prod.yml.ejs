@@ -245,8 +245,10 @@ jhipster:
     gateway:
         rate-limiting:
             enabled: false
+        <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api # recommended prod configuration
+        <%_ } _%>
     <%_ } _%>
     http:
         cache: # Used by the CachingHttpHeadersFilter

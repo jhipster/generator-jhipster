@@ -177,7 +177,7 @@ spring:
     cloud:
         gateway:
             default-filters:
-                - TokenRelay
+                - <% if (authenticationType === 'jwt') { %>JWTRelay<% } else { %>TokenRelay<% } %>
             discovery:
                 locator:
                     enabled: true
