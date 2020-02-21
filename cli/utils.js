@@ -24,7 +24,7 @@ const yeoman = require('yeoman-environment');
 const _ = require('lodash');
 const path = require('path');
 
-const { normalizeBlueprintName, packageNameToNamespace } = require('../generators/utils');
+const { normalizeBlueprintName, packageNameToNamespace, loadYoRc, loadBlueprintsFromConfiguration } = require('../generators/utils');
 
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
@@ -226,17 +226,24 @@ const loadBlueprints = () => {
         blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
     }
     if (!blueprintNames.length) {
-        return undefined;
+        return [];
     }
     return blueprintNames.filter((v, i, a) => a.indexOf(v) === i).map(v => normalizeBlueprintName(v));
 };
 
-const loadBlueprintCommands = (env, blueprints) => {
+const loadBlueprintsFromYoRc = () => {
+    const yoRc = loadYoRc();
+    if (!yoRc || !yoRc['generator-jhipster']) {
+        return [];
+    }
+    return loadBlueprintsFromConfiguration(yoRc['generator-jhipster']);
+};
+
+const getBlueprintPackagePaths = (env, blueprints) => {
     if (!blueprints) {
         return undefined;
     }
-    let result;
-    blueprints.forEach(blueprint => {
+    return blueprints.map(blueprint => {
         const namespace = packageNameToNamespace(blueprint);
         const packagePath = env.getPackagePath(namespace);
         if (!packagePath) {
@@ -246,6 +253,16 @@ const loadBlueprintCommands = (env, blueprints) => {
                 )}`
             );
         }
+        return [blueprint, packagePath];
+    });
+};
+
+const loadBlueprintCommands = blueprintPackagePaths => {
+    if (!blueprintPackagePaths) {
+        return undefined;
+    }
+    let result;
+    blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
         /* eslint-disable import/no-dynamic-require */
         /* eslint-disable global-require */
         try {
@@ -253,6 +270,43 @@ const loadBlueprintCommands = (env, blueprints) => {
             result = { ...result, ...blueprintCommands };
         } catch (e) {
             const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
+            /* eslint-disable no-console */
+            console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+        }
+    });
+    return result;
+};
+
+const loadBlueprintSharedOptions = blueprintPackagePaths => {
+    if (!blueprintPackagePaths) {
+        return undefined;
+    }
+
+    function joiner(objValue, srcValue) {
+        if (objValue === undefined) {
+            return srcValue;
+        }
+        if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+            return objValue.concat(srcValue);
+        }
+        if (Array.isArray(objValue)) {
+            return [...objValue, srcValue];
+        }
+        if (Array.isArray(srcValue)) {
+            return [objValue, ...srcValue];
+        }
+        return [objValue, srcValue];
+    }
+
+    let result = {};
+    blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
+        /* eslint-disable import/no-dynamic-require */
+        /* eslint-disable global-require */
+        try {
+            const blueprintCommands = require(`${packagePath}/cli/sharedOptions`);
+            result = _.mergeWith(result, blueprintCommands, joiner);
+        } catch (e) {
+            const msg = `No custom sharedOptions found within blueprint: ${blueprint} at ${packagePath}`;
             /* eslint-disable no-console */
             console.info(`${chalk.green.bold('INFO!')} ${msg}`);
         }
@@ -273,6 +327,9 @@ module.exports = {
     done,
     createYeomanEnv,
     loadBlueprints,
+    loadBlueprintsFromYoRc,
+    getBlueprintPackagePaths,
     loadBlueprintCommands,
+    loadBlueprintSharedOptions,
     getOptionAsArgs
 };

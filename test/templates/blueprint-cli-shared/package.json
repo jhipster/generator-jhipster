@@ -1,0 +1,10 @@
+{
+  "name": "generator-jhipster-bar",
+  "version": "9.9.9",
+  "dependencies": {
+    "yeoman-generator": "*"
+  },
+  "peerDependencies": {
+    "generator-jhipster": "1.1.1"
+  }
+}
