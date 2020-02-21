@@ -181,8 +181,11 @@ public final class SecurityUtils {
 
     @SuppressWarnings("unchecked")
     private static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
-        return (Collection<String>) claims.getOrDefault("groups",
-            claims.getOrDefault("roles", new ArrayList<>()));
+        Collection<String> roles = (Collection<String>) claims.getOrDefault("groups", new ArrayList<>());
+        Collection<String> clientRoles = (Collection<String>) claims.getOrDefault("roles", new ArrayList<>());
+        roles.addAll(clientRoles);
+
+        return roles;
     }
 
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
