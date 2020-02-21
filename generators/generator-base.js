@@ -1496,6 +1496,10 @@ module.exports = class extends PrivateBase {
      * @param {string} msg - message to print
      */
     error(msg) {
+        if (this._debug && this._debug.enabled) {
+            this._debug(`${chalk.red.bold('ERROR!')} ${msg}`);
+        }
+        // Terminate current environment.
         this.env.error(`${msg}`);
     }
 
@@ -1505,7 +1509,11 @@ module.exports = class extends PrivateBase {
      * @param {string} msg - message to print
      */
     warning(msg) {
-        this.log(`${chalk.yellow.bold('WARNING!')} ${msg}`);
+        const warn = `${chalk.yellow.bold('WARNING!')} ${msg}`;
+        this.log(warn);
+        if (this._debug && this._debug.enabled) {
+            this._debug(warn);
+        }
     }
 
     /**
@@ -1515,6 +1523,9 @@ module.exports = class extends PrivateBase {
      */
     info(msg) {
         this.log.info(msg);
+        if (this._debug && this._debug.enabled) {
+            this._debug(`${chalk.green('INFO!')} ${msg}`);
+        }
     }
 
     /**

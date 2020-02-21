@@ -8,7 +8,7 @@ const expectedFiles = require('./utils/expected-files');
 const packageJson = require('../package.json');
 
 describe('JHipster upgrade generator', function() {
-    this.timeout(200000);
+    this.timeout(400000);
     describe('default application', () => {
         const cwd = process.cwd();
         before(done => {
