@@ -173,7 +173,7 @@ spring:
                 watch:
                     enabled: false
     <%_ } _%>
-    <%_ if (applicationType === 'gateway' && reactive && serviceDiscoveryType === 'eureka') { _%>
+    <%_ if (applicationType === 'gateway' && reactive) { _%>
     cloud:
         gateway:
             default-filters:
