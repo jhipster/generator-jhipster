@@ -33,6 +33,7 @@ env:
     JHI_SCRIPTS: ./test-integration/scripts
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
+    REPRODUCIBLE_TEST: true
 jobs:
     applications:
         name: ${{ matrix.app-type }}
