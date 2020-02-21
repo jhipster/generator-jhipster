@@ -569,8 +569,11 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.reactive &&
-                generator.applicationType === 'gateway' && generator.authenticationType === 'jwt' && generator.serviceDiscoveryType,
+            condition: generator =>
+                !generator.reactive &&
+                generator.applicationType === 'gateway' &&
+                generator.authenticationType === 'jwt' &&
+                generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
