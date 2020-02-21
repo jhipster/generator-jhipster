@@ -64,6 +64,7 @@ module.exports = {
     getRandomHex,
     checkStringInFile,
     checkRegexInFile,
+    loadYoRc,
     loadBlueprintsFromConfiguration,
     parseBluePrints,
     normalizeBlueprintName,
@@ -506,6 +507,13 @@ function decodeBase64(string, encoding = 'utf-8') {
     return Buffer.from(string, 'base64').toString(encoding);
 }
 
+function loadYoRc(filePath = '.yo-rc.json') {
+    if (!jhiCore.FileUtils.doesFileExist(filePath)) {
+        return undefined;
+    }
+    return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
+}
+
 /**
  * Get all the generator configuration from the .yo-rc.json file
  * @param {Generator} generator the generator instance to use
@@ -516,9 +524,8 @@ function getAllJhipsterConfig(generator, force, basePath = '') {
     let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
     const filePath = path.join(basePath || '', '.yo-rc.json');
     if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
-        const yoRc = JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
+        const yoRc = loadYoRc(filePath);
         configuration = yoRc['generator-jhipster'];
-
         // merge the blueprint configs if available
         configuration.blueprints = loadBlueprintsFromConfiguration(configuration);
         const blueprintConfigs = configuration.blueprints.map(bp => yoRc[bp.name]).filter(el => el !== null && el !== undefined);
