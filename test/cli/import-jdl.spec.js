@@ -338,7 +338,7 @@ describe('JHipster generator import jdl', () => {
                 shelljs.rm(`${dir}/.yo-rc.json`);
                 importJdl(
                     ['single-app-and-entities.jdl'],
-                    { skipInstall: true, noInsight: true, 'skip-git': false },
+                    { skipInstall: true, noInsight: true, 'skip-git': false, creationTimestamp: '2019-01-01' },
                     env,
                     mockFork(done, 1)
                 );
@@ -347,9 +347,19 @@ describe('JHipster generator import jdl', () => {
 
         it('creates the application', () => {
             assert.file(['.yo-rc.json']);
+            assert.JSONFileContent('.yo-rc.json', {
+                'generator-jhipster': { baseName: 'jhipsterApp' }
+            });
+            assert.JSONFileContent('.yo-rc.json', {
+                'generator-jhipster': { creationTimestamp: 1546300800000 }
+            });
         });
         it('creates the entities', () => {
-            assert.file([path.join('.jhipster', 'A.json'), path.join('.jhipster', 'B.json')]);
+            const aFile = path.join('.jhipster', 'A.json');
+            assert.file([aFile, path.join('.jhipster', 'B.json')]);
+            assert.JSONFileContent(aFile, {
+                changelogDate: '20190101000100'
+            });
         });
         it('calls application generator', () => {
             expect(subGenCallParams.count).to.equal(1);
@@ -358,6 +368,8 @@ describe('JHipster generator import jdl', () => {
                 '--skip-install',
                 '--no-insight',
                 '--no-skip-git',
+                '--creation-timestamp',
+                '2019-01-01',
                 '--with-entities',
                 '--force',
                 '--from-cli'
