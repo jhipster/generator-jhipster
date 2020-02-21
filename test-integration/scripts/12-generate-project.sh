@@ -65,18 +65,6 @@ if [ "$REPRODUCIBLE_TEST" == "true" ]; then
     fi
     jhipster --no-insight --with-entities --bail
     echo "Done. Regeneration finished without any change"
-    echo "========================================================================="
-    echo "src/test/java/io/github/jhipster/sample/web/rest/EmployeeResourceIT.java"
-    echo "========================================================================="
-    cat src/test/java/io/github/jhipster/sample/web/rest/EmployeeResourceIT.java
-    echo "========================================================================="
-    echo "src/main/resources/config/liquibase/fake-data/employee.csv"
-    echo "========================================================================="
-    cat src/main/resources/config/liquibase/fake-data/employee.csv
-    echo "========================================================================="
-    echo "src/test/javascript/e2e/entities/employee/employee.spec.ts"
-    echo "========================================================================="
-    cat src/test/javascript/e2e/entities/employee/employee.spec.ts
 fi
 
 #-------------------------------------------------------------------------------
