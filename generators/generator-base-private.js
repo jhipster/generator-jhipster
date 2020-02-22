@@ -431,7 +431,8 @@ module.exports = class extends Generator {
      * @param file
      */
     removeFile(file) {
-        if (shelljs.test('-f', file)) {
+        file = this.detisnationPath(file);
+        if (file && shelljs.test('-f', file)) {
             this.log(`Removing the file - ${file}`);
             shelljs.rm(file);
         }
@@ -443,7 +444,8 @@ module.exports = class extends Generator {
      * @param folder
      */
     removeFolder(folder) {
-        if (shelljs.test('-d', folder)) {
+        folder = this.destinationPath(folder);
+        if (folder && shelljs.test('-d', folder)) {
             this.log(`Removing the folder - ${folder}`);
             shelljs.rm('-rf', folder);
         }
@@ -457,7 +459,9 @@ module.exports = class extends Generator {
      * @returns {boolean} true if success; false otherwise
      */
     renameFile(source, dest) {
-        if (shelljs.test('-f', source)) {
+        source = this.destinationPath(source);
+        dest = this.destinationPath(dest);
+        if (source && dest && shelljs.test('-f', source)) {
             this.info(`Renaming the file - ${source} to ${dest}`);
             return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
         }
