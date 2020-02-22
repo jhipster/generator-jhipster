@@ -395,6 +395,12 @@ dependencies {
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
     <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    implementation "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter"
+    implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
+    testImplementation "org.testcontainers:neo4j"
+    testImplementation 'org.testcontainers:junit-jupiter'
+    <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
         <%_ if (!reactive) { _%>
     implementation "org.apache.kafka:kafka-clients"

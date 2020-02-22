@@ -152,6 +152,7 @@
     <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="unknown.jul.logger" level="WARN"/>
     <%_ } _%>
+    <!-- jhipster-needle-logback-add-log - JHipster will add a new log with level, Do not remove -->
 
     <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>

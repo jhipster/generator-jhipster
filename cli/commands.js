@@ -16,41 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const jhipsterUtils = require('../generators/utils');
-
-const customCommands = loadBlueprintCommands();
-
-function loadBlueprintCommands() {
-    const blueprintNames = [];
-    const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
-    if (indexOfBlueprintArgv > -1) {
-        blueprintNames.push(process.argv[indexOfBlueprintArgv + 1]);
-    }
-    const indexOfBlueprintsArgv = process.argv.indexOf('--blueprints');
-    if (indexOfBlueprintsArgv > -1) {
-        blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
-    }
-    let result = {};
-    if (blueprintNames.length > 0) {
-        blueprintNames
-            .filter((v, i, a) => a.indexOf(v) === i)
-            .map(v => jhipsterUtils.normalizeBlueprintName(v))
-            .forEach(blueprint => {
-                /* eslint-disable import/no-dynamic-require */
-                /* eslint-disable global-require */
-                try {
-                    const blueprintCommands = require(`${blueprint}/cli/commands`);
-                    result = { ...result, ...blueprintCommands };
-                } catch (e) {
-                    const msg = `No custom commands found within blueprint: ${blueprint}`;
-                    /* eslint-disable no-console */
-                    console.info(`${chalk.green.bold('INFO!')} ${msg}`);
-                }
-            });
-    }
-    return result;
-}
 
 const defaultCommands = {
     app: {
@@ -161,10 +126,10 @@ Example:
     },
     upgrade: {
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
+    },
+    'upgrade-config': {
+        desc: 'Upgrade the JHipster configuration'
     }
 };
 
-module.exports = {
-    ...defaultCommands,
-    ...customCommands
-};
+module.exports = defaultCommands;

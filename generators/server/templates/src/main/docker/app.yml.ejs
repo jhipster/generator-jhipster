@@ -137,6 +137,12 @@ services:
             file: mssql.yml
             service: <%= baseName.toLowerCase() %>-mssql
     <%_ } _%>
+    <%_ if (prodDatabaseType === 'neo4j') { _%>
+    <%= baseName.toLowerCase() %>-neo4j:
+        extends:
+            file: neo4j.yml
+            service: <%= baseName.toLowerCase() %>-neo4j
+    <%_ } _%>
     <%_ if (prodDatabaseType === 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:
         extends:

@@ -20,6 +20,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 - ms-react-gateway-consul-jwt
 - ms-react-gateway-consul-oauth2
 - ngx-couchbase
+- ngx-neo4j
 - ngx-default
 - ngx-gradle-fr
 - ngx-gradle-mariadb-oauth2-infinispan

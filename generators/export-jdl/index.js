@@ -46,7 +46,7 @@ module.exports = class extends BaseGenerator {
 
             convertToJDL() {
                 try {
-                    jhiCore.jdl.conversion.JSONToJDLConverter.convertToJDL('.', this.options.jdlFile);
+                    jhiCore.convertToJDL('.', this.options.jdlFile);
                 } catch (error) {
                     this.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
                 }

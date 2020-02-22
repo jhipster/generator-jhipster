@@ -25,6 +25,9 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (reactive) { _%>
 import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
@@ -102,7 +105,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ if (databaseType === 'sql') { _%>
 @Transactional
 <%_ } _%>
-public class AuditResourceIT {
+public class AuditResourceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %>{
 
     private static final String SAMPLE_PRINCIPAL = "SAMPLE_PRINCIPAL";
     private static final String SAMPLE_TYPE = "SAMPLE_TYPE";
