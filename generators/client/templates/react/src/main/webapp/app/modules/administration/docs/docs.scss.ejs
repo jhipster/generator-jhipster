@@ -16,17 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import './docs.<%= styleSheetExt %>';
 
-import React from 'react';
-
-const DocsPage = () => (
-  <div>
-    <iframe
-      src="../swagger-ui/index.html" width="100%" height="800"
-      title="Swagger UI" seamless style={{ border: 'none' }}
-    />
-  </div>
-);
-
-export default DocsPage;
+iframe {
+  background: white;
+}
