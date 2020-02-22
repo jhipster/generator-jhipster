@@ -50,6 +50,24 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  */
 module.exports = class extends PrivateBase {
     /**
+     * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+     */
+    get CLIENT_MAIN_SRC_DIR() {
+        this._CLIENT_MAIN_SRC_DIR =
+            this._CLIENT_MAIN_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_MAIN_SRC_DIR) || constants.CLIENT_MAIN_SRC_DIR;
+        return this._CLIENT_MAIN_SRC_DIR;
+    }
+
+    /**
+     * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+     */
+    get CLIENT_TEST_SRC_DIR() {
+        this._CLIENT_TEST_SRC_DIR =
+            this._CLIENT_TEST_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_TEST_SRC_DIR) || constants.CLIENT_TEST_SRC_DIR;
+        return this._CLIENT_TEST_SRC_DIR;
+    }
+
+    /**
      * Apply output customizer.
      *
      * @param {string} path - Path to customize.
