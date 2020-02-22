@@ -16,11 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component } from '@angular/core';
 
-@Component({
-    selector: '<%= jhiPrefixDashed %>-docs',
-    templateUrl: './docs.component.html',
-    styleUrls: ['docs.scss']
-})
-export class DocsComponent {}
+@import '~bootstrap/scss/functions';
+<%_ if (clientTheme !== 'none') { _%>
+@import "~bootswatch/dist/<%= clientTheme %>/variables";
+<%_ } _%>
+@import '~bootstrap/scss/variables';
+
+iframe {
+    background: white
+}
