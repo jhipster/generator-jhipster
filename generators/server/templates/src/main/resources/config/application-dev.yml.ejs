@@ -38,6 +38,9 @@ logging:
         <%_ if (packageName !== 'io.github.jhipster') { _%>
         <%= packageName %>: DEBUG
         <%_ } _%>
+        <%_ if (databaseType === 'neo4j') { _%>
+        org.neo4j.driver: WARN
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -57,6 +60,22 @@ management:
         elasticsearch:
             enabled: false
 
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+org:
+    neo4j:
+        driver:
+            pool:
+                metrics-enabled: true
+            uri: bolt://localhost:7687
+            # Uncomment to use an authenticated connection
+            # authentication:
+            #     username: neo4j
+            #     password: secret
+        migrations:
+            locations-to-scan:
+            packages-to-scan: <%= packageName %>.config.neo4j
+            installed-by: <%= baseName %>
 <%_ } _%>
 spring:
     profiles:

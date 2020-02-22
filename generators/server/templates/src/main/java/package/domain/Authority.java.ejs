@@ -26,6 +26,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.<%= databaseType %>.core.mapping.Document;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.core.schema.Id;
+import org.neo4j.springframework.data.core.schema.Node;
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -53,6 +57,9 @@ import java.util.Objects;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= jhiTablePrefix %>_authority")
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+@Node("<%= jhiTablePrefix %>_authority")
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 @Document

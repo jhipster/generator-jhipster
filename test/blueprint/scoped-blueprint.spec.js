@@ -13,19 +13,15 @@ describe('JHipster application generator with scoped blueprint', () => {
                 .run(path.join(__dirname, '../../generators/app'))
                 .inTmpDir(dir => {
                     // Fake the presence of the blueprint in node_modules
-                    const packagejs = {
-                        name: '@jhipster/generator-jhipster-scoped-blueprint',
-                        version: '9.9.9'
-                    };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/@jhipster/generator-jhipster-scoped-blueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
-                    fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                 })
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,
                     skipChecks: true,
-                    blueprint: '@jhipster/generator-jhipster-scoped-blueprint'
+                    blueprints: '@jhipster/generator-jhipster-scoped-blueprint'
                 })
                 .withPrompts({
                     baseName: 'jhipster',

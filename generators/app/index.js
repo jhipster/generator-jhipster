@@ -303,7 +303,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.otherModules = this.config.get('otherModules') || [];
                 if (this.blueprints && this.blueprints.length > 0) {
                     this.blueprints.forEach(blueprint => {
-                        blueprint.version = this.findBlueprintVersion(blueprint.name) || 'latest';
+                        blueprint.version = this.findBlueprintVersion(blueprint.name) || blueprint.version || 'latest';
                     });
 
                     // Remove potential previous value to avoid duplicates

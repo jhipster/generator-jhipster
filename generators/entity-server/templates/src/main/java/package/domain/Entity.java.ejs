@@ -87,6 +87,15 @@ import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.couchbase.core.query.FetchType;
 import org.springframework.data.couchbase.core.query.N1qlJoin;
     <%_ } _%>
+<%_ } else if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.core.schema.GeneratedValue;
+import org.neo4j.springframework.data.core.schema.Id;
+import org.neo4j.springframework.data.core.schema.Node;
+import org.neo4j.springframework.data.core.schema.Property;
+import org.neo4j.springframework.data.core.support.UUIDStringGenerator;
+<%_ if (hasRelationship) { _%>
+import org.neo4j.springframework.data.core.schema.Relationship;
+<%_ } _%>
 <%_ } if (databaseType === 'sql') { _%>
 
 import javax.persistence.*;
@@ -153,6 +162,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 } if (!embedded) {
     if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
+<%_ } if (databaseType === 'neo4j') { _%>
+@Node
 <%_ } if (databaseType === 'couchbase') { _%>
 @Document
 <%_ }
@@ -184,6 +195,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'couchbase' && !embedded) { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
+    <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @GeneratedValue(UUIDStringGenerator.class)
     <%_ } _%>
     private <%= primaryKeyType %> id;
 
@@ -238,6 +252,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("<%= fieldNameUnderscored %>")
     <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("<%=fieldNameUnderscored %>")
+    <%_ } _%>
     <%_ if (fieldTypeBlobContent !== 'text') { _%>
     private <%= fieldType %> <%= fieldName %>;
     <%_ } else { _%>
@@ -253,6 +270,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
       <%_ } _%>
       <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("<%= fieldNameUnderscored %>_content_type")
+      <%_ } _%>
+      <%_ if (databaseType === 'neo4j') { _%>
+    @Property("<%=fieldNameUnderscored %>_content_type")
       <%_ } _%>
     private String <%= fieldName %>ContentType;
 
@@ -303,6 +323,8 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
         <%_ } _%>
+    <%_ } else if (databaseType === 'neo4j') { _%>
+    @Relationship
     <%_ } _%>
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
@@ -323,8 +345,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     @N1qlJoin(on = "lks.<%= relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
     <%_ }
-    }
-    _%>
+    } else if (databaseType === 'neo4j') { _%>
+    @Relationship("<%= relationshipFieldName %>")
+    <%_ } _%>
     <%_ if (otherEntityRelationshipNamePlural !== undefined && otherEntityRelationshipNamePlural !== '') { _%>
     @JsonIgnoreProperties("<%= otherEntityRelationshipNamePlural %>")
     <%_ } _%>
@@ -399,11 +422,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     } _%>
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     <%_ if (!embedded) { _%>
-    public <% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
+    public <% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'neo4j') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+    public void setId(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
     <%_ } _%>

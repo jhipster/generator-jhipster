@@ -31,6 +31,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.core.schema.GeneratedValue;
+import org.neo4j.springframework.data.core.schema.Id;
+import org.neo4j.springframework.data.core.schema.Node;
+import org.neo4j.springframework.data.core.schema.Property;
+import org.neo4j.springframework.data.core.schema.Relationship;
+<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
@@ -47,7 +54,7 @@ import javax.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.Objects;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 import java.time.LocalDate;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
@@ -101,7 +108,7 @@ public class PersistentToken implements Serializable {
 
     @IdAttribute
 <%_ } _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb')  { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j')  { _%>
     @Id
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
@@ -117,6 +124,8 @@ public class PersistentToken implements Serializable {
     <% if (databaseType === 'sql') { %>
     @Column(name = "token_date")
     private LocalDate tokenDate;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+    private LocalDate tokenDate;<% } %><% if (databaseType === 'neo4j') { %>
+    @Property(name = "token_date")
     private LocalDate tokenDate;<% } %><% if (databaseType === 'cassandra') { %>
     @Column(name = "token_date")
     private Date tokenDate;<% } %>
@@ -124,11 +133,15 @@ public class PersistentToken implements Serializable {
     //an IPV6 address max length is 39 characters
     @Size(min = 0, max = 39)<% if (databaseType === 'sql') { %>
     @Column(name = "ip_address", length = 39)<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "ip_address")<% } %>
+    @Column(name = "ip_address")<% } %><% if (databaseType === 'neo4j') { %>
+    @Property(name = "ip_address")<% } %>
     private String ipAddress;
 
     <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
     @Column(name = "user_agent")
+    <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property(name = "user_agent")
     <%_ } _%>
     private String userAgent;
     <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
@@ -139,7 +152,7 @@ public class PersistentToken implements Serializable {
     @Column(name = "user_id")
     private String userId;
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j') { _%>
 
     @JsonIgnore
         <%_ if (databaseType === 'sql') { _%>
@@ -147,6 +160,9 @@ public class PersistentToken implements Serializable {
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
     @DBRef
+        <%_ } _%>
+        <%_ if (databaseType === 'neo4j') { _%>
+    @Relationship(value = "HAS_PERSISTENT_TOKEN", direction = Relationship.Direction.INCOMING)
         <%_ } _%>
     private <%= asEntity('User') %> user;
     <%_ } _%>
@@ -167,11 +183,11 @@ public class PersistentToken implements Serializable {
         this.tokenValue = tokenValue;
     }
 
-    public <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> getTokenDate() {
+    public <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> getTokenDate() {
         return tokenDate;
     }
 
-    public void setTokenDate(<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> tokenDate) {
+    public void setTokenDate(<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> tokenDate) {
         this.tokenDate = tokenDate;
     }
 
@@ -193,7 +209,7 @@ public class PersistentToken implements Serializable {
         } else {
             this.userAgent = userAgent;
         }
-    }<% if (databaseType === 'sql' || databaseType === 'mongodb')  { %>
+    }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
 
     public <%= asEntity('User') %> getUser() {
         return user;

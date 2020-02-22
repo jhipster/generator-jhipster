@@ -136,7 +136,7 @@ public class AuditResource {
      */
     @GetMapping("/{id:.+}")
     <%_ if (!reactive) { _%>
-    public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>String <% } %>id) {
+    public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String <% } %>id) {
         return ResponseUtil.wrapOrNotFound(auditEventService.find(id));
     <%_ } else { _%>
     public Mono<AuditEvent> get(@PathVariable String id) {

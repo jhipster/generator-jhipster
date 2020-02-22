@@ -296,9 +296,11 @@ class JDLProcessor {
             applicationType: this.applicationType,
             applicationName: this.baseName,
             generatorVersion: packagejs.version,
-            forceNoFiltering: this.options.force
+            forceNoFiltering: this.options.force,
+            creationTimestamp: this.options.creationTimestamp
         };
-        const JDLImporter = jhiCore.jdl.import.JDLImporter;
+
+        const JDLImporter = jhiCore.JDLImporter;
         let importer;
         if (this.jdlContent) {
             importer = JDLImporter.createImporterFromContent(this.jdlContent, configuration);

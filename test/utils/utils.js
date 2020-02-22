@@ -2,16 +2,23 @@ const path = require('path');
 const os = require('os');
 const shelljs = require('shelljs');
 const assert = require('yeoman-assert');
+const fse = require('fs-extra');
+const fs = require('fs');
+
 const Generator = require('../../generators/generator-base');
 const constants = require('../../generators/generator-constants');
 
 const DOCKER_DIR = constants.DOCKER_DIR;
+const FAKE_BLUEPRINT_DIR = path.join(__dirname, '../templates/fake-blueprint');
 
 module.exports = {
     getFilesForOptions,
     shouldBeV3DockerfileCompatible,
     getJHipsterCli,
-    testInTempDir
+    testInTempDir,
+    copyBlueprint,
+    copyFakeBlueprint,
+    lnYeoman
 };
 
 function getFilesForOptions(files, options, prefix, excludeFiles) {
@@ -59,4 +66,23 @@ function testInTempDir(cb) {
     process.chdir(cwd);
     /* eslint-disable-next-line no-console */
     console.log(`current cwd: ${process.cwd()}`);
+}
+
+function copyBlueprint(sourceDir, packagePath, ...blueprintNames) {
+    const nodeModulesPath = `${packagePath}/node_modules`;
+    fse.ensureDirSync(nodeModulesPath);
+    blueprintNames.forEach(blueprintName => {
+        fse.copySync(sourceDir, `${nodeModulesPath}/generator-jhipster-${blueprintName}`);
+    });
+}
+
+function copyFakeBlueprint(packagePath, ...blueprintName) {
+    copyBlueprint(FAKE_BLUEPRINT_DIR, packagePath, ...blueprintName);
+}
+
+function lnYeoman(packagePath) {
+    const nodeModulesPath = `${packagePath}/node_modules`;
+    fse.ensureDirSync(nodeModulesPath);
+    fs.symlinkSync(path.join(__dirname, '../../node_modules/yeoman-generator/'), `${nodeModulesPath}/yeoman-generator`);
+    fs.symlinkSync(path.join(__dirname, '../../node_modules/yeoman-environment/'), `${nodeModulesPath}/yeoman-environment`);
 }

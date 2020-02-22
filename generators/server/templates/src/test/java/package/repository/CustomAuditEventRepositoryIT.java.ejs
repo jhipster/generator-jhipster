@@ -19,6 +19,10 @@
 package <%= packageName %>.repository;
 
 import <%= packageName %>.<%= mainClass %>;
+
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
@@ -74,7 +78,7 @@ import static <%= packageName %>.repository.CustomAuditEventRepository.EVENT_DAT
 <%_ if (databaseType === 'sql') { _%>
 @Transactional
 <%_ } _%>
-public class CustomAuditEventRepositoryIT {
+public class CustomAuditEventRepositoryIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %>{
 
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepository;

@@ -37,7 +37,10 @@ if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
-
+elif [[ "$JHI_ENTITY" == "neo4j" ]]; then
+    moveEntity BankAccount
+    moveEntity Label
+    moveEntity Operation
 elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
     moveEntity CassBankAccount
 

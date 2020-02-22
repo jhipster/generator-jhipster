@@ -26,6 +26,7 @@ const ServerMaven = require('./server/needle-api/needle-server-maven');
 const ServerGradle = require('./server/needle-api/needle-server-gradle');
 const ServerCache = require('./server/needle-api/needle-server-cache');
 const ServerLiquibase = require('./server/needle-api/needle-server-liquibase');
+const ServerLog = require('./server/needle-api/needle-server-logback-spring');
 
 module.exports = class NeedleApi {
     constructor(generator) {
@@ -39,5 +40,6 @@ module.exports = class NeedleApi {
         this.serverCache = new ServerCache(generator);
         this.serverLiquibase = new ServerLiquibase(generator);
         this.serverGradle = new ServerGradle(generator);
+        this.serverLog = new ServerLog(generator);
     }
 };

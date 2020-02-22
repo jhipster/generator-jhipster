@@ -41,7 +41,7 @@ import <%= packageName %>.web.rest.errors.LoginAlreadyUsedException;
 <%_ } _%>
 
 import io.github.jhipster.web.util.HeaderUtil;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 import io.github.jhipster.web.util.PaginationUtil;
 <%_ } _%>
 <%_ if (!reactive) { _%>
@@ -51,7 +51,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
     <%_ } else { _%>
@@ -275,7 +275,7 @@ public class UserResource {
 <%_ } _%>
     /**
      * {@code GET /users} : get all users.
-     *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+     *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j' || databaseType === 'couchbase') { %>
         <%_ if (reactive) { _%>
      * @param request a {@link ServerHttpRequest} request.
         <%_ } _%>
@@ -283,7 +283,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
     @GetMapping("/users")
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
         final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
