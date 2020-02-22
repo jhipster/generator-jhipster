@@ -52,6 +52,7 @@ module.exports = class extends Generator {
         this._ = _;
         // expose custom constants to templates and needles
         this.CLIENT_MAIN_SRC_DIR = this.applyOutputPathCustomizer(constants.CLIENT_MAIN_SRC_DIR) || constants.CLIENT_MAIN_SRC_DIR;
+        this.CLIENT_TEST_SRC_DIR = this.applyOutputPathCustomizer(constants.CLIENT_TEST_SRC_DIR) || constants.CLIENT_TEST_SRC_DIR;
 
         this.env.options.appPath = this.config.get('appPath') || this.CLIENT_MAIN_SRC_DIR;
     }
