@@ -360,6 +360,7 @@ const files = {
                 'shared/constants/error.constants.ts',
                 'shared/constants/input.constants.ts',
                 'shared/constants/pagination.constants.ts',
+                'shared/constants/authority.constants.ts',
                 // models
                 'shared/util/request-util.ts',
                 // alert service code
