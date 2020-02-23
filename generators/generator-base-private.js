@@ -35,6 +35,8 @@ const { prettierTransform, prettierOptions } = require('./generator-transforms')
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 /**
  * This is the Generator base private class.
@@ -212,7 +214,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstantNG2(languages) {
-        if (this.clientFramework !== 'angularX') {
+        if (this.clientFramework !== ANGULAR) {
             return;
         }
         const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
@@ -284,7 +286,7 @@ module.exports = class extends Generator {
      */
     updateLanguagesInLanguagePipe(languages) {
         const fullPath =
-            this.clientFramework === 'angularX'
+            this.clientFramework === ANGULAR
                 ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
                 : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
@@ -1083,13 +1085,13 @@ module.exports = class extends Generator {
      * @param {Array|Object} fields - array of fields
      * @returns {Array} defaultVariablesValues
      */
-    generateEntityClientFieldDefaultValues(fields, clientFramework = 'angularX') {
+    generateEntityClientFieldDefaultValues(fields, clientFramework = ANGULAR) {
         const defaultVariablesValues = {};
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
             if (fieldType === 'Boolean') {
-                if (clientFramework === 'react') {
+                if (clientFramework === REACT) {
                     defaultVariablesValues[fieldName] = `${fieldName}: false,`;
                 } else {
                     defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
@@ -1221,7 +1223,7 @@ module.exports = class extends Generator {
                 const importType = `I${otherEntityAngularName}`;
                 let importPath;
                 if (otherEntityAngularName === 'User') {
-                    importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : 'app/shared/model/user.model';
+                    importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }
@@ -1303,7 +1305,7 @@ module.exports = class extends Generator {
      */
     generateLanguageOptions(languages, clientFramework) {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
-        if (clientFramework === 'react') {
+        if (clientFramework === REACT) {
             return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
         }
 

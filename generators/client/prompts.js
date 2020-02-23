@@ -17,6 +17,10 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const constants = require('../generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = {
     askForModuleName,
@@ -39,11 +43,11 @@ function askForClient(meta) {
 
     const choices = [
         {
-            value: 'angularX',
+            value: ANGULAR,
             name: 'Angular'
         },
         {
-            value: 'react',
+            value: REACT,
             name: 'React'
         },
         {
@@ -58,7 +62,7 @@ function askForClient(meta) {
         when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
-        default: 'angularX'
+        default: ANGULAR
     };
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
