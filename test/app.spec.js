@@ -82,7 +82,10 @@ describe('JHipster generator', () => {
             it('uses correct prettier formatting for Java file', () => {
                 // tabWidth = 4 (see generators/common/templates/.prettierrc.ejs)
                 assert.fileContent('src/main/java/com/mycompany/myapp/JhipsterApp.java', / {4}public static void main/);
-                assert.fileContent('src/main/java/com/mycompany/myapp/JhipsterApp.java', / {8}SpringApplication app = new SpringApplication/);
+                assert.fileContent(
+                    'src/main/java/com/mycompany/myapp/JhipsterApp.java',
+                    / {8}SpringApplication app = new SpringApplication/
+                );
             });
         });
 
