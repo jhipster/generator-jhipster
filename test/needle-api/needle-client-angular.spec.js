@@ -5,6 +5,7 @@ const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
@@ -45,9 +46,9 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                 this.addVendorSCSSStyle('@import style_without_comment');
             },
             addToMenuStep() {
-                this.addElementToMenu('routerName1', 'iconName1', true, 'angularX');
-                this.addElementToAdminMenu('routerName2', 'iconName2', true, 'angularX');
-                this.addEntityToMenu('routerName3', true, 'angularX', 'routerName3');
+                this.addElementToMenu('routerName1', 'iconName1', true, ANGULAR);
+                this.addElementToAdminMenu('routerName2', 'iconName2', true, ANGULAR);
+                this.addEntityToMenu('routerName3', true, ANGULAR, 'routerName3');
             },
             addToModuleStep() {
                 this.addEntityToModule(
@@ -57,11 +58,11 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     'entityFolderName',
                     'entityFileName',
                     'entityUrl',
-                    'angularX',
+                    ANGULAR,
                     'microServiceName'
                 );
-                this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, 'angularX');
-                this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, 'angularX');
+                this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, ANGULAR);
+                this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
                 this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule');
             }
         };
@@ -93,7 +94,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
                 baseName: 'jhipster',
-                clientFramework: 'angularX',
+                clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
                 languages: ['fr']
