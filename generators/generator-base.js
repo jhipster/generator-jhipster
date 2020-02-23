@@ -39,6 +39,8 @@ const GENERATOR_JHIPSTER = 'generator-jhipster';
 
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 /**
  * This is the Generator base class.
@@ -54,9 +56,9 @@ module.exports = class extends PrivateBase {
      * @param {string} iconName - The name of the Font Awesome icon.
      */
     addIcon(iconName, clientFramework) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addIcon(iconName);
-        } else if (clientFramework === 'react') {
+        } else if (clientFramework === REACT) {
             // React
             // TODO:
         }
@@ -71,9 +73,9 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
-        } else if (clientFramework === 'react') {
+        } else if (clientFramework === REACT) {
             // React
             // TODO:
         }
@@ -98,9 +100,9 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu);
-        } else if (clientFramework === 'react') {
+        } else if (clientFramework === REACT) {
             // React
             // TODO:
         }
@@ -115,9 +117,9 @@ module.exports = class extends PrivateBase {
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
     addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
-        if (this.clientFramework === 'angularX') {
+        if (this.clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
-        } else if (this.clientFramework === 'react') {
+        } else if (this.clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
         }
     }
@@ -144,7 +146,7 @@ module.exports = class extends PrivateBase {
         clientFramework,
         microServiceName
     ) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
                 entityInstance,
                 entityClass,
@@ -154,7 +156,7 @@ module.exports = class extends PrivateBase {
                 entityUrl,
                 microServiceName
             );
-        } else if (clientFramework === 'react') {
+        } else if (clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
         }
     }
