@@ -25,7 +25,7 @@
     "languages": [
       "en"
     ],
-    "skipUserManagement": false,
+    "skipUserManagement": true,
     "skipClient": true,
     "skipServer": true
   }

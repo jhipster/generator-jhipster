@@ -34,16 +34,6 @@ describe('JDLRelationships', () => {
           }).to.throw('A relationship must be passed so as to be added.');
         });
       });
-      context('because it is invalid', () => {
-        it('fails', () => {
-          expect(() => {
-            new JDLRelationships().add({
-              to: 'A',
-              from: 'B'
-            });
-          }).to.throw('A valid relationship must be passed so as to be added.');
-        });
-      });
     });
     context('when passing a valid relationship', () => {
       let relationships;

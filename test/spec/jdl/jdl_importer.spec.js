@@ -528,6 +528,29 @@ describe('JDLImporter', () => {
         });
       });
     });
+    context('when passing an existing application config', () => {
+      let importer;
+
+      before(() => {
+        importer = createImporterFromContent(
+          `entity A
+entity User
+relationship OneToOne {
+  User{a} to A
+}
+`,
+          {
+            application: JSON.parse(
+              fse.readFileSync(path.join('test', 'test_files', 'jhipster_app', '.yo-rc.json'), 'utf-8')
+            )
+          }
+        );
+      });
+
+      it('should not fail', () => {
+        expect(() => importer.import()).not.to.throw();
+      });
+    });
     context('when parsing one JDL application and entities', () => {
       let returned;
 
