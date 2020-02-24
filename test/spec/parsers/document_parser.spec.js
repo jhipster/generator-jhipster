@@ -256,6 +256,21 @@ describe('DocumentParser', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User').to).to.eq('User');
         });
       });
+      context('with Authority entity as destination for a relationship', () => {
+        let jdlObject;
+
+        before(() => {
+          const input = JDLReader.parseFromFiles(['./test/test_files/authority_entity_to_relationship.jdl']);
+          jdlObject = DocumentParser.parseFromConfigurationObject({
+            parsedContent: input
+          });
+        });
+
+        it('is processed', () => {
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{authority}_Authority').to).to.eq('Authority');
+          expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority').to).to.eq('Authority');
+        });
+      });
       context('with an invalid option', () => {
         let input;
 

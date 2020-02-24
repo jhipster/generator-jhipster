@@ -326,6 +326,36 @@ describe('JSONToJDLEntityConverter', () => {
         expect(() => convertEntitiesToJDL({ entities })).not.to.throw();
       });
     });
+    context('when parsing relationships including the Authority entity', () => {
+      let entities;
+
+      before(() => {
+        entities = new Map([
+          [
+            'TestEntity',
+            JSON.parse(
+              fs
+                .readFileSync(
+                  path.join(
+                    'test',
+                    'test_files',
+                    'json_to_jdl_converter',
+                    'with_authority',
+                    '.jhipster',
+                    'TestEntity.json'
+                  ),
+                  'utf-8'
+                )
+                .toString()
+            )
+          ]
+        ]);
+      });
+
+      it('should not fail', () => {
+        expect(() => convertEntitiesToJDL({ entities })).not.to.throw();
+      });
+    });
   });
 });
 
