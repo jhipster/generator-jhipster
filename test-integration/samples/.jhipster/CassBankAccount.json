@@ -44,18 +44,6 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "picture",
-            "fieldType": "ByteBuffer",
-            "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "operationsFile",
-            "fieldType": "ByteBuffer"
-        },
-        {
             "fieldName": "accountType",
             "fieldType": "AccountTypeEnum",
             "fieldValues": "STANDARD,PREMIUM"

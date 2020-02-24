@@ -177,17 +177,6 @@
             ]
         },
         {
-            "fieldName": "zonedDateTimeField",
-            "fieldType": "ZonedDateTime"
-        },
-        {
-            "fieldName": "zonedDateTimeRequiredField",
-            "fieldType": "ZonedDateTime",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "booleanField",
             "fieldType": "Boolean"
         },
@@ -197,18 +186,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "picture",
-            "fieldType": "ByteBuffer",
-            "fieldTypeBlobContent": "image",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "operationsFile",
-            "fieldType": "ByteBuffer"
         }
     ],
     "changelogDate": "20160208184031",
