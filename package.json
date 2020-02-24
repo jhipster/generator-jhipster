@@ -73,7 +73,7 @@
     "nyc": "15.0.0",
     "prettier": "1.19.1",
     "sinon": "9.0.0",
-    "sinon-chai": "3.4.0",
+    "sinon-chai": "3.5.0",
     "terser-webpack-plugin": "2.3.5",
     "webpack": "4.41.6",
     "webpack-cli": "3.3.11"
