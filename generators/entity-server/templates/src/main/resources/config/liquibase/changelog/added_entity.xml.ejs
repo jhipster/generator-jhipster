@@ -133,7 +133,7 @@
                     nullable_relation = false;
                 }
                 if (relationships[idx].relationshipType === 'many-to-one') { _%>
-            <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_<%= idSuffix %>" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
             <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true

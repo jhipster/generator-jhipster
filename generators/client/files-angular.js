@@ -344,6 +344,11 @@ const files = {
             templates: ['core/user/user.service.ts', 'core/user/user.model.ts'],
         },
         {
+            condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
+            path: ANGULAR_DIR,
+            templates: ['core/user/authority.model.ts']
+        },
+        {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
             templates: ['core/language/language.constants.ts'],

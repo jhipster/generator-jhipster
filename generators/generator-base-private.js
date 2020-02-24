@@ -1048,7 +1048,12 @@ module.exports = class extends Generator {
                 if (!selectableEntities.includes(selectableEntityType)) {
                     selectableEntities.push(selectableEntityType);
                 }
-                if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName !== 'user') {
+                if (
+                    relationshipType === 'one-to-one' &&
+                    ownerSide === true &&
+                    otherEntityName !== 'user' &&
+                    otherEntityName !== 'authority'
+                ) {
                     rxjsMapIsUsed = true;
                     variableName = relationship.relationshipFieldNamePlural.toLowerCase();
                     if (variableName === entityInstance) {
@@ -1090,9 +1095,16 @@ module.exports = class extends Generator {
                     if (variableName === entityInstance) {
                         variableName += 'Collection';
                     }
-                    query = `
+                    if (otherEntityName === 'authority') {
+                        query = `
+                          this.userService.authorities().subscribe((authorityStrings) => {
+                            this.authorities = authorityStrings.map(authorityName => new Authority(authorityName));
+                          });`;
+                    } else {
+                        query = `
                         this.${relationship.otherEntityName}Service.query()
                             .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
+                    }
                 }
             }
             if (variableName && !this.contains(queries, query)) {
@@ -1254,6 +1266,8 @@ module.exports = class extends Generator {
                 let importPath;
                 if (otherEntityAngularName === 'User') {
                     importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
+                } else if (otherEntityAngularName === 'Authority') {
+                    importPath = clientFramework === 'angularX' ? 'app/core/user/authority.model' : 'app/shared/model/authority.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }

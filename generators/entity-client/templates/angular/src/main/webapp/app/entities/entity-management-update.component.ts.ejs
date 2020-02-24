@@ -23,6 +23,7 @@ const variables = query.variables;
 const rxjsMapIsUsed = query.rxjsMapIsUsed;
 const selectableEntities = query.selectableEntities;
 const selectableManyToManyEntities = query.selectableManyToManyEntities;
+let importUserService = false;
 _%>
 import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
@@ -51,11 +52,18 @@ Object.keys(differentRelationships).forEach(key => {
     if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
         const uniqueRel = differentRelationships[key][0];
         if (uniqueRel.otherEntityAngularName !== entityAngularName) {
-            if (uniqueRel.otherEntityAngularName === 'User') {
+            if (uniqueRel.otherEntityAngularName === 'User' || uniqueRel.otherEntityAngularName === 'Authority') {
+                importUserService = true; // in case the user uses both, user and authority in relationship, this avoids double import
+
+                if (uniqueRel.otherEntityAngularName === 'Authority') {
 _%>
-import { IUser } from 'app/core/user/user.model';
-import { UserService } from 'app/core/user/user.service';
+    import { I<%= uniqueRel.otherEntityAngularName %>, <%= uniqueRel.otherEntityAngularName %> } from 'app/core/user/<%= uniqueRel.otherEntityModelName %>.model';
 <%_
+                } else {
+_%>
+    import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/core/user/<%= uniqueRel.otherEntityModelName %>.model';
+<%_
+                }
             } else {
 _%>
 import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
@@ -65,6 +73,13 @@ import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%=
         }
     }
 });
+
+if (importUserService) {
+_%>
+import { UserService } from 'app/core/user/user.service';
+<%_
+}
+
 let selectableEntitiesType = '';
 if (selectableEntities.length === 1) {
     selectableEntitiesType = selectableEntities[0];
@@ -150,13 +165,18 @@ _%>
 Object.keys(differentRelationships).forEach(key => {
     if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
         const uniqueRel = differentRelationships[key][0];
-        if (uniqueRel.otherEntityAngularName !== entityAngularName) {
+        if (uniqueRel.otherEntityAngularName !== entityAngularName && uniqueRel.otherEntityAngularName !== 'Authority' && uniqueRel.otherEntityAngularName !== 'User') {
 _%>
         protected <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,
 <%_
         }
     }
 });
+if (importUserService) {
+_%>
+    protected userService: UserService,
+<%_
+}
 _%>
         <%_ if (fieldsContainImageBlob) { _%>
         protected elementRef: ElementRef,
@@ -324,17 +344,21 @@ _%>
         this.isSaving = false;
     }
 
-    <%_ if (selectableEntitiesType) { _%>
+    <%_ if (selectableEntitiesType) {
+        const idColumn = selectableEntitiesType === 'IAuthority' ? 'name' : 'id';
+    _%>
     trackById(index: number, item: <%= selectableEntitiesType %>): any {
-        return item.id;
+        return item.<%= idColumn %>;
     }
     <%_ } _%>
 
-    <%_ if (selectableManyToManyEntitiesType) { _%>
+    <%_ if (selectableManyToManyEntitiesType) {
+        const idColumn = selectableManyToManyEntitiesType === 'IAuthority' ? 'name' : 'id';
+    _%>
     getSelected(selectedVals: <%= selectableManyToManyEntitiesType %>[], option: <%= selectableManyToManyEntitiesType %>): <%= selectableManyToManyEntitiesType %> {
         if (selectedVals) {
             for (let i = 0; i < selectedVals.length; i++) {
-                if (option.id === selectedVals[i].id) {
+                if (option.<%= idColumn %> === selectedVals[i].<%= idColumn %>) {
                     return selectedVals[i];
                 }
             }
