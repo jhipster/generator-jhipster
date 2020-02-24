@@ -5,6 +5,7 @@ const fse = require('fs-extra');
 const LanguagesGenerator = require('../../generators/languages');
 const constants = require('../../generators/generator-constants');
 
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends LanguagesGenerator {
@@ -77,7 +78,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
             .withPrompts({
                 baseName: 'jhipster',
-                clientFramework: 'angularX',
+                clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
                 languages: ['en', 'fr']

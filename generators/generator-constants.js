@@ -102,6 +102,11 @@ const CLIENT_DIST_DIR = 'static/';
 
 const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
+const SUPPORTED_CLIENT_FRAMEWORKS = {
+    ANGULAR: 'angularX',
+    REACT: 'react'
+};
+
 // documentation constants
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
@@ -267,6 +272,9 @@ const constants = {
 
     MAIN_DIR,
     TEST_DIR,
+
+    // supported client frameworks
+    SUPPORTED_CLIENT_FRAMEWORKS,
 
     CLIENT_MAIN_SRC_DIR: `${MAIN_DIR}webapp/`,
     CLIENT_TEST_SRC_DIR: `${TEST_DIR}javascript/`,

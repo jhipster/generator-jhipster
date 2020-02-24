@@ -27,6 +27,9 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
@@ -92,11 +95,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
+                    this.clientFramework = ANGULAR;
                 }
                 if (this.clientFramework === 'angular' || this.clientFramework === 'angular2') {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
+                    this.clientFramework = ANGULAR;
                 }
 
                 this.clientTheme = configuration.get('clientTheme');
@@ -359,7 +362,7 @@ module.exports = class extends BaseBlueprintGenerator {
             write() {
                 if (this.skipClient) return;
                 switch (this.clientFramework) {
-                    case 'react':
+                    case REACT:
                         return writeReactFiles.call(this, useBlueprints);
                     default:
                         return writeAngularFiles.call(this, useBlueprints);

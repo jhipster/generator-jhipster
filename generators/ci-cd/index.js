@@ -24,6 +24,8 @@ const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
@@ -138,7 +140,7 @@ module.exports = class extends BaseGenerator {
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
-                if (this.clientFramework === 'react') {
+                if (this.clientFramework === REACT) {
                     this.frontTestCommand = 'test-ci';
                 } else {
                     this.frontTestCommand = 'test';

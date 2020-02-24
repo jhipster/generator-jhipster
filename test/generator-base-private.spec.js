@@ -2,6 +2,10 @@ const path = require('path');
 const expect = require('chai').expect;
 // using base generator which extends the private base
 const BaseGenerator = require('../generators/generator-base').prototype;
+const constants = require('../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 BaseGenerator.log = msg => {
     // eslint-disable-next-line no-console
@@ -117,8 +121,8 @@ export * from './entityFolderName/entityFileName.state';`;
                 ];
 
                 before(() => {
-                    importsForAngular = BaseGenerator.generateEntityClientImports(relationships, 'no', 'angularX');
-                    importsForReact = BaseGenerator.generateEntityClientImports(relationships, 'no', 'react');
+                    importsForAngular = BaseGenerator.generateEntityClientImports(relationships, 'no', ANGULAR);
+                    importsForReact = BaseGenerator.generateEntityClientImports(relationships, 'no', REACT);
                 });
 
                 it('adds the same imports regardless of the client framework', () => {
