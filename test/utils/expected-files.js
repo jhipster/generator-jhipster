@@ -393,6 +393,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/health/health-modal.component.html`,

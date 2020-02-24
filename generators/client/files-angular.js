@@ -238,6 +238,7 @@ const files = {
                 { file: 'admin/docs/docs.module.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.component.ts', method: 'processJs' },
                 'admin/docs/docs.component.html',
+                'admin/docs/docs.scss',
                 { file: 'admin/health/health.route.ts', method: 'processJs' },
                 { file: 'admin/health/health.module.ts', method: 'processJs' },
                 { file: 'admin/health/health.component.ts', method: 'processJs' },
