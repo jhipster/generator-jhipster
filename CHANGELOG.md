@@ -1,3 +1,20 @@
+# Unreleased
+
+## What's new
+  - `Authority` is now allowed as a special relationship source/destination, just like `User` (thanks to @xetys for
+    this feature!)
+    - It's also a JHipster-managed entity.
+  - Added the `ZonedDateTime` and `ByteBuffer` field types for Cassandra (thanks @SudharakaP for taking this issue and
+    making this happen!)
+
+## Bug fixes
+  - Importing a JDL file now takes into account existing `.yo-rc.json` files
+    - For instance, if an existing application has the `skipUserManagement` option set, then this will be taken into
+      account when reading entities/relationships.
+    - A previous workaround consisted in exporting, modifying and finally re-importing a single JDL file.
+
+---
+
 # Latest v7.0.0
 
 ## Breaking changes
