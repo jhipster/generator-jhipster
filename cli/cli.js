@@ -34,7 +34,7 @@ const {
     loadBlueprintsFromYoRc,
     getBlueprintPackagePaths,
     loadBlueprintCommands,
-    loadBlueprintSharedOptions
+    loadSharedOptions
 } = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
@@ -48,7 +48,7 @@ const configBlueprints = loadBlueprintsFromYoRc().map(bp => bp.name);
 const allBlueprints = [...new Set([...argBlueprints, ...configBlueprints])];
 
 const env = createYeomanEnv(allBlueprints);
-const sharedOptions = loadBlueprintSharedOptions(getBlueprintPackagePaths(env, allBlueprints)) || {};
+const sharedOptions = loadSharedOptions(getBlueprintPackagePaths(env, allBlueprints)) || {};
 // Env will forward sharedOptions to every generator
 Object.assign(env.sharedOptions, sharedOptions);
 

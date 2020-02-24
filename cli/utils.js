@@ -277,11 +277,7 @@ const loadBlueprintCommands = blueprintPackagePaths => {
     return result;
 };
 
-const loadBlueprintSharedOptions = blueprintPackagePaths => {
-    if (!blueprintPackagePaths) {
-        return undefined;
-    }
-
+const loadSharedOptions = blueprintPackagePaths => {
     function joiner(objValue, srcValue) {
         if (objValue === undefined) {
             return srcValue;
@@ -298,18 +294,35 @@ const loadBlueprintSharedOptions = blueprintPackagePaths => {
         return [objValue, srcValue];
     }
 
-    let result = {};
-    blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
+    function loadSharedOptionsFromFile(sharedOptionsFile, msg, errorMsg) {
         /* eslint-disable import/no-dynamic-require */
         /* eslint-disable global-require */
         try {
-            const blueprintCommands = require(`${packagePath}/cli/sharedOptions`);
-            result = _.mergeWith(result, blueprintCommands, joiner);
-        } catch (e) {
-            const msg = `No custom sharedOptions found within blueprint: ${blueprint} at ${packagePath}`;
+            const opts = require(sharedOptionsFile);
             /* eslint-disable no-console */
-            console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+            if (msg) {
+                console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+            }
+            return opts;
+        } catch (e) {
+            if (errorMsg) {
+                console.info(`${chalk.green.bold('INFO!')} ${errorMsg}`);
+            }
         }
+        return {};
+    }
+
+    const localPath = './.jhipster/sharedOptions';
+    let result = loadSharedOptionsFromFile(path.resolve(localPath), `SharedOptions found at local config ${localPath}`);
+
+    if (!blueprintPackagePaths) {
+        return undefined;
+    }
+
+    blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
+        const errorMsg = `No custom sharedOptions found within blueprint: ${blueprint} at ${packagePath}`;
+        const opts = loadSharedOptionsFromFile(`${packagePath}/cli/sharedOptions`, undefined, errorMsg);
+        result = _.mergeWith(result, opts, joiner);
     });
     return result;
 };
@@ -330,6 +343,6 @@ module.exports = {
     loadBlueprintsFromYoRc,
     getBlueprintPackagePaths,
     loadBlueprintCommands,
-    loadBlueprintSharedOptions,
+    loadSharedOptions,
     getOptionAsArgs
 };
