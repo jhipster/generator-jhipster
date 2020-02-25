@@ -282,7 +282,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
         const ownerSide = relationships[idx].ownerSide;
         const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-        const idSuffix = relationshipName.toLowerCase() === 'authority' ? 'name' : 'id';
+        const idSuffix = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'name' : 'id';
         if (otherEntityRelationshipName) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }

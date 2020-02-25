@@ -163,8 +163,8 @@
             const relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
             if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
-                const idSuffix = relationshipName.toLowerCase() === 'authority' ? 'name' : 'id';
-                const idColumnType = relationshipName.toLowerCase() === 'authority' ? 'varchar(50)' : 'bigint';
+                const idSuffix = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'name' : 'id';
+                const idColumnType = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'varchar(50)' : 'bigint';
           _%>
 
         <createTable tableName="<%= joinTableName %>">

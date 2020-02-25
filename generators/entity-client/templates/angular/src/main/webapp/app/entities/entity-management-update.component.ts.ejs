@@ -81,10 +81,12 @@ import { UserService } from 'app/core/user/user.service';
 }
 
 let selectableEntitiesType = '';
+let selectableEntityContainsAuthority = false;
 if (selectableEntities.length === 1) {
     selectableEntitiesType = selectableEntities[0];
 } else if (selectableEntities.length > 1) {
     selectableEntitiesType = 'SelectableEntity';
+    selectableEntityContainsAuthority = selectableEntities.includes('IAuthority');
 _%>
 
 type SelectableEntity = <%= selectableEntities.join(' | ') %>;
@@ -348,7 +350,17 @@ _%>
         const idColumn = selectableEntitiesType === 'IAuthority' ? 'name' : 'id';
     _%>
     trackById(index: number, item: <%= selectableEntitiesType %>): any {
+        <%_ if (selectableEntityContainsAuthority) { _%>
+        if ('name' in item) {
+            return item.name;
+        } else if ('id' in item) {
+            return item.id;
+        } else {
+            return index;
+        }
+        <%_ } else { _%>
         return item.<%= idColumn %>;
+        <%_ } _%>
     }
     <%_ } _%>
 

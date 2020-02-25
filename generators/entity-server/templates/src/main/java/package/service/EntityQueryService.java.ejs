@@ -134,10 +134,13 @@ public class <%= serviceClassName %> extends QueryService<<%= asEntity(entityCla
             });
 
             relationships.forEach((relationship) => {
-                const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName; _%>
-            if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
-                specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
-                    root -> root.join(<%= asEntity(entityClass) %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= asEntity(relationship.otherEntityNameCapitalized) %>_.id)));
+                const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName;
+                const idColumn = relationship.otherEntityNameCapitalized === 'Authority' ? 'name' : 'id';
+                const idColumnCapitalized = idColumn === 'name' ? 'Name' : 'Id';
+            _%>
+            if (criteria.get<%= relationship.relationshipNameCapitalized %><%= idColumnCapitalized %>() != null) {
+                specification = specification.and(buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %><%= idColumnCapitalized %>(),
+                    root -> root.join(<%= asEntity(entityClass) %>_.<%= metamodelFieldName %>, JoinType.LEFT).get(<%= asEntity(relationship.otherEntityNameCapitalized) %>_.<%= idColumn %>)));
             }
             <%_ }); // forEach
         _%>

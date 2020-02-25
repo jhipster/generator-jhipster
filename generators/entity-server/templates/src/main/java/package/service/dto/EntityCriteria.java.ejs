@@ -58,13 +58,19 @@ relationships.forEach((relationship) => {
 const relationshipType = relationship.relationshipType;
 // user has a String PK when using OAuth, so change relationships accordingly
 let oauthAwareReferenceFilterType = referenceFilterType;
+let idColumn = 'Id';
 if (relationship.otherEntityName === 'user' && authenticationType === 'oauth2') {
     oauthAwareReferenceFilterType = 'StringFilter';
 }
+if (relationship.otherEntityName === 'authority') {
+    oauthAwareReferenceFilterType = 'StringFilter';
+    idColumn = 'Name';
+}
+
 filterVariables.push({ filterType : oauthAwareReferenceFilterType,
-    name: relationship.relationshipFieldName + 'Id',
+    name: relationship.relationshipFieldName + idColumn,
     type: relationshipType,
-    fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + 'Id' });
+    fieldInJavaBeanMethod: relationship.relationshipNameCapitalized + idColumn });
 });
 _%>
 /**
