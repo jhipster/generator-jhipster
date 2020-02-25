@@ -238,8 +238,15 @@ describe('JDLOptions', () => {
       );
     });
 
-    it('stringifies the options', () => {
-      expect(options.toString()).to.eq('skipClient A, B, C, J except M, N, O\nskipServer D');
+    context('when not passing an indentation level', () => {
+      it('should stringify the options without indent', () => {
+        expect(options.toString()).to.equal('skipClient A, B, C, J except M, N, O\nskipServer D');
+      });
+    });
+    context('when passing an indentation level', () => {
+      it('should stringify the options with indent', () => {
+        expect(options.toString(2)).to.equal('  skipClient A, B, C, J except M, N, O\n  skipServer D');
+      });
     });
   });
 });

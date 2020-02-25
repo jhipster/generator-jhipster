@@ -20,11 +20,13 @@
 
 const { expect } = require('chai');
 const { OptionNames } = require('../../../lib/core/jhipster/application_options');
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const StringJDLApplicationConfigurationOption = require('../../../lib/core/string_jdl_application_configuration_option');
 const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 
 describe('JDLApplication', () => {
-  describe('hasOption', () => {
+  describe('hasConfigurationOption', () => {
     context('when the application does not have the option', () => {
       let application;
 
@@ -33,7 +35,7 @@ describe('JDLApplication', () => {
       });
 
       it('should return false', () => {
-        expect(application.hasOption(OptionNames.BASE_NAME)).to.be.false;
+        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).to.be.false;
       });
     });
     context('when the application has the option', () => {
@@ -41,15 +43,17 @@ describe('JDLApplication', () => {
 
       before(() => {
         application = new JDLApplication();
-        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
+        application.setConfigurationOption(
+          new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application')
+        );
       });
 
       it('should return true', () => {
-        expect(application.hasOption(OptionNames.BASE_NAME)).to.be.true;
+        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).to.be.true;
       });
     });
   });
-  describe('setOption', () => {
+  describe('setConfigurationOption', () => {
     context('when not passing an option', () => {
       let application;
 
@@ -58,7 +62,7 @@ describe('JDLApplication', () => {
       });
 
       it('should fail', () => {
-        expect(() => application.setOption()).to.throw(/^An option has to be passed to set an option\.$/);
+        expect(() => application.setConfigurationOption()).to.throw(/^An option has to be passed to set an option\.$/);
       });
     });
     context('when setting a new option', () => {
@@ -66,11 +70,13 @@ describe('JDLApplication', () => {
 
       before(() => {
         application = new JDLApplication();
-        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
+        application.setConfigurationOption(
+          new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application')
+        );
       });
 
       it('should add it', () => {
-        expect(application.hasOption(OptionNames.BASE_NAME)).to.be.true;
+        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).to.be.true;
       });
     });
     context('when setting an already present option', () => {
@@ -78,16 +84,20 @@ describe('JDLApplication', () => {
 
       before(() => {
         application = new JDLApplication();
-        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
-        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application2'));
+        application.setConfigurationOption(
+          new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application')
+        );
+        application.setConfigurationOption(
+          new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application2')
+        );
       });
 
       it('should replace its value', () => {
-        expect(application.getOptionValue(OptionNames.BASE_NAME)).to.equal('application2');
+        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).to.equal('application2');
       });
     });
   });
-  describe('getOptionValue', () => {
+  describe('getConfigurationOptionValue', () => {
     context('when not passing an option name', () => {
       let application;
 
@@ -96,7 +106,9 @@ describe('JDLApplication', () => {
       });
 
       it('should fail', () => {
-        expect(() => application.getOptionValue()).to.throw(/^An option name has to be passed to get a value\.$/);
+        expect(() => application.getConfigurationOptionValue()).to.throw(
+          /^An option name has to be passed to get a value\.$/
+        );
       });
     });
     context('when the application does not have the option', () => {
@@ -107,7 +119,7 @@ describe('JDLApplication', () => {
       });
 
       it('should return undefined', () => {
-        expect(application.getOptionValue(OptionNames.BASE_NAME)).to.be.undefined;
+        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).to.be.undefined;
       });
     });
     context('when the application has the option', () => {
@@ -115,15 +127,17 @@ describe('JDLApplication', () => {
 
       before(() => {
         application = new JDLApplication();
-        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'));
+        application.setConfigurationOption(
+          new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application')
+        );
       });
 
       it('should return its value', () => {
-        expect(application.getOptionValue(OptionNames.BASE_NAME)).to.equal('application');
+        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).to.equal('application');
       });
     });
   });
-  describe('forEachOption', () => {
+  describe('forEachConfigurationOption', () => {
     context('when not passing a function', () => {
       let application;
 
@@ -132,7 +146,7 @@ describe('JDLApplication', () => {
       });
 
       it('should not do anything', () => {
-        expect(() => application.forEachOption()).not.to.throw();
+        expect(() => application.forEachConfigurationOption()).not.to.throw();
       });
     });
     context('when passing a function', () => {
@@ -140,10 +154,12 @@ describe('JDLApplication', () => {
 
       before(() => {
         const application = new JDLApplication();
-        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'toto'));
-        application.setOption(new StringJDLApplicationConfigurationOption(OptionNames.JHI_PREFIX, 'prefix'));
+        application.setConfigurationOption(new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'toto'));
+        application.setConfigurationOption(
+          new StringJDLApplicationConfigurationOption(OptionNames.JHI_PREFIX, 'prefix')
+        );
         result = [];
-        application.forEachOption(option => {
+        application.forEachConfigurationOption(option => {
           result.push(`${option.name} is ${option.getValue()}`);
         });
         result = result.join(' and ');
@@ -305,6 +321,38 @@ describe('JDLApplication', () => {
 
       it('uses each entity name', () => {
         expect(result).to.deep.equal(['A', 'B']);
+      });
+    });
+  });
+  describe('addOption', () => {
+    context('when not passing an option', () => {
+      let application;
+
+      before(() => {
+        application = new JDLApplication();
+      });
+
+      it('should fail', () => {
+        expect(() => application.addOption()).to.throw(/^Can't add a nil option\.$/);
+      });
+    });
+    context('when passing an option', () => {
+      let result;
+
+      before(() => {
+        const application = new JDLApplication();
+        const option = new JDLBinaryOption({
+          name: BinaryOptions.Options.PAGINATION,
+          value: BinaryOptions.Values.pagination['INFINITE-SCROLL'],
+          entityNames: ['*'],
+          excludedNames: ['D']
+        });
+        application.addOption(option);
+        result = application.toString();
+      });
+
+      it('should add it', () => {
+        expect(result).to.include('paginate * with infinite-scroll except D');
       });
     });
   });
@@ -519,6 +567,40 @@ describe('JDLApplication', () => {
 
       it('should not stringify it', () => {
         expect(result).not.to.include('packageFolder');
+      });
+    });
+    context('when there are options', () => {
+      let result;
+
+      before(() => {
+        const application = new JDLApplication({
+          entityNames: ['A', 'B', 'C']
+        });
+        const option1 = new JDLBinaryOption({
+          name: BinaryOptions.Options.PAGINATION,
+          value: BinaryOptions.Values.pagination['INFINITE-SCROLL'],
+          entityNames: ['*'],
+          excludedNames: ['D']
+        });
+        const option2 = new JDLBinaryOption({
+          name: BinaryOptions.Options.SERVICE,
+          value: BinaryOptions.Values.service.SERVICE_CLASS,
+          entityNames: ['A', 'B', 'C']
+        });
+        application.addOption(option1);
+        application.addOption(option2);
+        result = application.toString();
+      });
+
+      it('should add the options', () => {
+        expect(result).to.equal(`application {
+  config {}
+
+  entities A, B, C
+
+  paginate * with infinite-scroll except D
+  service A, B, C with serviceClass
+}`);
       });
     });
   });
