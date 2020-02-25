@@ -374,6 +374,64 @@ describe('JHipster generator for entity', () => {
                     assert.jsonFileContent('.jhipster/Foo.json', { clientRootFolder: 'test-root' });
                 });
             });
+
+            describe('with authority as relationship', () => {
+                before(done => {
+                    helpers
+                        .run(require.resolve('../generators/entity'))
+                        .inTmpDir(dir => {
+                            fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                        })
+                        .withArguments(['foo'])
+                        .withPrompts({
+                            fieldAdd: false,
+                            relationshipAdd: true,
+                            otherEntityName: 'authority',
+                            relationshipName: 'authority',
+                            relationshipType: 'many-to-one',
+                            ownerSide: true,
+                            otherEntityRelationshipName: 'foo',
+                            otherEntityField: 'name'
+                        })
+                        .withPrompts({
+                            relationshipAdd: false,
+                            dto: 'no',
+                            service: 'no',
+                            pagination: 'no'
+                        })
+                        .on('end', done);
+                });
+
+                it('creates expected default files', () => {
+                    assert.file(expectedFiles.server);
+                    assert.file(expectedFiles.clientNg2);
+                    assert.file(expectedFiles.gatling);
+                    assert.file(expectedFiles.fakeData);
+                });
+
+                it('creates correct entity files for authority', () => {
+                    // entity related files exist
+                    assert.file(`${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.module.ts`);
+                    assert.file(`${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.component.html`);
+                    assert.file('.jhipster/Foo.json');
+                    assert.fileContent('.jhipster/Foo.json', 'many-to-one');
+                    assert.fileContent('.jhipster/Foo.json', {
+                        relationships: [
+                            {
+                                relationshipType: 'many-to-one',
+                                otherEntityName: 'authority',
+                                otherEntityRelationshipName: 'foo',
+                                relationshipName: 'authority',
+                                otherEntityField: 'name'
+                            }
+                        ]
+                    });
+                    assert.fileContent(
+                        `${CLIENT_MAIN_SRC_DIR}app/entities/foo/foo.component.html`,
+                        "<a [routerLink]=\"['/authority', foo.authority?.name, 'view']\" >{{ foo.authority?.name }}</a>"
+                    );
+                });
+            });
         });
 
         context('fake data', () => {

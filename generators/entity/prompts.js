@@ -983,7 +983,7 @@ function askForRelationship(done) {
                         name: 'one-to-one',
                     },
                 ];
-                if (response.otherEntityName.toLowerCase() !== 'user') {
+                if (['user', 'authority'].includes(response.otherEntityName.toLowerCase())) {
                     opts.unshift({
                         value: 'one-to-many',
                         name: 'one-to-many',
@@ -997,6 +997,7 @@ function askForRelationship(done) {
             when: response =>
                 response.relationshipAdd === true &&
                 response.otherEntityName.toLowerCase() !== 'user' &&
+                response.otherEntityName.toLowerCase() !== 'authority' &&
                 (response.relationshipType === 'many-to-many' || response.relationshipType === 'one-to-one'),
             type: 'confirm',
             name: 'ownerSide',
@@ -1081,6 +1082,12 @@ function askForRelationship(done) {
             if (props.otherEntityName.toLowerCase() === 'user') {
                 relationship.ownerSide = true;
                 relationship.otherEntityField = 'login';
+                relationship.otherEntityRelationshipName = _.lowerFirst(name);
+            }
+
+            if (props.otherEntityName.toLowerCase() === 'authority') {
+                relationship.ownerSide = true;
+                relationship.otherEntityField = 'name';
                 relationship.otherEntityRelationshipName = _.lowerFirst(name);
             }
 
