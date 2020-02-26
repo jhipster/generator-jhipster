@@ -836,11 +836,15 @@ module.exports = class extends Generator {
                     jhipsterContext: this
                 };
                 this.useBlueprint = true;
-                this.composeExternalModule(blueprint, subGen, finalOptions);
+                const blueprintGenerator = this.composeExternalModule(blueprint, subGen, finalOptions);
                 this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-                return true;
+                return blueprintGenerator;
             } catch (e) {
-                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
+                this.debug(
+                    `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
+                        subGen
+                    )} subgenerator: falling back to default generator`
+                );
                 this.debug('Error', e);
                 return false;
             }

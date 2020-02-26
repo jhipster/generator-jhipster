@@ -119,8 +119,9 @@ module.exports = class extends BaseGenerator {
                 if (extraOptions) {
                     bpOptions = { ...bpOptions, ...extraOptions };
                 }
-                const useBP = this.composeBlueprint(blueprint.name, subGen, bpOptions);
-                if (!useBlueprints && useBP) {
+                const blueprintGenerator = this.composeBlueprint(blueprint.name, subGen, bpOptions);
+                // If the blueprints sets sbsBlueprint property, then don't ignore the normal workflow.
+                if (!useBlueprints && blueprintGenerator && !blueprintGenerator.sbsBlueprint) {
                     useBlueprints = true;
                 }
             });
