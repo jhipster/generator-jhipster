@@ -75,13 +75,24 @@ const getRecentForLiquibase = function(days, changelogDate) {
 const serverFiles = {
     dbChangelog: [
         {
-            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog,
+            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog && generator.updateEntity !== 'update',
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
                     file: 'config/liquibase/changelog/added_entity.xml',
                     options: { interpolate: INTERPOLATE_REGEX },
                     renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.xml`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog && generator.updateEntity === 'update',
+            path: SERVER_MAIN_RES_DIR,
+            templates: [
+                {
+                    file: 'config/liquibase/changelog/updated_entity.xml',
+                    options: { interpolate: INTERPOLATE_REGEX },
+                    renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_updated_entity_${generator.entityClass}.xml`
                 }
             ]
         },
@@ -113,7 +124,10 @@ const serverFiles = {
     ],
     fakeData: [
         {
-            condition: generator => generator.databaseType === 'sql' && !generator.skipFakeData && !generator.skipDbChangelog,
+            condition: generator => generator.databaseType === 'sql'
+                && !generator.skipFakeData
+                && !generator.skipDbChangelog
+                && generator.updateEntity !== 'update',
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {

@@ -289,8 +289,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     // no file present, new entity creation
                     this.log(`\nThe entity ${entityName} is being created.\n`);
                     context.fields = [];
+                    context.newFields = [];
                     context.haveFieldWithJavadoc = false;
                     context.relationships = [];
+                    context.newRelationships = [];
                     context.pagination = 'no';
                     context.validation = false;
                     context.dto = 'no';

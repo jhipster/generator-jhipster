@@ -122,6 +122,10 @@ function askForUpdate() {
                     name: 'Yes, add more fields and relationships'
                 },
                 {
+                    value: 'update',
+                    name: 'Yes, add more fields and relationships, but will write new changelogs for database'
+                },
+                {
                     value: 'remove',
                     name: 'Yes, remove fields and relationships'
                 },
@@ -145,11 +149,11 @@ function askForUpdate() {
 function askForFields() {
     const context = this.context;
     // don't prompt if data is imported from a file
-    if (context.useConfigurationFile && context.updateEntity !== 'add') {
+    if (context.useConfigurationFile && context.updateEntity !== 'add' && context.updateEntity !== 'update') {
         return;
     }
 
-    if (context.updateEntity === 'add') {
+    if (context.updateEntity === 'add' || context.updateEntity === 'update') {
         logFieldsAndRelationships.call(this);
     }
 
@@ -891,6 +895,9 @@ function askForField(done) {
             };
 
             fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
+            if (context.updateEntity === 'update') {
+                context.newFields.push(field);
+            }
             context.fields.push(field);
         }
         logFieldsAndRelationships.call(this);
@@ -1085,6 +1092,10 @@ function askForRelationship(done) {
             }
 
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
+            if (context.updateEntity === 'update') {
+                context.newRelationships.push(relationship);
+            }
+
             context.relationships.push(relationship);
         }
         logFieldsAndRelationships.call(this);
