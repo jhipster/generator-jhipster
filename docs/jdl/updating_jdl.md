@@ -6,55 +6,20 @@ This section will focus on updating the JDL by adding some things to it.
 
 ## Example case 1
 
-For this section we'll add a new option: the `embedded` option that has been added in [6220e55][embedded-option-commit]
-and we'll break it down.
-We'll focus first on what has been added in the parsing system then in other files.
+For this section we'll add a new imaginary entity option: the `jhipster` option.
 
 ### Parsing system additions
 
-First of all, we add a new token the option, in the `lexer` file
-```javascript
-createTokenFromConfig({ name: 'EMBEDDED', pattern: 'embedded' });
+First of all, we add a new token the unary option, in the `lib/dsl/lexer/option_tokens` file
+```
+{ name: 'JHIPSTER', pattern: 'jhipster', type: 'unary' }
 ```
 
-Then, we have to make a new rule so the `jdl_parser` file has to be updated like so:
-  - We create the new rule
-```javascript
-embeddedDeclaration() {
-  this.RULE('embeddedDeclaration', () => {
-    this.CONSUME(LexerTokens.EMBEDDED);
-    this.SUBRULE(this.filterDef);
-    this.OPTION(() => {
-      this.SUBRULE(this.exclusion);
-    });
-  });
-}
+Once it's done, the next file to change is the `ast_builder`.
+Because it's an unary option (unary means that the option doesn't have a value), we add a new entry to the options
 ```
-  - We allow users to use it anywhere in the file, like the other options (in the `prog` method)
-```javascript
-{ ALT: () => this.SUBRULE(this.embeddedDeclaration) }
+jhipster: { list: [], excluded: [] }
 ```
-  - We tell the parsing system that there's a new rule (in the `parse` method)
-```javascript
-this.embeddedDeclaration();
-```
-
-Once it's done, the next file to change is the `ast_builder`:
-  - Because it's an unary option (unary means that the option doesn't have a value), we add a new entry to the options
-```javascript
-embedded: { list: [], excluded: [] }
-```
-  - We map the option's name to the rule's name
-```javascript
-embeddedDeclaration: 'embedded'
-```
-  - We parse it
-```javascript
-embeddedDeclaration(context) {
-  return extractListExcluded(context, this);
-}
-```
-  - The `extractListExcluded` method basically means that we want to extract from the context a unary option.
 
 That's all there is to the parsing system, we'll know see what needs doing in the other files and why.
 
