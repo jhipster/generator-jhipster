@@ -96,7 +96,7 @@
         "mocha": "6.1.4",
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
-        "yeoman-test": "1.9.1"
+        "yeoman-test": "2.2.0"
     },
     "resolutions": {
         "inquirer": "6.3.1"
