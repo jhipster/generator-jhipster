@@ -10,6 +10,11 @@ Please read our [guidelines](/CONTRIBUTING.md#submission-guidelines) before subm
 If your issue is a bug, please use the bug template pre-populated [here](https://github.com/jhipster/jhipster-core/issues/new?template=BUG_REPORT.md).
 For feature requests and queries you can use [this template](https://github.com/jhipster/jhipster-core/issues/new?template=FEATURE_REQUEST.md).
 
+### Contributing to JHipster-Core
+
+For more details about the project structure and detailed examples on how to update JDL please refer our 
+[documentation pages](https://github.com/jhipster/jhipster-core/blob/master/docs/contributing.md).
+
 ### Releasing
 
 1. Commit any changes done, to ensure working directory is clean

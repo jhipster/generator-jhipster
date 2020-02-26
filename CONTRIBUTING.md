@@ -128,6 +128,18 @@ from the main (upstream) repository:
     ```shell
     git pull --ff upstream master
     ```
+## Development Setup
+
+First you have to fork the generator-jhipster project and [setup the development environment as detailed](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md#setup).
+Then fork the jhipster-core project and within it run `npm link` to create a symbolic link between the package
+folder and the global node modules folder. Afterwards navigate back to the cloned generator-jhipster folder and execute 
+`npm link jhipster-core`. 
+
+To summarize:
+
+1. Fork and setup the generator-jhipster project [using given instructions](https://github.com/jhipster/generator-jhipster/blob/master/CONTRIBUTING.md#setup).
+2. Fork the jhipster-core project and run `npm link` within it. 
+3. Navigate back to the generator-jhipster project and run `npm link jhipster-core`
 
 ## Coding Rules
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
