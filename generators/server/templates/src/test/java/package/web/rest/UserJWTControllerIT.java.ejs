@@ -91,10 +91,10 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
     @Autowired
     private UserRepository userRepository;
 
-    <%_ }  _%>
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    <%_ }  _%>
     @Autowired
     <%_ if (reactive) { _%>
     private WebTestClient webTestClient;
