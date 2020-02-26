@@ -126,7 +126,7 @@ describe('JDL DSL API', () => {
       });
 
       it('provides suggestions', () => {
-        expect(result).to.have.lengthOf(21);
+        expect(result).to.have.lengthOf(10);
         expect(result).to.have.members([
           tokens.AT,
           tokens.APPLICATION,
@@ -135,20 +135,9 @@ describe('JDL DSL API', () => {
           tokens.ENTITY,
           tokens.RELATIONSHIP,
           tokens.ENUM,
-          tokens.DTO,
-          tokens.SERVICE,
-          tokens.SEARCH,
-          tokens.MICROSERVICE,
           tokens.JAVADOC,
-          tokens.PAGINATE,
-          tokens.READ_ONLY,
-          tokens.EMBEDDED,
-          tokens.SKIP_CLIENT,
-          tokens.SKIP_SERVER,
-          tokens.NO_FLUENT_METHOD,
-          tokens.ANGULAR_SUFFIX,
-          tokens.FILTER,
-          tokens.CLIENT_ROOT_FOLDER
+          tokens.UNARY_OPTION,
+          tokens.BINARY_OPTION
         ]);
       });
     });
