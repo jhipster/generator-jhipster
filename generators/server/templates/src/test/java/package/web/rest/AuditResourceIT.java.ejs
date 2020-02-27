@@ -38,6 +38,9 @@ import <%= packageName %>.repository.PersistenceAuditEventRepository;
 import <%= packageName %>.security.AuthoritiesConstants;
 
 import <%= packageName %>.service.AuditEventService;
+<%_ if (reactive && applicationType === 'gateway' && authenticationType === 'jwt') { _%>
+import org.junit.jupiter.api.Disabled;
+<%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
@@ -131,7 +134,7 @@ public class AuditResourceIT <% if (databaseType === 'neo4j') { %>extends Abstra
         auditEvent.setAuditEventDate(SAMPLE_TIMESTAMP);
     }
 
-    @Test
+    @Test <% if (reactive && applicationType === 'gateway' && authenticationType === 'jwt') { _%>@Disabled<% } %>
     public void getAllAudits() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         auditEventRepository.save(auditEvent)<% if (reactive) { %>.block()<% } %>;
