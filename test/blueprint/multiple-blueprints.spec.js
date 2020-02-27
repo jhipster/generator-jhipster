@@ -5,6 +5,9 @@ const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const ClientGenerator = require('../../generators/client');
 const ServerGenerator = require('../../generators/server');
+const constants = require('../../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 const mockClientBlueprintSubGen = class extends ClientGenerator {
     constructor(args, opts) {
@@ -127,7 +130,7 @@ describe('JHipster entity generator with multiple blueprints', () => {
                     ])
                     .withPrompts({
                         baseName: 'jhipster',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: false,

@@ -25,6 +25,7 @@ import { JhiResolvePagingParams } from 'ng-jhipster';
 import { Observable, of, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
+import { Authority } from 'app/shared/constants/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
@@ -66,7 +67,7 @@ export const <%= entityInstance %>Route: Routes = [
         },
         <%_ } _%>
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: [Authority.USER],
             <%_ if (pagination === 'pagination') { _%>
             defaultSort: 'id,asc',
             <%_ } _%>
@@ -81,7 +82,7 @@ export const <%= entityInstance %>Route: Routes = [
             <%= entityInstance %>: <%= entityAngularName %>Resolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: [Authority.USER],
             pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
@@ -94,7 +95,7 @@ export const <%= entityInstance %>Route: Routes = [
             <%= entityInstance %>: <%= entityAngularName %>Resolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: [Authority.USER],
             pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]
@@ -106,7 +107,7 @@ export const <%= entityInstance %>Route: Routes = [
             <%= entityInstance %>: <%= entityAngularName %>Resolve
         },
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: [Authority.USER],
             pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
         },
         canActivate: [UserRouteAccessService]

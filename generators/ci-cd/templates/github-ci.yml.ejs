@@ -49,7 +49,7 @@ jobs:
             NG_CLI_ANALYTICS: false
             <%_ } _%>
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
               <%_ if (!skipClient) { _%>
             - uses: actions/setup-node@v1
               with:

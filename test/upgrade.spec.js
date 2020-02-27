@@ -6,6 +6,9 @@ const fse = require('fs-extra');
 const expect = require('chai').expect;
 const expectedFiles = require('./utils/expected-files');
 const packageJson = require('../package.json');
+const constants = require('../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 describe('JHipster upgrade generator', function() {
     this.timeout(400000);
@@ -24,7 +27,7 @@ describe('JHipster upgrade generator', function() {
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
@@ -110,7 +113,7 @@ describe('JHipster upgrade generator', function() {
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,

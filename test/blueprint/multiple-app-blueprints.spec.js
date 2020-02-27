@@ -7,6 +7,9 @@ const ClientGenerator = require('../../generators/client');
 const ServerGenerator = require('../../generators/server');
 const CommonGenerator = require('../../generators/common');
 const LanguagesGenerator = require('../../generators/languages');
+const constants = require('../../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 const createMockBlueprint = function(parent, spy) {
     return class extends parent {
@@ -69,7 +72,7 @@ const options = {
 
 const prompts = {
     baseName: 'jhipster',
-    clientFramework: 'angularX',
+    clientFramework: ANGULAR,
     packageName: 'com.mycompany.myapp',
     packageFolder: 'com/mycompany/myapp',
     serviceDiscoveryType: false,

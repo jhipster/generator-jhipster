@@ -5,6 +5,10 @@ const getFilesForOptions = require('./utils/utils').getFilesForOptions;
 const expectedFiles = require('./utils/expected-files');
 const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
+const constants = require('../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 describe('JHipster client generator', () => {
     describe('generate client with React', () => {
@@ -18,7 +22,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: 'react'
+                    clientFramework: REACT
                 })
                 .on('end', done);
         });
@@ -49,7 +53,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: 'angularX'
+                    clientFramework: ANGULAR
                 })
                 .on('end', done);
         });
@@ -87,7 +91,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: 'angularX'
+                    clientFramework: ANGULAR
                 })
                 .on('end', done);
         });

@@ -23,6 +23,10 @@ import { Observable<% if (databaseType !== 'sql' && databaseType !== 'mongodb' &
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption, Pagination } from 'app/shared/util/request-util';
 import { IUser } from './user.model';
+<%_ if (databaseType !== 'sql' && databaseType !== 'mongodb' && databaseType !== 'couchbase') { _%>
+import { Authority } from 'app/shared/constants/authority.constants';
+<%_ } _%>
+
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -58,7 +62,7 @@ export class UserService {
         <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
         return this.http.get<string[]>(SERVER_API_URL + '<%- apiUaaPath %>api/users/authorities');
         <%_ } else { _%>
-        return of(['ROLE_USER', 'ROLE_ADMIN']);
+        return of([Authority.ADMIN, Authority.USER]);
         <%_ } _%>
     }
     <%_ } _%>

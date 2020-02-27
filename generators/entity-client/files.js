@@ -28,6 +28,8 @@ const Randexp = utils.RandexpWithFaker;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const REACT_DIR = constants.ANGULAR_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
@@ -313,12 +315,12 @@ function writeFiles() {
             let templatesDir;
             let microserviceName = this.microserviceName;
 
-            if (this.clientFramework === 'angularX') {
+            if (this.clientFramework === ANGULAR) {
                 files = angularFiles;
                 destDir = ANGULAR_DIR;
                 templatesDir = CLIENT_NG2_TEMPLATES_DIR;
                 microserviceName = this.microserviceName;
-            } else if (this.clientFramework === 'react') {
+            } else if (this.clientFramework === REACT) {
                 files = reactFiles;
                 destDir = REACT_DIR;
                 templatesDir = CLIENT_REACT_TEMPLATES_DIR;

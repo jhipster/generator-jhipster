@@ -236,20 +236,6 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
         <%_ } _%>
     }
-
-    @Test
-    public void testGetUnknownAccount() <% if (!reactive) { %>throws Exception <% } %>{
-        <%_ if (!reactive) { _%>
-        restAccountMockMvc.perform(get("/api/account")
-            .accept(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(status().isInternalServerError());
-        <%_ } else { _%>
-        accountWebTestClient.get().uri("/api/account")
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().is5xxServerError();
-        <%_ } _%>
-    }
 }
 <%_ } else {  // not oauth, not skipUserManagement _%>
 
