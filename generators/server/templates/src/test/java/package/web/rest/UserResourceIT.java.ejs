@@ -47,9 +47,6 @@ import <%= packageName %>.web.rest.vm.ManagedUserVM;
 <%_ } _%>
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
-<%_ if (reactive && applicationType === 'gateway' && authenticationType === 'jwt') { _%>
-import org.junit.jupiter.api.Disabled;
-<%_ } _%>
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -872,7 +869,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')
         && (!(authenticationType === 'oauth2' && applicationType === 'microservice'))) { _%>
 
-    @Test <% if (reactive && applicationType === 'gateway' && authenticationType === 'jwt') { %>@Disabled<% } %>
+    @Test
     <%_ if (databaseType === 'sql') { _%>
     @Transactional
     <%_ } _%>
