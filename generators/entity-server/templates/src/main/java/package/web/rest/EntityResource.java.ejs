@@ -51,7 +51,7 @@ import <%= packageName %>.repository.<%= entityClass %>Repository;
 import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
     <%_ } _%>
     <%_ if (reactiveRepositories) { _%>
-import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
+import <%= packageName %>.repository.<%= entityClass %>ReactiveRepository;
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;

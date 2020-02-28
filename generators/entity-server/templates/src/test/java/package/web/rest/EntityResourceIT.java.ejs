@@ -78,7 +78,7 @@ import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
 <%_ if (service !== 'no') { _%>
 import <%= packageName %>.service.<%= entityClass %>Service;
 <%_ } else if (reactiveRepositories) { _%>
-import <%= packageName %>.repository.reactive.<%= entityClass %>ReactiveRepository;
+import <%= packageName %>.repository.<%= entityClass %>ReactiveRepository;
 <%_ } _%>
 <%_ if (dto === 'mapstruct') { _%>
 import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;

@@ -203,8 +203,8 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/reactive/EntityReactiveRepository.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/reactive/${generator.entityClass}ReactiveRepository.java`
+                    file: 'package/repository/EntityReactiveRepository.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}ReactiveRepository.java`
                 }
             ]
         },
