@@ -260,8 +260,7 @@ const serverFiles = {
     ],
     test: [
         {
-            // TODO: add test for reactive
-            condition: generator => !generator.reactive && !generator.embedded,
+            condition: generator => !generator.embedded,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
