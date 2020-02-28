@@ -75,7 +75,11 @@ const getRecentForLiquibase = function(days, changelogDate) {
 const serverFiles = {
     dbChangelog: [
         {
-            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog && generator.updateEntity !== 'update',
+            condition: generator =>
+                generator.databaseType === 'sql' &&
+                !generator.skipDbChangelog &&
+                generator.updateEntity !== 'add-with-new-changelogs' &&
+                generator.updateEntity !== 'remove-with-new-changelogs',
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -86,13 +90,16 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog && generator.updateEntity === 'update',
+            condition: generator =>
+                generator.databaseType === 'sql' &&
+                !generator.skipDbChangelog &&
+                (generator.updateEntity === 'add-with-new-changelogs' || generator.updateEntity === 'remove-with-new-changelogs'),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
                     file: 'config/liquibase/changelog/updated_entity.xml',
                     options: { interpolate: INTERPOLATE_REGEX },
-                    renameTo: generator => `config/liquibase/changelog/${generator.changelogDate}_updated_entity_${generator.entityClass}.xml`
+                    renameTo: generator => `config/liquibase/changelog/${generator.newChangelogDate}_updated_entity_${generator.entityClass}.xml`
                 }
             ]
         },
@@ -124,10 +131,12 @@ const serverFiles = {
     ],
     fakeData: [
         {
-            condition: generator => generator.databaseType === 'sql'
-                && !generator.skipFakeData
-                && !generator.skipDbChangelog
-                && generator.updateEntity !== 'update',
+            condition: generator =>
+                generator.databaseType === 'sql' &&
+                !generator.skipFakeData &&
+                !generator.skipDbChangelog &&
+                generator.updateEntity !== 'add-with-new-changelogs' &&
+                generator.updateEntity !== 'remove-with-new-changelogs',
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -376,8 +385,14 @@ function writeFiles() {
                 if (!this.skipDbChangelog) {
                     if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
                         this.addConstraintsChangelogToLiquibase(`${this.changelogDate}_added_entity_constraints_${this.entityClass}`);
+                        if (this.updateEntity === 'add-with-new-changelogs' || this.updateEntity === 'remove-with-new-changelogs') {
+                            this.addConstraintsChangelogToLiquibase(`${this.newChangelogDate}_updated_entity_constraints_${this.entityClass}`);
+                        }
                     }
                     this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
+                    if (this.updateEntity === 'add-with-new-changelogs' || this.updateEntity === 'remove-with-new-changelogs') {
+                        this.addChangelogToLiquibase(`${this.newChangelogDate}_updated_entity_${this.entityClass}`);
+                    }
                 }
 
                 if (['ehcache', 'caffeine', 'infinispan', 'redis'].includes(this.cacheProvider) && this.enableHibernateCache) {
