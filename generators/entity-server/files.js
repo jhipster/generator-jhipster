@@ -75,11 +75,7 @@ const getRecentForLiquibase = function(days, changelogDate) {
 const serverFiles = {
     dbChangelog: [
         {
-            condition: generator =>
-                generator.databaseType === 'sql' &&
-                !generator.skipDbChangelog &&
-                generator.updateEntity !== 'add-with-new-changelogs' &&
-                generator.updateEntity !== 'remove-with-new-changelogs',
+            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog && !generator.newChangelog,
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -90,10 +86,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator =>
-                generator.databaseType === 'sql' &&
-                !generator.skipDbChangelog &&
-                (generator.updateEntity === 'add-with-new-changelogs' || generator.updateEntity === 'remove-with-new-changelogs'),
+            condition: generator => generator.databaseType === 'sql' && !generator.skipDbChangelog && generator.newChangelog,
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -107,7 +100,8 @@ const serverFiles = {
             condition: generator =>
                 generator.databaseType === 'sql' &&
                 !generator.skipDbChangelog &&
-                (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne),
+                (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne) &&
+                !generator.newChangelog,
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -115,6 +109,22 @@ const serverFiles = {
                     options: { interpolate: INTERPOLATE_REGEX },
                     renameTo: generator =>
                         `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`
+                }
+            ]
+        },
+        {
+            condition: generator =>
+                generator.databaseType === 'sql' &&
+                !generator.skipDbChangelog &&
+                (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne) &&
+                generator.newChangelog,
+            path: SERVER_MAIN_RES_DIR,
+            templates: [
+                {
+                    file: 'config/liquibase/changelog/updated_entity_constraints.xml',
+                    options: { interpolate: INTERPOLATE_REGEX },
+                    renameTo: generator =>
+                        `config/liquibase/changelog/${generator.newChangelogDate}_updated_entity_constraints_${generator.entityClass}.xml`
                 }
             ]
         },
@@ -135,8 +145,7 @@ const serverFiles = {
                 generator.databaseType === 'sql' &&
                 !generator.skipFakeData &&
                 !generator.skipDbChangelog &&
-                generator.updateEntity !== 'add-with-new-changelogs' &&
-                generator.updateEntity !== 'remove-with-new-changelogs',
+                !generator.newChangelog,
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -385,12 +394,12 @@ function writeFiles() {
                 if (!this.skipDbChangelog) {
                     if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
                         this.addConstraintsChangelogToLiquibase(`${this.changelogDate}_added_entity_constraints_${this.entityClass}`);
-                        if (this.updateEntity === 'add-with-new-changelogs' || this.updateEntity === 'remove-with-new-changelogs') {
+                        if (this.newChangelog) {
                             this.addConstraintsChangelogToLiquibase(`${this.newChangelogDate}_updated_entity_constraints_${this.entityClass}`);
                         }
                     }
                     this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
-                    if (this.updateEntity === 'add-with-new-changelogs' || this.updateEntity === 'remove-with-new-changelogs') {
+                    if (this.newChangelog) {
                         this.addChangelogToLiquibase(`${this.newChangelogDate}_updated_entity_${this.entityClass}`);
                     }
                 }

@@ -27,7 +27,7 @@
     <!--
         Updated the entity <%= entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-1" author="jhipster">
+    <changeSet id="<%= newChangelogDate %>-1" author="jhipster">
         <%_ if (typeof javadoc == 'undefined') { _%>
         <addColumn tableName="<%= entityTableName %>">
         <%_ } else { _%>
@@ -136,7 +136,7 @@
         } _%>
     </changeSet>
 
-    <changeSet id="<%= changelogDate %>-1-relations" author="jhipster">
+    <changeSet id="<%= newChangelogDate %>-1-relations" author="jhipster">
         <%_ for (idx in relationships) {
             const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,

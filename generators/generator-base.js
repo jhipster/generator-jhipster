@@ -1196,6 +1196,7 @@ module.exports = class extends PrivateBase {
             }
         });
         context.changelogDate = context.fileData.changelogDate;
+        context.newChangelogDate = this.dateFormatForLiquibase();
         context.dto = context.fileData.dto;
         context.service = context.fileData.service;
         context.fluentMethods = context.fileData.fluentMethods;
@@ -1908,6 +1909,7 @@ module.exports = class extends PrivateBase {
         const _this = generator || this;
         const filesOut = [];
         const startTime = new Date();
+
         // using the fastest method for iterations
         for (let i = 0, blocks = Object.keys(files); i < blocks.length; i++) {
             for (let j = 0, blockTemplates = files[blocks[i]]; j < blockTemplates.length; j++) {

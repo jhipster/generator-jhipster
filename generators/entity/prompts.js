@@ -122,16 +122,8 @@ function askForUpdate() {
                     name: 'Yes, add more fields and relationships'
                 },
                 {
-                    value: 'add-with-new-changelogs',
-                    name: 'Yes, add more fields and relationships and write new changelogs for database updates'
-                },
-                {
                     value: 'remove',
                     name: 'Yes, remove fields and relationships'
-                },
-                {
-                    value: 'remove-with-new-changelogs',
-                    name: 'Yes, remove fields and relationships and write new changelogs for database updates'
                 },
                 {
                     value: 'none',
@@ -153,26 +145,28 @@ function askForUpdate() {
 function askForFields() {
     const context = this.context;
     // don't prompt if data is imported from a file
-    if (
-        context.useConfigurationFile &&
-        context.updateEntity !== 'add' &&
-        context.updateEntity !== 'add-with-new-changelogs' &&
-        context.updateEntity !== 'remove-with-new-changelogs'
-    ) {
+    if (context.useConfigurationFile && context.updateEntity !== 'add') {
         return;
     }
 
-    if (
-        context.updateEntity === 'add' ||
-        context.updateEntity === 'add-with-new-changelogs' ||
-        context.updateEntity === 'remove-with-new-changelogs'
-    ) {
+    if (context.updateEntity === 'add') {
         logFieldsAndRelationships.call(this);
     }
 
     const done = this.async();
 
-    askForField.call(this, done);
+    const prompts = [
+        {
+            type: 'confirm',
+            name: 'newChangelog',
+            message: 'Do you want to generate a separated new liquibase changelog file for new fields and relationships ?',
+            default: true
+        }
+    ];
+    this.prompt(prompts).then(props => {
+        context.newChangelog = props.newChangelog;
+        askForField.call(this, done);
+    });
 }
 
 function askForFieldsToRemove() {
@@ -908,13 +902,10 @@ function askForField(done) {
             };
 
             fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
-            if (context.updateEntity === 'add-with-new-changelogs') {
+            if (context.newChangelog) {
                 context.newFields.push(field);
             }
 
-            if (context.updateEntity === 'add-with-new-changelogs' || context.updateEntity === 'remove-with-new-changelogs') {
-                context.newChangelogDate = this.dateFormatForLiquibase();
-            }
             context.fields.push(field);
         }
         logFieldsAndRelationships.call(this);
@@ -1109,7 +1100,7 @@ function askForRelationship(done) {
             }
 
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
-            if (context.updateEntity === 'add-with-new-changelogs') {
+            if (context.newChangelog) {
                 context.newRelationships.push(relationship);
             }
 
