@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const semver = require('semver');
 
 // Version of Java
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
@@ -29,7 +30,11 @@ const GRADLE_VERSION = '6.1';
 
 // Libraries version
 const JIB_VERSION = '2.0.0';
+
 const LIQUIBASE_VERSION = '3.6.3';
+const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
+const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
+
 const JACOCO_VERSION = '0.8.5';
 const KAFKA_VERSION = '5.4.0';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
@@ -332,6 +337,7 @@ const constants = {
     // Libraries
     JIB_VERSION,
     LIQUIBASE_VERSION,
+    LIQUIBASE_DTD_VERSION,
     JACOCO_VERSION,
     JACKSON_DATABIND_NULLABLE_VERSION,
 

@@ -128,6 +128,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.JIB_VERSION = constants.JIB_VERSION;
                 this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
+                this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
