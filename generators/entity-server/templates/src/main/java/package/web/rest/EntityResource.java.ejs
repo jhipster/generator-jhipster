@@ -101,6 +101,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactiveRepositories) { _%>
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 <%_ } _%>
 
 <%_ if (validation) { _%>
@@ -166,7 +167,7 @@ public class <%= entityClass %>Resource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/<%= entityApiUrl %>")
-    public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= instanceType %>>><% } else { %>ResponseEntity<<%= instanceType %>><% } %> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
@@ -187,10 +188,28 @@ public class <%= entityClass %>Resource {
         <%_ if (databaseType === 'cassandra') { _%>
         <%= instanceName %>.setId(UUID.randomUUID());
         <%_ } _%>
+        <%_ if (!reactive) { _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId().toString()))
             .body(result);
+        <%_ } else { _%>
+            <%_ if (service !== 'no') { _%>
+        return <%= entityInstance %>Service
+            <%_ } else { _%>
+        return <%= entityInstance %>Repository
+            <%_ } _%>
+            .save(<%= instanceName %>)
+            .map(result -> {
+                try {
+                    return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()))
+                        .body(result);
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        <%_ } _%>
     }
 
     /**
