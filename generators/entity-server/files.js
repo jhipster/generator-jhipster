@@ -164,10 +164,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/EntityRepository.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
-                },
-                {
                     file: 'package/web/rest/EntityResource.java',
                     renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}Resource.java`
                 }
@@ -199,12 +195,23 @@ const serverFiles = {
         },
         {
             condition: generator =>
+                (!generator.reactive || !['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType)) && !generator.embedded,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/EntityRepository.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
                 generator.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType) && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
                     file: 'package/repository/EntityReactiveRepository.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}ReactiveRepository.java`
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
                 }
             ]
         },

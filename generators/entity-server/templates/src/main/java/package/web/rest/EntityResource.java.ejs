@@ -50,9 +50,6 @@ import <%= packageName %>.repository.<%= entityClass %>Repository;
     <%_ if (isUsingMapsId === true) { _%>
 import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
     <%_ } _%>
-    <%_ if (reactiveRepositories) { _%>
-import <%= packageName %>.repository.<%= entityClass %>ReactiveRepository;
-    <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.<%= entityClass %>SearchRepository;
     <%_ } _%>
@@ -270,7 +267,7 @@ public class <%= entityClass %>Resource {
         <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.findAllAsFlux();
         <%_ } else { _%>
-        return <%= entityInstance %>ReactiveRepository.findAll();
+        return <%= entityInstance %>Repository.findAll();
         <%_ } _%>
     }
 
