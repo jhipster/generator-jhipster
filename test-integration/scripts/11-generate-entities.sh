@@ -38,6 +38,29 @@ if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
 
+elif [[ "$JHI_ENTITY" == "mongodb-reactive" ]]; then
+#    moveEntity DocumentBankAccount
+#    moveEntity EmbeddedOperation
+
+    moveEntity FieldTestEntity
+#    moveEntity FieldTestMapstructEntity
+#    moveEntity FieldTestServiceClassEntity
+#    moveEntity FieldTestServiceImplEntity
+#    moveEntity FieldTestInfiniteScrollEntity
+#    moveEntity FieldTestPaginationEntity
+
+#    moveEntity EntityWithDTO
+    moveEntity EntityWithPagination
+#    moveEntity EntityWithPaginationAndDTO
+#    moveEntity EntityWithServiceClass
+#    moveEntity EntityWithServiceClassAndDTO
+#    moveEntity EntityWithServiceClassAndPagination
+#    moveEntity EntityWithServiceClassPaginationAndDTO
+#    moveEntity EntityWithServiceImpl
+#    moveEntity EntityWithServiceImplAndDTO
+#    moveEntity EntityWithServiceImplAndPagination
+#    moveEntity EntityWithServiceImplPaginationAndDTO
+
 elif [[ "$JHI_ENTITY" == "neo4j" ]]; then
     moveEntity BankAccount
     moveEntity Label

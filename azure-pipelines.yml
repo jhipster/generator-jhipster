@@ -75,7 +75,7 @@ jobs:
                   JHI_PROTRACTOR: 1
               webflux-mongodb:
                   JHI_APP: webflux-mongodb
-                  JHI_ENTITY: none
+                  JHI_ENTITY: mongodb-reactive
                   JHI_PROTRACTOR: 1
               webflux-mongodb-session:
                   JHI_APP: webflux-mongodb-session
