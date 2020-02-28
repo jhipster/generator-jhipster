@@ -533,8 +533,8 @@ dependencies {
     liquibaseRuntime "com.h2database:h2"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle') { _%>
-    implementation "com.oracle.ojdbc:ojdbc8"
-    liquibaseRuntime "com.oracle.ojdbc:ojdbc8"
+    implementation "com.oracle.database.jdbc:ojdbc8"
+    liquibaseRuntime "com.oracle.database.jdbc:ojdbc8"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testImplementation "org.testcontainers:kafka"
