@@ -188,7 +188,7 @@ To benefit from TypeScript type definitions from [DefinitelyTyped][] repository 
     <%= clientPackageManager %> <%= clientPackageMngrAddDev %> @types/leaflet
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-<%_ if (clientFramework === 'angularX') { _%>
+<%_ if (clientFramework === ANGULAR) { _%>
 Edit [<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts](<%= CLIENT_MAIN_SRC_DIR %>app/vendor.ts) file:
 ~~~
 import 'leaflet/dist/leaflet.js';
@@ -204,7 +204,7 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-<%_ if (clientFramework === 'angularX' && applicationType !== 'microservice') { _%>
+<%_ if (clientFramework === ANGULAR && applicationType !== 'microservice') { _%>
 ### Using Angular CLI
 
 You can also use [Angular CLI][] to generate some custom client code.
