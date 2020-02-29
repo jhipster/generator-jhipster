@@ -131,10 +131,18 @@ function askForUpdate() {
                 }
             ],
             default: 0
+        },
+        {
+            when: response => context.useConfigurationFile && (response.updateEntity === 'add' || response.updateEntity === 'remove'),
+            type: 'confirm',
+            name: 'newChangelog',
+            message: 'Do you want to generate a separated new liquibase changelog file for new fields and relationships ?',
+            default: false
         }
     ];
     this.prompt(prompts).then(props => {
         context.updateEntity = props.updateEntity;
+        context.newChangelog = props.newChangelog;
         if (context.updateEntity === 'none') {
             this.env.error(chalk.green('Aborting entity update, no changes were made.'));
         }
@@ -155,18 +163,7 @@ function askForFields() {
 
     const done = this.async();
 
-    const prompts = [
-        {
-            type: 'confirm',
-            name: 'newChangelog',
-            message: 'Do you want to generate a separated new liquibase changelog file for new fields and relationships ?',
-            default: true
-        }
-    ];
-    this.prompt(prompts).then(props => {
-        context.newChangelog = props.newChangelog;
-        askForField.call(this, done);
-    });
+    askForField.call(this, done);
 }
 
 function askForFieldsToRemove() {
@@ -1161,7 +1158,8 @@ function logFieldsAndRelationships() {
             this.log(
                 chalk.red(field.fieldName) +
                     chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) +
-                    chalk.cyan(validationDetails.join(' '))
+                    chalk.cyan(validationDetails.join(' ')) +
+                    (context.newFields && context.newFields.includes(field) ? chalk.blue('NEW') : '')
             );
         });
         this.log();
@@ -1176,7 +1174,9 @@ function logFieldsAndRelationships() {
             this.log(
                 `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
                     relationship.relationshipType
-                )} ${chalk.cyan(validationDetails.join(' '))}`
+                )} ${chalk.cyan(validationDetails.join(' '))}${
+                    context.newRelationships && context.newRelationships.includes(relationship) ? chalk.blue('NEW') : ''
+                }`
             );
         });
         this.log();

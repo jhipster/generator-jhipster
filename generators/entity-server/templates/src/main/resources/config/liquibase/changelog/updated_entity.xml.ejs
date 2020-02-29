@@ -28,6 +28,7 @@
         Updated the entity <%= entityClass %>.
     -->
     <changeSet id="<%= newChangelogDate %>-1" author="jhipster">
+        <%_ if (newFields && newFields.length > 0) { _%>
         <%_ if (typeof javadoc == 'undefined') { _%>
         <addColumn tableName="<%= entityTableName %>">
         <%_ } else { _%>
@@ -106,29 +107,46 @@
                 <%_ }
                 newFields[idx].columnType = columnType;
             } _%>
-            <%_ for (idx in relationships) {
-                let nullable_relation = true,
-                relationshipType = relationships[idx].relationshipType,
-                relationshipName = relationships[idx].relationshipName,
-                relationshipColumnType = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
-                if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
-                    nullable_relation = false;
-                }
-                if (relationships[idx].relationshipType === 'many-to-one') { _%>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </addColumn>
+        <%_ } _%>
+        <%_ if (newRelationships && newRelationships.length > 0) { _%>
+
+        <%_ for (idx in newRelationships) {
+            let nullable_relation = true,
+                    relationshipType = newRelationships[idx].relationshipType,
+                    relationshipName = newRelationships[idx].relationshipName,
+                    relationshipColumnType = newRelationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
+            if (newRelationships[idx].relationshipValidate === true && newRelationships[idx].relationshipRequired) {
+                nullable_relation = false;
+            }
+            if (newRelationships[idx].relationshipType === 'many-to-one') { _%>
+            <%_ if (typeof javadoc == 'undefined') { _%>
+        <addColumn tableName="<%= entityTableName %>">
+            <%_ } else { _%>
+        <addColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
+            <%_ } _%>
             <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
-            <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true
-                            && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) {
+        </addColumn>
+            <%_ } else if (relationshipType === 'one-to-one' && newRelationships[idx].ownerSide === true
+                && (newRelationships[idx].useJPADerivedIdentifier == null || newRelationships[idx].useJPADerivedIdentifier === false)) {
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
+            <%_ if (typeof javadoc == 'undefined') { _%>
+        <addColumn tableName="<%= entityTableName %>">
+            <%_ } else { _%>
+        <addColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
+            <%_ } _%>
             <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints unique="true" nullable="<%= nullable_relation %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
             </column>
-            <%_ }
-            } _%>
-            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </addColumn>
+            <%_ }
+        } _%>
+
+        <%_ } _%>
         <%_ for (const idx in newFields) {
             if (newFields[idx].fieldType === 'ZonedDateTime' || newFields[idx].fieldType === 'Instant') { _%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= newFields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
@@ -136,12 +154,13 @@
         } _%>
     </changeSet>
 
+    <%_ if (newRelationships && newRelationships.length > 0) { _%>
     <changeSet id="<%= newChangelogDate %>-1-relations" author="jhipster">
-        <%_ for (idx in relationships) {
-            const relationshipType = relationships[idx].relationshipType,
-            relationshipName = relationships[idx].relationshipName,
-            ownerSide = relationships[idx].ownerSide,
-            otherEntityName = relationships[idx].otherEntityName;
+        <%_ for (idx in newRelationships) {
+            const relationshipType = newRelationships[idx].relationshipType,
+            relationshipName = newRelationships[idx].relationshipName,
+            ownerSide = newRelationships[idx].ownerSide,
+            otherEntityName = newRelationships[idx].otherEntityName;
             const relationshipColumnType = otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
             if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
@@ -159,6 +178,7 @@
         <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
         <% } %><% } %>
     </changeSet>
+    <%_ } _%>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
 </databaseChangeLog>
