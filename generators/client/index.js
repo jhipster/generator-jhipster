@@ -91,7 +91,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
             },
 
-            setupClientconsts() {
+            setupClientConstants() {
                 // Make constants available in templates
                 this.LOGIN_REGEX = constants.LOGIN_REGEX_JS;
                 this.ANGULAR = ANGULAR;

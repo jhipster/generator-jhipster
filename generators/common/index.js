@@ -52,7 +52,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.checkInvocationFromCLI();
             },
 
-            setupConsts() {
+            setupConstants() {
                 // Make constants available in templates
                 this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
