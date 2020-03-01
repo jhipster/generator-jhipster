@@ -73,7 +73,7 @@ import io.github.jhipster.web.util.HeaderUtil;
 <%_ if (pagination !== 'no') { _%>
 import io.github.jhipster.web.util.PaginationUtil;
 <%_ } _%>
-import io.github.jhipster.web.util.ResponseUtil;
+import io.github.jhipster.web.util.<% if (reactive) { %>reactive.<% } %>ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
