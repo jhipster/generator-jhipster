@@ -117,7 +117,8 @@ const serverFiles = {
                 generator.databaseType === 'sql' &&
                 !generator.skipDbChangelog &&
                 (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne) &&
-                generator.newChangelog,
+                generator.newChangelog &&
+                fs.existsSync(`config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -394,7 +395,12 @@ function writeFiles() {
                 if (!this.skipDbChangelog) {
                     if (this.fieldsContainOwnerManyToMany || this.fieldsContainOwnerOneToOne || this.fieldsContainManyToOne) {
                         this.addConstraintsChangelogToLiquibase(`${this.changelogDate}_added_entity_constraints_${this.entityClass}`);
-                        if (this.newChangelog) {
+                        if (
+                            this.newChangelog &&
+                            fs.existsSync(
+                                `config/liquibase/changelog/${this.changelogDate}_added_entity_constraints_${this.entityClass}.xml`
+                            )
+                        ) {
                             this.addConstraintsChangelogToLiquibase(`${this.newChangelogDate}_updated_entity_constraints_${this.entityClass}`);
                         }
                     }

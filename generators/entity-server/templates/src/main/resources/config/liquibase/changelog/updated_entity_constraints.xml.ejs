@@ -25,39 +25,64 @@
         Updated the constraints for entity <%= entityClass %>.
     -->
     <changeSet id="<%= newChangelogDate %>-2" author="jhipster">
-        <% for (idx in newRelationships) {
-            const relationshipType = newRelationships[idx].relationshipType,
-            relationshipName = newRelationships[idx].relationshipName,
-            ownerSide = newRelationships[idx].ownerSide,
-            otherEntityTableName = newRelationships[idx].otherEntityTableName;
+        <% for (idx in updateRelationships) {
+            const relationshipType = updateRelationships[idx].relationshipType,
+            relationshipName = updateRelationships[idx].relationshipName,
+            ownerSide = updateRelationships[idx].ownerSide,
+            otherEntityTableName = updateRelationships[idx].otherEntityTableName;
             if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
                 const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
                 let baseColumnName = getColumnName(relationshipName) + '_id';
-                if (relationshipType === 'one-to-one' && ownerSide && newRelationships[idx].useJPADerivedIdentifier === true) {
+                if (relationshipType === 'one-to-one' && ownerSide && updateRelationships[idx].useJPADerivedIdentifier === true) {
                     baseColumnName = 'id';
                 } %>
+                <%_ if (updateEntity === 'add') { _%>
         <addForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
+                <%_ } else if (updateEntity === 'remove') { _%>
+        <dropForeignKeyConstraint baseColumnNames="<%= baseColumnName %>"
+                                 baseTableName="<%= entityTableName %>"
+                                 constraintName="<%= constraintName %>"
+                                 referencedColumnNames="id"
+                                 referencedTableName="<%= otherEntityTableName %>"/>
+                <%_ } _%>
         <%_ } else if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
                 const constraintName = getFKConstraintName(joinTableName, getColumnName(entityTableName), prodDatabaseType, true);
                 const otherEntityConstraintName = getFKConstraintName(joinTableName, getColumnName(relationshipName), prodDatabaseType, true);
           _%>
 
+        <%_ if (updateEntity === 'add') { _%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(name) %>_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= entityTableName %>"/>
+        <%_ } else if (updateEntity === 'remove') { _%>
+        <dropForeignKeyConstraint baseColumnNames="<%= getColumnName(name) %>_id"
+                                 baseTableName="<%= joinTableName %>"
+                                 constraintName="<%= constraintName %>"
+                                 referencedColumnNames="id"
+                                 referencedTableName="<%= entityTableName %>"/>
+        <%_ } _%>
 
+        <%_ if (updateEntity === 'add') { _%>
         <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= getColumnName(otherEntityConstraintName) %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= otherEntityTableName %>"/>
+        <%_ } else if (updateEntity === 'remove') { _%>
+        <dropForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
+                                 baseTableName="<%= joinTableName %>"
+                                 constraintName="<%= getColumnName(otherEntityConstraintName) %>"
+                                 referencedColumnNames="id"
+                                 referencedTableName="<%= otherEntityTableName %>"/>
+        <%_ } _%>
+
         <%  } %><% } %>
     </changeSet>
 </databaseChangeLog>

@@ -1186,9 +1186,9 @@ module.exports = class extends PrivateBase {
             context.databaseType = context.fileData.databaseType;
         }
         context.relationships = context.fileData.relationships || [];
-        context.newRelationships = [];
+        context.updateRelationships = [];
         context.fields = context.fileData.fields || [];
-        context.newFields = [];
+        context.updateFields = [];
         context.haveFieldWithJavadoc = false;
         context.fields.forEach(field => {
             if (field.javadoc) {
