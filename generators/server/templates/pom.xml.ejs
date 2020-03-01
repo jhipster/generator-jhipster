@@ -80,7 +80,7 @@
         <javassist.version>3.24.0-GA</javassist.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <liquibase.version>3.8.7</liquibase.version>
+        <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
         <liquibase-hibernate5.version>3.8</liquibase-hibernate5.version>
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
