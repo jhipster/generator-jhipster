@@ -101,9 +101,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ if (pagination === 'no' || pagination === 'infinite-scroll') { _%>
   useEffect(() => {
     <%_ if (pagination !== 'no') { _%>
-      <%_ if (pagination === 'infinite-scroll') { _%>
     resetAll();
-      <%_ } _%>
     <%_ } else { _%>
     props.getEntities();
     <%_ } _%>
