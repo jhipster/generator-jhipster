@@ -6,9 +6,12 @@ const fse = require('fs-extra');
 const expect = require('chai').expect;
 const expectedFiles = require('./utils/expected-files');
 const packageJson = require('../package.json');
+const constants = require('../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 describe('JHipster upgrade generator', function() {
-    this.timeout(200000);
+    this.timeout(400000);
     describe('default application', () => {
         const cwd = process.cwd();
         before(done => {
@@ -24,7 +27,7 @@ describe('JHipster upgrade generator', function() {
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
@@ -91,7 +94,7 @@ describe('JHipster upgrade generator', function() {
             let workingDirectory;
             helpers
                 .run(path.join(__dirname, '../generators/app'))
-                .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true, blueprint: blueprintName })
+                .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true, blueprints: blueprintName })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
                     console.log(`Generating JHipster application in directory: ${dir}`);
@@ -103,12 +106,14 @@ describe('JHipster upgrade generator', function() {
                         version: blueprintVersion
                     };
                     const fakeBlueprintModuleDir = path.join(dir, `node_modules/${blueprintName}`);
-                    fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.ensureDirSync(path.join(fakeBlueprintModuleDir, 'generators', 'fake'));
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
+                    // Create an fake generator, otherwise env.lookup doesn't find it.
+                    fse.writeFileSync(path.join(fakeBlueprintModuleDir, 'generators', 'fake', 'index.js'), '');
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
@@ -134,6 +139,7 @@ describe('JHipster upgrade generator', function() {
                             'from-cli': true,
                             force: true,
                             silent: false,
+                            'skip-checks': true,
                             'target-version': packageJson.version
                         })
                         .inTmpDir(() => {

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -60,7 +60,7 @@ ribbon:
     eureka:
         enabled: true
 <%_ } _%>
-<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+<%_ if (applicationType === 'gateway') { _%>
 # See http://cloud.spring.io/spring-cloud-netflix/spring-cloud-netflix.html
 zuul: # those values must be configured depending on the application specific needs
     sensitive-headers: Cookie,Set-Cookie #see https://github.com/spring-cloud/spring-cloud-netflix/issues/3126
@@ -115,7 +115,7 @@ management:
                 include: ["configprops", "env", "health", "info", "jhimetrics", "logfile", "loggers", "prometheus", "threaddump"]
     endpoint:
         health:
-            show-details: when-authorized
+            show-details: when_authorized
             roles: "ROLE_ADMIN"
         jhimetrics:
             enabled: true
@@ -257,9 +257,6 @@ security:
 
 server:
     servlet:
-        <%_ if ((applicationType === 'microservice' || applicationType === 'uaa') && !serviceDiscoveryType) { _%>
-        context-path: /services/${spring.application.name}
-        <%_ } _%>
         session:
             cookie:
                 http-only: true
@@ -294,8 +291,8 @@ jhipster:
         from: <%= baseName %>@localhost
     swagger:
         default-include-pattern: /api/.*
-        title: <%=baseName%> API
-        description: <%=baseName%> API documentation
+        title: <%= baseName %> API
+        description: <%= baseName %> API documentation
         version: 0.0.1
         terms-of-service-url:
         contact-name:
@@ -303,18 +300,24 @@ jhipster:
         contact-email:
         license:
         license-url:
+    <%_ if (authenticationType === 'oauth2') { _%>
+    security:
+        oauth2:
+            audience:
+                - account
+                - api://default
+    <%_ } _%>
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
+  bootstrap-servers: localhost:9092
   consumer:
     key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    bootstrap.servers: localhost:9092
     group.id: <%= dasherizedBaseName %>
     auto.offset.reset: earliest
   producer:
     key.serializer: org.apache.kafka.common.serialization.StringSerializer
     value.serializer: org.apache.kafka.common.serialization.StringSerializer
-    bootstrap.servers: localhost:9092
 <%_ } _%>
 # ===================================================================
 # Application specific properties

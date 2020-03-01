@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,6 +23,8 @@ const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
+
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -60,6 +62,14 @@ module.exports = class extends BaseGenerator {
             defaults: false,
             description: 'Automatically configure Azure'
         });
+
+        // Automatically configure GitHub Actions
+        this.argument('autoconfigure-github', {
+            type: Boolean,
+            defaults: false,
+            description: 'Automatically configure GitHub Actions'
+        });
+
         this.registerPrettierTransform();
     }
 
@@ -73,21 +83,27 @@ module.exports = class extends BaseGenerator {
             },
             getConfig() {
                 this.jhipsterVersion = packagejs.version;
-                this.baseName = this.config.get('baseName');
-                this.applicationType = this.config.get('applicationType');
-                this.skipClient = this.config.get('skipClient');
-                this.clientPackageManager = this.config.get('clientPackageManager');
-                this.buildTool = this.config.get('buildTool');
-                this.herokuAppName = this.config.get('herokuAppName');
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.baseName = configuration.get('baseName');
+                this.dasherizedBaseName = _.kebabCase(this.baseName);
+                this.applicationType = configuration.get('applicationType');
+                this.databaseType = configuration.get('databaseType');
+                this.prodDatabaseType = configuration.get('prodDatabaseType');
+                this.skipClient = configuration.get('skipClient');
+                this.skipServer = configuration.get('skipServer');
+                this.clientPackageManager = configuration.get('clientPackageManager');
+                this.buildTool = configuration.get('buildTool');
+                this.herokuAppName = configuration.get('herokuAppName');
                 if (this.herokuAppName === undefined) {
                     this.herokuAppName = _.kebabCase(this.baseName);
                 }
-                this.clientFramework = this.config.get('clientFramework');
-                this.testFrameworks = this.config.get('testFrameworks');
+                this.clientFramework = configuration.get('clientFramework');
+                this.testFrameworks = configuration.get('testFrameworks');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
                 this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
                 this.autoconfigureAzure = this.options['autoconfigure-azure'];
+                this.autoconfigureGithub = this.options['autoconfigure-github'];
                 this.abort = false;
             },
             initConstants() {
@@ -99,6 +115,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_DIR = constants.DOCKER_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
             }
         };
     }
@@ -124,7 +141,7 @@ module.exports = class extends BaseGenerator {
                 this.gitLabIndent = this.sendBuildToGitlab ? '    ' : '';
                 this.indent = this.insideDocker ? '    ' : '';
                 this.indent += this.gitLabIndent;
-                if (this.clientFramework === 'react') {
+                if (this.clientFramework === REACT) {
                     this.frontTestCommand = 'test-ci';
                 } else {
                     this.frontTestCommand = 'test';
@@ -150,6 +167,9 @@ module.exports = class extends BaseGenerator {
         }
         if (this.pipeline === 'azure') {
             this.template('azure-pipelines.yml.ejs', 'azure-pipelines.yml');
+        }
+        if (this.pipeline === 'github') {
+            this.template('github-ci.yml.ejs', '.github/workflows/github-ci.yml');
         }
 
         if (this.cicdIntegrations.includes('deploy')) {

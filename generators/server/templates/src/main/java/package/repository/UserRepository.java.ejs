@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.repository;
+package <%= packageName %>.repository;
 
-import <%=packageName%>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.driver.core.*;
@@ -33,7 +33,7 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
     <%_ } %>
@@ -45,6 +45,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
 <%_ if (reactive && databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.ReactiveResultSet;
@@ -83,7 +86,7 @@ import java.util.Set;
 import java.time.Instant;
 <%_ } _%>
 <% if (databaseType === 'couchbase') { %>
-import static <%=packageName%>.config.Constants.ID_DELIMITER;
+import static <%= packageName %>.config.Constants.ID_DELIMITER;
 <% } %>
 <%_ if (databaseType === 'sql') { _%>
 /**
@@ -93,6 +96,11 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
 <%_ if (databaseType === 'mongodb') { _%>
 /**
  * Spring Data MongoDB repository for the {@link <%= asEntity('User') %>} entity.
+ */
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+/**
+ * Spring Data Neo4j RX repository for the {@link <%= asEntity('User') %>} entity.
  */
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
@@ -111,9 +119,9 @@ import static <%=packageName%>.config.Constants.ID_DELIMITER;
         optionalOrMono = 'Mono';
     }
 _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
     <%_ if (cacheManagerIsAvailable === true) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -153,8 +161,14 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
         <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login);
     <%_ } else { _%>
-    Optional<<%= asEntity('User') %>> findOneByLogin(String login);
+    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login);
     <%_ } _%>
+
+    <%_ if (databaseType === 'neo4j') { _%>
+    <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<% } %>
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAll();
+    <%_ } _%>
+
     <%_ if (databaseType === 'sql') { _%>
 
     @EntityGraph(attributePaths = "authorities")
@@ -189,11 +203,11 @@ public class UserRepository {
     public static final String USERS_BY_EMAIL_CACHE = "usersByEmail";
     <%_ } _%>
 
-    private final <% if(reactive) { %>Reactive<% } %>Session session;
+    private final <% if (reactive) { %>Reactive<% } %>Session session;
 
     private final Validator validator;
 
-    <%_ if(!reactive) { _%>
+    <%_ if (!reactive) { _%>
     private Mapper<<%= asEntity('User') %>> mapper;
 
     <%_ } else { _%>
@@ -210,7 +224,7 @@ public class UserRepository {
 
     private PreparedStatement insertByResetKeyStmt;
 
-    <%_ if(reactive) { _%>
+    <%_ if (reactive) { _%>
     private PreparedStatement deleteByIdStmt;
 
     <%_ } _%>
@@ -238,36 +252,36 @@ public class UserRepository {
 
     private PreparedStatement truncateByEmailStmt;
 
-    public UserRepository(<% if(reactive) { %>ReactiveCassandraTemplate cqlTemplate, Reactive<% } %>Session session, Validator validator) {
+    public UserRepository(<% if (reactive) { %>ReactiveCassandraTemplate cqlTemplate, Reactive<% } %>Session session, Validator validator) {
         this.session = session;
         this.validator = validator;
-        <%_ if(!reactive) { _%>
+        <%_ if (!reactive) { _%>
         mapper = new MappingManager(session).mapper(<%= asEntity('User') %>.class);
         <%_ } else { _%>
         this.cqlTemplate = cqlTemplate;
         <%_ } _%>
 
-        findAllStmt = session.prepare("SELECT * FROM user")<% if(reactive) { %>.block()<% } %>;
+        findAllStmt = session.prepare("SELECT * FROM user")<% if (reactive) { %>.block()<% } %>;
 
         findOneByActivationKeyStmt = session.prepare(
             "SELECT id " +
                 "FROM user_by_activation_key " +
-                "WHERE activation_key = :activation_key")<% if(reactive) { %>.block()<% } %>;
+                "WHERE activation_key = :activation_key")<% if (reactive) { %>.block()<% } %>;
 
         findOneByResetKeyStmt = session.prepare(
             "SELECT id " +
                 "FROM user_by_reset_key " +
-                "WHERE reset_key = :reset_key")<% if(reactive) { %>.block()<% } %>;
+                "WHERE reset_key = :reset_key")<% if (reactive) { %>.block()<% } %>;
 
         insertByActivationKeyStmt = session.prepare(
             "INSERT INTO user_by_activation_key (activation_key, id) " +
-                "VALUES (:activation_key, :id)")<% if(reactive) { %>.block()<% } %>;
+                "VALUES (:activation_key, :id)")<% if (reactive) { %>.block()<% } %>;
 
         insertByResetKeyStmt = session.prepare(
             "INSERT INTO user_by_reset_key (reset_key, id) " +
-                "VALUES (:reset_key, :id)")<% if(reactive) { %>.block()<% } %>;
+                "VALUES (:reset_key, :id)")<% if (reactive) { %>.block()<% } %>;
 
-        <%_ if(reactive) { _%>
+        <%_ if (reactive) { _%>
         deleteByIdStmt = session.prepare(
             "DELETE FROM user " +
                 "WHERE id = :id").block();
@@ -275,54 +289,54 @@ public class UserRepository {
         <%_ } _%>
         deleteByActivationKeyStmt = session.prepare(
             "DELETE FROM user_by_activation_key " +
-                "WHERE activation_key = :activation_key")<% if(reactive) { %>.block()<% } %>;
+                "WHERE activation_key = :activation_key")<% if (reactive) { %>.block()<% } %>;
 
         deleteByResetKeyStmt = session.prepare(
             "DELETE FROM user_by_reset_key " +
-                "WHERE reset_key = :reset_key")<% if(reactive) { %>.block()<% } %>;
+                "WHERE reset_key = :reset_key")<% if (reactive) { %>.block()<% } %>;
 
         findOneByLoginStmt = session.prepare(
             "SELECT id " +
                 "FROM user_by_login " +
-                "WHERE login = :login")<% if(reactive) { %>.block()<% } %>;
+                "WHERE login = :login")<% if (reactive) { %>.block()<% } %>;
 
         insertByLoginStmt = session.prepare(
             "INSERT INTO user_by_login (login, id) " +
-                "VALUES (:login, :id)")<% if(reactive) { %>.block()<% } %>;
+                "VALUES (:login, :id)")<% if (reactive) { %>.block()<% } %>;
 
         deleteByLoginStmt = session.prepare(
             "DELETE FROM user_by_login " +
-                "WHERE login = :login")<% if(reactive) { %>.block()<% } %>;
+                "WHERE login = :login")<% if (reactive) { %>.block()<% } %>;
 
         findOneByEmailStmt = session.prepare(
             "SELECT id " +
                 "FROM user_by_email " +
-                "WHERE email     = :email")<% if(reactive) { %>.block()<% } %>;
+                "WHERE email     = :email")<% if (reactive) { %>.block()<% } %>;
 
         insertByEmailStmt = session.prepare(
             "INSERT INTO user_by_email (email, id) " +
-                "VALUES (:email, :id)")<% if(reactive) { %>.block()<% } %>;
+                "VALUES (:email, :id)")<% if (reactive) { %>.block()<% } %>;
 
         deleteByEmailStmt = session.prepare(
             "DELETE FROM user_by_email " +
-                "WHERE email = :email")<% if(reactive) { %>.block()<% } %>;
+                "WHERE email = :email")<% if (reactive) { %>.block()<% } %>;
 
-        truncateStmt = session.prepare("TRUNCATE user")<% if(reactive) { %>.block()<% } %>;
+        truncateStmt = session.prepare("TRUNCATE user")<% if (reactive) { %>.block()<% } %>;
 
-        truncateByResetKeyStmt = session.prepare("TRUNCATE user_by_reset_key")<% if(reactive) { %>.block()<% } %>;
+        truncateByResetKeyStmt = session.prepare("TRUNCATE user_by_reset_key")<% if (reactive) { %>.block()<% } %>;
 
-        truncateByLoginStmt = session.prepare("TRUNCATE user_by_login")<% if(reactive) { %>.block()<% } %>;
+        truncateByLoginStmt = session.prepare("TRUNCATE user_by_login")<% if (reactive) { %>.block()<% } %>;
 
-        truncateByEmailStmt = session.prepare("TRUNCATE user_by_email")<% if(reactive) { %>.block()<% } %>;
+        truncateByEmailStmt = session.prepare("TRUNCATE user_by_email")<% if (reactive) { %>.block()<% } %>;
     }
 
     public <%= optionalOrMono %><<%= asEntity('User') %>> findById(String id) {
-        <%_ if(!reactive) { _%>
+        <%_ if (!reactive) { _%>
         return Optional.ofNullable(mapper.get(id));
         <%_ } else { _%>
         return cqlTemplate.selectOneById(id, User.class)
             .map(user -> {
-                if(user.getAuthorities() == null) {
+                if (user.getAuthorities() == null) {
                     user.setAuthorities(new HashSet<>());
                 }
                 return user;
@@ -360,7 +374,7 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
-    <%_ if(!reactive) { _%>
+    <%_ if (!reactive) { _%>
     public List<<%= asEntity('User') %>> findAll() {
         return mapper.map(session.execute(findAllStmt.bind())).all();
     }
@@ -368,7 +382,7 @@ public class UserRepository {
     public Flux<<%= asEntity('User') %>> findAll() {
         return cqlTemplate.select(findAllStmt.bind(), User.class)
             .map(user -> {
-                if(user.getAuthorities() == null) {
+                if (user.getAuthorities() == null) {
                     user.setAuthorities(new HashSet<>());
                 }
                 return user;
@@ -376,12 +390,12 @@ public class UserRepository {
     }
 
     <%_ } _%>
-    public <% if(reactive) { %>Mono<<% } %><%= asEntity('User') %><% if(reactive) { %>><% } %> save(<%= asEntity('User') %> user) {
+    public <% if (reactive) { %>Mono<<% } %><%= asEntity('User') %><% if (reactive) { %>><% } %> save(<%= asEntity('User') %> user) {
         Set<ConstraintViolation<<%= asEntity('User') %>>> violations = validator.validate(user);
         if (violations != null && !violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }
-        <%_ if(!reactive) { _%>
+        <%_ if (!reactive) { _%>
         <%= asEntity('User') %> oldUser = mapper.get(user.getId());
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
@@ -473,9 +487,9 @@ public class UserRepository {
         <%_ } _%>
     }
 
-    public <% if(reactive) { %>Mono<Void><% } else { %>void<% } %> delete(<%= asEntity('User') %> user) {
+    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> delete(<%= asEntity('User') %> user) {
         BatchStatement batch = new BatchStatement();
-        batch.add(<% if(!reactive) { %>mapper.deleteQuery(user)<% } else { %>deleteByIdStmt.bind().setString("id", user.getId())<% } %>);
+        batch.add(<% if (!reactive) { %>mapper.deleteQuery(user)<% } else { %>deleteByIdStmt.bind().setString("id", user.getId())<% } %>);
         if (!StringUtils.isEmpty(user.getActivationKey())) {
             batch.add(deleteByActivationKeyStmt.bind().setString("activation_key", user.getActivationKey()));
         }
@@ -484,14 +498,14 @@ public class UserRepository {
         }
         batch.add(deleteByLoginStmt.bind().setString("login", user.getLogin()));
         batch.add(deleteByEmailStmt.bind().setString("email", user.getEmail().toLowerCase()));
-        <%_ if(!reactive) { _%>
+        <%_ if (!reactive) { _%>
         session.execute(batch);
         <%_ } else { _%>
         return session.execute(batch).then();
         <%_ } _%>
     }
 
-    <%_ if(!reactive) { _%>
+    <%_ if (!reactive) { _%>
     private Optional<<%= asEntity('User') %>> findOneFromIndex(BoundStatement stmt) {
         ResultSet rs = session.execute(stmt);
         if (rs.isExhausted()) {

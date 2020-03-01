@@ -1,6 +1,6 @@
 # Sample application generation
 
-To generate test applications, either automatically by Travis or locally on the developer machine, a number of pre-defined configurations have been prepared.
+To generate test applications, either automatically by the CI or locally on the developer machine, a number of pre-defined configurations have been prepared.
 
 ## Application configurations
 
@@ -15,6 +15,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 -   ms-ngx-gateway-eureka-oauth2
 -   ms-ngx-gateway-uaa
 -   ngx-couchbase
+-   ngx-neo4j
 -   ngx-default
 -   ngx-gradle-fr
 -   ngx-h2mem-ws-nol2
@@ -26,6 +27,8 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 -   react-noi18n-es-ws-gradle-session
 -   uaa
 -   webflux-mongodb
+-   webflux-mongodb-session
+-   webflux-mongodb-oauth2
 
 ## Entity configurations
 

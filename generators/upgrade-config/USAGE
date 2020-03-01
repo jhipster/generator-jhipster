@@ -1,0 +1,9 @@
+Description:
+    Unifies JHipster configuration
+
+Example:
+
+    jhipster upgrade-config
+
+    JHipster upgrade-config will :
+    - read all blueprint configuration and unify into generator-jhipster namespace

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -21,6 +21,10 @@ const path = require('path');
 const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const shelljs = require('shelljs');
+const constants = require('../generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = {
     askForMicroserviceJson,
@@ -33,6 +37,7 @@ module.exports = {
     askForDTO,
     askForService,
     askForFiltering,
+    askForReadOnly,
     askForPagination
 };
 
@@ -324,6 +329,27 @@ function askForFiltering() {
     });
 }
 
+function askForReadOnly() {
+    const context = this.context;
+    // don't prompt if data is imported from a file
+    if (context.useConfigurationFile) {
+        return;
+    }
+    const done = this.async();
+    const prompts = [
+        {
+            type: 'confirm',
+            name: 'readOnly',
+            message: 'Is this entity read-only?',
+            default: false
+        }
+    ];
+    this.prompt(prompts).then(props => {
+        context.readOnly = props.readOnly;
+        done();
+    });
+}
+
 function askForDTO() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped or if no service layer
@@ -466,10 +492,10 @@ function askForField(done) {
                 if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
                 }
-                if ((clientFramework === undefined || clientFramework === 'angularX') && jhiCore.isReservedFieldName(input, 'angularX')) {
+                if ((clientFramework === undefined || clientFramework === ANGULAR) && jhiCore.isReservedFieldName(input, ANGULAR)) {
                     return 'Your field name cannot contain a Java or Angular reserved keyword';
                 }
-                if ((clientFramework !== undefined || clientFramework === 'react') && jhiCore.isReservedFieldName(input, 'react')) {
+                if ((clientFramework !== undefined || clientFramework === REACT) && jhiCore.isReservedFieldName(input, REACT)) {
                     return 'Your field name cannot contain a Java or React reserved keyword';
                 }
                 if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
@@ -480,7 +506,7 @@ function askForField(done) {
             message: 'What is the name of your field?'
         },
         {
-            when: response => response.fieldAdd === true && (skipServer || ['sql', 'mongodb', 'couchbase'].includes(databaseType)),
+            when: response => response.fieldAdd === true && (skipServer || ['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)),
             type: 'list',
             name: 'fieldType',
             message: 'What is the type of your field?',
@@ -1008,9 +1034,7 @@ function askForRelationship(done) {
             type: 'input',
             name: 'otherEntityField',
             message: response =>
-                `When you display this relationship on client-side, which field from '${
-                    response.otherEntityName
-                }' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
+                `When you display this relationship on client-side, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
             default: 'id'
         },
         {

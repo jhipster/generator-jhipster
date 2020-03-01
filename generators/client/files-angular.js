@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -238,6 +238,7 @@ const files = {
                 { file: 'admin/docs/docs.module.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.component.ts', method: 'processJs' },
                 'admin/docs/docs.component.html',
+                'admin/docs/docs.scss',
                 { file: 'admin/health/health.route.ts', method: 'processJs' },
                 { file: 'admin/health/health.module.ts', method: 'processJs' },
                 { file: 'admin/health/health.component.ts', method: 'processJs' },
@@ -280,6 +281,7 @@ const files = {
                 { file: 'admin/tracker/tracker.module.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.html', method: 'processHtml' },
+                'core/tracker/tracker-activity.model.ts',
                 'core/tracker/tracker.service.ts'
             ]
         },
@@ -330,8 +332,14 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
                 // login
+                'core/login/login.model.ts',
                 'core/login/login-modal.service.ts'
             ]
+        },
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType === 'oauth2',
+            templates: ['core/login/logout.model.ts']
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
@@ -341,7 +349,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['core/language/language.constants.ts', 'core/language/language.helper.ts']
+            templates: ['core/language/language.constants.ts']
         }
     ],
     angularShared: [
@@ -353,11 +361,13 @@ const files = {
                 'shared/constants/error.constants.ts',
                 'shared/constants/input.constants.ts',
                 'shared/constants/pagination.constants.ts',
+                'shared/constants/authority.constants.ts',
                 // models
                 'shared/util/request-util.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
+                'shared/alert/alert-error.model.ts',
                 // dates
                 'shared/util/datepicker-adapter.ts'
             ]
@@ -415,6 +425,7 @@ const files = {
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
                 'spec/app/core/user/account.service.spec.ts',
+                'spec/app/layouts/main/main.component.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',
                 'spec/helpers/mock-route.service.ts',
@@ -489,11 +500,6 @@ const files = {
         {
             condition: generator => generator.protractorTests,
             templates: ['tsconfig.e2e.json']
-        },
-        {
-            condition: generator => generator.authenticationType === 'oauth2',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/layouts/main/main.component.spec.ts']
         }
     ]
 };

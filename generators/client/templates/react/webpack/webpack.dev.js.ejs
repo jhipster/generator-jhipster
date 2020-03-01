@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -110,6 +110,13 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
           heartbeatTimeout: 60000
         }
       }
+      /*
+      ,ghostMode: { // uncomment this part to disable BrowserSync ghostMode; https://github.com/jhipster/generator-jhipster/issues/11116
+        clicks: false,
+        location: false,
+        forms: false,
+        scroll: false
+      } */
     }, {
       reload: false
     }),

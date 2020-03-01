@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,7 +33,7 @@ services:
             - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mysql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mariadb') { _%>
             - SPRING_DATASOURCE_URL=jdbc:mariadb://<%= baseName.toLowerCase() %>-mariadb:3306/<%= baseName.toLowerCase() %>
@@ -60,6 +60,9 @@ services:
             <%_ } _%>
             <%_ if (cacheProvider === 'redis') { _%>
             - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+            - JHIPSTER_CACHE_REDIS_CLUSTER=false
+            # - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+            # - JHIPSTER_CACHE_REDIS_CLUSTER=true
             <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
             - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
@@ -76,22 +79,20 @@ services:
             - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
                 <%_ if (authenticationType === 'uaa') { _%>
             - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
-                <%_ } _%>
-            <%_ } _%>
+                <%_ } else { _%>
             - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+                <%_ } _%>
+            <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+            - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
+            <%_ } else { _%>
+            - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+            <%_ } _%>
             <%_ if (searchEngine === 'elasticsearch') { _%>
             - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
-            - KAFKA_CONSUMER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_CONSUMER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_CONSUMER_BOOTSTRAP_SERVERS=kafka:9092
-            - KAFKA_CONSUMER_GROUP_ID=<%= dasherizedBaseName %>
-            - KAFKA_CONSUMER_AUTO_OFFSET_RESET=earliest
-            - KAFKA_PRODUCER_BOOTSTRAP_SERVERS=kafka:9092
-            - KAFKA_PRODUCER_KEY_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
-            - KAFKA_PRODUCER_VALUE_DESERIALIZER=org.apache.kafka.common.serialization.StringDeserializer
+            - KAFKA_BOOTSTRAPSERVERS=kafka:9092
             <%_ } _%>
             <%_ if (cacheProvider === 'infinispan') { _%>
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
@@ -135,6 +136,12 @@ services:
         extends:
             file: mssql.yml
             service: <%= baseName.toLowerCase() %>-mssql
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'neo4j') { _%>
+    <%= baseName.toLowerCase() %>-neo4j:
+        extends:
+            file: neo4j.yml
+            service: <%= baseName.toLowerCase() %>-neo4j
     <%_ } _%>
     <%_ if (prodDatabaseType === 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:

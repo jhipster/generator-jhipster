@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -117,16 +117,20 @@ module.exports = class extends BaseDockerGenerator {
                         yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
                     }
 
-                    parentConfiguration[`${lowercaseBaseName}-app`] = yamlConfig;
+                    if (!this.serviceDiscoveryType && appConfig.skipClient) {
+                        yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
+                    }
+
+                    parentConfiguration[`${lowercaseBaseName}`] = yamlConfig;
 
                     // Add database configuration
                     const database = appConfig.prodDatabaseType;
-                    if (database !== 'no') {
+                    if (database !== 'no' && database !== 'oracle') {
                         const relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
                         const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
                         const databaseServiceName = `${lowercaseBaseName}-${database}`;
                         let databaseYamlConfig = databaseYaml.services[databaseServiceName];
-                        delete databaseYamlConfig.ports;
+                        if (database !== 'mariadb') delete databaseYamlConfig.ports;
 
                         if (database === 'cassandra') {
                             // node config
@@ -189,6 +193,15 @@ module.exports = class extends BaseDockerGenerator {
                         const memcachedConfig = memcachedYaml.services[`${lowercaseBaseName}-memcached`];
                         delete memcachedConfig.ports;
                         parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
+                    }
+
+                    // Add Redis support
+                    if (cacheProvider === 'redis') {
+                        this.useRedis = true;
+                        const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
+                        const redisConfig = redisYaml.services[`${lowercaseBaseName}-redis`];
+                        delete redisConfig.ports;
+                        parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
                     }
                     // Expose authenticationType
                     this.authenticationType = appConfig.authenticationType;

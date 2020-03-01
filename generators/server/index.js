@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -60,7 +60,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupServerOptions(this);
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
 
         this.registerPrettierTransform();
     }
@@ -98,6 +98,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
                 this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
+                this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
                 this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
                 this.DOCKER_REDIS = constants.DOCKER_REDIS;
@@ -123,10 +124,16 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
+                this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
                 this.JIB_VERSION = constants.JIB_VERSION;
+                this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
+                this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+                this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
+
+                this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
 
                 this.packagejs = packagejs;
                 const configuration = this.getAllJhipsterConfig(this, true);
@@ -191,6 +198,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.devDatabaseType = configuration.get('devDatabaseType');
                     this.prodDatabaseType = configuration.get('prodDatabaseType');
                 }
+                this.skipFakeData = configuration.get('skipFakeData') || this.configOptions.skipFakeData;
 
                 this.buildTool = configuration.get('buildTool');
                 this.jhipsterVersion = packagejs.version;
@@ -203,6 +211,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
                 }
+                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
                 this.jwtSecretKey = configuration.get('jwtSecretKey');
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
@@ -253,7 +262,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.packageName !== undefined &&
                     this.authenticationType !== undefined &&
                     this.cacheProvider !== undefined &&
-                    this.enableHibernateCache !== undefined &&
                     this.websocket !== undefined &&
                     this.databaseType !== undefined &&
                     this.devDatabaseType !== undefined &&

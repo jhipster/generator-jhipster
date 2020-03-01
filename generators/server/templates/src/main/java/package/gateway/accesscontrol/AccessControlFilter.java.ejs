@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.gateway.accesscontrol;
+package <%= packageName %>.gateway.accesscontrol;
 
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -74,7 +74,7 @@ public class AccessControlFilter extends ZuulFilter {
             // If this route correspond to the current request URI
             // We do a substring to remove the "**" at the end of the route URL
             if (requestUri.startsWith(serviceUrl.substring(0, serviceUrl.length() - 2))) {
-				return !isAuthorizedRequest(serviceUrl, serviceName, requestUri);
+                return !isAuthorizedRequest(serviceUrl, serviceName, requestUri);
             }
         }
         return true;

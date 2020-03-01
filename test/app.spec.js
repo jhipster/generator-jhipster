@@ -9,6 +9,8 @@ const constants = require('../generators/generator-constants');
 const angularFiles = require('../generators/client/files-angular').files;
 const reactFiles = require('../generators/client/files-react').files;
 
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -23,7 +25,7 @@ describe('JHipster generator', () => {
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, jhiPrefix: 'test' })
                     .withPrompts({
                         baseName: 'jhipster',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: false,
@@ -92,7 +94,7 @@ describe('JHipster generator', () => {
                     })
                     .withPrompts({
                         baseName: 'jhipster',
-                        clientFramework: 'react',
+                        clientFramework: REACT,
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: false,
@@ -151,7 +153,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -206,7 +208,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -255,7 +257,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -305,7 +307,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'no',
@@ -344,7 +346,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'no',
@@ -374,6 +376,45 @@ describe('JHipster generator', () => {
             shouldBeV3DockerfileCompatible('couchbase');
         });
 
+        describe('neo4j', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: ANGULAR,
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'no',
+                        enableHibernateCache: false,
+                        databaseType: 'neo4j',
+                        devDatabaseType: 'neo4j',
+                        prodDatabaseType: 'neo4j',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: []
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with "Neo4j"', () => {
+                assert.file(expectedFiles.neo4j);
+            });
+            it("doesn't setup liquibase", () => {
+                assert.noFileContent('pom.xml', 'liquibase');
+                assert.noFile(expectedFiles.liquibase);
+            });
+            shouldBeV3DockerfileCompatible('neo4j');
+        });
+
         describe('mssql', () => {
             before(done => {
                 helpers
@@ -383,7 +424,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'no',
@@ -424,7 +465,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'no',
@@ -463,7 +504,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'no',
@@ -497,7 +538,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'no',
@@ -576,7 +617,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'oauth2',
                         cacheProvider: 'ehcache',
@@ -596,6 +637,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with authenticationType "oauth2"', () => {
                 assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.oauth2Client);
                 assert.file(expectedFiles.mysql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
@@ -613,7 +655,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'oauth2',
                         cacheProvider: 'ehcache',
@@ -633,6 +675,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with authenticationType "oauth2" and elasticsearch', () => {
                 assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.oauth2Client);
                 assert.file(expectedFiles.elasticsearch);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
                 assert.file(expectedFiles.mysql);
@@ -648,7 +691,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'oauth2',
                         cacheProvider: 'ehcache',
@@ -668,6 +711,7 @@ describe('JHipster generator', () => {
 
             it('creates expected files with authenticationType "oauth2" and mongodb', () => {
                 assert.file(expectedFiles.oauth2);
+                assert.file(expectedFiles.oauth2Client);
                 assert.file(expectedFiles.mongodb);
             });
         });
@@ -681,7 +725,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'hazelcast',
@@ -792,7 +836,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'memcached',
@@ -829,7 +873,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'redis',
@@ -866,7 +910,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serverPort: '8080',
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
@@ -911,7 +955,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serverPort: '8080',
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
@@ -959,7 +1003,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serverPort: '8080',
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
@@ -1008,7 +1052,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.otherpackage',
                         packageFolder: 'com/otherpackage',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -1042,7 +1086,7 @@ describe('JHipster generator', () => {
                         baseName: '21Points',
                         packageName: 'com.otherpackage',
                         packageFolder: 'com/otherpackage',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -1078,7 +1122,7 @@ describe('JHipster generator', () => {
                         baseName: 'myapplication',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -1113,7 +1157,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'hazelcast',
@@ -1142,7 +1186,7 @@ describe('JHipster generator', () => {
                     .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
                     .withPrompts({
                         baseName: 'jhipster',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
                         serviceDiscoveryType: false,
@@ -1175,8 +1219,8 @@ describe('JHipster generator', () => {
                     })
                 );
             });
-            it('contains updatePageDirection in language helper', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`, /private updatePageDirection/);
+            it('contains updatePageDirection in main component', () => {
+                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}app/layouts/main/main.component.ts`, /private updatePageDirection/);
             });
         });
     });
@@ -1191,7 +1235,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -1231,7 +1275,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'session',
                         cacheProvider: 'ehcache',
@@ -1273,7 +1317,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serverPort: '8080',
                         authenticationType: 'jwt',
                         serviceDiscoveryType: false,
@@ -1323,7 +1367,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serverPort: '8080',
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
@@ -1365,7 +1409,7 @@ describe('JHipster generator', () => {
                 .withOptions({ 'from-cli': true, skipInstall: true, skipServer: true, db: 'mysql', auth: 'jwt', skipChecks: true })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
@@ -1565,7 +1609,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: 'eureka',
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -1603,7 +1647,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: 'eureka',
                         authenticationType: 'jwt',
                         cacheProvider: 'hazelcast',
@@ -1678,7 +1722,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
                         enableHibernateCache: true,
@@ -1836,7 +1880,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: 'consul',
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -1873,7 +1917,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: 'consul',
                         authenticationType: 'jwt',
                         cacheProvider: 'hazelcast',
@@ -1948,7 +1992,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
                         cacheProvider: 'ehcache',
@@ -1985,7 +2029,7 @@ describe('JHipster generator', () => {
                         baseName: 'jhipster',
                         packageName: 'com.mycompany.myapp',
                         packageFolder: 'com/mycompany/myapp',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'uaa',
                         uaaBaseName: 'jhipsterApp',

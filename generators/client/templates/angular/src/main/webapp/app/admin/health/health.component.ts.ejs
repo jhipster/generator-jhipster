@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,35 +17,29 @@
  limitations under the License.
 -%>
 import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { <%=jhiPrefixCapitalized%>HealthService } from './health.service';
-import { <%=jhiPrefixCapitalized%>HealthModalComponent } from './health-modal.component';
+import { HealthService, HealthStatus, Health, HealthKey, HealthDetails } from './health.service';
+import { HealthModalComponent } from './health-modal.component';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-health',
     templateUrl: './health.component.html'
 })
-export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
-    healthData: any;
-    updatingHealth: boolean;
+export class HealthComponent implements OnInit {
+    health?: Health;
 
     constructor(
         private modalService: NgbModal,
-        private healthService: <%=jhiPrefixCapitalized%>HealthService
-    ) {
+        private healthService: HealthService
+    ) {}
 
-    }
-
-    ngOnInit() {
+    ngOnInit(): void {
         this.refresh();
     }
 
-    baseName(name: string) {
-        return this.healthService.getBaseName(name);
-    }
-
-    getBadgeClass(statusState) {
+    getBadgeClass(statusState: HealthStatus): string {
         if (statusState === 'UP') {
             return 'badge-success';
         } else {
@@ -53,32 +47,19 @@ export class <%=jhiPrefixCapitalized%>HealthCheckComponent implements OnInit {
         }
     }
 
-    refresh() {
-        this.updatingHealth = true;
-
-        this.healthService.checkHealth().subscribe((health) => {
-            this.healthData = this.healthService.transformHealthData(health);
-            this.updatingHealth = false;
-        }, (error) => {
-            if (error.status === 503) {
-                this.healthData = this.healthService.transformHealthData(error.error);
-                this.updatingHealth = false;
+    refresh(): void {
+        this.healthService.checkHealth().subscribe(
+            health => (this.health = health),
+            (error: HttpErrorResponse) => {
+                if (error.status === 503) {
+                    this.health = error.error;
+                }
             }
-        });
+        );
     }
 
-    showHealth(health: any) {
-        const modalRef  = this.modalService.open(<%=jhiPrefixCapitalized%>HealthModalComponent);
-        modalRef.componentInstance.currentHealth = health;
-        modalRef.result.then((result) => {
-            // Left blank intentionally, nothing to do here
-        }, (reason) => {
-            // Left blank intentionally, nothing to do here
-        });
+    showHealth(health: { key: HealthKey; value: HealthDetails }): void {
+        const modalRef = this.modalService.open(HealthModalComponent);
+        modalRef.componentInstance.health = health;
     }
-
-    subSystemName(name: string) {
-        return this.healthService.getSubSystemName(name);
-    }
-
 }

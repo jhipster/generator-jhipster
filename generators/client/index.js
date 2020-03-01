@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,6 +26,9 @@ const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 let useBlueprints;
 
@@ -63,7 +66,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.setupClientOptions(this);
 
-        useBlueprints = !opts.fromBlueprint && this.instantiateBlueprints('client');
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('client');
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -83,6 +86,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
@@ -92,11 +96,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
+                    this.clientFramework = ANGULAR;
                 }
                 if (this.clientFramework === 'angular' || this.clientFramework === 'angular2') {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
+                    this.clientFramework = ANGULAR;
                 }
 
                 this.clientTheme = configuration.get('clientTheme');
@@ -359,7 +363,7 @@ module.exports = class extends BaseBlueprintGenerator {
             write() {
                 if (this.skipClient) return;
                 switch (this.clientFramework) {
-                    case 'react':
+                    case REACT:
                         return writeReactFiles.call(this, useBlueprints);
                     default:
                         return writeAngularFiles.call(this, useBlueprints);

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,96 +16,93 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component,<%_ if (authenticationType === 'oauth2') { _%> OnDestroy,<%_ } _%> OnInit } from '@angular/core';
-<%_ if (!enableTranslation) { _%>
+import { Component, OnInit<% if (enableTranslation) { %>, RendererFactory2, Renderer2<% } %> } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-<%_ } _%>
 import { Router, ActivatedRouteSnapshot, NavigationEnd, NavigationError } from '@angular/router';
-<%_ if (authenticationType === 'oauth2') { _%>
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+<%_ if (enableTranslation) { _%>
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 <%_ } _%>
 
-<%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
-<%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-import { Account } from 'app/core/user/account.model';
 import { AccountService } from 'app/core/auth/account.service';
-import { StateStorageService } from 'app/core/auth/state-storage.service';
+<%_ if (enableI18nRTL) { _%>
+import { FindLanguageFromKeyPipe } from 'app/shared/language/find-language-from-key.pipe';
 <%_ } _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-main',
     templateUrl: './main.component.html'
 })
-export class <%=jhiPrefixCapitalized%>MainComponent implements OnInit<%_ if (authenticationType === 'oauth2') { _%>, OnDestroy<%_ } _%> {
-    <%_ if (authenticationType === 'oauth2') { _%>
-    _cleanup: Subject<any> = new Subject<any>();
+export class MainComponent implements OnInit {
+    <%_ if (enableTranslation) { _%>
+    private renderer: Renderer2;
     <%_ } _%>
 
     constructor(
-        <%_ if (authenticationType === 'oauth2') { _%>
         private accountService: AccountService,
-        private stateStorageService: StateStorageService,
+        private titleService: Title,
+        private router: Router,
+        <%_ if (enableI18nRTL) { _%>
+        private findLanguageFromKeyPipe: FindLanguageFromKeyPipe,
         <%_ } _%>
         <%_ if (enableTranslation) { _%>
-        private jhiLanguageHelper: JhiLanguageHelper,
-        <%_ } else { _%>
-        private titleService: Title,
+        private translateService: TranslateService,
+        rootRenderer: RendererFactory2
         <%_ } _%>
-        private router: Router
-    ) {}
+    ) {
+        <%_ if (enableTranslation) { _%>
+        this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);
+        <%_ } _%>
+    }
 
-    private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {
-        let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : '<%= angularAppName %>';
+    ngOnInit(): void {
+        // try to log in automatically
+        this.accountService.identity().subscribe();
+
+        this.router.events.subscribe(event => {
+            if (event instanceof NavigationEnd) {
+                this.updateTitle();
+            }
+            if (event instanceof NavigationError && event.error.status === 404) {
+                this.router.navigate(['/404']);
+            }
+        });
+
+        <%_ if (enableTranslation) { _%>
+        this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
+            this.updateTitle();
+
+            this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
+
+            <%_ if (enableI18nRTL) { _%>
+            this.updatePageDirection();
+            <%_ } _%>
+        });
+        <%_ } _%>
+    }
+
+    private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
+        let title: string = (routeSnapshot.data && routeSnapshot.data['pageTitle']) ? routeSnapshot.data['pageTitle'] : '';
         if (routeSnapshot.firstChild) {
             title = this.getPageTitle(routeSnapshot.firstChild) || title;
         }
         return title;
     }
 
-    ngOnInit() {
-        this.router.events.subscribe((event) => {
-            if (event instanceof NavigationEnd) {
-                <%_ if (enableTranslation) { _%>
-                this.jhiLanguageHelper.updateTitle(this.getPageTitle(this.router.routerState.snapshot.root));
-                <%_ } else { _%>
-                this.titleService.setTitle(this.getPageTitle(this.router.routerState.snapshot.root));
-                <%_ } _%>
-            }
-            if (event instanceof NavigationError && event.error.status === 404) {
-                this.router.navigate(['/404']);
-            }
-        });
-        <%_ if (authenticationType === 'oauth2') { _%>
-        this.subscribeToLoginEvents();
+    private updateTitle(): void {
+        let pageTitle = this.getPageTitle(this.router.routerState.snapshot.root);
+        if (!pageTitle) {
+            pageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= capitalizedBaseName %><% } %>';
+        }
+        <%_ if (enableTranslation) { _%>
+        this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
+        <%_ } else { _%>
+        this.titleService.setTitle(pageTitle);
         <%_ } _%>
     }
-    <%_ if (authenticationType === 'oauth2') { _%>
 
-    ngOnDestroy() {
-        this._cleanup.next();
-        this._cleanup.complete();
-      }
-
-    private subscribeToLoginEvents() {
-        this.accountService
-            .getAuthenticationState()
-            .pipe(takeUntil(this._cleanup))
-            .subscribe((account: Account) => {
-                if (account) {
-                    this.navigateToStoredUrl();
-                }
-            });
-      }
-
-    private navigateToStoredUrl() {
-        const previousUrl = this.stateStorageService.getUrl();
-        if (previousUrl) {
-            this.stateStorageService.storeUrl(null);
-            this.router.navigateByUrl(previousUrl);
-        }
+    <%_ if (enableI18nRTL) { _%>
+    private updatePageDirection(): void {
+        this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.currentLang) ? 'rtl' : 'ltr');
     }
     <%_ } _%>
 }

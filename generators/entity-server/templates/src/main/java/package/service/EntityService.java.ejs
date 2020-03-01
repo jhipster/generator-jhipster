@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,15 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service;<%
+package <%= packageName %>.service;
+
+<%_
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-%>
-<%  const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
-    const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance); %>
+const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+_%>
 <%_ if (dto === 'mapstruct') { _%>
-import <%=packageName%>.service.dto.<%= asDto(entityClass) %>;
+import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
 <%_ } else { _%>
-import <%=packageName%>.domain.<%= asEntity(entityClass) %>;
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
 <%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 
@@ -70,7 +72,7 @@ public interface <%= entityClass %>Service {
      * @return the list of entities.
      */
     List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
-<% } } -%>
+<%_ } } _%>
 
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
     /**
@@ -79,8 +81,8 @@ public interface <%= entityClass %>Service {
      * @return the list of entities.
      */
     Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable);
-    <% } -%>
 
+    <%_ } _%>
     <%_ if (reactiveRepositories) { _%>
     /**
      * Get all the <%= entityInstancePlural %>.

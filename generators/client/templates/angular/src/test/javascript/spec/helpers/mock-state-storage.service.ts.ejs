@@ -1,5 +1,5 @@
 <%#
-Copyright 2013-2019 the original author or authors from the JHipster project.
+Copyright 2013-2020 the original author or authors from the JHipster project.
 
 This file is part of the JHipster project, see https://www.jhipster.tech/
 for more information.
@@ -16,26 +16,24 @@ distributed under the License is distributed on an "AS IS" BASIS,
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-import { SpyObject } from './spyobject';
-import { StateStorageService } from 'app/core/auth/state-storage.service';
 import Spy = jasmine.Spy;
 
-export class MockStateStorageService extends SpyObject {
+import { SpyObject } from './spyobject';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 
+export class MockStateStorageService extends SpyObject {
     getUrlSpy: Spy;
     storeUrlSpy: Spy;
+    clearUrlSpy: Spy;
 
     constructor() {
         super(StateStorageService);
-        this.setUrlSpy({});
+        this.getUrlSpy = this.spy('getUrl').andReturn(null);
         this.storeUrlSpy = this.spy('storeUrl').andReturn(this);
+        this.clearUrlSpy = this.spy('clearUrl').andReturn(this);
     }
 
-    setUrlSpy(json) {
-        this.getUrlSpy = this.spy('getUrl').andReturn(json);
-    }
-
-    setResponse(json: any): void {
-        this.setUrlSpy(json);
+    setResponse(previousUrl: string | null): void {
+        this.getUrlSpy = this.spy('getUrl').andReturn(previousUrl);
     }
 }

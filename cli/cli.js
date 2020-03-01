@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,18 +16,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-console */
 const program = require('commander');
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const { CLI_NAME, initHelp, logger, createYeomanEnv, toString, getCommand, getCommandOptions, getArgs, done } = require('./utils');
+const {
+    CLI_NAME,
+    initHelp,
+    logger,
+    createYeomanEnv,
+    toString,
+    getCommand,
+    getCommandOptions,
+    getArgs,
+    done,
+    loadBlueprints,
+    loadBlueprintCommands
+} = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
+const { packageNameToNamespace } = require('../generators/utils');
 
+const blueprints = loadBlueprints();
 const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
-const env = createYeomanEnv();
+const env = createYeomanEnv(blueprints);
 
 /* setup debugging */
 logger.init(program);
@@ -54,9 +67,10 @@ program
     .usage('[command] [options]')
     .allowUnknownOption();
 
+const allCommands = { ...SUB_GENERATORS, ...loadBlueprintCommands(env, blueprints) };
+
 /* create commands */
-Object.keys(SUB_GENERATORS).forEach(key => {
-    const opts = SUB_GENERATORS[key];
+Object.entries(allCommands).forEach(([key, opts]) => {
     const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: opts.default });
     if (opts.alias) {
         command.alias(opts.alias);
@@ -72,7 +86,8 @@ Object.keys(SUB_GENERATORS).forEach(key => {
                 require(`./${key}`)(program.args, options, env);
                 /* eslint-enable */
             } else {
-                runYoCommand(key, program.args, options, opts);
+                const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
+                runYoCommand(namespace, program.args, options, opts);
             }
         })
         .on('--help', () => {
@@ -98,5 +113,5 @@ if (program.args.length < 1) {
     logger.debug('No command specified. Running default');
     logger.info(chalk.yellow('Running default command'));
     const options = getCommandOptions(packageJson, process.argv.slice(2));
-    runYoCommand('app', [], options, {});
+    runYoCommand(`${JHIPSTER_NS}:app`, [], options, {});
 }

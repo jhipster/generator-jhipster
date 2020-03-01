@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.service.mapper;
+package <%= packageName %>.service.mapper;
 
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
-import <%=packageName%>.domain.Authority;
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+import <%= packageName %>.domain.Authority;
 <%_ } _%>
-import <%=packageName%>.domain.<%= asEntity('User') %>;
-import <%=packageName%>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
 
 import org.springframework.stereotype.Service;
 
@@ -71,7 +71,7 @@ public class UserMapper {
             <%_ } _%>
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
-            <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+            <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
             <%_ } _%>
@@ -83,12 +83,12 @@ public class UserMapper {
         }
     }
 
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
 
     private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
         Set<Authority> authorities = new HashSet<>();
 
-        if(authoritiesAsString != null){
+        if (authoritiesAsString != null) {
             authorities = authoritiesAsString.stream().map(string -> {
                 Authority auth = new Authority();
                 auth.setName(string);
@@ -104,7 +104,7 @@ public class UserMapper {
     private Set<String> cleanNullStringAuthorities(Set<String> authoritiesAsString) {
         Set<String> authorities = new HashSet<>();
 
-        if(authoritiesAsString != null) {
+        if (authoritiesAsString != null) {
             authorities = authoritiesAsString.stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
@@ -114,7 +114,7 @@ public class UserMapper {
     }
     <%_ } _%>
 
-    public <%= asEntity('User') %> userFromId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
+    public <%= asEntity('User') %> userFromId(<% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
         if (id == null) {
             return null;
         }

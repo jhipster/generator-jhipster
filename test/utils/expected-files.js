@@ -127,6 +127,8 @@ const expectedFiles = {
             // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
             `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`
         ],
+        fakeData: [`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`],
+        serverLiquibase: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_added_entity_Foo.xml`],
         gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
     },
 
@@ -141,10 +143,11 @@ const expectedFiles = {
         'gradle/profile_prod.gradle',
         'gradle/sonar.gradle',
         'gradle/wrapper/gradle-wrapper.jar',
-        'gradle/wrapper/gradle-wrapper.properties'
+        'gradle/wrapper/gradle-wrapper.properties',
+        'checkstyle.xml'
     ],
 
-    maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties'],
+    maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties', 'checkstyle.xml'],
 
     common: ['.prettierignore', '.prettierrc', 'README.md', '.gitignore', '.gitattributes', '.editorconfig'],
 
@@ -219,26 +222,26 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/AuditEventService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/MailService.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/UserService.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/util/RandomUtil.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/UserDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/PasswordChangeDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/package-info.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapper.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/EmailAlreadyUsedException.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/EmailNotFoundException.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/InvalidPasswordException.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/errors/LoginAlreadyUsedException.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AuditResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/UserResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/ManagedUserVM.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/NoOpMailConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/AuditEventServiceIT.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperTest.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`
     ],
 
@@ -249,6 +252,9 @@ const expectedFiles = {
     redis: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
         `${DOCKER_DIR}redis.yml`,
+        `${DOCKER_DIR}redis-cluster.yml`,
+        `${DOCKER_DIR}redis/connectRedisCluster.sh`,
+        `${DOCKER_DIR}redis/Redis-Cluster.Dockerfile`,
         `${SERVER_TEST_SRC_DIR}/com/mycompany/myapp/RedisTestContainerExtension.java`
     ],
 
@@ -387,6 +393,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/health/health-modal.component.html`,
@@ -440,6 +447,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/layouts/profiles/profile.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/polyfills.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert-error.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert-error.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/account.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/csrf.service.ts`,
@@ -447,12 +455,13 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access-service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/constants/authority.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/error.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/input.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/pagination.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/core/login/login.model.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/login/login-modal.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/login/login.component.ts`,
@@ -509,6 +518,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/layouts/main/main.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`,
@@ -537,7 +547,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
@@ -548,7 +557,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/language/language.helper.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
     ],
 
@@ -587,10 +595,11 @@ const expectedFiles = {
         `${DOCKER_DIR}keycloak.yml`
     ],
 
+    oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/core/login/logout.model.ts`],
+
     messageBroker: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/KafkaProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResource.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/JhipsterKafkaConsumer.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/JhipsterKafkaProducer.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResourceIT.java`,
         `${DOCKER_DIR}kafka.yml`
     ],
@@ -604,6 +613,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/IatTokenEnhancer.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/OAuth2TestConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`
     ],
@@ -716,6 +726,15 @@ const expectedFiles = {
         `${DOCKER_DIR}couchbase/scripts/configure-node.sh`
     ],
 
+    neo4j: [
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/AbstractNeo4jIT.java`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__admin.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__system.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__user.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__anonymoususer.json`,
+        `${DOCKER_DIR}neo4j.yml`
+    ],
+
     cassandra: [
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`,
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace.cql`,
@@ -732,6 +751,7 @@ const expectedFiles = {
 
     elasticsearch: [
         `${DOCKER_DIR}elasticsearch.yml`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/ElasticsearchTestConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`
     ],

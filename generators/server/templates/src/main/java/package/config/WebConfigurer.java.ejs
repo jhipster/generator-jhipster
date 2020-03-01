@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 
 <%_ if (reactive) { _%>
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -250,12 +250,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
     }
 
         <%_ if (!skipClient) { _%>
-    @Bean
-    RouterFunction<ServerResponse> index() {
-        // Redirect "/" to "/index.html"
-        return route(GET("/"), req -> ServerResponse.temporaryRedirect(URI.create("index.html")).build());
-    }
-
     @Bean
     ResourceHandlerRegistrationCustomizer registrationCustomizer() {
         // Disable built-in cache control to use our custom filter instead

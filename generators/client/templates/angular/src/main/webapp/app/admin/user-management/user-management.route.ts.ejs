@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,27 +17,26 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot, Routes } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { JhiResolvePagingParams } from 'ng-jhipster';
 
-import { User } from 'app/core/user/user.model';
+import { User, IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { UserManagementComponent } from './user-management.component';
 import { UserManagementDetailComponent } from './user-management-detail.component';
 import { UserManagementUpdateComponent } from './user-management-update.component';
 
-@Injectable({providedIn: 'root'})
-export class UserManagementResolve implements Resolve<any> {
+@Injectable({ providedIn: 'root' })
+export class UserManagementResolve implements Resolve<IUser> {
+    constructor(private service: UserService) {}
 
-    constructor(private service: UserService) {
-    }
-
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const id = route.params['login'] ? route.params['login'] : null;
+    resolve(route: ActivatedRouteSnapshot): Observable<IUser> {
+        const id = route.params['login'];
         if (id) {
             return this.service.find(id);
         }
-        return new User();
+        return of(new User());
     }
 }
 
@@ -46,10 +45,9 @@ export const userManagementRoute: Routes = [
         path: '',
         component: UserManagementComponent,
         resolve: {
-            'pagingParams': JhiResolvePagingParams
+            pagingParams: JhiResolvePagingParams
         },
         data: {
-            pageTitle: 'userManagement.home.title',
             defaultSort: 'id,asc'
         }
     },
@@ -58,9 +56,6 @@ export const userManagementRoute: Routes = [
         component: UserManagementDetailComponent,
         resolve: {
             user: UserManagementResolve
-        },
-        data: {
-            pageTitle: 'userManagement.home.title'
         }
     },
     {

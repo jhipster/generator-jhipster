@@ -42,14 +42,6 @@
             "otherEntityRelationshipName": "testManyToMany"
         },
         {
-            "relationshipName": "testPager",
-            "otherEntityName": "testPager",
-            "relationshipType": "many-to-many",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "testManyToMany"
-        },
-        {
             "relationshipName": "testPagination",
             "otherEntityName": "testPagination",
             "relationshipType": "many-to-many",

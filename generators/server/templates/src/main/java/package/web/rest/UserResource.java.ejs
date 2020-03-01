@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,32 +16,32 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest;
 
-import <%=packageName%>.config.Constants;
+import <%= packageName %>.config.Constants;
 <%_ if (authenticationType !== 'oauth2' || searchEngine === 'elasticsearch') { _%>
-import <%=packageName%>.domain.<%= asEntity('User') %>;
+import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.repository.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-import <%=packageName%>.repository.search.UserSearchRepository;
+import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
-import <%=packageName%>.security.AuthoritiesConstants;
+import <%= packageName %>.security.AuthoritiesConstants;
 <%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.service.MailService;
+import <%= packageName %>.service.MailService;
 <%_ } _%>
-import <%=packageName%>.service.UserService;
-import <%=packageName%>.service.dto.<%= asDto('User') %>;
+import <%= packageName %>.service.UserService;
+import <%= packageName %>.service.dto.<%= asDto('User') %>;
 <%_ if (authenticationType !== 'oauth2') { _%>
-import <%=packageName%>.web.rest.errors.BadRequestAlertException;
-import <%=packageName%>.web.rest.errors.EmailAlreadyUsedException;
-import <%=packageName%>.web.rest.errors.LoginAlreadyUsedException;
+import <%= packageName %>.web.rest.errors.BadRequestAlertException;
+import <%= packageName %>.web.rest.errors.EmailAlreadyUsedException;
+import <%= packageName %>.web.rest.errors.LoginAlreadyUsedException;
 <%_ } _%>
 
 import io.github.jhipster.web.util.HeaderUtil;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 import io.github.jhipster.web.util.PaginationUtil;
 <%_ } _%>
 <%_ if (!reactive) { _%>
@@ -51,7 +51,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
     <%_ } else { _%>
@@ -101,7 +101,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 /**
  * REST controller for managing users.
  * <p>
- * This class accesses the {@link <% if (!(authenticationType !== 'oauth2' || searchEngine === 'elasticsearch')) { %><%=packageName%>.domain.<% } %><%= asEntity('User') %>} entity, and needs to fetch its collection of authorities.
+ * This class accesses the {@link <% if (!(authenticationType !== 'oauth2' || searchEngine === 'elasticsearch')) { %><%= packageName %>.domain.<% } %><%= asEntity('User') %>} entity, and needs to fetch its collection of authorities.
  * <p>
  * For a normal use-case, it would be better to have an eager relationship between User and Authority,
  * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join
@@ -144,7 +144,6 @@ public class UserResource {
 <%_ } _%>
 
     public UserResource(UserService userService<% if (authenticationType !== 'oauth2') { %>, UserRepository userRepository, MailService mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, UserSearchRepository userSearchRepository<% } %>) {
-
         this.userService = userService;
         <%_ if (authenticationType !== 'oauth2') { _%>
         this.userRepository = userRepository;
@@ -187,7 +186,7 @@ public class UserResource {
             <%= asEntity('User') %> newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) {%> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
+                .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
                 .body(newUser);
         }
         <%_ } else { _%>
@@ -195,15 +194,15 @@ public class UserResource {
         return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
             .hasElement()
             .flatMap(loginExists -> {
-                if (loginExists) {
-                    throw new LoginAlreadyUsedException();
+                if (Boolean.TRUE.equals(loginExists)) {
+                    return Mono.error(new LoginAlreadyUsedException());
                 }
                 return userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
             })
             .hasElement()
             .flatMap(emailExists -> {
-                if (emailExists) {
-                    throw new EmailAlreadyUsedException();
+                if (Boolean.TRUE.equals(emailExists)) {
+                    return Mono.error(new EmailAlreadyUsedException());
                 }
                 return userService.createUser(userDTO);
             })
@@ -252,16 +251,16 @@ public class UserResource {
             .filter(user -> !user.getId().equals(userDTO.getId()))
             .hasElement()
             .flatMap(emailExists -> {
-                if (emailExists) {
-                    throw new EmailAlreadyUsedException();
+                if (Boolean.TRUE.equals(emailExists)) {
+                    return Mono.error(new EmailAlreadyUsedException());
                 }
                 return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
             })
             .filter(user -> !user.getId().equals(userDTO.getId()))
             .hasElement()
             .flatMap(loginExists -> {
-                if (loginExists) {
-                    throw new LoginAlreadyUsedException();
+                if (Boolean.TRUE.equals(loginExists)) {
+                    return Mono.error(new LoginAlreadyUsedException());
                 }
                 return userService.updateUser(userDTO);
             })
@@ -276,7 +275,7 @@ public class UserResource {
 <%_ } _%>
     /**
      * {@code GET /users} : get all users.
-     *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+     *<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType == 'neo4j' || databaseType === 'couchbase') { %>
         <%_ if (reactive) { _%>
      * @param request a {@link ServerHttpRequest} request.
         <%_ } _%>
@@ -284,7 +283,7 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */
     @GetMapping("/users")
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         <%_ if (!reactive) { _%>
     public ResponseEntity<List<<%= asDto('User') %>>> getAllUsers(Pageable pageable) {
         final Page<<%= asDto('User') %>> page = userService.getAllManagedUsers(pageable);
@@ -349,7 +348,7 @@ public class UserResource {
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
-        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) {%> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.deleted"<% } else { %> "A user is deleted with identifier " + login<% } %>, login)).build();
     <%_ } else { _%>
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable String login) {

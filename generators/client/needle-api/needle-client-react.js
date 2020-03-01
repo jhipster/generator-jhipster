@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -35,7 +35,7 @@ module.exports = class extends needleClientBase {
         const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/shared/layout/menus/entities.tsx`;
         const entityEntry =
             // prettier-ignore
-            this.generator.stripMargin(`|<MenuItem icon="asterisk" to="/entity/${routerName}">
+            this.generator.stripMargin(`|<MenuItem icon="asterisk" to="/${routerName}">
                         |      ${enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${_.startCase(routerName)}`}
                         |    </MenuItem>`);
         const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
@@ -62,7 +62,7 @@ module.exports = class extends needleClientBase {
         const indexAddRoutePathRewriteFileModel = this.generateFileModel(
             indexModulePath,
             'jhipster-needle-add-route-path',
-            this.generator.stripMargin(`|<ErrorBoundaryRoute path={\`\${match.url}/${entityFileName}\`} component={${entityName}} />`)
+            this.generator.stripMargin(`|<ErrorBoundaryRoute path={\`\${match.url}${entityFileName}\`} component={${entityName}} />`)
         );
         this.addBlockContentToFile(indexAddRoutePathRewriteFileModel, errorMessage(indexModulePath));
 

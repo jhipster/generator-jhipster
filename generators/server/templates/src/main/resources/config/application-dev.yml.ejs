@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -36,7 +36,10 @@ logging:
         ROOT: DEBUG
         io.github.jhipster: DEBUG
         <%_ if (packageName !== 'io.github.jhipster') { _%>
-        <%=packageName%>: DEBUG
+        <%= packageName %>: DEBUG
+        <%_ } _%>
+        <%_ if (databaseType === 'neo4j') { _%>
+        org.neo4j.driver: WARN
         <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
@@ -58,6 +61,22 @@ management:
             enabled: false
 
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+org:
+    neo4j:
+        driver:
+            pool:
+                metrics-enabled: true
+            uri: bolt://localhost:7687
+            # Uncomment to use an authenticated connection
+            # authentication:
+            #     username: neo4j
+            #     password: secret
+        migrations:
+            locations-to-scan:
+            packages-to-scan: <%= packageName %>.config.neo4j
+            installed-by: <%= baseName %>
+<%_ } _%>
 spring:
     profiles:
         active: dev
@@ -68,27 +87,12 @@ spring:
     devtools:
         restart:
             enabled: true
-            <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-            additional-exclude: .h2.server.properties
-            <%_ } _%>
+            additional-exclude: static/**<% if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %>,.h2.server.properties<% } %>
         livereload:
             enabled: false # we use Webpack dev server + BrowserSync for livereload
     jackson:
         serialization:
             indent-output: true
-    <%_ if (messageBroker === 'kafka') { _%>
-    kafka:
-        consumer:
-            bootstrap-servers: localhost:9092
-            group-id: group_id
-            auto-offset-reset: earliest
-            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        producer:
-            bootstrap-servers: localhost:9092
-            key-serializer: org.apache.kafka.common.serialization.StringSerializer
-            value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
         consul:
@@ -101,7 +105,7 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         <%_ if (devDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
         username: root
         password:
         <%_ } else if (devDatabaseType === 'mariadb') { _%>
@@ -145,27 +149,10 @@ spring:
             enabled: false
     <%_ } _%>
     jpa:
-        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') { _%>
-        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-        <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL95Dialect
-        <%_ } else if (devDatabaseType === 'oracle') { _%>
-        database-platform: org.hibernate.dialect.Oracle12cDialect
-        <%_ } else if (devDatabaseType === 'mssql') { _%>
-        database-platform: org.hibernate.dialect.SQLServer2012Dialect
-        <%_ } else { _%>
+        <%_ if (devDatabaseType === 'postgresql') { _%>
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
+        <%_ } else if (devDatabaseType === 'h2disk' || devDatabaseType === 'h2Memory') { _%>
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
-        <%_ } _%>
-        <%_ if (devDatabaseType === 'mysql' || devDatabaseType === 'mariadb') { _%>
-        database: MYSQL
-        <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        database: POSTGRESQL
-        <%_ } else if (devDatabaseType === 'oracle') { _%>
-        database: ORACLE
-        <%_ } else if (devDatabaseType === 'mssql') { _%>
-        database: SQL_SERVER
-        <%_ } else { _%>
-        database: H2
         <%_ } _%>
         show-sql: true
         properties:
@@ -221,8 +208,10 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
+    <%_ if (!skipFakeData) { _%>
         # Remove 'faker' if you do not want the sample data to be loaded automatically
-        contexts: dev, faker
+    <%_ } _%>
+        contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
     <%_ } _%>
     mail:
         host: localhost
@@ -273,7 +262,7 @@ jhipster:
             management-center: # Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
                 enabled: false
                 update-interval: 3
-                url: http://localhost:8180/mancenter
+                url: http://localhost:8180/hazelcast-mancenter
         <%_ } _%>
         <%_ if (cacheProvider === 'ehcache') { _%>
         ehcache: # Ehcache configuration
@@ -312,6 +301,10 @@ jhipster:
         <%_ if (cacheProvider === 'redis') { _%>
         redis: # Redis configuration
             expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+            server: redis://localhost:6379
+            cluster: false
+            # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
+            # cluster: true
         <%_ } _%>
     <%_ } _%>
     <%_ if (applicationType !== 'microservice') { _%>

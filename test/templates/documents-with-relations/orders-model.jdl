@@ -1,10 +1,10 @@
 /* Customers */
 entity Customer {
-	username String required minlength(3) maxlength(250),
-	password String required minlength(3) maxlength(250),
-	email String required minlength(3) maxlength(250),
-	firstName String required minlength(3) maxlength(250),
-	lastName String required minlength(3) maxlength(250)
+    username String required minlength(3) maxlength(250),
+    password String required minlength(3) maxlength(250),
+    email String required minlength(3) maxlength(250),
+    firstName String required minlength(3) maxlength(250),
+    lastName String required minlength(3) maxlength(250)
 }
 
 
@@ -12,34 +12,34 @@ entity Customer {
 enum OrderStatus { CONFIRMED, SHIPPED, DELIVERED }
 
 entity CustomerOrder { // Order is a reserved word
-	date Instant,
-	status OrderStatus
+    date Instant,
+    status OrderStatus
 }
 entity OrderedItem {
-	catalogItemId Long,
-	name String required minlength(3) maxlength(250),
-	price BigDecimal required,
-	quantity Integer
+    catalogItemId Long,
+    name String required minlength(3) maxlength(250),
+    price BigDecimal required,
+    quantity Integer
 }
 entity PaymentDetails {
-	creditCardNumber String
+    creditCardNumber String
 }
 
 entity ShippingDetails {
-	address String
+    address String
 }
 
 relationship OneToOne {
-	CustomerOrder{paymentDetails(creditCardNumber)} to PaymentDetails
+    CustomerOrder{paymentDetails(creditCardNumber)} to PaymentDetails
 }
 
 relationship ManyToOne {
-	CustomerOrder{customer(username)} to Customer,
-	CustomerOrder{shippingDetails(address)} to ShippingDetails
+    CustomerOrder{customer(username)} to Customer,
+    CustomerOrder{shippingDetails(address)} to ShippingDetails
 }
 
 relationship ManyToMany {
-	CustomerOrder{orderedItems(name)} to OrderedItem
+    CustomerOrder{orderedItems(name)} to OrderedItem{customerOrder}
 }
 
 

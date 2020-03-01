@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,8 +22,10 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const statistics = require('../statistics');
-
 const constants = require('../generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 let useBlueprints;
 
@@ -80,7 +82,7 @@ module.exports = class extends BaseBlueprintGenerator {
         }
 
         useBlueprints =
-            !opts.fromBlueprint &&
+            !this.fromBlueprint &&
             this.instantiateBlueprints('languages', { languages: this.languages, arguments: this.options.languages });
     }
 
@@ -228,10 +230,10 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.updateLanguagesInLanguagePipe(this.languages);
                     this.updateLanguagesInLanguageConstantNG2(this.languages);
                     this.updateLanguagesInWebpack(this.languages);
-                    if (this.clientFramework === 'angularX') {
+                    if (this.clientFramework === ANGULAR) {
                         this.updateLanguagesInMomentWebpackNgx(this.languages);
                     }
-                    if (this.clientFramework === 'react') {
+                    if (this.clientFramework === REACT) {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
                 }

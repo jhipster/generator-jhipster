@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,11 +22,13 @@ const didYouMean = require('didyoumean');
 const meow = require('meow');
 const yeoman = require('yeoman-environment');
 const _ = require('lodash');
+const path = require('path');
 
-const SUB_GENERATORS = require('./commands');
+const { normalizeBlueprintName, packageNameToNamespace } = require('../generators/utils');
 
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
+
 const debug = function(msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
@@ -42,6 +44,19 @@ const log = function(msg) {
 };
 
 const error = function(msg, trace) {
+    console.error(`${chalk.red(msg)}`);
+    if (trace) {
+        console.log(trace);
+    }
+    process.exitCode = 1;
+};
+
+/**
+ *  Use with carefull.
+ *  process.exit is not recommended by Node.js.
+ *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
+ */
+const fatal = function(msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
@@ -65,7 +80,8 @@ const logger = {
     debug,
     info,
     log,
-    error
+    error,
+    fatal
 };
 
 const toString = item => {
@@ -162,7 +178,7 @@ const getCommand = (cmd, args, opts) => {
     }
     const cmdArgs = options.join(' ').trim();
     logger.debug(`cmdArgs: ${cmdArgs}`);
-    return `${CLI_NAME}:${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
+    return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
 const getCommandOptions = (pkg, argv) => {
@@ -188,20 +204,60 @@ const done = errorMsg => {
     }
 };
 
-const createYeomanEnv = () => {
+const createYeomanEnv = packagePatterns => {
     const env = yeoman.createEnv();
-    /* Register yeoman generators */
-    Object.keys(SUB_GENERATORS)
-        .filter(command => !SUB_GENERATORS[command].cliOnly)
-        .forEach(generator => {
-            if (SUB_GENERATORS[generator].blueprint) {
-                /* eslint-disable prettier/prettier */
-                env.register(require.resolve(`${SUB_GENERATORS[generator].blueprint}/generators/${generator}`), `${CLI_NAME}:${generator}`);
-            } else {
-                env.register(require.resolve(`../generators/${generator}`), `${CLI_NAME}:${generator}`);
-            }
-        });
+    // Register jhipster generators.
+    env.lookup({ packagePaths: [path.join(__dirname, '..')] });
+    if (packagePatterns) {
+        // Lookup for blueprints.
+        env.lookup({ packagePatterns });
+    }
     return env;
+};
+
+const loadBlueprints = () => {
+    const blueprintNames = [];
+    const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
+    if (indexOfBlueprintArgv > -1) {
+        blueprintNames.push(process.argv[indexOfBlueprintArgv + 1]);
+    }
+    const indexOfBlueprintsArgv = process.argv.indexOf('--blueprints');
+    if (indexOfBlueprintsArgv > -1) {
+        blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
+    }
+    if (!blueprintNames.length) {
+        return undefined;
+    }
+    return blueprintNames.filter((v, i, a) => a.indexOf(v) === i).map(v => normalizeBlueprintName(v));
+};
+
+const loadBlueprintCommands = (env, blueprints) => {
+    if (!blueprints) {
+        return undefined;
+    }
+    let result;
+    blueprints.forEach(blueprint => {
+        const namespace = packageNameToNamespace(blueprint);
+        const packagePath = env.getPackagePath(namespace);
+        if (!packagePath) {
+            logger.fatal(
+                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
+                    `npm i -g ${blueprint}`
+                )}`
+            );
+        }
+        /* eslint-disable import/no-dynamic-require */
+        /* eslint-disable global-require */
+        try {
+            const blueprintCommands = require(`${packagePath}/cli/commands`);
+            result = { ...result, ...blueprintCommands };
+        } catch (e) {
+            const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
+            /* eslint-disable no-console */
+            console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+        }
+    });
+    return result;
 };
 
 module.exports = {
@@ -216,5 +272,7 @@ module.exports = {
     getCommandOptions,
     done,
     createYeomanEnv,
+    loadBlueprints,
+    loadBlueprintCommands,
     getOptionAsArgs
 };
