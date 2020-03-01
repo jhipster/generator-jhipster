@@ -519,7 +519,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>))
             .exchange()
             .expectStatus().isCreated();
@@ -575,7 +575,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>))
             .exchange()
             .expectStatus().isBadRequest();
@@ -688,7 +688,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/<%= entityApiUrl %>")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>))
             .exchange()
             .expectStatus().isBadRequest();
