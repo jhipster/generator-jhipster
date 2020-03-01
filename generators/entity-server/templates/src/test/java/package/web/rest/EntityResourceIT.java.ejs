@@ -766,17 +766,17 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
             .expectBody()
         <%_ } _%>
             <%_ if (databaseType === 'sql' && hasOauthUser === true || ['mongodb', 'couchbase'].includes(databaseType)) { _%>
-            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId()))<% if (!reactive) { %>)<% } %>
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId()))<%= !reactive ? ')' : '' %>
             <%_ } else if (databaseType === 'sql') { _%>
-            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().intValue()))<% if (!reactive) { %>)<% } %>
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().intValue()))<%= !reactive ? ')' : '' %>
             <%_ } else if (databaseType === 'cassandra') { _%>
-            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().toString()))<% if (!reactive) { %>)<% } %>
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().toString()))<%= !reactive ? ')' : '' %>
             <%_ } _%>
             <% for (idx in fields) { %>
                 <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].<%= fields[idx].fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<% if (!reactive) { %>)<% } %>
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= fields[idx].fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%= !reactive ? ')' : '' %>
                 <%_ } _%>
-            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<% if (!reactive) { %>)<% } %><% } %>;
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><% } %>;
     }
     <% if (fieldsContainOwnerManyToMany === true) { %>
     @SuppressWarnings({"unchecked"})
