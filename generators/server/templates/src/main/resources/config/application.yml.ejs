@@ -187,6 +187,11 @@ spring:
         open-in-view: false
         properties:
             hibernate.jdbc.time_zone: UTC
+            hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
+            hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
             # modify batch size as necessary
             hibernate.jdbc.batch_size: 25
             hibernate.order_inserts: true
