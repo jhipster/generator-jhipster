@@ -826,20 +826,34 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
 
         // Get the <%= entityInstance %>
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
-            .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId()))<% } else if (databaseType === 'sql') { %>
-            .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId().intValue()))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-            .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId()))<% } %><% if (databaseType === 'cassandra') { %>
-            .andExpect(jsonPath("$.id").value(<%= asEntity(entityInstance) %>.getId().toString()))<% } %><% for (idx in fields) { %>
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+        <%_ } else { _%>
+        webTestClient.get().uri("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+        <%_ } _%>
+        <%_ if (['sql', 'mongodb', 'couchbase', 'cassandra'].includes(databaseType)) {
+            let idValue = `${asEntity(entityInstance)}.getId()`;
+            if (databaseType === 'sql' && hasOauthUser !== true) {
+                idValue = idValue + '.intValue()';
+            } else if (databaseType === 'cassandra') {
+                idValue = idValue + '.toString()';
+            }
+        _%>
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.id").<%= !reactive ? 'value' : 'isEqualTo' %>(<%= idValue %>)<%= !reactive ? ')' : '' %><%_ } _%><% for (idx in fields) { %>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            .andExpect(jsonPath("$.<%= fields[idx].fieldName %>ContentType").value(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= fields[idx].fieldName %>ContentType").<%= !reactive ? 'value' : 'isEqualTo' %>(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<%= !reactive ? ')' : '' %>
             <%_ } _%>
-            .andExpect(jsonPath("$.<%= fields[idx].fieldName %>").value(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<% } %>;
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= fields[idx].fieldName %>").<%= !reactive ? 'value' : 'isEqualTo' %>(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>)<%= !reactive ? ')' : '' %><%_ } _%>;
     }
 <%_ if (jpaMetamodelFiltering) {  %>
 
@@ -1098,8 +1112,15 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>Long.MAX_VALUE<% } if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
+        <%_ if (!reactive) { _%>
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { %>Long.MAX_VALUE<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
             .andExpect(status().isNotFound());
+        <%_ } else { _%>
+        webTestClient.get().uri("/api/<%= entityApiUrl %>/{id}", <% if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { %>Long.MAX_VALUE<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isNotFound();
+        <%_ } _%>
     }
 <%_ if (!readOnly) { _%>
 
