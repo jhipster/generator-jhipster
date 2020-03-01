@@ -289,13 +289,13 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isCreated();
@@ -347,13 +347,13 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
         // An entity with an existing ID cannot be created, so this API call must fail
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
@@ -392,13 +392,13 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
         // Create the User
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
@@ -437,13 +437,13 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
         // Create the User
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
@@ -605,13 +605,13 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isOk();
@@ -669,13 +669,13 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isOk();
@@ -751,13 +751,13 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
@@ -819,13 +819,13 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
@@ -848,12 +848,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
         // Delete the user
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(delete("/api/users/{login}", user.getLogin())
-            .accept(TestUtil.APPLICATION_JSON)<% if (testsNeedCsrf) { %>
+            .accept(MediaType.APPLICATION_JSON)<% if (testsNeedCsrf) { %>
             .with(csrf())<% } %>)
             .andExpect(status().isNoContent());
         <%_ } else { _%>
         webTestClient.delete().uri("/api/users/{login}", user.getLogin())
-            .accept(TestUtil.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isNoContent();
         <%_ } _%>
@@ -876,15 +876,15 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     public void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/users/authorities")
-            .accept(TestUtil.APPLICATION_JSON)
-            .contentType(TestUtil.APPLICATION_JSON))
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
         <%_ } else { _%>
         webTestClient.get().uri("/api/users/authorities")
-            .accept(TestUtil.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
