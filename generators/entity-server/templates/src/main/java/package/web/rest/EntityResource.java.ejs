@@ -301,7 +301,7 @@ public class <%= entityClass %>Resource {
     <%_ if (databaseType === 'sql' && isUsingMapsId === true && !viaService) { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= primaryKeyType %> id) {
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> get<%= entityClass %>(@PathVariable <%= primaryKeyType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:false}); -%>
         return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
     }
