@@ -45,7 +45,7 @@ jobs:
             <%_ if (!skipClient) { _%>
             JHI_DISABLE_WEBPACK_LOGS: true
             <%_ } _%>
-            <%_ if (clientFramework === 'angularX') { _%>
+            <%_ if (clientFramework === ANGULAR) { _%>
             NG_CLI_ANALYTICS: false
             <%_ } _%>
         steps:

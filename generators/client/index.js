@@ -86,6 +86,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
