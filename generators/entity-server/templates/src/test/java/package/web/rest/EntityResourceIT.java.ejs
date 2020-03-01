@@ -496,7 +496,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     @BeforeEach
     public void initTest() {
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
-        <%= entityInstance %>Repository.deleteAll();
+        <%= entityInstance %>Repository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         <%_ } _%>
         <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
     }
@@ -711,20 +711,33 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
 
         // Get all the <%= entityInstance %>List
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %><% if (databaseType !== 'cassandra') { %>?sort=id,desc<% } %>"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))<% if (databaseType === 'sql' && hasOauthUser === true) { %>
-            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } else if (databaseType === 'sql') { %>
-            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().intValue())))<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId())))<% } %><% if (databaseType === 'cassandra') { %>
-            .andExpect(jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().toString())))<% } %><% for (idx in fields) { %>
-            <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            .andExpect(jsonPath("$.[*].<%= fields[idx].fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+        <%_ } else { _%>
+        webTestClient.get().uri("/api/<%= entityApiUrl %>?sort=id,desc")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
+            .expectBody()
+        <%_ } _%>
+            <%_ if (databaseType === 'sql' && hasOauthUser === true || ['mongodb', 'couchbase'].includes(databaseType)) { _%>
+            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId()))<% if (!reactive) { %>)<% } %>
+            <%_ } else if (databaseType === 'sql') { _%>
+            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().intValue()))<% if (!reactive) { %>)<% } %>
+            <%_ } else if (databaseType === 'cassandra') { _%>
+            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].id").value(hasItem(<%= asEntity(entityInstance) %>.getId().toString()))<% if (!reactive) { %>)<% } %>
             <%_ } _%>
-            .andExpect(jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>)))<% } %>;
+            <% for (idx in fields) { %>
+                <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
+            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].<%= fields[idx].fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<% if (!reactive) { %>)<% } %>
+                <%_ } _%>
+            .<% if (!reactive) { %>andExpect(<% } %>jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<% if (!reactive) { %>)<% } %><% } %>;
     }
     <% if (fieldsContainOwnerManyToMany === true) { %>
     @SuppressWarnings({"unchecked"})
