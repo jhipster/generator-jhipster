@@ -66,21 +66,21 @@ _%>
             <%_ if (fieldsContainOwnerManyToMany) { _%>
         Page<<%= instanceType %>> page;
         if (eagerload) {
-            page = <%= entityInstance %><% if (viaService) { %>Service<% } else { %>Repository<% } %>.findAllWithEagerRelationships(pageable)<% if (dto === 'mapstruct' && !viaService) { %>.map(<%= entityToDtoReference %>)<% } %>;
+            page = <%= entityInstance %><%= viaService ? 'Service' : 'Repository' %>.findAllWithEagerRelationships(pageable)<% if (dto === 'mapstruct' && !viaService) { %>.map(<%= entityToDtoReference %>)<% } %>;
         } else {
-            page = <%= entityInstance %><% if (viaService) { %>Service<% } else { %>Repository<% } %>.findAll(pageable)<% if (dto !== 'mapstruct' && !viaService) { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
+            page = <%= entityInstance %><%= viaService ? 'Service' : 'Repository' %>.findAll(pageable)<% if (dto !== 'mapstruct' && !viaService) { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
             <%_ } else { _%>
-        Page<<%= instanceType %>> page = <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct' || viaService) { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
+        Page<<%= instanceType %>> page = <%= entityInstance %><%= viaService ? 'Service' : 'Repository' %>.findAll(pageable)<% if (dto !== 'mapstruct' || viaService) { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>UriComponentsBuilder.fromHttpRequest(request)<% } %>, page);
             <%_ } _%>
         return ResponseEntity.ok().headers(headers).body(page.getContent());
         <%_ } else { _%>
-        return <%= entityInstance %><% if (viaService) { %>Service<% } else { %>Repository<% } %>.count()
+        return <%= entityInstance %><%= viaService ? 'Service' : 'Repository' %>.count()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
-            .map(headers -> ResponseEntity.ok().headers(headers).body(<%= entityInstance %><% if (viaService) { %>Service.findAll<% } else { %>Repository.findAllBy<% } %>(pageable)));
+            .map(headers -> ResponseEntity.ok().headers(headers).body(<%= entityInstance %><%= viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)));
         <%_ } _%>
     <%_ } _%>
     }
