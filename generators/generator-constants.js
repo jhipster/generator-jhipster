@@ -129,7 +129,7 @@ const SQL_DB_OPTIONS = [
     },
     {
         value: 'oracle',
-        name: 'Oracle (Please follow our documentation to use the Oracle proprietary driver)'
+        name: 'Oracle'
     },
     {
         value: 'mssql',
