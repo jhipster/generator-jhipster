@@ -81,6 +81,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
     <%_ if (reactive) { _%>
 import org.springframework.http.server.reactive.ServerHttpRequest;
     <%_ } _%>
@@ -89,9 +90,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
     <%_ } else { _%>
 import org.springframework.web.util.UriComponentsBuilder;
     <%_ } _%>
+<%_ } else if (reactiveRepositories) { _%>
+import org.springframework.http.HttpStatus;
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
