@@ -319,10 +319,20 @@ public class <%= entityClass %>Resource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/<%= entityApiUrl %>/{id}")
-    public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <%= primaryKeyType %> id) {
+    <%_ if (reactive) { _%>
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    <%_ } _%>
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%= entityClass %>(@PathVariable <%= primaryKeyType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
+    <%_ if (!reactive) { _%>
 <%- include('../../common/delete_template', {viaService: viaService}); -%>
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build();
+    <%_ } else { _%>
+        return <%= entityInstance %><%= service !== 'no' ? 'Service.delete' : 'Repository.deleteById' %>(id)
+            .map(result -> ResponseEntity.noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (pkType !== 'String') { %>.toString()<% } %>)).build()
+            );
+    <%_ } _%>
     }
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
