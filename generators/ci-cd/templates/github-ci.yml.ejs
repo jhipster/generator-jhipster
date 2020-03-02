@@ -45,11 +45,11 @@ jobs:
             <%_ if (!skipClient) { _%>
             JHI_DISABLE_WEBPACK_LOGS: true
             <%_ } _%>
-            <%_ if (clientFramework === 'angularX') { _%>
+            <%_ if (clientFramework === ANGULAR) { _%>
             NG_CLI_ANALYTICS: false
             <%_ } _%>
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
               <%_ if (!skipClient) { _%>
             - uses: actions/setup-node@v1
               with:

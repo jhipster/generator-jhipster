@@ -31,8 +31,11 @@ const jhipsterUtils = require('../generators/utils');
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
+const constants = require('../generators/generator-constants');
 
 const runYeomanProcess = require.resolve('./run-yeoman-process.js');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 // holds the state of generation for interactive mode
 const generationCompletionState = {
@@ -278,7 +281,7 @@ class JDLProcessor {
             this.devDatabaseType = configuration.devDatabaseType || this.options.db;
             this.skipClient = configuration.skipClient;
             this.clientFramework = configuration.clientFramework;
-            this.clientFramework = this.clientFramework || 'angularX';
+            this.clientFramework = this.clientFramework || ANGULAR;
             this.clientPackageManager = configuration.clientPackageManager;
             if (!this.clientPackageManager) {
                 if (this.useNpm) {

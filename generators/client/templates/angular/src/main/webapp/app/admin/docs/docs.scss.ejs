@@ -16,12 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export const enum <%= enumName %> {
-<% enumsWithCustomValue.forEach((enumWithCustomValue, index) => { %>
-  <% if (!enumWithCustomValue.value) { %>
-  <%= enumWithCustomValue.name %> = '<%= enumWithCustomValue.name %>'
-  <% } else { %>
-  <%= enumWithCustomValue.name %> = '<%= enumWithCustomValue.value %>'
-  <% } %><% if (index < enumsWithCustomValue.length - 1) { %>,<% } %>
-<% }); %>
+
+@import '~bootstrap/scss/functions';
+<%_ if (clientTheme !== 'none') { _%>
+@import "~bootswatch/dist/<%= clientTheme %>/variables";
+<%_ } _%>
+@import '~bootstrap/scss/variables';
+
+iframe {
+    background: white
 }

@@ -28,6 +28,7 @@ const SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 const shouldSkipUserManagement = generator =>
     generator.skipUserManagement && (generator.applicationType !== 'monolith' || generator.authenticationType !== 'oauth2');
@@ -201,7 +202,7 @@ const serverFiles = {
     ],
     serverResource: [
         {
-            condition: generator => generator.clientFramework === 'react',
+            condition: generator => generator.clientFramework === REACT,
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -213,7 +214,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.clientFramework !== 'react',
+            condition: generator => generator.clientFramework !== REACT,
             path: SERVER_MAIN_RES_DIR,
             templates: [{ file: 'banner.txt', method: 'copy', noEjs: true }]
         },
@@ -804,7 +805,7 @@ const serverFiles = {
                     )
                 ) && generator.applicationType === 'microservice',
             path: SERVER_MAIN_RES_DIR,
-            templates: [{ file: 'static/microservices_index.html', method: 'copy', renameTo: () => 'static/index.html' }]
+            templates: [{ file: 'static/microservices_index.html', renameTo: () => 'static/index.html' }]
         }
     ],
     serverMicroserviceAndGateway: [

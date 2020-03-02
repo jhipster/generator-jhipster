@@ -29,6 +29,7 @@ const statistics = require('../statistics');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
@@ -186,7 +187,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 context.clientFramework = configuration.get('clientFramework');
                 if (!context.clientFramework) {
-                    context.clientFramework = 'angularX';
+                    context.clientFramework = ANGULAR;
                 }
                 context.clientPackageManager = configuration.get('clientPackageManager');
                 if (!context.clientPackageManager) {
@@ -1145,7 +1146,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (this.isJhipsterVersionLessThan('5.0.0')) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
                 }
-                if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === 'angularX') {
+                if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === ANGULAR) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
                 }
             },

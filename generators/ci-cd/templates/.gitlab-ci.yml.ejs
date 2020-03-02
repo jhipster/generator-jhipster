@@ -43,7 +43,7 @@ stages:
 
 <%_ if (buildTool === 'gradle') { _%>
 before_script:
-    <%_ if (clientFramework === 'angularX') { _%>
+    <%_ if (clientFramework === ANGULAR) { _%>
     - export NG_CLI_ANALYTICS="false"
     <%_ } _%>
     - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -152,7 +152,7 @@ deploy-to-production:
 <%_ } _%>
 <%_ if (buildTool === 'maven') { _%>
 before_script:
-    <%_ if (clientFramework === 'angularX') { _%>
+    <%_ if (clientFramework === ANGULAR) { _%>
     - export NG_CLI_ANALYTICS="false"
     <%_ } _%>
     - export MAVEN_USER_HOME=`pwd`/.maven

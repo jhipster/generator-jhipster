@@ -44,6 +44,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 <%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 <%_ if (!skipUserManagement) { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
@@ -91,10 +92,10 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
     @Autowired
     private UserRepository userRepository;
 
-    <%_ }  _%>
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    <%_ }  _%>
     @Autowired
     <%_ if (reactive) { _%>
     private WebTestClient webTestClient;
@@ -133,7 +134,7 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
         login.setPassword("test");
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
@@ -142,7 +143,7 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
             .andExpect(header().string("Authorization", not(is(emptyString()))));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isOk()
@@ -184,7 +185,7 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
         login.setRememberMe(true);
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id_token").isString())
@@ -193,7 +194,7 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
             .andExpect(header().string("Authorization", not(is(emptyString()))));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isOk()
@@ -210,14 +211,14 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
         login.setPassword("wrong password");
         <%_ if (!reactive) { _%>
         mockMvc.perform(post("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(login)))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.id_token").doesNotExist())
             .andExpect(header().doesNotExist("Authorization"));
         <%_ } else { _%>
         webTestClient.post().uri("/api/authenticate")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .syncBody(TestUtil.convertObjectToJsonBytes(login))
             .exchange()
             .expectStatus().isUnauthorized()

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const semver = require('semver');
 
 // Version of Java
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
@@ -30,10 +31,12 @@ const GRADLE_VERSION = '6.1';
 // Libraries version
 const JIB_VERSION = '2.0.0';
 
+const LIQUIBASE_VERSION = '3.8.7';
+const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
+const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
+
 const JACOCO_VERSION = '0.8.5';
-
 const KAFKA_VERSION = '5.4.0';
-
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // Version of docker images
@@ -48,9 +51,9 @@ const DOCKER_CASSANDRA = 'cassandra:3.11.5';
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2017-latest-ubuntu';
 const DOCKER_NEO4J = 'neo4j:4.0';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.8';
-const DOCKER_MEMCACHED = 'memcached:1.5.21-alpine';
+const DOCKER_MEMCACHED = 'memcached:1.5.22-alpine';
 const DOCKER_REDIS = 'redis:5.0.7';
-const DOCKER_KEYCLOAK = 'jboss/keycloak:8.0.1'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
+const DOCKER_KEYCLOAK = 'jboss/keycloak:9.0.0'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.6'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
@@ -61,16 +64,16 @@ const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.1.0';
 const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.1.0';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.1.0';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.1.0';
-const DOCKER_TRAEFIK = 'traefik:1.7.20';
-const DOCKER_CONSUL = 'consul:1.6.2';
+const DOCKER_TRAEFIK = 'traefik:1.7.21';
+const DOCKER_CONSUL = 'consul:1.7.1';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
-const DOCKER_PROMETHEUS = 'prom/prometheus:v2.15.2';
+const DOCKER_PROMETHEUS = 'prom/prometheus:v2.16.0';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.20.0';
-const DOCKER_GRAFANA = 'grafana/grafana:6.6.0';
+const DOCKER_GRAFANA = 'grafana/grafana:6.6.2';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';
-const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.35.1';
+const DOCKER_PROMETHEUS_OPERATOR = 'quay.io/coreos/prometheus-operator:v0.36.0';
 const DOCKER_GRAFANA_WATCHER = 'quay.io/coreos/grafana-watcher:v0.0.8';
 
 // Kubernetes versions
@@ -101,6 +104,11 @@ const TEST_DIR = 'src/test/';
 const CLIENT_DIST_DIR = 'static/';
 
 const SUPPORTED_VALIDATION_RULES = ['required', 'unique', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
+
+const SUPPORTED_CLIENT_FRAMEWORKS = {
+    ANGULAR: 'angularX',
+    REACT: 'react'
+};
 
 // documentation constants
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
@@ -268,6 +276,9 @@ const constants = {
     MAIN_DIR,
     TEST_DIR,
 
+    // supported client frameworks
+    SUPPORTED_CLIENT_FRAMEWORKS,
+
     CLIENT_MAIN_SRC_DIR: `${MAIN_DIR}webapp/`,
     CLIENT_TEST_SRC_DIR: `${TEST_DIR}javascript/`,
     CLIENT_WEBPACK_DIR: 'webpack/',
@@ -325,6 +336,8 @@ const constants = {
 
     // Libraries
     JIB_VERSION,
+    LIQUIBASE_VERSION,
+    LIQUIBASE_DTD_VERSION,
     JACOCO_VERSION,
     JACKSON_DATABIND_NULLABLE_VERSION,
 
