@@ -160,8 +160,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 <%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
 import static org.mockito.Mockito.*;
 <%_ } _%>
+<%_ if (!reactive) { _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } _%>
 
 <%_ for (idx in fields) { if (fields[idx].fieldIsEnum === true) { _%>import <%= packageName %>.domain.enumeration.<%= fields[idx].fieldType %>;
 <%_ } } _%>
