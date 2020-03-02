@@ -192,14 +192,14 @@ public class <%= entityClass %>Resource {
         <%_ if (!reactive) { _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()<% if (pkType !== 'String') { %>.toString()<% } %>))
             .body(result);
         <%_ } else { _%>
         return <%= entityInstance %><%= service !== 'no' ? 'Service' : 'Repository' %>.save(<%= instanceName %>)
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()<% if (pkType !== 'String') { %>.toString()<% } %>))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -239,13 +239,13 @@ public class <%= entityClass %>Resource {
     <%_ if (!reactive) { _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc}); -%>
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.getId()<% if (pkType !== 'String') { %>.toString()<% } %>))
             .body(result);
     <%_ } else { _%>
         return <%= entityInstance %><%= service !== 'no' ? 'Service' : 'Repository' %>.save(<%= instanceName %>)
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(result -> ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()))
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()<% if (pkType !== 'String') { %>.toString()<% } %>))
                 .body(result)
             );
     <%_ } _%>
