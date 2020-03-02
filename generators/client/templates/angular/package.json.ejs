@@ -83,12 +83,10 @@
     "@typescript-eslint/eslint-plugin": "2.11.0",
     "@typescript-eslint/eslint-plugin-tslint": "2.11.0",
     "@typescript-eslint/parser": "2.11.0",
-    "angular2-template-loader": "0.6.2",
     "autoprefixer": "9.7.3",
     "base-href-webpack-plugin": "2.0.0",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
-    "cache-loader": "4.1.0",
     <%_ if (protractorTests) { _%>
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
@@ -102,7 +100,6 @@
     "eslint-config-prettier": "6.7.0",
     "eslint-loader": "3.0.3",
     "file-loader": "5.0.2",
-    "fork-ts-checker-webpack-plugin": "3.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.5.5",
@@ -146,7 +143,7 @@
     <%_ if (protractorTests) { _%>
     "ts-node": "8.5.4",
     <%_ } _%>
-    "tslint": "5.20.1",
+    "tslint": "6.0.0",
     "typescript": "3.7.5",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
