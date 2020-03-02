@@ -81,7 +81,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
     <%_ if (reactive) { _%>
 import org.springframework.http.server.reactive.ServerHttpRequest;
     <%_ } _%>
@@ -92,6 +91,7 @@ import org.springframework.web.util.UriComponentsBuilder;
     <%_ } _%>
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
@@ -100,6 +100,7 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactiveRepositories) { _%>
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
@@ -167,7 +168,7 @@ public class <%= entityClass %>Resource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/<%= entityApiUrl %>")
-    public <% if (reactive) { %>Mono<ResponseEntity<<%= instanceType %>>><% } else { %>ResponseEntity<<%= instanceType %>><% } %> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
@@ -194,12 +195,7 @@ public class <%= entityClass %>Resource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId().toString()))
             .body(result);
         <%_ } else { _%>
-            <%_ if (service !== 'no') { _%>
-        return <%= entityInstance %>Service
-            <%_ } else { _%>
-        return <%= entityInstance %>Repository
-            <%_ } _%>
-            .save(<%= instanceName %>)
+        return <%= entityInstance %><%= service !== 'no' ? 'Service' : 'Repository' %>.save(<%= instanceName %>)
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
@@ -222,7 +218,7 @@ public class <%= entityClass %>Resource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/<%= entityApiUrl %>")
-    public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -240,10 +236,19 @@ public class <%= entityClass %>Resource {
         }
             <%_ } _%>
         <%_ } _%>
+    <%_ if (!reactive) { _%>
 <%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: false, isUsingMapsId: false, mapsIdAssoc: mapsIdAssoc}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.getId().toString()))
             .body(result);
+    <%_ } else { _%>
+        return <%= entityInstance %><%= service !== 'no' ? 'Service' : 'Repository' %>.save(<%= instanceName %>)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+            .map(result -> ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()))
+                .body(result)
+            );
+    <%_ } _%>
     }
 <%_ } _%>
 
