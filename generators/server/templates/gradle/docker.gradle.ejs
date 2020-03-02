@@ -36,7 +36,7 @@ jib {
         creationTime = "USE_CURRENT_TIMESTAMP"
     }
     extraDirectories {
-      paths = ["<%= MAIN_DIR %>jib"]
+      paths = file("<%= MAIN_DIR %>jib")
       permissions = ["/entrypoint.sh": 755]
     }
 }
