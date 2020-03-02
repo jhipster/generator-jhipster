@@ -151,6 +151,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
+<%_ if (reactive) { _%>
+import static org.hamcrest.Matchers.is;
+<%_ } _%>
 <%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 <%_ } _%>
@@ -849,11 +852,11 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
                 idValue = idValue + '.toString()';
             }
         _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.id").<%= !reactive ? 'value' : 'isEqualTo' %>(<%= idValue %>)<%= !reactive ? ')' : '' %><%_ } _%><% for (idx in fields) { %>
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.id").value(<%= reactive ? 'is(' : '' %><%= idValue %>))<%_ } _%><% for (idx in fields) { %>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= fields[idx].fieldName %>ContentType").<%= !reactive ? 'value' : 'isEqualTo' %>(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<%= !reactive ? ')' : '' %>
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= fields[idx].fieldName %>ContentType").value(<%= reactive ? 'is(' : '' %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
             <%_ } _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= fields[idx].fieldName %>").<%= !reactive ? 'value' : 'isEqualTo' %>(<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>)<%= !reactive ? ')' : '' %><%_ } _%>;
+            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= fields[idx].fieldName %>").value(<%= reactive ? 'is(' : '' %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else if (fields[idx].fieldType === 'Integer') { %><% } else if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<%_ } _%>;
     }
 <%_ if (jpaMetamodelFiltering) {  %>
 
