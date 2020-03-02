@@ -85,6 +85,18 @@ jobs:
                   JHI_APP: webflux-mongodb-oauth2
                   JHI_ENTITY: none
                   JHI_PROTRACTOR: 1
+              webflux-couchbase:
+                  JHI_APP: webflux-couchbase
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-couchbase-session:
+                  JHI_APP: webflux-couchbase-session
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-couchbase-oauth2:
+                  JHI_APP: webflux-couchbase-oauth2
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
       steps:
           #----------------------------------------------------------------------
           # Set checkout path.
