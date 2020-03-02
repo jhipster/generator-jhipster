@@ -1132,21 +1132,24 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
     <%_ if (searchEngine === 'elasticsearch') { _%>
         // As the test used the service layer, reset the Elasticsearch mock repository
         reset(mock<%= entityClass %>SearchRepository);
     <%_ } _%>
 <%_ } else { _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
 <%_ } _%>
 
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
+            .collectList().block()<% } %>.size();
 
         // Update the <%= entityInstance %>
-        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId()).get();<% if (databaseType === 'sql') { %>
+        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId())<%= reactive ? '.block()' : '.get()' %>;
+        <%_ if (databaseType === 'sql') { _%>
         // Disconnect from session so that the updates on updated<%= asEntity(entityClass) %> are not directly saved in db
-        em.detach(updated<%= asEntity(entityClass) %>);<% } %>
+        em.detach(updated<%= asEntity(entityClass) %>);
+        <%_ } _%>
         <%_ if (fluentMethods && fields.length > 0) { _%>
         updated<%= asEntity(entityClass) %><% for (idx in fields) { %>
             .<%= fields[idx].fieldName %>(<%= 'UPDATED_' + fields[idx].fieldNameUnderscored.toUpperCase() %>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
@@ -1163,16 +1166,25 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(updated<%= asEntity(entityClass) %>);
         <%_ } _%>
 
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass)) %>)))
             .andExpect(status().isOk());
+        <%_ } else { _%>
+        webTestClient.put().uri("/api/<%= entityApiUrl %>")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass)) %>))
+            .exchange()
+            .expectStatus().isOk();
+        <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
         <%_ if (databaseType === 'couchbase') { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
+            .collectList().block()<% } %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
@@ -1195,22 +1207,34 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void updateNonExisting<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
+            .collectList().block()<% } %>.size();
 
-        // Create the <%= entityClass %><% if (dto === 'mapstruct') { %>
-        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);<% } %>
+        <%_ if (dto === 'mapstruct') { _%>
+        // Create the <%= entityClass %>
+        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
 
+        <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
+        <%_ } else { _%>
+        webTestClient.put().uri("/api/<%= entityApiUrl %>")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>))
+            .exchange()
+            .expectStatus().isBadRequest();
+        <%_ } _%>
 
         // Validate the <%= entityClass %> in the database
         <%_ if (databaseType === 'couchbase') { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll();
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
+            .collectList().block()<% } %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
