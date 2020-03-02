@@ -115,6 +115,7 @@ module.exports = class extends BaseGenerator {
                 this.DOCKER_DIR = constants.DOCKER_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
             }
         };
     }

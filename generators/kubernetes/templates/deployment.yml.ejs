@@ -33,6 +33,18 @@ spec:
         app: <%= app.baseName.toLowerCase() %>
         version: "v1"
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - <%= app.baseName.toLowerCase() %>
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       initContainers:
         - name: init-ds
           image: busybox:latest

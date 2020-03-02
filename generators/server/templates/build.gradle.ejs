@@ -243,8 +243,8 @@ configurations {
     all {
         resolutionStrategy {
             // Inherited version from Spring Boot can't be used because of regressions:
-            // https://liquibase.jira.com/browse/CORE-3536 and https://liquibase.jira.com/browse/CORE-3522
-            force 'org.liquibase:liquibase-core:3.6.3'
+            // To be removed as soon as spring-boot use the same version
+            force 'org.liquibase:liquibase-core:<%= LIQUIBASE_VERSION %>'
         }
     }
 }
@@ -296,6 +296,7 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     <%_ if (databaseType === 'sql') { _%>
+    implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
     <%_ } _%>
     implementation "com.fasterxml.jackson.core:jackson-annotations"
