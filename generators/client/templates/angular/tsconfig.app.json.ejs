@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import 'zone.js/dist/zone';
-import '@angular/localize/init';
-require('../manifest.webapp');
+{
+    "extends": "./tsconfig.json",
+    "files": ["<%= MAIN_SRC_DIR %>app/app.main.ts"]
+}

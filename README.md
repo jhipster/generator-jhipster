@@ -39,20 +39,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
   </tbody>
 </table>
 
-### Silver sponsors
-
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://www.bizequity.com/" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/bizequity.png">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
 ### Bronze sponsors
 
 <table>
