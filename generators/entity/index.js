@@ -235,6 +235,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
+            validateReactiveCompatibility() {
+                if (this.context.reactive && !['mongodb', 'cassandra', 'couchbase'].includes(this.context.databaseType)) {
+                    this.error(chalk.red(`The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`));
+                }
+            },
+
             validateDbExistence() {
                 const context = this.context;
                 if (
