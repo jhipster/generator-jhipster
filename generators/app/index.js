@@ -192,9 +192,9 @@ module.exports = class extends BaseBlueprintGenerator {
             type: String
         });
 
-        // This adds support for a `--skip-prettier-java` flag
-        this.option('skip-prettier-java', {
-            desc: 'Skip the prettier-java pre-formatting at generation',
+        // This adds support for a `--prettier-java` flag
+        this.option('prettier-java', {
+            desc: 'Launch prettier-java pre-formatting at generation',
             type: Boolean,
             defaults: false
         });
@@ -219,7 +219,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        this.skipPrettierJava = this.options['skip-prettier-java'];
+        this.prettierJava = this.options['prettier-java'];
 
         let blueprints = this.options.blueprints || '';
         // check for old single blueprint declaration
