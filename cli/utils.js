@@ -210,7 +210,7 @@ const createYeomanEnv = packagePatterns => {
     env.lookup({ packagePaths: [path.join(__dirname, '..')] });
     if (packagePatterns) {
         // Lookup for blueprints.
-        env.lookup({ packagePatterns });
+        env.lookup({ filterPaths: true, packagePatterns });
     }
     return env;
 };

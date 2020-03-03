@@ -97,7 +97,7 @@ module.exports = class extends BaseGenerator {
                 const packagePatterns = blueprints
                     .filter(bp => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(bp.name)))
                     .map(bp => bp.name);
-                this.env.lookup({ packagePatterns });
+                this.env.lookup({ filterPaths: true, packagePatterns });
 
                 if (!this.options.skipChecks) {
                     const namespaces = blueprints.map(bp => jhipsterUtils.packageNameToNamespace(bp.name));
