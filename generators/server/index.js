@@ -515,14 +515,6 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (this.prodDatabaseType === 'oracle') {
-                    this.log('\n\n');
-                    this.warning(
-                        `${chalk.yellow.bold(
-                            'You have selected Oracle database.\n'
-                        )}Please follow our documentation on using Oracle to set up the \nOracle proprietary JDBC driver.`
-                    );
-                }
                 this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
                 let executable = 'mvnw';

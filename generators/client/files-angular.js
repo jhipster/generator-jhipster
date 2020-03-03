@@ -35,7 +35,7 @@ const files = {
                 'package.json',
                 'proxy.conf.json',
                 'tsconfig.json',
-                'tsconfig-aot.json',
+                'tsconfig.app.json',
                 'tslint.json',
                 '.eslintrc.json',
                 '.eslintignore',
