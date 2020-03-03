@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ if (!viaService) { _%>
-        <%= entityInstance %>Repository.deleteById(id);
+        <% if (reactive) { %>return <% } %><%= entityInstance %>Repository.deleteById(id);
         <%_ if (searchEngine === 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.deleteById(id);
         <%_ } _%>

@@ -299,7 +299,7 @@ public class <%= entityClass %>Resource {
     public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
         log.debug("REST request to get all <%= entityClassPlural %> as a stream");
         <%_ if (viaService) { _%>
-        return <%= entityInstance %>Service.findAllAsFlux();
+        return <%= entityInstance %>Service.findAll();
         <%_ } else { _%>
         return <%= entityInstance %>Repository.findAll()<%_ if (dto === 'mapstruct') { _%>.map(<%= entityToDtoReference %>)<%_ } _%>;
         <%_ } _%>

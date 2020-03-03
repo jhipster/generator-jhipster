@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%  const monoOrOptional = (reactive === true) ? 'Mono' : 'Optional';
-    const instanceType = (dto === 'mapstruct') ? `${monoOrOptional}<${asDto(entityClass)}>` : `${monoOrOptional}<${asEntity(entityClass)}>`;
+<%  const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
+    const instanceType = (dto === 'mapstruct') ? `${optionalOrMono}<${asDto(entityClass)}>` : `${optionalOrMono}<${asEntity(entityClass)}>`;
     const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::toDto`;
