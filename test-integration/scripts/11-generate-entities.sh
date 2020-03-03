@@ -106,8 +106,6 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity EntityWithDTO
     moveEntity EntityWithPagination
     moveEntity EntityWithPaginationAndDTO
-    moveEntity EntityWithServiceClass
-    moveEntity EntityWithServiceClassAndDTO
     moveEntity EntityWithServiceClassAndPagination
     moveEntity EntityWithServiceClassPaginationAndDTO
     moveEntity EntityWithServiceImpl
@@ -136,8 +134,6 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity EntityWithDTO
     moveEntity EntityWithPagination
     moveEntity EntityWithPaginationAndDTO
-    moveEntity EntityWithServiceClass
-    moveEntity EntityWithServiceClassAndDTO
     moveEntity EntityWithServiceClassAndPagination
     moveEntity EntityWithServiceClassPaginationAndDTO
     moveEntity EntityWithServiceImpl
