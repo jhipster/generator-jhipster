@@ -104,11 +104,9 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity SuperMegaLargeTestEntity
 
     moveEntity EntityWithDTO
-    moveEntity EntityWithPagination
     moveEntity EntityWithPaginationAndDTO
     moveEntity EntityWithServiceClassAndPagination
     moveEntity EntityWithServiceClassPaginationAndDTO
-    moveEntity EntityWithServiceImpl
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
@@ -132,11 +130,9 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity FieldTestPaginationEntity
 
     moveEntity EntityWithDTO
-    moveEntity EntityWithPagination
     moveEntity EntityWithPaginationAndDTO
     moveEntity EntityWithServiceClassAndPagination
     moveEntity EntityWithServiceClassPaginationAndDTO
-    moveEntity EntityWithServiceImpl
     moveEntity EntityWithServiceImplAndDTO
     moveEntity EntityWithServiceImplAndPagination
     moveEntity EntityWithServiceImplPaginationAndDTO
