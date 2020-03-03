@@ -43,20 +43,16 @@ elif [[ "$JHI_ENTITY" == "mongodb-reactive" ]]; then
 #    moveEntity EmbeddedOperation
 
     moveEntity FieldTestEntity
-#    moveEntity FieldTestMapstructEntity
+    moveEntity FieldTestMapstructEntity
 #    moveEntity FieldTestServiceClassEntity
 #    moveEntity FieldTestServiceImplEntity
 #    moveEntity FieldTestInfiniteScrollEntity
-#    moveEntity FieldTestPaginationEntity
+    moveEntity FieldTestPaginationEntity
 
-#    moveEntity EntityWithDTO
-    moveEntity EntityWithPagination
 #    moveEntity EntityWithPaginationAndDTO
-#    moveEntity EntityWithServiceClass
 #    moveEntity EntityWithServiceClassAndDTO
 #    moveEntity EntityWithServiceClassAndPagination
 #    moveEntity EntityWithServiceClassPaginationAndDTO
-#    moveEntity EntityWithServiceImpl
 #    moveEntity EntityWithServiceImplAndDTO
 #    moveEntity EntityWithServiceImplAndPagination
 #    moveEntity EntityWithServiceImplPaginationAndDTO

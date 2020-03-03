@@ -165,6 +165,8 @@ public class <%= entityClass %>Resource {
     <%_
     const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
     const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+    const mapper = entityInstance  + 'Mapper';
+    const entityToDtoReference = mapper + '::' + 'toDto';
     _%><%- include('../../common/inject_template', {viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true}); -%>
 <%_ if (!readOnly) { _%>
 
@@ -203,7 +205,7 @@ public class <%= entityClass %>Resource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()<% if (pkType !== 'String') { %>.toString()<% } %>))
             .body(result);
         <%_ } else { _%>
-        return <%= entityInstance %><%= service !== 'no' ? 'Service' : 'Repository' %>.save(<%= instanceName %>)
+<%- include('../../common/save_reactive_template', {asEntity, asDto, viaService: viaService}); -%>
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
@@ -250,7 +252,7 @@ public class <%= entityClass %>Resource {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.getId()<% if (pkType !== 'String') { %>.toString()<% } %>))
             .body(result);
     <%_ } else { _%>
-        return <%= entityInstance %><%= service !== 'no' ? 'Service' : 'Repository' %>.save(<%= instanceName %>)
+<%- include('../../common/save_reactive_template', {asEntity, asDto, viaService: viaService}); -%>
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(result -> ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.getId()<% if (pkType !== 'String') { %>.toString()<% } %>))
@@ -299,7 +301,7 @@ public class <%= entityClass %>Resource {
         <%_ if (viaService) { _%>
         return <%= entityInstance %>Service.findAllAsFlux();
         <%_ } else { _%>
-        return <%= entityInstance %>Repository.findAll();
+        return <%= entityInstance %>Repository.findAll()<%_ if (dto === 'mapstruct') { _%>.map(<%= entityToDtoReference %>)<%_ } _%>;
         <%_ } _%>
     }
 
