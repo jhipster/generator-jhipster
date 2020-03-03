@@ -6,6 +6,7 @@
     - It's also a JHipster-managed entity.
   - Added the `ZonedDateTime` and `ByteBuffer` field types for Cassandra (thanks @SudharakaP for taking this issue and
     making this happen!)
+  - Added the `couchbase` as application option value for `searchEngine`
 
 ## Bug fixes
   - Importing a JDL file now takes into account existing `.yo-rc.json` files
@@ -15,7 +16,7 @@
 
 ---
 
-# Latest v7.0.0
+# v7.0.0
 
 ## Breaking changes
   - API:
