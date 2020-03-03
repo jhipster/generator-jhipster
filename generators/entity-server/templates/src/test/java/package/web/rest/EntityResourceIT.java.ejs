@@ -708,7 +708,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     }
 <%_ } } } _%>
 <%_ } _%>
-<%_ if (reactiveRepositories) { _%>
+<%_ if (reactiveRepositories && pagination === 'no') { _%>
 
     @Test
     public void getAll<%= entityClassPlural %>AsStream() {

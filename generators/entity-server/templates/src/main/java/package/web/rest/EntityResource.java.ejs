@@ -287,7 +287,7 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
 <%- include('../../common/get_all_template', {asEntity, asDto, viaService}); -%>
 
-    <%_ if (reactiveRepositories) { _%>
+    <%_ if (reactiveRepositories && pagination === 'no') { _%>
     /**
      * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
      * @return the {@link Flux} of <%= entityInstancePlural %>.
