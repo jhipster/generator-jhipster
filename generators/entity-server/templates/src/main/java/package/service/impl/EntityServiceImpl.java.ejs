@@ -25,6 +25,7 @@ const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entit
 const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
 const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
 const listOrFlux = (reactive === true) ? 'Flux' : 'List';
+const pageOrFlux = (reactive === true) ? 'Flux' : 'Page';
 const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.'+ 'toEntity';
 const entityToDto = 'toDto';
@@ -63,7 +64,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 <%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
+    <%_ if (reactive) { _%>
 import org.springframework.data.domain.Page;
+    <%_ } _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 import org.springframework.stereotype.Service;
@@ -134,14 +137,14 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>) {
+    public <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClassPlural %>");
         <%_ if (pagination === 'no') { _%>
-        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto === 'mapstruct') { %>.stream()
-            .map(<%= entityToDtoReference %>)
-            .collect(Collectors.toCollection(LinkedList::new))<% } %>;
+        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany === true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto === 'mapstruct') { %><% if (!reactive) { %>.stream()<% } %>
+            .map(<%= entityToDtoReference %>)<% if (!reactive) { %>
+            .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
         <%_ } else { _%>
-        return <%= entityInstance %>Repository.findAll(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>
+        return <%= entityInstance %>Repository.findAll<% if (reactive) { %>By<% } %>(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>
             .map(<%= entityToDtoReference %>);<% } %>
         <%_ } _%>
     }
@@ -153,11 +156,21 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
      *
      * @return the list of entities.
      */
-    public Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
+    public <%= pageOrFlux %><<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
         return <%= entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (dto !== 'mapstruct') { %>;<% } else { %>.map(<%= entityToDtoReference %>);<% } %>
     }
     <%_ } _%>
 <%- include('../../common/get_filtered_template', {asEntity, asDto}); -%>
+<%_ if (reactive) { _%>
+    /**
+    * Returns the number of <%= entityInstancePlural %> available.
+    *
+    */
+    public Mono<Long> countAll() {
+        return <%= entityInstance %>Repository.count();
+    }
+
+<%_  } _%>
     /**
      * Get one <%= entityInstance %> by id.
      *
@@ -201,7 +214,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (databaseType === 'sql') { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>) {
+    public <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>) {
         <%_ if (pagination === 'no') { _%>
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
         <%_ } else { _%>

@@ -49,13 +49,13 @@ elif [[ "$JHI_ENTITY" == "mongodb-reactive" ]]; then
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
 
-#    moveEntity EntityWithPaginationAndDTO
-#    moveEntity EntityWithServiceClassAndDTO
-#    moveEntity EntityWithServiceClassAndPagination
-#    moveEntity EntityWithServiceClassPaginationAndDTO
-#    moveEntity EntityWithServiceImplAndDTO
-#    moveEntity EntityWithServiceImplAndPagination
-#    moveEntity EntityWithServiceImplPaginationAndDTO
+    moveEntity EntityWithPaginationAndDTO
+    moveEntity EntityWithServiceClassAndDTO
+    moveEntity EntityWithServiceClassAndPagination
+    moveEntity EntityWithServiceClassPaginationAndDTO
+    moveEntity EntityWithServiceImplAndDTO
+    moveEntity EntityWithServiceImplAndPagination
+    moveEntity EntityWithServiceImplPaginationAndDTO
 
 elif [[ "$JHI_ENTITY" == "neo4j" ]]; then
     moveEntity BankAccount

@@ -81,10 +81,10 @@ _%>
             <%_ } _%>
         return ResponseEntity.ok().headers(headers).body(page.getContent());
         <%_ } else { _%>
-        return <%= entityInstance %><%= viaService ? 'Service' : 'Repository' %>.count()
+        return <%= entityInstance %><%= viaService ? 'Service.countAll' : 'Repository.count' %>()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(UriComponentsBuilder.fromHttpRequest(request), page))
-            .map(headers -> ResponseEntity.ok().headers(headers).body(<%= entityInstance %><%= viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)));
+            .map(headers -> ResponseEntity.ok().headers(headers).body(<%= entityInstance %><%= viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)<% if (!viaService && dto === 'mapstruct') { %>.map(<%= entityToDtoReference %>)<% } %>));
         <%_ } _%>
     <%_ } _%>
     }

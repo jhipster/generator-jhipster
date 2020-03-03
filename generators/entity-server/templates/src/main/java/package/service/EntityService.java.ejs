@@ -24,6 +24,7 @@ const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entit
 const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
 const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
 const listOrFlux = (reactive === true) ? 'Flux' : 'List';
+const pageOrFlux = (reactive === true) ? 'Flux' : 'Page';
 _%>
 <%_ if (dto === 'mapstruct') { _%>
 import <%= packageName %>.service.dto.<%= asDto(entityClass) %>;
@@ -32,7 +33,9 @@ import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 <%_ } _%>
 <%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 
+    <%_ if (reactive) { _%>
 import org.springframework.data.domain.Page;
+    <%_ } _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (reactiveRepositories) { _%>
@@ -69,7 +72,7 @@ public interface <%= entityClass %>Service {
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
+    <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> findAll(<% if (pagination !== 'no') { %>Pageable pageable<% } %>);
 <% for (idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { -%>
     /**
      * Get all the <%= asDto(entityClass) %> where <%= relationships[idx].relationshipNameCapitalized %> is {@code null}.
@@ -85,9 +88,17 @@ public interface <%= entityClass %>Service {
      *
      * @return the list of entities.
      */
-    Page<<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable);
+    <%= pageOrFlux %><<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable);
 
     <%_ } _%>
+<%_ if (reactive) { _%>
+    /**
+    * Returns the number of <%= entityInstancePlural %> available.
+    *
+    */
+    Mono<Long> countAll();
+
+<%_  } _%>
 
     /**
      * Get the "id" <%= entityInstance %>.
@@ -112,5 +123,5 @@ public interface <%= entityClass %>Service {
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (pagination !== 'no') { %>Page<<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);<% } %>
+    <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);<% } %>
 }
