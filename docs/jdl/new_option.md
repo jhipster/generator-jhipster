@@ -25,26 +25,9 @@ Here we can see that:
   - `binary` simply means that it's a binary option. 
 
 Once it's done, the next file to change is the `lib/dsl/ast_builder.js` file.
-Because it's a binary option, we add a new entry to the options in the `prog` method.
+Because it's an option, we add a new entry to the options in the `prog` method.
 ```
 myNewOption: {}
-```
-
-It may be confusing why some options are set unlike others. Set options are for unary options.
-After the parsing's done, the object will have this form:
-```
-{
-    ...
-    options: {
-        dto: {
-            mapstruct: { list: [], excluded: [] },
-        },
-        pagination: {},
-        service: {},
-        skipClient: { list: [], excluded: [] },
-        ...
-    }
-}
 ```
 
 That's all there is to the parsing system, we'll know see what needs doing in the other files and why.
