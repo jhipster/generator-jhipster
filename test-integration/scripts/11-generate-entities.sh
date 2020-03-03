@@ -39,8 +39,8 @@ if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity FieldTestPaginationEntity
 
 elif [[ "$JHI_ENTITY" == "mongodb-reactive" ]]; then
-#    moveEntity DocumentBankAccount
-#    moveEntity EmbeddedOperation
+    moveEntity DocumentBankAccount
+    moveEntity EmbeddedOperation
 
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructEntity
