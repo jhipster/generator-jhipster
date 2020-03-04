@@ -22,7 +22,7 @@ const semver = require('semver');
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
-const NODE_VERSION = '12.16.0';
+const NODE_VERSION = '12.16.1';
 const YARN_VERSION = '1.22.0';
 const NPM_VERSION = '6.14.2';
 
