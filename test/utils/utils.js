@@ -23,10 +23,14 @@ module.exports = {
 
 function getFilesForOptions(files, options, prefix, excludeFiles) {
     const generator = options;
+    generator.debug = () => {};
+    const outputPathCustomizer = generator.outputPathCustomizer || (file => file);
+
+    const destFiles = Generator.prototype.writeFilesToDisk.call(generator, files, undefined, true, prefix).map(outputPathCustomizer);
     if (excludeFiles === undefined) {
-        return Generator.prototype.writeFilesToDisk(files, generator, true, prefix);
+        return destFiles;
     }
-    return Generator.prototype.writeFilesToDisk(files, generator, true, prefix).filter(file => !excludeFiles.includes(file));
+    return destFiles.filter(file => !excludeFiles.includes(file));
 }
 
 function shouldBeV3DockerfileCompatible(databaseType) {

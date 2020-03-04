@@ -147,7 +147,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const context = this.context;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 context.useConfigurationFile = false;
-                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 context.options = this.options;
                 context.baseName = configuration.get('baseName');
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
@@ -234,8 +233,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.entitySuffix === context.dtoSuffix) {
                     this.error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
                 }
-
-                context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
             validateMvcApp() {

@@ -964,7 +964,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.databaseType === 'couchbase',
+            condition: generator => !generator.reactive && generator.databaseType === 'couchbase',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1607,7 +1607,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+            condition: generator =>
+                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1627,7 +1628,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1637,7 +1640,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+            condition: generator =>
+                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -1648,7 +1652,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

@@ -85,6 +85,18 @@ jobs:
                   JHI_APP: webflux-mongodb-oauth2
                   JHI_ENTITY: none
                   JHI_PROTRACTOR: 1
+              webflux-couchbase:
+                  JHI_APP: webflux-couchbase
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-couchbase-session:
+                  JHI_APP: webflux-couchbase-session
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-couchbase-oauth2:
+                  JHI_APP: webflux-couchbase-oauth2
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
       steps:
           #----------------------------------------------------------------------
           # Set checkout path.
@@ -98,7 +110,7 @@ jobs:
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '12.16.0'
+                versionSpec: '12.16.1'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then

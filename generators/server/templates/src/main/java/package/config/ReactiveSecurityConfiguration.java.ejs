@@ -104,6 +104,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
+<%_ } _%>
 import org.springframework.security.web.server.SecurityWebFilterChain;
 <%_ if (authenticationType === 'session') { _%>
 import org.springframework.security.web.server.WebFilterExchange;
@@ -374,6 +377,21 @@ public class SecurityConfiguration {
         <%_ } else { _%>
         return Mono.empty();
         <%_ } _%>
+    }
+    <%_ } _%>
+
+    <%_ if(databaseType === 'couchbase') { _%>
+    /**
+     * Disables Spring security integration with SpEL expressions since it is not yet compatible with Reactor
+     */
+    @Bean
+    public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+        return new SecurityEvaluationContextExtension() {
+            @Override
+            public Object getRootObject() {
+                return null;
+            }
+        };
     }
     <%_ } _%>
 }
