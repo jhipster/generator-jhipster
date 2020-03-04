@@ -155,7 +155,11 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 <%_ } _%>
 <%_ if (testsNeedCsrf) { _%>
+    <%_ if (reactive) { _%>
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+    <%_ } else { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+    <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
 import static org.mockito.Mockito.*;
