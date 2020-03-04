@@ -1192,11 +1192,12 @@ module.exports = class extends PrivateBase {
      * @param {string} npmPackageName - package name
      * @param {string} subGen - sub generator name
      * @param {any} options - options to pass
+     * @return {object} the composed generator
      */
     composeExternalModule(npmPackageName, subGen, options) {
         const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
         const generatorCallback = `${generatorName}:${subGen}`;
-        this.composeWith(generatorCallback, options);
+        return this.composeWith(generatorCallback, options, true);
     }
 
     /**
