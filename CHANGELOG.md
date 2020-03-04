@@ -1,4 +1,4 @@
-# Unreleased
+# Latest: v7.1.0
 
 ## What's new
   - `Authority` is now allowed as a special relationship source/destination, just like `User` (thanks to @xetys for
