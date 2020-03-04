@@ -104,13 +104,13 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     <%_
         } else if (databaseType === 'mongodb' || databaseType === 'couchbase')  { _%>
 
-    @Query("<%= (databaseType === 'mongodb')?'{}':'#{#n1ql.selectEntity} WHERE #{#n1ql.filter}'%>")
+    @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
     Page<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("<%= (databaseType === 'mongodb')?'{}':'#{#n1ql.selectEntity} WHERE #{#n1ql.filter}'%>")
+    @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
     List<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
 
-    @Query("<%- (databaseType === 'mongodb')?"{'id': ?0}":"#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}"%>")
+    @Query("<%- (databaseType === 'mongodb') ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
     Optional<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
     <%_ }
     } _%>
