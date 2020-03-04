@@ -24,7 +24,7 @@ const yeoman = require('yeoman-environment');
 const _ = require('lodash');
 const path = require('path');
 
-const { normalizeBlueprintName, packageNameToNamespace } = require('../generators/utils');
+const { normalizeBlueprintName, packageNameToNamespace, loadYoRc, loadBlueprintsFromConfiguration } = require('../generators/utils');
 
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
@@ -210,7 +210,7 @@ const createYeomanEnv = packagePatterns => {
     env.lookup({ packagePaths: [path.join(__dirname, '..')] });
     if (packagePatterns) {
         // Lookup for blueprints.
-        env.lookup({ packagePatterns });
+        env.lookup({ filterPaths: true, packagePatterns });
     }
     return env;
 };
@@ -226,17 +226,24 @@ const loadBlueprints = () => {
         blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
     }
     if (!blueprintNames.length) {
-        return undefined;
+        return [];
     }
     return blueprintNames.filter((v, i, a) => a.indexOf(v) === i).map(v => normalizeBlueprintName(v));
 };
 
-const loadBlueprintCommands = (env, blueprints) => {
+const loadBlueprintsFromYoRc = () => {
+    const yoRc = loadYoRc();
+    if (!yoRc || !yoRc['generator-jhipster']) {
+        return [];
+    }
+    return loadBlueprintsFromConfiguration(yoRc['generator-jhipster']);
+};
+
+const getBlueprintPackagePaths = (env, blueprints) => {
     if (!blueprints) {
         return undefined;
     }
-    let result;
-    blueprints.forEach(blueprint => {
+    return blueprints.map(blueprint => {
         const namespace = packageNameToNamespace(blueprint);
         const packagePath = env.getPackagePath(namespace);
         if (!packagePath) {
@@ -246,6 +253,16 @@ const loadBlueprintCommands = (env, blueprints) => {
                 )}`
             );
         }
+        return [blueprint, packagePath];
+    });
+};
+
+const loadBlueprintCommands = blueprintPackagePaths => {
+    if (!blueprintPackagePaths) {
+        return undefined;
+    }
+    let result;
+    blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
         /* eslint-disable import/no-dynamic-require */
         /* eslint-disable global-require */
         try {
@@ -256,6 +273,56 @@ const loadBlueprintCommands = (env, blueprints) => {
             /* eslint-disable no-console */
             console.info(`${chalk.green.bold('INFO!')} ${msg}`);
         }
+    });
+    return result;
+};
+
+const loadSharedOptions = blueprintPackagePaths => {
+    function joiner(objValue, srcValue) {
+        if (objValue === undefined) {
+            return srcValue;
+        }
+        if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+            return objValue.concat(srcValue);
+        }
+        if (Array.isArray(objValue)) {
+            return [...objValue, srcValue];
+        }
+        if (Array.isArray(srcValue)) {
+            return [objValue, ...srcValue];
+        }
+        return [objValue, srcValue];
+    }
+
+    function loadSharedOptionsFromFile(sharedOptionsFile, msg, errorMsg) {
+        /* eslint-disable import/no-dynamic-require */
+        /* eslint-disable global-require */
+        try {
+            const opts = require(sharedOptionsFile);
+            /* eslint-disable no-console */
+            if (msg) {
+                console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+            }
+            return opts;
+        } catch (e) {
+            if (errorMsg) {
+                console.info(`${chalk.green.bold('INFO!')} ${errorMsg}`);
+            }
+        }
+        return {};
+    }
+
+    const localPath = './.jhipster/sharedOptions';
+    let result = loadSharedOptionsFromFile(path.resolve(localPath), `SharedOptions found at local config ${localPath}`);
+
+    if (!blueprintPackagePaths) {
+        return undefined;
+    }
+
+    blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
+        const errorMsg = `No custom sharedOptions found within blueprint: ${blueprint} at ${packagePath}`;
+        const opts = loadSharedOptionsFromFile(`${packagePath}/cli/sharedOptions`, undefined, errorMsg);
+        result = _.mergeWith(result, opts, joiner);
     });
     return result;
 };
@@ -273,6 +340,9 @@ module.exports = {
     done,
     createYeomanEnv,
     loadBlueprints,
+    loadBlueprintsFromYoRc,
+    getBlueprintPackagePaths,
     loadBlueprintCommands,
+    loadSharedOptions,
     getOptionAsArgs
 };

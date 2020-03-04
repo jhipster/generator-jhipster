@@ -72,6 +72,8 @@ import javax.validation.Validator;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.List;
+<%_ } _%>
+<%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>

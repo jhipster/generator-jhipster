@@ -511,7 +511,7 @@ module.exports = {
 };
 
 function writeFiles() {
-    mkdirp(MAIN_SRC_DIR);
+    mkdirp(this.CLIENT_MAIN_SRC_DIR);
     // write angular 2.x and above files
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
 }

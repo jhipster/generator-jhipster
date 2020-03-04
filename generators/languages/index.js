@@ -116,7 +116,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.databaseType = configuration.get('databaseType');
                 this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
                 this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.enableTranslation = configuration.get('enableTranslation');
                 this.currentLanguages = configuration.get('languages');
                 this.clientFramework = configuration.get('clientFramework');

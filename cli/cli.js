@@ -31,16 +31,26 @@ const {
     getArgs,
     done,
     loadBlueprints,
-    loadBlueprintCommands
+    loadBlueprintsFromYoRc,
+    getBlueprintPackagePaths,
+    loadBlueprintCommands,
+    loadSharedOptions
 } = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
 
-const blueprints = loadBlueprints();
 const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
-const env = createYeomanEnv(blueprints);
+
+const argBlueprints = loadBlueprints();
+const configBlueprints = loadBlueprintsFromYoRc().map(bp => bp.name);
+const allBlueprints = [...new Set([...argBlueprints, ...configBlueprints])];
+
+const env = createYeomanEnv(allBlueprints);
+const sharedOptions = loadSharedOptions(getBlueprintPackagePaths(env, allBlueprints)) || {};
+// Env will forward sharedOptions to every generator
+Object.assign(env.sharedOptions, sharedOptions);
 
 /* setup debugging */
 logger.init(program);
@@ -67,7 +77,8 @@ program
     .usage('[command] [options]')
     .allowUnknownOption();
 
-const allCommands = { ...SUB_GENERATORS, ...loadBlueprintCommands(env, blueprints) };
+const blueprintCommands = loadBlueprintCommands(getBlueprintPackagePaths(env, argBlueprints));
+const allCommands = { ...SUB_GENERATORS, ...blueprintCommands };
 
 /* create commands */
 Object.entries(allCommands).forEach(([key, opts]) => {
