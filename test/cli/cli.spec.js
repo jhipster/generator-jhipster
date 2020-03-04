@@ -71,7 +71,7 @@ describe('jhipster cli test', () => {
         });
     });
 
-    it('should delegate to blueprint on multiple blueprints command and find it', function(done) {
+    it('should delegate to blueprint on multiple blueprints command with sharedOptions and find it', function(done) {
         this.timeout(4000);
 
         testInTempDir(tmpdir => {
@@ -79,6 +79,26 @@ describe('jhipster cli test', () => {
             lnYeoman(tmpdir);
             exec(`${cmd} foo --blueprints cli`, (error, stdout, stderr) => {
                 expect(stdout.includes('Running foo')).to.be.true;
+                expect(stdout.includes('Running bar')).to.be.true;
+                expect(stdout.includes('barValue')).to.be.true;
+                expect(stdout.includes('foorValue')).to.be.false;
+                done();
+            });
+        });
+    });
+
+    it('should delegate to blueprint on multiple blueprints command with multiple sharedOptions and find it', function(done) {
+        this.timeout(4000);
+
+        testInTempDir(tmpdir => {
+            copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
+            copyBlueprint(path.join(__dirname, '../templates/blueprint-cli-shared'), tmpdir, 'cli-shared');
+            lnYeoman(tmpdir);
+            exec(`${cmd} foo --blueprints cli,cli-shared`, (error, stdout, stderr) => {
+                expect(stdout.includes('Running foo')).to.be.true;
+                expect(stdout.includes('Running bar')).to.be.true;
+                expect(stdout.includes('fooValue')).to.be.true;
+                expect(stdout.includes('barValue')).to.be.true;
                 done();
             });
         });

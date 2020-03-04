@@ -22,21 +22,19 @@ const needleClientBase = require('./needle-client');
 const constants = require('../../generator-constants');
 const jhipsterUtils = require('../../utils');
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-
 module.exports = class extends needleClientBase {
     addGlobalSCSSStyle(style, comment) {
-        const filePath = `${CLIENT_MAIN_SRC_DIR}content/scss/global.scss`;
+        const filePath = `${this.CLIENT_MAIN_SRC_DIR}content/scss/global.scss`;
         this.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-main');
     }
 
     addVendorSCSSStyle(style, comment) {
-        const filePath = `${CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`;
+        const filePath = `${this.CLIENT_MAIN_SRC_DIR}content/scss/vendor.scss`;
         super.addStyle(style, comment, filePath, 'jhipster-needle-scss-add-vendor');
     }
 
     addModule(appName, angularName, folderName, fileName, enableTranslation, clientFramework) {
-        const modulePath = `${CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
+        const modulePath = `${this.CLIENT_MAIN_SRC_DIR}app/app.module.ts`;
         const importNeedle = 'jhipster-needle-angular-add-module-import';
         const moduleNeedle = 'jhipster-needle-angular-add-module';
 
@@ -54,7 +52,7 @@ module.exports = class extends needleClientBase {
     }
 
     addToAdminModule(appName, adminAngularName, adminFolderName, adminFileName, enableTranslation, clientFramework) {
-        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
+        const adminModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
         const importNeedle = 'jhipster-needle-add-admin-module-import';
         const moduleNeedle = 'jhipster-needle-add-admin-module';
 
@@ -126,7 +124,7 @@ module.exports = class extends needleClientBase {
     }
 
     addIcon(iconName) {
-        const iconsPath = `${CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`;
+        const iconsPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/icons/font-awesome-icons.ts`;
         const iconImport = `fa${this.generator.upperFirstCamelCase(iconName)}`;
         if (!jhipsterUtils.checkRegexInFile(iconsPath, new RegExp(`\\b${iconImport}\\b`), this.generator)) {
             try {
@@ -153,7 +151,7 @@ module.exports = class extends needleClientBase {
 
     addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-        const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+        const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         const entityEntry =
             // prettier-ignore
             this.generator.stripMargin(`|<li>
@@ -169,7 +167,7 @@ module.exports = class extends needleClientBase {
 
     addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to menu.\n')}`;
-        const entityMenuPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+        const entityMenuPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         // prettier-ignore
         const entityEntry = `<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                                 <a class="nav-link" routerLink="${routerName}" (click)="collapseNavbar()">
@@ -185,7 +183,7 @@ module.exports = class extends needleClientBase {
 
     addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu = routerName) {
         const errorMessage = `${chalk.yellow('Reference to ') + routerName} ${chalk.yellow('not added to admin menu.\n')}`;
-        const navbarAdminPath = `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
+        const navbarAdminPath = `${this.CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`;
         // prettier-ignore
         const entityEntry = `<li>
                         <a class="dropdown-item" routerLink="${routerName}" routerLinkActive="active" (click)="collapseNavbar()">
@@ -215,7 +213,7 @@ module.exports = class extends needleClientBase {
     }
 
     addEntityToModule(entityInstance, entityClass, entityAngularName, entityFolderName, entityFileName, entityUrl, microServiceName) {
-        const entityModulePath = `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
+        const entityModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`;
         try {
             const isSpecificEntityAlreadyGenerated = jhipsterUtils.checkStringInFile(
                 entityModulePath,
@@ -241,7 +239,7 @@ module.exports = class extends needleClientBase {
     }
 
     addAdminRoute(route, modulePath, moduleName) {
-        const adminModulePath = `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
+        const adminModulePath = `${this.CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`;
         this._addRoute(route, modulePath, moduleName, 'jhipster-needle-add-admin-route', adminModulePath);
     }
 };
