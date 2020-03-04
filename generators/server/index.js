@@ -209,7 +209,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
                 }
-                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
                 this.jwtSecretKey = configuration.get('jwtSecretKey');
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
@@ -374,6 +373,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             configureGlobal() {
+                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
+
                 // Application name modified, using each technology's conventions
                 this.angularAppName = this.getAngularAppName();
                 this.camelizedBaseName = _.camelCase(this.baseName);
