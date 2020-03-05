@@ -27,9 +27,9 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component
-public class JwtAuthorityExtractor implements Converter<Jwt, Collection<GrantedAuthority>> {
+public class JwtGrantedAuthorityConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
-    public JwtAuthorityExtractor() {
+    public JwtGrantedAuthorityConverter() {
         // Bean extracting authority.
     }
 

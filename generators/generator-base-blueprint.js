@@ -97,7 +97,7 @@ module.exports = class extends BaseGenerator {
                 const packagePatterns = blueprints
                     .filter(bp => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(bp.name)))
                     .map(bp => bp.name);
-                this.env.lookup({ packagePatterns });
+                this.env.lookup({ filterPaths: true, packagePatterns });
 
                 if (!this.options.skipChecks) {
                     const namespaces = blueprints.map(bp => jhipsterUtils.packageNameToNamespace(bp.name));
@@ -119,8 +119,9 @@ module.exports = class extends BaseGenerator {
                 if (extraOptions) {
                     bpOptions = { ...bpOptions, ...extraOptions };
                 }
-                const useBP = this.composeBlueprint(blueprint.name, subGen, bpOptions);
-                if (!useBlueprints && useBP) {
+                const blueprintGenerator = this.composeBlueprint(blueprint.name, subGen, bpOptions);
+                // If the blueprints sets sbsBlueprint property, then don't ignore the normal workflow.
+                if (!useBlueprints && blueprintGenerator && !blueprintGenerator.sbsBlueprint) {
                     useBlueprints = true;
                 }
             });

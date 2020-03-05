@@ -67,28 +67,21 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>3.5.0</jhipster-dependencies.version>
+        <jhipster-dependencies.version>3.6.0-SNAPSHOT</jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.2.4.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
 <%_ if (databaseType === 'sql') { _%>
-        <!-- The spring framework version should match the one managed by
-        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <spring.version>5.2.3.RELEASE</spring.version>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <hibernate.version>5.4.10.Final</hibernate.version>
+        <hibernate.version>5.4.12.Final</hibernate.version>
         <!-- The javassist version should match the one managed by
         https://mvnrepository.com/artifact/org.hibernate/hibernate-core/${hibernate.version} -->
         <javassist.version>3.24.0-GA</javassist.version>
         <!-- The liquibase version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
-        <!-- However due to regressions, we can't upgrade: https://liquibase.jira.com/browse/CORE-3536 and
-         https://liquibase.jira.com/browse/CORE-3522 -->
-        <liquibase.version>3.6.3</liquibase.version>
-        <liquibase-hibernate5.version>3.6</liquibase-hibernate5.version>
-        <!-- The hibernate version to be used to override default version of liquibase maven plugin -->
-        <hibernate-core.version>5.3.8.Final</hibernate-core.version>
+        <liquibase.version><%= LIQUIBASE_VERSION %></liquibase.version>
+        <liquibase-hibernate5.version>3.8</liquibase-hibernate5.version>
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
     <%_ } _%>
@@ -183,6 +176,10 @@
         </dependency>
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate5</artifactId>
@@ -392,7 +389,7 @@
 <%_ } _%>
 <%_ if (prodDatabaseType === 'oracle') { _%>
         <dependency>
-            <groupId>com.oracle.ojdbc</groupId>
+            <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
         </dependency>
 <%_ } _%>
@@ -683,7 +680,7 @@
             <scope>runtime</scope>
         </dependency>
 <%_ } _%>
-<%_ if (authenticationType === 'uaa' || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
@@ -1121,7 +1118,7 @@
                             <entrypoint>
                                 <shell>bash</shell>
                                 <option>-c</option>
-                                <arg>chmod +x /entrypoint.sh &amp;&amp; sync &amp;&amp; /entrypoint.sh</arg>
+                                <arg>/entrypoint.sh</arg>
                             </entrypoint>
                             <ports>
                                 <port><%= serverPort %></port>
@@ -1138,6 +1135,15 @@
                             </environment>
                             <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
                         </container>
+                        <extraDirectories>
+                            <paths><%= MAIN_DIR %>jib</paths>
+                            <permissions>
+                                <permission>
+                                    <file>/entrypoint.sh</file>
+                                    <mode>755</mode>
+                                </permission>
+                            </permissions>
+                        </extraDirectories>
                     </configuration>
                 </plugin>
 <%_ if (databaseType === 'sql') { _%>
@@ -1163,19 +1169,9 @@
                     </configuration>
                     <dependencies>
                         <dependency>
-                            <groupId>io.github.jhipster</groupId>
-                            <artifactId>jhipster-framework</artifactId>
-                            <version>${jhipster-dependencies.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.hibernate</groupId>
-                            <artifactId>hibernate-core</artifactId>
-                            <version>${hibernate-core.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.javassist</groupId>
-                            <artifactId>javassist</artifactId>
-                            <version>${javassist.version}</version>
+                            <groupId>org.liquibase</groupId>
+                            <artifactId>liquibase-core</artifactId>
+                            <version>${liquibase.version}</version>
                         </dependency>
                         <dependency>
                             <groupId>org.liquibase.ext</groupId>
@@ -1192,6 +1188,18 @@
                             <artifactId>validation-api</artifactId>
                             <version>${validation-api.version}</version>
                         </dependency>
+                        <dependency>
+                            <groupId>org.javassist</groupId>
+                            <artifactId>javassist</artifactId>
+                            <version>${javassist.version}</version>
+                        </dependency>
+    <%_ if (devDatabaseType === 'postgresql') { _%>
+                        <dependency>
+                            <groupId>io.github.jhipster</groupId>
+                            <artifactId>jhipster-framework</artifactId>
+                            <version>${jhipster-dependencies.version}</version>
+                        </dependency>
+    <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk') { _%>
                         <dependency>
                             <groupId>com.h2database</groupId>
@@ -1199,21 +1207,6 @@
                             <version>${h2.version}</version>
                         </dependency>
     <%_ } _%>
-                        <dependency>
-                            <groupId>org.springframework</groupId>
-                            <artifactId>spring-core</artifactId>
-                            <version>${spring.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.springframework</groupId>
-                            <artifactId>spring-context</artifactId>
-                            <version>${spring.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.springframework</groupId>
-                            <artifactId>spring-beans</artifactId>
-                            <version>${spring.version}</version>
-                        </dependency>
                     </dependencies>
                 </plugin>
 <%_ } _%>

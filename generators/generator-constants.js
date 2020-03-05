@@ -16,24 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const semver = require('semver');
 
 // Version of Java
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
-const NODE_VERSION = '12.16.0';
+const NODE_VERSION = '12.16.1';
 const YARN_VERSION = '1.22.0';
-const NPM_VERSION = '6.13.7';
+const NPM_VERSION = '6.14.2';
 
 const GRADLE_VERSION = '6.1';
 
 // Libraries version
 const JIB_VERSION = '2.0.0';
 
+const LIQUIBASE_VERSION = '3.8.7';
+const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
+const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
+
 const JACOCO_VERSION = '0.8.5';
-
 const KAFKA_VERSION = '5.4.0';
-
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
 
 // Version of docker images
@@ -54,7 +57,7 @@ const DOCKER_KEYCLOAK = 'jboss/keycloak:9.0.0'; // The version should match the 
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.6'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
-const DOCKER_SONAR = 'sonarqube:7.9.2-community';
+const DOCKER_SONAR = 'sonarqube:8.2-community';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.1.0';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v4.1.0';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.1.0';
@@ -126,7 +129,7 @@ const SQL_DB_OPTIONS = [
     },
     {
         value: 'oracle',
-        name: 'Oracle (Please follow our documentation to use the Oracle proprietary driver)'
+        name: 'Oracle'
     },
     {
         value: 'mssql',
@@ -333,6 +336,8 @@ const constants = {
 
     // Libraries
     JIB_VERSION,
+    LIQUIBASE_VERSION,
+    LIQUIBASE_DTD_VERSION,
     JACOCO_VERSION,
     JACKSON_DATABIND_NULLABLE_VERSION,
 

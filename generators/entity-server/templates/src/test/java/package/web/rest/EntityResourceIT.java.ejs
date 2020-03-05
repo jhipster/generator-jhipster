@@ -519,7 +519,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
         <%_ } _%>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance))%>)))
             .andExpect(status().isCreated());
 
@@ -565,7 +565,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
         // An entity with an existing ID cannot be created, so this API call must fail
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
@@ -623,7 +623,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
         // Update the entity
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%_ if (dto === 'mapstruct') { _%>updated<%= asDto(entityClass) %> <%_ } else { _%> updated<%= asEntity(entityClass) %> <%_ } _%>)))
             .andExpect(status().isOk());
 
@@ -667,7 +667,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);<% } %>
 
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
@@ -1111,7 +1111,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%_ } _%>
 
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : 'updated' + asEntity(entityClass)) %>)))
             .andExpect(status().isOk());
 
@@ -1149,7 +1149,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(<%= (dto === 'mapstruct' ? asDto(entityInstance) : asEntity(entityInstance)) %>)))
             .andExpect(status().isBadRequest());
 
@@ -1183,7 +1183,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
         // Delete the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= asEntity(entityInstance) %>.getId())<% if (testsNeedCsrf) { %>.with(csrf())<% }%>
-            .accept(TestUtil.APPLICATION_JSON))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

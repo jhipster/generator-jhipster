@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const constants = require('../generator-constants');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
@@ -36,6 +37,21 @@ module.exports = class extends BaseBlueprintGenerator {
         useBlueprints =
             !this.fromBlueprint &&
             this.instantiateBlueprints('entity-server', { context: opts.context, debug: opts.context.isDebugEnabled });
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
+        return {
+            setupConstants() {
+                // Make constants available in templates
+                this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+            }
+        };
+    }
+
+    get initializing() {
+        if (useBlueprints) return;
+        return this._initializing();
     }
 
     // Public API method used by the getter and also by Blueprints
