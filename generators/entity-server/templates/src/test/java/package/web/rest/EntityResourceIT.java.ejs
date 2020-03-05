@@ -121,6 +121,9 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (fieldsContainBlob === true) { _%>
 import org.springframework.util.Base64Utils;
 <%_ } _%>
+<%_ if (reactive && fieldsContainOwnerManyToMany === true) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
