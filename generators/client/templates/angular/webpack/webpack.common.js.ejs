@@ -59,6 +59,8 @@ module.exports = (options) => ({
                 options: {
                     digest: 'hex',
                     hash: 'sha512',
+                    // For fixing src attr of image
+                    // See https://github.com/jhipster/generator-jhipster/issues/11209
                     name: 'content/[hash].[ext]',
                     esModule: false
                 }
