@@ -30,6 +30,8 @@ fi
 if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity DocumentBankAccount
     moveEntity EmbeddedOperation
+    moveEntity Place
+    moveEntity Division
 
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructAndServiceClassEntity
