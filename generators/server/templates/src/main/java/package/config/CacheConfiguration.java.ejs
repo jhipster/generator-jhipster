@@ -69,10 +69,9 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (cacheProvider === 'memcached') { _%>
-    <%_ if (databaseType !== 'no') { _%>
+    <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
 import <%= packageName %>.repository.UserRepository;
     <%_ } _%>
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -684,7 +683,7 @@ public class CacheConfiguration {
         cacheManager.setCaches(ssmCaches);
         return cacheManager;
     }
-    <%_ if (databaseType !== 'no') { _%>
+    <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
 
     @Bean
     public CacheFactory usersByLoginCache(JHipsterProperties jHipsterProperties) {
