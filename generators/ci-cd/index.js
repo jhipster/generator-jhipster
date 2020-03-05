@@ -159,7 +159,7 @@ module.exports = class extends BaseGenerator {
             this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
         if (this.pipeline === 'circle') {
-            this.template('circle.yml.ejs', 'circle.yml');
+            this.template('circle.yml.ejs', '.circleci/config.yml');
         }
         if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');
