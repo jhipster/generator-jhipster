@@ -28,6 +28,12 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
+<%_ if (databaseType === 'sql' && reactive) { _%>        
+        <repository>
+            <id>spring-milestone</id>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+<%_ } _%>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
@@ -180,10 +186,12 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jaxb-annotations</artifactId>
         </dependency>
+    <%_ if (!reactive) { _%>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate5</artifactId>
         </dependency>
+    <%_ } _%> 
 <%_ } _%>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -520,10 +528,23 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 <%_ if (databaseType === 'sql') { _%>
+    <%_ if (!reactive) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+    <%_ } else { _%>
+        <dependency>
+            <groupId>org.springframework.boot.experimental</groupId>
+            <artifactId>spring-boot-starter-data-r2dbc</artifactId>
+            <version>0.1.0.M3</version>
+        </dependency>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+            <version>0.8.1.RELEASE</version>
+        </dependency>
+    <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
         <dependency>

@@ -1310,7 +1310,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.databaseType === 'sql',
+            condition: generator => generator.databaseType === 'sql' && !generator.reactive,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

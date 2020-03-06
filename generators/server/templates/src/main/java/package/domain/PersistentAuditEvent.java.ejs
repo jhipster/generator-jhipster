@@ -36,7 +36,17 @@ import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } else if (databaseType === 'sql') { _%>
+    <%_ if (reactive) { _%>
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+    <%_ } else { _%>
 import javax.persistence.*;
+    <%_ } _%>
 <%_ } _%>
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -53,72 +63,106 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  * Persist AuditEvent managed by the Spring Boot actuator.
  *
  * @see org.springframework.boot.actuate.audit.AuditEvent
- */<% if (databaseType === 'sql') { %>
+ */
+<%_ if (databaseType === 'sql') { _%>
+    <%_ if (!reactive) { _%>
 @Entity
-@Table(name = "<%= jhiTablePrefix %>_persistent_audit_event")<% } %><% if (databaseType === 'mongodb') { %>
-@Document(collection = "<%= jhiTablePrefix %>_persistent_audit_event")<% } %><% if (databaseType === 'neo4j') { %>
-@Node("<%= jhiTablePrefix %>_persistent_audit_event")<% } %><% if (databaseType === 'couchbase') { %>
-@Document<% } %>
+@Table(name = "<%= jhiTablePrefix %>_persistent_audit_event")
+    <%_ } else { _%>
+@Table("<%= jhiTablePrefix %>_persistent_audit_event")
+    <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+@Document(collection = "<%= jhiTablePrefix %>_persistent_audit_event")
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+@Node("<%= jhiTablePrefix %>_persistent_audit_event")
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+@Document
+<%_ } _%>
 public class PersistentAuditEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
-<%_ if (databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'couchbase') { _%>
 
     public static final String PREFIX = "audit";
 
     @IdPrefix
     private String prefix = PREFIX;
-<%_ } _%>
+    <%_ } _%>
 
-    @Id<% if (databaseType === 'sql') { %>
-    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    @Id
+    <%_ if (databaseType === 'sql') { _%>
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    <%_ }  else { _%>
+        <%_ }  else { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-    <%_ } _%>
-    @Column(name = "event_id")
-    private Long id;<% } else { %>
-    <%_ if (databaseType === 'couchbase') { _%>
+        <%_ } _%>
+    @Column(<% if (!reactive) { %>name = <% } %>"event_id")
+    private Long id;
+    <%_ } else { _%>
+        <%_ if (databaseType === 'couchbase') { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    <%_ } else if (databaseType === 'neo4j') { _%>
+        <%_ } else if (databaseType === 'neo4j') { _%>
     @Property("event_id")
     @GeneratedValue(UUIDStringGenerator.class)
+        <%_ } _%>
+    private String id;
     <%_ } _%>
-    private String id;<% } %>
 
-    @NotNull<% if (databaseType === 'sql') { %>
-    @Column(nullable = false)<% } %>
+    @NotNull
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
+    @Column(nullable = false)
+    <%_ } _%>
     private String principal;
-<% if (databaseType === 'sql') { %>
-    @Column(name = "event_date")<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    @Field("event_date")<% } %>
+
+    <%_ if (databaseType === 'sql') { _%>
+    @Column(<% if (!reactive) { %>name = <% } %>"event_date")
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    @Field("event_date")
+    <%_ } _%>
     private Instant auditEventDate;
-<% if (databaseType === 'sql') { %>
-    @Column(name = "event_type")<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    @Field("event_type")<% } %>
+
+    <%_ if (databaseType === 'sql') { _%>
+    @Column(<% if (!reactive) { %>name = <% } %>"event_type")
+    <%_ } _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    @Field("event_type")
+    <%_ } _%>
     private String auditEventType;
-<% if (databaseType === 'sql') { %>
+
+    <%_ if (databaseType === 'sql') { _%>
+        <%_ if (!reactive) { _%>
     @ElementCollection
     @MapKeyColumn(name = "name")
     @Column(name = "value")
-    @CollectionTable(name = "<%= jhiTablePrefix %>_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))<% } %>
+    @CollectionTable(name = "<%= jhiTablePrefix %>_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))
+        <%_ } else { _%>
+    @Transient
+        <%_ } _%>
+    <%_ } _%>
     private Map<String, String> data = new HashMap<>();
-<% if (databaseType === 'sql') { %>
+
+    <%_ if (databaseType === 'sql') { _%>
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }<% } else { %>
+    }
+    <%_ } else { _%>
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }<% } %>
+    }
+    <%_ } _%>
 
     public String getPrincipal() {
         return principal;

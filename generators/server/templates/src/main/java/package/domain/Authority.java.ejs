@@ -31,10 +31,17 @@ import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
+    <%_ if (!reactive) { _%>
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+    <%_ } else { _%>
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+    <%_ } _%>
 <%_ } _%>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,7 +51,7 @@ import java.util.Objects;
 /**
  * An authority (a security role) used by Spring Security.
  */
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_authority")
     <%_ if (enableHibernateCache) { _%>
@@ -54,6 +61,9 @@ import java.util.Objects;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
         <%_ } _%>
     <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+@Table("jhi_authority")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= jhiTablePrefix %>_authority")
@@ -70,8 +80,10 @@ public class Authority implements Serializable {
 
     @NotNull
     @Size(max = 50)
-    @Id<% if (databaseType === 'sql') { %>
-    @Column(length = 50)<% } %>
+    @Id
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
+    @Column(length = 50)
+    <%_ } _%>
     private String name;
 
     public String getName() {

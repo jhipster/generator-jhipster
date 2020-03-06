@@ -59,8 +59,10 @@ import static org.springframework.boot.actuate.security.AuthenticationAuditListe
  * <p>
  * This is the default implementation to support SpringBoot Actuator {@code AuditEventRepository}.
  */
-@Service<% if (databaseType === 'sql') { %>
-@Transactional<% } %>
+@Service
+<%_ if (databaseType === 'sql' && !reactive) { _%>
+@Transactional
+<%_ } _%>
 public class AuditEventService {
 
     <%_ if (reactive) { _%>
@@ -94,45 +96,71 @@ public class AuditEventService {
      */
     @Scheduled(cron = "0 0 12 * * ?")
     public void removeOldAuditEvents() {
+        <%_ if (!reactive) { _%>
         persistenceAuditEventRepository
             .findByAuditEventDateBefore(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod(), ChronoUnit.DAYS))
-            <%_ if (!reactive) { _%>
             .forEach(auditEvent -> {
                 log.debug("Deleting audit data {}", auditEvent);
                 persistenceAuditEventRepository.delete(auditEvent);
             });
-            <%_ } else { _%>
+        <%_ } else { _%>
+        removeOldAuditEventsReactively().block();
+    }
+
+    @Transactional
+    public Mono<Void> removeOldAuditEventsReactively() {
+        return persistenceAuditEventRepository
+            .findByAuditEventDateBefore(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod(), ChronoUnit.DAYS))
             .flatMap(auditEvent -> {
                 log.debug("Deleting audit data {}", auditEvent);
                 return persistenceAuditEventRepository.delete(auditEvent);
-            }).blockLast();
-            <%_ } _%>
+            })
+            .then();
+        <%_ } _%>
     }
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><AuditEvent> findAll(Pageable pageable) {
         return persistenceAuditEventRepository.findAll<% if (reactive) { %>By<% } %>(pageable)
             .map(auditEventConverter::convertToAuditEvent);
     }
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><AuditEvent> findByDates(Instant fromDate, Instant toDate, Pageable pageable) {
         return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable)
             .map(auditEventConverter::convertToAuditEvent);
     }
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><AuditEvent> find(<% if (databaseType === 'sql') { %>Long <% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String <% } %>id) {
         return persistenceAuditEventRepository.findById(id)
             .map(auditEventConverter::convertToAuditEvent);
     }
     <%_ if (reactive) { _%>
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public Mono<Long> count() {
         return persistenceAuditEventRepository.count();
     }
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public Mono<Long> countByDates(Instant fromDate, Instant toDate) {
         return persistenceAuditEventRepository.countByAuditEventDateBetween(fromDate, toDate);
     }
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public Mono<PersistentAuditEvent> saveAuthenticationSuccess(String login) {
         PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
         persistentAuditEvent.setPrincipal(login);
@@ -141,6 +169,9 @@ public class AuditEventService {
         return persistenceAuditEventRepository.save(persistentAuditEvent);
     }
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public Mono<PersistentAuditEvent> saveAuthenticationError(String login, Throwable e) {
         PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
         persistentAuditEvent.setPrincipal(login);

@@ -103,7 +103,7 @@
     <logger name="org.elasticsearch" level="WARN"/>
     <%_ } _%>
     <logger name="org.hibernate.validator" level="WARN"/>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <%_ } else if (databaseType === 'mongodb') { _%>

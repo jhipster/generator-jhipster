@@ -178,7 +178,7 @@ spring:
     <%_ } _%>
     jmx:
         enabled: false
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     data:
         jpa:
             repositories:

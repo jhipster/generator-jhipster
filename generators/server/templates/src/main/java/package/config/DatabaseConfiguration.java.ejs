@@ -22,6 +22,9 @@ import io.github.jhipster.config.JHipsterConstants;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import io.r2dbc.spi.ConnectionFactory;
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
@@ -61,7 +64,7 @@ import org.springframework.context.annotation.FilterType;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.springframework.context.annotation.Profile;
 <%_ } _%>
-<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || (databaseType === 'sql' && reactive)) { _%>
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -101,13 +104,30 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.springframework.core.env.Environment;
     <%_ } _%>
+    <%_ if (reactive) { _%>
+import org.springframework.data.convert.CustomConversions;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
+import org.springframework.data.r2dbc.dialect.DialectResolver;
+import org.springframework.data.r2dbc.dialect.R2dbcDialect;
+import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+    <%_ } else { _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+    <%_ } _%>
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import java.sql.SQLException;
 <%_ } } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import java.util.ArrayList;
 import java.util.List;
@@ -125,8 +145,12 @@ import java.util.UUID;
 
 @Configuration
 <%_ if (databaseType === 'sql') { _%>
+    <%_ if (reactive) { _%>
+@EnableR2dbcRepositories("<%= packageName %>.repository")
+    <%_ } else { _%>
 @EnableJpaRepositories("<%= packageName %>.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
 @EnableTransactionManagement
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -377,6 +401,28 @@ public class DatabaseConfiguration {
             return source == null ? null : UUID.fromString(source);
         }
 
+    }
+<%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+    // Can be removed in 0.8.3+ version of r2dbc-h2
+    // See https://github.com/r2dbc/r2dbc-h2/pull/139
+    @Bean
+    public R2dbcCustomConversions r2dbcCustomConversions(ConnectionFactory connectionFactory) {
+        R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
+        List<Object> converters = new ArrayList<>(dialect.getConverters());
+        converters.add(new InstantWriteConverter());
+        converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
+        return new R2dbcCustomConversions(
+            CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
+            Collections.emptyList());
+    }
+
+    @WritingConverter
+    public static class InstantWriteConverter implements Converter<Instant, OffsetDateTime> {
+
+        public OffsetDateTime convert(Instant source) {
+            return source.atOffset(ZoneOffset.UTC);
+        }
     }
 <%_ } _%>
 }

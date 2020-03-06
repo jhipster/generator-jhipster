@@ -85,6 +85,9 @@ import java.time.LocalDate;
 <%_ if (databaseType !== 'no') { _%>
 import java.time.Instant;
 <%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import java.time.OffsetDateTime;
+<%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'neo4j'  || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
@@ -96,8 +99,10 @@ import java.util.stream.Collectors;
 /**
  * Service class for managing users.
  */
-@Service<% if (databaseType === 'sql') { %>
-@Transactional<% } %>
+@Service
+<%_ if (databaseType === 'sql' && !reactive) { _%>
+@Transactional
+<%_ } _%>
 public class UserService {
 <%_ if (databaseType !== 'no') { _%>
 
@@ -145,6 +150,9 @@ public class UserService {
     }
 <%_ if (authenticationType !== 'oauth2') { _%>
 
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transactional
+    <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
@@ -175,6 +183,9 @@ public class UserService {
             <%_ } _%>
     }
 
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transactional
+    <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository.findOneByResetKey(key)
@@ -199,6 +210,9 @@ public class UserService {
             <%_ } _%>
     }
 
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transactional
+    <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asEntity('User') %>> requestPasswordReset(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail)
             .filter(<%= asEntity('User') %>::getActivated)
@@ -221,6 +235,9 @@ public class UserService {
             <%_ } _%>
     }
 
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transactional
+    <%_ } _%>
     public <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> registerUser(<%= asDto('User') %> userDTO, String password) {
     <%_ if (!reactive) { _%>
         userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
@@ -352,6 +369,9 @@ public class UserService {
     }
 
     <%_ } _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transactional
+    <%_ } _%>
     public <% if (reactive) { %>Mono<<%= asEntity('User') %>><% } else { %><%= asEntity('User') %><% } %> createUser(<%= asDto('User') %> userDTO) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();<% if (databaseType === 'cassandra') { %>
         user.setId(UUID.randomUUID().toString());<% } %>
@@ -398,7 +418,7 @@ public class UserService {
         return user;
     <%_ } else { _%>
         <%_ if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
-        return Flux.fromIterable(Optional.ofNullable(userDTO.getAuthorities()).orElse(new HashSet<>()))
+        return Flux.fromIterable(userDTO.getAuthorities() != null ? userDTO.getAuthorities() : new HashSet<>())
             .flatMap(authorityRepository::findById)
             .doOnNext(authority -> user.getAuthorities().add(authority))
             .then(createUser(user))
@@ -425,6 +445,9 @@ public class UserService {
      * @param imageUrl  image URL of user.
      <%_ } _%>
      */
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transactional
+    <%_ } _%>
     public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { %>, String imageUrl<% } %>) {
         <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -467,6 +490,9 @@ public class UserService {
      * @param userDTO user to update.
      * @return updated user.
      */
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    @Transactional
+    <%_ } _%>
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= asDto('User') %>> updateUser(<%= asDto('User') %> userDTO) {
         <%_ if (!reactive) { _%>
         return Optional.of(userRepository
@@ -556,7 +582,10 @@ public class UserService {
         });
     }
     <%_ } else { _%>
-    private Mono<<%= asEntity('User') %>> updateUser(<%= asEntity('User') %> user) {
+        <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+        <%_ } _%>
+    <% if (databaseType !== 'sql') { %>private <% } %>Mono<<%= asEntity('User') %>> updateUser(<%= asEntity('User') %> user) {
         <%_ if (databaseType === 'cassandra') { _%>
         return userRepository.save(user);
         <%_ } else { _%>
@@ -569,7 +598,10 @@ public class UserService {
         <%_ } _%>
     }
 
-    private Mono<<%= asEntity('User') %>> createUser(<%= asEntity('User') %> user) {
+        <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+        <%_ } _%>
+    <% if (databaseType !== 'sql') { %>private <% } %>Mono<<%= asEntity('User') %>> createUser(<%= asEntity('User') %> user) {
         <%_ if (databaseType === 'cassandra') { _%>
         return userRepository.save(user);
         <%_ } else { _%>
@@ -578,11 +610,25 @@ public class UserService {
             .flatMap(login -> {
                 user.setCreatedBy(login);
                 user.setLastModifiedBy(login);
+            <%_ if (databaseType === 'sql') { _%>
+                // Saving the relationship can be done in an entity callback
+                // once https://github.com/spring-projects/spring-data-r2dbc/issues/215 is done
+                return userRepository.save(user)
+                    .flatMap(savedUser ->
+                       Flux.fromIterable(user.getAuthorities())
+                           .flatMap(authority -> userRepository.saveUserAuthority(savedUser.getId(), authority.getName()))
+                           .then(Mono.just(savedUser))
+                    );
+            <%_ } else { _%>
                 return userRepository.save(user);
+            <%_ } _%>
             });
         <%_ } _%>
     }
 
+        <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+        <%_ } _%>
     public Mono<Void> deleteUser(String login) {
         return userRepository.findOneByLogin(login)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
@@ -595,6 +641,9 @@ public class UserService {
     <%_ } _%>
 <%_ if (authenticationType !== 'oauth2') { _%>
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional
+    <%_ } _%>
     public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> changePassword(String currentClearTextPassword, String newPassword) {
         <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -635,6 +684,9 @@ public class UserService {
     }
         <%_ if (reactive) { _%>
 
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public Mono<Long> countManagedUsers() {
         return userRepository.countAllByLoginNot(Constants.ANONYMOUS_USER);
     }
@@ -704,9 +756,9 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
+        <%_ if (!reactive) { _%>
         userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
-            <%_ if (!reactive) { _%>
             .forEach(user -> {
                 log.debug("Deleting not activated user {}", user.getLogin());
                 userRepository.delete(user);
@@ -717,21 +769,31 @@ public class UserService {
                 this.clearUserCaches(user);
                 <%_ } _%>
             });
-            <%_ } else { _%>
+        <%_ } else { _%>
+        removeNotActivatedUsersReactively().blockLast();
+    }
+
+    @Transactional
+    public Flux<User> removeNotActivatedUsersReactively() {
+        return userRepository
+            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(OffsetDateTime.now().minus(3, ChronoUnit.DAYS))
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
             <%_ } _%>
-            .doOnNext(user -> log.debug("Deleted User: {}", user))
-            .blockLast();
+            .doOnNext(user -> log.debug("Deleted User: {}", user));
             <%_ } _%>
     }
-    <%_ } if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 
     /**
      * Gets a list of all the authorities.
      * @return a list of all the authorities.
      */
+    <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+    <%_ } _%>
     public <% if (reactive) { %>Flux<% } else { %>List<% } %><String> getAuthorities() {
         return authorityRepository.findAll()<% if (!reactive) { %>.stream()<% } %>.map(Authority::getName)<% if (!reactive) { %>.collect(Collectors.toList())<% } %>;
     }
@@ -836,6 +898,9 @@ public class UserService {
      * @param authToken the authentication token.
      * @return the user from the authentication.
      */
+        <%_ if (databaseType === 'sql') { _%>
+    @Transactional(readOnly = true)
+        <%_ } _%>
     public <% if (!reactive) { %>UserDTO<% } else { %>Mono<UserDTO><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
         if (authToken instanceof OAuth2AuthenticationToken) {

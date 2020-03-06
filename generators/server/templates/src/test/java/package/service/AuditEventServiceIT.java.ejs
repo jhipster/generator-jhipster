@@ -60,10 +60,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 @Transactional
 <%_ } _%>
-public class AuditEventServiceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %> {
+public class AuditEventServiceIT<% if (databaseType === 'neo4j') { %> extends AbstractNeo4jIT<% } %> {
     @Autowired
     private AuditEventService auditEventService;
 
@@ -101,7 +101,7 @@ public class AuditEventServiceIT <% if (databaseType === 'neo4j') { %>extends Ab
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void verifyOldAuditEventsAreDeleted() {
@@ -110,11 +110,11 @@ public class AuditEventServiceIT <% if (databaseType === 'neo4j') { %>extends Ab
         persistenceAuditEventRepository.save(auditEventWithinRetention)<% if (reactive) { %>.block()<% } %>;
         persistenceAuditEventRepository.save(auditEventNew)<% if (reactive) { %>.block()<% } %>;
 
-        <%_ if (databaseType === 'sql') { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
         persistenceAuditEventRepository.flush();
         <%_ } _%>
         auditEventService.removeOldAuditEvents();
-        <%_ if (databaseType === 'sql') { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
         persistenceAuditEventRepository.flush();
         <%_ } _%>
 

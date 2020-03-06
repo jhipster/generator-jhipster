@@ -23,8 +23,14 @@ import <%= packageName %>.domain.PersistentAuditEvent;
 import org.springframework.data.domain.Page;
 <%_ } _%>
 import org.springframework.data.domain.Pageable;
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.data.jpa.repository.JpaRepository;
+<%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.data.r2dbc.query.Criteria;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.stereotype.Repository;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
@@ -38,15 +44,27 @@ import reactor.core.publisher.Mono;
 <%_ } _%>
 
 import java.time.Instant;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+<%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.List;
 <%_ } _%>
 
 /**
- * Spring Data <% if (databaseType === 'sql') { %>JPA<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } %> repository for the {@link PersistentAuditEvent} entity.
+ * Spring Data <% if (databaseType === 'sql' && !reactive) { %>JPA<% } else if (databaseType === 'sql' && reactive) { %>R2DBC<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } %> repository for the {@link PersistentAuditEvent} entity.
  */
+<%_ if (databaseType === 'sql' && reactive) { _%>
+@Repository
+public interface PersistenceAuditEventRepository extends R2dbcRepository<PersistentAuditEvent, Long>, PersistenceAuditEventRepositoryInternal {
+}
+
+interface PersistenceAuditEventRepositoryInternal {
+<%_ } else { _%>
 public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') {
  %><PersistentAuditEvent, String><% } %> {
+<%_ } _%>
 
     <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByPrincipal(String principal);
 
@@ -64,3 +82,71 @@ public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Re
     Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate);
     <%_ } _%>
 }
+<%_ if (databaseType === 'sql' && reactive) { _%>
+
+class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEventRepositoryInternal {
+
+    private final DatabaseClient databaseClient;
+
+    public PersistenceAuditEventRepositoryInternalImpl(DatabaseClient databaseClient) {
+        this.databaseClient = databaseClient;
+    }
+
+    @Override
+    public Flux<PersistentAuditEvent> findByPrincipal(String principal) {
+        return findAllByCriteria(Criteria.where("principal").is(principal));
+    }
+
+    @Override
+    public Flux<PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable) {
+        // Can be removed in 0.8.3+ version of r2dbc-h2
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139
+        OffsetDateTime fromDateH2 = OffsetDateTime.ofInstant(fromDate, ZoneId.systemDefault());
+        OffsetDateTime toDateH2 = OffsetDateTime.ofInstant(toDate, ZoneId.systemDefault());
+        Criteria criteria = Criteria
+            .where("event_date").greaterThan(fromDateH2)
+            .and("event_date").lessThan(toDateH2);
+        return findAllFromSpec(select().matching(criteria).page(pageable));
+    }
+
+    @Override
+    public Flux<PersistentAuditEvent> findByAuditEventDateBefore(Instant before) {
+        // Can be removed in 0.8.3+ version of r2dbc-h2
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139
+        OffsetDateTime beforeH2 = OffsetDateTime.ofInstant(before, ZoneId.systemDefault());
+        return findAllByCriteria(Criteria.where("event_date").lessThan(beforeH2));
+    }
+
+    @Override
+    public Flux<PersistentAuditEvent> findAllBy(Pageable pageable) {
+        return findAllFromSpec(select().page(pageable));
+    }
+
+    @Override
+    public Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate) {
+        // Can be removed in 0.8.3+ version of r2dbc-h2
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139
+        OffsetDateTime fromDateH2 = OffsetDateTime.ofInstant(fromDate, ZoneId.systemDefault());
+        OffsetDateTime toDateH2 = OffsetDateTime.ofInstant(toDate, ZoneId.systemDefault());
+        return databaseClient.execute("SELECT COUNT(DISTINCT event_id) FROM jhi_persistent_audit_event " +
+            "WHERE event_date > :fromDate AND event_date < :toDate")
+            .bind("fromDate", fromDateH2)
+            .bind("toDate", toDateH2)
+            .as(Long.class)
+            .fetch()
+            .one();
+    }
+
+    private Flux<PersistentAuditEvent> findAllByCriteria(Criteria criteria) {
+        return findAllFromSpec(select().matching(criteria));
+    }
+
+    private DatabaseClient.TypedSelectSpec<PersistentAuditEvent> select() {
+        return databaseClient.select().from(PersistentAuditEvent.class);
+    }
+
+    private Flux<PersistentAuditEvent> findAllFromSpec(DatabaseClient.TypedSelectSpec<PersistentAuditEvent> spec) {
+        return spec.as(PersistentAuditEvent.class).all();
+    }
+}
+<%_ } _%>
