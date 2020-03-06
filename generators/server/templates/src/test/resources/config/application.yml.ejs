@@ -48,7 +48,7 @@ spring:
         exclude:
             - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
     <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE

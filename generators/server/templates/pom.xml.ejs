@@ -28,6 +28,12 @@
     <name><%= humanizedBaseName %></name>
 
     <repositories>
+        <%_ if (reactive) { _%>
+        <repository>
+            <id>spring-milestone</id>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <%_ } _%>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
