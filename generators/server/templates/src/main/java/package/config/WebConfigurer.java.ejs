@@ -67,9 +67,10 @@ import org.springframework.web.filter.CorsFilter;
 <%_ if (reactive) { _%>
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+<%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
+import org.springframework.web.reactive.config.ResourceHandlerRegistry;
+<%_ } _%>
 import org.springframework.web.reactive.config.WebFluxConfigurer;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
 import org.springframework.web.server.WebExceptionHandler;
 import org.zalando.problem.spring.webflux.advice.ProblemExceptionHandler;
@@ -90,11 +91,7 @@ import static java.net.URLDecoder.decode;
 <%_ } _%>
 <%_ if (reactive && !skipClient) { _%>
 
-import java.net.URI;
 import java.util.concurrent.TimeUnit;
-
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 <%_ } _%>
 
 /**
@@ -262,6 +259,17 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         // Use a cache filter that only match selected paths
         return new CachingHttpHeadersFilter(TimeUnit.DAYS.toMillis(jHipsterProperties.getHttp().getCache().getTimeToLiveInDays()));
     }
+            <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/swagger-ui.html**")
+            .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+            .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+            <%_ } _%>
         <%_ } _%>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>

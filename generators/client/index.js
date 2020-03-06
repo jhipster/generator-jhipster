@@ -92,6 +92,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
+                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
                 this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */

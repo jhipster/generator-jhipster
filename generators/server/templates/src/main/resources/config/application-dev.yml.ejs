@@ -250,8 +250,10 @@ jhipster:
             enabled: false
             limit: 100000
             duration-in-seconds: 3600
+        <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api,/v2/api-docs # recommended dev configuration
+        <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration

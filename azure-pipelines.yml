@@ -85,6 +85,14 @@ jobs:
                   JHI_APP: webflux-mongodb-oauth2
                   JHI_ENTITY: none
                   JHI_PROTRACTOR: 1
+              webflux-gateway-oauth2:
+                  JHI_APP: webflux-gateway-oauth2
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-gateway-jwt:
+                  JHI_APP: webflux-gateway-jwt
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
               webflux-couchbase:
                   JHI_APP: webflux-couchbase
                   JHI_ENTITY: none

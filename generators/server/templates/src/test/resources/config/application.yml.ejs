@@ -43,6 +43,11 @@ eureka:
 spring:
     application:
         name: <%= baseName %>
+    <%_ if (applicationType === 'gateway' && reactive) { _%>
+    autoconfigure:
+        exclude:
+            - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
+    <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
