@@ -24,8 +24,8 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <% const isAutoIncrementDB = prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb';
-       const isSequenceDB = prodDatabaseType === 'postgresql' || prodDatabaseType === 'oracle' || prodDatabaseType === 'mssql';
+    <% const isAutoIncrementDB = (prodDatabaseType === 'postgresql' && reactive) || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb';
+       const isSequenceDB = (prodDatabaseType === 'postgresql' && !reactive) || prodDatabaseType === 'oracle' || prodDatabaseType === 'mssql';
     _%>
     <%_ if (isAutoIncrementDB) { _%>
     <property name="autoIncrement" value="true"/>
@@ -48,7 +48,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ } else { _%>
-            <column name="id" type="bigint" <% if (isAutoIncrementDB) { _%> autoIncrement="${autoIncrement}" <%_ } _%>>
+            <column name="id" type="bigint"<% if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}"<% } %><% if (reactive) { %> startWith="1050"<% } %> >
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ } _%>

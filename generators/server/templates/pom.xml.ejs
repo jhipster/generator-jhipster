@@ -91,6 +91,9 @@
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
     <%_ } _%>
+    <%_ if (reactive) { _%>
+        <r2dbc-h2.version>0.8.1.RELEASE</r2dbc-h2.version>
+    <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
@@ -210,6 +213,14 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+        <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+            <version>${r2dbc-h2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <%_ } _%>
 <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -500,6 +511,13 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
+        <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <version>0.8.1.RELEASE</version>
+        </dependency>
+        <%_ } _%>
 <%_ } _%>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -538,11 +556,6 @@
             <groupId>org.springframework.boot.experimental</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
             <version>0.1.0.M3</version>
-        </dependency>
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
-            <version>0.8.1.RELEASE</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -1227,6 +1240,14 @@
                             <artifactId>h2</artifactId>
                             <version>${h2.version}</version>
                         </dependency>
+        <%_ if (reactive) { _%>
+                        <dependency>
+                            <groupId>io.r2dbc</groupId>
+                            <artifactId>r2dbc-h2</artifactId>
+                            <version>${r2dbc-h2.version}</version>
+                            <scope>test</scope>
+                        </dependency>
+        <%_ } _%>
     <%_ } _%>
                     </dependencies>
                 </plugin>
@@ -1474,6 +1495,13 @@
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                 </dependency>
+        <%_ if (reactive) { _%>
+                <dependency>
+                    <groupId>io.r2dbc</groupId>
+                    <artifactId>r2dbc-h2</artifactId>
+                    <version>${r2dbc-h2.version}</version>
+                </dependency>
+        <%_ } _%>
     <%_ } _%>
             </dependencies>
             <build>
@@ -1567,6 +1595,13 @@
                     <groupId>com.h2database</groupId>
                     <artifactId>h2</artifactId>
                 </dependency>
+    <%_ if (reactive) { _%>
+                <dependency>
+                    <groupId>io.r2dbc</groupId>
+                    <artifactId>r2dbc-h2</artifactId>
+                    <version>${r2dbc-h2.version}</version>
+                </dependency>
+    <%_ } _%>
 <%_ } _%>
             </dependencies>
             <properties>

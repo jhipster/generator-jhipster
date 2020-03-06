@@ -161,12 +161,10 @@ function askForServerSideOpts(meta) {
             message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: response => {
                 const opts = [];
-                if (!reactive) {
-                    opts.push({
-                        value: 'sql',
-                        name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
-                    });
-                }
+                opts.push({
+                    value: 'sql',
+                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
+                });
                 opts.push({
                     value: 'mongodb',
                     name: 'MongoDB'
