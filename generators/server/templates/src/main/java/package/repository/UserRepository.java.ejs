@@ -91,7 +91,7 @@ import java.util.List;
 import java.util.Optional;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 <%_ } _%>
@@ -200,7 +200,7 @@ public interface UserRepository extends R2dbcRepository<User, Long>, UserReposit
     Mono<User> findOneByActivationKey(String activationKey);
 
     @Query("SELECT * FROM jhi_user WHERE activated = false AND activation_key IS NOT NULL AND created_date < :dateTime")
-    Flux<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(OffsetDateTime dateTime);
+    Flux<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(LocalDateTime dateTime);
 
     @Query("SELECT * FROM jhi_user WHERE reset_key = :resetKey")
     Mono<User> findOneByResetKey(String resetKey);

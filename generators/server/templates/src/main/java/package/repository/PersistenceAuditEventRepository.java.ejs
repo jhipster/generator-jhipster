@@ -45,8 +45,8 @@ import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 <%_ if (databaseType === 'sql' && reactive) { _%>
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.List;
@@ -99,22 +99,22 @@ class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEve
 
     @Override
     public Flux<PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable) {
-        // Can be removed in 0.8.3+ version of r2dbc-h2
-        // See https://github.com/r2dbc/r2dbc-h2/pull/139
-        OffsetDateTime fromDateH2 = OffsetDateTime.ofInstant(fromDate, ZoneId.systemDefault());
-        OffsetDateTime toDateH2 = OffsetDateTime.ofInstant(toDate, ZoneId.systemDefault());
+        // LocalDateTime seems to be the only type that is supported across all drivers atm
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
+        LocalDateTime fromDateLocal = LocalDateTime.ofInstant(fromDate, ZoneOffset.UTC);
+        LocalDateTime toDateLocal = LocalDateTime.ofInstant(toDate, ZoneOffset.UTC);
         Criteria criteria = Criteria
-            .where("event_date").greaterThan(fromDateH2)
-            .and("event_date").lessThan(toDateH2);
+            .where("event_date").greaterThan(fromDateLocal)
+            .and("event_date").lessThan(toDateLocal);
         return findAllFromSpec(select().matching(criteria).page(pageable));
     }
 
     @Override
     public Flux<PersistentAuditEvent> findByAuditEventDateBefore(Instant before) {
-        // Can be removed in 0.8.3+ version of r2dbc-h2
-        // See https://github.com/r2dbc/r2dbc-h2/pull/139
-        OffsetDateTime beforeH2 = OffsetDateTime.ofInstant(before, ZoneId.systemDefault());
-        return findAllByCriteria(Criteria.where("event_date").lessThan(beforeH2));
+        // LocalDateTime seems to be the only type that is supported across all drivers atm
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
+        LocalDateTime beforeLocal = LocalDateTime.ofInstant(before, ZoneOffset.UTC);
+        return findAllByCriteria(Criteria.where("event_date").lessThan(beforeLocal));
     }
 
     @Override
@@ -124,14 +124,14 @@ class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEve
 
     @Override
     public Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate) {
-        // Can be removed in 0.8.3+ version of r2dbc-h2
-        // See https://github.com/r2dbc/r2dbc-h2/pull/139
-        OffsetDateTime fromDateH2 = OffsetDateTime.ofInstant(fromDate, ZoneId.systemDefault());
-        OffsetDateTime toDateH2 = OffsetDateTime.ofInstant(toDate, ZoneId.systemDefault());
+        // LocalDateTime seems to be the only type that is supported across all drivers atm
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
+        LocalDateTime fromDateLocal = LocalDateTime.ofInstant(fromDate, ZoneOffset.UTC);
+        LocalDateTime toDateLocal = LocalDateTime.ofInstant(toDate, ZoneOffset.UTC);
         return databaseClient.execute("SELECT COUNT(DISTINCT event_id) FROM jhi_persistent_audit_event " +
             "WHERE event_date > :fromDate AND event_date < :toDate")
-            .bind("fromDate", fromDateH2)
-            .bind("toDate", toDateH2)
+            .bind("fromDate", fromDateLocal)
+            .bind("toDate", fromDateLocal)
             .as(Long.class)
             .fetch()
             .one();

@@ -106,6 +106,7 @@ import org.springframework.core.env.Environment;
     <%_ } _%>
     <%_ if (reactive) { _%>
 import org.springframework.data.convert.CustomConversions;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.data.r2dbc.dialect.DialectResolver;
@@ -122,7 +123,7 @@ import java.sql.SQLException;
 <%_ } } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import java.time.Instant;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -404,13 +405,14 @@ public class DatabaseConfiguration {
     }
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
-    // Can be removed in 0.8.3+ version of r2dbc-h2
-    // See https://github.com/r2dbc/r2dbc-h2/pull/139
+    // LocalDateTime seems to be the only type that is supported across all drivers atm
+    // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
     @Bean
     public R2dbcCustomConversions r2dbcCustomConversions(ConnectionFactory connectionFactory) {
         R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
         List<Object> converters = new ArrayList<>(dialect.getConverters());
         converters.add(new InstantWriteConverter());
+        converters.add(new InstantReadConverter());
         converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
         return new R2dbcCustomConversions(
             CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
@@ -418,10 +420,19 @@ public class DatabaseConfiguration {
     }
 
     @WritingConverter
-    public static class InstantWriteConverter implements Converter<Instant, OffsetDateTime> {
+    public static class InstantWriteConverter implements Converter<Instant, LocalDateTime> {
 
-        public OffsetDateTime convert(Instant source) {
-            return source.atOffset(ZoneOffset.UTC);
+        public LocalDateTime convert(Instant source) {
+            return LocalDateTime.ofInstant(source, ZoneOffset.UTC);
+        }
+    }
+
+    @ReadingConverter
+    public static class InstantReadConverter implements Converter<LocalDateTime, Instant> {
+
+        @Override
+        public Instant convert(LocalDateTime localDateTime) {
+            return localDateTime.toInstant(ZoneOffset.UTC);
         }
     }
 <%_ } _%>

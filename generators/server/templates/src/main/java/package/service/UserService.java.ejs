@@ -86,7 +86,8 @@ import java.time.LocalDate;
 import java.time.Instant;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'neo4j'  || databaseType === 'mongodb' || databaseType === 'couchbase')) { _%>
 import java.time.temporal.ChronoUnit;
@@ -615,9 +616,9 @@ public class UserService {
                 // once https://github.com/spring-projects/spring-data-r2dbc/issues/215 is done
                 return userRepository.save(user)
                     .flatMap(savedUser ->
-                       Flux.fromIterable(user.getAuthorities())
-                           .flatMap(authority -> userRepository.saveUserAuthority(savedUser.getId(), authority.getName()))
-                           .then(Mono.just(savedUser))
+                        Flux.fromIterable(user.getAuthorities())
+                            .flatMap(authority -> userRepository.saveUserAuthority(savedUser.getId(), authority.getName()))
+                            .then(Mono.just(savedUser))
                     );
             <%_ } else { _%>
                 return userRepository.save(user);
@@ -776,7 +777,7 @@ public class UserService {
     @Transactional
     public Flux<User> removeNotActivatedUsersReactively() {
         return userRepository
-            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(OffsetDateTime.now().minus(3, ChronoUnit.DAYS))
+            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC))
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)

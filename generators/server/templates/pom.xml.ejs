@@ -411,6 +411,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+    <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>dev.miku</groupId>
+            <artifactId>r2dbc-mysql</artifactId>
+            <version>0.8.1.RELEASE</version>
+        </dependency>
+    <%_ } _%>
 <%_ } _%>
 <%_ if (prodDatabaseType === 'mariadb') { _%>
         <dependency>

@@ -104,7 +104,7 @@ import java.time.LocalDate;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import java.time.ZoneOffset;
 <%_ } _%>
-<%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
+<%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
 import java.time.LocalDateTime;
 <%_ } _%>
 <%_ if (authenticationType !== 'oauth2' || reactive) { _%>
@@ -374,11 +374,16 @@ public class UserServiceIT <% if (databaseType === 'neo4j') { %>extends Abstract
         <%= asEntity('User') %> dbUser = userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS)<% if (databaseType === 'sql' && reactive) { %>.atOffset(ZoneOffset.UTC)<% } %>)<% if (reactive) { %>
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
+        <%_ } else { _%>
+        Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
+        <%_ } _%>
+        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isNotEmpty();
         userService.removeNotActivatedUsers();
-        users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS)<% if (databaseType === 'sql' && reactive) { %>.atOffset(ZoneOffset.UTC)<% } %>)<% if (reactive) { %>
+        users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isEmpty();
         <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -401,7 +406,12 @@ public class UserServiceIT <% if (databaseType === 'neo4j') { %>extends Abstract
         <%= asEntity('User') %> dbUser = userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS)<% if (databaseType === 'sql' && reactive) { %>.atOffset(ZoneOffset.UTC)<% } %>)<% if (reactive) { %>
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
+        <%_ } else { _%>
+        Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
+        <%_ } _%>
+        List<<%= asEntity('User') %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isEmpty();
         userService.removeNotActivatedUsers();
