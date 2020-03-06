@@ -208,19 +208,21 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-afterburner</artifactId>
         </dependency>
+<%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-        <%_ if (reactive) { _%>
+    <%_ if (reactive) { _%>
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-h2</artifactId>
             <version>${r2dbc-h2.version}</version>
             <scope>test</scope>
         </dependency>
-        <%_ } _%>
+    <%_ } _%>
+<%_ } _%>
 <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
