@@ -253,6 +253,14 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
+    <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
+    maven {
+        url "https://oss.jfrog.org/artifactory/oss-snapshot-local/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    <%_ } _%>
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -411,7 +419,11 @@ dependencies {
     implementation "com.datastax.cassandra:cassandra-driver-mapping"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
+        <%_ if (!reactive) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-netflix-zuul"
+        <%_ } else { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-gateway"
+        <%_ } _%>
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-core"
     implementation "com.github.vladimir-bukhtoyarov:bucket4j-jcache"
     <%_ } _%>
@@ -429,8 +441,8 @@ dependencies {
     implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
     implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
     <%_ } _%>
-    <%_ if (authenticationType === 'uaa') { _%>
-    implementation "org.springframework.cloud:spring-cloud-security"
+    <%_ if (authenticationType === 'uaa' || (applicationType === 'gateway' && authenticationType === 'oauth2' && reactive)) { _%>
+    implementation "org.springframework.cloud:spring-cloud-starter-security"
     <%_ } _%>
     <%_ if (applicationType === 'microservice' || applicationType === 'gateway' || applicationType === 'uaa') { _%>
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
@@ -445,7 +457,6 @@ dependencies {
     <%_ if (authenticationType === 'oauth2') { _%>
     implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
-    implementation "org.springframework.security.oauth:spring-security-oauth2"
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>
     implementation "io.jsonwebtoken:jjwt-api"
@@ -475,6 +486,10 @@ dependencies {
         exclude module: "mapstruct"
     }
     implementation "io.springfox:springfox-bean-validators"
+    <%_ } else if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+    implementation "io.springfox:springfox-swagger2:3.0.0-SNAPSHOT"
+    implementation "io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT"
+    implementation "io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"

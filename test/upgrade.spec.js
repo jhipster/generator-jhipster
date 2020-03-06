@@ -44,7 +44,8 @@ describe('JHipster upgrade generator', function() {
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                     skipClient: false,
                     skipUserManagement: false,
-                    serverSideOptions: []
+                    serverSideOptions: [],
+                    upgradeConfig: false
                 })
                 .on('end', () => {
                     helpers
@@ -130,7 +131,8 @@ describe('JHipster upgrade generator', function() {
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                     skipClient: false,
                     skipUserManagement: false,
-                    serverSideOptions: []
+                    serverSideOptions: [],
+                    upgradeConfig: false
                 })
                 .on('end', () => {
                     helpers

@@ -846,7 +846,7 @@ public class UserService {
         return user;
         <%_ } else { _%>
         Collection<String> userAuthorities =
-            user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
+            user.getAuthorities().stream()<% if (databaseType !== 'couchbase') { %>.map(Authority::getName)<% } %>.collect(Collectors.toList());
 
         return getAuthorities().collectList()
             .flatMapMany(dbAuthorities -> {

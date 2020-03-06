@@ -368,6 +368,29 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
     });
 
+    describe('GitLab: npm skip server', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/npm-skip-server'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'gitlab',
+                    insideDocker: true,
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.gitlab);
+        });
+        it('contains image: jhipster', () => {
+            assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
+        });
+    });
+
     //--------------------------------------------------
     // Travis CI tests
     //--------------------------------------------------

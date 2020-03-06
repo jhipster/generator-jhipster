@@ -13,7 +13,7 @@ const mockBlueprintSubGen = class extends EntityI18NGenerator {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
         if (!this.jhipsterContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
     }
 

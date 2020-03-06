@@ -209,7 +209,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
                 }
-                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
                 this.jwtSecretKey = configuration.get('jwtSecretKey');
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
@@ -384,6 +383,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(
                     this.cacheProvider
                 );
+                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
