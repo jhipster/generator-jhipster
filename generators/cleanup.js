@@ -235,6 +235,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/DefaultProfileUtil.java`);
         generator.removeFolder(`${javaDir}service/util`);
     }
+    if (generator.isJhipsterVersionLessThan('6.8.0')) {
+        generator.removeFile(`${javaDir}security/oauth2/JwtAuthorityExtractor.java`);
+    }
 }
 
 /**

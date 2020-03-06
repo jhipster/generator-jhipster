@@ -32,6 +32,7 @@ cache:
     paths:
         - .maven/
 <%_ } _%>
+<%_ if (!skipServer) { _%>
 stages:
     - check
     - build
@@ -40,7 +41,7 @@ stages:
     - package
     - release
     - deploy
-
+<%_ } _%>
 <%_ if (buildTool === 'gradle') { _%>
 before_script:
     <%_ if (clientFramework === ANGULAR) { _%>
@@ -249,4 +250,41 @@ deploy-to-production:
         name: production
     when: manual
 <%_ } _%>
+<%_ } _%>
+<%_ if (skipServer) { _%>
+cache:
+    paths:
+        - node_modules/
+stages:
+    - build
+    - test
+    - packaging
+webpack-build:
+    stage: build
+    script:
+        - <%= clientPackageManager %> install
+        - <%= clientPackageManager %> run webpack:build
+    artifacts:
+        paths:
+            - build/
+webpack-test:
+    stage: test
+    dependencies:
+        - webpack-build
+    script:
+        - <%= clientPackageManager %> run webpack:test
+    artifacts:
+        reports:
+            junit: build/test-results/TESTS-results-jest.xml
+        paths:
+            - build/test-results
+        expire_in: 1 day
+webpack-prod:
+    stage: packaging
+    script:
+        - <%= clientPackageManager %> run webpack:prod
+        # - add cmd to zip the app folder build/resources/main/static
+    artifacts:
+        paths:
+            - build/
 <%_ } _%>

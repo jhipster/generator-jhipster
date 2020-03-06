@@ -1,11 +1,11 @@
 {
     "generator-jhipster": {
-        "applicationType": "monolith",
+        "applicationType": "gateway",
         "reactive": true,
-        "baseName": "sampleWebflux",
-        "packageName": "io.github.jhipster.sample",
-        "packageFolder": "io/github/jhipster/sample",
-        "authenticationType": "session",
+        "baseName": "reactiveGateway",
+        "packageName": "io.github.jhipster.gateway",
+        "packageFolder": "io/github/jhipster/gateway",
+        "authenticationType": "jwt",
         "cacheProvider": "no",
         "enableHibernateCache": false,
         "websocket": false,
@@ -13,14 +13,13 @@
         "devDatabaseType": "mongodb",
         "prodDatabaseType": "mongodb",
         "searchEngine": false,
+        "serviceDiscoveryType": "eureka",
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",
-        "languages": ["en", "fr"],
-        "testFrameworks": ["gatling", "protractor"],
+        "languages": ["en", "es"],
+        "testFrameworks": ["protractor"],
         "serverPort": "8080",
-        "jhiPrefix": "jhi",
-        "clientPackageManager": "yarn",
-        "clientFramework": "react"
+        "jhiPrefix": "jhi"
     }
 }
