@@ -92,7 +92,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-import <%= packageName %>.security.oauth2.JwtAuthorityExtractor;
+import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
     <%_ } _%>
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -295,7 +295,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .and()
             .oauth2ResourceServer()
                 .jwt()
-                .jwtAuthenticationConverter(grantedAuthoritiesExtractor())
+                .jwtAuthenticationConverter(authenticationConverter())
                 .and()
             .and()
                 .oauth2Client();
@@ -310,9 +310,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
 
-    Converter<Jwt, AbstractAuthenticationToken> grantedAuthoritiesExtractor() {
+    Converter<Jwt, AbstractAuthenticationToken> authenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtAuthorityExtractor());
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
         return jwtAuthenticationConverter;
     }
         <%_ if (applicationType !== 'microservice') { _%>

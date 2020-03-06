@@ -38,7 +38,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 <%_ if (serviceDiscoveryType) { _%>
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 <%_ } _%>
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && !reactive) { _%>
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 <%_ } _%>
 <%_ if (applicationType === 'microservice' && authenticationType === 'uaa') { _%>
@@ -63,7 +63,7 @@ import java.util.Collection;
 <%_ if (serviceDiscoveryType) { _%>
 @EnableDiscoveryClient
 <%_ } _%>
-<%_ if (applicationType === 'gateway') { _%>
+<%_ if (applicationType === 'gateway' && !reactive) { _%>
 @EnableZuulProxy
 <%_ } _%>
 public class <%= mainClass %> {

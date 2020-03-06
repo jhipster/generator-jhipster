@@ -22,7 +22,7 @@ const semver = require('semver');
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
-const NODE_VERSION = '12.16.0';
+const NODE_VERSION = '12.16.1';
 const YARN_VERSION = '1.22.0';
 const NPM_VERSION = '6.14.2';
 
@@ -57,7 +57,7 @@ const DOCKER_KEYCLOAK = 'jboss/keycloak:9.0.0'; // The version should match the 
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.6'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
-const DOCKER_SONAR = 'sonarqube:7.9.2-community';
+const DOCKER_SONAR = 'sonarqube:8.2-community';
 const DOCKER_JHIPSTER_CONSOLE = 'jhipster/jhipster-console:v4.1.0';
 const DOCKER_JHIPSTER_CURATOR = 'jhipster/jhipster-curator:v4.1.0';
 const DOCKER_JHIPSTER_ELASTICSEARCH = 'jhipster/jhipster-elasticsearch:v4.1.0';

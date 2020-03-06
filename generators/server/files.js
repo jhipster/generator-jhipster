@@ -420,6 +420,16 @@ const serverFiles = {
             ]
         },
         {
+            condition: generator => generator.reactive && generator.applicationType === 'gateway' && generator.authenticationType === 'jwt',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/security/jwt/JWTRelayGatewayFilterFactory.java',
+                    renameTo: generator => `${generator.testDir}security/jwt/JWTRelayGatewayFilterFactory.java`
+                }
+            ]
+        },
+        {
             condition: generator => !generator.reactive && generator.applicationType !== 'uaa',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -489,8 +499,8 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}security/oauth2/AudienceValidator.java`
                 },
                 {
-                    file: 'package/security/oauth2/JwtAuthorityExtractor.java',
-                    renameTo: generator => `${generator.javaDir}security/oauth2/JwtAuthorityExtractor.java`
+                    file: 'package/security/oauth2/JwtGrantedAuthorityConverter.java',
+                    renameTo: generator => `${generator.javaDir}security/oauth2/JwtGrantedAuthorityConverter.java`
                 },
                 {
                     file: 'package/security/oauth2/OAuthIdpTokenResponseDTO.java',
@@ -543,7 +553,7 @@ const serverFiles = {
     ],
     serverJavaGateway: [
         {
-            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+            condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -561,11 +571,28 @@ const serverFiles = {
                 {
                     file: 'package/gateway/responserewriting/SwaggerBasePathRewritingFilter.java',
                     renameTo: generator => `${generator.javaDir}gateway/responserewriting/SwaggerBasePathRewritingFilter.java`
-                },
+                }
+            ]
+        },
+        {
+            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
                 { file: 'package/web/rest/vm/RouteVM.java', renameTo: generator => `${generator.javaDir}web/rest/vm/RouteVM.java` },
                 {
                     file: 'package/web/rest/GatewayResource.java',
                     renameTo: generator => `${generator.javaDir}web/rest/GatewayResource.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
+                generator.reactive && (generator.applicationType === 'gateway' || generator.applicationType === 'monolith'),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/apidoc/SwaggerConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/apidoc/SwaggerConfiguration.java`
                 }
             ]
         },
@@ -582,7 +609,10 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.applicationType === 'gateway' && generator.authenticationType === 'jwt' && generator.serviceDiscoveryType,
+                !generator.reactive &&
+                generator.applicationType === 'gateway' &&
+                generator.authenticationType === 'jwt' &&
+                generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -592,7 +622,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway' && !generator.serviceDiscoveryType,
+            condition: generator => !generator.reactive && generator.applicationType === 'gateway' && !generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -748,7 +778,10 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.authenticationType === 'oauth2' && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                generator.applicationType === 'gateway' &&
+                generator.serviceDiscoveryType,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -759,6 +792,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
+                !generator.reactive &&
                 generator.authenticationType === 'oauth2' &&
                 (generator.applicationType === 'microservice' || generator.applicationType === 'gateway'),
             path: SERVER_MAIN_SRC_DIR,
@@ -964,7 +998,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.databaseType === 'couchbase',
+            condition: generator => !generator.reactive && generator.databaseType === 'couchbase',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1347,7 +1381,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
+            condition: generator => !generator.reactive && generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 // Create Gateway tests files
@@ -1607,7 +1641,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+            condition: generator =>
+                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1627,7 +1662,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1637,7 +1674,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+            condition: generator =>
+                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -1648,7 +1686,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && generator.authenticationType === 'oauth2' && ['sql', 'mongodb'].includes(generator.databaseType),
+                !generator.reactive &&
+                generator.authenticationType === 'oauth2' &&
+                ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

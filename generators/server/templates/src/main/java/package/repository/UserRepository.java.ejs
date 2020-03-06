@@ -86,6 +86,8 @@ import javax.validation.Validator;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.List;
+<%_ } _%>
+<%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
@@ -149,7 +151,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
-    default Optional<<%= asEntity('User') %>> findOneByLogin(String login) {
+    default <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
         return findById(<%= asEntity('User') %>.PREFIX + ID_DELIMITER + login);
     }
     <%_ } else if (databaseType === 'mongodb') { _%>

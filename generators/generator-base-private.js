@@ -836,11 +836,15 @@ module.exports = class extends Generator {
                     jhipsterContext: this
                 };
                 this.useBlueprint = true;
-                this.composeExternalModule(blueprint, subGen, finalOptions);
+                const blueprintGenerator = this.composeExternalModule(blueprint, subGen, finalOptions);
                 this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-                return true;
+                return blueprintGenerator;
             } catch (e) {
-                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
+                this.debug(
+                    `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
+                        subGen
+                    )} subgenerator: falling back to default generator`
+                );
                 this.debug('Error', e);
                 return false;
             }
@@ -1544,7 +1548,12 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        let prettierFilter;
+        if (this.prettierJava) {
+            prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml,java}'], { restore: true });
+        } else {
+            prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        }
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }
