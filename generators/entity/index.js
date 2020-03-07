@@ -19,7 +19,6 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const shelljs = require('shelljs');
 const pluralize = require('pluralize');
 const jhiCore = require('jhipster-core');
 const prompts = require('./prompts');
@@ -214,8 +213,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.clientRootFolder = context.microserviceName;
                     }
                 }
+                // TODO 7.0 context.filename = this.destinationPath(context.filename);
                 context.filename = `${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
-                if (shelljs.test('-f', context.filename)) {
+                if (this.fs.exists(context.filename)) {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
                     context.useConfigurationFile = true;
                 }
