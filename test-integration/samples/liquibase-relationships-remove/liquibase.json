@@ -1,0 +1,8 @@
+{
+    "20200302000003": {
+        "type": "entity-relationships",
+        "changelogDate": "20200302000003",
+        "entityName": "BankAccount",
+        "removedRelationships": ["operation:one-to-many"]
+    }
+}

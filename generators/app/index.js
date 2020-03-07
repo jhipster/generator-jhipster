@@ -448,6 +448,22 @@ module.exports = class extends BaseBlueprintGenerator {
                 });
             },
 
+            composeLiquibase() {
+                if (!this.config.get('versionedDatabase')) {
+                    return;
+                }
+                const { updateVersionedDatabase } = this.options;
+                // If there is changelogs then liquibase should be call entities by changelog order.
+                this.composeWith(require.resolve('../versioned-database'), {
+                    ...this.options,
+                    configOptions: this.configOptions,
+                    update: updateVersionedDatabase === undefined ? true : updateVersionedDatabase,
+                    regenerate: true,
+                    'skip-install': true,
+                    debug: this.isDebugEnabled,
+                });
+            },
+
             askFori18n: prompts.askFori18n,
         };
     }

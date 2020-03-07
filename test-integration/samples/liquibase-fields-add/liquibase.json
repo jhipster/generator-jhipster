@@ -1,0 +1,17 @@
+{
+    "20200302000000": {
+        "type": "entity-fields",
+        "changelogDate": "20200302000000",
+        "entityName": "Operation",
+        "addedFields": [
+            {
+                "fieldName": "address",
+                "fieldType": "String"
+            },
+            {
+                "fieldName": "manager",
+                "fieldType": "String"
+            }
+        ]
+    }
+}

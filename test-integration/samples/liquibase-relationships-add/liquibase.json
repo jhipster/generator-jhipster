@@ -1,0 +1,30 @@
+{
+    "20200302000004": {
+        "type": "entity-relationships",
+        "changelogDate": "20200302000004",
+        "entityName": "Operation",
+        "addedRelationships": [
+            {
+                "relationshipType": "many-to-many",
+                "otherEntityName": "FieldTestEntity",
+                "otherEntityRelationshipName": "operation",
+                "relationshipName": "fieldTestEntity",
+                "ownerSide": true
+            }
+        ]
+    },
+    "20200302000005": {
+        "type": "entity-relationships",
+        "changelogDate": "20200302000005",
+        "entityName": "FieldTestEntity",
+        "addedRelationships": [
+            {
+                "relationshipType": "many-to-many",
+                "otherEntityName": "Operation",
+                "otherEntityRelationshipName": "fieldTestEntity",
+                "relationshipName": "operation",
+                "ownerSide": false
+            }
+        ]
+    }
+}

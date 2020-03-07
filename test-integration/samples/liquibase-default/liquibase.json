@@ -1,0 +1,62 @@
+{
+    "20200302000000": {
+        "type": "entity-fields",
+        "changelogDate": "20200302000000",
+        "entityName": "Operation",
+        "addedFields": [
+            {
+                "fieldName": "address",
+                "fieldType": "String"
+            },
+            {
+                "fieldName": "manager",
+                "fieldType": "String"
+            }
+        ]
+    },
+    "20200302000001": {
+        "type": "entity-fields",
+        "changelogDate": "20200302000001",
+        "entityName": "Operation",
+        "removedFields": ["address"]
+    },
+    "20200302000002": {
+        "type": "tag",
+        "changelogDate": "20200302000002",
+        "name": "v1.0.0"
+    },
+    "20200302000003": {
+        "type": "entity-relationships",
+        "changelogDate": "20200302000003",
+        "entityName": "BankAccount",
+        "removedRelationships": ["operation:one-to-many"]
+    },
+    "20200302000004": {
+        "type": "entity-relationships",
+        "changelogDate": "20200302000004",
+        "entityName": "Operation",
+        "addedRelationships": [
+            {
+                "relationshipType": "many-to-many",
+                "otherEntityName": "FieldTestEntity",
+                "otherEntityRelationshipName": "operation",
+                "relationshipName": "fieldTestEntity",
+                "ownerSide": true
+            }
+        ]
+    },
+    "20200302000005": {
+        "type": "entity-relationships",
+        "changelogDate": "20200302000005",
+        "entityName": "FieldTestEntity",
+        "addedRelationships": [
+            {
+                "relationshipType": "many-to-many",
+                "otherEntityName": "Operation",
+                "otherEntityRelationshipName": "fieldTestEntity",
+                "relationshipName": "operation",
+                "ownerSide": false
+            }
+        ]
+    }
+}

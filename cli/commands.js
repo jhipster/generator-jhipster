@@ -130,6 +130,9 @@ Example:
     'upgrade-config': {
         desc: 'Upgrade the JHipster configuration',
     },
+    'versioned-database': {
+        desc: 'Versioned database manipulation',
+    },
 };
 
 module.exports = defaultCommands;

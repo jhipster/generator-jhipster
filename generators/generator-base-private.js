@@ -34,6 +34,8 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
 
+const liquibaseMixin = require('./generator-versioned-database-mixin');
+
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -51,6 +53,7 @@ module.exports = class extends Generator {
         super(args, opts);
         // expose lodash to templates
         this._ = _;
+        Object.assign(this, liquibaseMixin);
     }
 
     /* ======================================================================== */
@@ -539,11 +542,12 @@ module.exports = class extends Generator {
      * Format As Liquibase Remarks
      *
      * @param {string} text - text to format
+     * @param {boolean} addRemarksTag - add remarks tag
      * @returns formatted liquibase remarks
      */
-    formatAsLiquibaseRemarks(text) {
+    formatAsLiquibaseRemarks(text, addRemarksTag = false) {
         if (!text) {
-            return text;
+            return addRemarksTag ? '' : text;
         }
         const rows = text.split('\n');
         let description = rows[0];
@@ -567,7 +571,7 @@ module.exports = class extends Generator {
         description = description.replace(/</g, '&lt;');
         // escape > to &gt;
         description = description.replace(/>/g, '&gt;');
-        return description;
+        return addRemarksTag ? ` remarks="${description}"` : description;
     }
 
     /**

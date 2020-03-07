@@ -1,0 +1,8 @@
+{
+    "20200302000001": {
+        "type": "entity-fields",
+        "changelogDate": "20200302000001",
+        "entityName": "Operation",
+        "removedFields": ["address"]
+    }
+}

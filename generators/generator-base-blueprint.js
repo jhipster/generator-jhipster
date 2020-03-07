@@ -34,6 +34,9 @@ module.exports = class extends BaseGenerator {
         if (this.fromBlueprint) {
             this.blueprintConfig = this.config;
             this.config = this.jhipsterConfig;
+
+            // Load the original jhipster generator.
+            this.jhipsterGenerator = this.options.jhipsterContext;
         }
     }
 
@@ -127,5 +130,26 @@ module.exports = class extends BaseGenerator {
             });
         }
         return useBlueprints;
+    }
+
+    /**
+     * Blueprint aware sourceRoot().
+     * @returns {String} Path to templates folder of the jhipster blueprinted generator.
+     */
+    jhipsterSourceRoot() {
+        // Try to load from the original jhipster generator (blueprints).
+        // Fallback to sourceRoot() from current generator.
+        return this.jhipsterGenerator ? this.jhipsterGenerator.sourceRoot() : this.sourceRoot();
+    }
+
+    /**
+     * Join a path to the source root.
+     * @param  {...String} dest - path parts
+     * @return {String}    joined path
+     */
+    jhipsterTemplatePath(...dest) {
+        // Try to load from the original jhipster generator (blueprints).
+        // Fallback to sourceRoot() from current generator.
+        return this.jhipsterGenerator ? this.jhipsterGenerator.templatePath(...dest) : this.templatePath(...dest);
     }
 };

@@ -4,7 +4,10 @@ const shelljs = require('shelljs');
 const assert = require('yeoman-assert');
 const fse = require('fs-extra');
 const fs = require('fs');
+const Environment = require('yeoman-environment');
+const helpers = require('yeoman-test');
 
+const cliUtils = require('../../cli/utils');
 const Generator = require('../../generators/generator-base');
 const constants = require('../../generators/generator-constants');
 
@@ -20,6 +23,7 @@ module.exports = {
     copyBlueprint,
     copyFakeBlueprint,
     lnYeoman,
+    runWithJHipster,
 };
 
 function getFilesForOptions(files, options, prefix, excludeFiles) {
@@ -97,4 +101,38 @@ function lnYeoman(packagePath) {
     fse.ensureDirSync(nodeModulesPath);
     fs.symlinkSync(path.join(__dirname, '../../node_modules/yeoman-generator/'), `${nodeModulesPath}/yeoman-generator`);
     fs.symlinkSync(path.join(__dirname, '../../node_modules/yeoman-environment/'), `${nodeModulesPath}/yeoman-environment`);
+}
+
+function runWithJHipster(GeneratorOrNamespace, options) {
+    const runContext = helpers.run(GeneratorOrNamespace, options).withEnvironment(() => {
+        // Create a new test environment with local version.
+        const env = helpers.createTestEnv(Environment.createEnv);
+        // Skip checks by default.
+        Object.assign(env.sharedOptions, {
+            skipGit: true,
+            'skip-git': true,
+            skipChecks: true,
+            'skip-checks': true,
+        });
+
+        // Setup jhipster environment.
+        return cliUtils.setupEnvironment(env);
+    });
+    runContext.copyFile = function (source, dest) {
+        this.doInDir(targetDirectory => {
+            const targetFile = path.join(targetDirectory, dest);
+            const targetDir = path.dirname(targetFile);
+            fse.ensureDirSync(targetDir);
+            const sourceFile = path.join(__dirname, '../../', source);
+            fse.copySync(sourceFile, targetFile);
+        });
+        return this;
+    };
+    runContext.copyTestTemplate = function (source, dest = source) {
+        return this.copyFile(path.join('test/templates', source), dest);
+    };
+    runContext.copyITTemplate = function (source, dest = source) {
+        return this.copyFile(path.join('test-integration/samples', source), dest);
+    };
+    return runContext;
 }

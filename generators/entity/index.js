@@ -676,7 +676,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.storageData = storageData;
                 }
 
-                this.fs.writeJSON(context.filename, this.storageData, null, 4);
+                this.fs.writeJSON(context.filename, this.storageData, null, 2);
 
                 // Keep this.data for compatibility with existing blueprints
                 this.data = this.storageData;
@@ -1174,6 +1174,21 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 this.composeWith(require.resolve('../entity-server'), {
                     context,
                     configOptions,
+                    force: context.options.force,
+                    debug: context.isDebugEnabled,
+                });
+            },
+
+            composeLiquibase() {
+                if (this.options.regenerate || !this.config.get('versionedDatabase')) {
+                    return;
+                }
+                const context = this.context;
+                this.composeWith(require.resolve('../versioned-database'), {
+                    context,
+                    entity: context.name,
+                    newEntity: !context.useConfigurationFile,
+                    update: context.useConfigurationFile,
                     force: context.options.force,
                     debug: context.isDebugEnabled,
                 });
