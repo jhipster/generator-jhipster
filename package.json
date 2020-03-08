@@ -57,6 +57,9 @@
     "yeoman-assert": "3.1.1",
     "yeoman-test": "2.2.0"
   },
+  "resolutions": {
+    "inquirer": "7.0.6"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint-fix": "npm run lint -- --fix",
