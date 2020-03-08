@@ -31,7 +31,7 @@ jobs:
                 node_version: [12.16.1]
                 os: [ubuntu-latest]
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node_version }}
