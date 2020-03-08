@@ -97,9 +97,3 @@ git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %
 npm ci
 npm link
 npm link generator-jhipster
-
-npm run lint
-if [[ "$JHI_APP" == "" || "$JHI_APP" == "vuejs-default" ]]; then
-    # Run generator tests only for some configurations
-    npm test
-fi
