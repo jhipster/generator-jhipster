@@ -96,7 +96,7 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
                   errorMessage: translate('register.messages.validate.login.required')
                 },
                 pattern: {
-                  value: '^[_.@A-Za-z0-9-]*$',
+                  value: '^[a-zA-Z0-9!#$%&\'*+/=?^_`{|}~.-]+@?[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$',
                   errorMessage: translate('register.messages.validate.login.pattern')
                 },
                 minLength: {
