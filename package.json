@@ -37,7 +37,6 @@
     "pluralize": "7.0.0",
     "prettier": "1.13.5",
     "randexp": "0.4.9",
-    "semver": "5.5.0",
     "shelljs": "0.8.2"
   },
   "devDependencies": {
