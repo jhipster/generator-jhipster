@@ -40,8 +40,7 @@
     "semver": "5.5.0",
     "shelljs": "0.8.2",
     "through2": "2.0.3",
-    "yeoman-environment": "2.8.0",
-    "yeoman-generator": "4.6.0"
+    "yeoman-environment": "2.8.0"
   },
   "devDependencies": {
     "chai": "4.1.2",
