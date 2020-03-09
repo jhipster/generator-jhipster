@@ -164,24 +164,14 @@ spring:
         <%_ if (reactive) { _%>
             <%_ if (prodDatabaseType === 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-        user: root
-        password:
             <%_ } else if (prodDatabaseType === 'mariadb') { _%>
         url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
-        user: root
-        password:
             <%_ } else if (prodDatabaseType === 'postgresql') { _%>
         url: jdbc:postgresql://localhost:5432/<%= baseName %>
-        user: <%= baseName %>
-        password:
             <%_ } else if (prodDatabaseType === 'mssql') { _%>
         url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
-        user: SA
-        password: yourStrong(!)Password
             <%_ } else if (prodDatabaseType === 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:xe
-        user: system
-        password: oracle
             <%_ } _%>
         <%_ } _%>
     <%_ } _%>

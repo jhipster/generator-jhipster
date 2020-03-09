@@ -268,7 +268,8 @@ function askForServerSideOpts(meta) {
         {
             when: response =>
                 ((response.cacheProvider !== 'no' && response.cacheProvider !== 'memcached') || applicationType === 'gateway') &&
-                response.databaseType === 'sql' && !reactive,
+                response.databaseType === 'sql' &&
+                !reactive,
             type: 'confirm',
             name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',

@@ -103,10 +103,13 @@ public class LiquibaseConfiguration {
     }
 
     private static DataSource createNewDataSource(LiquibaseProperties liquibaseProperties, R2dbcProperties dataSourceProperties) {
-        String url = getProperty(liquibaseProperties::getUrl, dataSourceProperties::determineUrl);
         String user = getProperty(liquibaseProperties::getUser, dataSourceProperties::determineUsername);
         String password = getProperty(liquibaseProperties::getPassword, dataSourceProperties::determinePassword);
-        return DataSourceBuilder.create().url(url).username(user).password(password).build();
+        return DataSourceBuilder.create()
+            .url(liquibaseProperties.getUrl())
+            .username(user)
+            .password(password)
+            .build();
     }
 
     private static String getProperty(Supplier<String> property, Supplier<String> defaultValue) {

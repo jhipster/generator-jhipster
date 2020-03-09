@@ -218,32 +218,18 @@ spring:
         <%_ if (reactive) { _%>
             <%_ if (devDatabaseType === 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-        user: root
-        password:
             <%_ } else if (devDatabaseType === 'mariadb') { _%>
         url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
-        user: root
-        password:
             <%_ } else if (devDatabaseType === 'postgresql') { _%>
         url: jdbc:postgresql://localhost:5432/<%= baseName %>
-        user: <%= baseName %>
-        password:
             <%_ } else if (devDatabaseType === 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:xe
-        user: system
-        password: oracle
             <%_ } else if (devDatabaseType === 'mssql') { _%>
         url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
-        user: SA
-        password: yourStrong(!)Password
             <%_ } else if (devDatabaseType === 'h2Disk') { _%>
         url: jdbc:h2:file:./<%= BUILD_DIR %>h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
-        user: <%= baseName %>
-        password:
             <%_ } else if (devDatabaseType === 'h2Memory') { _%>
         url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-        user: <%= baseName %>
-        password:
             <%_ } _%>
         <%_ } _%>
     mail:

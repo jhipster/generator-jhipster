@@ -119,8 +119,6 @@ spring:
         contexts: test
         <%_ if (reactive) { _%>
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-        user: r2dbc
-        password:
         <%_ } _%>
     <%_ } _%>
     mail:
