@@ -68,7 +68,7 @@ import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ } _%>
 
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import javax.persistence.*;
 <%_ } _%>
 import javax.validation.constraints.Email;
