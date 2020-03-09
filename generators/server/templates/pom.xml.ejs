@@ -1279,14 +1279,6 @@
                             <artifactId>h2</artifactId>
                             <version>${h2.version}</version>
                         </dependency>
-        <%_ if (reactive) { _%>
-                        <dependency>
-                            <groupId>io.r2dbc</groupId>
-                            <artifactId>r2dbc-h2</artifactId>
-                            <version>${r2dbc-h2.version}</version>
-                            <scope>test</scope>
-                        </dependency>
-        <%_ } _%>
     <%_ } _%>
                     </dependencies>
                 </plugin>

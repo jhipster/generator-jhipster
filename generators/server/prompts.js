@@ -161,10 +161,17 @@ function askForServerSideOpts(meta) {
             message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
             choices: response => {
                 const opts = [];
-                opts.push({
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
-                });
+                if (!reactive) {
+                    opts.push({
+                        value: 'sql',
+                        name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
+                    });
+                } else {
+                    opts.push({
+                        value: 'sql',
+                        name: 'SQL (H2, MySQL, PostgreSQL, MSSQL)'
+                    });
+                }
                 opts.push({
                     value: 'mongodb',
                     name: 'MongoDB'
@@ -198,7 +205,7 @@ function askForServerSideOpts(meta) {
             type: 'list',
             name: 'prodDatabaseType',
             message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-            choices: constants.SQL_DB_OPTIONS,
+            choices: reactive ? constants.R2DBC_DB_OPTIONS : constants.SQL_DB_OPTIONS,
             default: 0
         },
         {
@@ -261,7 +268,7 @@ function askForServerSideOpts(meta) {
         {
             when: response =>
                 ((response.cacheProvider !== 'no' && response.cacheProvider !== 'memcached') || applicationType === 'gateway') &&
-                response.databaseType === 'sql',
+                response.databaseType === 'sql' && !reactive,
             type: 'confirm',
             name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',
