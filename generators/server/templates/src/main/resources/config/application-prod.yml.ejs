@@ -205,7 +205,7 @@ spring:
         username: <%= baseName %>
         password:
         <%_ } else if (prodDatabaseType === 'mssql') { _%>
-        url: r2dbc:sqlserver://localhost:1433;database=<%= baseName %>
+        url: r2dbc:sqlserver://localhost:1433/<%= baseName %>
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (prodDatabaseType === 'oracle') { _%>

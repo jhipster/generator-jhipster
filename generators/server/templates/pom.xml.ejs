@@ -446,6 +446,13 @@
             <groupId>com.github.sabomichal</groupId>
             <artifactId>liquibase-mssql</artifactId>
         </dependency>
+    <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-mssql</artifactId>
+            <version>0.8.1.RELEASE</version>
+        </dependency>
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
         <dependency>

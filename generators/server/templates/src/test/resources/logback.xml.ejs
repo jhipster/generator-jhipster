@@ -54,6 +54,9 @@
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <logger name="io.searchbox" level="WARN"/>
     <%_ } _%>
+    <%_ if (reactive) { _%>
+    <logger name="io.r2dbc" level="WARN"/>
+    <%_ } _%>
     <%_ if (!reactive) { _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>

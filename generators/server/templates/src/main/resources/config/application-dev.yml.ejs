@@ -272,7 +272,7 @@ spring:
         username: system
         password: oracle
         <%_ } else if (devDatabaseType === 'mssql') { _%>
-        url: r2dbc:sqlserver://localhost:1433;database=<%= baseName %>
+        url: r2dbc:sqlserver://localhost:1433/<%= baseName %>
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (devDatabaseType === 'h2Disk') { _%>
