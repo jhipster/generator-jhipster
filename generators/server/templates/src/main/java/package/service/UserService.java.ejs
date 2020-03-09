@@ -774,10 +774,12 @@ public class UserService {
         removeNotActivatedUsersReactively().blockLast();
     }
 
+    <%_ if (databaseType === 'sql') { _%>
     @Transactional
+    <%_ } _%>
     public Flux<User> removeNotActivatedUsersReactively() {
         return userRepository
-            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC))
+            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(<%_ if (databaseType === 'sql') { _%>LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)<%_ } else { _%>Instant.now().minus(3, ChronoUnit.DAYS)<%_ } _%>)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)

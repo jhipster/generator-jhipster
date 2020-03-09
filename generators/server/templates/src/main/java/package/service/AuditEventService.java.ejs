@@ -39,6 +39,9 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+    <%_ if (databaseType === 'sql') { _%>
+import reactor.util.function.Tuples;
+    <%_ } _%>
 <%_ } _%>
 
 import java.time.Instant;
@@ -107,7 +110,9 @@ public class AuditEventService {
         removeOldAuditEventsReactively().block();
     }
 
+    <%_ if (databaseType === 'sql') { _%>
     @Transactional
+    <%_ } _%>
     public Mono<Void> removeOldAuditEventsReactively() {
         return persistenceAuditEventRepository
             .findByAuditEventDateBefore(Instant.now().minus(jHipsterProperties.getAuditEvents().getRetentionPeriod(), ChronoUnit.DAYS))
@@ -181,7 +186,16 @@ public class AuditEventService {
         eventData.put("type", e.getClass().getName());
         eventData.put("message", e.getMessage());
         persistentAuditEvent.setData(truncate(eventData));
-        return persistenceAuditEventRepository.save(persistentAuditEvent);
+        return persistenceAuditEventRepository.save(persistentAuditEvent)<% if (databaseType === 'sql') { %>
+            .flatMapMany(event -> Flux.fromStream(
+                event.getData().entrySet().stream()
+                    .map(entry -> Tuples.of(event, entry.getKey(), entry.getValue()))
+            ))
+            .flatMap(t -> persistenceAuditEventRepository
+                .savePersistenceAuditEventData(t.getT1().getId(), t.getT2(), t.getT3())
+                .thenReturn(t.getT1())
+            )
+            .last()<% } %>;
     }
 
     /**

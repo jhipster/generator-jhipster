@@ -29,7 +29,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.query.Criteria;
+import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Repository;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -47,6 +49,7 @@ import java.time.Instant;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Map;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.List;
@@ -58,6 +61,9 @@ import java.util.List;
 <%_ if (databaseType === 'sql' && reactive) { _%>
 @Repository
 public interface PersistenceAuditEventRepository extends R2dbcRepository<PersistentAuditEvent, Long>, PersistenceAuditEventRepositoryInternal {
+
+    @Query("INSERT INTO jhi_persistent_audit_evt_data VALUES(:eventId, :name, :value)")
+    Mono<Void> savePersistenceAuditEventData(Long eventId, String name, String value);
 }
 
 interface PersistenceAuditEventRepositoryInternal {
@@ -146,7 +152,26 @@ class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEve
     }
 
     private Flux<PersistentAuditEvent> findAllFromSpec(DatabaseClient.TypedSelectSpec<PersistentAuditEvent> spec) {
-        return spec.as(PersistentAuditEvent.class).all();
+        return spec.as(PersistentAuditEvent.class).all()
+            .flatMap(event -> findAllEventData(event.getId())
+                .map(data -> {
+                    event.setData(data);
+                    return event;
+                })
+            );
+    }
+
+    private Mono<Map<String, String>> findAllEventData(Long id) {
+        return databaseClient.select().from("jhi_persistent_audit_evt_data")
+            .project("name", "value")
+            .matching(Criteria.where("event_id").is(id))
+            .map(row -> {
+                String name = row.get("name", String.class);
+                String value = row.get("value", String.class);
+                return Pair.of(name == null ? "" : name, value == null ? "" : value);
+            })
+            .all()
+            .collectMap(Pair::getFirst, Pair::getSecond);
     }
 }
 <%_ } _%>
