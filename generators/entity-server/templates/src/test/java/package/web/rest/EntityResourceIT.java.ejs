@@ -1333,7 +1333,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ } _%>
     }
 <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch' || searchEngine === 'couchbase') { _%>
+    <%_ if (searchEngine !== false) { _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>

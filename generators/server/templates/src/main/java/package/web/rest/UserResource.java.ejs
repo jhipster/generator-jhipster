@@ -358,7 +358,7 @@ public class UserResource {
     <%_ } _%>
     }
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' || searchEngine === 'couchbase') { _%>
+<%_ if (searchEngine !== false) { _%>
 
     /**
      * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.

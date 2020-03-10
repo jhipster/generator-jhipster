@@ -86,7 +86,7 @@ import java.util.Optional;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' || searchEngine === 'couchbase') || dto === 'mapstruct'))) { _%>
+<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine !== false) || dto === 'mapstruct'))) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
 <%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch')) { _%>
@@ -209,7 +209,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         log.debug("Request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: false, fromResource: false}); -%>
     }
-    <%_ if (searchEngine === 'elasticsearch' || searchEngine === 'couchbase') { _%>
+    <%_ if (searchEngine !== false) { _%>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.

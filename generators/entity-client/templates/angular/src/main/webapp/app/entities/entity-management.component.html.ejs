@@ -23,7 +23,7 @@
 
         <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= entityUrl %>" [routerLink]="['/<%= entityUrl %>/new']">
             <fa-icon icon="plus"></fa-icon>
-            <span <% if (searchEngine === 'elasticsearch' || searchEngine === 'couchbase') { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
+            <span <% if (searchEngine !== false) { %>class="hidden-sm-down" <% } %> jhiTranslate="<%= i18nKeyPrefix %>.home.createLabel">
             Create a new <%= entityClassHumanized %>
             </span>
         </button>
@@ -33,7 +33,7 @@
     <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
 
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
-    <%_ if (searchEngine === 'elasticsearch' || searchEngine === 'couchbase') { _%>
+    <%_ if (searchEngine !== false) { _%>
 
     <div class="row">
         <div class="col-sm-12">
