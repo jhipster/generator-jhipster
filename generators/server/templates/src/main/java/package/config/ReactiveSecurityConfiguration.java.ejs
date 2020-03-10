@@ -259,7 +259,7 @@ public class SecurityConfiguration {
                 .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
             .and()
                 .frameOptions().disable()
-        <%_ if (applicationType === 'microservice') _%>
+        <%_ if (applicationType === 'microservice') { _%>
         .and()
             .requestCache()
             .requestCache(NoOpServerRequestCache.getInstance())
