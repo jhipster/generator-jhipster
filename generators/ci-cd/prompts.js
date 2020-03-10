@@ -70,7 +70,8 @@ function askPipeline() {
                 { name: 'Azure Pipelines', value: 'azure' },
                 { name: 'GitLab CI', value: 'gitlab' },
                 { name: 'GitHub Actions', value: 'github' },
-                { name: 'Travis CI', value: 'travis' }
+                { name: 'Travis CI', value: 'travis' },
+                { name: 'CircleCI', value: 'circle' }
             ]
         }
     ];
@@ -122,7 +123,7 @@ function askIntegrations() {
     if (['jenkins', 'github'].includes(this.pipeline)) {
         integrationChoices.push({ name: `Build and publish a ${chalk.yellow('*Docker*')} image`, value: 'publishDocker' });
     }
-    if (['jenkins', 'gitlab', 'travis', 'github'].includes(this.pipeline)) {
+    if (['jenkins', 'gitlab', 'travis', 'github', 'circle'].includes(this.pipeline)) {
         integrationChoices.push({
             name: `Deploy to ${chalk.yellow('*Heroku*')} (requires HEROKU_API_KEY set on CI service)`,
             value: 'heroku'
