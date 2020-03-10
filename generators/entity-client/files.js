@@ -39,6 +39,17 @@ const vueFiles = {
             path: VUE_DIR,
             templates: [
                 {
+                    file: 'entities/entity.model.ts',
+                    // using entityModelFileName so that there is no conflict when generating microservice entities
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.embedded,
+            path: VUE_DIR,
+            templates: [
+                {
                     file: 'entities/entity-details.vue',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}-details.vue`
                 },
@@ -57,16 +68,11 @@ const vueFiles = {
                 {
                     file: 'entities/entity.service.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.ts`
-                },
-                {
-                    file: 'entities/entity.model.ts',
-                    // using entityModelFileName so that there is no conflict when generating microservice entities
-                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
                 }
             ]
         },
         {
-            condition: generator => !generator.readOnly,
+            condition: generator => !generator.readOnly && !generator.embedded,
             path: VUE_DIR,
             templates: [
                 {
@@ -82,6 +88,7 @@ const vueFiles = {
     ],
     test: [
         {
+            condition: generator => !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -99,7 +106,7 @@ const vueFiles = {
             ]
         },
         {
-            condition: generator => !generator.readOnly,
+            condition: generator => !generator.readOnly && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -109,7 +116,7 @@ const vueFiles = {
             ]
         },
         {
-            condition: generator => generator.protractorTests,
+            condition: generator => generator.protractorTests && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -127,7 +134,7 @@ const vueFiles = {
             ]
         },
         {
-            condition: generator => generator.protractorTests && !generator.readOnly,
+            condition: generator => generator.protractorTests && !generator.readOnly && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -168,15 +175,17 @@ function writeFiles() {
     const className = this.entityClass;
     const entityName = this.entityInstance;
     const entityAngularName = this.entityAngularName;
-    utils.addEntityToMenu(this, this.entityFileName, this.entityTranslationKeyMenu, className);
+    if (!this.embedded) {
+        utils.addEntityToMenu(this, this.entityFileName, this.entityTranslationKeyMenu, className);
 
-    // Add entity paths to routing system
-    utils.addEntityToRouterImport(this, entityAngularName, this.entityFileName, this.entityFolderName);
-    utils.addEntityToRouter(this, entityName, this.entityFileName, entityAngularName);
+        // Add entity paths to routing system
+        utils.addEntityToRouterImport(this, entityAngularName, this.entityFileName, this.entityFolderName);
+        utils.addEntityToRouter(this, entityName, this.entityFileName, entityAngularName);
 
-    // Add entity services to main
-    utils.addEntityServiceToMainImport(this, className, this.entityFileName, this.entityFolderName);
-    utils.addEntityServiceToMain(this, entityName, className);
+        // Add entity services to main
+        utils.addEntityServiceToMainImport(this, className, this.entityFileName, this.entityFolderName);
+        utils.addEntityServiceToMain(this, entityName, className);
+    }
 
     if (!this.enableTranslation) {
         if (!this.readOnly) {
