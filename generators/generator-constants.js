@@ -114,7 +114,7 @@ const SUPPORTED_CLIENT_FRAMEWORKS = {
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
-const R2DBC_DB_OPTIONS =  [
+const R2DBC_DB_OPTIONS = [
     {
         value: 'mysql',
         name: 'MySQL'
