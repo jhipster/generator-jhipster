@@ -429,7 +429,7 @@ for more detailed information.`
                         } else {
                             const json = JSON.parse(stdout);
                             this.log(`${chalk.green(chalk.bold('Success!'))} Your application has been deployed.`);
-                            this.log(`Provisitioning state: ${chalk.bold(json.properties.provisioningState)}`);
+                            this.log(`Provisioning state: ${chalk.bold(json.properties.provisioningState)}`);
                             this.log(`Application status  : ${chalk.bold(json.properties.status)}`);
                         }
                         done();
