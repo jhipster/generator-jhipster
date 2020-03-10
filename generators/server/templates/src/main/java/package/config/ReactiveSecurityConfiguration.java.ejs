@@ -115,6 +115,9 @@ import org.springframework.security.web.server.authentication.logout.HttpStatusR
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 <%_ } _%>
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
+<%_ if (applicationType === 'microservice') _%>
+import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
+<%_ } _%>
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
 <%_ if (skipUserManagement && authenticationType !== 'oauth2') { _%>
@@ -256,6 +259,11 @@ public class SecurityConfiguration {
                 .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
             .and()
                 .frameOptions().disable()
+        <%_ if (applicationType === 'microservice') _%>
+        .and()
+            .requestCache()
+            .requestCache(NoOpServerRequestCache.getInstance())
+        <%_ } _%>
         .and()
             .authorizeExchange()
             <%_ if (!skipClient) { _%>
