@@ -30,6 +30,7 @@ jobs:
             matrix:
                 node_version: [12.16.1]
                 os: [ubuntu-latest]
+                test_case: [base, blueprint, cli, needle, upgrade]
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
@@ -43,4 +44,4 @@ jobs:
               run: $JHI_SCRIPTS/04-git-config.sh
               shell: bash
             - run: npm ci
-            - run: npm test
+            - run: npm run test-${{ matrix.test_case }}
