@@ -417,9 +417,9 @@ for more detailed information.`
 
                 const done = this.async();
                 this.log(chalk.bold('\nDeploying application...'));
-                let buildDir = "target";
+                let buildDir = 'target';
                 if (this.buildTool === 'gradle') {
-                    buildDir = "build/libs";
+                    buildDir = 'build/libs';
                 }
                 exec(
                     `az spring-cloud app deploy --resource-group ${this.azureSpringCloudResourceGroupName} \
