@@ -1,6 +1,6 @@
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url]
 
 [![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
 
@@ -218,8 +218,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/workflows/Angular/badge.svg
 [github-actions-react-image]: https://github.com/jhipster/generator-jhipster/workflows/React/badge.svg
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
-[daviddm-image]: https://david-dm.org/jhipster/generator-jhipster.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/jhipster/generator-jhipster
 [backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890
 [backers-url]: https://opencollective.com/generator-jhipster
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
