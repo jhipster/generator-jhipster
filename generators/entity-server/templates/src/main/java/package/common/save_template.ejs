@@ -21,6 +21,7 @@ const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(en
 const mapper = entityInstance  + 'Mapper';
 const dtoToEntity = mapper + '.' + 'toEntity';
 const entityToDto = mapper + '.' + 'toDto';
+const entityToDtoReference = mapper + '::' + 'toDto';
 const returnPrefix = (returnDirectly && searchEngine !== 'elasticsearch') ? 'return' : instanceType + ' result =';
 let resultEntity;
 let mapsIdEntityInstance;
@@ -46,8 +47,13 @@ if (!viaService) {
         <%= dataTypeName %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>Id();
         <%= mapsIdRepoInstance %>.findById(<%= otherEntityName %>Id).ifPresent(<%= asEntity(entityInstance) %>::<%_ if (fluentMethods === false) { _%>set<%= mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%= mapsIdAssoc.relationshipName %><%_ } _%>);
         <%_ } _%>
+        <%_ if (!reactive) { _%>
         <%= asEntity(entityInstance) %> = <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>);
         <%= returnPrefix %> <%= entityToDto %>(<%= asEntity(entityInstance) %>);
+        <%_ } else { _%>
+        return <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>)
+            .map(<%= entityToDtoReference %>);
+        <%_ } _%>
     <%_ } else { resultEntity = 'result'; _%>
         <%_ if (isUsingMapsId === true) { _%>
         <%= dataTypeName %> <%= otherEntityName %>Id = <%= instanceName %>.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId();
