@@ -45,6 +45,12 @@
         "ejslint": "ejslint",
         "pretest": "npm run lint",
         "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
+        "test-base": "npm run test:unit -- test/*.spec.js --no-insight",
+        "test-blueprint": "npm run test:unit -- test/blueprint/*.spec.js --no-insight",
+        "test-cli": "npm run test:unit -- test/cli/*.spec.js --no-insight",
+        "test-needle": "npm run test:unit -- test/needle-api/*.spec.js --no-insight",
+        "test-upgrade": "npm run test:unit -- test/upgrade/*.spec.js --no-insight",
+        "test-utils": "npm run test:unit -- test/utils/*.spec.js --no-insight",
         "test:unit": "mocha --timeout 30000 --slow 0 --reporter spec",
         "jsdoc": "jsdoc --configure jsdoc-conf.json"
     },
