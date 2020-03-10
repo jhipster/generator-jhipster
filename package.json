@@ -23,25 +23,15 @@
   },
   "dependencies": {
     "chalk": "2.4.1",
-    "ejs": "2.6.1",
     "eslint-config-airbnb": "17.1.0",
-    "generator-jhipster": "6.7.1",
-    "glob": "7.1.2",
-    "gulp-filter": "5.1.0",
-    "insight": "0.10.1",
+    "generator-jhipster": "6.8.0",
     "jhipster-core": "6.0.4",
-    "js-yaml": "3.13.1",
     "lodash": "4.17.13",
-    "meow": "5.0.0",
     "mkdirp": "0.5.1",
     "pluralize": "7.0.0",
     "prettier": "1.13.5",
     "randexp": "0.4.9",
-    "semver": "5.5.0",
-    "shelljs": "0.8.2",
-    "through2": "2.0.3",
-    "yeoman-environment": "2.3.4",
-    "yeoman-generator": "3.2.0"
+    "shelljs": "0.8.2"
   },
   "devDependencies": {
     "chai": "4.1.2",
@@ -50,11 +40,15 @@
     "eslint-config-airbnb-base": "13.0.0",
     "eslint-plugin-import": "2.12.0",
     "fs-extra": "6.0.1",
+    "inquirer": "7.0.4",
     "jsdoc": "3.6.3",
     "mocha": "5.2.0",
     "sinon": "6.0.0",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "1.9.1"
+    "yeoman-test": "2.2.0"
+  },
+  "resolutions": {
+    "inquirer": "7.0.4"
   },
   "scripts": {
     "lint": "eslint .",
