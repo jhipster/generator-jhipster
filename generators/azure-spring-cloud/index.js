@@ -421,7 +421,7 @@ for more detailed information.`
                 exec(
                     `az spring-cloud app deploy --resource-group ${this.azureSpringCloudResourceGroupName} \
 --service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName} \
---jar-path target/*.jar`,
+--jar-path <% if (buildTool === 'maven') { %>target<% } %><% if (buildTool === 'gradle') { %>build/libs<% } %>/*.jar`,
                     (err, stdout) => {
                         if (err) {
                             this.abort = true;
