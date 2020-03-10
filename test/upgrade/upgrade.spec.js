@@ -4,11 +4,12 @@ const helpers = require('yeoman-test');
 const shelljs = require('shelljs');
 const fse = require('fs-extra');
 const expect = require('chai').expect;
-const expectedFiles = require('./utils/expected-files');
-const packageJson = require('../package.json');
-const constants = require('../generators/generator-constants');
+const expectedFiles = require('../utils/expected-files');
+const packageJson = require('../../package.json');
+const constants = require('../../generators/generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const APP_GENERATOR = '../../generators/app';
 
 describe('JHipster upgrade generator', function() {
     this.timeout(400000);
@@ -17,7 +18,7 @@ describe('JHipster upgrade generator', function() {
         before(done => {
             let workingDirectory;
             helpers
-                .run(path.join(__dirname, '../generators/app'))
+                .run(path.join(__dirname, APP_GENERATOR))
                 .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
@@ -49,7 +50,7 @@ describe('JHipster upgrade generator', function() {
                 })
                 .on('end', () => {
                     helpers
-                        .run(path.join(__dirname, '../generators/upgrade'))
+                        .run(path.join(__dirname, APP_GENERATOR))
                         .withOptions({
                             'from-cli': true,
                             force: true,
@@ -94,7 +95,7 @@ describe('JHipster upgrade generator', function() {
         before(done => {
             let workingDirectory;
             helpers
-                .run(path.join(__dirname, '../generators/app'))
+                .run(path.join(__dirname, APP_GENERATOR))
                 .withOptions({ skipInstall: true, skipChecks: true, 'from-cli': true, blueprints: blueprintName })
                 .inTmpDir(dir => {
                     /* eslint-disable-next-line no-console */
@@ -136,7 +137,7 @@ describe('JHipster upgrade generator', function() {
                 })
                 .on('end', () => {
                     helpers
-                        .run(path.join(__dirname, '../generators/upgrade'))
+                        .run(path.join(__dirname, APP_GENERATOR))
                         .withOptions({
                             'from-cli': true,
                             force: true,
