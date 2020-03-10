@@ -115,7 +115,7 @@ import org.springframework.security.web.server.authentication.logout.HttpStatusR
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 <%_ } _%>
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
-<%_ if (applicationType === 'microservice') _%>
+<%_ if (applicationType === 'microservice') { _%>
 import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
 <%_ } _%>
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
