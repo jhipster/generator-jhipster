@@ -243,6 +243,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         )
                     );
                 }
+                if (this.context.reactive && this.context.searchEngine === 'elasticsearch') {
+                    this.error(chalk.red("The entity generator doesn't support reactive apps with elasticsearch at the moment"));
+                }
             },
 
             validateDbExistence() {
