@@ -19,7 +19,6 @@
 
 const path = require('path');
 const _ = require('lodash');
-const fs = require('fs');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -34,8 +33,9 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 /**
  * This is the Generator base private class.
@@ -48,7 +48,6 @@ const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
-        this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         // expose lodash to templates
         this._ = _;
     }
@@ -62,6 +61,15 @@ module.exports = class extends Generator {
      */
     usage() {
         return super.usage().replace('yo jhipster:', 'jhipster ');
+    }
+
+    /**
+     * Override yeoman generator's destinationPath to apply custom output dir.
+     */
+    destinationPath(...paths) {
+        paths = path.join(...paths);
+        paths = this.applyOutputPathCustomizer(paths);
+        return paths ? super.destinationPath(paths) : paths;
     }
 
     /**
@@ -139,7 +147,7 @@ module.exports = class extends Generator {
             const fileName = this.entityTranslationKey;
             this.template(
                 `${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
+                `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
             );
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
@@ -160,7 +168,7 @@ module.exports = class extends Generator {
         try {
             this.template(
                 `${prefix ? `${prefix}/` : ''}i18n/enum.json.ejs`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
+                `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
                 this,
                 {},
                 enumInfo
@@ -178,7 +186,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstant(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
         try {
             let content = ".constant('LANGUAGES', [\n";
             languages.forEach((language, i) => {
@@ -213,10 +221,10 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstantNG2(languages) {
-        if (this.clientFramework !== 'angularX') {
+        if (this.clientFramework !== ANGULAR) {
             return;
         }
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -252,7 +260,7 @@ module.exports = class extends Generator {
     updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
         const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
         try {
-            let content = 'private static String languages[] = {\n';
+            let content = 'private static final String[] languages = {\n';
             languages.forEach((language, i) => {
                 content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
             });
@@ -285,9 +293,9 @@ module.exports = class extends Generator {
      */
     updateLanguagesInLanguagePipe(languages) {
         const fullPath =
-            this.clientFramework === 'angularX'
-                ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
-                : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
+            this.clientFramework === ANGULAR
+                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+                : `${this.CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
             this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
@@ -430,7 +438,8 @@ module.exports = class extends Generator {
      * @param file
      */
     removeFile(file) {
-        if (shelljs.test('-f', file)) {
+        file = this.destinationPath(file);
+        if (file && shelljs.test('-f', file)) {
             this.log(`Removing the file - ${file}`);
             shelljs.rm(file);
         }
@@ -442,7 +451,8 @@ module.exports = class extends Generator {
      * @param folder
      */
     removeFolder(folder) {
-        if (shelljs.test('-d', folder)) {
+        folder = this.destinationPath(folder);
+        if (folder && shelljs.test('-d', folder)) {
             this.log(`Removing the folder - ${folder}`);
             shelljs.rm('-rf', folder);
         }
@@ -456,7 +466,9 @@ module.exports = class extends Generator {
      * @returns {boolean} true if success; false otherwise
      */
     renameFile(source, dest) {
-        if (shelljs.test('-f', source)) {
+        source = this.destinationPath(source);
+        dest = this.destinationPath(dest);
+        if (source && dest && shelljs.test('-f', source)) {
             this.info(`Renaming the file - ${source} to ${dest}`);
             return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
         }
@@ -567,7 +579,7 @@ module.exports = class extends Generator {
         if (this.options.creationTimestamp) {
             creationTimestamp = Date.parse(this.options.creationTimestamp);
             if (!creationTimestamp) {
-                this.warn(`Error parsing creationTimestamp ${this.options.creationTimestamp}`);
+                this.warning(`Error parsing creationTimestamp ${this.options.creationTimestamp}`);
             }
         }
         return creationTimestamp;
@@ -625,17 +637,18 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Execute callback if git is installed
+     * Checks if git is installed.
      *
-     * @param {function} callback - function to be called if git is installed
+     * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
+     *
+     * @return {boolean} true if installed; false otherwise.
      */
     isGitInstalled(callback) {
-        this.gitExec('--version', { trace: false }, code => {
-            if (code !== 0) {
-                this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
-            }
-            if (callback) callback(code);
-        });
+        const gitInstalled = jhipsterUtils.isGitInstalled(callback);
+        if (!gitInstalled) {
+            this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
+        }
+        return gitInstalled;
     }
 
     /**
@@ -745,8 +758,13 @@ module.exports = class extends Generator {
     template(source, destination, generator, options = {}, context) {
         const _this = generator || this;
         const _context = context || _this;
+        const customDestination = _this.destinationPath(destination);
+        if (!customDestination) {
+            this.debug(`File ${destination} ignored`);
+            return;
+        }
         jhipsterUtils.renderContent(source, _this, _context, options, res => {
-            _this.fs.write(_this.destinationPath(destination), res);
+            _this.fs.write(customDestination, res);
         });
     }
 
@@ -774,7 +792,12 @@ module.exports = class extends Generator {
      * @param {string} destination - The resulting file.
      */
     copy(source, destination) {
-        this.fs.copy(this.templatePath(source), this.destinationPath(destination));
+        const customDestination = this.destinationPath(destination);
+        if (!customDestination) {
+            this.debug(`File ${destination} ignored`);
+            return;
+        }
+        this.fs.copy(this.templatePath(source), customDestination);
     }
 
     /**
@@ -784,9 +807,14 @@ module.exports = class extends Generator {
      * @param {string[]} args - arguments to print
      */
     debug(msg, ...args) {
+        const formattedMsg = `${chalk.yellow.bold('DEBUG!')} ${msg}`;
         if (this.isDebugEnabled || (this.options && this.options.debug)) {
-            this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+            this.log(formattedMsg);
             args.forEach(arg => this.log(arg));
+        }
+        if (this._debug && this._debug.enabled) {
+            this._debug(formattedMsg);
+            args.forEach(arg => this._debug(arg));
         }
     }
 
@@ -800,7 +828,7 @@ module.exports = class extends Generator {
         if (blueprint) {
             blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
             if (options.skipChecks === undefined || !options.skipChecks) {
-                this.checkBlueprint(blueprint, subGen);
+                this.checkBlueprint(blueprint);
             }
             try {
                 const finalOptions = {
@@ -808,11 +836,15 @@ module.exports = class extends Generator {
                     jhipsterContext: this
                 };
                 this.useBlueprint = true;
-                this.composeExternalModule(blueprint, subGen, finalOptions);
+                const blueprintGenerator = this.composeExternalModule(blueprint, subGen, finalOptions);
                 this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-                return true;
+                return blueprintGenerator;
             } catch (e) {
-                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
+                this.debug(
+                    `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
+                        subGen
+                    )} subgenerator: falling back to default generator`
+                );
                 this.debug('Error', e);
                 return false;
             }
@@ -826,19 +858,15 @@ module.exports = class extends Generator {
      * @return {object} packageJson - retrieved package.json as an object or undefined if not found
      */
     findBlueprintPackageJson(blueprintPkgName) {
-        let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
-        try {
-            if (!fs.existsSync(packageJsonPath)) {
-                this.debug('using global module as local version could not be found in node_modules');
-                packageJsonPath = path.join(blueprintPkgName, 'package.json');
-            }
-            // eslint-disable-next-line global-require,import/no-dynamic-require
-            return require(packageJsonPath);
-        } catch (err) {
-            this.debug('ERROR:', err);
-            this.warning(`Could not retrieve package.json of blueprint '${blueprintPkgName}'`);
+        const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
+        const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
+        if (!blueprintPackagePath) {
+            const msg = `Could not retrieve packagePath of blueprint '${blueprintPkgName}'`;
+            this.warning(msg);
             return undefined;
         }
+        // eslint-disable-next-line global-require,import/no-dynamic-require
+        return require(path.join(blueprintPackagePath, 'package.json'));
     }
 
     /**
@@ -850,7 +878,7 @@ module.exports = class extends Generator {
         const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
         if (!blueprintPackageJson || !blueprintPackageJson.version) {
             this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-            return '';
+            return undefined;
         }
         return blueprintPackageJson.version;
     }
@@ -859,35 +887,17 @@ module.exports = class extends Generator {
      * Check if the generator specified as blueprint is installed.
      * @param {string} blueprint - generator name
      */
-    checkBlueprint(blueprint, subGen = '') {
+    checkBlueprint(blueprint) {
         if (blueprint === 'generator-jhipster') {
             this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
         }
-        const done = this.async();
-        const localModule = path.join(process.cwd(), 'node_modules', blueprint);
-        if (fs.existsSync(localModule)) {
-            done();
-            return;
+        if (!this.findBlueprintPackageJson(blueprint)) {
+            this.error(
+                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
+                    `npm i -g ${blueprint}`
+                )}.`
+            );
         }
-        const generatorName = blueprint.replace('generator-', '');
-        if (this.env.get(`${generatorName}:${subGen}`)) {
-            done();
-            return;
-        }
-
-        // Path to the yo cli script in generator-jhipster's node_modules
-        const yoInternalCliPath = require.resolve('yo/lib/cli.js');
-
-        shelljs.exec(`node ${yoInternalCliPath} --generators`, { silent: true }, (err, stdout, stderr) => {
-            if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
-                this.error(
-                    `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-                        `npm i -g ${blueprint}`
-                    )}.`
-                );
-            }
-            done();
-        });
     }
 
     /**
@@ -897,6 +907,7 @@ module.exports = class extends Generator {
     checkJHipsterBlueprintVersion(blueprintPkgName) {
         const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
         if (!blueprintPackageJson) {
+            this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
             return;
         }
         const mainGeneratorJhipsterVersion = packagejs.version;
@@ -978,11 +989,7 @@ module.exports = class extends Generator {
      */
     checkGit() {
         if (this.skipChecks || this.skipClient) return;
-        const done = this.async();
-        this.isGitInstalled(code => {
-            this.gitInstalled = code === 0;
-            done();
-        });
+        this.gitInstalled = this.isGitInstalled();
     }
 
     /**
@@ -1103,13 +1110,13 @@ module.exports = class extends Generator {
      * @param {Array|Object} fields - array of fields
      * @returns {Array} defaultVariablesValues
      */
-    generateEntityClientFieldDefaultValues(fields, clientFramework = 'angularX') {
+    generateEntityClientFieldDefaultValues(fields, clientFramework = ANGULAR) {
         const defaultVariablesValues = {};
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
             if (fieldType === 'Boolean') {
-                if (clientFramework === 'react') {
+                if (clientFramework === REACT) {
                     defaultVariablesValues[fieldName] = `${fieldName}: false,`;
                 } else {
                     defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
@@ -1139,12 +1146,15 @@ module.exports = class extends Generator {
      * @param {Array|Object} fields - array of fields
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
+     * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
         const variablesWithTypes = [];
         const tsKeyType = this.getTypescriptKeyType(pkType);
-        variablesWithTypes.push(`id?: ${tsKeyType}`);
+        if (!embedded) {
+            variablesWithTypes.push(`id?: ${tsKeyType}`);
+        }
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
@@ -1173,10 +1183,11 @@ module.exports = class extends Generator {
             let fieldType;
             let fieldName;
             const relationshipType = relationship.relationshipType;
+            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 fieldType = `I${relationship.otherEntityAngularName}[]`;
                 fieldName = relationship.relationshipFieldNamePlural;
-            } else if (dto === 'no') {
+            } else if (dto === 'no' || otherEntityIsEmbedded) {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
             } else {
@@ -1219,8 +1230,9 @@ module.exports = class extends Generator {
         const typeImports = new Map();
         relationships.forEach(relationship => {
             const relationshipType = relationship.relationshipType;
+            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             let toBeImported = false;
-            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many' || otherEntityIsEmbedded) {
                 toBeImported = true;
             } else if (dto === 'no') {
                 toBeImported = true;
@@ -1236,7 +1248,7 @@ module.exports = class extends Generator {
                 const importType = `I${otherEntityAngularName}`;
                 let importPath;
                 if (otherEntityAngularName === 'User') {
-                    importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : 'app/shared/model/user.model';
+                    importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }
@@ -1318,7 +1330,7 @@ module.exports = class extends Generator {
      */
     generateLanguageOptions(languages, clientFramework) {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
-        if (clientFramework === 'react') {
+        if (clientFramework === REACT) {
             return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
         }
 
@@ -1431,6 +1443,7 @@ module.exports = class extends Generator {
         let pk = '';
         switch (databaseType) {
             case 'mongodb':
+            case 'neo4j':
             case 'couchbase':
                 pk = 'String';
                 break;
@@ -1535,7 +1548,12 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        let prettierFilter;
+        if (this.prettierJava) {
+            prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml,java}'], { restore: true });
+        } else {
+            prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        }
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }

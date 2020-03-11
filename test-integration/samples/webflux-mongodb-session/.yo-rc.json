@@ -21,6 +21,6 @@
         "serverPort": "8080",
         "jhiPrefix": "jhi",
         "clientPackageManager": "yarn",
-        "clientFramework": "angularX"
+        "clientFramework": "react"
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "generator-jhipster",
-    "version": "6.6.0",
+    "version": "6.8.0",
     "description": "Spring Boot + Angular/React in one handy generator",
     "files": [
         "cli",
@@ -36,7 +36,7 @@
         "url": "git://github.com/jhipster/generator-jhipster.git"
     },
     "scripts": {
-        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml}\"",
+        "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
         "completion": "tabtab install --name jhipster --auto",
         "lint": "npm run eslint && npm run ejs-lint",
         "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
@@ -60,7 +60,7 @@
         "glob": "7.1.3",
         "gulp-filter": "5.1.0",
         "insight": "0.10.1",
-        "jhipster-core": "6.0.7",
+        "jhipster-core": "7.1.1",
         "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.13.1",
         "lodash": "4.17.13",
@@ -71,6 +71,7 @@
         "parse-gitignore": "1.0.1",
         "pluralize": "7.0.0",
         "prettier": "1.19.1",
+        "prettier-plugin-java": "0.7.1",
         "progress": "2.0.3",
         "randexp": "0.5.3",
         "semver": "5.6.0",
@@ -79,12 +80,11 @@
         "tabtab": "2.2.2",
         "through2": "3.0.1",
         "uuid": "3.3.3",
-        "yeoman-environment": "2.7.0",
-        "yeoman-generator": "4.5.0",
-        "yo": "3.1.1"
+        "yeoman-environment": "2.8.0",
+        "yeoman-generator": "4.6.0"
     },
     "devDependencies": {
-        "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
+        "@openapitools/openapi-generator-cli": "1.0.10-4.2.3",
         "chai": "4.2.0",
         "ejs-lint": "0.3.0",
         "eslint": "6.2.2",
@@ -97,7 +97,7 @@
         "mocha": "6.1.4",
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
-        "yeoman-test": "1.9.1"
+        "yeoman-test": "2.2.0"
     },
     "resolutions": {
         "inquirer": "6.3.1"

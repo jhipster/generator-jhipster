@@ -6,28 +6,52 @@ To generate test applications, either automatically by the CI or locally on the 
 
 Those are described in `.yo-rc.json` files which is the descriptor file created by Yeoman to keep track of the choices selected while generating an application.
 
--   app-sample-dev: left empty for local testing, launching the generator with the VSCode debugger will generate an app in this folder
--   jdl-default
--   ms-micro-consul
--   ms-micro-eureka
--   ms-ngx-gateway-consul
--   ms-ngx-gateway-eureka
--   ms-ngx-gateway-eureka-oauth2
--   ms-ngx-gateway-uaa
--   ngx-couchbase
--   ngx-default
--   ngx-gradle-fr
--   ngx-h2mem-ws-nol2
--   ngx-mariadb-oauth2-sass-infinispan
--   ngx-mongodb-kafka-cucumber
--   ngx-psql-es-noi18n
--   ngx-session-cassandra-fr
--   react-default
--   react-noi18n-es-ws-gradle-session
--   uaa
--   webflux-mongodb
--   webflux-mongodb-session
--   webflux-mongodb-oauth2
+- app-sample-dev: left empty for local testing, launching the generator with the VSCode debugger will generate an app in this folder
+- jdl-default
+- ms-micro-consul
+- ms-micro-eureka
+- ms-micro-eureka-jwt
+- ms-ngx-gateway-consul
+- ms-ngx-gateway-eureka
+- ms-ngx-gateway-eureka-jwt
+- ms-ngx-gateway-eureka-oauth2
+- ms-ngx-gateway-eureka-uaa
+- ms-ngx-gateway-uaa
+- ms-react-gateway-consul-jwt
+- ms-react-gateway-consul-oauth2
+- ngx-couchbase
+- ngx-neo4j
+- ngx-default
+- ngx-gradle-fr
+- ngx-gradle-mariadb-oauth2-infinispan
+- ngx-gradle-mongodb-kafka-cucumber
+- ngx-gradle-psql-es-noi18n-mapsid
+- ngx-gradle-yarn-h2disk-ws-nocache
+- ngx-h2mem-ws-nol2
+- ngx-mariadb-oauth2-infinispan
+- ngx-mariadb-oauth2-sass-infinispan
+- ngx-mongodb-kafka-cucumber
+- ngx-psql-es-noi18n-mapsid
+- ngx-session-cassandra-fr
+- react-default
+- react-gradle-cassandra-session-redis
+- react-gradle-couchbase-caffeine
+- react-gradle-h2mem-memcached
+- react-gradle-psql-es-noi18n-mapsid
+- react-maven-cassandra-session-redis
+- react-maven-couchbase-caffeine
+- react-maven-h2mem-memcached
+- react-maven-psql-es-noi18n-mapsid
+- react-noi18n-es-ws-gradle-session
+- uaa
+- webflux-mongodb
+- webflux-mongodb-oauth2
+- webflux-mongodb-session
+- webflux-gateway-jwt
+- webflux-gateway-oauth2
+- webflux-couchbase
+- webflux-couchbase-session
+- webflux-couchbase-oauth2
 
 ## Entity configurations
 

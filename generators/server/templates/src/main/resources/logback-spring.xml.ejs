@@ -120,7 +120,7 @@
     <%_ if (cacheProvider === 'memcached') { _%>
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
     <%_ } _%>
-    <%_ if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     <logger name="org.postgresql" level="WARN"/>
     <%_ } _%>
     <logger name="org.springframework" level="WARN"/>
@@ -132,7 +132,7 @@
     <%_ } _%>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
-    <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
     <logger name="com.microsoft.sqlserver.jdbc.internals" level="WARN"/>
     <%_ } _%>
     <%_ if (reactive) { _%>
@@ -152,6 +152,7 @@
     <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="unknown.jul.logger" level="WARN"/>
     <%_ } _%>
+    <!-- jhipster-needle-logback-add-log - JHipster will add a new log with level, Do not remove -->
 
     <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>

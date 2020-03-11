@@ -21,7 +21,7 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-<%= LIQUIBASE_DTD_VERSION %>.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <% const isAutoIncrementDB = prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb';
@@ -143,10 +143,10 @@
                                  referencedTableName="<%= jhiTablePrefix %>_user"/>
     <%_ } _%>
     <%_ if (authenticationType !== 'oauth2' || (authenticationType === 'oauth2' && applicationType !== 'microservice')) { _%>
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
-                  <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+                  <%_ if (prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
                   tableName="<%= jhiTablePrefix %>_user">
@@ -155,23 +155,27 @@
             <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
-        </<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
+        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
         <dropDefaultValue tableName="<%= jhiTablePrefix %>_user" columnName="created_date" columnDataType="datetime"/>
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
-                  <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+                  <%_ if (prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
-                  tableName="<%= jhiTablePrefix %>_authority"/>
+                  tableName="<%= jhiTablePrefix %>_authority">
+            <column name="name" type="string"/>
+        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
 
-        <<% if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
+        <<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
-                  <%_ if (devDatabaseType === 'mssql' || prodDatabaseType === 'mssql') { _%>
+                  <%_ if (prodDatabaseType === 'mssql') { _%>
                   identityInsertEnabled="true"
                   <%_ } _%>
-                  tableName="<%= jhiTablePrefix %>_user_authority"/>
+                  tableName="<%= jhiTablePrefix %>_user_authority">
+            <column name="user_id" type="numeric"/>
+        </<% if (prodDatabaseType === 'mssql') { %>ext:<% } %>loadData>
     <%_ } _%>
 <%_ } _%>
         <createTable tableName="<%= jhiTablePrefix %>_persistent_audit_event">

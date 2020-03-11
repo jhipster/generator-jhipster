@@ -21,6 +21,10 @@ const path = require('path');
 const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const shelljs = require('shelljs');
+const constants = require('../generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = {
     askForMicroserviceJson,
@@ -488,10 +492,10 @@ function askForField(done) {
                 if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
                 }
-                if ((clientFramework === undefined || clientFramework === 'angularX') && jhiCore.isReservedFieldName(input, 'angularX')) {
+                if ((clientFramework === undefined || clientFramework === ANGULAR) && jhiCore.isReservedFieldName(input, ANGULAR)) {
                     return 'Your field name cannot contain a Java or Angular reserved keyword';
                 }
-                if ((clientFramework !== undefined || clientFramework === 'react') && jhiCore.isReservedFieldName(input, 'react')) {
+                if ((clientFramework !== undefined || clientFramework === REACT) && jhiCore.isReservedFieldName(input, REACT)) {
                     return 'Your field name cannot contain a Java or React reserved keyword';
                 }
                 if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
@@ -502,7 +506,7 @@ function askForField(done) {
             message: 'What is the name of your field?'
         },
         {
-            when: response => response.fieldAdd === true && (skipServer || ['sql', 'mongodb', 'couchbase'].includes(databaseType)),
+            when: response => response.fieldAdd === true && (skipServer || ['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)),
             type: 'list',
             name: 'fieldType',
             message: 'What is the type of your field?',

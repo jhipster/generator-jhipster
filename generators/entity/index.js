@@ -29,6 +29,7 @@ const statistics = require('../statistics');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
@@ -146,7 +147,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const context = this.context;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 context.useConfigurationFile = false;
-                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 context.options = this.options;
                 context.baseName = configuration.get('baseName');
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
@@ -186,7 +186,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 context.clientFramework = configuration.get('clientFramework');
                 if (!context.clientFramework) {
-                    context.clientFramework = 'angularX';
+                    context.clientFramework = ANGULAR;
                 }
                 context.clientPackageManager = configuration.get('clientPackageManager');
                 if (!context.clientPackageManager) {
@@ -233,13 +233,18 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (context.entitySuffix === context.dtoSuffix) {
                     this.error('The entity cannot be generated as the entity suffix and DTO suffix are equals !');
                 }
-
-                context.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
-            validateMvcApp() {
-                if (this.context.reactive) {
-                    this.error(chalk.red("The entity generator doesn't support reactive apps at the moment"));
+            validateReactiveCompatibility() {
+                if (this.context.reactive && !['mongodb', 'cassandra', 'couchbase'].includes(this.context.databaseType)) {
+                    this.error(
+                        chalk.red(
+                            `The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`
+                        )
+                    );
+                }
+                if (this.context.reactive && this.context.searchEngine === 'elasticsearch') {
+                    this.error(chalk.red("The entity generator doesn't support reactive apps with elasticsearch at the moment"));
                 }
             },
 
@@ -296,6 +301,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.service = 'no';
                     context.jpaMetamodelFiltering = false;
                     context.readOnly = false;
+                    context.embedded = false;
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
@@ -730,6 +736,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.fieldsContainOwnerOneToOne = false;
                 context.fieldsContainOneToMany = false;
                 context.fieldsContainManyToOne = false;
+                context.fieldsContainEmbedded = false;
                 context.fieldsIsReactAvField = false;
                 context.blobFields = [];
                 context.differentTypes = [context.entityClass];
@@ -877,8 +884,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.relationships.forEach(relationship => {
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
-                    if (otherEntityData && otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
-                        otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+                    if (otherEntityData) {
+                        if (otherEntityData.microserviceName && !otherEntityData.clientRootFolder) {
+                            otherEntityData.clientRootFolder = otherEntityData.microserviceName;
+                        }
+                        if (otherEntityData.embedded) {
+                            relationship.otherEntityIsEmbedded = true;
+                        }
                     }
                     const jhiTablePrefix = context.jhiTablePrefix;
 
@@ -1083,6 +1095,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     } else if (relationship.relationshipType === 'many-to-one') {
                         context.fieldsContainManyToOne = true;
                     }
+                    if (relationship.otherEntityIsEmbedded) {
+                        context.fieldsContainEmbedded = true;
+                    }
 
                     if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
                         if (entityName.toLowerCase() === relationship.otherEntityName.toLowerCase()) {
@@ -1135,7 +1150,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 if (this.isJhipsterVersionLessThan('5.0.0')) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${entityName}/${entityName}.model.ts`);
                 }
-                if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === 'angularX') {
+                if (this.isJhipsterVersionLessThan('6.3.0') && context.clientFramework === ANGULAR) {
                     this.removeFile(`${constants.ANGULAR_DIR}entities/${context.entityFolderName}/index.ts`);
                 }
             },

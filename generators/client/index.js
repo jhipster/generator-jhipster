@@ -27,6 +27,9 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+
 let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
@@ -81,22 +84,23 @@ module.exports = class extends BaseBlueprintGenerator {
 
             setupClientconsts() {
                 // Make constants available in templates
-                this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-                this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
+                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
                 this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
+                    this.clientFramework = ANGULAR;
                 }
                 if (this.clientFramework === 'angular' || this.clientFramework === 'angular2') {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
+                    this.clientFramework = ANGULAR;
                 }
 
                 this.clientTheme = configuration.get('clientTheme');
@@ -212,6 +216,10 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             configureGlobal() {
+                // Make constants available in templates
+                this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
+                this.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
+
                 // Application name modified, using each technology's conventions
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.angularAppName = this.getAngularAppName();
@@ -337,7 +345,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
                 this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
-                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
             composeLanguages() {
@@ -359,7 +366,7 @@ module.exports = class extends BaseBlueprintGenerator {
             write() {
                 if (this.skipClient) return;
                 switch (this.clientFramework) {
-                    case 'react':
+                    case REACT:
                         return writeReactFiles.call(this, useBlueprints);
                     default:
                         return writeAngularFiles.call(this, useBlueprints);

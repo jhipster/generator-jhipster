@@ -37,7 +37,8 @@
             "refreshScope": "Microservice Refresh Scope",
             "clientConfigServer": "Microservice Config Server",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
-            "consul": "Consul",<% } %>
+            "consul": "Consul",<% } else if (reactive) { %>
+            "reactiveDiscoveryClients": "Microservice Discovery Clients",<% } %>
             <%_ } _%>
             "diskSpace": "Disk space",
             "mail": "Email",
@@ -46,7 +47,8 @@
             "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
-            "couchbase": "Couchbase"<% } %>
+            "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,
+            "neo4j": "Neo4j"<% } %>
         },
         "table": {
             "service": "Service name",

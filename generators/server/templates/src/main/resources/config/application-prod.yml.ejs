@@ -38,6 +38,9 @@ logging:
         <%_ if (packageName !== 'io.github.jhipster') { _%>
         <%= packageName %>: INFO
         <%_ } _%>
+        <%_ if (databaseType === 'neo4j') { _%>
+        org.neo4j.driver: WARN
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -48,6 +51,22 @@ eureka:
             defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 <%_ } _%>
 
+<%_ if (databaseType === 'neo4j') { _%>
+org:
+    neo4j:
+        driver:
+            pool:
+                metrics-enabled: true
+            uri: bolt://localhost:7687
+            # Uncomment to use an authenticated connection
+            # authentication:
+            #     username: neo4j
+            #     password: secret
+        migrations:
+            locations-to-scan:
+            packages-to-scan: <%= packageName %>.config.neo4j
+            installed-by: <%= baseName %>
+<%_ } _%>
 management:
     metrics:
         export:
@@ -60,19 +79,6 @@ spring:
             enabled: false
         livereload:
             enabled: false
-    <%_ if (messageBroker === 'kafka') { _%>
-    kafka:
-        consumer:
-            bootstrap-servers: localhost:9092
-            group-id: group_id
-            auto-offset-reset: earliest
-            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        producer:
-            bootstrap-servers: localhost:9092
-            key-serializer: org.apache.kafka.common.serialization.StringSerializer
-            value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
         consul:
@@ -120,39 +126,6 @@ spring:
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } _%>
         show-sql: false
-        properties:
-            hibernate.id.new_generator_mappings: true
-            hibernate.connection.provider_disables_autocommit: true
-            hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
-            hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
-            # modify batch size as necessary
-            hibernate.jdbc.batch_size: 25
-            hibernate.order_inserts: true
-            hibernate.order_updates: true
-            <%_ if (prodDatabaseType === 'mssql' || prodDatabaseType === 'oracle') { _%>
-            # modify fetch size as necessary
-            hibernate.jdbc.fetch_size: 150
-            hibernate.criteria.literal_handling_mode: BIND
-            <%_ } _%>
-            hibernate.query.fail_on_pagination_over_collection_fetch: true
-            hibernate.query.in_clause_parameter_padding: true
-            <%_ if (enableHibernateCache) { _%>
-                <%_ if (cacheProvider === 'hazelcast') { _%>
-            hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
-            hibernate.cache.hazelcast.instance_name: <%= baseName %>
-                <%_ } else if (cacheProvider === 'infinispan') { _%>
-            hibernate.cache.infinispan.statistics: true
-            hibernate.cache.use_minimal_puts: true
-            hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
-            hibernate.cache.infinispan.entity.memory.size: 1000
-            hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
-                <%_ } _%>
-                <%_ if (cacheProvider === 'hazelcast') { _%>
-            hibernate.cache.use_minimal_puts: true
-            hibernate.cache.hazelcast.use_lite_member: true
-                <%_ } _%>
-            <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
     data:
@@ -245,8 +218,10 @@ jhipster:
     gateway:
         rate-limiting:
             enabled: false
+        <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api # recommended prod configuration
+        <%_ } _%>
     <%_ } _%>
     http:
         cache: # Used by the CachingHttpHeadersFilter
@@ -301,6 +276,9 @@ jhipster:
         redis: # Redis configuration
             expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
             server: redis://localhost:6379
+            cluster: false
+            # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
+            # cluster: true
         <%_ } _%>
     <%_ } _%>
     <%_ if (authenticationType === 'jwt') { _%>

@@ -156,11 +156,13 @@ const serverFiles = {
                 {
                     file: 'package/domain/Entity.java',
                     renameTo: generator => `${generator.packageFolder}/domain/${generator.asEntity(generator.entityClass)}.java`
-                },
-                {
-                    file: 'package/repository/EntityRepository.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
-                },
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.embedded,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
                 {
                     file: 'package/web/rest/EntityResource.java',
                     renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}Resource.java`
@@ -192,17 +194,29 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType),
+            condition: generator =>
+                (!generator.reactive || !['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType)) && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/reactive/EntityReactiveRepository.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/reactive/${generator.entityClass}ReactiveRepository.java`
+                    file: 'package/repository/EntityRepository.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
                 }
             ]
         },
         {
-            condition: generator => generator.service === 'serviceImpl',
+            condition: generator =>
+                generator.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType) && !generator.embedded,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/EntityReactiveRepository.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.service === 'serviceImpl' && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -216,7 +230,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.service === 'serviceClass',
+            condition: generator => generator.service === 'serviceClass' && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -246,8 +260,7 @@ const serverFiles = {
     ],
     test: [
         {
-            // TODO: add test for reactive
-            condition: generator => !generator.reactive,
+            condition: generator => !generator.embedded,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

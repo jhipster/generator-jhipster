@@ -28,6 +28,8 @@ const Randexp = utils.RandexpWithFaker;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const REACT_DIR = constants.ANGULAR_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 const CLIENT_NG2_TEMPLATES_DIR = 'angular';
 const CLIENT_REACT_TEMPLATES_DIR = 'react';
@@ -40,6 +42,17 @@ const CLIENT_REACT_TEMPLATES_DIR = 'react';
 const angularFiles = {
     client: [
         {
+            path: ANGULAR_DIR,
+            templates: [
+                {
+                    file: 'entities/entity.model.ts',
+                    // using entityModelFileName so that there is no conflict when generating microservice entities
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.embedded,
             path: ANGULAR_DIR,
             templates: [
                 {
@@ -63,11 +76,6 @@ const angularFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.route.ts`
                 },
                 {
-                    file: 'entities/entity.model.ts',
-                    // using entityModelFileName so that there is no conflict when genertaing microservice entities
-                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
-                },
-                {
                     file: 'entities/entity-management.component.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.component.ts`
                 },
@@ -82,7 +90,7 @@ const angularFiles = {
             ]
         },
         {
-            condition: generator => !generator.readOnly,
+            condition: generator => !generator.readOnly && !generator.embedded,
             path: ANGULAR_DIR,
             templates: [
                 {
@@ -110,6 +118,7 @@ const angularFiles = {
     ],
     test: [
         {
+            condition: generator => !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -128,7 +137,7 @@ const angularFiles = {
             ]
         },
         {
-            condition: generator => !generator.readOnly,
+            condition: generator => !generator.readOnly && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -144,7 +153,7 @@ const angularFiles = {
             ]
         },
         {
-            condition: generator => generator.protractorTests,
+            condition: generator => generator.protractorTests && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -163,6 +172,7 @@ const angularFiles = {
 const reactFiles = {
     client: [
         {
+            condition: generator => !generator.embedded,
             path: REACT_DIR,
             templates: [
                 {
@@ -180,10 +190,6 @@ const reactFiles = {
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.reducer.ts`
                 },
                 {
-                    file: 'entities/entity.model.ts',
-                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
-                },
-                {
                     file: 'entities/index.tsx',
                     method: 'processJsx',
                     renameTo: generator => `entities/${generator.entityFolderName}/index.tsx`
@@ -191,7 +197,16 @@ const reactFiles = {
             ]
         },
         {
-            condition: generator => !generator.readOnly,
+            path: REACT_DIR,
+            templates: [
+                {
+                    file: 'entities/entity.model.ts',
+                    renameTo: generator => `shared/model/${generator.entityModelFileName}.model.ts`
+                }
+            ]
+        },
+        {
+            condition: generator => !generator.readOnly && !generator.embedded,
             path: REACT_DIR,
             templates: [
                 {
@@ -209,6 +224,7 @@ const reactFiles = {
     ],
     test: [
         {
+            condition: generator => !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -218,7 +234,7 @@ const reactFiles = {
             ]
         },
         {
-            condition: generator => generator.protractorTests,
+            condition: generator => generator.protractorTests && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -232,7 +248,7 @@ const reactFiles = {
             ]
         },
         {
-            condition: generator => generator.protractorTests && !generator.readOnly,
+            condition: generator => generator.protractorTests && !generator.readOnly && !generator.embedded,
             path: CLIENT_TEST_SRC_DIR,
             templates: [
                 {
@@ -293,14 +309,33 @@ function writeFiles() {
             if (this.protractorTests) {
                 addSampleRegexTestingStrings(this);
             }
-            if (this.clientFramework === 'angularX') {
-                // write client side files for angular 2.x +
-                this.writeFilesToDisk(
-                    angularFiles,
-                    this,
-                    false,
-                    this.fetchFromInstalledJHipster(`entity-client/templates/${CLIENT_NG2_TEMPLATES_DIR}`)
-                );
+
+            let files;
+            let destDir;
+            let templatesDir;
+            let microserviceName = this.microserviceName;
+
+            if (this.clientFramework === ANGULAR) {
+                files = angularFiles;
+                destDir = ANGULAR_DIR;
+                templatesDir = CLIENT_NG2_TEMPLATES_DIR;
+                microserviceName = this.microserviceName;
+            } else if (this.clientFramework === REACT) {
+                files = reactFiles;
+                destDir = REACT_DIR;
+                templatesDir = CLIENT_REACT_TEMPLATES_DIR;
+            } else {
+                if (!this.embedded) {
+                    this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
+                }
+                return;
+            }
+
+            const entityTemplatesDir = `entity-client/templates/${templatesDir}`;
+            this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster(entityTemplatesDir));
+            addEnumerationFiles(this, templatesDir, destDir);
+
+            if (!this.embedded) {
                 this.addEntityToModule(
                     this.entityInstance,
                     this.entityClass,
@@ -309,31 +344,10 @@ function writeFiles() {
                     this.entityFileName,
                     this.entityUrl,
                     this.clientFramework,
-                    this.microserviceName
+                    microserviceName
                 );
-
-                addEnumerationFiles(this, CLIENT_NG2_TEMPLATES_DIR, ANGULAR_DIR);
-            } else if (this.clientFramework === 'react') {
-                // write client side files for react
-                this.writeFilesToDisk(
-                    reactFiles,
-                    this,
-                    false,
-                    this.fetchFromInstalledJHipster(`entity-client/templates/${CLIENT_REACT_TEMPLATES_DIR}`)
-                );
-                this.addEntityToModule(
-                    this.entityInstance,
-                    this.entityClass,
-                    this.entityAngularName,
-                    this.entityFolderName,
-                    this.entityFileName,
-                    this.entityUrl,
-                    this.clientFramework
-                );
-
-                addEnumerationFiles(this, CLIENT_REACT_TEMPLATES_DIR, REACT_DIR);
+                this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
             }
-            this.addEntityToMenu(this.entityStateName, this.enableTranslation, this.clientFramework, this.entityTranslationKeyMenu);
         }
     };
 }

@@ -172,10 +172,10 @@ module.exports = class extends needleServer {
             ${chalk.yellow(' not added.\n')}`;
         // prettier-ignore
         const annotationProcessorPath = `${'<path>\n'
-            + '                            <groupId>'}${groupId}</groupId>\n`
-            + `                            <artifactId>${artifactId}</artifactId>\n`
-            + `                            <version>${version}</version>\n`
-            + '                        </path>';
+            + '                                <groupId>'}${groupId}</groupId>\n`
+            + `                                <artifactId>${artifactId}</artifactId>\n`
+            + `                                <version>${version}</version>\n`
+            + '                            </path>';
         const rewriteFileModel = this.generateFileModel(
             pomPath,
             '<!-- jhipster-needle-maven-add-annotation-processor -->',

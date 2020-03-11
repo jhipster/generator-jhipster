@@ -1,6 +1,6 @@
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url]
 
 [![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url-main]
 
@@ -33,20 +33,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
       <td align="center" valign="middle">
         <a href="http://www.octoconsulting.com/" target="_blank">
           <img width="200em" src="https://www.jhipster.tech/images/open-collective/octoconsulting.png">
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-### Silver sponsors
-
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="middle">
-        <a href="https://www.bizequity.com/" target="_blank">
-          <img width="200em" src="https://www.jhipster.tech/images/open-collective/bizequity.png">
         </a>
       </td>
     </tr>
@@ -128,20 +114,35 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://www.banksecrets.eu/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
+        <a href="https://papersowl.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://edubirdie.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">
+        <a href="https://www.banksecrets.eu/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
         </a>
       </td>
     </tr>
     <tr>
       <td align="center" valign="middle">
+        <a href="https://edubirdie.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
         <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://www.minitool.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://unscramblex.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/unscramblex.png">
         </a>
       </td>
     </tr>
@@ -160,6 +161,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | :------------------- | :----------------------------------------------------- |
 | Docker               | [![Build Status][img-docker]][azure-url]               |
 | Official             | [![Build Status][img-official]][azure-url]             |
+| Windows Official     | [![Build Status][img-windows-official]][azure-url]     |
 | Angular.Maven        | [![Build Status][img-angular-maven]][azure-url]        |
 | Angular.Maven.NoSQL  | [![Build Status][img-angular-maven-nosql]][azure-url]  |
 | Angular.Gradle       | [![Build Status][img-angular-gradle]][azure-url]       |
@@ -184,6 +186,7 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [azure-url]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_build
 [img-docker]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Docker.Image
 [img-official]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Official
+[img-windows-official]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Windows.GitBash.Official?branchName=master
 [img-angular-maven]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven
 [img-angular-maven-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven.NoSQL
 [img-angular-gradle]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Gradle
@@ -215,8 +218,6 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [github-actions-angular-image]: https://github.com/jhipster/generator-jhipster/workflows/Angular/badge.svg
 [github-actions-react-image]: https://github.com/jhipster/generator-jhipster/workflows/React/badge.svg
 [github-actions-url]: https://github.com/jhipster/generator-jhipster/actions
-[daviddm-image]: https://david-dm.org/jhipster/generator-jhipster.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/jhipster/generator-jhipster
 [backers-image]: https://opencollective.com/generator-jhipster/tiers/backer.svg?avatarHeight=40&width=890
 [backers-url]: https://opencollective.com/generator-jhipster
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md

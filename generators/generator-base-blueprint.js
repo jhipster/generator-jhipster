@@ -89,7 +89,28 @@ module.exports = class extends BaseGenerator {
                 this.configOptions.blueprint ||
                 this.config.get('blueprint')
         );
+
         if (blueprints && blueprints.length > 0) {
+            // Verify blueprints, should be executed only once
+            if (!this.configOptions.blueprintsVerified) {
+                // Run a lookup to find blueprints.
+                const packagePatterns = blueprints
+                    .filter(bp => !this.env.isPackageRegistered(jhipsterUtils.packageNameToNamespace(bp.name)))
+                    .map(bp => bp.name);
+                this.env.lookup({ filterPaths: true, packagePatterns });
+
+                if (!this.options.skipChecks) {
+                    const namespaces = blueprints.map(bp => jhipsterUtils.packageNameToNamespace(bp.name));
+                    // Verify if the blueprints has been registered.
+                    const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
+                    if (missing && missing.length > 0) {
+                        this.env.error(`Some blueprints were not found ${missing}, you should install them manually`);
+                    }
+                }
+
+                this.configOptions.blueprintsVerified = true;
+            }
+
             blueprints.forEach(blueprint => {
                 let bpOptions = {
                     ...this.options,
@@ -98,8 +119,9 @@ module.exports = class extends BaseGenerator {
                 if (extraOptions) {
                     bpOptions = { ...bpOptions, ...extraOptions };
                 }
-                const useBP = this.composeBlueprint(blueprint.name, subGen, bpOptions);
-                if (!useBlueprints && useBP) {
+                const blueprintGenerator = this.composeBlueprint(blueprint.name, subGen, bpOptions);
+                // If the blueprints sets sbsBlueprint property, then don't ignore the normal workflow.
+                if (!useBlueprints && blueprintGenerator && !blueprintGenerator.sbsBlueprint) {
                     useBlueprints = true;
                 }
             });

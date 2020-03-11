@@ -82,8 +82,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
-                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-                this.CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
                 this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
                 this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -98,6 +96,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
                 this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
+                this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
                 this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
                 this.DOCKER_REDIS = constants.DOCKER_REDIS;
@@ -126,6 +125,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
                 this.JIB_VERSION = constants.JIB_VERSION;
+                this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
+                this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
 
                 this.KAFKA_VERSION = constants.KAFKA_VERSION;
@@ -382,6 +383,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(
                     this.cacheProvider
                 );
+                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
@@ -511,14 +513,6 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (this.prodDatabaseType === 'oracle') {
-                    this.log('\n\n');
-                    this.warning(
-                        `${chalk.yellow.bold(
-                            'You have selected Oracle database.\n'
-                        )}Please follow our documentation on using Oracle to set up the \nOracle proprietary JDBC driver.`
-                    );
-                }
                 this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
                 let executable = 'mvnw';

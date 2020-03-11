@@ -98,33 +98,17 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
+  <%_ if (pagination === 'no' || pagination === 'infinite-scroll') { _%>
   useEffect(() => {
     <%_ if (pagination !== 'no') { _%>
-      <%_ if (pagination === 'infinite-scroll') { _%>
     resetAll();
-      <%_ } else { _%>
-    getAllEntities();
-      <%_ } _%>
     <%_ } else { _%>
     props.getEntities();
     <%_ } _%>
   }, []);
-
-  <%_ if (pagination === 'infinite-scroll') { _%>
-  useEffect(() => {
-    if (props.updateSuccess) {
-      getAllEntities();
-    }
-  });
   <%_ } _%>
 
   <%_ if (searchEngine === 'elasticsearch') { _%>
-    <%_ if (pagination !== 'no') { _%>
-  useEffect(() => {
-    props.getSearchEntities(search, paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
-  }, [paginationState.activePage]);
-
-    <%_ } _%>
   const startSearching = () => {
     if (search) {
       <%_ if (pagination === 'infinite-scroll') { _%>
@@ -135,15 +119,12 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
         ...paginationState,
         activePage: 1
       });
+      props.getSearchEntities(search, paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
       <%_ } else { _%>
       props.getSearchEntities(search);
       <%_ } _%>
     }
   };
-
-  useEffect(() => {
-    props.getEntities()
-  }, [<%_ if (pagination !== 'no') { _%>paginationState.activePage, <%_ } _%>search]);
 
   const clear = () => {
     <%_ if (pagination === 'infinite-scroll') { _%>
@@ -156,6 +137,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       activePage: 1
     });
     <%_ } _%>
+    props.getEntities();
   };
 
   const handleSearch = event => setSearch(event.target.value);
@@ -194,7 +176,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <% } else { %>
     sortEntities();
     <% } %>
-  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %>]);
+  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %><%_ if (searchEngine === 'elasticsearch') { _%>, search<% } %>]);
 
   const sort = p => () => {
     <% if (pagination === 'infinite-scroll') { %>

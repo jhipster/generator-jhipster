@@ -62,6 +62,8 @@ metadata:
   name: jhipster-registry
   namespace: <%= kubernetesNamespace %>
 spec:
+  # added to circumvent kustomize bug
+  volumeClaimTemplates: []
   serviceName: jhipster-registry
   replicas: 2
   selector:

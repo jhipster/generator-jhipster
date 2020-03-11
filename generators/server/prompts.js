@@ -181,6 +181,10 @@ function askForServerSideOpts(meta) {
                     value: 'couchbase',
                     name: 'Couchbase'
                 });
+                opts.push({
+                    value: 'neo4j',
+                    name: '[BETA] Neo4j'
+                });
                 if (applicationType !== 'uaa') {
                     opts.push({
                         value: 'no',
@@ -247,7 +251,7 @@ function askForServerSideOpts(meta) {
                 },
                 {
                     value: 'redis',
-                    name: 'Yes, with the Redis implementation (single server)'
+                    name: 'Yes, with the Redis implementation'
                 },
                 {
                     value: 'no',
@@ -335,17 +339,9 @@ function askForServerSideOpts(meta) {
             if (this.authenticationType !== 'uaa') {
                 this.skipUserManagement = true;
             }
-        } else if (this.databaseType === 'mongodb') {
-            this.devDatabaseType = 'mongodb';
-            this.prodDatabaseType = 'mongodb';
-            this.enableHibernateCache = false;
-        } else if (this.databaseType === 'couchbase') {
-            this.devDatabaseType = 'couchbase';
-            this.prodDatabaseType = 'couchbase';
-            this.enableHibernateCache = false;
-        } else if (this.databaseType === 'cassandra') {
-            this.devDatabaseType = 'cassandra';
-            this.prodDatabaseType = 'cassandra';
+        } else if (['mongodb', 'neo4j', 'couchbase', 'cassandra'].includes(this.databaseType)) {
+            this.devDatabaseType = this.databaseType;
+            this.prodDatabaseType = this.databaseType;
             this.enableHibernateCache = false;
         }
         done();

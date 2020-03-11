@@ -4,6 +4,7 @@ const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
 const assetFrom = 'source';
 const assetTo = 'target';
@@ -15,7 +16,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
@@ -66,7 +67,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
                 baseName: 'jhipster',
-                clientFramework: 'angularX',
+                clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
                 languages: ['en', 'fr']

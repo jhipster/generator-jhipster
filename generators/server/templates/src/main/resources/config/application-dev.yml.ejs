@@ -38,6 +38,9 @@ logging:
         <%_ if (packageName !== 'io.github.jhipster') { _%>
         <%= packageName %>: DEBUG
         <%_ } _%>
+        <%_ if (databaseType === 'neo4j') { _%>
+        org.neo4j.driver: WARN
+        <%_ } _%>
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 
 eureka:
@@ -58,6 +61,22 @@ management:
             enabled: false
 
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+org:
+    neo4j:
+        driver:
+            pool:
+                metrics-enabled: true
+            uri: bolt://localhost:7687
+            # Uncomment to use an authenticated connection
+            # authentication:
+            #     username: neo4j
+            #     password: secret
+        migrations:
+            locations-to-scan:
+            packages-to-scan: <%= packageName %>.config.neo4j
+            installed-by: <%= baseName %>
+<%_ } _%>
 spring:
     profiles:
         active: dev
@@ -74,19 +93,6 @@ spring:
     jackson:
         serialization:
             indent-output: true
-    <%_ if (messageBroker === 'kafka') { _%>
-    kafka:
-        consumer:
-            bootstrap-servers: localhost:9092
-            group-id: group_id
-            auto-offset-reset: earliest
-            key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-            value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        producer:
-            bootstrap-servers: localhost:9092
-            key-serializer: org.apache.kafka.common.serialization.StringSerializer
-            value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    <%_ } _%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     cloud:
         consul:
@@ -244,8 +250,10 @@ jhipster:
             enabled: false
             limit: 100000
             duration-in-seconds: 3600
+        <%_ if (!reactive) { _%>
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api,/v2/api-docs # recommended dev configuration
+        <%_ } _%>
     <%_ } _%>
     <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration
@@ -295,6 +303,10 @@ jhipster:
         <%_ if (cacheProvider === 'redis') { _%>
         redis: # Redis configuration
             expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
+            server: redis://localhost:6379
+            cluster: false
+            # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
+            # cluster: true
         <%_ } _%>
     <%_ } _%>
     <%_ if (applicationType !== 'microservice') { _%>

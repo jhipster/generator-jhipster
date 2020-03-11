@@ -20,7 +20,6 @@ const webpack = require('webpack');
 const writeFilePlugin = require('write-file-webpack-plugin');
 const webpackMerge = require('webpack-merge');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
@@ -68,7 +67,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         historyApiFallback: true
     },
     entry: {
-        polyfills: './<%= MAIN_SRC_DIR %>app/polyfills',
         global: './<%= MAIN_SRC_DIR %>content/scss/global.scss',
         main: './<%= MAIN_SRC_DIR %>app/app.main'
     },
@@ -83,35 +81,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
             enforce: 'pre',
             loader: 'eslint-loader',
             exclude: /node_modules/
-        },
-        {
-            test: /\.ts$/,
-            use: [
-                'angular2-template-loader',
-                {
-                    loader: 'cache-loader',
-                    options: {
-                        cacheDirectory: path.resolve('<%= BUILD_DIR %>cache-loader')
-                    }
-                },
-                {
-                    loader: 'thread-loader',
-                    options: {
-                        // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
-                        // The value may need to be adjusted (e.g. to 1) in some CI environments,
-                        // as cpus() may report more cores than what are available to the build.
-                        workers: require('os').cpus().length - 1
-                    }
-                },
-                {
-                    loader: 'ts-loader',
-                    options: {
-                        transpileOnly: true,
-                        happyPackMode: true
-                    }
-                }
-            ],
-            exclude: /(node_modules)/
         },
         {
             test: /\.scss$/,
@@ -137,7 +106,6 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                 format: options.stats === 'minimal' ? 'compact' : 'expanded'
               }),
         new FriendlyErrorsWebpackPlugin(),
-        new ForkTsCheckerWebpackPlugin(),
         new BrowserSyncPlugin({
             https: options.tls,
             host: 'localhost',
@@ -156,6 +124,13 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
                     heartbeatTimeout: 60000
                 }
             }
+            /*
+            ,ghostMode: { // uncomment this part to disable BrowserSync ghostMode; https://github.com/jhipster/generator-jhipster/issues/11116
+                clicks: false,
+                location: false,
+                forms: false,
+                scroll: false
+            } */
         }, {
             reload: false
         }),

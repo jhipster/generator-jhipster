@@ -19,18 +19,18 @@
 package <%= packageName %>.service.dto;
 
 import <%= packageName %>.config.Constants;
-<% if (databaseType === 'sql' || databaseType === 'mongodb') { %>
+<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
 import <%= packageName %>.domain.Authority;<% } %>
 <%_ if (databaseType !== 'no') { _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 <%_ } _%>
 
 import javax.validation.constraints.*;
-<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 import java.time.Instant;
 <%_ } _%>
 import java.util.Set;
-<%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'sql') { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
 
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 public class <%= asDto('User') %> {
 
-    private <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;
+    private <% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -65,7 +65,7 @@ public class <%= asDto('User') %> {
 
     @Size(min = 2, max = 10)
     private String langKey;
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 
     private String createdBy;
 
@@ -94,13 +94,13 @@ public class <%= asDto('User') %> {
         this.imageUrl = user.getImageUrl();
         <%_ } _%>
         this.langKey = user.getLangKey();
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
         this.createdBy = user.getCreatedBy();
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         <%_ } _%>
-        <%_ if (databaseType === 'mongodb' || databaseType === 'sql') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'sql') { _%>
         this.authorities = user.getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
@@ -110,11 +110,11 @@ public class <%= asDto('User') %> {
     }
 
     <%_ } _%>
-    public <% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> getId() {
+    public <% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
+    public void setId(<% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id) {
         this.id = id;
     }
 
@@ -175,7 +175,7 @@ public class <%= asDto('User') %> {
     public void setLangKey(String langKey) {
         this.langKey = langKey;
     }
-    <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'sql') { _%>
 
     public String getCreatedBy() {
         return createdBy;

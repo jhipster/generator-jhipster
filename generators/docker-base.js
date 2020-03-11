@@ -105,7 +105,7 @@ function loadConfigs() {
     this.appsFolders.forEach(appFolder => {
         const path = this.destinationPath(`${this.directoryPath + appFolder}`);
         if (this.fs.exists(`${path}/.yo-rc.json`)) {
-            const config = getAllJhipsterConfig(this, false, path);
+            const config = getAllJhipsterConfig(this, true, path);
 
             if (config.applicationType === 'monolith') {
                 this.monolithicNb++;

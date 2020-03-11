@@ -22,8 +22,10 @@ const _ = require('lodash');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const statistics = require('../statistics');
-
 const constants = require('../generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 let useBlueprints;
 
@@ -106,6 +108,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
                 this.applicationType = configuration.get('applicationType');
+                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
                 this.baseName = configuration.get('baseName');
                 this.packageFolder = configuration.get('packageFolder');
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
@@ -113,7 +116,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.databaseType = configuration.get('databaseType');
                 this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
                 this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.enableTranslation = configuration.get('enableTranslation');
                 this.currentLanguages = configuration.get('languages');
                 this.clientFramework = configuration.get('clientFramework');
@@ -228,10 +230,10 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.updateLanguagesInLanguagePipe(this.languages);
                     this.updateLanguagesInLanguageConstantNG2(this.languages);
                     this.updateLanguagesInWebpack(this.languages);
-                    if (this.clientFramework === 'angularX') {
+                    if (this.clientFramework === ANGULAR) {
                         this.updateLanguagesInMomentWebpackNgx(this.languages);
                     }
-                    if (this.clientFramework === 'react') {
+                    if (this.clientFramework === REACT) {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
                 }

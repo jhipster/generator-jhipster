@@ -23,6 +23,8 @@ const ANGULAR_DIR = constants.ANGULAR_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = {
     cleanupOldFiles,
@@ -77,7 +79,7 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.ts`);
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
     }
-    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
         generator.removeFile(`${ANGULAR_DIR}account/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}admin/index.ts`);
         generator.removeFile(`${ANGULAR_DIR}core/index.ts`);
@@ -87,17 +89,21 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}shared/shared-common.module.ts`);
     }
 
-    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === 'react') {
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === REACT) {
         generator.removeFile('tslint.json');
     }
 
-    if (generator.isJhipsterVersionLessThan('6.4.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+    if (generator.isJhipsterVersionLessThan('6.4.0') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
         generator.removeFile(`${ANGULAR_DIR}admin/admin.route.ts`);
         generator.removeFile(`${ANGULAR_DIR}admin/admin.module.ts`);
     }
 
-    if (generator.isJhipsterVersionLessThan('6.6.1') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+    if (generator.isJhipsterVersionLessThan('6.6.1') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
         generator.removeFile(`${ANGULAR_DIR}core/language/language.helper.ts`);
+    }
+
+    if (generator.isJhipsterVersionLessThan('6.8.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+        generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
 }
 
@@ -229,6 +235,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/DefaultProfileUtil.java`);
         generator.removeFolder(`${javaDir}service/util`);
     }
+    if (generator.isJhipsterVersionLessThan('6.8.0')) {
+        generator.removeFile(`${javaDir}security/oauth2/JwtAuthorityExtractor.java`);
+    }
 }
 
 /**
@@ -239,23 +248,25 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
 function upgradeFiles(generator) {
     let atLeastOneSuccess = false;
     if (generator.isJhipsterVersionLessThan('6.1.0')) {
-        const langNameDiffer = function(lang) {
-            const langProp = lang.replace(/-/g, '_');
-            // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
-            const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
-            return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
-        };
         const languages = generator.config.get('languages');
-        languages
-            .map(langNameDiffer)
-            .filter(props => props)
-            .forEach(props => {
-                const code = generator.renameFile(
-                    `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
-                    `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
-                );
-                atLeastOneSuccess = atLeastOneSuccess || code;
-            });
+        if (languages) {
+            const langNameDiffer = function(lang) {
+                const langProp = lang.replace(/-/g, '_');
+                // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+                const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+                return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
+            };
+            languages
+                .map(langNameDiffer)
+                .filter(props => props)
+                .forEach(props => {
+                    const code = generator.renameFile(
+                        `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
+                        `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
+                    );
+                    atLeastOneSuccess = atLeastOneSuccess || code;
+                });
+        }
     }
     return atLeastOneSuccess;
 }

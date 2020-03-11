@@ -22,7 +22,7 @@ jobs:
       pool:
           vmImage: 'ubuntu-18.04'
       variables:
-          JHI_PROFILE: dev
+          JHI_PROFILE: dev,webpack
           JHI_RUN_APP: 1
           JHI_PROTRACTOR: 0
           JHI_JDK: 11
@@ -62,12 +62,12 @@ jobs:
                   JHI_APP: ms-react-gateway-consul-jwt
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 0
+                  JHI_PROTRACTOR: 1
               ms-react-gateway-consul-oauth2:
                   JHI_APP: ms-react-gateway-consul-oauth2
                   JHI_ENTITY: sqllight
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 0
+                  JHI_PROTRACTOR: 1
               jdl-default:
                   JHI_APP: jdl-default
                   JHI_ENTITY: jdl
@@ -75,23 +75,50 @@ jobs:
                   JHI_PROTRACTOR: 1
               webflux-mongodb:
                   JHI_APP: webflux-mongodb
-                  JHI_ENTITY: none
+                  JHI_ENTITY: mongodb
                   JHI_PROTRACTOR: 1
               webflux-mongodb-session:
                   JHI_APP: webflux-mongodb-session
-                  JHI_ENTITY: none
+                  JHI_ENTITY: mongodb
                   JHI_PROTRACTOR: 1
               webflux-mongodb-oauth2:
                   JHI_APP: webflux-mongodb-oauth2
+                  JHI_ENTITY: mongodb
+                  JHI_PROTRACTOR: 1
+              webflux-gateway-oauth2:
+                  JHI_APP: webflux-gateway-oauth2
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-gateway-jwt:
+                  JHI_APP: webflux-gateway-jwt
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-couchbase:
+                  JHI_APP: webflux-couchbase
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-couchbase-session:
+                  JHI_APP: webflux-couchbase-session
+                  JHI_ENTITY: none
+                  JHI_PROTRACTOR: 1
+              webflux-couchbase-oauth2:
+                  JHI_APP: webflux-couchbase-oauth2
                   JHI_ENTITY: none
                   JHI_PROTRACTOR: 1
       steps:
+          #----------------------------------------------------------------------
+          # Set checkout path.
+          # Yeoman uses the package name to calculate namespaces.
+          # Otherwise the namespace will be the path instead of jhispter:*.
+          #----------------------------------------------------------------------
+          - checkout: self
+            path: generator-jhipster
           #----------------------------------------------------------------------
           # Install all tools and check configuration
           #----------------------------------------------------------------------
           - task: NodeTool@0
             inputs:
-                versionSpec: '12.14.0'
+                versionSpec: '12.16.1'
             displayName: 'TOOLS: install Node.js'
           - script: |
                 if [[ $JHI_JDK = '11' ]]; then

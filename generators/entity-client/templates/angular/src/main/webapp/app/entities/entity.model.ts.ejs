@@ -18,7 +18,7 @@
 -%>
 <%
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto);
+const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, undefined, embedded);
 const typeImports = generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = generateEntityClientFieldDefaultValues(fields);
 const enumImports = generateEntityClientEnumImports(fields);
@@ -27,7 +27,7 @@ const enumImports = generateEntityClientEnumImports(fields);
 import { Moment } from 'moment';
 <%_ } _%>
 <%_ typeImports.forEach((importedPath, importedType) => { _%>
-    <%_ if (importedType !== `I${entityAngularName}`) { _%> 
+    <%_ if (importedType !== `I${entityAngularName}`) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
     <%_ } _%>
 <%_ }); _%>

@@ -26,11 +26,11 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - uses: gradle/wrapper-validation-action@v1
-    <%_ } _%>   
+    <%_ } _%>
     pipeline:
         name: <%= baseName %> pipeline
         runs-on: ubuntu-latest
-        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
         timeout-minutes: 40
         env:
             <%_ if (!skipClient) { _%>
@@ -45,11 +45,11 @@ jobs:
             <%_ if (!skipClient) { _%>
             JHI_DISABLE_WEBPACK_LOGS: true
             <%_ } _%>
-            <%_ if (clientFramework === 'angularX') { _%>
+            <%_ if (clientFramework === ANGULAR) { _%>
             NG_CLI_ANALYTICS: false
             <%_ } _%>
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
               <%_ if (!skipClient) { _%>
             - uses: actions/setup-node@v1
               with:

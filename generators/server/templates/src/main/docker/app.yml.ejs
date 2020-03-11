@@ -60,6 +60,9 @@ services:
             <%_ } _%>
             <%_ if (cacheProvider === 'redis') { _%>
             - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+            - JHIPSTER_CACHE_REDIS_CLUSTER=false
+            # - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+            # - JHIPSTER_CACHE_REDIS_CLUSTER=true
             <%_ } _%>
             <%_ if (authenticationType === 'oauth2') { _%>
             - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
@@ -133,6 +136,12 @@ services:
         extends:
             file: mssql.yml
             service: <%= baseName.toLowerCase() %>-mssql
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'neo4j') { _%>
+    <%= baseName.toLowerCase() %>-neo4j:
+        extends:
+            file: neo4j.yml
+            service: <%= baseName.toLowerCase() %>-neo4j
     <%_ } _%>
     <%_ if (prodDatabaseType === 'cassandra') { _%>
     <%= baseName.toLowerCase() %>-cassandra:

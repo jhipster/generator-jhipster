@@ -20,6 +20,7 @@ const webpack = require('webpack');
 const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 <%_ if (enableTranslation) { _%>
 const MergeJsonWebpackPlugin = require("merge-jsons-webpack-plugin");
 <%_ } _%>
@@ -42,6 +43,10 @@ module.exports = (options) => ({
     module: {
         rules: [
             {
+                test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+                loader: '@ngtools/webpack'
+            },
+            {
                 test: /\.html$/,
                 loader: 'html-loader',
                 options: {
@@ -59,7 +64,10 @@ module.exports = (options) => ({
                 options: {
                     digest: 'hex',
                     hash: 'sha512',
-                    name: 'content/[hash].[ext]'
+                    // For fixing src attr of image
+                    // See https://github.com/jhipster/generator-jhipster/issues/11209
+                    name: 'content/[hash].[ext]',
+                    esModule: false
                 }
             },
             {
@@ -93,9 +101,11 @@ module.exports = (options) => ({
             }
         }),
         new CopyWebpackPlugin([
+            <%_ if (!reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
             { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', flatten: true, ignore: ['index.html'] },
             { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui' },
             { from: './<%= MAIN_SRC_DIR %>swagger-ui/', to: 'swagger-ui' },
+            <%_ } _%>
             { from: './<%= MAIN_SRC_DIR %>content/', to: 'content' },
             { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
             { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
@@ -117,6 +127,11 @@ module.exports = (options) => ({
             chunksSortMode: 'manual',
             inject: 'body'
         }),
-        new BaseHrefWebpackPlugin({ baseHref: '/' })
+        new BaseHrefWebpackPlugin({ baseHref: '/' }),
+        new AngularCompilerPlugin({
+            mainPath: utils.root('<%= MAIN_SRC_DIR %>app/app.main.ts'),
+            tsConfigPath: utils.root('tsconfig.app.json'),
+            sourceMap: true
+        })
     ]
 });

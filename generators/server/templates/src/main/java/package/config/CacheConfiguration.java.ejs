@@ -69,10 +69,9 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cache.CacheManager;
 <%_ } _%>
 <%_ if (cacheProvider === 'memcached') { _%>
-    <%_ if (databaseType !== 'no') { _%>
+    <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
 import <%= packageName %>.repository.UserRepository;
     <%_ } _%>
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -227,10 +226,9 @@ public class CacheConfiguration {
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache != null) {
-            cm.destroyCache(cacheName);
+        if (cache == null) {
+            cm.createCache(cacheName, jcacheConfiguration);
         }
-        cm.createCache(cacheName, jcacheConfiguration);
     }
     <%_ } _%>
     <%_ if (cacheProvider === 'hazelcast') { _%>
@@ -331,7 +329,7 @@ public class CacheConfiguration {
         <%_ } _%>
         config.getMapConfigs().put("default", initializeDefaultMapConfig(jHipsterProperties));
 
-        // Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
+        // Full reference is available at: https://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
         config.setManagementCenterConfig(initializeDefaultManagementCenterConfig(jHipsterProperties));
         <%_ if (enableHibernateCache) { _%>
         config.getMapConfigs().put("<%= packageName %>.domain.*", initializeDomainMapConfig(jHipsterProperties));
@@ -685,7 +683,7 @@ public class CacheConfiguration {
         cacheManager.setCaches(ssmCaches);
         return cacheManager;
     }
-    <%_ if (databaseType !== 'no') { _%>
+    <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
 
     @Bean
     public CacheFactory usersByLoginCache(JHipsterProperties jHipsterProperties) {
@@ -727,7 +725,11 @@ public class CacheConfiguration {
     public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
         Config config = new Config();
-        config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer());
+        if (jHipsterProperties.getCache().getRedis().isCluster()) {
+            config.useClusterServers().addNodeAddress(jHipsterProperties.getCache().getRedis().getServer());
+        } else {
+            config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer()[0]);
+        }
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
         return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
@@ -762,10 +764,9 @@ public class CacheConfiguration {
 
     private void createCache(javax.cache.CacheManager cm, String cacheName, javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
-        if (cache != null) {
-            cm.destroyCache(cacheName);
+        if (cache == null) {
+            cm.createCache(cacheName, jcacheConfiguration);
         }
-        cm.createCache(cacheName, jcacheConfiguration);
     }
 
     <%_ } _%>

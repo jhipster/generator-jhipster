@@ -32,7 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = {};
+        this.configOptions = opts.configOptions || {};
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -192,6 +192,13 @@ module.exports = class extends BaseBlueprintGenerator {
             type: String
         });
 
+        // This adds support for a `--prettier-java` flag
+        this.option('prettier-java', {
+            desc: 'Launch prettier-java pre-formatting at generation',
+            type: Boolean,
+            defaults: false
+        });
+
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement =
@@ -212,6 +219,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
+        this.prettierJava = this.options['prettier-java'];
 
         let blueprints = this.options.blueprints || '';
         // check for old single blueprint declaration
@@ -303,7 +311,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.otherModules = this.config.get('otherModules') || [];
                 if (this.blueprints && this.blueprints.length > 0) {
                     this.blueprints.forEach(blueprint => {
-                        blueprint.version = this.findBlueprintVersion(blueprint.name) || 'latest';
+                        blueprint.version = this.findBlueprintVersion(blueprint.name) || blueprint.version || 'latest';
                     });
 
                     // Remove potential previous value to avoid duplicates
@@ -400,7 +408,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeServer() {
-                if (this.skipServer) return;
+                if (this.skipServer || this.configOptions.skipComposeServer) return;
+                this.configOptions.skipComposeServer = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -413,7 +422,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeClient() {
-                if (this.skipClient) return;
+                if (this.skipClient || this.configOptions.skipComposeClient) return;
+                this.configOptions.skipComposeClient = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -425,6 +435,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeCommon() {
+                if (this.configOptions.skipComposeCommon) return;
+                this.configOptions.skipComposeCommon = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
 
@@ -460,7 +472,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeLanguages() {
-                if (this.skipI18n) return;
+                if (this.skipI18n || this.configOptions.skipComposeLanguages) return;
+                this.configOptions.skipComposeLanguages = true;
                 this.composeLanguagesSub(this, this.configOptions, this.generatorType);
             },
 
@@ -525,7 +538,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             regenerateEntities() {
-                if (this.withEntities) {
+                if (this.withEntities && !this.configOptions.skipComposeEntity) {
+                    this.configOptions.skipComposeEntity = true;
                     const options = this.options;
                     const configOptions = this.configOptions;
                     this.getExistingEntities().forEach(entity => {
@@ -543,23 +557,20 @@ module.exports = class extends BaseBlueprintGenerator {
 
             initGitRepo() {
                 if (!this.options['skip-git']) {
-                    this.isGitInstalled(code => {
-                        if (code === 0) {
-                            this.gitExec('rev-parse --is-inside-work-tree', { trace: false }, (err, gitDir) => {
-                                // gitDir has a line break to remove (at least on windows)
-                                if (gitDir && gitDir.trim() === 'true') {
-                                    this.gitInitialized = true;
-                                } else {
-                                    this.gitExec('init', { trace: false }, () => {
-                                        this.log(chalk.green.bold('Git repository initialized.'));
-                                        this.gitInitialized = true;
-                                    });
-                                }
-                            });
+                    if (this.gitInstalled || this.isGitInstalled()) {
+                        const gitDir = this.gitExec('rev-parse --is-inside-work-tree', { trace: false }).stdout;
+                        // gitDir has a line break to remove (at least on windows)
+                        if (gitDir && gitDir.trim() === 'true') {
+                            this.gitInitialized = true;
                         } else {
-                            this.warning('Git repository could not be initialized, as Git is not installed on your system');
+                            const shellStr = this.gitExec('init', { trace: false });
+                            this.gitInitialized = shellStr.code === 0;
+                            if (this.gitInitialized) this.log(chalk.green.bold('Git repository initialized.'));
+                            else this.warning(`Failed to initialize Git repository.\n ${shellStr.stderr}`);
                         }
-                    });
+                    } else {
+                        this.warning('Git repository could not be initialized, as Git is not installed on your system');
+                    }
                 }
             }
         };
@@ -573,66 +584,63 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             gitCommit() {
-                if (!this.options['skip-git']) {
-                    this.debug('Committing files to git');
-                    const done = this.async();
-                    this.isGitInstalled(code => {
-                        if (code === 0 && this.gitInitialized) {
-                            this.gitExec('log --oneline -n 1 -- .', { trace: false }, (code, commits) => {
-                                if (code !== 0 || !commits || !commits.trim()) {
-                                    // if no files in Git from current folder then we assume that this is initial application generation
-                                    this.gitExec('add .', { trace: false }, code => {
-                                        if (code === 0) {
-                                            let commitMsg = `Initial version of ${this.baseName} generated by JHipster-${this.jhipsterVersion}`;
-                                            if (this.blueprints && this.blueprints.length > 0) {
-                                                const bpInfo = this.blueprints
-                                                    .map(bp => `${bp.name.replace('generator-jhipster-', '')}-${bp.version}`)
-                                                    .join(', ');
-                                                commitMsg += ` with blueprints: ${bpInfo}`;
+                if (!this.options['skip-git'] && this.isGitInstalled()) {
+                    if (this.gitInitialized) {
+                        this.debug('Committing files to git');
+                        const done = this.async();
+                        this.gitExec('log --oneline -n 1 -- .', { trace: false }, (code, commits) => {
+                            if (code !== 0 || !commits || !commits.trim()) {
+                                // if no files in Git from current folder then we assume that this is initial application generation
+                                this.gitExec('add .', { trace: false }, code => {
+                                    if (code === 0) {
+                                        let commitMsg = `Initial version of ${this.baseName} generated by JHipster-${this.jhipsterVersion}`;
+                                        if (this.blueprints && this.blueprints.length > 0) {
+                                            const bpInfo = this.blueprints
+                                                .map(bp => `${bp.name.replace('generator-jhipster-', '')}-${bp.version}`)
+                                                .join(', ');
+                                            commitMsg += ` with blueprints: ${bpInfo}`;
+                                        }
+                                        this.gitExec(`commit -m "${commitMsg}" -- .`, { trace: false }, code => {
+                                            if (code === 0) {
+                                                this.log(
+                                                    chalk.green.bold(`Application successfully committed to Git from ${process.cwd()}.`)
+                                                );
+                                            } else {
+                                                this.log(
+                                                    chalk.red.bold(
+                                                        `Application commit to Git failed from ${process.cwd()}. Try to commit manually.`
+                                                    )
+                                                );
                                             }
-                                            this.gitExec(`commit -m "${commitMsg}" -- .`, { trace: false }, code => {
-                                                if (code === 0) {
-                                                    this.log(
-                                                        chalk.green.bold(`Application successfully committed to Git from ${process.cwd()}.`)
-                                                    );
-                                                } else {
-                                                    this.log(
-                                                        chalk.red.bold(
-                                                            `Application commit to Git failed from ${process.cwd()}. Try to commit manually.`
-                                                        )
-                                                    );
-                                                }
-                                                done();
-                                            });
-                                        } else {
-                                            this.warning(
-                                                `The generated application could not be committed to Git, because ${chalk.bold(
-                                                    'git add'
-                                                )} command failed.`
-                                            );
                                             done();
-                                        }
-                                    });
-                                } else {
-                                    // if found files in Git from current folder then we assume that this is application regeneration
-                                    // if there are changes in current folder then inform user about manual commit needed
-                                    this.gitExec('diff --name-only .', { trace: false }, (code, diffs) => {
-                                        if (code === 0 && diffs && diffs.trim()) {
-                                            this.log(
-                                                `Found commits in Git from ${process.cwd()}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
-                                            );
-                                        }
+                                        });
+                                    } else {
+                                        this.warning(
+                                            `The generated application could not be committed to Git, because ${chalk.bold(
+                                                'git add'
+                                            )} command failed.`
+                                        );
                                         done();
-                                    });
-                                }
-                            });
-                        } else {
-                            this.warning(
-                                'The generated application could not be committed to Git, as a Git repository could not be initialized.'
-                            );
-                            done();
-                        }
-                    });
+                                    }
+                                });
+                            } else {
+                                // if found files in Git from current folder then we assume that this is application regeneration
+                                // if there are changes in current folder then inform user about manual commit needed
+                                this.gitExec('diff --name-only .', { trace: false }, (code, diffs) => {
+                                    if (code === 0 && diffs && diffs.trim()) {
+                                        this.log(
+                                            `Found commits in Git from ${process.cwd()}. So we assume this is application regeneration. Therefore automatic Git commit is not done. You can do Git commit manually.`
+                                        );
+                                    }
+                                    done();
+                                });
+                            }
+                        });
+                    } else {
+                        this.warning(
+                            'The generated application could not be committed to Git, as a Git repository could not be initialized.'
+                        );
+                    }
                 }
             },
 

@@ -23,15 +23,15 @@ jobs:
     generator-jhipster:
         name: npm test
         runs-on: ${{ matrix.os }}
-        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
         timeout-minutes: 20
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.14.0]
+                node_version: [12.16.1]
                 os: [ubuntu-latest]
         steps:
-            - uses: actions/checkout@v1
+            - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node_version }}

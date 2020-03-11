@@ -234,8 +234,10 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/UserResource.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/KeyAndPasswordVM.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/vm/ManagedUserVM.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/NoOpMailConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/AuditResourceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/UserResourceIT.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/WithUnauthenticatedMockUser.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/UserServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/AuditEventServiceIT.java`,
@@ -250,6 +252,9 @@ const expectedFiles = {
     redis: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheConfiguration.java`,
         `${DOCKER_DIR}redis.yml`,
+        `${DOCKER_DIR}redis-cluster.yml`,
+        `${DOCKER_DIR}redis/connectRedisCluster.sh`,
+        `${DOCKER_DIR}redis/Redis-Cluster.Dockerfile`,
         `${SERVER_TEST_SRC_DIR}/com/mycompany/myapp/RedisTestContainerExtension.java`
     ],
 
@@ -388,6 +393,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.component.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.scss`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/docs/docs.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/health/health-modal.component.html`,
@@ -449,6 +455,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/auth/has-any-authority.directive.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/state-storage.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/user-route-access-service.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/shared/constants/authority.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/error.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/input.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/constants/pagination.constants.ts`,
@@ -524,7 +531,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-state-storage.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/spyobject.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/test.module.ts`,
-        'tsconfig-aot.json',
+        'tsconfig.app.json',
         'tsconfig.json',
         'tslint.json',
         'webpack/logo-jhipster.png',
@@ -580,7 +587,7 @@ const expectedFiles = {
 
     oauth2: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/JwtAuthorityExtractor.java`,
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/JwtGrantedAuthorityConverter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/AudienceValidator.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuthIdpTokenResponseDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
@@ -606,6 +613,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/UaaProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/IatTokenEnhancer.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/OAuth2TestConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`
     ],
@@ -718,6 +726,15 @@ const expectedFiles = {
         `${DOCKER_DIR}couchbase/scripts/configure-node.sh`
     ],
 
+    neo4j: [
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/AbstractNeo4jIT.java`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__admin.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__system.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__user.json`,
+        `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__anonymoususer.json`,
+        `${DOCKER_DIR}neo4j.yml`
+    ],
+
     cassandra: [
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`,
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace.cql`,
@@ -734,6 +751,7 @@ const expectedFiles = {
 
     elasticsearch: [
         `${DOCKER_DIR}elasticsearch.yml`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/ElasticsearchTestConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`
     ],

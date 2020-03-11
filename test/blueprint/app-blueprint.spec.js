@@ -8,6 +8,9 @@ const expectedFiles = require('../utils/expected-files');
 const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
 const jhipsterVersion = require('../../package').version;
+const constants = require('../../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 describe('JHipster application generator with blueprint', () => {
     describe('generate application with a version-compatible blueprint', () => {
@@ -25,6 +28,7 @@ describe('JHipster application generator with blueprint', () => {
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
@@ -35,7 +39,7 @@ describe('JHipster application generator with blueprint', () => {
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
@@ -90,6 +94,7 @@ describe('JHipster application generator with blueprint', () => {
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
@@ -100,7 +105,7 @@ describe('JHipster application generator with blueprint', () => {
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
@@ -140,6 +145,7 @@ describe('JHipster application generator with blueprint', () => {
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
@@ -150,7 +156,7 @@ describe('JHipster application generator with blueprint', () => {
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,
@@ -205,6 +211,7 @@ describe('JHipster application generator with blueprint', () => {
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                     fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
                 })
                 .withOptions({
@@ -215,7 +222,7 @@ describe('JHipster application generator with blueprint', () => {
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,

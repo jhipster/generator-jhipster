@@ -27,7 +27,7 @@ import <%= packageName %>.security.jwt.TokenProvider;
     <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.security.SecurityUtils;
 import <%= packageName %>.security.oauth2.AudienceValidator;
-import <%= packageName %>.security.oauth2.JwtAuthorityExtractor;
+import <%= packageName %>.security.oauth2.JwtGrantedAuthorityConverter;
 import <%= packageName %>.service.AuditEventService;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -104,6 +104,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
+<%_ } _%>
 import org.springframework.security.web.server.SecurityWebFilterChain;
 <%_ if (authenticationType === 'session') { _%>
 import org.springframework.security.web.server.WebFilterExchange;
@@ -112,6 +115,9 @@ import org.springframework.security.web.server.authentication.logout.HttpStatusR
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 <%_ } _%>
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
+<%_ if (applicationType === 'microservice') { _%>
+import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
+<%_ } _%>
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
 <%_ if (skipUserManagement && authenticationType !== 'oauth2') { _%>
@@ -208,7 +214,7 @@ public class SecurityConfiguration {
         // @formatter:off
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
-                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/index.html", "/test/**"),
+                pathMatchers("/app/**", "/i18n/**", "/content/**", "/swagger-ui/**", "/test/**"<% if (applicationType === 'gateway' || applicationType === 'monolith') { %>, "/webjars/**"<% } %>),
                 pathMatchers(HttpMethod.OPTIONS, "/**")
             )))
             .csrf()
@@ -253,6 +259,11 @@ public class SecurityConfiguration {
                 .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
             .and()
                 .frameOptions().disable()
+        <%_ if (applicationType === 'microservice') { _%>
+        .and()
+            .requestCache()
+            .requestCache(NoOpServerRequestCache.getInstance())
+        <%_ } _%>
         .and()
             .authorizeExchange()
             <%_ if (!skipClient) { _%>
@@ -268,6 +279,9 @@ public class SecurityConfiguration {
             <%_ } _%>
             .pathMatchers("/api/auth-info").permitAll()
             .pathMatchers("/api/**").authenticated()
+            <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
+            .pathMatchers("/services/**", "/swagger-resources/**", "/v2/api-docs").authenticated()
+            <%_ } _%>
             .pathMatchers("/management/health").permitAll()
             .pathMatchers("/management/info").permitAll()
             .pathMatchers("/management/prometheus").permitAll()
@@ -279,7 +293,7 @@ public class SecurityConfiguration {
         .and()
             <%_ } _%>.oauth2ResourceServer()
             .jwt()
-            .jwtAuthenticationConverter(grantedAuthoritiesExtractor())
+            .jwtAuthenticationConverter(jwtAuthenticationConverter())
         .and()
             .and()
             .oauth2Client();
@@ -289,9 +303,9 @@ public class SecurityConfiguration {
     }
     <%_ if (authenticationType === 'oauth2') { _%>
 
-    Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
+    Converter<Jwt, Mono<AbstractAuthenticationToken>> jwtAuthenticationConverter() {
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtAuthorityExtractor());
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(new JwtGrantedAuthorityConverter());
         return new ReactiveJwtAuthenticationConverterAdapter(jwtAuthenticationConverter);
     }
 
@@ -374,6 +388,21 @@ public class SecurityConfiguration {
         <%_ } else { _%>
         return Mono.empty();
         <%_ } _%>
+    }
+    <%_ } _%>
+
+    <%_ if(databaseType === 'couchbase') { _%>
+    /**
+     * Disables Spring security integration with SpEL expressions since it is not yet compatible with Reactor
+     */
+    @Bean
+    public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+        return new SecurityEvaluationContextExtension() {
+            @Override
+            public Object getRootObject() {
+                return null;
+            }
+        };
     }
     <%_ } _%>
 }

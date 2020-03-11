@@ -27,29 +27,29 @@
     "node_modules"
   ],
   "dependencies": {
-    "@angular/common": "8.2.14",
-    "@angular/compiler": "8.2.14",
-    "@angular/core": "8.2.14",
-    "@angular/forms": "8.2.14",
-    "@angular/platform-browser": "8.2.14",
-    "@angular/platform-browser-dynamic": "8.2.14",
-    "@angular/router": "8.2.14",
-    "@fortawesome/angular-fontawesome": "0.5.0",
+    "@angular/common": "9.0.4",
+    "@angular/compiler": "9.0.4",
+    "@angular/core": "9.0.4",
+    "@angular/forms": "9.0.4",
+    "@angular/localize": "9.0.4",
+    "@angular/platform-browser": "9.0.4",
+    "@angular/platform-browser-dynamic": "9.0.4",
+    "@angular/router": "9.0.4",
+    "@fortawesome/angular-fontawesome": "0.6.0",
     "@fortawesome/fontawesome-svg-core": "1.2.26",
     "@fortawesome/free-solid-svg-icons": "5.12.0",
-    "@ng-bootstrap/ng-bootstrap": "5.1.4",
+    "@ng-bootstrap/ng-bootstrap": "6.0.0",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
     "bootstrap": "4.4.1",
     <%_ if (clientTheme !== 'none') { _%>
     "bootswatch": "4.4.1",
     <%_ } _%>
-    "core-js": "3.5.0",
     "moment": "2.24.0",
-    "ng-jhipster": "0.11.5",
+    "ng-jhipster": "0.12.0",
     "ngx-cookie": "4.0.2",
     "ngx-infinite-scroll": "8.0.1",
-    "ngx-webstorage": "4.0.1",
+    "ngx-webstorage": "5.0.0",
     "rxjs": "6.5.3",
     "swagger-ui-dist": "3.24.3",
     <%_ if (websocket === 'spring-websocket') { _%>
@@ -60,10 +60,10 @@
     "zone.js": "0.10.2"
   },
   "devDependencies": {
-    "@angular/cli": "8.3.20",
-    "@angular/compiler-cli": "8.2.14",
-    "@ngtools/webpack": "8.3.20",
-    "@openapitools/openapi-generator-cli": "0.0.14-4.0.2",
+    "@angular/cli": "9.0.4",
+    "@angular/compiler-cli": "9.0.4",
+    "@ngtools/webpack": "9.0.4",
+    "@openapitools/openapi-generator-cli": "1.0.10-4.2.3",
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.7",
     "@types/chai-string": "1.4.2",
@@ -82,12 +82,10 @@
     "@typescript-eslint/eslint-plugin": "2.11.0",
     "@typescript-eslint/eslint-plugin-tslint": "2.11.0",
     "@typescript-eslint/parser": "2.11.0",
-    "angular2-template-loader": "0.6.2",
     "autoprefixer": "9.7.3",
     "base-href-webpack-plugin": "2.0.0",
     "browser-sync": "2.26.7",
     "browser-sync-webpack-plugin": "2.2.2",
-    "cache-loader": "4.1.0",
     <%_ if (protractorTests) { _%>
     "chai": "4.2.0",
     "chai-as-promised": "7.1.1",
@@ -101,7 +99,6 @@
     "eslint-config-prettier": "6.7.0",
     "eslint-loader": "3.0.3",
     "file-loader": "5.0.2",
-    "fork-ts-checker-webpack-plugin": "3.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "html-loader": "0.5.5",
@@ -145,8 +142,8 @@
     <%_ if (protractorTests) { _%>
     "ts-node": "8.5.4",
     <%_ } _%>
-    "tslint": "5.20.1",
-    "typescript": "3.4.5",
+    "tslint": "6.0.0",
+    "typescript": "3.7.5",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
@@ -154,11 +151,11 @@
     "webdriver-manager": "12.1.7",
     <%_ } _%>
     "webpack": "4.41.2",
+    "webpack-bundle-analyzer": "3.6.0",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0",
     "webpack-merge": "4.2.2",
     "webpack-notifier": "1.8.0",
-    "webpack-visualizer-plugin": "0.1.11",
     "workbox-webpack-plugin": "4.3.1",
     "write-file-webpack-plugin": "4.5.1"
   },
@@ -170,7 +167,7 @@
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
-    "ngc": "ngc -p tsconfig-aot.json",
+    "ngc": "ngc -p tsconfig.app.json",
     "cleanup": "rimraf <%= DIST_DIR %> <%= AOT_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests) { _%>

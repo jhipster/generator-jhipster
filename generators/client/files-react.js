@@ -94,6 +94,7 @@ const files = {
     ],
     swagger: [
         {
+            condition: generator => !generator.reactive,
             path: MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
         }
@@ -229,6 +230,7 @@ const files = {
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
+                'modules/administration/docs/docs.scss',
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
@@ -409,7 +411,7 @@ module.exports = {
 };
 
 function writeFiles() {
-    mkdirp(MAIN_SRC_DIR);
+    mkdirp(this.CLIENT_MAIN_SRC_DIR);
     // write React files
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
 }

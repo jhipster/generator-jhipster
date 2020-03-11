@@ -58,8 +58,7 @@ let hasRelationshipQuery = false;
 let otherEntityActions = new Set();
 let manyToManyOwners = new Set();
 let relFieldNames = new Set();
-let uniqueRealtionFields = new Set();
-
+let uniqueRelationFields = new Set();
 
 Object.keys(differentRelationships).forEach(key => {
 
@@ -79,7 +78,7 @@ Object.keys(differentRelationships).forEach(key => {
   }
   if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
     const uniqueRel = differentRelationships[key][0];
-    uniqueRealtionFields.add(uniqueRel.otherEntityNamePlural);
+    uniqueRelationFields.add(uniqueRel.otherEntityNamePlural);
     otherEntityActions.add({
       action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
       instance: `${uniqueRel.otherEntityNamePlural}`,
@@ -131,7 +130,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
   const { <%= entityInstance %>Entity,<%
-  uniqueRealtionFields.forEach(rel => {
+  uniqueRelationFields.forEach(rel => {
   %> <%= rel %>,<% }) %> loading, updating } = props;
 
   <%_ for (var i = 0; i < blobFields.length; i++) { _%>
@@ -208,6 +207,9 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
         <%_ }) _%>
       }
+      <%_ if (uniqueRelationFields.has('users')) { _%>
+      entity.user = users[values.user];
+      <%_ } _%>
 
       if (isNew) {
         props.createEntity(entity);
@@ -408,9 +410,10 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               id="<%= entityFileName %>-<%= relationshipName %>"
               type="select"
               className="form-control"
-              name="<%= relationshipFieldName %>.id"
+              name="<%= relationshipFieldName %><% if (relationshipFieldName !== 'user') { %>.id<% } %>"
             >
               <option value="" key="0" />
+              <%_ if (relationshipFieldName !== 'user') { _%>
               {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                   <option
@@ -420,6 +423,17 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                   </option>
                 ) : null
               }
+              <%_ } else { _%>
+              {
+                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((otherEntity, index) =>
+                  <option
+                    value={index}
+                    key={otherEntity.id}>
+                    {otherEntity.<%= otherEntityField %>}
+                  </option>
+                ) : null
+              }
+              <%_ } _%>
             </AvInput>
               <%_ } else { _%>
             <AvInput

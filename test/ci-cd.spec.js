@@ -7,7 +7,7 @@ const expectedFiles = {
     travis: ['.travis.yml'],
     jenkins: ['Jenkinsfile', 'src/main/docker/jenkins.yml', 'src/main/resources/idea.gdsl'],
     gitlab: ['.gitlab-ci.yml'],
-    circle: ['circle.yml'],
+    circle: ['.circleci/config.yml'],
     azure: ['azure-pipelines.yml'],
     github: ['.github/workflows/github-ci.yml'],
     dockerRegistry: ['src/main/docker/docker-registry.yml']
@@ -365,6 +365,29 @@ describe('JHipster CI-CD Sub Generator', () => {
             assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
             assert.noFileContent('.gitlab-ci.yml', /sonar/);
             assert.noFileContent('.gitlab-ci.yml', /heroku/);
+        });
+    });
+
+    describe('GitLab: npm skip server', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/npm-skip-server'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'gitlab',
+                    insideDocker: true,
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.gitlab);
+        });
+        it('contains image: jhipster', () => {
+            assert.fileContent('.gitlab-ci.yml', /image: jhipster/);
         });
     });
 
@@ -755,6 +778,28 @@ describe('JHipster CI-CD Sub Generator', () => {
         });
         it('creates expected files', () => {
             assert.file(expectedFiles.github);
+        });
+    });
+
+    describe('Circle CI', () => {
+        beforeEach(done => {
+            helpers
+                .run(require.resolve('../generators/ci-cd'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/ci-cd/maven-ngx-yarn'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    pipeline: 'circle',
+                    cicdIntegrations: []
+                })
+                .on('end', done);
+        });
+        it('creates expected files', () => {
+            assert.file(expectedFiles.circle);
+            assert.noFile(expectedFiles.jenkins);
+            assert.noFile(expectedFiles.travis);
+            assert.noFile(expectedFiles.gitlab);
         });
     });
 });

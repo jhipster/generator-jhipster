@@ -33,7 +33,7 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.annotation.Cacheable;
 <%_ } _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.domain.Page;
     <%_ } %>
@@ -45,6 +45,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
 <%_ if (reactive && databaseType === 'cassandra') { _%>
 import org.springframework.data.cassandra.ReactiveResultSet;
@@ -69,6 +72,8 @@ import javax.validation.Validator;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import java.util.List;
+<%_ } _%>
+<%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
@@ -95,6 +100,11 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
  * Spring Data MongoDB repository for the {@link <%= asEntity('User') %>} entity.
  */
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+/**
+ * Spring Data Neo4j RX repository for the {@link <%= asEntity('User') %>} entity.
+ */
+<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 /**
  * Spring Data Couchbase repository for the {@link <%= asEntity('User') %>} entity.
@@ -111,9 +121,9 @@ import static <%= packageName %>.config.Constants.ID_DELIMITER;
         optionalOrMono = 'Mono';
     }
 _%>
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 @Repository
-public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
+public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRepository<<%= asEntity('User') %>, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>><% } %><% if (reactive) { %>Reactive<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<<%= asEntity('User') %>, String><% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<<%= asEntity('User') %>, String><% } %> {
     <%_ if (cacheManagerIsAvailable === true) { _%>
 
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
@@ -144,7 +154,7 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
         <%_ } _%>
-    default Optional<<%= asEntity('User') %>> findOneByLogin(String login) {
+    default <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login) {
         return findById(<%= asEntity('User') %>.PREFIX + ID_DELIMITER + login);
     }
     <%_ } else if (databaseType === 'mongodb') { _%>
@@ -153,8 +163,14 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
         <%_ } _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login);
     <%_ } else { _%>
-    Optional<<%= asEntity('User') %>> findOneByLogin(String login);
+    <%= optionalOrMono %><<%= asEntity('User') %>> findOneByLogin(String login);
     <%_ } _%>
+
+    <%_ if (databaseType === 'neo4j') { _%>
+    <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<% } %>
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAll();
+    <%_ } _%>
+
     <%_ if (databaseType === 'sql') { _%>
 
     @EntityGraph(attributePaths = "authorities")

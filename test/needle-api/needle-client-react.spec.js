@@ -4,6 +4,7 @@ const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
@@ -13,7 +14,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
@@ -46,7 +47,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                 this.addAppSCSSStyle('@import with-comment', 'my comment');
             },
             addEntityToMenuStep() {
-                this.addEntityToMenu('routerName', false, 'react', false);
+                this.addEntityToMenu('routerName', false, REACT, false);
             },
             addEntityToModuleStep() {
                 this.addEntityToModule(
@@ -56,7 +57,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     'entityFolderName',
                     'entityFileName',
                     'entityUrl',
-                    'react',
+                    REACT,
                     'microServiceNam'
                 );
             }
@@ -81,7 +82,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
                 baseName: 'jhipster',
-                clientFramework: 'react',
+                clientFramework: REACT,
                 enableTranslation: true,
                 nativeLanguage: 'en',
                 languages: ['en', 'fr']

@@ -33,6 +33,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.core.mapping.Field;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.core.schema.Property;
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 <%_ } _%>
@@ -46,8 +49,8 @@ import javax.persistence.MappedSuperclass;
 <%_ } _%>
 
 /**
- * Base abstract class for entities which will hold definitions for created, last modified by and created,
- * last modified by date.
+ * Base abstract class for entities which will hold definitions for created, last modified, created by,
+ * last modified by attributes.
  */
 <%_ if (databaseType === 'sql') { _%>
 @MappedSuperclass
@@ -66,6 +69,9 @@ public abstract class AbstractAuditingEntity implements Serializable {
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("created_by")
     <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("created_by")
+    <%_ } _%>
     @JsonIgnore
     private String createdBy;
 
@@ -75,6 +81,9 @@ public abstract class AbstractAuditingEntity implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("created_date")
+    <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("created_date")
     <%_ } _%>
     @JsonIgnore
     private Instant createdDate = Instant.now();
@@ -88,6 +97,9 @@ public abstract class AbstractAuditingEntity implements Serializable {
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("last_modified_by")
     <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("last_modified_by")
+    <%_ } _%>
     @JsonIgnore
     private String lastModifiedBy;
 
@@ -97,6 +109,9 @@ public abstract class AbstractAuditingEntity implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("last_modified_date")
+    <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Property("last_modified_date")
     <%_ } _%>
     @JsonIgnore
     private Instant lastModifiedDate = Instant.now();

@@ -26,6 +26,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<% if (reactive) { %>import reactor.core.publisher.Flux;<% } else { %>import java.util.List;<% } %>
+<%_ } _%>
 
 <%_ if (databaseType === 'sql') { _%>
 /**
@@ -37,10 +41,19 @@ import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive
  * Spring Data MongoDB repository for the {@link Authority} entity.
  */
 <%_ } _%>
+ <%_ if (databaseType === 'neo4j') { _%>
+/**
+ * Spring Data Neo4j RX repository for the {@link Authority} entity.
+ */
+<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 /**
  * Spring Data Couchbase repository for the {@link Authority} entity.
  */
 <%_ } _%>
-public interface AuthorityRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><Authority, String> {
+public interface AuthorityRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><Authority, String> {
+    <%_ if (databaseType === 'neo4j') { _%>
+    <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<%_ } _%>
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('Authority') %>> findAll();
+    <%_ } _%>
 }

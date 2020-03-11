@@ -25,6 +25,9 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ if (reactive) { _%>
 import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
@@ -32,6 +35,7 @@ import io.github.jhipster.config.JHipsterProperties;
 import <%= packageName %>.config.audit.AuditEventConverter;
 import <%= packageName %>.domain.PersistentAuditEvent;
 import <%= packageName %>.repository.PersistenceAuditEventRepository;
+import <%= packageName %>.security.AuthoritiesConstants;
 
 import <%= packageName %>.service.AuditEventService;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +46,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+<%_ if (!reactive) { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (!reactive) { _%>
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
@@ -51,6 +60,7 @@ import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 <%_ } _%>
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (!reactive) { _%>
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
@@ -65,9 +75,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
-<%_ if (databaseType === 'couchbase') { _%>
-import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
-<%_ } _%>
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 <%_ if (!reactive) { _%>
@@ -78,6 +85,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Integration tests for the {@link AuditResource} REST controller.
  */
+<%_ if (!reactive) { _%>
+@AutoConfigureMockMvc
+<%_ } else { _%>
+@AutoConfigureWebTestClient
+<%_ } _%>
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 <%_ if (authenticationType === 'oauth2') { _%>
 @SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
 <%_ } else { _%>
@@ -89,7 +102,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ if (databaseType === 'sql') { _%>
 @Transactional
 <%_ } _%>
-public class AuditResourceIT {
+public class AuditResourceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %>{
 
     private static final String SAMPLE_PRINCIPAL = "SAMPLE_PRINCIPAL";
     private static final String SAMPLE_TYPE = "SAMPLE_TYPE";
@@ -99,60 +112,18 @@ public class AuditResourceIT {
     @Autowired
     private PersistenceAuditEventRepository auditEventRepository;
 
-    @Autowired
-    private AuditEventConverter auditEventConverter;
-
-    @Autowired
-    private JHipsterProperties jhipsterProperties;
-    <%_ if (!reactive) { _%>
-
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-    <%_ } _%>
-
-    @Autowired
-    @Qualifier("<% if (!reactive) { %>mvc<% } else { %>webFlux<% } %>ConversionService")
-    private FormattingConversionService formattingConversionService;
-
     private PersistentAuditEvent auditEvent;
 
     <%_ if (!reactive) { _%>
+    @Autowired
     private MockMvc restAuditMockMvc;
     <%_ } else { _%>
+    @Autowired
     private WebTestClient webTestClient;
     <%_ } _%>
 
     @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        AuditEventService auditEventService =
-            new AuditEventService(auditEventRepository, auditEventConverter, jhipsterProperties);
-        AuditResource auditResource = new AuditResource(auditEventService);
-        <%_ if (!reactive) { _%>
-        this.restAuditMockMvc = MockMvcBuilders.standaloneSetup(auditResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setConversionService(formattingConversionService)
-            .setMessageConverters(jacksonMessageConverter)
-        <%_ } else { _%>
-        this.webTestClient = WebTestClient.bindToController(auditResource)
-            .argumentResolvers(configurer -> configurer.addCustomResolver(new ReactivePageableHandlerMethodArgumentResolver()))
-            .formatters(registry -> {
-                DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
-                registrar.setUseIsoFormat(true);
-                registrar.registerFormatters(registry);
-            })
-        <%_ } _%>
-            .build();
-    }
-
-    @BeforeEach
     public void initTest() {
-        <%_ if (databaseType === 'couchbase') { _%>
-        mockAuthentication();
-        <%_ } _%>
         auditEventRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         auditEvent = new PersistentAuditEvent();
         auditEvent.setAuditEventType(SAMPLE_TYPE);

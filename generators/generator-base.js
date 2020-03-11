@@ -37,8 +37,9 @@ const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 /**
  * This is the Generator base class.
@@ -49,14 +50,51 @@ const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
  */
 module.exports = class extends PrivateBase {
     /**
+     * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+     */
+    get CLIENT_MAIN_SRC_DIR() {
+        this._CLIENT_MAIN_SRC_DIR =
+            this._CLIENT_MAIN_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_MAIN_SRC_DIR) || constants.CLIENT_MAIN_SRC_DIR;
+        return this._CLIENT_MAIN_SRC_DIR;
+    }
+
+    /**
+     * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
+     */
+    get CLIENT_TEST_SRC_DIR() {
+        this._CLIENT_TEST_SRC_DIR =
+            this._CLIENT_TEST_SRC_DIR || this.applyOutputPathCustomizer(constants.CLIENT_TEST_SRC_DIR) || constants.CLIENT_TEST_SRC_DIR;
+        return this._CLIENT_TEST_SRC_DIR;
+    }
+
+    /**
+     * Apply output customizer.
+     *
+     * @param {string} path - Path to customize.
+     */
+    applyOutputPathCustomizer(path) {
+        const outputPathCustomizer = this.options.outputPathCustomizer;
+        if (!outputPathCustomizer) {
+            return path;
+        }
+        if (Array.isArray(outputPathCustomizer)) {
+            outputPathCustomizer.forEach(customizer => {
+                path = customizer.call(this, path);
+            });
+            return path;
+        }
+        return outputPathCustomizer.call(this, path);
+    }
+
+    /**
      * Add a new icon to icon imports.
      *
      * @param {string} iconName - The name of the Font Awesome icon.
      */
     addIcon(iconName, clientFramework) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addIcon(iconName);
-        } else if (clientFramework === 'react') {
+        } else if (clientFramework === REACT) {
             // React
             // TODO:
         }
@@ -71,9 +109,9 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addElementToMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addElementToMenu(routerName, iconName, enableTranslation, translationKeyMenu);
-        } else if (clientFramework === 'react') {
+        } else if (clientFramework === REACT) {
             // React
             // TODO:
         }
@@ -98,9 +136,9 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      */
     addElementToAdminMenu(routerName, iconName, enableTranslation, clientFramework, translationKeyMenu = _.camelCase(routerName)) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addElementToAdminMenu(routerName, iconName, enableTranslation, translationKeyMenu);
-        } else if (clientFramework === 'react') {
+        } else if (clientFramework === REACT) {
             // React
             // TODO:
         }
@@ -115,9 +153,9 @@ module.exports = class extends PrivateBase {
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
     addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
-        if (this.clientFramework === 'angularX') {
+        if (this.clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
-        } else if (this.clientFramework === 'react') {
+        } else if (this.clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
         }
     }
@@ -144,7 +182,7 @@ module.exports = class extends PrivateBase {
         clientFramework,
         microServiceName
     ) {
-        if (clientFramework === 'angularX') {
+        if (clientFramework === ANGULAR) {
             this.needleApi.clientAngular.addEntityToModule(
                 entityInstance,
                 entityClass,
@@ -154,7 +192,7 @@ module.exports = class extends PrivateBase {
                 entityUrl,
                 microServiceName
             );
-        } else if (clientFramework === 'react') {
+        } else if (clientFramework === REACT) {
             this.needleApi.clientReact.addEntityToModule(entityInstance, entityClass, entityName, entityFolderName, entityFileName);
         }
     }
@@ -178,6 +216,17 @@ module.exports = class extends PrivateBase {
             enableTranslation,
             clientFramework
         );
+    }
+
+    /**
+     * Add a new lazy loaded module to admin routing file.
+     *
+     * @param {string} route - The route for the module. For example 'entity-audit'.
+     * @param {string} modulePath - The path to the module file. For example './entity-audit/entity-audit.module'.
+     * @param {string} moduleName - The name of the module. For example 'EntityAuditModule'.
+     */
+    addAdminRoute(route, modulePath, moduleName) {
+        this.needleApi.clientAngular.addAdminRoute(route, modulePath, moduleName);
     }
 
     /**
@@ -221,7 +270,7 @@ module.exports = class extends PrivateBase {
      * @param {string} language - The language to which this translation should be added
      */
     addGlobalTranslationKey(key, value, language) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
         try {
             jhipsterUtils.rewriteJSONFile(
                 fullPath,
@@ -263,7 +312,7 @@ module.exports = class extends PrivateBase {
         const languages = [];
         this.getAllSupportedLanguages().forEach(language => {
             try {
-                const stats = fs.lstatSync(`${CLIENT_MAIN_SRC_DIR}i18n/${language}`);
+                const stats = fs.lstatSync(`${this.CLIENT_MAIN_SRC_DIR}i18n/${language}`);
                 if (stats.isDirectory()) {
                     languages.push(language);
                 }
@@ -808,6 +857,16 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a logger to the logback-spring.xml
+     *
+     * @param {string} logName - name of the log we want to track
+     * @param {string} level - tracking level
+     */
+    addLoggerForLogbackSpring(logName, level) {
+        this.needleApi.serverLog.addlog(logName, level);
+    }
+
+    /**
      * Add a remote Maven Repository to the Gradle build.
      *
      * @param {string} url - url of the repository
@@ -1033,7 +1092,7 @@ module.exports = class extends PrivateBase {
             let error;
             let duplicate;
             const moduleName = _.startCase(npmPackageName.replace(`${GENERATOR_JHIPSTER}-`, ''));
-            const generatorName = npmPackageName.replace('generator-', '');
+            const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
             const generatorCallback = `${generatorName}:${callbackSubGenerator || 'app'}`;
             const moduleConfig = {
                 name: `${moduleName} generator`,
@@ -1133,24 +1192,12 @@ module.exports = class extends PrivateBase {
      * @param {string} npmPackageName - package name
      * @param {string} subGen - sub generator name
      * @param {any} options - options to pass
+     * @return {object} the composed generator
      */
     composeExternalModule(npmPackageName, subGen, options) {
-        let generatorTocall = path.join(process.cwd(), 'node_modules', npmPackageName, 'generators', subGen);
-        try {
-            if (!fs.existsSync(generatorTocall)) {
-                this.debug('using global module as local version could not be found in node_modules');
-                generatorTocall = path.join(npmPackageName, 'generators', subGen);
-            }
-            this.debug('Running yeoman compose with options: ', generatorTocall, options);
-            this.composeWith(require.resolve(generatorTocall), options);
-        } catch (err) {
-            this.debug('ERROR:', err);
-            const generatorName = npmPackageName.replace('generator-', '');
-            const generatorCallback = `${generatorName}:${subGen}`;
-            // Fallback for legacy modules
-            this.debug('Running yeoman legacy compose with options: ', generatorCallback, options);
-            this.composeWith(generatorCallback, options);
-        }
+        const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
+        const generatorCallback = `${generatorName}:${subGen}`;
+        return this.composeWith(generatorCallback, options, true);
     }
 
     /**
@@ -1197,6 +1244,7 @@ module.exports = class extends PrivateBase {
         context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
         context.skipClient = context.fileData.skipClient || context.skipClient;
         context.readOnly = context.fileData.readOnly || false;
+        context.embedded = context.fileData.embedded || false;
         this.copyFilteringFlag(context.fileData, context, context);
         if (_.isUndefined(context.entityTableName)) {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
@@ -1309,29 +1357,15 @@ module.exports = class extends PrivateBase {
 
     /**
      * executes a Git command using shellJS
-     * gitExec(args [, options ], callback)
+     * gitExec(args [, options] [, callback])
      *
      * @param {string|array} args - can be an array of arguments or a string command
      * @param {object} options[optional] - takes any of child process options
-     * @param {function} callback - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+     * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+     * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
      */
     gitExec(args, options, callback) {
-        callback = arguments[arguments.length - 1]; // eslint-disable-line prefer-rest-params
-        if (arguments.length < 3) {
-            options = {};
-        }
-        if (options.async === undefined) options.async = true;
-        if (options.silent === undefined) options.silent = true;
-        if (options.trace === undefined) options.trace = true;
-
-        if (!Array.isArray(args)) {
-            args = [args];
-        }
-        const command = `git ${args.join(' ')}`;
-        if (options.trace) {
-            this.info(command);
-        }
-        shelljs.exec(command, options, callback);
+        return jhipsterUtils.gitExec(args, options, callback);
     }
 
     /**
@@ -1501,6 +1535,10 @@ module.exports = class extends PrivateBase {
      * @param {string} msg - message to print
      */
     error(msg) {
+        if (this._debug && this._debug.enabled) {
+            this._debug(`${chalk.red.bold('ERROR!')} ${msg}`);
+        }
+        // Terminate current environment.
         this.env.error(`${msg}`);
     }
 
@@ -1510,7 +1548,11 @@ module.exports = class extends PrivateBase {
      * @param {string} msg - message to print
      */
     warning(msg) {
-        this.log(`${chalk.yellow.bold('WARNING!')} ${msg}`);
+        const warn = `${chalk.yellow.bold('WARNING!')} ${msg}`;
+        this.log(warn);
+        if (this._debug && this._debug.enabled) {
+            this._debug(warn);
+        }
     }
 
     /**
@@ -1520,6 +1562,9 @@ module.exports = class extends PrivateBase {
      */
     info(msg) {
         this.log.info(msg);
+        if (this._debug && this._debug.enabled) {
+            this._debug(`${chalk.green('INFO!')} ${msg}`);
+        }
     }
 
     /**
@@ -1835,10 +1880,10 @@ module.exports = class extends PrivateBase {
      * @returns {object} the command line and its result
      */
     buildApplication(buildTool, profile, buildWar, cb) {
-        let buildCmd = 'mvnw -ntp verify -DskipTests=true -B';
+        let buildCmd = 'mvnw -ntp verify -B';
 
         if (buildTool === 'gradle') {
-            buildCmd = 'gradlew -x test';
+            buildCmd = 'gradlew';
             if (buildWar) {
                 buildCmd += ' bootWar';
             } else {

@@ -126,8 +126,11 @@ module.exports = class extends BaseDockerGenerator {
             });
         }
 
-        this.log('\nYou can deploy all your apps by running the following script:');
-        this.log(`  ${chalk.cyan('bash kubectl-apply.sh')}`);
+        this.log('\nYou can deploy all your apps by running the following kubectl command:');
+        this.log(`  ${chalk.cyan('bash kubectl-apply.sh -f')}`);
+        this.log('\n[OR]');
+        this.log('\nIf you want to use kustomize configuration, then run the following command:');
+        this.log(`  ${chalk.cyan('bash kubectl-apply.sh -k')}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log("\nUse these commands to find your application's IP addresses:");

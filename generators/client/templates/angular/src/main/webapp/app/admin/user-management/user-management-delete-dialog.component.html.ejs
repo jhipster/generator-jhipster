@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<form *ngIf="user" name="deleteForm" (ngSubmit)="confirmDelete(user.login!)">
+<form *ngIf="user" name="deleteForm" (ngSubmit)="confirmDelete(user?.login!)">
     <div class="modal-header">
         <h4 class="modal-title" jhiTranslate="entity.delete.title">Confirm delete operation</h4>
 
