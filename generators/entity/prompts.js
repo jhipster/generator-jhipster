@@ -196,7 +196,7 @@ function askForFieldsToRemove() {
                 const field = context.fields[i];
                 if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
                     field.fieldNameAsDatabaseColumn = _.snakeCase(field.fieldName);
-                    context.updateFields.push(field);
+                    context.removedFields.push(field);
                     context.fields.splice(i, 1);
                 }
             }
@@ -902,7 +902,7 @@ function askForField(done) {
 
             fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
             if (context.newChangelog) {
-                context.updateFields.push(field);
+                context.newFields.push(field);
             }
 
             context.fields.push(field);
@@ -1100,7 +1100,7 @@ function askForRelationship(done) {
 
             fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
             if (context.newChangelog) {
-                context.updateRelationships.push(relationship);
+                context.newRelationships.push(relationship);
             }
 
             context.relationships.push(relationship);
@@ -1161,7 +1161,7 @@ function logFieldsAndRelationships() {
                 chalk.red(field.fieldName) +
                     chalk.white(` (${field.fieldType}${field.fieldTypeBlobContent ? ` ${field.fieldTypeBlobContent}` : ''}) `) +
                     chalk.cyan(validationDetails.join(' ')) +
-                    (context.updateFields && context.updateFields.includes(field) ? chalk.blue('NEW') : '')
+                    (context.newFields && context.newFields.includes(field) ? chalk.blue('NEW') : '')
             );
         });
         this.log();
@@ -1177,7 +1177,7 @@ function logFieldsAndRelationships() {
                 `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
                     relationship.relationshipType
                 )} ${chalk.cyan(validationDetails.join(' '))}${
-                    context.updateRelationships && context.updateRelationships.includes(relationship) ? chalk.blue('NEW') : ''
+                    context.newRelationships && context.newRelationships.includes(relationship) ? chalk.blue('NEW') : ''
                 }`
             );
         });

@@ -221,6 +221,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.useConfigurationFile = true;
                 }
 
+                context.filenamePreviousState = `${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}-previous.json`;
+                if (shelljs.test('-f', context.filenamePreviousState)) {
+                    this.log(
+                        chalk.green(
+                            `\nFound the ${context.filenamePreviousState} configuration file for previous entity state, entity can be automatically updated!\n`
+                        )
+                    );
+                    context.useConfigurationFile = true;
+                }
+
                 context.entitySuffix = configuration.get('entitySuffix');
                 if (_.isNil(context.entitySuffix)) {
                     context.entitySuffix = '';
@@ -301,7 +311,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
-                    this.loadEntityJson(context.filename);
+                    this.loadEntityJson(context.filename, context.filenamePreviousState);
                 }
             },
 

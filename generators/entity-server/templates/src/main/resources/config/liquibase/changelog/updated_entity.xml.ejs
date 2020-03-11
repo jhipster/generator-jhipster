@@ -28,38 +28,30 @@
         Updated the entity <%= entityClass %>.
     -->
     <changeSet id="<%= newChangelogDate %>-1" author="jhipster">
-        <%_ if (updateFields && updateFields.length > 0) { _%>
+        <%_ if (newFields && newFields.length > 0) { _%>
             <%_ if (typeof javadoc == 'undefined') { _%>
-                <%_ if (updateEntity === 'add') { _%>
         <addColumn tableName="<%= entityTableName %>">
-                <%_ } else if (updateEntity === 'remove') { _%>
-        <dropColumn tableName="<%= entityTableName %>">
-                <%_ } _%>
             <%_ } else { _%>
-                <%_ if (updateEntity === 'add') { _%>
         <addColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
-                <%_ } else if (updateEntity === 'remove') { _%>
-        <dropColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
-                <%_ } _%>
             <%_ } _%>
-            <%_ for (idx in updateFields) {
+            <%_ for (idx in newFields) {
                 let nullable = true;
-                if (updateFields[idx].fieldValidate === true && updateFields[idx].fieldValidateRules.includes('required')) {
+                if (newFields[idx].fieldValidate === true && newFields[idx].fieldValidateRules.includes('required')) {
                     nullable = false;
                 }
                 let unique = false;
-                if (updateFields[idx].fieldValidate === true && updateFields[idx].fieldValidateRules.includes('unique')) {
+                if (newFields[idx].fieldValidate === true && newFields[idx].fieldValidateRules.includes('unique')) {
                     unique = true;
                 }
                 let maxlength = 255;
-                if (updateFields[idx].fieldValidate === true && updateFields[idx].fieldValidateRules.includes('maxlength')) {
-                    maxlength = updateFields[idx].fieldValidateRulesMaxlength;
+                if (newFields[idx].fieldValidate === true && newFields[idx].fieldValidateRules.includes('maxlength')) {
+                    maxlength = newFields[idx].fieldValidateRulesMaxlength;
                 }
-                const fieldType = updateFields[idx].fieldType;
-                const fieldTypeBlobContent = updateFields[idx].fieldTypeBlobContent;
-                const columnName = updateFields[idx].fieldNameAsDatabaseColumn;
+                const fieldType = newFields[idx].fieldType;
+                const fieldTypeBlobContent = newFields[idx].fieldTypeBlobContent;
+                const columnName = newFields[idx].fieldNameAsDatabaseColumn;
                 let columnType;
-                if (fieldType === 'String' || updateFields[idx].fieldIsEnum) {
+                if (fieldType === 'String' || newFields[idx].fieldIsEnum) {
                     columnType="varchar(" + maxlength + ")";
                 } else if (fieldType === 'Integer') {
                     columnType="integer";
@@ -93,10 +85,10 @@
                     columnType="boolean";
                 }
                 _%>
-                <%_ if (typeof updateFields[idx].javadoc == 'undefined') { _%>
+                <%_ if (typeof newFields[idx].javadoc == 'undefined') { _%>
             <column name="<%= columnName %>" type="<%= columnType %>">
                 <%_ } else { _%>
-            <column name="<%= columnName %>" type="<%= columnType %>" remarks="<%- formatAsLiquibaseRemarks(updateFields[idx].javadoc) %>">
+            <column name="<%= columnName %>" type="<%= columnType %>" remarks="<%- formatAsLiquibaseRemarks(newFields[idx].javadoc) %>">
                 <%_ } _%>
                 <%_ if (unique) {
                     const uniqueConstraintName = getUXConstraintName(entityTableName, columnName, prodDatabaseType);
@@ -113,119 +105,226 @@
                 <constraints nullable="<%= nullable %>" />
             </column>
                 <%_ }
-                updateFields[idx].columnType = columnType;
+                    newFields[idx].columnType = columnType;
             } _%>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
-            <%_ if (updateEntity === 'add') { _%>
         </addColumn>
-            <%_ } else if (updateEntity === 'remove') { _%>
+        <%_ } _%>
+
+        <%_ if (removedFields && removedFields.length > 0) { _%>
+            <%_ if (typeof javadoc == 'undefined') { _%>
+        <dropColumn tableName="<%= entityTableName %>">
+            <%_ } else { _%>
+        <dropColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
+            <%_ } _%>
+            <%_ for (idx in removedFields) {
+                let nullable = true;
+                if (removedFields[idx].fieldValidate === true && removedFields[idx].fieldValidateRules.includes('required')) {
+                    nullable = false;
+                }
+                let unique = false;
+                if (removedFields[idx].fieldValidate === true && removedFields[idx].fieldValidateRules.includes('unique')) {
+                    unique = true;
+                }
+                let maxlength = 255;
+                if (removedFields[idx].fieldValidate === true && removedFields[idx].fieldValidateRules.includes('maxlength')) {
+                    maxlength = removedFields[idx].fieldValidateRulesMaxlength;
+                }
+                const fieldType = removedFields[idx].fieldType;
+                const fieldTypeBlobContent = removedFields[idx].fieldTypeBlobContent;
+                const columnName = removedFields[idx].fieldNameAsDatabaseColumn;
+                let columnType;
+                if (fieldType === 'String' || removedFields[idx].fieldIsEnum) {
+                    columnType="varchar(" + maxlength + ")";
+                } else if (fieldType === 'Integer') {
+                    columnType="integer";
+                } else if (fieldType === 'Long') {
+                    columnType="bigint";
+                } else if (fieldType === 'Float') {
+                    columnType="${floatType}";
+                } else if (fieldType === 'Double') {
+                    columnType="double";
+                } else if (fieldType === 'BigDecimal') {
+                    columnType="decimal(21,2)";
+                } else if (fieldType === 'LocalDate') {
+                    columnType="date";
+                } else if (fieldType === 'Instant') {
+                    columnType="datetime";
+                } else if (fieldType === 'ZonedDateTime') {
+                    columnType="datetime";
+                } else if (fieldType === 'Duration') {
+                    columnType="bigint";
+                } else if (fieldType === 'UUID') {
+                    columnType="${uuidType}";
+                } else if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
+                    if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
+                        columnType="longblob";
+                    } else {
+                        columnType="blob";
+                    }
+                } else if (fieldTypeBlobContent === 'text') {
+                    columnType="${clobType}";
+                } else if (fieldType === 'Boolean') {
+                    columnType="boolean";
+                }
+            _%>
+            <%_ if (typeof removedFields[idx].javadoc == 'undefined') { _%>
+            <column name="<%= columnName %>" type="<%= columnType %>">
+                <%_ } else { _%>
+            <column name="<%= columnName %>" type="<%= columnType %>" remarks="<%- formatAsLiquibaseRemarks(removedFields[idx].javadoc) %>">
+                <%_ } _%>
+                <%_ if (unique) {
+                    const uniqueConstraintName = getUXConstraintName(entityTableName, columnName, prodDatabaseType);
+                _%>
+                <constraints nullable="<%= nullable %>" unique="true" uniqueConstraintName="<%= uniqueConstraintName %>" />
+                <%_ } else { _%>
+                <constraints nullable="<%= nullable %>" />
+                <%_ } _%>
+            </column>
+            <%_ if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
+                let contentTypeColumnType = columnType;
+                contentTypeColumnType = "varchar(255)"; _%>
+            <column name="<%= columnName %>_content_type" type="<%= contentTypeColumnType %>">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+                <%_ }
+                    removedFields[idx].columnType = columnType;
+                } _%>
+                <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </dropColumn>
             <%_ } _%>
-        <%_ } _%>
-        <%_ if (updateRelationships && updateRelationships.length > 0) { _%>
 
-        <%_ for (idx in updateRelationships) {
+        <%_ if (newRelationships && newRelationships.length > 0) { _%>
+
+        <%_ for (idx in newRelationships) {
             let nullable_relation = true,
-                    relationshipType = updateRelationships[idx].relationshipType,
-                    relationshipName = updateRelationships[idx].relationshipName,
-                    relationshipColumnType = updateRelationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
-            if (updateRelationships[idx].relationshipValidate === true && updateRelationships[idx].relationshipRequired) {
+                    relationshipType = newRelationships[idx].relationshipType,
+                    relationshipName = newRelationships[idx].relationshipName,
+                    relationshipColumnType = newRelationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
+            if (newRelationships[idx].relationshipValidate === true && newRelationships[idx].relationshipRequired) {
                 nullable_relation = false;
             }
-            if (updateRelationships[idx].relationshipType === 'many-to-one') { _%>
+            if (newRelationships[idx].relationshipType === 'many-to-one') { _%>
             <%_ if (typeof javadoc == 'undefined') { _%>
-                <%_ if (updateEntity === 'add') { _%>
         <addColumn tableName="<%= entityTableName %>">
-                <%_ } else if (updateEntity === 'remove') { _%>
-        <dropColumn tableName="<%= entityTableName %>">
-                <%_ } _%>
             <%_ } else { _%>
-                <%_ if (updateEntity === 'add') { _%>
         <addColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
-                <%_ } else if (updateEntity === 'remove') { _%>
-        <dropColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
-                <%_ } _%>
             <%_ } _%>
             <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
-            <%_ if (updateEntity === 'add') { _%>
         </addColumn>
-            <%_ } else if (updateEntity === 'remove') { _%>
-        </dropColumn>
-            <%_ } _%>
-            <%_ } else if (relationshipType === 'one-to-one' && updateRelationships[idx].ownerSide === true
-                && (updateRelationships[idx].useJPADerivedIdentifier == null || updateRelationships[idx].useJPADerivedIdentifier === false)) {
+            <%_ } else if (relationshipType === 'one-to-one' && newRelationships[idx].ownerSide === true
+                && (newRelationships[idx].useJPADerivedIdentifier == null || newRelationships[idx].useJPADerivedIdentifier === false)) {
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
             <%_ if (typeof javadoc == 'undefined') { _%>
-                <%_ if (updateEntity === 'add') { _%>
         <addColumn tableName="<%= entityTableName %>">
-                <%_ } else if (updateEntity === 'remove') { _%>
-        <dropColumn tableName="<%= entityTableName %>">
-                <%_ } _%>
             <%_ } else { _%>
-                <%_ if (updateEntity === 'add') { _%>
         <addColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
-                <%_ } else if (updateEntity === 'remove') { _%>
-        <dropColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
-                <%_ } _%>
             <%_ } _%>
             <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints unique="true" nullable="<%= nullable_relation %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
             </column>
-            <%_ if (updateEntity === 'add') { _%>
         </addColumn>
-            <%_ } else if (updateEntity === 'remove') { _%>
-        </dropColumn>
-            <%_ } _%>
             <%_ }
         } _%>
 
         <%_ } _%>
-        <%_ for (const idx in updateFields) {
-            if (updateFields[idx].fieldType === 'ZonedDateTime' || updateFields[idx].fieldType === 'Instant') { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= updateFields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
+        <%_ if (removedRelationships && removedRelationships.length > 0) { _%>
+
+        <%_ for (idx in removedRelationships) {
+            let nullable_relation = true,
+                    relationshipType = removedRelationships[idx].relationshipType,
+                    relationshipName = removedRelationships[idx].relationshipName,
+                    relationshipColumnType = removedRelationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
+            if (removedRelationships[idx].relationshipValidate === true && removedRelationships[idx].relationshipRequired) {
+                nullable_relation = false;
+            }
+        if (removedRelationships[idx].relationshipType === 'many-to-one') { _%>
+        <%_ if (typeof javadoc == 'undefined') { _%>
+        <dropColumn tableName="<%= entityTableName %>">
+            <%_ } else { _%>
+        <dropColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
+            <%_ } _%>
+            <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+                <constraints nullable="<%= nullable_relation %>" />
+            </column>
+        </dropColumn>
+            <%_ } else if (relationshipType === 'one-to-one' && removedRelationships[idx].ownerSide === true
+                    && (removedRelationships[idx].useJPADerivedIdentifier == null || removedRelationships[idx].useJPADerivedIdentifier === false)) {
+                const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
+            _%>
+            <%_ if (typeof javadoc == 'undefined') { _%>
+        <dropColumn tableName="<%= entityTableName %>">
+            <%_ } else { _%>
+        <dropColumn tableName="<%= entityTableName %>" remarks="<%- formatAsLiquibaseRemarks(javadoc) %>">
+            <%_ } _%>
+            <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+                <constraints unique="true" nullable="<%= nullable_relation %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
+            </column>
+        </dropColumn>
+            <%_ }
+            } _%>
+
+        <%_ } _%>
+        <%_ for (const idx in newFields) {
+            if (newFields[idx].fieldType === 'ZonedDateTime' || newFields[idx].fieldType === 'Instant') { _%>
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= newFields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
         <%_ }
         } _%>
     </changeSet>
 
-    <%_ if (updateRelationships && updateRelationships.length > 0) { _%>
+    <%_ if (newRelationships && newRelationships.length > 0) { _%>
     <changeSet id="<%= newChangelogDate %>-1-relations" author="jhipster">
-        <%_ for (idx in updateRelationships) {
-            const relationshipType = updateRelationships[idx].relationshipType,
-            relationshipName = updateRelationships[idx].relationshipName,
-            ownerSide = updateRelationships[idx].ownerSide,
-            otherEntityName = updateRelationships[idx].otherEntityName;
+        <%_ for (idx in newRelationships) {
+            const relationshipType = newRelationships[idx].relationshipType,
+            relationshipName = newRelationships[idx].relationshipName,
+            ownerSide = newRelationships[idx].ownerSide,
+            otherEntityName = newRelationships[idx].otherEntityName;
             const relationshipColumnType = otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
             if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
           _%>
 
-            <%_ if (updateEntity === 'add') { _%>
         <addColumn tableName="<%= joinTableName %>">
-            <%_ } else if (updateEntity === 'remove') { _%>
-        <dropColumn tableName="<%= joinTableName %>">
-            <%_ } _%>
             <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
                 <constraints nullable="false"/>
             </column>
             <column name="<%= getColumnName(name) %>_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <%_ if (updateEntity === 'add') { _%>
         </addColumn>
-            <%_ } else if (updateEntity === 'remove') { _%>
-        </dropColumn>
-            <%_ } _%>
 
-            <%_ if (updateEntity === 'add') { _%>
         <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
-            <%_ } else if (updateEntity === 'remove') { _%>
-        <dropPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
-            <%_ } _%>
         <% } %><% } %>
     </changeSet>
+    <%_ } _%>
+
+    <%_ if (removedRelationships && removedRelationships.length > 0) { _%>
+        <changeSet id="<%= newChangelogDate %>-1-relations" author="jhipster">
+            <%_ for (idx in newRelationships) {
+                const relationshipType = removedRelationships[idx].relationshipType,
+                        relationshipName = removedRelationships[idx].relationshipName,
+                        ownerSide = removedRelationships[idx].ownerSide,
+                        otherEntityName = removedRelationships[idx].otherEntityName;
+                const relationshipColumnType = otherEntityName === 'user' && authenticationType === 'oauth2' ? 'varchar(100)' : 'bigint';
+            if (relationshipType === 'many-to-many' && ownerSide) {
+                const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
+            _%>
+
+            <dropColumn tableName="<%= joinTableName %>">
+                <column name="<%= getColumnName(relationshipName) %>_id" type="<%= relationshipColumnType %>">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="<%= getColumnName(name) %>_id" type="bigint">
+                    <constraints nullable="false"/>
+                </column>
+            </dropColumn>
+
+            <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_id" tableName="<%= joinTableName %>"/>
+            <% } %><% } %>
+        </changeSet>
     <%_ } _%>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

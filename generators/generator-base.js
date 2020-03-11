@@ -1171,10 +1171,22 @@ module.exports = class extends PrivateBase {
         return _.camelCase(microserviceName) + (microserviceName.endsWith('App') ? '' : 'App');
     }
 
+    getNewElements(currentElements, previousElements) {
+        return currentElements.filter(
+            currentElement => !previousElements.find(previousElement => JSON.stringify(previousElement) === JSON.stringify(currentElement))
+        );
+    }
+
+    getRemovedElements(currentElements, previousElements) {
+        return previousElements.filter(
+            previousElement => !currentElements.find(currentElement => JSON.stringify(currentElement) === JSON.stringify(previousElement))
+        );
+    }
+
     /**
      * Load an entity configuration file into context.
      */
-    loadEntityJson(fromPath = this.context.fromPath) {
+    loadEntityJson(fromPath = this.context.fromPath, fromPathPreviousState = null) {
         const context = this.context;
         try {
             context.fileData = this.fs.readJSON(fromPath);
@@ -1185,10 +1197,53 @@ module.exports = class extends PrivateBase {
         if (context.fileData.databaseType) {
             context.databaseType = context.fileData.databaseType;
         }
+
+        try {
+            if (fromPathPreviousState) {
+                context.previousStateFileData = this.fs.readJSON(fromPathPreviousState);
+            }
+        } catch (err) {
+            this.debug('Error:', err);
+            this.error('\nThe entity configuration file for previous entity state could not be read!\n');
+        }
+
         context.relationships = context.fileData.relationships || [];
-        context.updateRelationships = [];
         context.fields = context.fileData.fields || [];
-        context.updateFields = [];
+
+        if (context.previousStateFileData && context.previousStateFileData.fields && context.previousStateFileData.fields.length > 0) {
+            context.newFields = this.getNewElements(context.fields, context.previousStateFileData.fields);
+            context.removedFields = this.getRemovedElements(context.fields, context.previousStateFileData.fields);
+
+            if ((context.newFields && context.newFields.length > 0) || (context.removedFields && context.removedFields.length > 0)) {
+                context.newChangelog = true;
+            }
+        } else {
+            context.newFields = [];
+            context.removedFields = [];
+        }
+
+        if (
+            context.previousStateFileData &&
+            context.previousStateFileData.relationships &&
+            context.previousStateFileData.relationships.length > 0
+        ) {
+            context.newRelationships = this.getNewElements(context.fileData.relationships, context.previousStateFileData.relationships);
+            context.removedRelationships = this.getRemovedElements(
+                context.fileData.relationships,
+                context.previousStateFileData.relationships
+            );
+
+            if (
+                (context.newRelationships && context.newRelationships.length > 0) ||
+                (context.removedRelationships && context.removedRelationships.length > 0)
+            ) {
+                context.newChangelog = true;
+            }
+        } else {
+            context.newRelationships = [];
+            context.removedRelationships = [];
+        }
+
         context.haveFieldWithJavadoc = false;
         context.fields.forEach(field => {
             if (field.javadoc) {

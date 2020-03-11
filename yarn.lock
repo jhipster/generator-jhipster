@@ -2414,10 +2414,8 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
-jhipster-core@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/jhipster-core/-/jhipster-core-7.0.0.tgz#c97d853d6984168438b0aaaee8c094f884500bb4"
-  integrity sha512-/uidO538VSxtxzFGnONyV1Gr4nJRvpRNrBkvznp60nq4SrpZnZW5BaB82ByC2ZBseMrjf+oX5uy85ycfRELMFw==
+jhipster-core@../jhipster-core:
+  version "7.1.1"
   dependencies:
     chevrotain "6.5.0"
     fs-extra "8.1.0"
