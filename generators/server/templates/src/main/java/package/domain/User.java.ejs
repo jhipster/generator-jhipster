@@ -351,7 +351,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
     private Set<String> authorities = new HashSet<>();
     <%_ } _%>
-    <%_ if (authenticationType === 'session' && databaseType === 'sql') { _%>
+    <%_ if (authenticationType === 'session' && databaseType === 'sql' && !reactive) { _%>
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
@@ -471,7 +471,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 
     public void setAuthorities(Set<<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>Authority<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>String<% } %>> authorities) {
         this.authorities = authorities;
-    }<% if ((authenticationType === 'session') && (databaseType === 'sql')) { %>
+    }<% if (authenticationType === 'session' && databaseType === 'sql' && !reactive) { %>
 
     public Set<PersistentToken> getPersistentTokens() {
         return persistentTokens;
