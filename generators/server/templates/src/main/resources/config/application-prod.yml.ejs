@@ -244,7 +244,7 @@ jhipster:
         <%_ } _%>
         <%_ if (cacheProvider === 'caffeine') { _%>
         caffeine: # Caffeine configuration
-            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache
+            time-to-live-seconds: 3600 # By default objects stay 1 hour in the cache. This sets expireAfterWrite in Caffeine (https://github.com/ben-manes/caffeine/wiki/Eviction#time-based)
             max-entries: 1000 # Number of objects in each cache entry
         <%_ } _%>
         <%_ if (cacheProvider === 'infinispan') { _%>
