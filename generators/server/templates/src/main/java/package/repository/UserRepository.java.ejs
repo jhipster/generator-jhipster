@@ -196,28 +196,28 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 @Repository
 public interface UserRepository extends R2dbcRepository<User, Long>, UserRepositoryInternal {
 
-    @Query("SELECT * FROM jhi_user WHERE activation_key = :activationKey")
+    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE activation_key = :activationKey")
     Mono<User> findOneByActivationKey(String activationKey);
 
-    @Query("SELECT * FROM jhi_user WHERE activated = false AND activation_key IS NOT NULL AND created_date < :dateTime")
+    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE activated = false AND activation_key IS NOT NULL AND created_date < :dateTime")
     Flux<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(LocalDateTime dateTime);
 
-    @Query("SELECT * FROM jhi_user WHERE reset_key = :resetKey")
+    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE reset_key = :resetKey")
     Mono<User> findOneByResetKey(String resetKey);
 
-    @Query("SELECT * FROM jhi_user WHERE LOWER(email) = LOWER(:email)")
+    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE LOWER(email) = LOWER(:email)")
     Mono<User> findOneByEmailIgnoreCase(String email);
 
-    @Query("SELECT * FROM jhi_user WHERE login = :login")
+    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE login = :login")
     Mono<User> findOneByLogin(String login);
 
-    @Query("SELECT COUNT(DISTINCT id) FROM jhi_user WHERE login != :anonymousUser")
+    @Query("SELECT COUNT(DISTINCT id) FROM <%= jhiTablePrefix %>_user WHERE login != :anonymousUser")
     Mono<Long> countAllByLoginNot(String anonymousUser);
 
-    @Query("INSERT INTO jhi_user_authority VALUES(:userId, :authority)")
+    @Query("INSERT INTO <%= jhiTablePrefix %>_user_authority VALUES(:userId, :authority)")
     Mono<Void> saveUserAuthority(Long userId, String authority);
 
-    @Query("DELETE FROM jhi_user_authority")
+    @Query("DELETE FROM <%= jhiTablePrefix %>_user_authority")
     Mono<Void> deleteAllUserAuthorities();
 }
 
@@ -261,7 +261,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
     }
 
     private Mono<User> findOneWithAuthoritiesBy(String fieldName, Object fieldValue) {
-        return db.execute("SELECT * FROM jhi_user u LEFT JOIN jhi_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
+        return db.execute("SELECT * FROM <%= jhiTablePrefix %>_user u LEFT JOIN <%= jhiTablePrefix %>_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
             .bind(fieldName, fieldValue)
             .map((row, metadata) ->
                 Tuples.of(
@@ -299,7 +299,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
 
     @Override
     public Mono<Void> delete(User user) {
-        return db.execute("DELETE FROM jhi_user_authority WHERE user_id = :userId")
+        return db.execute("DELETE FROM <%= jhiTablePrefix %>_user_authority WHERE user_id = :userId")
             .bind("userId", user.getId())
             .then()
             .then(db.delete()

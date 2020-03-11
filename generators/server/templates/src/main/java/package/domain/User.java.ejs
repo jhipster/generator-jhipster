@@ -94,10 +94,8 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
  <%_ if (databaseType === 'sql') { _%>
     <%_ if (!reactive) { _%>
 @Entity
-@Table(name = "<%= jhiTablePrefix %>_user")
-    <%_ } else { _%>
-@Table("<%= jhiTablePrefix %>_user")
     <%_ } _%>
+@Table(<% if (!reactive) { %>name = <% } %>"<%= jhiTablePrefix %>_user")
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.<% if (cacheProvider !== 'infinispan') { %>NONSTRICT_<% } %>READ_WRITE)

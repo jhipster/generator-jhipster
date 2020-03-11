@@ -54,7 +54,7 @@
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <logger name="io.searchbox" level="WARN"/>
     <%_ } _%>
-    <%_ if (reactive) { _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
     <logger name="io.r2dbc" level="WARN"/>
     <%_ } _%>
     <%_ if (!reactive) { _%>

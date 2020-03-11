@@ -96,8 +96,7 @@ public class LiquibaseConfiguration {
 
     public static SpringLiquibase createAsyncSpringLiquibase(Environment env, Executor executor,
             LiquibaseProperties liquibaseProperties, R2dbcProperties dataSourceProperties) {
-        SpringLiquibase liquibase;
-        liquibase = new AsyncSpringLiquibase(executor, env);
+        SpringLiquibase liquibase = new AsyncSpringLiquibase(executor, env);
         liquibase.setDataSource(createNewDataSource(liquibaseProperties, dataSourceProperties));
         return liquibase;
     }

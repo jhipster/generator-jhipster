@@ -62,7 +62,7 @@ import java.util.Objects;
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
-@Table("jhi_authority")
+@Table("<%= jhiTablePrefix %>_authority")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= jhiTablePrefix %>_authority")

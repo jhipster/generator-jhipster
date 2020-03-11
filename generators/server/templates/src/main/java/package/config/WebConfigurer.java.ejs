@@ -21,11 +21,11 @@ package <%= packageName %>.config;
 <%_ if (reactive) { _%>
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ } _%>
-<%_ if (!skipClient || (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') && !reactive) { _%>
+<%_ if (!skipClient || ['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
 import io.github.jhipster.config.JHipsterConstants;
 <%_ } _%>
 import io.github.jhipster.config.JHipsterProperties;
-<%_ if ((devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') && !reactive) { _%>
+<%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
@@ -269,7 +269,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             <%_ } _%>
         <%_ } _%>
     <%_ } _%>
-    <%_ if ((devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') && !reactive) { _%>
+    <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
 
     /**
      * Initializes H2 console.
