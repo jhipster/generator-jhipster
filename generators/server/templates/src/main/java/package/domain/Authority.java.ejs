@@ -38,6 +38,7 @@ import javax.persistence.Table;
 import javax.persistence.Column;
     <%_ } else { _%>
 import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
     <%_ } _%>
@@ -73,7 +74,7 @@ import java.util.Objects;
 <%_ if (databaseType === 'couchbase') { _%>
 @Document
 <%_ } _%>
-public class Authority implements Serializable {
+public class Authority implements Serializable<% if (databaseType === 'sql' && reactive) { %>, Persistable<String><% } %> {
 
     private static final long serialVersionUID = 1L;
 
@@ -115,4 +116,16 @@ public class Authority implements Serializable {
             "name='" + name + '\'' +
             "}";
     }
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+
+    @Override
+    public String getId() {
+        return name;
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
+    }
+    <%_ } _%>
 }

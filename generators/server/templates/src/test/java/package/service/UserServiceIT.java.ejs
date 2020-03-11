@@ -452,7 +452,7 @@ public class UserServiceIT <% if (databaseType === 'neo4j') { %>extends Abstract
         <%_ } _%>
         user.setLogin(Constants.ANONYMOUS_USER);
         if (!userRepository.findOneByLogin(Constants.ANONYMOUS_USER)<% if (reactive) { %>.blockOptional()<% } %>.isPresent()) {
-            userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+            userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>
         final PageRequest pageable = PageRequest.of(0, (int) userRepository.count()<% if (reactive) { %>.block().intValue()<% } %>);
         final <% if (reactive) { %>List<% } else { %>Page<% } %><<%= asDto('User') %>> allManagedUsers = userService.getAllManagedUsers(pageable)<% if (reactive) { %>

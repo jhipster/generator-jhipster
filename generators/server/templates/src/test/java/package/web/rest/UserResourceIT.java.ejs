@@ -470,7 +470,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     <%_ } _%>
     public void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -514,7 +514,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     <%_ } _%>
     public void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>

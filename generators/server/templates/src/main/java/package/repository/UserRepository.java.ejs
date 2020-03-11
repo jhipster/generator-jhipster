@@ -91,7 +91,9 @@ import java.util.List;
 import java.util.Optional;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 import java.time.LocalDateTime;
+    <%_ } _%>
 import java.util.Optional;
 import java.util.stream.Collectors;
 <%_ } _%>
@@ -103,7 +105,7 @@ import java.util.Map;
     <%_ } _%>
 import java.util.Set;
 <%_ } _%>
-<%_ if (databaseType !== 'cassandra' && !(databaseType === 'sql' && reactive)) { _%>
+<%_ if (databaseType !== 'cassandra' && !(databaseType === 'sql' && reactive) && authenticationType !== 'oauth2') { _%>
 import java.time.Instant;
 <%_ } _%>
 <% if (databaseType === 'couchbase') { %>
@@ -145,8 +147,10 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
         <%_ } _%>
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
     <%= optionalOrMono %><<%= asEntity('User') %>> findOneByEmailIgnoreCase(String email);
 
+    <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
@@ -166,26 +170,24 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
     <%_ if (databaseType === 'neo4j') { _%>
     <% if (!reactive) { %>// See https://github.com/neo4j/sdn-rx/issues/51<% } %>
     <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= asEntity('User') %>> findAll();
+    
     <%_ } _%>
-
     <%_ if (databaseType === 'sql') { _%>
-
     @EntityGraph(attributePaths = "authorities")
-    Optional<<%= asEntity('User') %>> findOneWithAuthoritiesById(<%= pkType %> id);
-
-    @EntityGraph(attributePaths = "authorities")
-    <%_ if (cacheManagerIsAvailable === true) { _%>
+        <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_LOGIN_CACHE)
-    <%_ } _%>
+        <%_ } _%>
     Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByLogin(String login);
 
+        <%_ if (authenticationType !== 'oauth2') { _%>
     @EntityGraph(attributePaths = "authorities")
-    <%_ if (cacheManagerIsAvailable === true) { _%>
+            <%_ if (cacheManagerIsAvailable === true) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE)
-    <%_ } _%>
+            <%_ } _%>
     Optional<<%= asEntity('User') %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
-    <%_ } _%>
 
+        <%_ } _%>
+    <%_ } _%>
     <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= asEntity('User') %>> findAllByLoginNot(Pageable pageable, String login);
     <%_ if (reactive) { _%>
 
@@ -194,8 +196,9 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 }
 <%_ } else if (databaseType === 'sql' && reactive) { _%>
 @Repository
-public interface UserRepository extends R2dbcRepository<User, Long>, UserRepositoryInternal {
+public interface UserRepository extends R2dbcRepository<User, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>>, UserRepositoryInternal {
 
+    <%_ if (authenticationType !== 'oauth2') { _%>
     @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE activation_key = :activationKey")
     Mono<User> findOneByActivationKey(String activationKey);
 
@@ -208,6 +211,7 @@ public interface UserRepository extends R2dbcRepository<User, Long>, UserReposit
     @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE LOWER(email) = LOWER(:email)")
     Mono<User> findOneByEmailIgnoreCase(String email);
 
+    <%_ } _%>
     @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE login = :login")
     Mono<User> findOneByLogin(String login);
 
@@ -215,25 +219,31 @@ public interface UserRepository extends R2dbcRepository<User, Long>, UserReposit
     Mono<Long> countAllByLoginNot(String anonymousUser);
 
     @Query("INSERT INTO <%= jhiTablePrefix %>_user_authority VALUES(:userId, :authority)")
-    Mono<Void> saveUserAuthority(Long userId, String authority);
+    Mono<Void> saveUserAuthority(<% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> userId, String authority);
 
     @Query("DELETE FROM <%= jhiTablePrefix %>_user_authority")
     Mono<Void> deleteAllUserAuthorities();
 }
 
+<%_ if (authenticationType !== 'oauth2') { _%>
 interface DeleteExtended<T> {
     Mono<Void> delete(T user);
 }
 
-interface UserRepositoryInternal extends DeleteExtended<User> {
+<%_ } _%>
+interface UserRepositoryInternal<% if (authenticationType !== 'oauth2') { %> extends DeleteExtended<User><% } %> {
 
     Mono<User> findOneWithAuthoritiesByLogin(String login);
 
-    Mono<User> findOneWithAuthoritiesById(Long id);
-
+    <%_ if (authenticationType !== 'oauth2') { _%>
     Mono<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
+    <%_ } _%>
     Flux<User> findAllByLoginNot(Pageable pageable, String login);
+    <%_ if (authenticationType == 'oauth2') { _%>
+
+    Mono<User> create(User user);
+    <%_ } _%>
 }
 
 class UserRepositoryInternalImpl implements UserRepositoryInternal {
@@ -250,16 +260,13 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
         return findOneWithAuthoritiesBy("login", login);
     }
 
-    @Override
-    public Mono<User> findOneWithAuthoritiesById(Long id) {
-        return findOneWithAuthoritiesBy("id", id);
-    }
-
+    <%_ if (authenticationType !== 'oauth2') { _%>
     @Override
     public Mono<User> findOneWithAuthoritiesByEmailIgnoreCase(String email) {
         return findOneWithAuthoritiesBy("email", email.toLowerCase());
     }
 
+    <%_ } _%>
     private Mono<User> findOneWithAuthoritiesBy(String fieldName, Object fieldValue) {
         return db.execute("SELECT * FROM <%= jhiTablePrefix %>_user u LEFT JOIN <%= jhiTablePrefix %>_user_authority ua ON u.id=ua.user_id WHERE u." + fieldName + " = :" + fieldName)
             .bind(fieldName, fieldValue)
@@ -297,6 +304,7 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             .all();
     }
 
+    <%_ if (authenticationType !== 'oauth2') { _%>
     @Override
     public Mono<Void> delete(User user) {
         return db.execute("DELETE FROM <%= jhiTablePrefix %>_user_authority WHERE user_id = :userId")
@@ -309,6 +317,17 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
             );
     }
 
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2') { _%>
+    @Override
+    public Mono<User> create(User user) {
+        return db.insert().into(User.class).using(user)
+            .map(dataAccessStrategy.getConverter().populateIdIfNecessary(user))
+            .first()
+            .defaultIfEmpty(user);
+    }
+
+    <%_ } _%>
 }
 <%_ } else if (databaseType === 'cassandra') { _%>
 @Repository
