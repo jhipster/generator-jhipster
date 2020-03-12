@@ -45,7 +45,7 @@ plugins {
     id "net.ltgt.apt-eclipse"
     id "net.ltgt.apt-idea"
     id "net.ltgt.apt"
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     id "org.liquibase.gradle"
     <%_ } _%>
     id "org.sonarqube"
@@ -184,7 +184,7 @@ task cucumberTestReport(type: TestReport) {
 }
 
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 if (!project.hasProperty("runList")) {
     project.ext.runList = "main"
 }
@@ -261,6 +261,14 @@ repositories {
         }
     }
     <%_ } _%>
+    <%_ if (reactive && databaseType === 'sql') { _%>
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    <%_ } _%>
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -286,7 +294,9 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     <%_ if (databaseType === 'sql') { _%>
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
+        <%_ if (!reactive) { _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
+        <%_ } _%>
     <%_ } _%>
     implementation "com.fasterxml.jackson.core:jackson-annotations"
     implementation "com.fasterxml.jackson.core:jackson-databind"
@@ -357,12 +367,16 @@ dependencies {
         <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
+        <%_ if (!reactive) { _%>
     implementation "org.hibernate:hibernate-entitymanager"
+        <%_ } _%>
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
     liquibaseRuntime sourceSets.main.compileClasspath
+        <%_ } _%>
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-loader-tools"
     implementation "org.springframework.boot:spring-boot-starter-mail"
@@ -370,7 +384,11 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-aop"
     <%_ if (databaseType === 'sql') { _%>
+        <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+        <%_ } else { _%>
+    implementation "org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.M3"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
@@ -493,11 +511,19 @@ dependencies {
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "mysql:mysql-connector-java"
+        <%_ } else { _%>
+    implementation "dev.miku:r2dbc-mysql:0.8.1.RELEASE"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
     implementation "org.postgresql:postgresql"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "org.postgresql:postgresql"
+        <%_ } else { _%>
+    implementation "io.r2dbc:r2dbc-postgresql:0.8.1.RELEASE"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mariadb') { _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
@@ -506,8 +532,12 @@ dependencies {
     <%_ if (prodDatabaseType === 'mssql') { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
     implementation "com.github.sabomichal:liquibase-mssql"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
+        <%_ } else { _%>
+    implementation "io.r2dbc:r2dbc-mssql:0.8.1.RELEASE"
+        <%_ } _%>
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
@@ -543,9 +573,16 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     testImplementation "com.h2database:h2"
+        <%_ if (reactive) { _%>
+    testImplementation "io.r2dbc:r2dbc-h2:0.8.1.RELEASE"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "com.h2database:h2"
+        <%_ } else { _%>
+    implementation "io.r2dbc:r2dbc-h2:0.8.1.RELEASE"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle') { _%>
     implementation "com.oracle.database.jdbc:ojdbc8"

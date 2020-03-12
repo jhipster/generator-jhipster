@@ -28,6 +28,9 @@ import <%= packageName %>.AbstractNeo4jIT;
 import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.config.Constants;
+<%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
@@ -76,11 +79,11 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import javax.persistence.EntityManager;
 <%_ } _%>
 <%_ if (databaseType !== 'cassandra') { _%>
@@ -190,7 +193,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 
     @Autowired
     private UserMapper userMapper;
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
 
     @Autowired
     private EntityManager em;
@@ -231,7 +234,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
+    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql' && !reactive) { %>EntityManager em<% } %>) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra' || (authenticationType === 'oauth2' && databaseType !== 'couchbase')) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -248,17 +251,24 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
         user.setImageUrl(DEFAULT_IMAGEURL);
         <%_ } _%>
         user.setLangKey(DEFAULT_LANGKEY);
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
         return user;
     }
 
     @BeforeEach
     public void initTest() {
-        <%_ if (databaseType !== 'sql') { _%>
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        userRepository.deleteAllUserAuthorities().block();
+        <%_ } _%> 
+        <%_ if (databaseType !== 'sql' || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         user = createEntity();
+        <%_ } else { _%>
+        user = createEntity(em);
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        user = createEntity(em);
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
         <%_ } _%>
@@ -266,7 +276,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void createUser() throws Exception {
@@ -317,7 +327,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void createUserWithExistingId() throws Exception {
@@ -364,12 +374,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -409,12 +419,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void createUserWithExistingEmail() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -455,12 +465,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 <%_ } _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -499,12 +509,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -552,7 +562,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void getNonExistingUser()<% if (!reactive) { %> throws Exception<% } %> {
@@ -568,12 +578,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void updateUser() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -632,12 +642,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void updateUserLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -697,12 +707,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -721,7 +731,10 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
         anotherUser.setImageUrl("");
         <%_ } _%>
         anotherUser.setLangKey("en");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        anotherUser.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(anotherUser);
         <%_ } _%>
@@ -765,12 +778,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void updateUserExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -789,7 +802,10 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
         anotherUser.setImageUrl("");
         <%_ } _%>
         anotherUser.setLangKey("en");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        anotherUser.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(anotherUser);
         <%_ } _%>
@@ -833,12 +849,12 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -870,7 +886,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
         && (!(authenticationType === 'oauth2' && applicationType === 'microservice'))) { _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
@@ -897,9 +913,6 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     <%_ } _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
     public void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(<%= asEntity('User') %>.class);
         <%= asEntity('User') %> user1 = new <%= asEntity('User') %>();
