@@ -477,7 +477,7 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt-api"
     if (!project.hasProperty("gae")) {
         runtimeOnly "io.jsonwebtoken:jjwt-impl"
-        runtimeOnly "io.jsonwebtoken:jjwt-jackson"
+        <% if (reactive) { %>implementation<% } else { %>runtimeOnly<% } %> "io.jsonwebtoken:jjwt-jackson"
     } else {
         implementation "io.jsonwebtoken:jjwt-impl"
         implementation "io.jsonwebtoken:jjwt-jackson"
@@ -560,6 +560,9 @@ dependencies {
     }
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
+    <%_ if (reactive) { _%>
+    testImplementation "io.projectreactor.tools:blockhound-junit-platform:1.0.2.RELEASE"
+    <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     <%_ if (databaseType === 'mongodb') { _%>
