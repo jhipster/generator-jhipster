@@ -30,6 +30,8 @@ fi
 if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity DocumentBankAccount
     moveEntity EmbeddedOperation
+    moveEntity Place
+    moveEntity Division
 
     moveEntity FieldTestEntity
     moveEntity FieldTestMapstructAndServiceClassEntity
@@ -38,10 +40,19 @@ if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
 
+    moveEntity EntityWithDTO
+    moveEntity EntityWithPaginationAndDTO
+    moveEntity EntityWithServiceClassAndPagination
+    moveEntity EntityWithServiceClassPaginationAndDTO
+    moveEntity EntityWithServiceImplAndDTO
+    moveEntity EntityWithServiceImplAndPagination
+    moveEntity EntityWithServiceImplPaginationAndDTO
+
 elif [[ "$JHI_ENTITY" == "neo4j" ]]; then
     moveEntity BankAccount
     moveEntity Label
     moveEntity Operation
+
 elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
     moveEntity CassBankAccount
 

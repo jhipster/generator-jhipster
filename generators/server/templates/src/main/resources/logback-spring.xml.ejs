@@ -83,6 +83,9 @@
     <%_ if (searchEngine === 'elasticsearch') { _%>
     <logger name="io.searchbox" level="WARN"/>
     <%_ } _%>
+    <%_ if (reactive) { _%>
+    <logger name="io.r2dbc" level="WARN"/>
+    <%_ } _%>
     <%_ if (!reactive) { _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>
@@ -103,7 +106,7 @@
     <logger name="org.elasticsearch" level="WARN"/>
     <%_ } _%>
     <logger name="org.hibernate.validator" level="WARN"/>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
     <%_ } else if (databaseType === 'mongodb') { _%>

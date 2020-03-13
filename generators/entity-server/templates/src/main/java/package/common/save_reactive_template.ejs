@@ -16,11 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (!viaService) { _%>
-        <% if (reactive) { %>return <% } %><%= entityInstance %>Repository.deleteById(id);
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        <%= entityInstance %>SearchRepository.deleteById(id);
-        <%_ } _%>
+<%_ const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
+const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
+const mapper = entityInstance  + 'Mapper';
+const dtoToEntity = mapper + '.' + 'toEntity';
+const entityToDtoReference = mapper + '::' + 'toDto';
+_%>
+<%_ if (viaService) { _%>
+    return <%= entityInstance %>Service.save(<%= instanceName %>)
 <%_ } else { _%>
-        <%= entityInstance %>Service.delete(id);
+    return <%= entityInstance %>Repository.save(<%if (dto === 'mapstruct') { %><%= dtoToEntity %>(<% } %><%= instanceName %>)<%if (dto === 'mapstruct') { %>)<% } %>
+    <%_ if (dto === 'mapstruct') { _%>
+            .map(<%= entityToDtoReference  %>)
+    <%_ } _%>
 <%_ } _%>

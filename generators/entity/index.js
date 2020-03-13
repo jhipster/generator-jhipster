@@ -235,9 +235,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
             },
 
-            validateMvcApp() {
-                if (this.context.reactive) {
-                    this.error(chalk.red("The entity generator doesn't support reactive apps at the moment"));
+            validateReactiveCompatibility() {
+                if (this.context.reactive && !['mongodb', 'cassandra', 'couchbase'].includes(this.context.databaseType)) {
+                    this.error(
+                        chalk.red(
+                            `The entity generator doesn't support reactive apps with databases of type ${this.context.databaseType} at the moment`
+                        )
+                    );
+                }
+                if (this.context.reactive && this.context.searchEngine === 'elasticsearch') {
+                    this.error(chalk.red("The entity generator doesn't support reactive apps with elasticsearch at the moment"));
                 }
             },
 

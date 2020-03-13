@@ -114,6 +114,21 @@ const SUPPORTED_CLIENT_FRAMEWORKS = {
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
+const R2DBC_DB_OPTIONS = [
+    {
+        value: 'mysql',
+        name: 'MySQL'
+    },
+    {
+        value: 'postgresql',
+        name: 'PostgreSQL'
+    },
+    {
+        value: 'mssql',
+        name: 'Microsoft SQL Server'
+    }
+];
+
 const SQL_DB_OPTIONS = [
     {
         value: 'mysql',
@@ -343,6 +358,7 @@ const constants = {
 
     DOCKER_JENKINS,
     DOCKER_SWAGGER_EDITOR,
+    R2DBC_DB_OPTIONS,
     SQL_DB_OPTIONS,
     DOCKER_COMPOSE_FORMAT_VERSION,
     DOCKER_PROMETHEUS_OPERATOR,

@@ -22,6 +22,7 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const fs = require('fs');
 const gitignore = require('parse-gitignore');
+const path = require('path');
 const childProcess = require('child_process');
 const BaseGenerator = require('../generator-base');
 const cleanup = require('../cleanup');
@@ -121,6 +122,12 @@ module.exports = class extends BaseGenerator {
         };
     }
 
+    _rmRf(file) {
+        const absolutePath = path.resolve(file);
+        this.info(`Removing ${absolutePath}`);
+        shelljs.rm('-rf', absolutePath);
+    }
+
     _gitCheckout(branch, options = {}) {
         const args = ['checkout', '-q', branch];
         if (options.force) {
@@ -144,8 +151,7 @@ module.exports = class extends BaseGenerator {
         const filesToKeep = ['.yo-rc.json', '.jhipster', 'node_modules', '.git', '.idea', '.mvn', ...ignoredFiles];
         shelljs.ls('-A').forEach(file => {
             if (!filesToKeep.includes(file)) {
-                this.info(`Removing ${file}`);
-                shelljs.rm('-rf', file);
+                this._rmRf(file);
             }
         });
         this.success('Cleaned up project directory');
@@ -155,7 +161,7 @@ module.exports = class extends BaseGenerator {
         this.log(`Regenerating application with JHipster ${jhipsterVersion}${blueprintInfo}...`);
         let generatorCommand = 'yo jhipster';
         if (jhipsterVersion.startsWith(GLOBAL_VERSION)) {
-            shelljs.rm('-rf', 'node_modules');
+            this._rmRf('node_modules');
             generatorCommand = 'jhipster';
         } else if (semver.gte(jhipsterVersion, FIRST_CLI_SUPPORTED_VERSION)) {
             const generatorDir =
@@ -190,7 +196,7 @@ module.exports = class extends BaseGenerator {
         this._generate(jhipsterVersion, blueprintInfo);
         const keystore = `${SERVER_MAIN_RES_DIR}config/tls/keystore.p12`;
         this.info(`Removing ${keystore}`);
-        shelljs.rm('-Rf', keystore);
+        this._rmRf(keystore);
         this._gitCommitAll(`Generated with JHipster ${jhipsterVersion}${blueprintInfo}`);
     }
 
@@ -509,7 +515,7 @@ module.exports = class extends BaseGenerator {
         if (!this.skipInstall) {
             this.log('Installing dependencies, please wait...');
             this.info('Removing the node_modules directory');
-            shelljs.rm('-rf', 'node_modules');
+            this._rmRf('node_modules');
             const installCommand = this.clientPackageManager === 'yarn' ? 'yarn' : 'npm install';
             this.info(installCommand);
 

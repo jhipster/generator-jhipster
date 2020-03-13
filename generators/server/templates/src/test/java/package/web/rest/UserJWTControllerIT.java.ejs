@@ -29,6 +29,9 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (!skipUserManagement) { _%>
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.config.Constants;
+    <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
@@ -105,7 +108,7 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
 
     @Test
 <%_ if (!skipUserManagement) { _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void testAuthorize() throws Exception {
@@ -117,12 +120,11 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-
-        <%_ if (databaseType === 'sql') { _%>
-        userRepository.saveAndFlush(user);
-        <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
-        userRepository.save(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
         <%_ } _%>
+
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller");
@@ -155,7 +157,7 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
 
     @Test
 <%_ if (!skipUserManagement) { _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void testAuthorizeWithRememberMe() throws Exception {
@@ -167,12 +169,11 @@ public class UserJWTControllerIT <% if (databaseType === 'neo4j') { %>extends Ab
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
-
-        <%_ if (databaseType === 'sql') { _%>
-        userRepository.saveAndFlush(user);
-        <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
-        userRepository.save(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
         <%_ } _%>
+
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller-remember-me");

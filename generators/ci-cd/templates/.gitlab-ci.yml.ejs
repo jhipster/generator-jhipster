@@ -258,6 +258,9 @@ cache:
 stages:
     - build
     - test
+    <%_ if (cicdIntegrations.includes('sonar')) { _%>
+    - analyze
+    <%_ } _%>
     - packaging
 webpack-build:
     stage: build
@@ -279,6 +282,18 @@ webpack-test:
         paths:
             - build/test-results
         expire_in: 1 day
+<%_ if (cicdIntegrations.includes('sonar')) { _%>
+sonar-analyze:
+    stage: analyze
+    dependencies:
+        - webpack-test
+    script:
+        - npm run sonar
+    artifacts:
+        paths:
+        - build/
+        - build/test-results
+<%_ } _%>
 webpack-prod:
     stage: packaging
     script:
