@@ -51,6 +51,24 @@ describe('Formatter i18n', () => {
     expect(result).toBe(false);
   });
 
+  it('should paddingSize to 0', () => {
+    const result = dataUtilsService.paddingSize('toto');
+
+    expect(result).toBe(0);
+  });
+
+  it('should paddingSize to 1', () => {
+    const result = dataUtilsService.paddingSize('toto=');
+
+    expect(result).toBe(1);
+  });
+
+  it('should paddingSize to 2', () => {
+    const result = dataUtilsService.paddingSize('toto==');
+
+    expect(result).toBe(2);
+  });
+
   it('should parse links', () => {
     const result = dataUtilsService.parseLinks('<http://localhost/api/entities?' +
       'sort=date%2Cdesc&sort=id&page=1&size=12>; rel="next",<http://localhost/api' +
@@ -72,6 +90,17 @@ describe('Formatter i18n', () => {
     expect(result).toStrictEqual({});
   });
 
+  it('should return empty JSON object for text without >;', () => {
+    const result = dataUtilsService.parseLinks(
+      '<http://localhost/api/entities?' +
+        'sort=date%2Cdesc&sort=id&page=1&size=12> rel="next",<http://localhost/api' +
+        '/entities?sort=date%2Cdesc&sort=id&page=2&size=12> rel="last",<http://localhost' +
+        '/api/entities?sort=date%2Cdesc&sort=id&page=0&size=12> rel="first"'
+    );
+
+    expect(result).toStrictEqual({});
+  });
+
   it('should return empty JSON object for text with no comma separated link header', () => {
     const result = dataUtilsService.parseLinks('<http://localhost/api/entities?' +
     'sort=id%2Cdesc&sort=id&page=1&size=12>; rel="next"<http://localhost/api' +
@@ -80,6 +109,4 @@ describe('Formatter i18n', () => {
 
     expect(result).toStrictEqual({});
   });
-
-  
 });
