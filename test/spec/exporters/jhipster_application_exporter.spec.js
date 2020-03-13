@@ -170,6 +170,33 @@ describe('JHipsterApplicationExporter', () => {
         });
       });
 
+      context('when exporting an application to JSON with creationTimestampConfig', () => {
+        before(() => {
+          exportApplication(
+            createJDLApplication({
+              applicationType: MONOLITH,
+              baseName: 'toto',
+              packageName: 'com.mathieu.sample',
+              enableTranslation: false,
+              languages: ['en', 'fr'],
+              jhipsterVersion: '4.9.0',
+              otherModules: ['MyModule']
+            }),
+            { creationTimestampConfig: 1546300800000 }
+          );
+        });
+
+        after(() => {
+          fs.unlinkSync(path.join('.yo-rc.json'));
+        });
+
+        it('sets creationTimestamp on .yo-rc.json', () => {
+          const content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
+          expect(content['generator-jhipster']).not.to.be.undefined;
+          expect(content['generator-jhipster'].creationTimestamp).to.equal(1546300800000);
+        });
+      });
+
       describe('when exporting an existing application to JSON', () => {
         let content;
 
