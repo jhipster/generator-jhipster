@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 <%_ if (databaseType === 'mongodb') { _%>
 
 import com.github.mongobee.Mongobee;
@@ -51,7 +51,7 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.mongodb.repository.config.Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
@@ -68,7 +68,7 @@ import java.util.List;
 
 @Configuration
 <%_ if (databaseType === 'mongodb') { _%>
-@EnableMongoRepositories("<%=packageName%>.repository")
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
 <%_ } _%>
 @Profile(JHipsterConstants.SPRING_PROFILE_CLOUD)
 public class CloudDatabaseConfiguration extends AbstractCloudConfig {
@@ -77,7 +77,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     private final Logger log = LoggerFactory.getLogger(CloudDatabaseConfiguration.class);
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
-    
+
     private static final String CLOUD_CONFIGURATION_HIKARI_PREFIX = "spring.datasource.hikari";
 
     @Bean
@@ -127,7 +127,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
         mongobee.setDbName(mongoDbFactory.getDb().getName());
         mongobee.setMongoTemplate(mongoTemplate);
         // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("<%=packageName%>.config.dbmigrations");
+        mongobee.setChangeLogsScanPackage("<%= packageName %>.config.dbmigrations");
         mongobee.setEnabled(true);
         return mongobee;
     }

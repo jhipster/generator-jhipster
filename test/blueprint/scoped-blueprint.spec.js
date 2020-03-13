@@ -5,6 +5,9 @@ const fse = require('fs-extra');
 const expectedFiles = require('../utils/expected-files');
 const getFilesForOptions = require('../utils/utils').getFilesForOptions;
 const angularFiles = require('../../generators/client/files-angular').files;
+const constants = require('../../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 describe('JHipster application generator with scoped blueprint', () => {
     describe('generate monolith application with scoped blueprint', () => {
@@ -13,23 +16,19 @@ describe('JHipster application generator with scoped blueprint', () => {
                 .run(path.join(__dirname, '../../generators/app'))
                 .inTmpDir(dir => {
                     // Fake the presence of the blueprint in node_modules
-                    const packagejs = {
-                        name: '@jhipster/generator-jhipster-scoped-blueprint',
-                        version: '9.9.9'
-                    };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/@jhipster/generator-jhipster-scoped-blueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
-                    fse.writeJsonSync(path.join(fakeBlueprintModuleDir, 'package.json'), packagejs);
+                    fse.copySync(path.join(__dirname, '../../test/templates/fake-blueprint'), fakeBlueprintModuleDir);
                 })
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,
                     skipChecks: true,
-                    blueprint: '@jhipster/generator-jhipster-scoped-blueprint'
+                    blueprints: '@jhipster/generator-jhipster-scoped-blueprint'
                 })
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     packageName: 'com.mycompany.myapp',
                     packageFolder: 'com/mycompany/myapp',
                     serviceDiscoveryType: false,

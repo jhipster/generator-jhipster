@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://jhipster.github.io/
  * for more information.
@@ -94,6 +94,7 @@ const files = {
     ],
     swagger: [
         {
+            condition: generator => !generator.reactive,
             path: MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
         }
@@ -154,7 +155,10 @@ const files = {
     reactMain: [
         {
             path: REACT_DIR,
-            templates: [{ file: 'modules/home/home.tsx', method: 'processJsx' }, { file: 'modules/login/logout.tsx', method: 'processJsx' }]
+            templates: [
+                { file: 'modules/home/home.tsx', method: 'processJsx' },
+                { file: 'modules/login/logout.tsx', method: 'processJsx' }
+            ]
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
@@ -226,6 +230,7 @@ const files = {
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
+                'modules/administration/docs/docs.scss',
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
@@ -406,7 +411,7 @@ module.exports = {
 };
 
 function writeFiles() {
-    mkdirp(MAIN_SRC_DIR);
+    mkdirp(this.CLIENT_MAIN_SRC_DIR);
     // write React files
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
 }

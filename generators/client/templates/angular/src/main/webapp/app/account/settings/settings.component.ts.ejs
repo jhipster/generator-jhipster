@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -18,11 +18,14 @@
 -%>
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+<%_ if (enableTranslation) { _%>
 import { JhiLanguageService } from 'ng-jhipster';
+<%_ } _%>
 
 import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
 <%_ if (enableTranslation) { _%>
-import { JhiLanguageHelper } from 'app/core/language/language.helper';
+import { LANGUAGES } from 'app/core/language/language.constants';
 <%_ } _%>
 
 @Component({
@@ -30,86 +33,61 @@ import { JhiLanguageHelper } from 'app/core/language/language.helper';
     templateUrl: './settings.component.html'
 })
 export class SettingsComponent implements OnInit {
-    error: string;
-    success: string;
-    languages: any[];
+    account!: Account;
+    success = false;
+    <%_ if (enableTranslation) { _%>
+    languages = LANGUAGES;
+    <%_ } _%>
     settingsForm = this.fb.group({
         firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
         lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-        email: [ undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-        activated: [false],
-        authorities: [[]],
-        langKey: ['en'],
-        login: [],
-        imageUrl: []
+        email: [ undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]]<% if (enableTranslation) { %>,
+        langKey: [ undefined ]<% } %>
     });
 
     constructor(
         private accountService: AccountService,
-        private fb: FormBuilder<% if (enableTranslation) { %>,
-        private languageService: JhiLanguageService,
-        private languageHelper: JhiLanguageHelper<% } %>
-    ) {
+        private fb: FormBuilder,
+        <%_ if (enableTranslation) { _%>
+        private languageService: JhiLanguageService
+        <%_ } _%>
+    ) {}
+
+    ngOnInit(): void {
+        this.accountService.identity().subscribe((account) => {
+            if (account) {
+                this.settingsForm.patchValue({
+                    firstName: account.firstName,
+                    lastName: account.lastName,
+                    email: account.email<% if (enableTranslation) { %>,
+                    langKey: account.langKey<% } %>
+                });
+
+                this.account = account;
+            }
+        });
     }
 
-    ngOnInit() {
-        this.accountService.identity().then((account) => {
-            this.updateForm(account);
-        });
+    save(): void {
+        this.success = false;
+
+        this.account.firstName = this.settingsForm.get('firstName')!.value;
+        this.account.lastName = this.settingsForm.get('lastName')!.value;
+        this.account.email = this.settingsForm.get('email')!.value;
         <%_ if (enableTranslation) { _%>
-        this.languageHelper.getAll().then((languages) => {
-            this.languages = languages;
-        });
+        this.account.langKey = this.settingsForm.get('langKey')!.value;
         <%_ } _%>
 
-    }
+        this.accountService.save(this.account).subscribe(() => {
+            this.success = true;
 
-    save() {
-        const settingsAccount = this.accountFromForm();
-        this.accountService.save(settingsAccount).subscribe(() => {
-            this.error = null;
-            this.success = 'OK';
-            this.accountService.identity(true).then((account) => {
-                this.updateForm(account);
-            });
+            this.accountService.authenticate(this.account);
+
             <%_ if (enableTranslation) { _%>
-            this.languageService.getCurrent().then((current) => {
-                if (settingsAccount.langKey !== current) {
-                    this.languageService.changeLanguage(settingsAccount.langKey);
-                }
-            });
+            if (this.account.langKey !== this.languageService.getCurrentLanguage()) {
+                this.languageService.changeLanguage(this.account.langKey);
+            }
             <%_ } _%>
-        }, () => {
-            this.success = null;
-            this.error = 'ERROR';
         });
     }
-
-    private accountFromForm(): any {
-        const account = {};
-        return {...account,
-            firstName: this.settingsForm.get('firstName').value,
-            lastName: this.settingsForm.get('lastName').value,
-            email: this.settingsForm.get('email').value,
-            activated: this.settingsForm.get('activated').value,
-            authorities: this.settingsForm.get('authorities').value,
-            langKey: this.settingsForm.get('langKey').value,
-            login: this.settingsForm.get('login').value,
-            imageUrl: this.settingsForm.get('imageUrl').value
-        };
-    }
-
-    updateForm(account: any): void {
-        this.settingsForm.patchValue({
-            firstName: account.firstName,
-            lastName: account.lastName,
-            email: account.email,
-            activated: account.activated,
-            authorities: account.authorities,
-            langKey: account.langKey,
-            login: account.login,
-            imageUrl: account.imageUrl
-        });
-    }
-
 }

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,30 +22,32 @@
         "refresh.button": "Refrescar",
         "stacktrace": "Stacktrace",
         "details": {
-            "details": "Details",
-            "properties": "Properties",
-            "name": "Name",
-            "value": "Value",
+            "details": "Detalles",
+            "properties": "Propiedades",
+            "name": "Nombre",
+            "value": "Valor",
             "error": "Error"
         },
         "indicator": {
             <%_ if (messageBroker === 'kafka') { _%>
-            "binders": "Message broker",
+            "binders": "Agente de mensajes",
             <%_ } _%>
             <%_ if (applicationType === 'gateway' || serviceDiscoveryType) { _%>
-            "discoveryComposite": "Discovery Composite",
-            "refreshScope": "Microservice Refresh Scope",
-            "configServer": "Microservice Config Server",
+            "discoveryComposite": "Descubrimiento compuesto",
+            "refreshScope": "Alcance de actualización de microservicios",
+            "clientConfigServer": "Servidor de configuración de microservicio",
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
             "diskSpace": "Espacio en disco",
-            "mail": "Email"<% if (searchEngine === 'elasticsearch') { %>,
+            "mail": "Email",
+            "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,
             "elasticsearch": "Elasticsearch"<% } %><% if (databaseType === 'sql') { %>,
             "db": "Database"<% } %><% if (databaseType === 'mongodb') { %>,
             "mongo": "MongoDB"<% } %><% if (databaseType === 'cassandra') { %>,
             "cassandra": "Cassandra"<% } %><% if (databaseType === 'couchbase') { %>,
-            "couchbase": "Couchbase"<% } %>
+            "couchbase": "Couchbase"<% } %><% if (databaseType === 'neo4j') { %>,
+            "neo4j": "Neo4j"<% } %>
         },
         "table": {
             "service": "Nombre del servicio",

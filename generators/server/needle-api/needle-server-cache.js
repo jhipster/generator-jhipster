@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -47,11 +47,9 @@ module.exports = class extends needleServer {
             const content = `createCache(cm, ${entry});`;
 
             this._doAddBlockContentToFile(cachePath, needle, content, errorMessage);
-        } else if (cacheProvider === 'infinispan') {
-            const needle = 'jhipster-needle-infinispan-add-entry';
-            const content = `registerPredefinedCache(${entry}, new JCache<Object, Object>(
-                cacheManager.getCache(${entry}).getAdvancedCache(), this,
-                ConfigurationAdapter.create()));`;
+        } else if (cacheProvider === 'redis') {
+            const needle = 'jhipster-needle-redis-add-entry';
+            const content = `createCache(cm, ${entry}, jcacheConfiguration);`;
 
             this._doAddBlockContentToFile(cachePath, needle, content, errorMessage);
         }

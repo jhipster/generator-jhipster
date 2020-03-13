@@ -1,5 +1,5 @@
 <%#
-Copyright 2013-2019 the original author or authors from the JHipster project.
+Copyright 2013-2020 the original author or authors from the JHipster project.
 
 This file is part of the JHipster project, see https://www.jhipster.tech/
 for more information.
@@ -16,12 +16,12 @@ distributed under the License is distributed on an "AS IS" BASIS,
 See the License for the specific language governing permissions and
 limitations under the License.
 -%>
-import { SpyObject } from './spyobject';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import Spy = jasmine.Spy;
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
+import { SpyObject } from './spyobject';
 
 export class MockActiveModal extends SpyObject {
-
     dismissSpy: Spy;
     closeSpy: Spy;
 

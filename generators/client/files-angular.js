@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -35,7 +35,7 @@ const files = {
                 'package.json',
                 'proxy.conf.json',
                 'tsconfig.json',
-                'tsconfig-aot.json',
+                'tsconfig.app.json',
                 'tslint.json',
                 '.eslintrc.json',
                 '.eslintignore',
@@ -94,6 +94,7 @@ const files = {
     ],
     swagger: [
         {
+            condition: generator => !generator.reactive,
             path: MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
         }
@@ -227,28 +228,33 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                { file: 'admin/admin.route.ts', method: 'processJs' },
-                'admin/admin.module.ts',
+                { file: 'admin/admin-routing.module.ts', method: 'processJs' },
                 // admin modules
                 { file: 'admin/configuration/configuration.route.ts', method: 'processJs' },
+                { file: 'admin/configuration/configuration.module.ts', method: 'processJs' },
                 { file: 'admin/configuration/configuration.component.ts', method: 'processJs' },
                 { file: 'admin/configuration/configuration.component.html', method: 'processHtml' },
                 'admin/configuration/configuration.service.ts',
                 { file: 'admin/docs/docs.route.ts', method: 'processJs' },
+                { file: 'admin/docs/docs.module.ts', method: 'processJs' },
                 { file: 'admin/docs/docs.component.ts', method: 'processJs' },
                 'admin/docs/docs.component.html',
+                'admin/docs/docs.scss',
                 { file: 'admin/health/health.route.ts', method: 'processJs' },
+                { file: 'admin/health/health.module.ts', method: 'processJs' },
                 { file: 'admin/health/health.component.ts', method: 'processJs' },
                 { file: 'admin/health/health.component.html', method: 'processHtml' },
                 'admin/health/health-modal.component.ts',
                 { file: 'admin/health/health-modal.component.html', method: 'processHtml' },
                 'admin/health/health.service.ts',
                 { file: 'admin/logs/logs.route.ts', method: 'processJs' },
+                { file: 'admin/logs/logs.module.ts', method: 'processJs' },
                 'admin/logs/log.model.ts',
                 { file: 'admin/logs/logs.component.ts', method: 'processJs' },
                 { file: 'admin/logs/logs.component.html', method: 'processHtml' },
                 'admin/logs/logs.service.ts',
                 { file: 'admin/metrics/metrics.route.ts', method: 'processJs' },
+                { file: 'admin/metrics/metrics.module.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.ts', method: 'processJs' },
                 { file: 'admin/metrics/metrics.component.html', method: 'processHtml', template: true },
                 'admin/metrics/metrics.service.ts'
@@ -260,6 +266,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/audits/audits.route.ts', method: 'processJs' },
+                { file: 'admin/audits/audits.module.ts', method: 'processJs' },
                 'admin/audits/audit-data.model.ts',
                 'admin/audits/audit.model.ts',
                 { file: 'admin/audits/audits.component.ts', method: 'processJs' },
@@ -272,8 +279,10 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/tracker/tracker.route.ts', method: 'processJs' },
+                { file: 'admin/tracker/tracker.module.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.html', method: 'processHtml' },
+                'core/tracker/tracker-activity.model.ts',
                 'core/tracker/tracker.service.ts'
             ]
         },
@@ -298,6 +307,7 @@ const files = {
             path: ANGULAR_DIR,
             templates: [
                 { file: 'admin/gateway/gateway.route.ts', method: 'processJs' },
+                { file: 'admin/gateway/gateway.module.ts', method: 'processJs' },
                 'admin/gateway/gateway-route.model.ts',
                 { file: 'admin/gateway/gateway.component.ts', method: 'processJs' },
                 { file: 'admin/gateway/gateway.component.html', method: 'processHtml' },
@@ -323,8 +333,14 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
                 // login
+                'core/login/login.model.ts',
                 'core/login/login-modal.service.ts'
             ]
+        },
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType === 'oauth2',
+            templates: ['core/login/logout.model.ts']
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
@@ -334,7 +350,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['core/language/language.constants.ts', 'core/language/language.helper.ts']
+            templates: ['core/language/language.constants.ts']
         }
     ],
     angularShared: [
@@ -346,11 +362,13 @@ const files = {
                 'shared/constants/error.constants.ts',
                 'shared/constants/input.constants.ts',
                 'shared/constants/pagination.constants.ts',
+                'shared/constants/authority.constants.ts',
                 // models
                 'shared/util/request-util.ts',
                 // alert service code
                 'shared/alert/alert.component.ts',
                 'shared/alert/alert-error.component.ts',
+                'shared/alert/alert-error.model.ts',
                 // dates
                 'shared/util/datepicker-adapter.ts'
             ]
@@ -408,6 +426,7 @@ const files = {
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
                 'spec/app/core/user/account.service.spec.ts',
+                'spec/app/layouts/main/main.component.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',
                 'spec/helpers/mock-route.service.ts',
@@ -482,11 +501,6 @@ const files = {
         {
             condition: generator => generator.protractorTests,
             templates: ['tsconfig.e2e.json']
-        },
-        {
-            condition: generator => generator.authenticationType === 'oauth2',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/layouts/main/main.component.spec.ts']
         }
     ]
 };
@@ -497,7 +511,7 @@ module.exports = {
 };
 
 function writeFiles() {
-    mkdirp(MAIN_SRC_DIR);
+    mkdirp(this.CLIENT_MAIN_SRC_DIR);
     // write angular 2.x and above files
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
 }

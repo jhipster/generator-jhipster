@@ -6,3 +6,5 @@ If you think this issue still applies, please [create a new ticket](https://gith
 -   This will increase your chances to get an answer
 -   Answers will be of higher quality, as there is a voting system
 -   This will also help other users who might have the same issue, as questions are tagged and easily searchable
+
+Finally, you can also use [our chat room on gitter](https://gitter.im/jhipster/generator-jhipster).

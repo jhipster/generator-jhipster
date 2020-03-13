@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,35 +17,37 @@
  limitations under the License.
 -%>
 <div>
-    <h2 jhiTranslate="sessions.title" [translateValues]="{username: account.login}" *ngIf="account">Active sessions for [<b>{{account.login}}</b>]</h2>
+    <h2 id="session-page-heading" jhiTranslate="sessions.title" [translateValues]="{ username: account.login }" *ngIf="account">Active sessions for [<b>{{ account.login }}</b>]</h2>
 
     <div class="alert alert-success" *ngIf="success" jhiTranslate="sessions.messages.success">
         <strong>Session invalidated!</strong>
     </div>
+
     <div class="alert alert-danger" *ngIf="error" jhiTranslate="sessions.messages.error">
         <strong>An error has occurred!</strong> The session could not be invalidated.
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped" aria-describedby="session-page-heading">
             <thead>
                 <tr>
-                    <th jhiTranslate="sessions.table.ipaddress">IP Address</th>
-                    <th jhiTranslate="sessions.table.useragent">User agent</th>
-                    <th jhiTranslate="sessions.table.date">Date</th>
-                    <th></th>
+                    <th scope="col" jhiTranslate="sessions.table.ipaddress">IP Address</th>
+                    <th scope="col" jhiTranslate="sessions.table.useragent">User agent</th>
+                    <th scope="col" jhiTranslate="sessions.table.date">Date</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let session of sessions">
-                    <td>{{session.ipAddress}}</td>
-                    <td>{{session.userAgent}}</td>
-                    <td>{{session.tokenDate | date:'longDate'}}</td>
+                    <td>{{ session.ipAddress }}</td>
+                    <td>{{ session.userAgent }}</td>
+                    <td>{{ session.tokenDate | date:'longDate' }}</td>
                     <td>
                         <button type="submit"
                                 class="btn btn-primary"
-                                (click)="invalidate(session.series)" jhiTranslate="sessions.table.button">
-                                 Invalidate
+                                (click)="invalidate(session.series)"
+                                jhiTranslate="sessions.table.button">
+                            Invalidate
                         </button>
                     </td>
                 </tr>

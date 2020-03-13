@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,6 +17,10 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const constants = require('../generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = {
     askForModuleName,
@@ -39,11 +43,11 @@ function askForClient(meta) {
 
     const choices = [
         {
-            value: 'angularX',
+            value: ANGULAR,
             name: 'Angular'
         },
         {
-            value: 'react',
+            value: REACT,
             name: 'React'
         },
         {
@@ -58,7 +62,7 @@ function askForClient(meta) {
         when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
-        default: 'angularX'
+        default: ANGULAR
     };
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
@@ -142,7 +146,7 @@ function askForClientTheme(meta) {
                     }))
                 ];
 
-                if (meta) return PROMPT; // eslint-disable-line consistent-return
+                if (meta) return PROMPT;
                 promptQuestion(PROMPT, done, this);
             } catch (err) {
                 this.warning('Could not fetch bootswatch themes from API. Using default ones.');
@@ -174,7 +178,11 @@ function askForClientThemeVariant(meta) {
 
     const skipClient = this.skipClient;
 
-    const choices = [{ value: 'primary', name: 'Primary' }, { value: 'dark', name: 'Dark' }, { value: 'light', name: 'Light' }];
+    const choices = [
+        { value: 'primary', name: 'Primary' },
+        { value: 'dark', name: 'Dark' },
+        { value: 'light', name: 'Light' }
+    ];
 
     const PROMPT = {
         type: 'list',

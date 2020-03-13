@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,26 +27,23 @@ import { UserService } from 'app/core/user/user.service';
     selector: '<%= jhiPrefixDashed %>-user-mgmt-delete-dialog',
     templateUrl: './user-management-delete-dialog.component.html'
 })
-export class UserMgmtDeleteDialogComponent {
-
-    user: User;
+export class UserManagementDeleteDialogComponent {
+    user?: User;
 
     constructor(
         private userService: UserService,
         public activeModal: NgbActiveModal,
         private eventManager: JhiEventManager
-    ) {
+    ) {}
+
+    cancel(): void {
+        this.activeModal.dismiss();
     }
 
-    clear() {
-        this.activeModal.dismiss('cancel');
-    }
-
-    confirmDelete(login) {
-        this.userService.delete(login).subscribe((response) => {
-            this.eventManager.broadcast({ name: 'userListModification',
-                content: 'Deleted a user'});
-            this.activeModal.close(true);
+    confirmDelete(login: string): void {
+        this.userService.delete(login).subscribe(() => {
+            this.eventManager.broadcast('userListModification');
+            this.activeModal.close();
         });
     }
 }

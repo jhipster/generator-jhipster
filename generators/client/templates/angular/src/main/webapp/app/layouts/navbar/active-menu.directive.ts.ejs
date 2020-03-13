@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,32 +16,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Directive, OnInit, ElementRef, Renderer, Input} from '@angular/core';
-<%_ if (enableTranslation) { _%>
+import { Directive, OnInit, ElementRef, Renderer2, Input } from '@angular/core';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-<%_ } _%>
 
 @Directive({
-    selector: '[<%=jhiPrefix%>ActiveMenu]'
+    selector: '[<%= jhiPrefix %>ActiveMenu]'
 })
 export class ActiveMenuDirective implements OnInit {
-    @Input() <%=jhiPrefix%>ActiveMenu: string;
+    @Input() <%= jhiPrefix %>ActiveMenu?: string;
 
-    constructor(private el: ElementRef, private renderer: Renderer<% if (enableTranslation) { %>, private translateService: TranslateService<% } %>) {}
+    constructor(private el: ElementRef, private renderer: Renderer2, private translateService: TranslateService) {}
 
-    ngOnInit() {
-<%_ if (enableTranslation) { _%>
-      this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-         this.updateActiveFlag(event.lang);
-      });
-      this.updateActiveFlag(this.translateService.currentLang);<% } %>
+    ngOnInit(): void {
+        this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+            this.updateActiveFlag(event.lang);
+        });
+
+        this.updateActiveFlag(this.translateService.currentLang);
     }
 
-    updateActiveFlag(selectedLanguage) {
-      if (this.<%=jhiPrefix%>ActiveMenu === selectedLanguage) {
-          this.renderer.setElementClass(this.el.nativeElement, 'active', true);
-      } else {
-          this.renderer.setElementClass(this.el.nativeElement, 'active', false);
-      }
+    updateActiveFlag(selectedLanguage: string): void {
+        if (this.<%= jhiPrefix %>ActiveMenu === selectedLanguage) {
+            this.renderer.addClass(this.el.nativeElement, 'active');
+        } else {
+            this.renderer.removeClass(this.el.nativeElement, 'active');
+        }
     }
 }

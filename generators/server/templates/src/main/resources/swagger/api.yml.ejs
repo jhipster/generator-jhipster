@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -23,24 +23,39 @@ info:
     title: "<%= baseName %>"
     version: 0.0.1
 servers:
-    - url: http://localhost:<%= serverPort %>
+    - url: http://localhost:<%= serverPort %>/api
       description: Development server
-    - url: https://localhost:<%= serverPort %>
+    - url: https://localhost:<%= serverPort %>/api
       description: Development server with TLS Profile
 paths: {}
-<% if(authenticationType === 'jwt') { %>
 components:
+    responses:
+        Problem:
+            description: error occurred - see status code and problem object for more information.
+            content:
+                "application/problem+json":
+                    schema:
+                        $ref: 'https://opensource.zalando.com/problem/schema.yaml#/Problem'
+<% if (authenticationType === 'jwt') { %>
     securitySchemes:
         jwt:
             type: http
             description: JWT Authentication
             scheme: bearer
             bearerFormat: JWT
+        <%_ if (applicationType === 'monolith') { _%>
+        basic:
+            type: http
+            description: Basic Authentication
+            scheme: basic
+        <%_ } _%>
 security:
     - jwt: []
+    <%_ if (applicationType === 'monolith') { _%>
+    - basic: []
+    <%_ } _%>
 <% } %>
-<% if(authenticationType === 'oauth2') { %>
-components:
+<% if (authenticationType === 'oauth2') { %>
     securitySchemes:
         oauth:
             type: oauth2
@@ -61,8 +76,7 @@ security:
     - oauth: [jhipster, email, profile]
     - openId: [jhipster, email, profile]
 <% } %>
-<% if(authenticationType === 'session') { %>
-components:
+<% if (authenticationType === 'session') { %>
     securitySchemes:
         sessionId:
             type: apiKey
