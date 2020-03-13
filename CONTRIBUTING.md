@@ -387,13 +387,13 @@ Fix #1234
 These are some of the guidelines that we would like to emphasize if you are a regular contributor to the project
 or joined the [JHipster team](https://www.jhipster.tech/team/).
 
--  We recommend not to committing directly to master, but always submit changes through PRs.
--  Before merging try to get at least one review on the PR.
+-  We recommend not committing directly to master, but always submit changes through PRs.
+-  Before merging, try to get at least one review on the PR.
 -  Add appropriate labels to issues and PRs that you create (if you have permission to do so).
--  Follow [project policies](https://www.jhipster.tech/policies/#-policies).
--  Follow project [Code of Conduct](https://github.com/jhipster/generator-jhipster/blob/master/CODE_OF_CONDUCT.md)
+-  Follow the project's [policies](https://www.jhipster.tech/policies/#-policies).
+-  Follow the project's [Code of Conduct](https://github.com/jhipster/generator-jhipster/blob/master/CODE_OF_CONDUCT.md)
 and be polite and helpful to users when answering questions/bug reports and when reviewing PRs.
--  We work on our free time so we have no obligations or commitments. Work life balance is important, so don't 
+-  We work on our free time so we have no obligation nor commitment. Work/life balance is important, so don't 
 feel tempted to put in all your free time fixing something.
 
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
