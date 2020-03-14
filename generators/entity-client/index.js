@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const _ = require('lodash');
 const chalk = require('chalk');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
@@ -34,6 +35,42 @@ module.exports = class extends BaseBlueprintGenerator {
         useBlueprints =
             !this.fromBlueprint &&
             this.instantiateBlueprints('entity-client', { context: opts.context, debug: opts.context.isDebugEnabled });
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
+        return {
+            globalSetup() {
+                this.entityReactName = this.entityClass + this.upperFirstCamelCase(this.entityAngularJSSuffix);
+                this.entityTranslationKeyMenu = _.camelCase(
+                    this.clientRootFolder ? `${this.clientRootFolder}-${this.entityStateName}` : this.entityStateName
+                );
+                this.i18nKeyPrefix = `${this.angularAppName}.${this.entityTranslationKey}`;
+                this.i18nToLoad = [this.entityInstance];
+            },
+            fieldsSetup() {
+                // Load in-memory data for fields
+                this.fields.forEach(field => {
+                    if (field.fieldIsEnum === true) {
+                        this.i18nToLoad.push(field.enumInstance);
+                    }
+
+                    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(field.fieldType)) {
+                        this.fieldsIsReactAvField = true;
+                    }
+                });
+            },
+            relationshipsSetup() {
+                // Load in-memory data for relationships
+                this.relationships.forEach(relationship => {
+                });
+            }
+        };
+    }
+
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
     }
 
     // Public API method used by the getter and also by Blueprints

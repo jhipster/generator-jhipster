@@ -17,6 +17,9 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const _ = require('lodash');
+const chalk = require('chalk');
+const jhiCore = require('jhipster-core');
 const constants = require('../generator-constants');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
@@ -47,6 +50,48 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
             }
         };
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _configuring() {
+        return {
+            globalSetup() {
+                this.reactiveRepositories = this.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(this.databaseType);
+            },
+            fieldsSetup() {
+                // Load in-memory data for fields
+                this.fields.forEach(field => {
+                    if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
+                        const fieldNameUnderscored = _.snakeCase(field.fieldName);
+                        const jhiFieldNamePrefix = this.getColumnName(this.jhiPrefix);
+                        if (jhiCore.isReservedTableName(fieldNameUnderscored, this.prodDatabaseType)) {
+                            if (!jhiFieldNamePrefix) {
+                                this.warning(
+                                    chalk.red(
+                                        `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
+                                    )
+                                );
+                                field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
+                            } else {
+                                field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
+                            }
+                        } else {
+                            field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
+                        }
+                    }
+                });
+            },
+            relationshipsSetup() {
+                // Load in-memory data for relationships
+                this.relationships.forEach(relationship => {
+                });
+            }
+        };
+    }
+
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
     }
 
     get initializing() {

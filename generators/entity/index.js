@@ -707,17 +707,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.entityPluralFileName = entityNamePluralizedAndSpinalCased + context.entityAngularJSSuffix;
                 context.entityServiceFileName = context.entityFileName;
                 context.entityAngularName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
-                context.entityReactName = context.entityClass + this.upperFirstCamelCase(context.entityAngularJSSuffix);
                 context.entityStateName = _.kebabCase(context.entityAngularName);
                 context.entityUrl = context.entityStateName;
                 context.entityTranslationKey = context.clientRootFolder
                     ? _.camelCase(`${context.clientRootFolder}-${context.entityInstance}`)
                     : context.entityInstance;
-                context.entityTranslationKeyMenu = _.camelCase(
-                    context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName
-                );
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-                context.reactiveRepositories = context.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(context.databaseType);
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;
@@ -744,19 +739,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.relationships = [];
                 }
                 context.differentRelationships = {};
-                context.i18nToLoad = [context.entityInstance];
-                context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
-                    // Migration from JodaTime to Java Time
-                    if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
-                        field.fieldType = 'Instant';
-                    }
                     const fieldType = field.fieldType;
-
-                    if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
-                        context.fieldsIsReactAvField = true;
+                    // Migration from JodaTime to Java Time
+                    if (fieldType === 'DateTime' || fieldType === 'Date') {
+                        field.fieldType = 'Instant';
                     }
 
                     field.fieldIsEnum = ![
@@ -766,6 +755,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'Float',
                         'Double',
                         'BigDecimal',
+                        'Date',
+                        'DateTime',
                         'LocalDate',
                         'Instant',
                         'ZonedDateTime',
@@ -776,35 +767,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'ByteBuffer'
                     ].includes(fieldType);
 
-                    if (field.fieldIsEnum === true) {
-                        context.i18nToLoad.push(field.enumInstance);
-                    }
-
                     if (_.isUndefined(field.fieldNameCapitalized)) {
                         field.fieldNameCapitalized = _.upperFirst(field.fieldName);
                     }
 
                     if (_.isUndefined(field.fieldNameUnderscored)) {
                         field.fieldNameUnderscored = _.snakeCase(field.fieldName);
-                    }
-
-                    if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
-                        const fieldNameUnderscored = _.snakeCase(field.fieldName);
-                        const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
-                        if (jhiCore.isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
-                            if (!jhiFieldNamePrefix) {
-                                this.warning(
-                                    chalk.red(
-                                        `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
-                                    )
-                                );
-                                field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-                            } else {
-                                field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
-                            }
-                        } else {
-                            field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-                        }
                     }
 
                     if (_.isUndefined(field.fieldNameHumanized)) {
