@@ -18,9 +18,6 @@
 -%>
 package <%= packageName %>.repository.search;
 
-<%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-_%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;<% if (databaseType === 'cassandra') { %>
 

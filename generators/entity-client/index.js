@@ -40,7 +40,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             setup() {
-                this.tsKeyType = this.getTypescriptKeyType(this.getPkTypeBasedOnDBAndAssociation(this.authenticationType, this.databaseType, this.relationships));
+                this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
             }
         };
     }

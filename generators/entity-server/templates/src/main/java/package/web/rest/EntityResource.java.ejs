@@ -22,7 +22,6 @@ package <%= packageName %>.web.rest;
 const viaService = service !== 'no';
 let isUsingMapsId = false;
 let mapsIdAssoc;
-let primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, pkType, relationships);
 for (idx in relationships) {
     isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
     if (isUsingMapsId) {

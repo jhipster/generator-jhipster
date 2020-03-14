@@ -24,7 +24,6 @@ let importJsonIgnore = false;
 let importJsonIgnoreProperties = false;
 let importSet = false;
 const uniqueEnums = {};
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 _%>
 <%- include ../../domain/imports -%>
 <%_ if (typeof javadoc != 'undefined') { _%>

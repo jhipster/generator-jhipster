@@ -1117,7 +1117,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.differentRelationships[entityType].push(relationship);
                 });
 
-                context.pkType = this.getPkType(context.databaseType);
+                context.primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(
+                    context.authenticationType,
+                    context.databaseType,
+                    context.relationships
+                );
             },
 
             insight() {
