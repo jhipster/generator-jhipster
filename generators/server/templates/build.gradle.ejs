@@ -318,9 +318,6 @@ dependencies {
     implementation "org.infinispan:infinispan-spring-boot-starter-embedded"
     implementation "org.infinispan:infinispan-core"
     implementation "org.infinispan:infinispan-jcache"
-    implementation ("org.infinispan:infinispan-cloud") {
-        exclude module: "undertow-core"
-    }
     <%_ } _%>
     <%_ if (cacheProvider === 'memcached') { _%>
     implementation "com.google.code.simple-spring-memcached:spring-cache"
