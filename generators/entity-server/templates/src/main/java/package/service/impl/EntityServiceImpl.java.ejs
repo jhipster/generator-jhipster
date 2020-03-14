@@ -32,17 +32,15 @@ const entityToDto = 'toDto';
 const entityToDtoReference = mapper + '::'+ 'toDto';
 const repository = entityInstance  + 'Repository';
 const searchRepository = entityInstance  + 'SearchRepository';
+let primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, pkType, relationships);
 let isUsingMapsId = false;
-let primaryKeyType = pkType;
 let mapsIdAssoc;
 for (idx in relationships) {
     isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-    if ( isUsingMapsId === true) {
+    if (isUsingMapsId === true) {
         mapsIdAssoc = relationships[idx];
-        primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
         break;
     }
-    isUsingMapsId = false;
 }
 _%>
 <%_ if (service === 'serviceImpl') { _%>
