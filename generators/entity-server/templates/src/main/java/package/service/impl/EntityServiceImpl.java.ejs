@@ -36,8 +36,8 @@ let primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, pkType
 let isUsingMapsId = false;
 let mapsIdAssoc;
 for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-    if (isUsingMapsId === true) {
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
+    if (isUsingMapsId) {
         mapsIdAssoc = relationships[idx];
         break;
     }
