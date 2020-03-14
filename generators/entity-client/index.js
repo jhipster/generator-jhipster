@@ -46,10 +46,10 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.clientRootFolder ? `${this.clientRootFolder}-${this.entityStateName}` : this.entityStateName
                 );
                 this.i18nKeyPrefix = `${this.angularAppName}.${this.entityTranslationKey}`;
-                this.i18nToLoad = [this.entityInstance];
             },
             fieldsSetup() {
                 // Load in-memory data for fields
+                this.i18nToLoad = [this.entityInstance];
                 this.fields.forEach(field => {
                     if (field.fieldIsEnum === true) {
                         this.i18nToLoad.push(field.enumInstance);
@@ -70,11 +70,6 @@ module.exports = class extends BaseBlueprintGenerator {
                             ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
                             : field.fieldValidateRulesPattern;
                     }
-                });
-            },
-            relationshipsSetup() {
-                // Load in-memory data for relationships
-                this.relationships.forEach(relationship => {
                 });
             }
         };
