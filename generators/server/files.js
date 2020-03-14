@@ -1098,6 +1098,10 @@ const serverFiles = {
                 {
                     file: 'package/config/apidoc/OpenApiSpecResourceProvider.java',
                     renameTo: generator => `${generator.javaDir}config/apidoc/OpenApiSpecResourceProvider.java`
+                },
+                {
+                    file: 'package/config/OpenApiConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/OpenApiConfiguration.java`
                 }
             ]
         }
