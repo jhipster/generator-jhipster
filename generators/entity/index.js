@@ -879,7 +879,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.validation = true;
                     }
                 });
-                context.hasUserField = context.saveUserSnapshot = false;
+                let hasUserField = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach(relationship => {
                     const otherEntityName = relationship.otherEntityName;
@@ -994,7 +994,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     if (otherEntityName === 'user') {
                         relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
-                        context.hasUserField = true;
+                        hasUserField = true;
                     } else {
                         relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
                         if (!relationship.otherEntityTableName) {
@@ -1005,11 +1005,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                         }
                     }
-                    context.saveUserSnapshot =
-                        context.applicationType === 'microservice' &&
-                        context.authenticationType === 'oauth2' &&
-                        context.hasUserField &&
-                        context.dto === 'no';
 
                     if (_.isUndefined(relationship.otherEntityNamePlural)) {
                         relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
@@ -1116,6 +1111,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                     context.differentRelationships[entityType].push(relationship);
                 });
+
+                context.saveUserSnapshot =
+                    context.applicationType === 'microservice' &&
+                    context.authenticationType === 'oauth2' &&
+                    hasUserField &&
+                    context.dto === 'no';
 
                 context.primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(
                     context.authenticationType,
