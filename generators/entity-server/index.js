@@ -35,8 +35,6 @@ module.exports = class extends BaseBlueprintGenerator {
         this.jhipsterContext = opts.jhipsterContext || opts.context;
         this.configOptions = opts.configOptions || {};
 
-        this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
-
         useBlueprints =
             !this.fromBlueprint &&
             this.instantiateBlueprints('entity-server', { context: opts.context, debug: opts.context.isDebugEnabled });
@@ -57,6 +55,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             globalSetup() {
                 this.reactiveRepositories = this.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(this.databaseType);
+                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
             },
             fieldsSetup() {
                 // Load in-memory data for fields
@@ -79,12 +78,57 @@ module.exports = class extends BaseBlueprintGenerator {
                             field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
                         }
                     }
+
+                    if (_.isUndefined(field.fieldInJavaBeanMethod)) {
+                        // Handle the specific case when the second letter is capitalized
+                        // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+                        if (field.fieldName.length > 1) {
+                            const firstLetter = field.fieldName.charAt(0);
+                            const secondLetter = field.fieldName.charAt(1);
+                            if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
+                                field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
+                            } else {
+                                field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
+                            }
+                        } else {
+                            field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
+                        }
+                    }
+
+                    if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
+                        field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
+                            ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+                            : field.fieldValidateRulesPattern;
+                    }
                 });
             },
             relationshipsSetup() {
                 // Load in-memory data for relationships
+                let hasUserField = false;
                 this.relationships.forEach(relationship => {
+                    const otherEntityName = relationship.otherEntityName;
+                    const otherEntityData = this.getEntityJson(otherEntityName);
+                    const jhiTablePrefix = this.jhiTablePrefix;
+
+                    if (otherEntityName === 'user') {
+                        relationship.otherEntityTableName = `${this.jhiTablePrefix}_user`;
+                        hasUserField = true;
+                    } else {
+                        relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
+                        if (!relationship.otherEntityTableName) {
+                            relationship.otherEntityTableName = this.getTableName(otherEntityName);
+                        }
+                        if (jhiCore.isReservedTableName(relationship.otherEntityTableName, this.prodDatabaseType) && jhiTablePrefix) {
+                            const otherEntityTableName = relationship.otherEntityTableName;
+                            relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
+                        }
+                    }
                 });
+                this.saveUserSnapshot =
+                    this.applicationType === 'microservice' &&
+                    this.authenticationType === 'oauth2' &&
+                    hasUserField &&
+                    this.dto === 'no';
             }
         };
     }

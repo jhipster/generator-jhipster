@@ -779,40 +779,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         field.fieldNameHumanized = _.startCase(field.fieldName);
                     }
 
-                    if (_.isUndefined(field.fieldInJavaBeanMethod)) {
-                        // Handle the specific case when the second letter is capitalized
-                        // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-                        if (field.fieldName.length > 1) {
-                            const firstLetter = field.fieldName.charAt(0);
-                            const secondLetter = field.fieldName.charAt(1);
-                            if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
-                                field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
-                            } else {
-                                field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
-                            }
-                        } else {
-                            field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
-                        }
-                    }
-
-                    if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
-                        field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-                            : field.fieldValidateRulesPattern;
-                    }
-
-                    if (_.isUndefined(field.fieldValidateRulesPatternAngular)) {
-                        field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
-                            : field.fieldValidateRulesPattern;
-                    }
-
-                    if (_.isUndefined(field.fieldValidateRulesPatternReact)) {
-                        field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
-                            : field.fieldValidateRulesPattern;
-                    }
-
                     field.fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
 
                     if (fieldType === 'ZonedDateTime') {
@@ -860,7 +826,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             relationship.otherEntityIsEmbedded = true;
                         }
                     }
-                    const jhiTablePrefix = context.jhiTablePrefix;
 
                     // Look for fields at the other other side of the relationship
                     if (otherEntityData && otherEntityData.relationships) {
@@ -959,25 +924,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             );
                         }
                     }
-
-                    if (otherEntityName === 'user') {
-                        relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
-                        context.hasUserField = true;
-                    } else {
-                        relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
-                        if (!relationship.otherEntityTableName) {
-                            relationship.otherEntityTableName = this.getTableName(otherEntityName);
-                        }
-                        if (jhiCore.isReservedTableName(relationship.otherEntityTableName, context.prodDatabaseType) && jhiTablePrefix) {
-                            const otherEntityTableName = relationship.otherEntityTableName;
-                            relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
-                        }
-                    }
-                    context.saveUserSnapshot =
-                        context.applicationType === 'microservice' &&
-                        context.authenticationType === 'oauth2' &&
-                        context.hasUserField &&
-                        context.dto === 'no';
 
                     if (_.isUndefined(relationship.otherEntityNamePlural)) {
                         relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);

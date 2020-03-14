@@ -58,6 +58,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(field.fieldType)) {
                         this.fieldsIsReactAvField = true;
                     }
+
+                    if (_.isUndefined(field.fieldValidateRulesPatternAngular)) {
+                        field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
+                            ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
+                            : field.fieldValidateRulesPattern;
+                    }
+
+                    if (_.isUndefined(field.fieldValidateRulesPatternReact)) {
+                        field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
+                            ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
+                            : field.fieldValidateRulesPattern;
+                    }
                 });
             },
             relationshipsSetup() {
