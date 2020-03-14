@@ -101,11 +101,6 @@
     <%_ if (!reactive) { _%>
         <liquibase-hibernate5.version>3.8</liquibase-hibernate5.version>
     <%_ } _%>
-    <%_ if (enableSwaggerCodegen) { _%>
-        <!-- The jackson version should match the one managed by
-        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${jackson.version} -->
-        <jackson.version>2.10.2</jackson.version>
-    <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
     <%_ } _%>
