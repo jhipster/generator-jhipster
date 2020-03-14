@@ -112,7 +112,7 @@ describe('Service Tests', () => {
         <%_ if (!readOnly) { _%>
             it('should create a <%= entityAngularName %>', () => {
                 const returnedFromService = Object.assign({
-                    <%_ if (pkType === 'String' || pkType === 'UUID') { _%>
+                    <%_ if (tsKeyType === 'string') { _%>
                     id: 'ID',
                     <%_ } else { _%>
                     id: 0,
