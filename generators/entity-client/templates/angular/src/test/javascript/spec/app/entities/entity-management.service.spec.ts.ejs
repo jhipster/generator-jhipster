@@ -19,7 +19,7 @@
 <%_
 const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const tsKeyId = generateTestEntityId(primaryKeyType);
-const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, undefined, embedded);
+const variablesWithTypes = generateEntityClientFields(tsKeyType, fields, relationships, dto, undefined, embedded);
 const enumImports = generateEntityClientEnumImports(fields);
 _%>
 import { TestBed, getTestBed } from '@angular/core/testing';
@@ -60,7 +60,7 @@ describe('Service Tests', () => {
             <%_ } _%>
 
             elemDefault = new <%= entityAngularName %>(
-                <%_ if (primaryKeyType === 'String' || primaryKeyType === 'UUID') { _%>
+                <%_ if (tsKeyType === 'string') { _%>
                 'ID',
                 <%_ } else { _%>
                 0,
