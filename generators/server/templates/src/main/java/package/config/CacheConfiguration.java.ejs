@@ -387,8 +387,6 @@ public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
-    // Initialize the cache in a non Spring-managed bean
-    private static EmbeddedCacheManager cacheManager;
         <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 
     private DiscoveryClient discoveryClient;
@@ -405,14 +403,6 @@ public class CacheConfiguration {
         this.discoveryClient = discoveryClient;
     }
         <%_ } _%>
-
-    public static EmbeddedCacheManager getCacheManager() {
-        return cacheManager;
-    }
-
-    public static void setCacheManager(EmbeddedCacheManager cacheManager) {
-        CacheConfiguration.cacheManager = cacheManager;
-    }
 
     /**
      * Inject a {@link org.infinispan.configuration.global.GlobalConfiguration GlobalConfiguration} for Infinispan cache.
@@ -570,7 +560,6 @@ public class CacheConfiguration {
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             <%_ } _%>
 
-            setCacheManager(manager);
         };
     }
         <%_ if (enableHibernateCache) { _%>
