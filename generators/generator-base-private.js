@@ -1461,7 +1461,7 @@ module.exports = class extends Generator {
      *
      * @param {string} authenticationType - the auth type
      * @param {string} databaseType - the database type
-     * @param {any} relationships - relationships
+     * @param {T[]} relationships - relationships
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
         let hasFound = false;

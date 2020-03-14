@@ -894,6 +894,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                     const jhiTablePrefix = context.jhiTablePrefix;
 
+                    relationship.otherEntityPrimaryKeyType =
+                        relationship.otherEntityName === 'user' && context.authenticationType === 'oauth2'
+                            ? 'String'
+                            : this.getPkType(context.databaseType);
+
                     // Look for fields at the other other side of the relationship
                     if (otherEntityData && otherEntityData.relationships) {
                         if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
