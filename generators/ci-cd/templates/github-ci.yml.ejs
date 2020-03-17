@@ -1,0 +1,138 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+name: Application CI
+on: [push, pull_request]
+jobs:
+    <%_ if (buildTool === 'gradle') { _%>
+    validation:
+        name: "Gradle Wrapper Validation"
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: gradle/wrapper-validation-action@v1
+    <%_ } _%>
+    pipeline:
+        name: <%= baseName %> pipeline
+        runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
+        timeout-minutes: 40
+        env:
+            <%_ if (!skipClient) { _%>
+            NODE_VERSION: <%= NODE_VERSION %>
+            <%_ } _%>
+            <%_ if (!skipServer) { _%>
+            SPRING_OUTPUT_ANSI_ENABLED: DETECT
+            <%_ }
+            if (databaseType !== 'no' && !skipServer ) { _%>
+            SPRING_JPA_SHOW_SQL: false
+            <%_ } _%>
+            <%_ if (!skipClient) { _%>
+            JHI_DISABLE_WEBPACK_LOGS: true
+            <%_ } _%>
+            <%_ if (clientFramework === ANGULAR) { _%>
+            NG_CLI_ANALYTICS: false
+            <%_ } _%>
+        steps:
+            - uses: actions/checkout@v2
+              <%_ if (!skipClient) { _%>
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: <%= NODE_VERSION %>
+              <%_ }
+              if (!skipServer) { _%>
+            - uses: actions/setup-java@v1
+              with:
+                  java-version: '11.x'
+              <%_ }
+              if (prodDatabaseType === 'mysql') { _%>
+            - name: Stop MySQL server
+              run: sudo /etc/init.d/mysql stop
+              <%_ }
+              if (!skipClient) { _%>
+            - name: Install node.js packages
+              run: <%= clientPackageManager %> install
+              <%_ }
+              if (!skipServer) { _%>
+            - name: Run backend test
+              <%_ if (buildTool === 'maven') { _%>
+              run: |
+                  chmod +x mvnw
+                  ./mvnw -ntp clean verify<% if (!skipClient) { %> -P-webpack<% } %>
+              <%_ } else if (buildTool === 'gradle') { _%>
+              run: |
+                  chmod +x gradlew
+                  ./gradlew clean test integrationTest<% if (!skipClient) { %> -x webpack<% } %>
+              <%_ }
+               }
+              if (!skipClient) { _%>
+            - name: Run frontend test
+              run: <%= clientPackageManager %> run <%= frontTestCommand %>
+              <%_ } _%>
+              <%_ if (cicdIntegrations.includes('sonar')) { _%>
+            - name: Analyze code with SonarQube
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              run: |
+                  if [ -n $SONAR_TOKEN ]; then
+                  <%_ if (buildTool === 'maven') { _%>
+                      ./mvnw -ntp initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %>
+                  <%_ } else if (buildTool === 'gradle') { _%>
+                      ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %>
+                  <%_ } _%>
+                  else
+                      echo No SONAR_TOKEN, skipping...
+                  fi
+              <%_ } _%>
+            - name: Package application
+              <%_ if (!skipServer) {
+              if (buildTool === 'maven') { _%>
+              run: ./mvnw -ntp package <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests
+              <%_ } else if (buildTool === 'gradle') { _%>
+              run: ./gradlew bootJar -Pprod -x test -x integrationTest
+              <%_ }
+              }
+              if (skipServer && !skipClient) {
+              _%>
+              run: <%= clientPackageManager %> run build
+              <%_
+              }
+              if (cicdIntegrations.includes('heroku')) { _%>
+            - name: Deploy to Heroku
+              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+              env:
+                  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+                  <%_ if (buildTool === 'maven') { _%>
+              run: ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+                  <%_ } else if (buildTool === 'gradle') { _%>
+              run: ./gradlew deployHeroku --no-daemon
+                  <%_ } _%>
+              <%_ } _%>
+              <%_ if (cicdIntegrations.includes('publishDocker')) { _%>
+            - name: Build and publish docker image
+              if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
+              run: |
+                  GIT_TAG=:${GITHUB_REF#refs/tags/}
+                  DOCKER_TAG=${GIT_TAG#:refs/heads/master}
+                  <%_ if (buildTool === 'maven') { _%>
+                  ./mvnw -ntp jib:build -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
+                  <%_ } else if (buildTool === 'gradle') { _%>
+                  ./gradlew jib -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}"
+                  <%_ } _%>
+              <%_ } _%>

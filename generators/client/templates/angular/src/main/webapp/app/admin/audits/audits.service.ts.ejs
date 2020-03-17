@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,18 +20,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { createRequestOption} from 'app/shared';
+import { createRequestOption, Pagination } from 'app/shared/util/request-util';
 import { SERVER_API_URL } from 'app/app.constants';
 import { Audit } from './audit.model';
 
-@Injectable({providedIn: 'root'})
-export class AuditsService  {
-    constructor(private http: HttpClient) { }
+export interface AuditsQuery extends Pagination {
+    fromDate: string;
+    toDate: string;
+}
 
-    query(req: any): Observable<HttpResponse<Audit[]>> {
+@Injectable({ providedIn: 'root' })
+export class AuditsService {
+    constructor(private http: HttpClient) {}
+
+    query(req: AuditsQuery): Observable<HttpResponse<Audit[]>> {
         const params: HttpParams = createRequestOption(req);
-        params.set('fromDate', req.fromDate);
-        params.set('toDate', req.toDate);
 
         const requestURL = SERVER_API_URL + '<%- apiUaaPath %>management/audits';
 

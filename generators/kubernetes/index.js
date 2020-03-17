@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const shelljs = require('shelljs');
 const fs = require('fs');
 const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
-const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkKubernetes, loadConfig, saveConfig, setupKubernetesConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
 
 module.exports = class extends BaseDockerGenerator {
@@ -32,34 +32,10 @@ module.exports = class extends BaseDockerGenerator {
                 this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Generator ${chalk.bold('⎈')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
-
             ...super.initializing,
-
-            checkKubernetes() {
-                if (this.skipChecks) return;
-                const done = this.async();
-
-                shelljs.exec('kubectl version', { silent: true }, (code, stdout, stderr) => {
-                    if (stderr) {
-                        this.log(
-                            `${chalk.yellow.bold('WARNING!')} kubectl 1.2 or later is not installed on your computer.\n` +
-                                'Make sure you have Kubernetes installed. Read http://kubernetes.io/docs/getting-started-guides/binary_release/\n'
-                        );
-                    }
-                    done();
-                });
-            },
-
-            loadConfig() {
-                loadFromYoRc.call(this);
-                this.kubernetesNamespace = this.config.get('kubernetesNamespace');
-                this.kubernetesServiceType = this.config.get('kubernetesServiceType');
-                this.ingressDomain = this.config.get('ingressDomain');
-                this.istio = this.config.get('istio');
-                this.dbRandomPassword = Math.random()
-                    .toString(36)
-                    .slice(-8);
-            }
+            checkKubernetes,
+            loadConfig,
+            setupKubernetesConstants
         };
     }
 
@@ -77,7 +53,10 @@ module.exports = class extends BaseDockerGenerator {
             askForDockerPushCommand: prompts.askForDockerPushCommand,
             askForIstioSupport: prompts.askForIstioSupport,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
-            askForIngressDomain: prompts.askForIngressDomain
+            askForIngressType: prompts.askForIngressType,
+            askForIngressDomain: prompts.askForIngressDomain,
+            askForPersistentStorage: prompts.askForPersistentStorage,
+            askForStorageClassName: prompts.askForStorageClassName
         };
     }
 
@@ -100,23 +79,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-
-            saveConfig() {
-                this.config.set({
-                    appsFolders: this.appsFolders,
-                    directoryPath: this.directoryPath,
-                    clusteredDbApps: this.clusteredDbApps,
-                    serviceDiscoveryType: this.serviceDiscoveryType,
-                    jwtSecretKey: this.jwtSecretKey,
-                    dockerRepositoryName: this.dockerRepositoryName,
-                    dockerPushCommand: this.dockerPushCommand,
-                    kubernetesNamespace: this.kubernetesNamespace,
-                    kubernetesServiceType: this.kubernetesServiceType,
-                    ingressDomain: this.ingressDomain,
-                    monitoring: this.monitoring,
-                    istio: this.istio
-                });
-            }
+            saveConfig
         };
     }
 
@@ -134,7 +97,7 @@ module.exports = class extends BaseDockerGenerator {
         }
 
         this.log(
-            `${chalk.yellow.bold(
+            `\n${chalk.yellow.bold(
                 'WARNING!'
             )} You will need to push your image to a registry. If you have not done so, use the following commands to tag and push the images:`
         );
@@ -147,8 +110,27 @@ module.exports = class extends BaseDockerGenerator {
             this.log(`  ${chalk.cyan(`${this.dockerPushCommand} ${targetImageName}`)}`);
         }
 
-        this.log('\nYou can deploy all your apps by running the following script:');
-        this.log(`  ${chalk.cyan('bash kubectl-apply.sh')}`);
+        if (this.dockerRepositoryName) {
+            this.log(
+                `\n${chalk.green.bold('INFO!')} Alternatively, you can use Jib to build and push image directly to a remote registry:`
+            );
+            this.appsFolders.forEach((appsFolder, index) => {
+                const appConfig = this.appConfigs[index];
+                let runCommand = '';
+                if (appConfig.buildTool === 'maven') {
+                    runCommand = `./mvnw -ntp -Pprod verify jib:build -Djib.to.image=${appConfig.targetImageName}`;
+                } else {
+                    runCommand = `./gradlew bootJar -Pprod jib -Djib.to.image=${appConfig.targetImageName}`;
+                }
+                this.log(`  ${chalk.cyan(`${runCommand}`)} in ${this.destinationPath(this.directoryPath + appsFolder)}`);
+            });
+        }
+
+        this.log('\nYou can deploy all your apps by running the following kubectl command:');
+        this.log(`  ${chalk.cyan('bash kubectl-apply.sh -f')}`);
+        this.log('\n[OR]');
+        this.log('\nIf you want to use kustomize configuration, then run the following command:');
+        this.log(`  ${chalk.cyan('bash kubectl-apply.sh -k')}`);
         if (this.gatewayNb + this.monolithicNb >= 1) {
             const namespaceSuffix = this.kubernetesNamespace === 'default' ? '' : ` -n ${this.kubernetesNamespace}`;
             this.log("\nUse these commands to find your application's IP addresses:");

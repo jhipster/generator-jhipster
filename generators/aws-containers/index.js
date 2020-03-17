@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,6 +19,9 @@
 const _ = require('lodash');
 const chalk = require('chalk');
 const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
+const fileUtils = require('jhipster-core').FileUtils;
+const fs = require('fs');
+const shelljs = require('shelljs');
 
 const BaseGenerator = require('../generator-base');
 const docker = require('../docker-base');
@@ -26,7 +29,6 @@ const dockerCli = require('../docker-cli');
 const dockerUtils = require('../docker-utils');
 const dockerPrompts = require('../docker-prompts');
 const constants = require('../generator-constants');
-const awsConstants = require('./constants');
 
 const prompts = require('./prompts');
 const awsClient = require('./aws-client');
@@ -100,27 +102,21 @@ module.exports = class extends BaseGenerator {
                 this.skipBuild = this.options['skip-build'];
             },
             getConfig() {
-                this.aws = {
-                    apps: [],
-                    vpc: {},
-                    dockerLogin: {
-                        accountId: null,
-                        password: null
-                    },
-                    ...this.config.get('aws')
-                };
-
+                if (fileUtils.doesFileExist('awsConstants.json')) {
+                    this.aws = JSON.parse(fs.readFileSync('awsConstants.json', { encoding: 'utf-8' }));
+                } else {
+                    this.aws = {
+                        apps: [],
+                        vpc: {},
+                        dockerLogin: {
+                            accountId: null,
+                            password: null
+                        }
+                    };
+                }
                 this.defaultAppsFolders = this.aws.apps.map(a => a.baseName);
             },
             checkDocker: docker.checkDocker,
-            loadAWS() {
-                if (this.abort) return;
-                const done = this.async();
-                awsClient
-                    .loadAWS(this)
-                    .then(() => done())
-                    .catch(() => done('Error while loading the AWS library'));
-            },
             checkAwsCredentials() {
                 if (this.abort) return;
                 const done = this.async();
@@ -136,17 +132,22 @@ module.exports = class extends BaseGenerator {
                     })
                     .catch(() => {
                         this.log.error(chalk.red(`No AWS credentials found for profile ${chalk.bold(profile)}`));
-                        this.abort = true;
-                        done();
+                        done('Please setup AWS credentials; https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html');
                     });
             },
             initAwsStuff() {
                 awsClient.initAwsStuff();
             },
             setOutputs() {
-                dockerCli.setOutputs(data => this.log(chalk.white(data.toString().trim())), data => this.log.error(data.toString().trim()));
+                dockerCli.setOutputs(
+                    data => this.log(chalk.white(data.toString().trim())),
+                    data => this.log.error(data.toString().trim())
+                );
 
-                awsClient.CF().setOutputs(message => this.log(message), message => this.log.error(message));
+                awsClient.CF().setOutputs(
+                    message => this.log(message),
+                    message => this.log.error(message)
+                );
             },
             fetchRegion() {
                 if (this.abort) return;
@@ -174,14 +175,51 @@ module.exports = class extends BaseGenerator {
 
     get prompting() {
         return {
-            bonjour() {
-                if (this.abort) return;
-                this.log(chalk.bold('❓ AWS prompting'));
-            },
             askTypeOfApplication: prompts.askTypeOfApplication,
             askDirectoryPath: dockerPrompts.askForPath,
             askForApps: dockerPrompts.askForApps,
             getAppConfig: dockerPrompts.loadConfigs,
+            promptEKSClusterCreation: prompts.promptEKSClusterCreation,
+            createEKSCluster() {
+                if (this.deploymentApplicationType === 'monolith') return;
+                const done = this.async();
+                this.log.ok('Initialising Elastic Kubernetes Service (EKS)️. This can take up to 15 minutes depending on load....');
+                shelljs.exec(
+                    `eksctl create cluster --name=${this.clusterName} --nodes=${this.totalNumberOfNodes}` +
+                        ` --version=${this.kubernetesVersion} --region=${this.clusterRegion} --nodegroup-name=${this.nodegroupName}`,
+                    { silent: false },
+                    (code, stdout, stderr) => {
+                        if (stderr) {
+                            this.log(stderr);
+                        }
+                        done();
+                    }
+                );
+            },
+            createECR() {
+                if (this.deploymentApplicationType === 'monolith') return;
+                const done = this.async();
+                this.log.ok('Initialising Elastic Repository Service (ERS) ...');
+                this.appConfigs.forEach(app => {
+                    shelljs.exec(
+                        `aws ecr create-repository --repository-name=${app.baseName} --region=${this.clusterRegion}`,
+                        { silent: false },
+                        (code, stdout, stderr) => {
+                            if (stderr) {
+                                this.log(stderr);
+                            }
+                            done();
+                        }
+                    );
+                });
+            },
+            finishMicroServiceFlow() {
+                if (this.deploymentApplicationType === 'monolith') return;
+                const done = this.async();
+                this.log.ok(chalk.green('EKS and ECRs created. Please use the Kubernetes Sub-generator (jhipster kubernetes) to deploy.`'));
+                this.abort = true;
+                done();
+            },
             askRegion: prompts.askRegion,
             initAwsAndLoadVPCs() {
                 awsClient.initAwsStuff(this.aws.region);
@@ -252,7 +290,13 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('🔧🛠️ AWS configuring'));
             },
             purgeAwsApps() {
+                if (this.abort) return;
                 this.aws.apps = this.aws.apps.filter(app => this.appConfigs.find(conf => conf.baseName === app.baseName));
+            },
+            setBucketName() {
+                if (this.abort) return;
+                this.aws.s3BucketName =
+                    this.aws.s3BucketName || awsClient.sanitizeBucketName(`${this.aws.cloudFormationName}_${new Date().getTime()}`);
             },
             getDockerLogin() {
                 if (this.abort) return null;
@@ -269,10 +313,6 @@ module.exports = class extends BaseGenerator {
                         this.abort = true;
                         done();
                     });
-            },
-            setBucketName() {
-                this.aws.s3BucketName =
-                    this.aws.s3BucketName || awsClient.sanitizeBucketName(`${this.aws.cloudFormationName}_${new Date().getTime()}`);
             }
         };
     }
@@ -284,24 +324,25 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('AWS default'));
             },
             updateBaseName() {
+                if (this.abort) return;
                 this.appConfigs.forEach(config => {
                     config.awsBaseName = config.baseName.toLowerCase().replace(/[^a-z^\d]/, '');
                 });
             },
             showAwsCacheWarning() {
+                if (this.abort) return;
                 this.appConfigs.forEach(config => {
                     if (config.cacheProvider !== 'no') {
                         this.log(
                             chalk.yellow(
-                                `Warning ${
-                                    config.baseName
-                                } is using a cache provider, scaling will not be available. Refer to an AWS native scaling service.`
+                                `Warning ${config.baseName} is using a cache provider, scaling will not be available. Refer to an AWS native scaling service.`
                             )
                         );
                     }
                 });
             },
             addAWSSpringDependencies() {
+                if (this.abort) return;
                 this.appConfigs.forEach(config => {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     if (config.buildTool === 'maven') {
@@ -361,6 +402,16 @@ module.exports = class extends BaseGenerator {
                 });
             }
         };
+    }
+
+    _writeFileErrorHandler(generator) {
+        fs.writeFile('awsConstants.json', JSON.stringify(this.aws), function(error) {
+            if (error) {
+                generator.log.error(`There was an error writing the awsConstants.json file: ${error.message}`);
+            } else {
+                generator.log(chalk.green.bold('Configuration saved at awsConstants.json'));
+            }
+        });
     }
 
     _uploadTemplateToAWS(filename, path) {
@@ -573,7 +624,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async;
 
                 const promises = this.aws.apps.map(app => {
-                    const from = `${app.baseName}:latest`;
+                    const from = `${app.baseName.toLowerCase()}:latest`;
                     const to = `${app.EcrRepositoryUri}:latest`;
                     return dockerCli
                         .tagImage(from, to)
@@ -667,14 +718,15 @@ module.exports = class extends BaseGenerator {
                         done();
                     })
                     .catch(error => {
-                        this.log.error(`There was an error updating the stack: ${error.message}`);
+                        this.log.error(`There was an error updating the stack: ${error.message}\n`);
+                        this.log.error(error);
                         this.abort = true;
                         done();
                     });
             },
             saveConf() {
                 delete this.aws.dockerLogin;
-                this.config.set(awsConstants.conf.aws, this.aws);
+                this._writeFileErrorHandler(this);
             }
         };
     }

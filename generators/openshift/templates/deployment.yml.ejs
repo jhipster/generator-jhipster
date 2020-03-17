@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -24,7 +24,7 @@
 # customizations. Pls note wherever displayName says *** PLEASE DO NOT CHANGE THIS ***, don't touch that as those parameters will be
 # referenced in other places.
 #
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Template
 metadata:
   name: <%= app.baseName.toLowerCase() %>-app-template
@@ -79,7 +79,7 @@ parameters:
 <%_ } _%>
 objects:
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: DeploymentConfig
     metadata:
       name: ${APPLICATION_NAME}
@@ -128,7 +128,7 @@ objects:
                     done
               containerName: ${APPLICATION_NAME}
         resources:
-      replicas: "1"
+      replicas: 1
       template:
         metadata:
           labels:
@@ -156,11 +156,11 @@ objects:
             - name: SPRING_CLOUD_CONSUL_HOST
               value: ${APPLICATION_NAME}-consul
             - name: SPRING_CLOUD_CONSUL_PORT
-              value: "8500"
+              value: 8500
             <%_ } _%>
             <%_ if (app.prodDatabaseType === 'mysql') { _%>
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+              value: jdbc:mysql://${APPLICATION_NAME}-mysqldb/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -229,12 +229,26 @@ objects:
             <%_ if (app.searchEngine === 'elasticsearch') { _%>
             - name: SPRING_DATA_JEST_URI
               value: http://${APPLICATION_NAME}-elasticsearch:9200
+            - name: SPRING_ELASTICSEARCH_REST_URIS
+              value: http://${APPLICATION_NAME}-elasticsearch:9200
             <%_ } _%>
             <%_ if (app.messageBroker === 'kafka') { _%>
-            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-              value: jhipster-kafka
-            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
-              value: jhipster-zookeeper
+            - name: KAFKA_CONSUMER_KEY_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+              value: jhipster-kafka:9092
+            - name: KAFKA_CONSUMER_GROUP_ID
+              value: '<%= dasherizedBaseName %>'
+            - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
+              value: 'earliest'
+            - name: KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+              value: jhipster-kafka:9092
+            - name: KAFKA_PRODUCER_KEY_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
+            - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
+              value: 'org.apache.kafka.common.serialization.StringDeserializer'
             <%_ } _%>
             <%_ if (monitoring === 'elk') { _%>
             - name: JHIPSTER_METRICS_LOGS_ENABLED
@@ -253,16 +267,16 @@ objects:
             <%_ if (monitoring === 'prometheus') { _%>
             - name: JHIPSTER_METRICS_LOGS_ENABLED
               value: "true"
-            - name: JHIPSTER_METRICS_PROMETHEUS_ENABLED
+            - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
               value: "true"
             - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
               value: "/prometheusMetrics"
             <%_ } _%>
             ports:
             - name: http
-              containerPort: "${APP_PORT}"
+              containerPort: ${{APP_PORT}}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Service
     metadata:
       annotations:
@@ -281,9 +295,9 @@ objects:
       type: LoadBalancer
       ports:
       - name: http
-        port: "${APP_PORT}"
+        port: ${{APP_PORT}}
   -
-    apiVersion: v1
+    apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
     kind: Route
     metadata:
       name: ${APPLICATION_NAME}
@@ -291,7 +305,7 @@ objects:
       to:
         kind: Service
         name: ${APPLICATION_NAME}
-        weight: "100"
+        weight: 100
       port:
         targetPort: "http"
       wildcardPolicy: None

@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable no-console */
 
 const path = require('path');
 const shelljs = require('shelljs');
@@ -24,10 +25,25 @@ const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const fs = require('fs');
 const crypto = require('crypto');
+const randexp = require('randexp');
+const faker = require('faker');
+const os = require('os');
 
 const constants = require('./generator-constants');
 
-const LANGUAGES_MAIN_SRC_DIR = `../../languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+const LANGUAGES_MAIN_SRC_DIR = `${__dirname}/languages/templates/${constants.CLIENT_MAIN_SRC_DIR}`;
+
+class RandexpWithFaker extends randexp {
+    constructor(regexp, m) {
+        super(regexp, m);
+        this.max = 5;
+    }
+
+    // In order to have consistent results with RandExp, the RNG is seeded.
+    randInt(min, max) {
+        return faker.random.number({ min, max });
+    }
+}
 
 module.exports = {
     rewrite,
@@ -46,7 +62,17 @@ module.exports = {
     getDBTypeFromDBValue,
     getBase64Secret,
     getRandomHex,
-    checkStringInFile
+    checkStringInFile,
+    checkRegexInFile,
+    loadYoRc,
+    loadBlueprintsFromConfiguration,
+    parseBluePrints,
+    normalizeBlueprintName,
+    packageNameToNamespace,
+    stringHashCode,
+    RandexpWithFaker,
+    gitExec,
+    isGitInstalled
 };
 
 /**
@@ -61,6 +87,7 @@ function rewriteFile(args, generator) {
     args.haystack = generator.fs.read(fullPath);
     const body = rewrite(args);
     generator.fs.write(fullPath, body);
+    return args.haystack !== body;
 }
 
 /**
@@ -74,9 +101,10 @@ function replaceContent(args, generator) {
 
     const re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 
-    let body = generator.fs.read(fullPath);
-    body = body.replace(re, args.content);
-    generator.fs.write(fullPath, body);
+    const currentBody = generator.fs.read(fullPath);
+    const newBody = currentBody.replace(re, args.content);
+    generator.fs.write(fullPath, newBody);
+    return newBody !== currentBody;
 }
 
 /**
@@ -90,6 +118,19 @@ function escapeRegExp(str) {
 }
 
 /**
+ * Normalize line endings.
+ * If in Windows is Git autocrlf used then need to replace \r\n with \n
+ * to achieve consistent comparison result when comparing strings read from file.
+ *
+ * @param {string} str string
+ * @returns {string} string where CRLF is replaced with LF in Windows
+ */
+function normalizeLineEndings(str) {
+    const isWin32 = os.platform() === 'win32';
+    return isWin32 ? str.replace(/\r\n/g, '\n') : str;
+}
+
+/**
  * Rewrite using the passed argument object.
  *
  * @param {object} args arguments object (containing splicable, haystack, needle properties) to be used
@@ -97,9 +138,9 @@ function escapeRegExp(str) {
  */
 function rewrite(args) {
     // check if splicable is already in the body text
-    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(line)}`).join('\n'));
+    const re = new RegExp(args.splicable.map(line => `\\s*${escapeRegExp(normalizeLineEndings(line))}`).join('\n'));
 
-    if (re.test(args.haystack)) {
+    if (re.test(normalizeLineEndings(args.haystack))) {
         return args.haystack;
     }
 
@@ -178,6 +219,9 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
                     break;
                 case 'js':
                     body = replaceTitle(body, generator);
+                    if (dest.endsWith('error.route.ts')) {
+                        body = replaceErrorMessage(body, generator);
+                    }
                     break;
                 case 'jsx':
                     body = replaceTranslation(body, generator);
@@ -216,11 +260,33 @@ function renderContent(source, generator, context, options, cb) {
  * @returns string with pageTitle replaced
  */
 function replaceTitle(body, generator) {
-    const re = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
+    const regex = /pageTitle[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
+    return replaceTranslationKeysWithText(body, generator, regex);
+}
+
+/**
+ *
+ * @param {string} body html body
+ * @param {object} generator reference to the generator
+ * @returns string with pageTitle replaced
+ */
+function replaceErrorMessage(body, generator) {
+    const regex = /errorMessage[\s]*:[\s]*['|"]([a-zA-Z0-9.\-_]+)['|"]/g;
+    return replaceTranslationKeysWithText(body, generator, regex);
+}
+
+/**
+ *
+ * @param {string} body html body
+ * @param {object} generator reference to the generator
+ * @param {object} regex regular expression to find keys
+ * @returns string with pageTitle replaced
+ */
+function replaceTranslationKeysWithText(body, generator, regex) {
     let match;
 
     // eslint-disable-next-line no-cond-assign
-    while ((match = re.exec(body)) !== null) {
+    while ((match = regex.exec(body)) !== null) {
         // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
         const key = match[1];
         const target = key;
@@ -240,7 +306,7 @@ function replaceTitle(body, generator) {
  * @returns string with placeholders replaced
  */
 function replacePlaceholders(body, generator) {
-    const re = /placeholder=['|"]([{]{2}['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)[}]{2})['|"]/g;
+    const re = /placeholder=['|"]([{]{2}\s*['|"]([a-zA-Z0-9.\-_]+)['|"][\s][|][\s](translate)\s*[}]{2})['|"]/g;
     let match;
 
     // eslint-disable-next-line no-cond-assign
@@ -300,27 +366,39 @@ function replaceTranslation(body, generator) {
  */
 function geti18nJson(key, generator) {
     const i18nDirectory = `${LANGUAGES_MAIN_SRC_DIR}i18n/en/`;
-    let name = _.kebabCase(key.split('.')[0]);
-    if (['entity', 'error', 'footer'].includes(name)) {
-        name = 'global';
+    const names = [];
+    let result;
+    const namePrefix = _.kebabCase(key.split('.')[0]);
+    if (['entity', 'error', 'footer'].includes(namePrefix)) {
+        names.push('global');
+        if (namePrefix === 'error') {
+            names.push('error');
+        }
+    } else {
+        names.push(namePrefix);
     }
-    let filename = `${i18nDirectory + name}.json`;
-    let render;
-    if (!shelljs.test('-f', path.join(generator.sourceRoot(), filename))) {
-        filename = `${i18nDirectory}${name}.json.ejs`;
-        render = true;
+    for (let i = 0; i < names.length; i++) {
+        let filename = `${i18nDirectory + names[i]}.json`;
+        let render;
+        if (!shelljs.test('-f', filename)) {
+            filename = `${filename}.ejs`;
+            render = true;
+        }
+        try {
+            let file = generator.fs.read(filename);
+            file = render ? ejs.render(file, generator, {}) : file;
+            file = JSON.parse(file);
+            if (result === undefined) {
+                result = file;
+            } else {
+                result = { ...result, ...file };
+            }
+        } catch (err) {
+            generator.log(err);
+            generator.log(`Error in file: ${filename}`);
+        }
     }
-    try {
-        let file = generator.fs.read(path.join(generator.sourceRoot(), filename));
-        file = render ? ejs.render(file, generator, {}) : file;
-        file = JSON.parse(file);
-        return file;
-    } catch (err) {
-        generator.log(err);
-        generator.log(`Error in file: ${filename}`);
-        // 'Error reading translation file!'
-        return undefined;
-    }
+    return result;
 }
 
 /**
@@ -374,22 +452,42 @@ function getJavadoc(text, indentSize) {
  * @param {any} field : entity field
  * @param {string} angularAppName
  * @param {string} packageName
+ * @param {string} clientRootFolder
  */
 function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
     field.enumInstance = _.lowerFirst(fieldType);
-    const enumInfo = {
+    const enums = field.fieldValues.replace(/\s/g, '').split(',');
+    const enumsWithCustomValue = getEnumsWithCustomValue(enums);
+    return {
         enumName: fieldType,
         enumValues: field.fieldValues.split(',').join(', '),
         enumInstance: field.enumInstance,
-        enums: field.fieldValues.replace(/\s/g, '').split(','),
+        enums,
+        enumsWithCustomValue,
         angularAppName,
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
-    return enumInfo;
 }
 
+function getEnumsWithCustomValue(enums) {
+    return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
+        if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
+            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
+            const enumValueName = matches[1];
+            const enumValueCustomValue = matches[3];
+            enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
+        } else {
+            enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
+        }
+        return enumsWithCustomValueArray;
+    }, []);
+}
+
+function doesTheEnumValueHaveACustomValue(enumValue) {
+    return enumValue.includes('(');
+}
 /**
  * Copy object props from source to destination
  * @param {*} toObj
@@ -409,19 +507,31 @@ function decodeBase64(string, encoding = 'utf-8') {
     return Buffer.from(string, 'base64').toString(encoding);
 }
 
+function loadYoRc(filePath = '.yo-rc.json') {
+    if (!jhiCore.FileUtils.doesFileExist(filePath)) {
+        return undefined;
+    }
+    return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
+}
+
 /**
  * Get all the generator configuration from the .yo-rc.json file
  * @param {Generator} generator the generator instance to use
  * @param {boolean} force force getting direct from file
+ * @param {String} base path where the .yo-rc.json file is located. Default is cwd.
  */
-function getAllJhipsterConfig(generator, force) {
+function getAllJhipsterConfig(generator, force, basePath = '') {
     let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
-    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
-        const yoRc = JSON.parse(fs.readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+    const filePath = path.join(basePath || '', '.yo-rc.json');
+    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
+        const yoRc = loadYoRc(filePath);
         configuration = yoRc['generator-jhipster'];
-        // merge the blueprint config if available
-        if (configuration.blueprint) {
-            configuration = { ...configuration, ...yoRc[configuration.blueprint] };
+        // merge the blueprint configs if available
+        configuration.blueprints = loadBlueprintsFromConfiguration(configuration);
+        const blueprintConfigs = configuration.blueprints.map(bp => yoRc[bp.name]).filter(el => el !== null && el !== undefined);
+        if (blueprintConfigs.length > 0) {
+            const mergedConfigs = Object.assign(...blueprintConfigs);
+            configuration = { ...configuration, ...mergedConfigs };
         }
     }
     if (!configuration.get || typeof configuration.get !== 'function') {
@@ -455,6 +565,7 @@ function getDBTypeFromDBValue(db) {
 function getRandomHex(len = 50) {
     return crypto.randomBytes(len).toString('hex');
 }
+
 /**
  * Generates a base64 secret from given string or random hex
  * @param {string} value the value used to get base64 secret
@@ -464,7 +575,170 @@ function getBase64Secret(value, len = 50) {
     return Buffer.from(value || getRandomHex(len)).toString('base64');
 }
 
+/**
+ * Checks if string is already in file
+ * @param {string} path file path
+ * @param {string} search search string
+ * @param {object} generator reference to generator
+ * @returns {boolean} true if string is in file, false otherwise
+ */
 function checkStringInFile(path, search, generator) {
     const fileContent = generator.fs.read(path);
     return fileContent.includes(search);
+}
+
+/**
+ * Checks if regex is found in file
+ * @param {string} path file path
+ * @param {regex} regex regular expression
+ * @param {object} generator reference to generator
+ * @returns {boolean} true if regex is matched in file, false otherwise
+ */
+function checkRegexInFile(path, regex, generator) {
+    const fileContent = generator.fs.read(path);
+    return fileContent.match(regex);
+}
+
+/**
+ * Loads the blueprint information from the configuration of the specified generator.
+ * @param config - the generator's configuration object.
+ * @returns {Array} an array that contains the info for each blueprint
+ */
+function loadBlueprintsFromConfiguration(config) {
+    // handle both config based on yeoman's Storage object, and direct configuration loaded from .yo-rc.json
+    const configuration = config && config.getAll && typeof config.getAll === 'function' ? config.getAll() || {} : config;
+    // load blueprints from config file
+    const blueprints = configuration.blueprints || [];
+
+    const oldBlueprintName = configuration.blueprint;
+    if (oldBlueprintName && blueprints.findIndex(e => e.name === oldBlueprintName) === -1) {
+        const version = configuration.blueprintVersion || 'latest';
+        blueprints.push(parseBlueprintInfo(`${oldBlueprintName}@${version}`));
+    }
+    return blueprints;
+}
+
+/**
+ * Splits and normalizes a comma separated list of blueprint names with optional versions.
+ * @param {string} blueprints - comma separated list of blueprint names, e.g kotlin,vuewjs@1.0.1. If an array then
+ * no processing is performed and it is returned as is.
+ * @returns {Array} an array that contains the info for each blueprint
+ */
+function parseBluePrints(blueprints) {
+    if (blueprints && !Array.isArray(blueprints)) {
+        return blueprints
+            .split(',')
+            .filter(el => el != null && el.length > 0)
+            .map(blueprint => parseBlueprintInfo(blueprint));
+    }
+    return blueprints;
+}
+
+/**
+ * Normalize blueprint name if needed and also extracts version if defined. If no version is defined then `latest`
+ * is used by default.
+ * @param {string} blueprint - name of the blueprint and optionally a version, e.g kotlin[@0.8.1]
+ * @returns {object} containing the name and version of the blueprint
+ */
+function parseBlueprintInfo(blueprint) {
+    let bpName = normalizeBlueprintName(blueprint);
+    let version = 'latest';
+    const idx = bpName.lastIndexOf('@');
+    if (idx > 0) {
+        version = bpName.slice(idx + 1);
+        bpName = bpName.slice(0, idx);
+    }
+    return {
+        name: bpName,
+        version
+    };
+}
+
+/**
+ * Remove 'generator-' prefix from generators for compatibility with yeoman namespaces.
+ * @param {string} packageName - name of the blueprint's package name
+ * @returns {string} namespace of the blueprint
+ */
+function packageNameToNamespace(packageName) {
+    return packageName.replace('generator-', '');
+}
+
+/**
+ * Normalize blueprint name: prepend 'generator-jhipster-' if needed
+ * @param {string} blueprint - name of the blueprint
+ * @returns {string} the normalized blueprint name
+ */
+function normalizeBlueprintName(blueprint) {
+    if (blueprint && blueprint.startsWith('@')) {
+        return blueprint;
+    }
+    if (blueprint && !blueprint.startsWith('generator-jhipster')) {
+        return `generator-jhipster-${blueprint}`;
+    }
+    return blueprint;
+}
+
+/**
+ * Calculate a hash code for a given string.
+ * @param {string} str - any string
+ * @returns {number} returns the calculated hash code.
+ */
+function stringHashCode(str) {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        const character = str.charCodeAt(i);
+        hash = (hash << 5) - hash + character; // eslint-disable-line no-bitwise
+        hash |= 0; // eslint-disable-line no-bitwise
+    }
+
+    if (hash < 0) {
+        hash *= -1;
+    }
+    return hash;
+}
+
+/**
+ * Executes a Git command using shellJS
+ * gitExec(args [, options, callback])
+ *
+ * @param {string|array} args - can be an array of arguments or a string command
+ * @param {object} options[optional] - takes any of child process options
+ * @param {function} callback[optional] - a callback function to be called once process complete, The call back will receive code, stdout and stderr
+ * @return {object} when in synchronous mode, this returns a ShellString. Otherwise, this returns the child process object.
+ */
+function gitExec(args, options = {}, callback) {
+    if (typeof options === 'function') {
+        callback = options;
+        options = {};
+    }
+
+    if (options.async === undefined) options.async = callback !== undefined;
+    if (options.silent === undefined) options.silent = true;
+    if (options.trace === undefined) options.trace = true;
+
+    if (!Array.isArray(args)) {
+        args = [args];
+    }
+    const command = `git ${args.join(' ')}`;
+    if (options.trace) {
+        console.info(command);
+    }
+    if (callback) {
+        return shelljs.exec(command, options, callback);
+    }
+    return shelljs.exec(command, options);
+}
+
+/**
+ * Checks if git is installed.
+ *
+ * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
+ *
+ * @return {boolean} true if installed; false otherwise..
+ */
+function isGitInstalled(callback) {
+    const code = gitExec('--version', { trace: false }).code;
+    if (callback) callback(code);
+    return code === 0;
 }

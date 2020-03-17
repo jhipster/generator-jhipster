@@ -22,6 +22,7 @@
             "data": {
                 "remoteAddress": "Dirección remota:"
             }
-        }
+        },
+        "notFound": "No se encontró la auditoría"
     }
 }

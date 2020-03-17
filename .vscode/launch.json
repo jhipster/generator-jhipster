@@ -7,6 +7,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "JHipster Mocha Tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "--timeout",
+                "999999",
+                "--reporter",
+                "spec",
+                "${workspaceFolder}/test"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "jhipster generate sample-dev blueprint",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "timeout": 100000,
@@ -18,7 +32,7 @@
                 "--blueprint",
                 "sample-blueprint"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -33,7 +47,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -48,7 +62,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ngx-default/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ngx-default/",
             "console": "integratedTerminal"
         },
         {
@@ -63,7 +77,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ngx-default/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ngx-default/",
             "console": "integratedTerminal"
         },
         {
@@ -78,7 +92,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ms-ngx-gateway-eureka/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ms-ngx-gateway-eureka/",
             "console": "integratedTerminal"
         },
         {
@@ -93,7 +107,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ms-micro-eureka/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ms-micro-eureka/",
             "console": "integratedTerminal"
         },
         {
@@ -108,7 +122,7 @@
                 "--skip-git",
                 "--skip-cache"
                 ],
-            "cwd": "${workspaceFolder}/travis/samples/ngx-gradle-fr/",
+            "cwd": "${workspaceFolder}/test-integration/samples/ngx-gradle-fr/",
             "console": "integratedTerminal"
         },
         {
@@ -121,7 +135,7 @@
                 "BankAccount",
                 "--force"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -132,7 +146,7 @@
             "args": [
                 "ci-cd"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -141,9 +155,11 @@
             "name": "jhipster import-jdl",
             "program": "${workspaceFolder}/cli/jhipster.js",
             "args": [
-                "import-jdl"
+                "import-jdl",
+                "--inline",
+                "application { config { baseName jhapp }}"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -154,7 +170,7 @@
             "args": [
                 "info"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -165,7 +181,7 @@
             "args": [
                 "language"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -176,7 +192,7 @@
             "args": [
                 "upgrade"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/"
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/"
         },
         {
             "type": "node",
@@ -186,7 +202,7 @@
             "args": [
                 "docker-compose"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -197,7 +213,7 @@
             "args": [
                 "kubernetes"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -208,7 +224,7 @@
             "args": [
                 "rancher-compose"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -219,7 +235,7 @@
             "args": [
                 "openshift"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -230,7 +246,7 @@
             "args": [
                 "heroku"
             ],
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -244,7 +260,7 @@
             "env": {
                 "JHIPSTER_ONLINE_URL": "http://localhost:8080"
             },
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
         },
         {
@@ -258,8 +274,19 @@
             "env": {
                 "JHIPSTER_ONLINE_URL": "http://localhost:8080"
             },
-            "cwd": "${workspaceFolder}/travis/samples/app-sample-dev/",
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
             "console": "integratedTerminal"
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster openapi-client",
+            "program": "${workspaceFolder}/cli/jhipster.js",
+            "args": [
+                "openapi-client"
+            ],
+            "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev/",
+            "console": "integratedTerminal"
+        },
     ]
 }

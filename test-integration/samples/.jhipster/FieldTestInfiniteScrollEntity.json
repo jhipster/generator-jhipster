@@ -199,6 +199,17 @@
             ]
         },
         {
+            "fieldName": "durationHugo",
+            "fieldType": "Duration"
+        },
+        {
+            "fieldName": "durationRequiredHugo",
+            "fieldType": "Duration",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "booleanHugo",
             "fieldType": "Boolean"
         },
@@ -218,6 +229,17 @@
             "fieldName": "enumRequiredHugo",
             "fieldType": "EnumRequiredFieldClass",
             "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uuidHugo",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "uuidRequiredHugo",
+            "fieldType": "UUID",
             "fieldValidateRules": [
                 "required"
             ]
@@ -296,24 +318,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldName": "byteTextMinbytesHugo",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "minbytes"
-            ],
-            "fieldValidateRulesMinbytes": 0
-        },
-        {
-            "fieldName": "byteTextMaxbytesHugo",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "text",
-            "fieldValidateRules": [
-                "maxbytes"
-            ],
-            "fieldValidateRulesMaxbytes": 10000
         }
     ],
     "changelogDate": "20160208184031",

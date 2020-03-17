@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Aktiiviset istunnot käyttäjälle [<strong>{{username}}</strong>]",
+        "table": {
+            "ipaddress": "IP osoite",
+            "useragent": "Agentti",
+            "date": "Pvm",
+            "button": "Invalidoi"
+        },
+        "messages": {
+            "success": "<strong>Sessio invalidoitu!</strong>",
+            "error": "<strong>Tapahtui virhe!</strong> Sessiota ei voitu invalidoida."
+        }
+    }
+}

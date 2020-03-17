@@ -1,17 +1,27 @@
-<%#Copyright 2013-2019 the original author or authors from the JHipster project.
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
- This file is part of the JHipster project, see https://www.jhipster.tech/ for
-        more information. Licensed under the Apache License,
-    Version 2 (the "License");
-youmay not use this file except in compliance with the License.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0 Unless
-        required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-    either express or implied. See the License for the specific language
-        governing permissions and limitations under the License. -%> @import "bootstrap-variables";
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+@import "bootstrap-variables";
+@import '~bootstrap/scss/functions';
+<%_ if (clientTheme !== 'none') { _%>
+@import "~bootswatch/dist/<%= clientTheme %>/variables";
+<%_ } _%>
+@import '~bootstrap/scss/variables';
 
 /* ==============================================================
 Bootstrap tweaks
@@ -25,6 +35,8 @@ h4 {
     font-weight: 300;
 }
 
+<%_ if (clientTheme === 'none') { _%>
+/* Increase contrast of links to get 100% on Lighthouse Accessability Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
 a {
     color: #533f03;
     font-weight: bold;
@@ -32,9 +44,26 @@ a {
 
 a:hover {
     color: #533f03;
-    font-weight: bold;
+}
+
+/* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
+a:not([href]):not([tabindex]):hover.dropdown-item {
+    color: $dropdown-link-hover-color;
+}
+
+/* override .dropdown-item.active background-color on hover */
+.dropdown-item.active:hover {
+    background-color: mix($dropdown-link-hover-bg, $dropdown-link-active-bg, 50%);
+}
+<%_ } _%>
+
+a:hover {
     /* make sure browsers use the pointer cursor for anchors, even with no href */
     cursor: pointer;
+}
+
+.dropdown-item:hover {
+    color: $dropdown-link-hover-color;
 }
 
 /* ==========================================================================
@@ -51,6 +80,7 @@ Browser Upgrade Prompt
 Generic styles
 ========================================================================== */
 
+<%_ if (clientTheme === 'none') { _%>
 /* Error highlight on input fields */
 .ng-valid[required],
 .ng-valid.required {
@@ -60,6 +90,7 @@ Generic styles
 .ng-invalid:not(form) {
     border-left: 5px solid red;
 }
+<%_ } _%>
 
 /* other generic styles */
 
@@ -123,7 +154,7 @@ Custom alerts for notification
             font-size: 10px;
         }
     }
-    .toast {
+    .jhi-toast {
         position: fixed;
         width: 100%;
         &.left {
@@ -142,49 +173,9 @@ Custom alerts for notification
 }
 
 @media screen and (min-width: 480px) {
-    .alerts .toast {
+    .alerts .jhi-toast {
         width: 50%;
     }
-}
-
-/* ==========================================================================
-entity tables helpers
-========================================================================== */
-
-/* Remove Bootstrap padding from the element
-http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
-@mixin no-padding($side) {
-    @if $side == "all" {
-        .no-padding {
-            padding: 0 !important;
-        }
-    } @else {
-        .no-padding-#{$side} {
-            padding-#{$side}: 0 !important;
-        }
-    }
-}
-@include no-padding("left");
-@include no-padding("right");
-@include no-padding("top");
-@include no-padding("bottom");
-@include no-padding("all");
-
-/* bootstrap 3 input-group 100% width
-http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
-.width-min {
-    width: 1% !important;
-}
-
-/* Makes toolbar not wrap on smaller screens
-http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
-.flex-btn-group-container {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-justify-content: flex-end;
-    justify-content: flex-end;
 }
 
 /* ==========================================================================
@@ -217,16 +208,6 @@ ui bootstrap tweaks
 .carousel,
 .panel-title a {
     cursor: pointer;
-}
-
-.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default,
-.uib-datepicker-popup > li > div.uib-datepicker > table .btn-default {
-    border: 0;
-}
-
-.datetime-picker-dropdown > li.date-picker-menu div > table:focus,
-.uib-datepicker-popup > li > div.uib-datepicker > table:focus {
-    outline: none;
 }
 
 .thread-dump-modal-lock {

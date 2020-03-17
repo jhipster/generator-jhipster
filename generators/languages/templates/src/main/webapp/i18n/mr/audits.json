@@ -22,6 +22,7 @@
             "data": {
                 "remoteAddress": "दूरस्थ पत्ता:"
             }
-        }
+        },
+        "notFound": "No audit found"
     }
 }

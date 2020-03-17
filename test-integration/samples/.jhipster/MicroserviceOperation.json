@@ -5,7 +5,8 @@
             "relationshipName": "bankAccount",
             "otherEntityName": "microserviceBankAccount",
             "relationshipType": "many-to-one",
-            "otherEntityField": "name"
+            "otherEntityField": "name",
+            "otherEntityRelationshipName": "operation"
         },
         {
             "relationshipName": "label",

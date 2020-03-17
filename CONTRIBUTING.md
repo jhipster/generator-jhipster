@@ -6,6 +6,7 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
 -   [Issues and Bugs](#issue)
 -   [Bug bounties](#bounties)
 -   [Feature Requests](#feature)
+-   [RFCs](#rfcs)
 -   [Submission Guidelines](#submit)
 -   [Generator development setup](#setup)
 -   [Coding Rules](#rules)
@@ -34,8 +35,28 @@ If you submitted a Pull Request that fixes a ticket with the "\$100" tag, then y
 You can request a new feature by submitting a ticket to our [GitHub issues](https://github.com/jhipster/generator-jhipster/issues). If you
 would like to implement a new feature then consider what kind of change it is:
 
--   **Major Changes** that you wish to contribute to the project should be discussed first. Please open a ticket which clearly states that it is a feature request in the title and explain clearly what you want to achieve in the description, and the JHipster team will discuss with you what should be done in that ticket. You can then start working on a Pull Request.
+-   **Major Changes** that you wish to contribute to the project should be discussed first. Please open a ticket which clearly states that it is a feature request in the title and explain clearly what you want to achieve in the description, and the JHipster team will discuss with you what should be done in that ticket. You can then start working on a Pull Request. In order to communicate major changes proposals and receive reviews from the core team, you can also submit an RFC.
 -   **Small Changes** can be proposed without any discussion. Open up a ticket which clearly states that it is a feature request in the title. Explain your change in the description, and you can propose a Pull Request straight away.
+
+## <a name="rfcs"></a> RFCs
+
+Sometimes, major feature requests are "complex" or "substantial". In this case, Github Issues might not be the best tool to to present them because we will need a lot of going back and forth to reach a consensus.
+
+So we ask that these feature request be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
+
+The RFC process is intended to provide a consistent and controlled path for major features and directions of the project.
+
+To submit an RFC follow those steps:
+
+1. Discuss the RFC proposal with the core team through Github issues or other channels
+2. Create the initial Github issue for the Feature Request if it doesn't already exist
+3. Copy the `rfcs/0-jhipster-rfc-template.md` to `rfcs/${featureRequestIssueNumber}-my-feature-request-name.md`
+4. Fill in the RFC, make sure to complete every required section
+5. Submit the RFC as a Pull Request with the summary of the proposal in the PR description
+6. Build consensus and integrate feedback from the reviewers
+7. The Pull Request is either accepted (merged), rejected (closed) or postponed (given an "on hold" status)
+
+Note: The JHipster RFC process is inspired by [Rust RFCs](https://rust-lang.github.io/rfcs/).
 
 ## <a name="submit"></a> Submission Guidelines
 
@@ -86,16 +107,16 @@ Before you submit your pull request consider the following guidelines:
 -   Generate a new JHipster project, and ensure that all tests pass
 
     ```shell
-    mvn verify -Pprod
+    mvnw verify -Pprod
     ```
 
 -   Test that the new project runs correctly:
 
     ```shell
-    mvn spring-boot:run
+    mvnw spring-boot:run
     ```
 
--   You can generate our Continuous Integration (with Travis CI and Azure Pipelines) by following [this](#local-build)
+-   You can generate our Continuous Integration (with GitHub Actions and Azure Pipelines) by following [this](#local-build)
 
 -   Commit your changes using a descriptive commit message that follows our
     [commit message conventions](#commit-message-format).
@@ -234,6 +255,20 @@ jhipster --with-entities
 
 You should see your changes reflected in the generated project.
 
+Note: The generated project might not build properly in case the generator is using a
+snapshot version of [jhipster/jhipster](https://github.com/jhipster/jhipster). This issue is mentioned in; https://github.com/jhipster/generator-jhipster/issues/9571. In
+this case clone the jhipster/jhipster project and build it using:
+
+```shell script
+./mvnw clean install -Dgpg.skip=true
+```
+
+or on Windows:
+
+```
+.\mvnw.cmd clean install -D"gpg.skip=true"
+```
+
 ### Use a text editor
 
 As modifying the JHipster generator includes modifying Java and JavaScript templates, most IDE will not work correctly. We recommend you use a text editor like [Atom](https://atom.io/) or [VSCode](https://code.visualstudio.com/) to code your changes. The ESLint and EditorConfig extensions are recommended to help with respecting code conventions.
@@ -244,7 +279,7 @@ It is possible to debug JHipster's code using a Node.js debugger. To achieve thi
 
 #### Debugging with VSCode
 
-To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `travis/samples/app-sample-dev` folder.
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `test-integration/samples/app-sample-dev` folder.
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
@@ -295,6 +330,8 @@ Sub templates can be unit tested.
 
 We have rules over how our git commit messages must be formatted. Please ensure to [squash](https://help.github.com/articles/about-git-rebase/#commands-available-while-rebasing) unnecessary commits so that your commit history is clean.
 
+If the commit only involves documentation changes you can skip the continuous integration pipelines using `[ci skip]` or `[skip ci]` in your commit message header.
+
 ### <a name="commit-message-format"></a> Commit Message Format
 
 Each commit message consists of a **header**, a **body** and a **footer**.
@@ -344,6 +381,20 @@ see http://spring.io/blog/2014/09/26/spring-boot-1-1-7-released
 
 Fix #1234
 ```
+
+### Regular Contributor Guidelines
+
+These are some of the guidelines that we would like to emphasize if you are a regular contributor to the project
+or joined the [JHipster team](https://www.jhipster.tech/team/).
+
+-  We recommend not committing directly to master, but always submit changes through PRs.
+-  Before merging, try to get at least one review on the PR.
+-  Add appropriate labels to issues and PRs that you create (if you have permission to do so).
+-  Follow the project's [policies](https://www.jhipster.tech/policies/#-policies).
+-  Follow the project's [Code of Conduct](https://github.com/jhipster/generator-jhipster/blob/master/CODE_OF_CONDUCT.md)
+and be polite and helpful to users when answering questions/bug reports and when reviewing PRs.
+-  We work on our free time so we have no obligation nor commitment. Work/life balance is important, so don't 
+feel tempted to put in all your free time fixing something.
 
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md

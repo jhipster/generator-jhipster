@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,7 +47,7 @@
                 "health": "Состояние",
                 "configuration": "Настройки",
                 "logs": "Логи",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Аудит",
                 <%_ } _%>
                 "apidocs": "API",
@@ -57,15 +57,15 @@
             "language": "Язык"
         },
         "form": {
-            "username": "Логин",
+            "username.label": "Логин",
             "username.placeholder": "Ваш логин",
-            "currentpassword": "Текущий пароль",
+            "currentpassword.label": "Текущий пароль",
             "currentpassword.placeholder": "Текущий пароль",
-            "newpassword": "Новый пароль",
+            "newpassword.label": "Новый пароль",
             "newpassword.placeholder": "Новый пароль",
-            "confirmpassword": "Подтверждение нового пароля",
+            "confirmpassword.label": "Подтверждение нового пароля",
             "confirmpassword.placeholder": "Подтвердите новый пароль",
-            "email": "Email",
+            "email.label": "Email",
             "email.placeholder": "Ваш email"
         },
         "messages": {
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Пароль должен быть указан.",
-                    "minlength": "Длина пароля должна быть хотя-бы 5 символов",
+                    "minlength": "Длина пароля должна быть хотя-бы 4 символов",
                     "maxlength": "Пароль не может быть длиннее чем 50 символов",
                     "strength": "Сложность пароля:"
                 },
                 "confirmpassword": {
                     "required": "подтверждение пароля должно быть указано.",
-                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 5 символов",
+                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 4 символов",
                     "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
                 },
                 "email": {
@@ -152,7 +152,11 @@
         "userexists": "Имя пользователя уже используется!",
         "emailexists": "Эл. почта уже используется!!",
         "idexists": "Новый {{entityName}} не может иметь данный ID",
-        "idnull": "Неверный ID"
+        "idnull": "Неверный ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Это ваш футтер"
 }

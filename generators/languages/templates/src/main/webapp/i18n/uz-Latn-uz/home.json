@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Java Hipsterga, hush kelibsiz!",
+        "subtitle": "Bosh sahifa",
+        "logged": {
+            "message": "Siz \"{{username}}\" foydalanuvchisi sifatida kirdiz."
+        },
+        "question": "JHipster bo`yicha savollaringiz bo`lsa:",
+        "link": {
+            "homepage": "JHipster bosh sahifasi",
+            "stackoverflow": "JHipster Stack Overflow",
+            "bugtracker": "JHipster bag trekeri",
+            "chat": "JHipster umumiy chat xonasi",
+            "follow": "Twitterdagi logini @jhipster"
+        },
+        "like": "Agar JHipster sizga yoqsa, ushbu manzilda yulduzcha quyishni ununmang",
+        "github": "GitHub"
+    }
+}

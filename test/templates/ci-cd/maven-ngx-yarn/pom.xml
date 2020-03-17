@@ -220,10 +220,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
@@ -500,6 +496,11 @@
                     <logging>debug</logging>
                 </configuration>
                 <dependencies>
+                    <dependency>
+                        <groupId>io.github.jhipster</groupId>
+                        <artifactId>jhipster-framework</artifactId>
+                        <version>${jhipster-dependencies.version}</version>
+                    </dependency>
                     <dependency>
                         <groupId>org.javassist</groupId>
                         <artifactId>javassist</artifactId>

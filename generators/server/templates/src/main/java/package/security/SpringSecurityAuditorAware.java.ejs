@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.security;
+package <%= packageName %>.security;
 
-import <%=packageName%>.config.Constants;
+import <%= packageName %>.config.Constants;
 
 import java.util.Optional;
 
@@ -33,14 +33,6 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
-        <%_ if (reactive) { _%>
-        // There is currently no reactive AuditorAware implementation so we can't
-        // extract the currently logged-in user from the Reactor Context.
-        // Therefore createdBy and lastModifiedBy will have to be set explicitly.
-        // See https://jira.spring.io/browse/DATACMNS-1231
-        return Optional.of(Constants.SYSTEM_ACCOUNT);
-        <%_ } else { _%>
         return Optional.of(SecurityUtils.getCurrentUserLogin().orElse(Constants.SYSTEM_ACCOUNT));
-        <%_ } _%>
     }
 }

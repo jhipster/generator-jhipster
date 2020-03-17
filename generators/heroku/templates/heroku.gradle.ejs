@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,6 +22,13 @@ heroku {
   appName = "<%= herokuAppName %>"
   buildpacks = ["heroku/jvm"]
 }
+<%_ if (herokuDeployType === 'git') { _%>
+
+// Task stage is used by Heroku, see also
+// https://devcenter.heroku.com/articles/deploying-gradle-apps-on-heroku
+// and GRADLE_TASK configuration variable.
+task stage(dependsOn: "bootJar") {
+}
 
 gradle.taskGraph.whenReady {taskGraph ->
     taskGraph.afterTask() {task ->
@@ -31,3 +38,4 @@ gradle.taskGraph.whenReady {taskGraph ->
         }
     }
 }
+<%_ } _%>

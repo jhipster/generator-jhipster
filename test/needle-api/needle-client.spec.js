@@ -4,6 +4,7 @@ const helpers = require('yeoman-test');
 const ClientGenerator = require('../../generators/client');
 const constants = require('../../generators/generator-constants');
 
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
@@ -13,7 +14,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprint myblueprint');
+            this.error('This is a JHipster blueprint and should be used only like jhipster --blueprints myblueprint');
         }
 
         this.configOptions = jhContext.configOptions || {};
@@ -49,37 +50,31 @@ const mockBlueprintSubGen = class extends ClientGenerator {
 };
 
 describe('needle API Client: JHipster client generator with blueprint', () => {
-    const blueprintNames = ['generator-jhipster-myblueprint', 'myblueprint'];
+    before(done => {
+        helpers
+            .run(path.join(__dirname, '../../generators/client'))
+            .withOptions({
+                'from-cli': true,
+                build: 'maven',
+                auth: 'jwt',
+                db: 'mysql',
+                skipInstall: true,
+                blueprint: 'myblueprint',
+                skipChecks: true
+            })
+            .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
+            .withPrompts({
+                baseName: 'jhipster',
+                clientFramework: ANGULAR,
+                enableTranslation: true,
+                nativeLanguage: 'en',
+                languages: ['en', 'fr']
+            })
+            .on('end', done);
+    });
 
-    blueprintNames.forEach(blueprintName => {
-        describe(`generate client with blueprint option '${blueprintName}'`, () => {
-            before(done => {
-                helpers
-                    .run(path.join(__dirname, '../../generators/client'))
-                    .withOptions({
-                        'from-cli': true,
-                        build: 'maven',
-                        auth: 'jwt',
-                        db: 'mysql',
-                        skipInstall: true,
-                        blueprint: blueprintName,
-                        skipChecks: true
-                    })
-                    .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
-                    .withPrompts({
-                        baseName: 'jhipster',
-                        clientFramework: 'angularX',
-                        enableTranslation: true,
-                        nativeLanguage: 'en',
-                        languages: ['en', 'fr']
-                    })
-                    .on('end', done);
-            });
-
-            it('Assert index.html contain the comment and the resource added', () => {
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<!-- Comment added by JHipster API -->');
-                assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css">');
-            });
-        });
+    it('Assert index.html contain the comment and the resource added', () => {
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<!-- Comment added by JHipster API -->');
+        assert.fileContent(`${CLIENT_MAIN_SRC_DIR}index.html`, '<link rel="stylesheet" href="content/css/my.css">');
     });
 });

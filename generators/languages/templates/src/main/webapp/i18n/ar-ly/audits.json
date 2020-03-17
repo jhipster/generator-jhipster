@@ -22,6 +22,7 @@
             "data": {
                 "remoteAddress": "العنوان"
             }
-        }
+        },
+        "notFound": "No audit found"
     }
 }

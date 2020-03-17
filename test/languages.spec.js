@@ -8,7 +8,7 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 describe('JHipster generator languages', () => {
-    context('Cretes default i18n files', () => {
+    context('Creates default i18n files', () => {
         constants.LANGUAGES.forEach(language => {
             describe(`for ${language.name}`, () => {
                 before(done => {
@@ -42,7 +42,9 @@ describe('JHipster generator languages', () => {
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/user-management.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/global.json`,
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/health.json`,
-                        `${SERVER_MAIN_RES_DIR}i18n/messages_${language.value.replace('-', '_')}.properties`
+                        `${SERVER_MAIN_RES_DIR}i18n/messages_${language.value
+                            .replace(/-/g, '_')
+                            .replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`
                     ]);
                     assert.noFile([`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/gateway.json`]);
                 });

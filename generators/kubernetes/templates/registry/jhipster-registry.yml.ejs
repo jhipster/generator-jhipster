@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -30,7 +30,7 @@
 #   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
 #   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
 #   `kubectl delete pod jhipster-registry-0`, `kubectl delete pod jhipster-registry-1`
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: registry-secret
@@ -39,7 +39,7 @@ type: Opaque
 data:
   registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: jhipster-registry
@@ -56,12 +56,14 @@ spec:
   selector:
     app: jhipster-registry
 ---
-apiVersion: apps/v1
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-registry
   namespace: <%= kubernetesNamespace %>
 spec:
+  # added to circumvent kustomize bug
+  volumeClaimTemplates: []
   serviceName: jhipster-registry
   replicas: 2
   selector:

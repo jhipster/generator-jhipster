@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -251,7 +251,7 @@ function askForMonitoring() {
                 },
                 {
                     value: 'prometheus',
-                    name: 'Yes, for metrics only with Prometheus (only compatible with JHipster >= v3.12)'
+                    name: 'Yes, for metrics only with Prometheus'
                 }
             ],
             default: this.monitoring ? this.monitoring : 'no'
@@ -454,10 +454,7 @@ function getAppFolders(input, deploymentApplicationType) {
 
     files.forEach(file => {
         if (file.isDirectory()) {
-            if (
-                shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`) &&
-                shelljs.test('-f', `${destinationPath}/${file.name}/src/main/docker/app.yml`)
-            ) {
+            if (shelljs.test('-f', `${destinationPath}/${file.name}/.yo-rc.json`)) {
                 try {
                     const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
                     if (

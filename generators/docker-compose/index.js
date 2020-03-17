@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -67,6 +67,7 @@ module.exports = class extends BaseDockerGenerator {
     }
 
     get prompting() {
+        if (this.abort) return undefined;
         return super.prompting;
     }
 
@@ -94,6 +95,7 @@ module.exports = class extends BaseDockerGenerator {
                     const yamlConfig = yaml.services[`${lowercaseBaseName}-app`];
                     if (this.gatewayType === 'traefik' && appConfig.applicationType === 'gateway') {
                         delete yamlConfig.ports; // Do not export the ports as Traefik is the gateway
+                        this.keycloakRedirectUris += '"http://localhost/*", "https://localhost/*", ';
                     } else if (appConfig.applicationType === 'gateway' || appConfig.applicationType === 'monolith') {
                         this.keycloakRedirectUris += `"http://localhost:${portIndex}/*", "https://localhost:${portIndex}/*", `;
                         const ports = yamlConfig.ports[0].split(':');
@@ -110,26 +112,25 @@ module.exports = class extends BaseDockerGenerator {
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
                     }
 
-                    if (this.monitoring === 'prometheus') {
-                        yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENABLED=true');
-                        yamlConfig.environment.push('JHIPSTER_METRICS_PROMETHEUS_ENDPOINT=/prometheusMetrics');
-                    }
-
                     if (this.serviceDiscoveryType === 'eureka') {
                         // Set the JHipster Registry password
                         yamlConfig.environment.push(`JHIPSTER_REGISTRY_PASSWORD=${this.adminPassword}`);
                     }
 
-                    parentConfiguration[`${lowercaseBaseName}-app`] = yamlConfig;
+                    if (!this.serviceDiscoveryType && appConfig.skipClient) {
+                        yamlConfig.environment.push('SERVER_PORT=80'); // to simplify service resolution in docker/k8s
+                    }
+
+                    parentConfiguration[`${lowercaseBaseName}`] = yamlConfig;
 
                     // Add database configuration
                     const database = appConfig.prodDatabaseType;
-                    if (database !== 'no') {
+                    if (database !== 'no' && database !== 'oracle') {
                         const relativePath = pathjs.relative(this.destinationRoot(), `${path}/src/main/docker`);
                         const databaseYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/${database}.yml`));
                         const databaseServiceName = `${lowercaseBaseName}-${database}`;
                         let databaseYamlConfig = databaseYaml.services[databaseServiceName];
-                        delete databaseYamlConfig.ports;
+                        if (database !== 'mariadb') delete databaseYamlConfig.ports;
 
                         if (database === 'cassandra') {
                             // node config
@@ -193,6 +194,15 @@ module.exports = class extends BaseDockerGenerator {
                         delete memcachedConfig.ports;
                         parentConfiguration[`${lowercaseBaseName}-memcached`] = memcachedConfig;
                     }
+
+                    // Add Redis support
+                    if (cacheProvider === 'redis') {
+                        this.useRedis = true;
+                        const redisYaml = jsyaml.load(this.fs.read(`${path}/src/main/docker/redis.yml`));
+                        const redisConfig = redisYaml.services[`${lowercaseBaseName}-redis`];
+                        delete redisConfig.ports;
+                        parentConfiguration[`${lowercaseBaseName}-redis`] = redisConfig;
+                    }
                     // Expose authenticationType
                     this.authenticationType = appConfig.authenticationType;
 
@@ -206,10 +216,15 @@ module.exports = class extends BaseDockerGenerator {
                     }
                     yamlString = yamlArray.join('\n');
                     this.appsYaml.push(yamlString);
+
+                    this.skipClient = appConfig.skipClient;
                 });
             },
 
             saveConfig() {
+                if (this.monitoring === 'no') {
+                    this.consoleOptions = [];
+                }
                 this.config.set({
                     appsFolders: this.appsFolders,
                     directoryPath: this.directoryPath,
@@ -236,7 +251,20 @@ module.exports = class extends BaseDockerGenerator {
         } else {
             this.log(`\n${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
         }
-        this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
+        if (this.gatewayType === 'traefik' && this.authenticationType === 'oauth2') {
+            if (!this.skipClient) {
+                this.log(
+                    `\n${chalk.yellow.bold('WARNING!')} The complete generation of the stack with Traefik and OAuth 2.0 is not complete.`
+                );
+                this.log('Please refer to the documentation to finish the configuration of your stack.');
+                this.log('Visit https://www.jhipster.tech/traefik/#configure-for-oauth2');
+            } else {
+                this.log('Please refer to the documentation to help you for the configuration of your stack.');
+                this.log('Visit https://www.jhipster.tech/traefik/#configuration-with-oauth-2.0-and-traefik');
+            }
+        } else {
+            this.log(`You can launch all your infrastructure by running : ${chalk.cyan('docker-compose up -d')}`);
+        }
         if (this.gatewayNb + this.monolithicNb > 1) {
             this.log('\nYour applications will be accessible on these URLs:');
             let portIndex = 8080;

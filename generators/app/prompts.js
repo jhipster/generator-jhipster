@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,7 +22,6 @@ const statistics = require('../statistics');
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
-    askForAccountLinking,
     askForModuleName,
     askFori18n,
     askForTestOpts,
@@ -42,21 +41,6 @@ function askForInsightOptIn() {
         if (prompt.insight !== undefined) {
             statistics.setOptoutStatus(!prompt.insight);
         }
-        done();
-    });
-}
-
-function askForAccountLinking() {
-    const done = this.async();
-
-    this.prompt({
-        when: () => !statistics.isLinked && !statistics.optOut,
-        type: 'confirm',
-        name: 'linkAccount',
-        message: `Would you like to link your ${chalk.cyan('JHipster Online')} account, to get access to and manage your own stats?`,
-        default: false
-    }).then(prompt => {
-        this.linkAccount = true;
         done();
     });
 }
@@ -81,20 +65,9 @@ function askForApplicationType(meta) {
         },
         {
             value: 'uaa',
-            name: 'JHipster UAA server (for microservice OAuth2 authentication)'
+            name: 'JHipster UAA server'
         }
     ];
-
-    if (this.experimental) {
-        applicationTypeChoices.push({
-            value: 'reactive',
-            name: '[Alpha] Reactive monolithic application'
-        });
-        applicationTypeChoices.push({
-            value: 'reactive-micro',
-            name: '[Alpha] Reactive microservice application'
-        });
-    }
 
     const PROMPT = {
         type: 'list',
@@ -110,23 +83,25 @@ function askForApplicationType(meta) {
 
     const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
     promise.then(prompt => {
-        if (prompt.applicationType === 'reactive') {
-            this.applicationType = this.configOptions.applicationType = DEFAULT_APPTYPE;
-            this.reactive = this.configOptions.reactive = true;
-        } else if (prompt.applicationType === 'reactive-micro') {
-            this.applicationType = this.configOptions.applicationType = 'microservice';
-            this.reactive = this.configOptions.reactive = true;
-        } else {
-            this.applicationType = this.configOptions.applicationType = prompt.applicationType;
-            this.reactive = this.configOptions.reactive = false;
-        }
-        done();
+        this.applicationType = this.configOptions.applicationType = prompt.applicationType;
+
+        const REACTIVE_PROMPT = {
+            when: () => ['gateway', 'monolith', 'microservice'].includes(this.applicationType),
+            type: 'confirm',
+            name: 'reactive',
+            message: '[Alpha] Do you want to make it reactive with Spring WebFlux?',
+            default: false
+        };
+
+        this.prompt(REACTIVE_PROMPT).then(reactivePrompt => {
+            this.reactive = this.configOptions.reactive = reactivePrompt.reactive;
+            done();
+        });
     });
 }
 
 function askForModuleName() {
     if (this.existingProject) return;
-
     this.askModuleName(this);
 }
 

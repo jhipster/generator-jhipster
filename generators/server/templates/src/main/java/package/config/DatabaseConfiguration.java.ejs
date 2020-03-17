@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,11 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%=packageName%>.config;
+package <%= packageName %>.config;
 
 import io.github.jhipster.config.JHipsterConstants;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
+<%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import io.r2dbc.spi.ConnectionFactory;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import com.github.mongobee.Mongobee;
@@ -30,10 +33,7 @@ import com.mongodb.MongoClient;
 
 import com.couchbase.client.java.Bucket;
 import com.github.couchmove.Couchmove;
-import <%=packageName%>.repository.CustomN1qlCouchbaseRepository;
-<%_ if (reactive) { _%>
-import <%=packageName%>.repository.reactive.CustomReactiveN1qlCouchbaseRepository;
-<%_ } _%>
+import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
 import org.apache.commons.codec.binary.Base64;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -62,13 +62,18 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
-import org.springframework.context.annotation.Profile;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-import org.springframework.core.convert.converter.Converter;<% } %>
+import org.springframework.context.annotation.Profile;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || (databaseType === 'sql' && reactive)) { _%>
+import org.springframework.core.convert.converter.Converter;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
+    <%_ } _%>
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
@@ -86,7 +91,9 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.BeanNames;
 import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
 import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
+    <%_ if (!reactive) { _%>
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
+    <%_ } _%>
 import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
     <%_ if (reactive) { _%>
 import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
@@ -97,13 +104,31 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.springframework.core.env.Environment;
     <%_ } _%>
+    <%_ if (reactive) { _%>
+import org.springframework.data.convert.CustomConversions;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
+import org.springframework.data.r2dbc.dialect.DialectResolver;
+import org.springframework.data.r2dbc.dialect.R2dbcDialect;
+import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+    <%_ } else { _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+    <%_ } _%>
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import java.sql.SQLException;
 <%_ } } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import java.util.ArrayList;
 import java.util.List;
@@ -116,25 +141,27 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 <%_ } _%>
 
 @Configuration
 <%_ if (databaseType === 'sql') { _%>
-@EnableJpaRepositories("<%=packageName%>.repository")
+    <%_ if (reactive) { _%>
+@EnableR2dbcRepositories("<%= packageName %>.repository")
+    <%_ } else { _%>
+@EnableJpaRepositories("<%= packageName %>.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
 @EnableTransactionManagement
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-@EnableElasticsearchRepositories("<%=packageName%>.repository.search")
+@EnableElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
-    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
-@EnableMongoRepositories(basePackages = "<%=packageName%>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+@EnableMongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
     <%_ } else { _%>
-@EnableMongoRepositories("<%=packageName%>.repository")
-    <%_ } _%>
-    <%_ if (reactive) { _%>
-@EnableReactiveMongoRepositories("<%=packageName%>.repository.reactive")
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
@@ -145,16 +172,17 @@ import java.util.List;
 @Import(value = {MongoAutoConfiguration.class, MongoReactiveAutoConfiguration.class})
     <%_ } else { _%>
 @Import(value = MongoAutoConfiguration.class)
-    <%_ } _%>
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
-@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository")
     <%_ if (reactive) { _%>
-@EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%=packageName%>.repository.reactive")
+@EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository")
+    <%_ } else { _%>
+@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository")
+@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
     <%_ } _%>
 @Import(value = CouchbaseAutoConfiguration.class)
-@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
 <%_ } _%>
 public class DatabaseConfiguration {
 
@@ -229,7 +257,7 @@ public class DatabaseConfiguration {
         mongobee.setDbName(mongoProperties.getMongoClientDatabase());
         mongobee.setMongoTemplate(mongoTemplate);
         // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("<%=packageName%>.config.dbmigrations");
+        mongobee.setChangeLogsScanPackage("<%= packageName %>.config.dbmigrations");
         mongobee.setEnabled(true);
         return mongobee;
     }<% } %><% if (databaseType === 'couchbase') { %>
@@ -244,6 +272,8 @@ public class DatabaseConfiguration {
         converters.add(BigDecimalToStringConverter.INSTANCE);
         converters.add(StringToBigDecimalConverter.INSTANCE);
         converters.add(StringToByteConverter.INSTANCE);
+        converters.add(UUIDToStringConverter.INSTANCE);
+        converters.add(StringToUUIDConverter.INSTANCE);
         return new CouchbaseCustomConversions(converters);
     }
 
@@ -333,7 +363,7 @@ public class DatabaseConfiguration {
     }
 
     /**
-     * Simple singleton to convert from {@link String} {@link byte[]} representation.
+     * Simple singleton to convert from {@link String} {@code byte[]} representation.
      */
     @ReadingConverter
     public enum StringToByteConverter implements Converter<String, byte[]> {
@@ -342,6 +372,67 @@ public class DatabaseConfiguration {
         @Override
         public byte[] convert(String source) {
             return Base64.decodeBase64(source);
+        }
+    }
+
+    /**
+    * Simple singleton to convert {@link UUID}s to their {@link String} representation.
+    */
+    @WritingConverter
+    public enum UUIDToStringConverter implements Converter<UUID, String> {
+
+        INSTANCE;
+
+        @Override
+        public String convert(UUID source) {
+            return source == null ? null : source.toString();
+        }
+    }
+
+    /**
+    * Simple singleton to convert from {@link String} {@link UUID} representation.
+    */
+    @ReadingConverter
+    public enum StringToUUIDConverter implements Converter<String, UUID> {
+
+        INSTANCE;
+
+        @Override
+        public UUID convert(String source) {
+            return source == null ? null : UUID.fromString(source);
+        }
+
+    }
+<%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+    // LocalDateTime seems to be the only type that is supported across all drivers atm
+    // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
+    @Bean
+    public R2dbcCustomConversions r2dbcCustomConversions(ConnectionFactory connectionFactory) {
+        R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
+        List<Object> converters = new ArrayList<>(dialect.getConverters());
+        converters.add(new InstantWriteConverter());
+        converters.add(new InstantReadConverter());
+        converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
+        return new R2dbcCustomConversions(
+            CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
+            Collections.emptyList());
+    }
+
+    @WritingConverter
+    public static class InstantWriteConverter implements Converter<Instant, LocalDateTime> {
+
+        public LocalDateTime convert(Instant source) {
+            return LocalDateTime.ofInstant(source, ZoneOffset.UTC);
+        }
+    }
+
+    @ReadingConverter
+    public static class InstantReadConverter implements Converter<LocalDateTime, Instant> {
+
+        @Override
+        public Instant convert(LocalDateTime localDateTime) {
+            return localDateTime.toInstant(ZoneOffset.UTC);
         }
     }
 <%_ } _%>

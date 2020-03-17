@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,7 +47,7 @@
                 "health": "Akalmazás állapota",
                 "configuration": "Konfiguráció",
                 "logs": "Naplók",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Nyomkövetés",
                 <%_ } _%>
                 "apidocs": "API dokumentáció",
@@ -57,15 +57,15 @@
             "language": "Nyelvek"
         },
         "form": {
-            "username": "Azonosító",
+            "username.label": "Azonosító",
             "username.placeholder": "Az Ön felhasználói neve",
-            "currentpassword": "Current password",
+            "currentpassword.label": "Current password",
             "currentpassword.placeholder": "Current password",
-            "newpassword": "Új jelszó",
+            "newpassword.label": "Új jelszó",
             "newpassword.placeholder": "Új jelszava",
-            "confirmpassword": "Új jelszó megerősítése",
+            "confirmpassword.label": "Új jelszó megerősítése",
             "confirmpassword.placeholder": "Írja be újra a jelszavát",
-            "email": "Email",
+            "email.label": "Email",
             "email.placeholder": "Az Ön email címe"
         },
         "messages": {
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "A jelszó kötelező.",
-                    "minlength": "A jelszó legalább 6 karakterből kell, hogy álljon",
+                    "minlength": "A jelszó legalább 4 karakterből kell, hogy álljon",
                     "maxlength": "A jelszó nem lehet hosszabb mint 50 karakter",
                     "strength": "A jelszó bonyolultsága:"
                 },
                 "confirmpassword": {
                     "required": "A jelszó megerősítés kötelező.",
-                    "minlength": "A jelszó megerősítés legalább 6 betűből kell, hogy álljon",
+                    "minlength": "A jelszó megerősítés legalább 4 betűből kell, hogy álljon",
                     "maxlength": "A jelszó megerősítés nem lehet hosszabb mint 50 betű"
                 },
                 "email": {
@@ -152,7 +152,11 @@
         "userexists": "Ezzel a felhasználónévvel már regisztráltak!",
         "emailexists": "Ezzel az email címmel már regisztráltak!",
         "idexists": "Az új {{entityName}}-nak/nek nem lehet még ID-ja",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Ez a lábléc."
 }

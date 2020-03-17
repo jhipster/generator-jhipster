@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -16,16 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
+
+const defaultCommands = {
     app: {
         default: true,
-        desc: 'Create a new JHipster application based on the selected options'
+        desc: '[Default] Create a new JHipster application based on the selected options'
     },
     aws: {
         desc: 'Deploy the current application to Amazon Web Services'
     },
     'aws-containers': {
         desc: 'Deploy the current application to Amazon Web Services using ECS'
+    },
+    'azure-app-service': {
+        desc: 'Deploy the current application to Azure App Service'
+    },
+    'azure-spring-cloud': {
+        desc: 'Deploy the current application to Azure Spring Cloud'
     },
     'ci-cd': {
         desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools'
@@ -53,7 +60,7 @@ module.exports = {
     'import-jdl': {
         argument: ['jdlFiles...'],
         cliOnly: true,
-        desc: `Create entities from the JDL file passed in argument.
+        desc: `Create entities from the JDL file/content passed in argument.
   By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
         help: `
     --skip-install        # Do not automatically install dependencies                              Default: false
@@ -63,25 +70,40 @@ module.exports = {
     --ignore-application  # Ignores application generation                                         Default: false
     --ignore-deployments  # Ignores deployments generation                                         Default: false
     --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
+    --skip-db-changelog   # Disable generation of database changelogs                              Default: false
+    --inline              # Pass JDL content inline. Argument can be skipped when passing this
 
 Arguments:
-    jdlFiles  # The JDL file names  Type: String[]  Required: true
+    jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
 
 Example:
     jhipster import-jdl myfile.jdl
     jhipster import-jdl myfile.jdl --interactive
     jhipster import-jdl myfile1.jdl myfile2.jdl
+    jhipster import-jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster import-jdl --inline \\
+        "application {
+            config {
+                baseName jhapp,
+                testFrameworks [protractor]
+            }
+        }"
         `
     },
     info: {
         desc: 'Display information about your current project and system'
     },
     kubernetes: {
+        alias: 'k8s',
         desc: 'Deploy the current application to Kubernetes'
     },
     'kubernetes-helm': {
         alias: 'k8s-helm',
         desc: 'Deploy the current application to Kubernetes using Helm package manager'
+    },
+    'kubernetes-knative': {
+        alias: 'knative',
+        desc: 'Deploy the current application to Kubernetes using knative constructs'
     },
     languages: {
         argument: ['languages...'],
@@ -99,7 +121,15 @@ Example:
         argument: ['name'],
         desc: 'Create a new Spring controller'
     },
+    'openapi-client': {
+        desc: 'Generates java client code from an OpenAPI/Swagger definition'
+    },
     upgrade: {
         desc: 'Upgrade the JHipster version, and upgrade the generated application'
+    },
+    'upgrade-config': {
+        desc: 'Upgrade the JHipster configuration'
     }
 };
+
+module.exports = defaultCommands;

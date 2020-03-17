@@ -2,7 +2,7 @@ import { $, ElementFinder } from 'protractor';
 
 import BasePage from './base-component';
 import SignInPage from './signin-page';
-<%_ if (authenticationType !== 'oauth2') { _%>
+<%_ if (!skipUserManagement) { _%>
 import RegisterPage from './register-page';
 import PasswordPage from './password-page';
 import SettingsPage from './settings-page';
@@ -25,7 +25,7 @@ export default class NavBarPage extends BasePage {
     this.signInPage = new SignInPage();
   }
 
-  <%_ if (authenticationType !== 'oauth2') { _%>
+  <%_ if (!skipUserManagement) { _%>
   async getPasswordPage() {
     await this.clickOnAccountMenuItem('password');
     return new PasswordPage();
@@ -38,7 +38,7 @@ export default class NavBarPage extends BasePage {
 
   async getRegisterPage() {
     await this.clickOnAccountMenu();
-    await this.clickOnTabMenu('/register');
+    await this.clickOnTabMenu('/account/register');
     return new RegisterPage();
   }
   <%_ } _%>
@@ -84,7 +84,7 @@ export default class NavBarPage extends BasePage {
   }
 
   async clickOnEntity(entityName: string) {
-    await this.selector.$(`.dropdown-item[href="/entity/${entityName}"]`).click();
+    await this.selector.$(`.dropdown-item[href="/${entityName}"]`).click();
   }
 
   async autoSignIn() {

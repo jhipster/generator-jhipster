@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Java Hipster га, ҳуш келибсиз!",
+        "subtitle": "Бу сизнинг бош саҳифангиз",
+        "logged": {
+            "message": "Сиз \"{{username}}\" фойдаланувчиси сифатида кирдиз."
+        },
+        "question": "JHipster бўйича саволларингиз бўлса::",
+        "link": {
+            "homepage": "JHipster бош саҳифаси",
+            "stackoverflow": "JHipster Stack Overflowда",
+            "bugtracker": "JHipster баг трекери",
+            "chat": "JHipster жамоавий чат хонаси",
+            "follow": "Twitterдаги логини @jhipster"
+        },
+        "like": "Агар JHipster сизга ёқса, ушбу манзилда юлдузча қуйишни унунманг",
+        "github": "GitHub"
+    }
+}

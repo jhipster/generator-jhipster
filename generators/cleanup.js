@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,10 +22,14 @@ const constants = require('./generator-constants');
 const ANGULAR_DIR = constants.ANGULAR_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = {
     cleanupOldFiles,
-    cleanupOldServerFiles
+    cleanupOldServerFiles,
+    upgradeFiles
 };
 
 /**
@@ -74,6 +78,32 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.html`);
         generator.removeFile(`${ANGULAR_DIR}admin/metrics/metrics-modal.component.ts`);
         generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics-modal.component.spec.ts`);
+    }
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
+        generator.removeFile(`${ANGULAR_DIR}account/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}core/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}home/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}layouts/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}shared/index.ts`);
+        generator.removeFile(`${ANGULAR_DIR}shared/shared-common.module.ts`);
+    }
+
+    if (generator.isJhipsterVersionLessThan('6.3.0') && generator.configOptions && generator.configOptions.clientFramework === REACT) {
+        generator.removeFile('tslint.json');
+    }
+
+    if (generator.isJhipsterVersionLessThan('6.4.0') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
+        generator.removeFile(`${ANGULAR_DIR}admin/admin.route.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/admin.module.ts`);
+    }
+
+    if (generator.isJhipsterVersionLessThan('6.6.1') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
+        generator.removeFile(`${ANGULAR_DIR}core/language/language.helper.ts`);
+    }
+
+    if (generator.isJhipsterVersionLessThan('6.8.0') && generator.configOptions && generator.configOptions.clientFramework === 'angularX') {
+        generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
 }
 
@@ -176,8 +206,67 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         }
     }
     if (generator.isJhipsterVersionLessThan('6.0.0')) {
+        generator.removeFile(`${javaDir}web/rest/errors/CustomParameterizedException.java`);
+        generator.removeFile(`${javaDir}web/rest/errors/InternalServerErrorException.java`);
         generator.removeFile(`${javaDir}web/rest/util/PaginationUtil.java`);
         generator.removeFile(`${javaDir}web/rest/util/HeaderUtil.java`);
         generator.removeFile(`${testDir}web/rest/util/PaginationUtilUnitTest.java`);
+        generator.removeFile(`${javaDir}web/rest/vm/LoggerVM.java`);
+        generator.removeFile(`${javaDir}web/rest/LogsResource.java`);
+        generator.removeFile(`${testDir}web/rest/LogsResourceIT.java`);
+        generator.removeFile(`${javaDir}config/OAuth2Configuration.java`);
+        generator.removeFile(`${javaDir}security/OAuth2AuthenticationSuccessHandler.java`);
+
+        generator.removeFolder(`${CLIENT_MAIN_SRC_DIR}app/shared/layout/header/menus`);
+        generator.removeFolder(`${CLIENT_TEST_SRC_DIR}spec/app/shared/layout/header/menus`);
     }
+    if (generator.isJhipsterVersionLessThan('6.1.0')) {
+        generator.config.delete('blueprint');
+        generator.config.delete('blueprintVersion');
+    }
+    if (generator.isJhipsterVersionLessThan('6.5.2')) {
+        generator.removeFile(`${testDir}service/mapper/UserMapperIT.java`);
+        generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaConsumer.java`);
+        generator.removeFile(`${javaDir}service/${generator.upperFirstCamelCase(generator.baseName)}KafkaProducer.java`);
+        generator.removeFile(`${testDir}web/rest/ClientForwardControllerIT.java`);
+    }
+    if (generator.isJhipsterVersionLessThan('6.6.1')) {
+        generator.removeFile(`${javaDir}web/rest/errors/EmailNotFoundException.java`);
+        generator.removeFile(`${javaDir}config/DefaultProfileUtil.java`);
+        generator.removeFolder(`${javaDir}service/util`);
+    }
+    if (generator.isJhipsterVersionLessThan('6.8.0')) {
+        generator.removeFile(`${javaDir}security/oauth2/JwtAuthorityExtractor.java`);
+    }
+}
+
+/**
+ * Upgrade files.
+ *
+ * @param {any} generator - reference to generator
+ */
+function upgradeFiles(generator) {
+    let atLeastOneSuccess = false;
+    if (generator.isJhipsterVersionLessThan('6.1.0')) {
+        const languages = generator.config.get('languages');
+        if (languages) {
+            const langNameDiffer = function(lang) {
+                const langProp = lang.replace(/-/g, '_');
+                // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+                const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
+                return langProp !== langJavaProp ? [langProp, langJavaProp] : undefined;
+            };
+            languages
+                .map(langNameDiffer)
+                .filter(props => props)
+                .forEach(props => {
+                    const code = generator.renameFile(
+                        `${SERVER_MAIN_RES_DIR}i18n/messages_${props[0]}.properties`,
+                        `${SERVER_MAIN_RES_DIR}i18n/messages_${props[1]}.properties`
+                    );
+                    atLeastOneSuccess = atLeastOneSuccess || code;
+                });
+        }
+    }
+    return atLeastOneSuccess;
 }

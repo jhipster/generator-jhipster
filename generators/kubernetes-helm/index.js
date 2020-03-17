@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const shelljs = require('shelljs');
 const fs = require('fs');
 const prompts = require('../kubernetes/prompts');
 const writeFiles = require('./files').writeFiles;
 const BaseDockerGenerator = require('../generator-base-docker');
-const { loadFromYoRc, checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkImages, generateJwtSecret, configureImageNames, setAppsFolderPaths } = require('../docker-base');
+const { checkKubernetes, checkHelm, loadConfig, saveConfig, setupKubernetesConstants, setupHelmConstants } = require('../kubernetes-base');
 const statistics = require('../statistics');
-const packagejs = require('../../package.json');
 
 module.exports = class extends BaseDockerGenerator {
     get initializing() {
@@ -33,35 +32,12 @@ module.exports = class extends BaseDockerGenerator {
                 this.log(chalk.white(`${chalk.bold('⎈')} Welcome to the JHipster Kubernetes Helm Generator ${chalk.bold('⎈')}`));
                 this.log(chalk.white(`Files will be generated in folder: ${chalk.yellow(this.destinationRoot())}`));
             },
-
             ...super.initializing,
-
-            checkKubernetes() {
-                if (this.skipChecks) return;
-                const done = this.async();
-
-                shelljs.exec('helm version --client', { silent: true }, (code, stdout, stderr) => {
-                    if (stderr) {
-                        this.log(
-                            `${chalk.yellow.bold('WARNING!')} helm 2.8 or later is not installed on your computer.\n` +
-                                'Make sure you have helm installed. Read https://github.com/helm/helm/\n'
-                        );
-                    }
-                    done();
-                });
-            },
-
-            loadConfig() {
-                loadFromYoRc.call(this);
-                this.kubernetesNamespace = this.config.get('kubernetesNamespace');
-                this.kubernetesServiceType = this.config.get('kubernetesServiceType');
-                this.ingressDomain = this.config.get('ingressDomain');
-                this.istio = this.config.get('istio');
-                this.jhipsterVersion = packagejs.version;
-                this.dbRandomPassword = Math.random()
-                    .toString(36)
-                    .slice(-8);
-            }
+            checkKubernetes,
+            checkHelm,
+            loadConfig,
+            setupKubernetesConstants,
+            setupHelmConstants
         };
     }
 
@@ -79,6 +55,7 @@ module.exports = class extends BaseDockerGenerator {
             askForDockerPushCommand: prompts.askForDockerPushCommand,
             askForIstioSupport: prompts.askForIstioSupport,
             askForKubernetesServiceType: prompts.askForKubernetesServiceType,
+            askForIngressType: prompts.askForIngressType,
             askForIngressDomain: prompts.askForIngressDomain
         };
     }
@@ -102,23 +79,7 @@ module.exports = class extends BaseDockerGenerator {
                     }
                 });
             },
-
-            saveConfig() {
-                this.config.set({
-                    appsFolders: this.appsFolders,
-                    directoryPath: this.directoryPath,
-                    clusteredDbApps: this.clusteredDbApps,
-                    serviceDiscoveryType: this.serviceDiscoveryType,
-                    jwtSecretKey: this.jwtSecretKey,
-                    dockerRepositoryName: this.dockerRepositoryName,
-                    dockerPushCommand: this.dockerPushCommand,
-                    kubernetesNamespace: this.kubernetesNamespace,
-                    kubernetesServiceType: this.kubernetesServiceType,
-                    ingressDomain: this.ingressDomain,
-                    monitoring: this.monitoring,
-                    istio: this.istio
-                });
-            }
+            saveConfig
         };
     }
 

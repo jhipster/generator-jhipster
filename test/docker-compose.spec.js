@@ -6,7 +6,7 @@ const fse = require('fs-extra');
 const expectedFiles = {
     dockercompose: ['docker-compose.yml', 'jhipster-registry.yml', 'central-server-config/application.yml'],
     elk: ['jhipster-console.yml', 'log-conf/logstash.conf'],
-    prometheus: ['prometheus.yml', 'prometheus-conf/alert.rules', 'prometheus-conf/prometheus.yml', 'alertmanager-conf/config.yml'],
+    prometheus: ['prometheus.yml', 'prometheus-conf/alert_rules.yml', 'prometheus-conf/prometheus.yml', 'alertmanager-conf/config.yml'],
     monolith: ['docker-compose.yml']
 };
 
@@ -545,6 +545,28 @@ describe('JHipster Docker Compose Sub Generator', () => {
             assert.noFileContent('docker-compose.yml', /container_name:/);
             assert.noFileContent('docker-compose.yml', /external_links:/);
             assert.noFileContent('docker-compose.yml', /links:/);
+        });
+    });
+
+    describe('oracle monolith', () => {
+        before(done => {
+            helpers
+                .run(require.resolve('../generators/docker-compose'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/compose/'), dir);
+                })
+                .withOptions({ skipChecks: true })
+                .withPrompts({
+                    deploymentApplicationType: 'monolith',
+                    directoryPath: './',
+                    chosenApps: ['12-oracle'],
+                    clusteredDbApps: [],
+                    monitoring: 'no'
+                })
+                .on('end', done);
+        });
+        it('creates expected default files', () => {
+            assert.file(expectedFiles.monolith);
         });
     });
 });

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -27,23 +27,30 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-
+server:
+    port: ${PORT}
+management:
+    health:
+        diskspace:
+            enabled: false
+<%_ if (gaeCloudSQLInstanceNeeded === 'Y') { _%>
 spring:
-<%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mysql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
-        username: <%=gcpCloudSqlUserName%>
-        password: <%=gcpCloudSqlPassword%>
+        url: "jdbc:mysql://google/<%= gcpCloudSqlDatabaseName %>?cloudSqlInstance=<%= gcpCloudSqlInstanceName %>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false"
+        username: "<%= gcpCloudSqlUserName %>"
+        password: "<%= gcpCloudSqlPassword %>"
         hikari:
             maximumPoolSize: 8
-<%_ } _%>
-<%_ if (prodDatabaseType === 'postgresql') { _%>
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://google/<%=gcpCloudSqlDatabaseName%>?cloudSqlInstance=<%=gcpCloudSqlInstanceName%>&socketFactory=com.google.cloud.sql.postgres.SocketFactory
-        username: <%=gcpCloudSqlUserName%>
-        password: <%=gcpCloudSqlPassword%>
+        url: "jdbc:postgresql://google/<%= gcpCloudSqlDatabaseName %>?cloudSqlInstance=<%= gcpCloudSqlInstanceName %>&socketFactory=com.google.cloud.sql.postgres.SocketFactory"
+        username: "<%= gcpCloudSqlUserName %>"
+        password: "<%= gcpCloudSqlPassword %>"
         hikari:
             maximumPoolSize: 8
+    <%_ } _%>
 <%_ } _%>

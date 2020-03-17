@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -28,7 +28,7 @@ const constants = require('../generator-constants');
 const statistics = require('../statistics');
 const { getBase64Secret, getRandomHex } = require('../utils');
 
-let useBlueprint;
+let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -59,17 +59,9 @@ module.exports = class extends BaseBlueprintGenerator {
         this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
 
         this.setupServerOptions(this);
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'server', {
-                ...this.options,
-                'client-hook': !this.skipClient,
-                configOptions: this.configOptions
-            });
-        } else {
-            useBlueprint = false;
-        }
+
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
+
         this.registerPrettierTransform();
     }
 
@@ -90,8 +82,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_DIR = constants.MAIN_DIR;
                 this.TEST_DIR = constants.TEST_DIR;
-                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-                this.CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
                 this.CLIENT_WEBPACK_DIR = constants.CLIENT_WEBPACK_DIR;
                 this.SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -106,8 +96,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_MONGODB = constants.DOCKER_MONGODB;
                 this.DOCKER_COUCHBASE = constants.DOCKER_COUCHBASE;
                 this.DOCKER_MSSQL = constants.DOCKER_MSSQL;
+                this.DOCKER_NEO4J = constants.DOCKER_NEO4J;
                 this.DOCKER_HAZELCAST_MANAGEMENT_CENTER = constants.DOCKER_HAZELCAST_MANAGEMENT_CENTER;
                 this.DOCKER_MEMCACHED = constants.DOCKER_MEMCACHED;
+                this.DOCKER_REDIS = constants.DOCKER_REDIS;
                 this.DOCKER_CASSANDRA = constants.DOCKER_CASSANDRA;
                 this.DOCKER_ELASTICSEARCH = constants.DOCKER_ELASTICSEARCH;
                 this.DOCKER_KEYCLOAK = constants.DOCKER_KEYCLOAK;
@@ -121,13 +113,25 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.DOCKER_CONSUL = constants.DOCKER_CONSUL;
                 this.DOCKER_CONSUL_CONFIG_LOADER = constants.DOCKER_CONSUL_CONFIG_LOADER;
                 this.DOCKER_SWAGGER_EDITOR = constants.DOCKER_SWAGGER_EDITOR;
+                this.DOCKER_PROMETHEUS = constants.DOCKER_PROMETHEUS;
+                this.DOCKER_GRAFANA = constants.DOCKER_GRAFANA;
+                this.DOCKER_COMPOSE_FORMAT_VERSION = constants.DOCKER_COMPOSE_FORMAT_VERSION;
 
                 this.JAVA_VERSION = constants.JAVA_VERSION;
-                this.SCALA_VERSION = constants.SCALA_VERSION;
 
                 this.NODE_VERSION = constants.NODE_VERSION;
                 this.YARN_VERSION = constants.YARN_VERSION;
                 this.NPM_VERSION = constants.NPM_VERSION;
+                this.GRADLE_VERSION = constants.GRADLE_VERSION;
+
+                this.JIB_VERSION = constants.JIB_VERSION;
+                this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
+                this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+                this.JACOCO_VERSION = constants.JACOCO_VERSION;
+
+                this.KAFKA_VERSION = constants.KAFKA_VERSION;
+
+                this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
 
                 this.packagejs = packagejs;
                 const configuration = this.getAllJhipsterConfig(this, true);
@@ -136,7 +140,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.applicationType = 'monolith';
                 }
                 this.reactive = configuration.get('reactive') || this.configOptions.reactive;
-                this.reactiveRepository = this.reactive ? 'reactive/' : '';
                 this.packageName = configuration.get('packageName');
                 this.serverPort = configuration.get('serverPort');
                 if (this.serverPort === undefined) {
@@ -166,11 +169,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
-                this.enableHibernateCache =
-                    configuration.get('enableHibernateCache') ||
-                    (configuration.get('hibernateCache') !== undefined &&
-                        configuration.get('hibernateCache') !== 'no' &&
-                        configuration.get('hibernateCache') !== 'memcached');
+                this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
 
                 this.databaseType = configuration.get('databaseType');
                 if (this.databaseType === 'mongodb') {
@@ -186,26 +185,26 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.prodDatabaseType = 'cassandra';
                     this.enableHibernateCache = false;
                 } else if (this.databaseType === 'no') {
-                    // no database, only available for microservice applications
                     this.devDatabaseType = 'no';
                     this.prodDatabaseType = 'no';
                     this.enableHibernateCache = false;
+                    if (this.authenticationType !== 'uaa') {
+                        this.skipUserManagement = true;
+                    }
                 } else {
                     // sql
                     this.devDatabaseType = configuration.get('devDatabaseType');
                     this.prodDatabaseType = configuration.get('prodDatabaseType');
                 }
-
-                // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-                if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
-                    this.cacheProvider = 'hazelcast';
-                }
+                this.skipFakeData = configuration.get('skipFakeData') || this.configOptions.skipFakeData;
 
                 this.buildTool = configuration.get('buildTool');
                 this.jhipsterVersion = packagejs.version;
                 if (this.jhipsterVersion === undefined) {
                     this.jhipsterVersion = configuration.get('jhipsterVersion');
                 }
+                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
                 this.authenticationType = configuration.get('authenticationType');
                 if (this.authenticationType === 'session') {
                     this.rememberMeKey = configuration.get('rememberMeKey');
@@ -217,7 +216,15 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (uaaBaseName) {
                     this.uaaBaseName = uaaBaseName;
                 }
+                const embeddableLaunchScript = configuration.get('embeddableLaunchScript');
+                if (embeddableLaunchScript) {
+                    this.embeddableLaunchScript = embeddableLaunchScript;
+                }
                 this.clientFramework = configuration.get('clientFramework');
+                this.clientTheme = configuration.get('clientTheme');
+                if (!this.clientTheme) {
+                    this.clientTheme = 'none';
+                }
                 const testFrameworks = configuration.get('testFrameworks');
                 if (testFrameworks) {
                     this.testFrameworks = testFrameworks;
@@ -245,14 +252,13 @@ module.exports = class extends BaseBlueprintGenerator {
                 }
 
                 if (this.entitySuffix === this.dtoSuffix) {
-                    this.error(chalk.red('Entities cannot be generated as the entity suffix and DTO suffix are equals !'));
+                    this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
                 }
 
                 const serverConfigFound =
                     this.packageName !== undefined &&
                     this.authenticationType !== undefined &&
                     this.cacheProvider !== undefined &&
-                    this.enableHibernateCache !== undefined &&
                     this.websocket !== undefined &&
                     this.databaseType !== undefined &&
                     this.devDatabaseType !== undefined &&
@@ -300,7 +306,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -340,7 +346,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get prompting() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._prompting();
     }
 
@@ -374,7 +380,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.mainClass = this.getMainClassName();
-                this.cacheManagerIsAvailable = ['ehcache', 'hazelcast', 'infinispan', 'memcached'].includes(this.cacheProvider);
+                this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(
+                    this.cacheProvider
+                );
+                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
                 this.pkType = this.getPkType(this.databaseType);
 
                 this.packageFolder = this.packageName.replace(/\./g, '/');
@@ -407,7 +416,8 @@ module.exports = class extends BaseBlueprintGenerator {
                     enableSwaggerCodegen: this.enableSwaggerCodegen,
                     jwtSecretKey: this.jwtSecretKey,
                     rememberMeKey: this.rememberMeKey,
-                    enableTranslation: this.enableTranslation
+                    enableTranslation: this.enableTranslation,
+                    embeddableLaunchScript: this.embeddableLaunchScript
                 };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     config.nativeLanguage = this.nativeLanguage;
@@ -419,7 +429,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get configuring() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._configuring();
     }
 
@@ -443,6 +453,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
+                if (this.configOptions.skipClient) {
+                    this.skipClient = this.configOptions.skipClient;
+                }
                 if (this.configOptions.uaaBaseName !== undefined) {
                     this.uaaBaseName = this.configOptions.uaaBaseName;
                 }
@@ -459,7 +472,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get default() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._default();
     }
 
@@ -469,7 +482,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 
@@ -492,7 +505,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get install() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._install();
     }
 
@@ -500,14 +513,6 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
-                if (this.prodDatabaseType === 'oracle') {
-                    this.log('\n\n');
-                    this.warning(
-                        `${chalk.yellow.bold(
-                            'You have selected Oracle database.\n'
-                        )}Please follow our documentation on using Oracle to set up the \nOracle proprietary JDBC driver.`
-                    );
-                }
                 this.log(chalk.green.bold('\nServer application generated successfully.\n'));
 
                 let executable = 'mvnw';
@@ -524,7 +529,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get end() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._end();
     }
 };

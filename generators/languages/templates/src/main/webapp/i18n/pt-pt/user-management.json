@@ -5,9 +5,9 @@
             "createLabel": "Adicionar",
             "createOrEditLabel": "Criar ou editar utilizador"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
+        "created": "Novo utilizador criado com identificador {{ param }}",
+        "updated": "Utilizador com identificador {{ param }} actualizado",
+        "deleted": "Utilizador com identificador {{ param }} eliminado",
         "delete": {
             "question": "Tem a certeza que deseja eliminar o utilizador {{ login }}?"
         },

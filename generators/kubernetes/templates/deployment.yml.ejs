@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: apps/v1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>
@@ -33,6 +33,18 @@ spec:
         app: <%= app.baseName.toLowerCase() %>
         version: "v1"
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - <%= app.baseName.toLowerCase() %>
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       initContainers:
         - name: init-ds
           image: busybox:latest
@@ -110,7 +122,7 @@ spec:
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mysql') { _%>
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:mysql://<%= app.baseName.toLowerCase() %>-mysql.<%= kubernetesNamespace %>.svc.cluster.local:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false
+          value: jdbc:mysql://<%= app.baseName.toLowerCase() %>-mysql.<%= kubernetesNamespace %>.svc.cluster.local:3306/<%= app.baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mariadb') { _%>
         - name: SPRING_DATASOURCE_URL
@@ -125,12 +137,12 @@ spec:
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://<%= app.baseName.toLowerCase() %>-postgresql.<%= kubernetesNamespace %>.svc.cluster.local:5432/<%= app.baseName %>
         - name: SPRING_DATASOURCE_USERNAME
-          value: <%= app.baseName.toLowerCase() %>
+          value: <%= app.baseName %>
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: <%= app.baseName.toLowerCase() %>-postgresql
-              key: postgres-password
+              key: postgresql-password
         <%_ } _%>
         <%_ if (app.prodDatabaseType === 'mongodb') { _%>
         - name: SPRING_DATA_MONGODB_DATABASE
@@ -147,12 +159,26 @@ spec:
         <%_ if (app.searchEngine === 'elasticsearch') { _%>
         - name: SPRING_DATA_JEST_URI
           value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
+        - name: SPRING_ELASTICSEARCH_REST_URIS
+          value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
         <%_ } _%>
         <%_ if (app.messageBroker === 'kafka') { _%>
-        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
-          value: jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local
-        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES
-          value: jhipster-zookeeper.<%= kubernetesNamespace %>.svc.cluster.local
+        - name: KAFKA_CONSUMER_KEY_DESERIALIZER
+          value: 'org.apache.kafka.common.serialization.StringDeserializer'
+        - name: KAFKA_CONSUMER_VALUE_DESERIALIZER
+          value: 'org.apache.kafka.common.serialization.StringDeserializer'
+        - name: KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+          value: 'jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
+        - name: KAFKA_CONSUMER_GROUP_ID
+          value: '<%= app.baseName.toLowerCase() %>'
+        - name: KAFKA_CONSUMER_AUTO_OFFSET_RESET
+          value: 'earliest'
+        - name: KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+          value: 'jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
+        - name: KAFKA_PRODUCER_KEY_DESERIALIZER
+          value: 'org.apache.kafka.common.serialization.StringDeserializer'
+        - name: KAFKA_PRODUCER_VALUE_DESERIALIZER
+          value: 'org.apache.kafka.common.serialization.StringDeserializer'
         <%_ } _%>
         <%_ if (monitoring === 'elk') { _%>
         - name: JHIPSTER_METRICS_LOGS_ENABLED
@@ -169,7 +195,7 @@ spec:
             <%_ } _%>
         <%_ } _%>
         <%_ if (monitoring === 'prometheus') { _%>
-        - name: JHIPSTER_METRICS_PROMETHEUS_ENABLED
+        - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
           value: 'true'
         - name: JHIPSTER_METRICS_PROMETHEUS_ENDPOINT
           value: /prometheusMetrics
@@ -182,23 +208,23 @@ spec:
           value: " -Xmx256m -Xms256m"
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "500m"
           limits:
-            memory: "512Mi"
+            memory: "1Gi"
             cpu: "1"
         ports:
         - name: http
           containerPort: <%= app.serverPort %>
         readinessProbe:
           httpGet:
-            path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? "/" + app.baseName.toLowerCase() : "" %>/management/health
+            path: /management/health
             port: http
           initialDelaySeconds: 20
           periodSeconds: 15
           failureThreshold: 6
         livenessProbe:
           httpGet:
-            path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? "/" + app.baseName.toLowerCase() : "" %>/management/health
+            path: /management/health
             port: http
           initialDelaySeconds: 120

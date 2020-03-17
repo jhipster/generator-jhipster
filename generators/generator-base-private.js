@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -19,7 +19,6 @@
 
 const path = require('path');
 const _ = require('lodash');
-const fs = require('fs');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const shelljs = require('shelljs');
@@ -34,7 +33,9 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
 
-const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 /**
  * This is the Generator base private class.
@@ -47,7 +48,6 @@ const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 module.exports = class extends Generator {
     constructor(args, opts) {
         super(args, opts);
-        this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
         // expose lodash to templates
         this._ = _;
     }
@@ -55,6 +55,22 @@ module.exports = class extends Generator {
     /* ======================================================================== */
     /* private methods use within generator (not exposed to modules) */
     /* ======================================================================== */
+
+    /**
+     * Override yeoman generator's usage function to fine tune --help message.
+     */
+    usage() {
+        return super.usage().replace('yo jhipster:', 'jhipster ');
+    }
+
+    /**
+     * Override yeoman generator's destinationPath to apply custom output dir.
+     */
+    destinationPath(...paths) {
+        paths = path.join(...paths);
+        paths = this.applyOutputPathCustomizer(paths);
+        return paths ? super.destinationPath(paths) : paths;
+    }
 
     /**
      * Install I18N Client Files By Language
@@ -66,7 +82,7 @@ module.exports = class extends Generator {
     installI18nClientFilesByLanguage(_this, webappDir, lang) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        if (generator.databaseType !== 'no' && generator.databaseType !== 'cassandra') {
+        if ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra') {
             generator.copyI18nFilesByName(generator, webappDir, 'audits.json', lang);
         }
         if (generator.applicationType === 'gateway' && generator.serviceDiscoveryType) {
@@ -103,14 +119,20 @@ module.exports = class extends Generator {
      * @param {string} resourceDir - resource directory
      * @param {string} lang - language code
      */
-    installI18nServerFilesByLanguage(_this, resourceDir, lang) {
+    installI18nServerFilesByLanguage(_this, resourceDir, lang, testResourceDir) {
         const generator = _this || this;
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
         // Template the message server side properties
         const langProp = lang.replace(/-/g, '_');
+        // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
+        const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());
         generator.template(
-            `${prefix}/${resourceDir}i18n/messages_${langProp}.properties.ejs`,
-            `${resourceDir}i18n/messages_${langProp}.properties`
+            `${prefix}/${resourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+            `${resourceDir}i18n/messages_${langJavaProp}.properties`
+        );
+        generator.template(
+            `${prefix}/${testResourceDir}i18n/messages_${langJavaProp}.properties.ejs`,
+            `${testResourceDir}i18n/messages_${langJavaProp}.properties`
         );
     }
 
@@ -125,7 +147,7 @@ module.exports = class extends Generator {
             const fileName = this.entityTranslationKey;
             this.template(
                 `${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
+                `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${fileName}.json`
             );
             this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
         } catch (e) {
@@ -146,7 +168,7 @@ module.exports = class extends Generator {
         try {
             this.template(
                 `${prefix ? `${prefix}/` : ''}i18n/enum.json.ejs`,
-                `${CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
+                `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
                 this,
                 {},
                 enumInfo
@@ -164,7 +186,7 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstant(languages) {
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/components/language/language.constants.js`;
         try {
             let content = ".constant('LANGUAGES', [\n";
             languages.forEach((language, i) => {
@@ -199,10 +221,10 @@ module.exports = class extends Generator {
      * @param languages
      */
     updateLanguagesInLanguageConstantNG2(languages) {
-        if (this.clientFramework !== 'angularX') {
+        if (this.clientFramework !== ANGULAR) {
             return;
         }
-        const fullPath = `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
+        const fullPath = `${this.CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -231,15 +253,49 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Update Languages In MailServiceIT
+     *
+     * @param languages
+     */
+    updateLanguagesInLanguageMailServiceIT(languages, packageFolder) {
+        const fullPath = `${SERVER_TEST_SRC_DIR}${packageFolder}/service/MailServiceIT.java`;
+        try {
+            let content = 'private static final String[] languages = {\n';
+            languages.forEach((language, i) => {
+                content += `        "${language}"${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content += '        // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n    };';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
+                    content
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
+    /**
      * Update Languages In Language Pipe
      *
      * @param languages
      */
     updateLanguagesInLanguagePipe(languages) {
         const fullPath =
-            this.clientFramework === 'angularX'
-                ? `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
-                : `${CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
+            this.clientFramework === ANGULAR
+                ? `${this.CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+                : `${this.CLIENT_MAIN_SRC_DIR}/app/config/translation.ts`;
         try {
             let content = '{\n';
             this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
@@ -382,7 +438,8 @@ module.exports = class extends Generator {
      * @param file
      */
     removeFile(file) {
-        if (shelljs.test('-f', file)) {
+        file = this.destinationPath(file);
+        if (file && shelljs.test('-f', file)) {
             this.log(`Removing the file - ${file}`);
             shelljs.rm(file);
         }
@@ -394,10 +451,28 @@ module.exports = class extends Generator {
      * @param folder
      */
     removeFolder(folder) {
-        if (shelljs.test('-d', folder)) {
+        folder = this.destinationPath(folder);
+        if (folder && shelljs.test('-d', folder)) {
             this.log(`Removing the folder - ${folder}`);
             shelljs.rm('-rf', folder);
         }
+    }
+
+    /**
+     * Rename File
+     *
+     * @param {string} source
+     * @param {string} dest
+     * @returns {boolean} true if success; false otherwise
+     */
+    renameFile(source, dest) {
+        source = this.destinationPath(source);
+        dest = this.destinationPath(dest);
+        if (source && dest && shelljs.test('-f', source)) {
+            this.info(`Renaming the file - ${source} to ${dest}`);
+            return !shelljs.exec(`git mv -f ${source} ${dest}`).code;
+        }
+        return true;
     }
 
     /**
@@ -495,12 +570,27 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Parse creationTimestamp option
+     * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
+     *                   obtained by parsing the given string representation of the creationTimestamp.
+     */
+    parseCreationTimestamp() {
+        let creationTimestamp;
+        if (this.options.creationTimestamp) {
+            creationTimestamp = Date.parse(this.options.creationTimestamp);
+            if (!creationTimestamp) {
+                this.warning(`Error parsing creationTimestamp ${this.options.creationTimestamp}`);
+            }
+        }
+        return creationTimestamp;
+    }
+
+    /**
      * @param {any} input input
      * @returns {boolean} true if input is number; false otherwise
      */
     isNumber(input) {
         if (isNaN(this.filterNumber(input))) {
-            // eslint-disable-line
             return false;
         }
         return true;
@@ -512,7 +602,6 @@ module.exports = class extends Generator {
      */
     isSignedNumber(input) {
         if (isNaN(this.filterNumber(input, true))) {
-            // eslint-disable-line
             return false;
         }
         return true;
@@ -524,7 +613,6 @@ module.exports = class extends Generator {
      */
     isSignedDecimalNumber(input) {
         if (isNaN(this.filterNumber(input, true, true))) {
-            // eslint-disable-line
             return false;
         }
         return true;
@@ -549,17 +637,18 @@ module.exports = class extends Generator {
     }
 
     /**
-     * Execute callback if git is installed
+     * Checks if git is installed.
      *
-     * @param {function} callback - function to be called if git is installed
+     * @param {function} callback[optional] - function to be called after checking if git is installed. The callback will receive the code of the shell command executed.
+     *
+     * @return {boolean} true if installed; false otherwise.
      */
     isGitInstalled(callback) {
-        this.gitExec('--version', { trace: false }, code => {
-            if (code !== 0) {
-                this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
-            }
-            if (callback) callback(code);
-        });
+        const gitInstalled = jhipsterUtils.isGitInstalled(callback);
+        if (!gitInstalled) {
+            this.warning('git is not found on your computer.\n', ` Install git: ${chalk.yellow('https://git-scm.com/')}`);
+        }
+        return gitInstalled;
     }
 
     /**
@@ -669,8 +758,13 @@ module.exports = class extends Generator {
     template(source, destination, generator, options = {}, context) {
         const _this = generator || this;
         const _context = context || _this;
+        const customDestination = _this.destinationPath(destination);
+        if (!customDestination) {
+            this.debug(`File ${destination} ignored`);
+            return;
+        }
         jhipsterUtils.renderContent(source, _this, _context, options, res => {
-            _this.fs.write(_this.destinationPath(destination), res);
+            _this.fs.write(customDestination, res);
         });
     }
 
@@ -698,7 +792,12 @@ module.exports = class extends Generator {
      * @param {string} destination - The resulting file.
      */
     copy(source, destination) {
-        this.fs.copy(this.templatePath(source), this.destinationPath(destination));
+        const customDestination = this.destinationPath(destination);
+        if (!customDestination) {
+            this.debug(`File ${destination} ignored`);
+            return;
+        }
+        this.fs.copy(this.templatePath(source), customDestination);
     }
 
     /**
@@ -708,21 +807,15 @@ module.exports = class extends Generator {
      * @param {string[]} args - arguments to print
      */
     debug(msg, ...args) {
+        const formattedMsg = `${chalk.yellow.bold('DEBUG!')} ${msg}`;
         if (this.isDebugEnabled || (this.options && this.options.debug)) {
-            this.log(`${chalk.yellow.bold('DEBUG!')} ${msg}`);
+            this.log(formattedMsg);
             args.forEach(arg => this.log(arg));
         }
-    }
-
-    /**
-     * Normalize blueprint name: prepend 'generator-jhipster-' if needed
-     * @param {string} blueprint - name of the blueprint
-     */
-    normalizeBlueprintName(blueprint) {
-        if (blueprint && !blueprint.startsWith('generator-jhipster')) {
-            return `generator-jhipster-${blueprint}`;
+        if (this._debug && this._debug.enabled) {
+            this._debug(formattedMsg);
+            args.forEach(arg => this._debug(arg));
         }
-        return blueprint;
     }
 
     /**
@@ -733,9 +826,9 @@ module.exports = class extends Generator {
      */
     composeBlueprint(blueprint, subGen, options = {}) {
         if (blueprint) {
-            blueprint = this.normalizeBlueprintName(blueprint);
+            blueprint = jhipsterUtils.normalizeBlueprintName(blueprint);
             if (options.skipChecks === undefined || !options.skipChecks) {
-                this.checkBlueprint(blueprint, subGen);
+                this.checkBlueprint(blueprint);
             }
             try {
                 const finalOptions = {
@@ -743,11 +836,15 @@ module.exports = class extends Generator {
                     jhipsterContext: this
                 };
                 this.useBlueprint = true;
-                this.composeExternalModule(blueprint, subGen, finalOptions);
+                const blueprintGenerator = this.composeExternalModule(blueprint, subGen, finalOptions);
                 this.info(`Using blueprint ${chalk.yellow(blueprint)} for ${chalk.yellow(subGen)} subgenerator`);
-                return true;
+                return blueprintGenerator;
             } catch (e) {
-                this.debug(`No blueprint found for ${chalk.yellow(subGen)} subgenerator: falling back to default generator`);
+                this.debug(
+                    `No blueprint found for blueprint ${chalk.yellow(blueprint)} and ${chalk.yellow(
+                        subGen
+                    )} subgenerator: falling back to default generator`
+                );
                 this.debug('Error', e);
                 return false;
             }
@@ -756,56 +853,85 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Try to retrieve the package.json of the blueprint used, as an object.
+     * @param {string} blueprintPkgName - generator name
+     * @return {object} packageJson - retrieved package.json as an object or undefined if not found
+     */
+    findBlueprintPackageJson(blueprintPkgName) {
+        const blueprintGeneratorName = jhipsterUtils.packageNameToNamespace(blueprintPkgName);
+        const blueprintPackagePath = this.env.getPackagePath(blueprintGeneratorName);
+        if (!blueprintPackagePath) {
+            const msg = `Could not retrieve packagePath of blueprint '${blueprintPkgName}'`;
+            this.warning(msg);
+            return undefined;
+        }
+        // eslint-disable-next-line global-require,import/no-dynamic-require
+        return require(path.join(blueprintPackagePath, 'package.json'));
+    }
+
+    /**
      * Try to retrieve the version of the blueprint used.
      * @param {string} blueprintPkgName - generator name
      * @return {string} version - retrieved version or empty string if not found
      */
     findBlueprintVersion(blueprintPkgName) {
-        let packageJsonPath = path.join(process.cwd(), 'node_modules', blueprintPkgName, 'package.json');
-        try {
-            if (!fs.existsSync(packageJsonPath)) {
-                this.debug('using global module as local version could not be found in node_modules');
-                packageJsonPath = path.join(blueprintPkgName, 'package.json');
-            }
-            // eslint-disable-next-line global-require,import/no-dynamic-require
-            const packagejs = require(packageJsonPath);
-            return packagejs.version;
-        } catch (err) {
-            this.debug('ERROR:', err);
+        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
+        if (!blueprintPackageJson || !blueprintPackageJson.version) {
             this.warning(`Could not retrieve version of blueprint '${blueprintPkgName}'`);
-            return '';
+            return undefined;
         }
+        return blueprintPackageJson.version;
     }
 
     /**
      * Check if the generator specified as blueprint is installed.
      * @param {string} blueprint - generator name
      */
-    checkBlueprint(blueprint, subGen = '') {
+    checkBlueprint(blueprint) {
         if (blueprint === 'generator-jhipster') {
             this.error(`You cannot use ${chalk.yellow(blueprint)} as the blueprint.`);
         }
-        const done = this.async();
-        const localModule = path.join(process.cwd(), 'node_modules', blueprint);
-        if (fs.existsSync(localModule)) {
-            done();
+        if (!this.findBlueprintPackageJson(blueprint)) {
+            this.error(
+                `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
+                    `npm i -g ${blueprint}`
+                )}.`
+            );
+        }
+    }
+
+    /**
+     * Check if the generator specified as blueprint has a version compatible with current JHipster.
+     * @param {string} blueprintPkgName - generator name
+     */
+    checkJHipsterBlueprintVersion(blueprintPkgName) {
+        const blueprintPackageJson = this.findBlueprintPackageJson(blueprintPkgName);
+        if (!blueprintPackageJson) {
+            this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
             return;
         }
-        const generatorName = blueprint.replace('generator-', '');
-        if (this.env.get(`${generatorName}:${subGen}`)) {
-            done();
-            return;
+        const mainGeneratorJhipsterVersion = packagejs.version;
+        const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
+        if (blueprintJhipsterVersion && mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
+            this.error(
+                `The installed ${chalk.yellow(
+                    blueprintPkgName
+                )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+            );
         }
-        shelljs.exec('yo --generators', { silent: true }, (err, stdout, stderr) => {
-            if (!stdout.includes(` ${blueprint}\n`) && !stdout.includes(` ${generatorName}\n`)) {
-                this.error(
-                    `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
-                        `npm i -g ${blueprint}`
-                    )}.`
-                );
+        const blueprintPeerJhipsterVersion =
+            blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
+        if (blueprintPeerJhipsterVersion) {
+            if (semver.satisfies(mainGeneratorJhipsterVersion, blueprintPeerJhipsterVersion)) {
+                return;
             }
-            done();
-        });
+            this.error(
+                `The installed ${chalk.yellow(
+                    blueprintPkgName
+                )} blueprint targets JHipster ${blueprintPeerJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+            );
+        }
+        this.warning(`Could not retrieve version of JHipster declared by blueprint '${blueprintPkgName}'`);
     }
 
     /**
@@ -820,10 +946,11 @@ module.exports = class extends Generator {
             } else {
                 const javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
                 if (
+                    !javaVersion.match(new RegExp('12'.replace('.', '\\.'))) &&
                     !javaVersion.match(new RegExp('11'.replace('.', '\\.'))) &&
                     !javaVersion.match(new RegExp(constants.JAVA_VERSION.replace('.', '\\.')))
                 ) {
-                    this.warning(`Java 8 or Java 11 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
+                    this.warning(`Java 8, 11, or 12 are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`);
                 }
             }
             done();
@@ -862,11 +989,7 @@ module.exports = class extends Generator {
      */
     checkGit() {
         if (this.skipChecks || this.skipClient) return;
-        const done = this.async();
-        this.isGitInstalled(code => {
-            this.gitInstalled = code === 0;
-            done();
-        });
+        this.gitInstalled = this.isGitInstalled();
     }
 
     /**
@@ -893,76 +1016,91 @@ module.exports = class extends Generator {
      * @param {Array|Object} relationships - array of relationships
      * @param {string} entityInstance - entity instance
      * @param {string} dto - dto
-     * @returns {{queries: Array, variables: Array, hasManyToMany: boolean}}
+     * @returns {{queries: Array, variables: Array, rxjsMapIsUsed: boolean, selectableEntities: Array, selectableManyToManyEntities: Array}}
      */
     generateEntityQueries(relationships, entityInstance, dto) {
         const queries = [];
         const variables = [];
-        let hasManyToMany = false;
+        const selectableEntities = [];
+        const selectableManyToManyEntities = [];
+        let rxjsMapIsUsed = false;
         relationships.forEach(relationship => {
+            const relationshipType = relationship.relationshipType;
+            const ownerSide = relationship.ownerSide;
+            const otherEntityName = relationship.otherEntityName;
+            const selectableEntityType = `I${relationship.otherEntityAngularName}`;
             let query;
             let variableName;
             let filter;
-            hasManyToMany = hasManyToMany || relationship.relationshipType === 'many-to-many';
+            if (relationshipType === 'many-to-many' && ownerSide === true && !selectableManyToManyEntities.includes(selectableEntityType)) {
+                selectableManyToManyEntities.push(selectableEntityType);
+            }
             if (
-                relationship.relationshipType === 'one-to-one' &&
-                relationship.ownerSide === true &&
-                relationship.otherEntityName !== 'user'
+                relationshipType === 'many-to-one' ||
+                (relationshipType === 'one-to-one' && ownerSide === true) ||
+                (relationshipType === 'many-to-many' && ownerSide === true)
             ) {
-                variableName = relationship.relationshipFieldNamePlural.toLowerCase();
-                if (variableName === entityInstance) {
-                    variableName += 'Collection';
+                if (!selectableEntities.includes(selectableEntityType)) {
+                    selectableEntities.push(selectableEntityType);
                 }
-                const relationshipFieldName = `this.${entityInstance}.${relationship.relationshipFieldName}`;
-                const relationshipFieldNameIdCheck =
-                    dto === 'no' ? `!${relationshipFieldName} || !${relationshipFieldName}.id` : `!${relationshipFieldName}Id`;
+                if (relationshipType === 'one-to-one' && ownerSide === true && otherEntityName !== 'user') {
+                    rxjsMapIsUsed = true;
+                    variableName = relationship.relationshipFieldNamePlural.toLowerCase();
+                    if (variableName === entityInstance) {
+                        variableName += 'Collection';
+                    }
+                    const relationshipFieldName = `${relationship.relationshipFieldName}`;
+                    const relationshipFieldNameIdCheck =
+                        dto === 'no'
+                            ? `!${entityInstance}.${relationshipFieldName} || !${entityInstance}.${relationshipFieldName}.id`
+                            : `!${entityInstance}.${relationshipFieldName}Id`;
 
-                filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
-                if (this.jpaMetamodelFiltering) {
-                    filter = `'${relationship.otherEntityRelationshipName}Id.specified': 'false'`;
-                }
+                    filter = `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`;
+                    if (relationship.jpaMetamodelFiltering) {
+                        filter = `'${relationship.otherEntityRelationshipName}Id.specified': 'false'`;
+                    }
 
-                query = `this.${relationship.otherEntityName}Service
-            .query({${filter}}).pipe(
-                filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
-                map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
-            )
-            .subscribe((res: I${relationship.otherEntityAngularName}[]) => {
-                if (${relationshipFieldNameIdCheck}) {
-                    this.${variableName} = res;
+                    query = `
+                        this.${relationship.otherEntityName}Service
+                            .query({${filter}})
+                            .pipe(map((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => {
+                                return res.body || [];
+                            }))
+                            .subscribe((resBody: I${relationship.otherEntityAngularName}[]) => {
+                                if (${relationshipFieldNameIdCheck}) {
+                                    this.${variableName} = resBody;
+                                } else {
+                                    this.${relationship.otherEntityName}Service
+                                        .find(${entityInstance}.${relationshipFieldName}${dto !== 'no' ? 'Id' : '.id'})
+                                        .pipe(map((subRes: HttpResponse<I${relationship.otherEntityAngularName}>) => {
+                                            return subRes.body ? [subRes.body].concat(resBody) : resBody;
+                                        }))
+                                        .subscribe((concatRes: I${
+                                            relationship.otherEntityAngularName
+                                        }[]) => this.${variableName} = concatRes);
+                                }
+                            });`;
                 } else {
-                    this.${relationship.otherEntityName}Service
-                        .find(${relationshipFieldName}${dto === 'no' ? '.id' : 'Id'}).pipe(
-                            filter((subResMayBeOk: HttpResponse<I${relationship.otherEntityAngularName}>) => subResMayBeOk.ok),
-                            map((subResponse: HttpResponse<I${relationship.otherEntityAngularName}>) => subResponse.body),
-                        )
-                        .subscribe((subRes: I${relationship.otherEntityAngularName}) =>
-                            this.${variableName} = [subRes].concat(res)
-                        , (subRes: HttpErrorResponse) => this.onError(subRes.message));
+                    variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
+                    if (variableName === entityInstance) {
+                        variableName += 'Collection';
+                    }
+                    query = `
+                        this.${relationship.otherEntityName}Service.query()
+                            .subscribe((res: HttpResponse<I${relationship.otherEntityAngularName}[]>) => this.${variableName} = res.body || []);`;
                 }
-            }, (res: HttpErrorResponse) => this.onError(res.message));`;
-            } else if (relationship.relationshipType !== 'one-to-many') {
-                variableName = relationship.otherEntityNameCapitalizedPlural.toLowerCase();
-                if (variableName === entityInstance) {
-                    variableName += 'Collection';
-                }
-                query = `this.${relationship.otherEntityName}Service.query().pipe(
-                            filter((mayBeOk: HttpResponse<I${relationship.otherEntityAngularName}[]>) => mayBeOk.ok),
-                            map((response: HttpResponse<I${relationship.otherEntityAngularName}[]>) => response.body),
-                        )
-            .subscribe(
-                (res: I${relationship.otherEntityAngularName}[]) => this.${variableName} = res,
-                (res: HttpErrorResponse) => this.onError(res.message));`;
             }
             if (variableName && !this.contains(queries, query)) {
                 queries.push(query);
-                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[];`);
+                variables.push(`${variableName}: I${relationship.otherEntityAngularName}[] = [];`);
             }
         });
         return {
             queries,
             variables,
-            hasManyToMany
+            rxjsMapIsUsed,
+            selectableEntities,
+            selectableManyToManyEntities
         };
     }
 
@@ -972,13 +1110,13 @@ module.exports = class extends Generator {
      * @param {Array|Object} fields - array of fields
      * @returns {Array} defaultVariablesValues
      */
-    generateEntityClientFieldDefaultValues(fields, clientFramework = 'angularX') {
+    generateEntityClientFieldDefaultValues(fields, clientFramework = ANGULAR) {
         const defaultVariablesValues = {};
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
             if (fieldType === 'Boolean') {
-                if (clientFramework === 'react') {
+                if (clientFramework === REACT) {
                     defaultVariablesValues[fieldName] = `${fieldName}: false,`;
                 } else {
                     defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} || false;`;
@@ -989,23 +1127,34 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Find key type for Typescript
+     *
+     * @param {string} pkType - primary key type in database
+     * @returns {string} primary key type in Typescript
+     */
+    getTypescriptKeyType(pkType) {
+        if (pkType === 'String' || pkType === 'UUID') {
+            return 'string';
+        }
+        return 'number';
+    }
+
+    /**
      * Generate Entity Client Field Declarations
      *
      * @param {string} pkType - type of primary key
      * @param {Array|Object} fields - array of fields
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
+     * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment') {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
         const variablesWithTypes = [];
-        let tsKeyType;
-        if (pkType === 'String') {
-            tsKeyType = 'string';
-        } else {
-            tsKeyType = 'number';
+        const tsKeyType = this.getTypescriptKeyType(pkType);
+        if (!embedded) {
+            variablesWithTypes.push(`id?: ${tsKeyType}`);
         }
-        variablesWithTypes.push(`id?: ${tsKeyType}`);
         fields.forEach(field => {
             const fieldType = field.fieldType;
             const fieldName = field.fieldName;
@@ -1014,7 +1163,7 @@ module.exports = class extends Generator {
                 tsType = fieldType;
             } else if (fieldType === 'Boolean') {
                 tsType = 'boolean';
-            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) {
+            } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
                 tsType = 'number';
             } else if (fieldType === 'String' || fieldType === 'UUID') {
                 tsType = 'string';
@@ -1034,10 +1183,11 @@ module.exports = class extends Generator {
             let fieldType;
             let fieldName;
             const relationshipType = relationship.relationshipType;
+            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
                 fieldType = `I${relationship.otherEntityAngularName}[]`;
                 fieldName = relationship.relationshipFieldNamePlural;
-            } else if (dto === 'no') {
+            } else if (dto === 'no' || otherEntityIsEmbedded) {
                 fieldType = `I${relationship.otherEntityAngularName}`;
                 fieldName = relationship.relationshipFieldName;
             } else {
@@ -1080,8 +1230,9 @@ module.exports = class extends Generator {
         const typeImports = new Map();
         relationships.forEach(relationship => {
             const relationshipType = relationship.relationshipType;
+            const otherEntityIsEmbedded = relationship.otherEntityIsEmbedded;
             let toBeImported = false;
-            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
+            if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many' || otherEntityIsEmbedded) {
                 toBeImported = true;
             } else if (dto === 'no') {
                 toBeImported = true;
@@ -1097,10 +1248,32 @@ module.exports = class extends Generator {
                 const importType = `I${otherEntityAngularName}`;
                 let importPath;
                 if (otherEntityAngularName === 'User') {
-                    importPath = clientFramework === 'angularX' ? 'app/core/user/user.model' : 'app/shared/model/user.model';
+                    importPath = clientFramework === ANGULAR ? 'app/core/user/user.model' : 'app/shared/model/user.model';
                 } else {
                     importPath = `app/shared/model/${relationship.otherEntityClientRootFolder}${relationship.otherEntityFileName}.model`;
                 }
+                typeImports.set(importType, importPath);
+            }
+        });
+        return typeImports;
+    }
+
+    /**
+     * Generate Entity Client Enum Imports
+     *
+     * @param {Array|Object} fields - array of the entity fields
+     * @param {string} clientFramework the client framework, 'angularX' or 'react'.
+     * @returns typeImports: Map
+     */
+    generateEntityClientEnumImports(fields, clientFramework = this.clientFramework) {
+        const typeImports = new Map();
+        const uniqueEnums = {};
+        fields.forEach(field => {
+            const fileName = _.kebabCase(field.fieldType);
+            if (field.fieldIsEnum && (!uniqueEnums[field.fieldType] || (uniqueEnums[field.fieldType] && field.fieldValues.length !== 0))) {
+                const importType = `${field.fieldType}`;
+                const importPath = `app/shared/model/enumerations/${fileName}.model`;
+                uniqueEnums[field.fieldType] = field.fieldType;
                 typeImports.set(importType, importPath);
             }
         });
@@ -1135,19 +1308,19 @@ module.exports = class extends Generator {
      * @returns generated JDL from entities
      */
     generateJDLFromEntities() {
-        const jdl = new jhiCore.JDLObject();
+        let jdlObject;
+        const entities = new Map();
         try {
-            const entities = {};
             this.getExistingEntities().forEach(entity => {
-                entities[entity.name] = entity.definition;
+                entities.set(entity.name, entity.definition);
             });
-            jhiCore.convertJsonEntitiesToJDL(entities, jdl);
-            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdl);
-        } catch (e) {
-            this.log(e.message || e);
+            jdlObject = jhiCore.convertJsonEntitiesToJDL({ entities });
+            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
+        } catch (error) {
+            this.log(error.message || error);
             this.error('\nError while parsing entities to JDL\n');
         }
-        return jdl;
+        return jdlObject;
     }
 
     /**
@@ -1157,7 +1330,7 @@ module.exports = class extends Generator {
      */
     generateLanguageOptions(languages, clientFramework) {
         const selectedLangs = this.getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value));
-        if (clientFramework === 'react') {
+        if (clientFramework === REACT) {
             return selectedLangs.map(lang => `'${lang.value}': { name: '${lang.dispName}'${lang.rtl ? ', rtl: true' : ''} }`);
         }
 
@@ -1203,7 +1376,7 @@ module.exports = class extends Generator {
      * @param {string} fieldType
      */
     getSpecificationBuilder(fieldType) {
-        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant'].includes(fieldType)) {
+        if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'LocalDate', 'ZonedDateTime', 'Instant', 'Duration'].includes(fieldType)) {
             return 'buildRangeSpecification';
         }
         if (fieldType === 'String') {
@@ -1250,28 +1423,84 @@ module.exports = class extends Generator {
      * Generate a primary key, according to the type
      *
      * @param {any} pkType - the type of the primary key
-     * @param {any} prodDatabaseType - the database type
      */
-    generateTestEntityId(pkType, prodDatabaseType) {
+    generateTestEntityId(pkType) {
         if (pkType === 'String') {
-            if (prodDatabaseType === 'cassandra') {
-                return "'9fec3727-3421-4967-b213-ba36557ca194'";
-            }
             return "'123'";
+        }
+        if (pkType === 'UUID') {
+            return "'9fec3727-3421-4967-b213-ba36557ca194'";
         }
         return 123;
     }
 
     /**
-     * Decide the primary key type based on DB
+     * Return the primary key data type based on DB
      *
      * @param {any} databaseType - the database type
      */
     getPkType(databaseType) {
-        if (['cassandra', 'mongodb', 'couchbase'].includes(databaseType)) {
-            return 'String';
+        let pk = '';
+        switch (databaseType) {
+            case 'mongodb':
+            case 'neo4j':
+            case 'couchbase':
+                pk = 'String';
+                break;
+            case 'cassandra':
+                pk = 'UUID';
+                break;
+            default:
+                pk = 'Long';
+                break;
         }
-        return 'Long';
+        return pk;
+    }
+
+    /**
+     * Returns the primary key data type based on authentication type, DB and given association
+     *
+     * @param {string} authenticationType - the auth type
+     * @param {string} databaseType - the database type
+     * @param {any} relationships - relationships
+     */
+    getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
+        let hasFound = false;
+        let primaryKeyType = this.getPkType(databaseType);
+        relationships.forEach(relationship => {
+            if (relationship.useJPADerivedIdentifier === true && !hasFound) {
+                primaryKeyType = relationship.otherEntityName === 'user' && authenticationType === 'oauth2' ? 'String' : primaryKeyType;
+                hasFound = true;
+            }
+        });
+        return primaryKeyType;
+    }
+
+    /**
+     * Returns the primary key value based on the primary key type, DB and default value
+     *
+     * @param {string} primaryKeyType - the primary key type
+     * @param {string} databaseType - the database type
+     * @param {string} defaultValue - default value
+     * @returns {string} java primary key value
+     */
+    getPrimaryKeyValue(primaryKeyType, databaseType, defaultValue) {
+        let value;
+        switch (primaryKeyType) {
+            case 'String':
+                value = `"id${defaultValue}"`;
+                // Special case with a OneToOne relationship with User and @MapsId when using OAuth
+                if (databaseType === 'sql') {
+                    value = 'UUID.randomUUID().toString()';
+                }
+                break;
+            case 'UUID':
+                value = 'UUID.randomUUID()';
+                break;
+            default:
+                value = `${defaultValue}L`;
+        }
+        return value;
     }
 
     /**
@@ -1291,10 +1520,26 @@ module.exports = class extends Generator {
      * @param {string} clientRootFolder
      */
     getEntityParentPathAddition(clientRootFolder) {
-        if (clientRootFolder) {
-            return '../';
+        if (!clientRootFolder) {
+            return '';
         }
-        return '';
+        const relative = path.relative(`/app/entities/${clientRootFolder}/`, '/app/entities/');
+        if (relative.includes('app')) {
+            // Relative path outside angular base dir.
+            const message = `
+                "clientRootFolder outside app base dir '${clientRootFolder}'"
+            `;
+            // Test case doesn't have a environment instance so return 'error'
+            if (this.env === undefined) {
+                throw new Error(message);
+            }
+            this.error(message);
+        }
+        const entityFolderPathAddition = relative.replace(/[/|\\]?..[/|\\]entities/, '').replace('entities', '..');
+        if (!entityFolderPathAddition) {
+            return '';
+        }
+        return `${entityFolderPathAddition}/`;
     }
 
     /**
@@ -1303,7 +1548,12 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        const prettierFilter = filter(['{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        let prettierFilter;
+        if (this.prettierJava) {
+            prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml,java}'], { restore: true });
+        } else {
+            prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+        }
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }

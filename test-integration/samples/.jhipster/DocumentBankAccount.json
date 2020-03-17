@@ -1,5 +1,13 @@
 {
     "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "embeddedOperation",
+            "otherEntityName": "embeddedOperation",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "documentBankAccount"
+        }
+    ],
     "fields": [
         {
             "fieldName": "name",

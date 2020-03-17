@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -47,6 +47,10 @@ const commonFiles = {
                     file: 'editorconfig',
                     renameTo: () => '.editorconfig',
                     method: 'copy'
+                },
+                {
+                    file: 'sonar-project.properties',
+                    renameTo: () => 'sonar-project.properties'
                 }
             ]
         }

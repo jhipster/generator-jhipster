@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://jhipster.github.io/
  * for more information.
@@ -33,7 +33,8 @@ const files = {
         {
             templates: [
                 'package.json',
-                'tslint.json',
+                '.eslintrc.json',
+                '.eslintignore',
                 'tsconfig.json',
                 'tsconfig.test.json',
                 { file: '.editorconfig', method: 'copy', noEjs: true },
@@ -50,7 +51,7 @@ const files = {
         },
         {
             condition: generator => !generator.skipCommitHook,
-            templates: ['.huskyrc']
+            templates: ['.huskyrc', '.lintstagedrc.js']
         }
     ],
     sass: [
@@ -67,32 +68,33 @@ const files = {
         {
             path: MAIN_SRC_DIR,
             templates: [
-                { file: 'static/images/jhipster_family_member_0.svg', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_1.svg', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_2.svg', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_3.svg', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_0_head-192.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_1_head-192.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_2_head-192.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_3_head-192.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_0_head-256.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_1_head-256.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_2_head-256.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_3_head-256.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_0_head-384.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_1_head-384.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_2_head-384.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_3_head-384.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_0_head-512.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_1_head-512.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_2_head-512.png', method: 'copy' },
-                { file: 'static/images/jhipster_family_member_3_head-512.png', method: 'copy' },
-                { file: 'static/images/logo-jhipster.png', method: 'copy' }
+                { file: 'content/images/jhipster_family_member_0.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3.svg', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-192.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-256.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-384.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_0_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_1_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_2_head-512.png', method: 'copy' },
+                { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
+                { file: 'content/images/logo-jhipster.png', method: 'copy' }
             ]
         }
     ],
     swagger: [
         {
+            condition: generator => !generator.reactive,
             path: MAIN_SRC_DIR,
             templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
         }
@@ -107,7 +109,7 @@ const files = {
                 '404.html',
                 'index.html',
                 'manifest.webapp',
-                'static/css/loading.css'
+                'content/css/loading.css'
             ]
         }
     ],
@@ -143,20 +145,6 @@ const files = {
             path: REACT_DIR,
             templates: ['app.scss', '_bootstrap-variables.scss']
         }
-        // {
-        //   condition: generator => generator.authenticationType === 'oauth2' || generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
-        //   path: REACT_DIR,
-        //   templates: [
-        //     'blocks/interceptor/_auth.interceptor.js'
-        //   ]
-        // },
-        // {
-        //   condition: generator => !generator.skipServer,
-        //   path: REACT_DIR,
-        //   templates: [
-        //     'blocks/interceptor/_auth-expired.interceptor.js'
-        //   ]
-        // }
     ],
     reactEntities: [
         {
@@ -167,7 +155,10 @@ const files = {
     reactMain: [
         {
             path: REACT_DIR,
-            templates: [{ file: 'modules/home/home.tsx', method: 'processJsx' }, { file: 'modules/login/logout.tsx', method: 'processJsx' }]
+            templates: [
+                { file: 'modules/home/home.tsx', method: 'processJsx' },
+                { file: 'modules/login/logout.tsx', method: 'processJsx' }
+            ]
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
@@ -205,7 +196,7 @@ const files = {
     ],
     accountModule: [
         {
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             path: REACT_DIR,
             templates: [
                 { file: 'modules/account/index.tsx', method: 'processJsx' },
@@ -223,7 +214,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'session',
+            condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: REACT_DIR,
             templates: [
                 { file: 'modules/account/sessions/sessions.tsx', method: 'processJsx' },
@@ -237,15 +228,20 @@ const files = {
             templates: [
                 // admin modules
                 { file: 'modules/administration/index.tsx', method: 'processJsx' },
-                { file: 'modules/administration/audits/audits.tsx', method: 'processJsx' },
                 { file: 'modules/administration/configuration/configuration.tsx', method: 'processJsx' },
                 { file: 'modules/administration/docs/docs.tsx', method: 'processJsx' },
+                'modules/administration/docs/docs.scss',
                 { file: 'modules/administration/health/health.tsx', method: 'processJsx' },
                 { file: 'modules/administration/health/health-modal.tsx', method: 'processJsx' },
                 { file: 'modules/administration/logs/logs.tsx', method: 'processJsx' },
                 { file: 'modules/administration/metrics/metrics.tsx', method: 'processJsx' },
                 'modules/administration/administration.reducer.ts'
             ]
+        },
+        {
+            condition: generator => !['no', 'cassandra'].includes(generator.databaseType),
+            path: REACT_DIR,
+            templates: [{ file: 'modules/administration/audits/audits.tsx', method: 'processJsx' }]
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
@@ -278,15 +274,16 @@ const files = {
                 { file: 'shared/layout/footer/footer.tsx', method: 'processJsx' },
                 { file: 'shared/layout/header/header.tsx', method: 'processJsx' },
                 { file: 'shared/layout/header/header-components.tsx', method: 'processJsx' },
-                'shared/layout/header/menus/index.ts',
-                { file: 'shared/layout/header/menus/admin.tsx', method: 'processJsx' },
-                { file: 'shared/layout/header/menus/account.tsx', method: 'processJsx' },
-                { file: 'shared/layout/header/menus/entities.tsx', method: 'processJsx' },
+                'shared/layout/menus/index.ts',
+                { file: 'shared/layout/menus/admin.tsx', method: 'processJsx' },
+                { file: 'shared/layout/menus/account.tsx', method: 'processJsx' },
+                { file: 'shared/layout/menus/entities.tsx', method: 'processJsx' },
+                { file: 'shared/layout/menus/menu-components.tsx', method: 'processJsx' },
+                { file: 'shared/layout/menus/menu-item.tsx', method: 'processJsx' },
                 { file: 'shared/layout/password/password-strength-bar.tsx', method: 'processJsx' },
                 // util
                 'shared/util/date-utils.ts',
                 'shared/util/pagination.constants.ts',
-                'shared/util/url-utils.ts',
                 'shared/util/entity-utils.ts',
                 // components
                 { file: 'shared/auth/private-route.tsx', method: 'processJsx' },
@@ -300,7 +297,7 @@ const files = {
         {
             condition: generator => generator.enableTranslation,
             path: REACT_DIR,
-            templates: [{ file: 'shared/layout/header/menus/locale.tsx', method: 'processJsx' }]
+            templates: [{ file: 'shared/layout/menus/locale.tsx', method: 'processJsx' }]
         },
         {
             condition: generator => generator.authenticationType === 'oauth2',
@@ -338,7 +335,7 @@ const files = {
                 'spec/app/shared/error/error-boundary.spec.tsx',
                 'spec/app/shared/error/error-boundary-route.spec.tsx',
                 'spec/app/shared/layout/header/header.spec.tsx',
-                'spec/app/shared/layout/header/menus/account.spec.tsx',
+                'spec/app/shared/layout/menus/account.spec.tsx',
                 'spec/app/modules/administration/administration.reducer.spec.ts'
                 // 'spec/app/account/activate/_activate.component.spec.js',
                 // 'spec/app/account/password/_password.component.spec.js',
@@ -355,7 +352,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.authenticationType !== 'oauth2',
+            condition: generator => !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: [
                 // 'spec/app/modules/account/register/register.spec.tsx',
@@ -401,7 +398,7 @@ const files = {
             ]
         },
         {
-            condition: generator => generator.protractorTests && generator.authenticationType !== 'oauth2',
+            condition: generator => generator.protractorTests && !generator.skipUserManagement,
             path: TEST_SRC_DIR,
             templates: ['e2e/page-objects/password-page.ts', 'e2e/page-objects/settings-page.ts', 'e2e/page-objects/register-page.ts']
         }
@@ -414,7 +411,7 @@ module.exports = {
 };
 
 function writeFiles() {
-    mkdirp(MAIN_SRC_DIR);
+    mkdirp(this.CLIENT_MAIN_SRC_DIR);
     // write React files
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/react'));
 }

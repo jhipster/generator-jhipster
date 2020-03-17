@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -26,13 +26,14 @@ import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
 <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
 import org.h2.server.web.WebServlet;
 <%_ } _%>
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+<%_ if (!skipClient) { _%>
 import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
+<%_ } _%>
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.mock.web.MockServletContext;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -42,7 +43,9 @@ import java.io.File;
 <%_ } _%>
 import java.util.*;
 
+<%_ if (!skipClient) { _%>
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ } _%>
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -64,7 +67,7 @@ public class WebConfigurerTest {
 
     private JHipsterProperties props;
 
-    @Before
+    @BeforeEach
     public void setup() {
         servletContext = spy(new MockServletContext());
         doReturn(mock(FilterRegistration.Dynamic.class))
@@ -104,6 +107,7 @@ public class WebConfigurerTest {
         <%_ } _%>
     }
 
+<%_ if (!skipClient) { _%>
     @Test
     public void testCustomizeServletContainer() {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
@@ -119,6 +123,7 @@ public class WebConfigurerTest {
         <%_ } _%>
     }
 
+<%_ } _%>
     @Test
     public void testCorsFilterOnApiPath() throws Exception {
         props.getCors().setAllowedOrigins(Collections.singletonList("*"));

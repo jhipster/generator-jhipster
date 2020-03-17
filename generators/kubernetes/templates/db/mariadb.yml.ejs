@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -16,7 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: v1
+<%_ if (kubernetesUseDynamicStorage) { _%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+kind: PersistentVolumeClaim
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mariadb-pvc
+  namespace: <%= kubernetesNamespace %>
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  <%_ if (kubernetesStorageClassName) { _%>
+  storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+---
+<%_ } _%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Secret
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mariadb
@@ -27,13 +44,16 @@ type: Opaque
 data:
   mariadb-root-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
 ---
-apiVersion: extensions/v1beta1
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mariadb
   namespace: <%= kubernetesNamespace %>
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-mariadb
   template:
     metadata:
       labels:
@@ -45,7 +65,12 @@ spec:
     spec:
       volumes:
       - name: data
+        <%_ if (kubernetesUseDynamicStorage) { _%>
+        persistentVolumeClaim:
+          claimName: <%= app.baseName.toLowerCase() %>-mariadb-pvc
+        <%_ } else { _%>
         emptyDir: {}
+        <%_ } _%>
       containers:
       - name: mariadb
         image: <%= DOCKER_MARIADB %>
@@ -68,8 +93,15 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/mysql/
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
 ---
-apiVersion: v1
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mariadb

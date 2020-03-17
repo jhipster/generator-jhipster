@@ -3,13 +3,16 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const expectedFiles = require('../utils/expected-files');
 const ClientGenerator = require('../../generators/client');
+const constants = require('../../generators/generator-constants');
+
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
 const mockBlueprintSubGen = class extends ClientGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
         if (!jhContext) {
-            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprint myblueprint')}");
+            this.error("This is a JHipster blueprint and should be used only like 'jhipster --blueprints myblueprint')}");
         }
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
@@ -71,7 +74,7 @@ describe('JHipster client generator with blueprint', () => {
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
                     .withPrompts({
                         baseName: 'jhipster',
-                        clientFramework: 'angularX',
+                        clientFramework: ANGULAR,
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['fr']
@@ -103,7 +106,7 @@ describe('JHipster client generator with blueprint', () => {
                 .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:client']])
                 .withPrompts({
                     baseName: 'jhipster',
-                    clientFramework: 'angularX',
+                    clientFramework: ANGULAR,
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr']

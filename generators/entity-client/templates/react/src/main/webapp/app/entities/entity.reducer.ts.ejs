@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,12 +47,14 @@ export const ACTION_TYPES = {
   <%_ } _%>
   FETCH_<%= entityActionName %>_LIST: '<%= entityInstance %>/FETCH_<%= entityActionName %>_LIST',
   FETCH_<%= entityActionName %>:  '<%= entityInstance %>/FETCH_<%= entityActionName %>',
+<%_ if (!readOnly) { _%>
   CREATE_<%= entityActionName %>: '<%= entityInstance %>/CREATE_<%= entityActionName %>',
   UPDATE_<%= entityActionName %>: '<%= entityInstance %>/UPDATE_<%= entityActionName %>',
   DELETE_<%= entityActionName %>: '<%= entityInstance %>/DELETE_<%= entityActionName %>',
   <%_ if (fieldsContainBlob) { _%>
   SET_BLOB: '<%= entityInstance %>/SET_BLOB',
   <%_ } _%>
+<%_ } _%>
   RESET: '<%= entityInstance %>/RESET'
 };
 
@@ -88,6 +90,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         loading: true
       };
+    <%_ if (!readOnly) { _%>
     case REQUEST(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case REQUEST(ACTION_TYPES.UPDATE_<%= entityActionName %>):
     case REQUEST(ACTION_TYPES.DELETE_<%= entityActionName %>):
@@ -97,14 +100,17 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         updateSuccess: false,
         updating: true
       };
+    <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     case FAILURE(ACTION_TYPES.SEARCH_<%= entityActionNamePlural %>):
     <%_ } _%>
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
     case FAILURE(ACTION_TYPES.FETCH_<%= entityActionName %>):
+    <%_ if (!readOnly) { _%>
     case FAILURE(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.UPDATE_<%= entityActionName %>):
     case FAILURE(ACTION_TYPES.DELETE_<%= entityActionName %>):
+    <%_ } _%>
       return {
         ...state,
         loading: false,
@@ -117,29 +123,37 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
     <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST):
       <%_ if (pagination === 'infinite-scroll') { _%>
+      {
       const links = parseHeaderForLinks(action.payload.headers.link);
       <%_ } _%>
+
       return {
         ...state,
-        <%_ if (pagination === 'infinite-scroll') { _%>
-        links,
-        <%_ } _%>
         loading: false,
-        <%_ if (pagination !== 'no') { _%>
-        totalItems: action.payload.headers['x-total-count'],
-        <%_ } _%>
         <%_ if (pagination === 'infinite-scroll') { _%>
-        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links)
+          <%_ if (databaseType !== 'cassandra') { _%>
+        links,
+        entities: loadMoreDataWhenScrolled(state.entities, action.payload.data, links),
+          <%_ } _%>
         <%_ } else { _%>
-        entities: action.payload.data
+        entities: action.payload.data,
+        <%_ } _%>
+        <%_ if (pagination !== 'no') { _%>
+          <%_ if (databaseType !== 'cassandra') { _%>
+        totalItems: parseInt(action.payload.headers['x-total-count'], 10)
+          <%_ } _%>
         <%_ } _%>
       };
+    <%_ if (pagination === 'infinite-scroll') { _%>
+    }
+    <%_ } _%>
     case SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>):
       return {
         ...state,
         loading: false,
         entity: action.payload.data
       };
+    <%_ if (!readOnly) { _%>
     case SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>):
     case SUCCESS(ACTION_TYPES.UPDATE_<%= entityActionName %>):
       return {
@@ -156,7 +170,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         entity: {}
       };
     <%_ if (fieldsContainBlob) { _%>
-    case ACTION_TYPES.SET_BLOB:
+    case ACTION_TYPES.SET_BLOB: {
       const { name, data, contentType } = action.payload;
       return {
         ...state,
@@ -166,6 +180,8 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
           [name + 'ContentType']: contentType
         }
       };
+    }
+    <%_ } _%>
     <%_ } _%>
     case ACTION_TYPES.RESET:
       return {
@@ -218,6 +234,7 @@ export const getEntity: ICrudGetAction<I<%= entityReactName %>> = id => {
   };
 };
 
+<%_ if (!readOnly) { _%>
 export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
@@ -234,9 +251,6 @@ export const updateEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.UPDATE_<%= entityActionName %>,
     payload: axios.put(apiUrl, cleanEntity(entity))
   });
-  <%_ if (pagination !== 'infinite-scroll') { _%>
-  dispatch(getEntities());
-  <%_ } _%>
   return result;
 };
 
@@ -246,9 +260,6 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
-  <%_ if (pagination !== 'infinite-scroll') { _%>
-  dispatch(getEntities());
-  <%_ } _%>
   return result;
 };
 
@@ -261,6 +272,7 @@ export const setBlob = (name, data, contentType?) => ({
     contentType
   }
 });
+<%_ } _%>
 <%_ } _%>
 
 export const reset = () => ({

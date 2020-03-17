@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,63 +21,76 @@ package <%= packageName %>.web.rest;
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+import <%= packageName %>.RedisTestContainerExtension;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
-<%_ if (reactive) { _%>
-import <%= packageName %>.config.ReactivePageableHandlerMethodArgumentResolver;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.config.Constants;
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
 <%_ if (databaseType !== 'cassandra' && databaseType !== 'couchbase') { _%>
 import <%= packageName %>.domain.Authority;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
-import <%= packageName %>.repository<% if (reactive) { %>.reactive<% } %>.UserRepository;
+import <%= packageName %>.repository.UserRepository;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
-<%_ if (authenticationType !== 'oauth2') { _%>
-import <%= packageName %>.service.MailService;<% } %>
-import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import <%= packageName %>.service.mapper.UserMapper;
-import <%= packageName %>.web.rest.errors.ExceptionTranslator;
 <%_ if (authenticationType !== 'oauth2') { _%>
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
 <%_ } _%>
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (!reactive) { _%>
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+<%_ } else { _%>
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (cacheManagerIsAvailable === true) { _%>
 import org.springframework.cache.CacheManager;
 <%_ } _%>
-<%_ if (!reactive) { _%>
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+<%_ if (cacheProvider === 'memcached' ) { _%>
+import org.springframework.cache.support.NoOpCacheManager;
 <%_ } _%>
 import org.springframework.http.MediaType;
-<%_ if (!reactive) { _%>
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import javax.persistence.EntityManager;
 <%_ } _%>
 <%_ if (databaseType !== 'cassandra') { _%>
 import java.time.Instant;
 <%_ } _%>
 import java.util.*;
+import java.util.function.Consumer;
 <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -86,25 +99,39 @@ import java.util.stream.Stream;
 import java.util.UUID;
 <%_ } _%>
 
-<%_ if (databaseType === 'couchbase') { _%>
-import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
-<%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (!reactive) { _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 import static org.hamcrest.Matchers.hasItems;
     <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
+<%_ if (testsNeedCsrf) { _%>
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+<%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } else if (testsNeedCsrf) { _%>
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 <%_ } _%>
 
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
-@RunWith(SpringRunner.class)
+<%_ if (!reactive) { _%>
+@AutoConfigureMockMvc
+<%_ } else { _%>
+@AutoConfigureWebTestClient
+<%_ } _%>
+@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
+<%_ if (authenticationType === 'oauth2') { _%>
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
-public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+<%_ } _%>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
+<%_ } _%>
+public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %><% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     private static final String DEFAULT_LOGIN = "johndoe";
     <%_ if (authenticationType !== 'oauth2') { _%>
@@ -113,14 +140,14 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
     <%_ if (databaseType === 'sql' && authenticationType !== 'oauth2') { _%>
     private static final Long DEFAULT_ID = 1L;
-    <%_ } else if (databaseType === 'couchbase'){ _%>
+    <%_ } else if (databaseType === 'couchbase') { _%>
     private static final String DEFAULT_ID = <%= asEntity('User') %>.PREFIX + DEFAULT_LOGIN;
     <%_ } else { _%>
     private static final String DEFAULT_ID = "id1";
     <%_ } _%>
+    <%_ if (authenticationType !== 'oauth2') { _%>
 
     private static final String DEFAULT_PASSWORD = "passjohndoe";
-    <%_ if (authenticationType !== 'oauth2') { _%>
     private static final String UPDATED_PASSWORD = "passjhipster";
     <%_ } _%>
 
@@ -156,36 +183,17 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
     /**
-     * This repository is mocked in the <%=packageName%>.repository.search test package.
+     * This repository is mocked in the <%= packageName %>.repository.search test package.
      *
      * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
      */
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
-    <%_ if (authenticationType !== 'oauth2') { _%>
-
-    @Autowired
-    private MailService mailService;
-    <%_ } _%>
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private UserMapper userMapper;
-
-    <%_ if (!reactive) { _%>
-    @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    <%_ } _%>
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
 
     @Autowired
     private EntityManager em;
@@ -196,6 +204,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     private CacheManager cacheManager;
     <%_ } _%>
 
+    @Autowired
     <%_ if (reactive) { _%>
     private WebTestClient webTestClient;
     <%_ } else { _%>
@@ -204,34 +213,28 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
     private <%= asEntity('User') %> user;
 
-    @Before
+    <%_ if (cacheManagerIsAvailable === true) { _%>
+    @BeforeEach
     public void setup() {
-        <%_ if (cacheManagerIsAvailable === true) { _%>
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
-        <%_ } _%>
-        UserResource userResource = new UserResource(userService<% if (authenticationType !== 'oauth2') { %>, userRepository, mailService<% } %><% if (searchEngine === 'elasticsearch') { %>, mockUserSearchRepository<% } %>);
-
-        <%_ if (reactive) { _%>
-        this.webTestClient = WebTestClient.bindToController(userResource)
-            .argumentResolvers(configurer -> configurer.addCustomResolver(new ReactivePageableHandlerMethodArgumentResolver()))
-            .controllerAdvice(exceptionTranslator)
-        <%_ } else { _%>
-        this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setMessageConverters(jacksonMessageConverter)
-        <%_ } _%>
-            .build();
     }
 
+    <%_ } _%>
+    <%_ if (reactive && testsNeedCsrf) { _%>
+    @BeforeEach
+    public void setupCsrf() {
+        webTestClient = webTestClient.mutateWith(csrf());
+    }
+
+    <%_ } _%>
     /**
      * Create a User.
      *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
+    public static <%= asEntity('User') %> createEntity(<% if (databaseType === 'sql' && !reactive) { %>EntityManager em<% } %>) {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra' || (authenticationType === 'oauth2' && databaseType !== 'couchbase')) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -248,20 +251,24 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         user.setImageUrl(DEFAULT_IMAGEURL);
         <%_ } _%>
         user.setLangKey(DEFAULT_LANGKEY);
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
         return user;
     }
 
-    @Before
+    @BeforeEach
     public void initTest() {
-        <%_ if (databaseType === 'couchbase') { _%>
-        mockAuthentication();
-        <%_ } _%>
-        <%_ if (databaseType !== 'sql') { _%>
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        userRepository.deleteAllUserAuthorities().block();
+        <%_ } _%> 
+        <%_ if (databaseType !== 'sql' || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         user = createEntity();
+        <%_ } else { _%>
+        user = createEntity(em);
         <%_ } _%>
         <%_ if (databaseType === 'sql') { _%>
-        user = createEntity(em);
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
         <%_ } _%>
@@ -269,7 +276,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void createUser() throws Exception {
@@ -292,33 +299,35 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isCreated());
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isCreated();
         <%_ } _%>
 
         // Validate the User in the database
-        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
-        assertThat(userList).hasSize(databaseSizeBeforeCreate + 1);
-        <%= asEntity('User') %> testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        <%_ if (databaseType !== 'cassandra') { _%>
-        assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-        <%_ } _%>
-        assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        assertPersistedUsers(users -> {
+            assertThat(users).hasSize(databaseSizeBeforeCreate + 1);
+            <%= asEntity('User') %> testUser = users.get(users.size() - 1);
+            assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+            assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+            assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+            assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
+            <%_ if (databaseType !== 'cassandra') { _%>
+            assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+            <%_ } _%>
+            assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        });
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void createUserWithExistingId() throws Exception {
@@ -328,7 +337,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         ManagedUserVM managedUserVM = new ManagedUserVM();
         <%_ if (databaseType === 'cassandra') { _%>
         managedUserVM.setId(UUID.randomUUID().toString());
-        <%_ } else if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+        <%_ } else if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
         managedUserVM.setId("1L");
         <%_ } else { _%>
         managedUserVM.setId(1L);
@@ -348,29 +357,29 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // An entity with an existing ID cannot be created, so this API call must fail
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
         // Validate the User in the database
-        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
-        assertThat(userList).hasSize(databaseSizeBeforeCreate);
+        assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void createUserWithExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -393,29 +402,29 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Create the User
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
         // Validate the User in the database
-        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
-        assertThat(userList).hasSize(databaseSizeBeforeCreate);
+        assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void createUserWithExistingEmail() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -438,30 +447,30 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Create the User
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(post("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.post().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
 
         // Validate the User in the database
-        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
-        assertThat(userList).hasSize(databaseSizeBeforeCreate);
+        assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeCreate));
     }
 <%_ } _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -471,7 +480,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         restUserMockMvc.perform(get("/api/users<% if (databaseType === 'sql') { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRSTNAME)))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LASTNAME)))
@@ -485,7 +494,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .returnResult(<%= asDto('User') %>.class).getResponseBody().blockFirst();
 
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
@@ -500,12 +509,12 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -518,7 +527,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(user.getLogin()))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
@@ -531,7 +540,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         webTestClient.get().uri("/api/users/{login}", user.getLogin())
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.login").isEqualTo(user.getLogin())
             .jsonPath("$.firstName").isEqualTo(DEFAULT_FIRSTNAME)
@@ -542,14 +551,18 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
             <%_ } _%>
             .jsonPath("$.langKey").isEqualTo(DEFAULT_LANGKEY);
         <%_ } _%>
-        <%_ if (cacheManagerIsAvailable === true) { _%>
 
+        <%_ if (cacheProvider === 'memcached') { _%>
+        if (!(cacheManager instanceof NoOpCacheManager)) {
+            assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
+        }
+        <%_ } else if (cacheManagerIsAvailable === true) { _%>
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
         <%_ } _%>
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void getNonExistingUser()<% if (!reactive) { %> throws Exception<% } %> {
@@ -565,12 +578,12 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 <%_ if (authenticationType !== 'oauth2') { _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void updateUser() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -602,37 +615,39 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
 
         // Validate the User in the database
-        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
-        assertThat(userList).hasSize(databaseSizeBeforeUpdate);
-        <%= asEntity('User') %> testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-        assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-        <%_ if (databaseType !== 'cassandra') { _%>
-        assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
-        <%_ } _%>
-        assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+        assertPersistedUsers(users -> {
+            assertThat(users).hasSize(databaseSizeBeforeUpdate);
+            <%= asEntity('User') %> testUser = users.get(users.size() - 1);
+            assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
+            assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
+            assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
+            <%_ if (databaseType !== 'cassandra') { _%>
+            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
+            <%_ } _%>
+            assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+        });
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void updateUserLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -664,38 +679,40 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isOk());
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
 
         // Validate the User in the database
-        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
-        assertThat(userList).hasSize(databaseSizeBeforeUpdate);
-        <%= asEntity('User') %> testUser = userList.get(userList.size() - 1);
-        assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
-        assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
-        assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
-        assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
-        <%_ if (databaseType !== 'cassandra') { _%>
-        assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
-        <%_ } _%>
-        assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+        assertPersistedUsers(users -> {
+            assertThat(users).hasSize(databaseSizeBeforeUpdate);
+            <%= asEntity('User') %> testUser = users.get(users.size() - 1);
+            assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
+            assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
+            assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
+            assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
+            <%_ if (databaseType !== 'cassandra') { _%>
+            assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
+            <%_ } _%>
+            assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
+        });
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -714,7 +731,10 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         anotherUser.setImageUrl("");
         <%_ } _%>
         anotherUser.setLangKey("en");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        anotherUser.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(anotherUser);
         <%_ } _%>
@@ -744,25 +764,26 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void updateUserExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -781,7 +802,10 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         anotherUser.setImageUrl("");
         <%_ } _%>
         anotherUser.setLangKey("en");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        anotherUser.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(anotherUser);
         <%_ } _%>
@@ -811,25 +835,26 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
 
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(put("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(managedUserVM)))
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(managedUserVM))<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
         <%_ } else { _%>
         webTestClient.put().uri("/api/users")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .syncBody(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(TestUtil.convertObjectToJsonBytes(managedUserVM))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } _%>
     }
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
         mockUserSearchRepository.save(user);
         <%_ } _%>
@@ -839,11 +864,12 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Delete the user
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(delete("/api/users/{login}", user.getLogin())
-            .accept(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON)<% if (testsNeedCsrf) { %>
+            .with(csrf())<% } %>)
             .andExpect(status().isNoContent());
         <%_ } else { _%>
         webTestClient.delete().uri("/api/users/{login}", user.getLogin())
-            .accept(TestUtil.APPLICATION_JSON_UTF8)
+            .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isNoContent();
         <%_ } _%>
@@ -853,32 +879,31 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } _%>
 
         // Validate the database is empty
-        List<<%= asEntity('User') %>> userList = userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>;
-        assertThat(userList).hasSize(databaseSizeBeforeDelete - 1);
+        assertPersistedUsers(users -> assertThat(users).hasSize(databaseSizeBeforeDelete - 1));
     }
     <%_ } _%>
-    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase')
+    <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')
         && (!(authenticationType === 'oauth2' && applicationType === 'microservice'))) { _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
     <%_ } _%>
     public void getAllAuthorities()<% if (!reactive) { %> throws Exception<% } %> {
         <%_ if (!reactive) { _%>
         restUserMockMvc.perform(get("/api/users/authorities")
-            .accept(TestUtil.APPLICATION_JSON_UTF8)
-            .contentType(TestUtil.APPLICATION_JSON_UTF8))
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").value(hasItems(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
         <%_ } else { _%>
         webTestClient.get().uri("/api/users/authorities")
-            .accept(TestUtil.APPLICATION_JSON_UTF8)
+            .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
             .expectBody()
             .jsonPath("$").isArray()
             .jsonPath("$[?(@=='" + AuthoritiesConstants.ADMIN + "')]").hasJsonPath()
@@ -888,9 +913,6 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     <%_ } _%>
 
     @Test
-    <%_ if (databaseType === 'sql') { _%>
-    @Transactional
-    <%_ } _%>
     public void testUserEquals() throws Exception {
         TestUtil.equalsVerifier(<%= asEntity('User') %>.class);
         <%= asEntity('User') %> user1 = new <%= asEntity('User') %>();
@@ -983,7 +1005,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
         assertThat(userDTO.toString()).isNotNull();
     }
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
 
     @Test
     public void testAuthorityEquals() {
@@ -1008,4 +1030,12 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         assertThat(authorityA.hashCode()).isEqualTo(authorityB.hashCode());
     }
     <%_ } _%>
+
+    private void assertPersistedUsers(Consumer<List<<%= asEntity('User') %>>> userAssertion) {
+        <%_ if (databaseType === 'couchbase') { _%>
+        // The security filter chain clears the security context after remote calls
+        SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
+        <%_ } _%>
+        userAssertion.accept(userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>);
+    }
 }

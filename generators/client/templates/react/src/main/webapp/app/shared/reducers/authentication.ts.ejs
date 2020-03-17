@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -35,7 +35,7 @@ export const ACTION_TYPES = {
 };
 
 <%_ if (authenticationType === 'jwt') { _%>
-const AUTH_TOKEN_KEY = 'jhi-authenticationToken';
+const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
 <%_ } _%>
 
 const initialState = {
@@ -98,10 +98,10 @@ export default (state: AuthenticationState = initialState, action): Authenticati
         loginSuccess: true
       };
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
-    case SUCCESS(ACTION_TYPES.LOGOUT):
-    <%_ } else { _%>
+    <%_ if (authenticationType === 'jwt') { _%>
     case ACTION_TYPES.LOGOUT:
+    <%_ } else { _%>
+    case SUCCESS(ACTION_TYPES.LOGOUT):
     <%_ } _%>
       return {
         ...initialState,
@@ -147,7 +147,7 @@ export default (state: AuthenticationState = initialState, action): Authenticati
 
 export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, message });
 
-export const getSession = () => async (dispatch, getState) => {
+export const getSession = () => <%_ if (enableTranslation) { _%>async<%_ } _%> (dispatch, getState) => {
     <%_ if (enableTranslation) { _%>
     await dispatch({
       type: ACTION_TYPES.GET_SESSION,
@@ -219,20 +219,14 @@ export const logout = () => dispatch => {
     type: ACTION_TYPES.LOGOUT
   });
 };
-<%_ } else if (authenticationType === 'uaa') { _%>
-export const logout = () => async dispatch => {
-  await dispatch({
-    type: ACTION_TYPES.LOGOUT,
-    payload: axios.post('auth/logout', {})
-  });
-  dispatch(getSession());
-};
 <%_ } else { _%>
 export const logout = () => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.LOGOUT,
-    payload: axios.post('api/logout', {})
+    payload: axios.post(<%_ if (authenticationType === 'uaa') { _%>'auth/logout'<%_ } else { _%>'api/logout'<%_ } _%>, {})
   });
+
+  // fetch new csrf token
   dispatch(getSession());
 };
 <%_ } _%>

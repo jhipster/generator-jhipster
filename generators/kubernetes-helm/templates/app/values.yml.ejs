@@ -3,10 +3,26 @@ mysql:
   enabled: true
   mysqlDatabase: <%= app.baseName.toLowerCase() %>
   mysqlAllowEmptyPassword: true
+  <%_ if (istio) { _%>
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
+  <%_ } _%>
+  initializationFiles:
+    grant.sql: |-
+      grant all privileges on *.* to root@'%' identified by '' with grant option;
 <%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
 postgresql:
   enabled: true
-  postgresUser: <%= app.baseName.toLowerCase() %>
+  postgresqlUsername: <%= app.baseName.toLowerCase() %>
+  postgresqlDatabase: <%= app.baseName %>
+  <%_ if (istio) { _%>
+  master:
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+  slave:
+    podAnnotations:
+      sidecar.istio.io/inject: "false"
+  <%_ } _%>
 <%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
 mariadb:
   enabled: true
@@ -14,11 +30,23 @@ mariadb:
     enabled: false
   db:
     name: <%= app.baseName.toLowerCase() %>
+  <%_ if (istio) { _%>
+  master:
+    annotations:
+      sidecar.istio.io/inject: "false"
+  slave:
+    annotations:
+      sidecar.istio.io/inject: "false"
+  <%_ } _%>
 <%_ } else if (app.prodDatabaseType === 'mongodb') { _%>
 mongodb:
   enabled: true
 mongodb-replicaset:
   replicas: 3
+  <%_ if (istio) { _%>
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
+  <%_ } _%>
 <%_ } else if (app.prodDatabaseType === 'couchbase') { _%>
 couchdb:
   enabled: true

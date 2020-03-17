@@ -1,0 +1,15 @@
+                <configuration>
+                    <schemaVersion>V2</schemaVersion>
+                    <resourceGroup><%= azureAppServiceResourceGroupName %></resourceGroup>
+                    <appName><%= azureAppServiceName %></appName>
+                    <deployment>
+                        <resources>
+                            <resource>
+                            <directory>${project.basedir}/target</directory>
+                            <includes>
+                                <include>*.jar</include>
+                            </includes>
+                            </resource>
+                        </resources>
+                    </deployment>
+                </configuration>

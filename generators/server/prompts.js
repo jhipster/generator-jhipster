@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -123,11 +123,11 @@ function askForServerSideOpts(meta) {
                         name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
                     });
                 }
+                opts.push({
+                    value: 'oauth2',
+                    name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+                });
                 if (!reactive) {
-                    opts.push({
-                        value: 'oauth2',
-                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
-                    });
                     if (['gateway', 'microservice'].includes(applicationType)) {
                         opts.push({
                             value: 'uaa',
@@ -166,31 +166,35 @@ function askForServerSideOpts(meta) {
                         value: 'sql',
                         name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, Oracle, MSSQL)'
                     });
+                } else {
+                    opts.push({
+                        value: 'sql',
+                        name: 'SQL (H2, MySQL, PostgreSQL, MSSQL)'
+                    });
                 }
                 opts.push({
                     value: 'mongodb',
                     name: 'MongoDB'
                 });
+                if (response.authenticationType !== 'oauth2') {
+                    opts.push({
+                        value: 'cassandra',
+                        name: 'Cassandra'
+                    });
+                }
                 opts.push({
                     value: 'couchbase',
                     name: 'Couchbase'
                 });
-                if (!reactive) {
-                    if (
-                        (response.authenticationType !== 'oauth2' && applicationType === 'microservice') ||
-                        (response.authenticationType === 'uaa' && applicationType === 'gateway')
-                    ) {
-                        opts.push({
-                            value: 'no',
-                            name: 'No database'
-                        });
-                    }
-                    if (response.authenticationType !== 'oauth2') {
-                        opts.push({
-                            value: 'cassandra',
-                            name: 'Cassandra'
-                        });
-                    }
+                opts.push({
+                    value: 'neo4j',
+                    name: '[BETA] Neo4j'
+                });
+                if (applicationType !== 'uaa') {
+                    opts.push({
+                        value: 'no',
+                        name: 'No database'
+                    });
                 }
                 return opts;
             },
@@ -201,7 +205,7 @@ function askForServerSideOpts(meta) {
             type: 'list',
             name: 'prodDatabaseType',
             message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
-            choices: constants.SQL_DB_OPTIONS,
+            choices: reactive ? constants.R2DBC_DB_OPTIONS : constants.SQL_DB_OPTIONS,
             default: 0
         },
         {
@@ -223,8 +227,7 @@ function askForServerSideOpts(meta) {
             default: 0
         },
         {
-            // cache is mandatory for gateway with service dsicovery and defined later to 'hazelcast' value
-            when: response => !(applicationType === 'gateway' && response.serviceDiscoveryType),
+            when: () => !reactive,
             type: 'list',
             name: 'cacheProvider',
             message: 'Do you want to use the Spring cache abstraction?',
@@ -234,8 +237,13 @@ function askForServerSideOpts(meta) {
                     name: 'Yes, with the Ehcache implementation (local cache, for a single node)'
                 },
                 {
+                    value: 'caffeine',
+                    name: 'Yes, with the Caffeine implementation (local cache, for a single node)'
+                },
+                {
                     value: 'hazelcast',
-                    name: 'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes)'
+                    name:
+                        'Yes, with the Hazelcast implementation (distributed cache, for multiple nodes, supports rate-limiting for gateway applications)'
                 },
                 {
                     value: 'infinispan',
@@ -247,16 +255,21 @@ function askForServerSideOpts(meta) {
                         'Yes, with Memcached (distributed cache) - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
                 },
                 {
+                    value: 'redis',
+                    name: 'Yes, with the Redis implementation'
+                },
+                {
                     value: 'no',
                     name: 'No - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!'
                 }
             ],
-            default: applicationType === 'microservice' || applicationType === 'uaa' ? 1 : 0
+            default: applicationType === 'microservice' || applicationType === 'uaa' ? 2 : 0
         },
         {
             when: response =>
                 ((response.cacheProvider !== 'no' && response.cacheProvider !== 'memcached') || applicationType === 'gateway') &&
-                response.databaseType === 'sql',
+                response.databaseType === 'sql' &&
+                !reactive,
             type: 'confirm',
             name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',
@@ -316,7 +329,7 @@ function askForServerSideOpts(meta) {
         if (this.serverPort === undefined) {
             this.serverPort = '8080';
         }
-        this.cacheProvider = props.cacheProvider;
+        this.cacheProvider = !reactive ? props.cacheProvider : 'no';
         this.enableHibernateCache = props.enableHibernateCache;
         this.databaseType = props.databaseType;
         this.devDatabaseType = props.devDatabaseType;
@@ -329,22 +342,13 @@ function askForServerSideOpts(meta) {
             this.devDatabaseType = 'no';
             this.prodDatabaseType = 'no';
             this.enableHibernateCache = false;
-        } else if (this.databaseType === 'mongodb') {
-            this.devDatabaseType = 'mongodb';
-            this.prodDatabaseType = 'mongodb';
+            if (this.authenticationType !== 'uaa') {
+                this.skipUserManagement = true;
+            }
+        } else if (['mongodb', 'neo4j', 'couchbase', 'cassandra'].includes(this.databaseType)) {
+            this.devDatabaseType = this.databaseType;
+            this.prodDatabaseType = this.databaseType;
             this.enableHibernateCache = false;
-        } else if (this.databaseType === 'couchbase') {
-            this.devDatabaseType = 'couchbase';
-            this.prodDatabaseType = 'couchbase';
-            this.enableHibernateCache = false;
-        } else if (this.databaseType === 'cassandra') {
-            this.devDatabaseType = 'cassandra';
-            this.prodDatabaseType = 'cassandra';
-            this.enableHibernateCache = false;
-        }
-        // Hazelcast is mandatory for Gateways, as it is used for rate limiting
-        if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
-            this.cacheProvider = 'hazelcast';
         }
         done();
     });
@@ -369,11 +373,11 @@ function askForOptionalItems(meta) {
                 value: 'websocket:spring-websocket'
             });
         }
-        choices.push({
-            name: 'Asynchronous messages using Apache Kafka',
-            value: 'messageBroker:kafka'
-        });
     }
+    choices.push({
+        name: 'Asynchronous messages using Apache Kafka',
+        value: 'messageBroker:kafka'
+    });
     choices.push({
         name: 'API first development using OpenAPI-generator',
         value: 'enableSwaggerCodegen:true'

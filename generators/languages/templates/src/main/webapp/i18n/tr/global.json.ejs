@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -47,7 +47,7 @@
                 "health": "Sağlık",
                 "configuration": "Yapılandırma",
                 "logs": "Kayıtlar",
-                <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
                 "audits": "Denetim",
                 <%_ } _%>
                 "apidocs": "API",
@@ -57,15 +57,15 @@
             "language": "Dil"
         },
         "form": {
-            "username": "Kullanıcı Adı",
+            "username.label": "Kullanıcı Adı",
             "username.placeholder": "Kullanıcı Adınız",
-            "currentpassword": "Mevcut Şifre",
+            "currentpassword.label": "Mevcut Şifre",
             "currentpassword.placeholder": "Mevcut Şifreniz",
-            "newpassword": "Yeni Şifre",
+            "newpassword.label": "Yeni Şifre",
             "newpassword.placeholder": "Yeni Şifreniz",
-            "confirmpassword": "Yeni Şifre Tekrar",
+            "confirmpassword.label": "Yeni Şifre Tekrar",
             "confirmpassword.placeholder": "Yeni Şifreniz Tekrar",
-            "email": "E-posta",
+            "email.label": "E-posta",
             "email.placeholder": "E-posta adresiniz"
         },
         "messages": {
@@ -86,13 +86,13 @@
             "validate": {
                 "newpassword": {
                     "required": "Şifre zorunlu alandır.",
-                    "minlength": "Şifreniz en az 5 karakter olmak zorundadır",
+                    "minlength": "Şifreniz en az 4 karakter olmak zorundadır",
                     "maxlength": "Şifreniz 50 karakterden uzun olamaz",
                     "strength": "Şifre karmaşıklığı:"
                 },
                 "confirmpassword": {
                     "required": "Tekrar şifresi zorunludur.",
-                    "minlength": "Tekrar şifreniz en az 5 karakter olmalıdır",
+                    "minlength": "Tekrar şifreniz en az 4 karakter olmalıdır",
                     "maxlength": "Tekrar şifreniz 50 karakterden uzun olamaz"
                 },
                 "email": {
@@ -153,7 +153,11 @@
         "userexists": "Kullanıcı adı daha önce alınmış!",
         "emailexists": "E-posta adresi zaten kullanılıyor!",
         "idexists": "A new {{entityName}} cannot already have an ID",
-        "idnull": "Invalid ID"
+        "idnull": "Invalid ID",
+        "file": {
+            "could.not.extract": "Could not extract file",
+            "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+        }
     },
     "footer": "Burası sayfa alt bilgisi"
 }

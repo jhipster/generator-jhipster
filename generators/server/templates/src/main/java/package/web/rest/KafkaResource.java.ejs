@@ -1,0 +1,150 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest;
+
+import <%= packageName %>.config.KafkaProperties;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+<%_ if (!reactive) { _%>
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+<%_ }  _%>
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.kafka.receiver.KafkaReceiver;
+import reactor.kafka.receiver.ReceiverOptions;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderOptions;
+import reactor.kafka.sender.SenderRecord;
+import reactor.kafka.sender.SenderResult;
+<%_ }  _%>
+<%_ if (!reactive) { _%>
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+<%_ }  _%>
+
+<%_ if (!reactive) { _%>
+import java.time.Duration;
+<%_ }  _%>
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+<%_ if (!reactive) { _%>
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+<%_ }  _%>
+
+@RestController
+@RequestMapping("/api/<%= dasherizedBaseName %>-kafka")
+public class <%= upperFirstCamelCase(baseName) %>KafkaResource {
+
+    private final Logger log = LoggerFactory.getLogger(<%= upperFirstCamelCase(baseName) %>KafkaResource.class);
+
+    private final KafkaProperties kafkaProperties;
+    <%_ if (!reactive) { _%>
+    private KafkaProducer<String, String> producer;
+    private ExecutorService sseExecutorService = Executors.newCachedThreadPool();
+    <%_ } else { _%>
+    private KafkaSender<String, String> sender;
+    <%_ }  _%>
+
+    public <%= upperFirstCamelCase(baseName) %>KafkaResource(KafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
+        <%_ if (!reactive) { _%>
+        this.producer = new KafkaProducer<>(kafkaProperties.getProducerProps());
+        <%_ } else { _%>
+        this.sender = KafkaSender.create(SenderOptions.create(kafkaProperties.getProducerProps()));
+        <%_ }  _%>
+    }
+
+    @PostMapping("/publish/{topic}")
+    public <% if (!reactive) { %>PublishResult<% } else { %>Mono<PublishResult><% }  %> publish(@PathVariable String topic, @RequestParam String message, @RequestParam(required = false) String key)<% if (!reactive) { %> throws ExecutionException, InterruptedException<% } %> {
+        log.debug("REST request to send to Kafka topic {} with key {} the message : {}", topic, key, message);
+        <%_ if (!reactive) { _%>
+        RecordMetadata metadata = producer.send(new ProducerRecord<>(topic, key, message)).get();
+        return new PublishResult(metadata.topic(), metadata.partition(), metadata.offset(), Instant.ofEpochMilli(metadata.timestamp()));
+        <%_ } else { _%>
+        return Mono.just(SenderRecord.create(topic, null, null, key, message, null))
+            .as(sender::send)
+            .next()
+            .map(SenderResult::recordMetadata)
+            .map(metadata -> new PublishResult(metadata.topic(), metadata.partition(), metadata.offset(), Instant.ofEpochMilli(metadata.timestamp())));
+        <%_ }  _%>
+    }
+
+    @GetMapping("/consume")
+    public <% if (!reactive) { %>SseEmitter<% } else { %>Flux<String><% }  %> consume(@RequestParam("topic") List<String> topics, @RequestParam Map<String, String> consumerParams) {
+        log.debug("REST request to consume records from Kafka topics {}", topics);
+        Map<String, Object> consumerProps = kafkaProperties.getConsumerProps();
+        consumerProps.putAll(consumerParams);
+        consumerProps.remove("topic");
+
+        <%_ if (!reactive) { _%>
+        SseEmitter emitter = new SseEmitter(0L);
+        sseExecutorService.execute(() -> {
+            KafkaConsumer<String, String> consumer = new KafkaConsumer<>(consumerProps);
+            emitter.onCompletion(consumer::close);
+            consumer.subscribe(topics);
+            boolean exitLoop = false;
+            while(!exitLoop) {
+                try {
+                    ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(5));
+                    for (ConsumerRecord<String, String> record : records) {
+                        emitter.send(record.value());
+                    }
+                    emitter.send(SseEmitter.event().comment(""));
+                } catch (Exception ex) {
+                    log.trace("Complete with error {}", ex.getMessage(), ex);
+                    emitter.completeWithError(ex);
+                    exitLoop = true;
+                }
+            }
+            consumer.close();
+            emitter.complete();
+        });
+        return emitter;
+        <%_ } else { _%>
+        ReceiverOptions<String, String> receiverOptions = ReceiverOptions.<String, String>create(consumerProps)
+            .subscription(topics);
+        return KafkaReceiver.create(receiverOptions)
+            .receive()
+            .map(ConsumerRecord::value);
+        <%_ }  _%>
+    }
+
+    private static class PublishResult {
+        public final String topic;
+        public final int partition;
+        public final long offset;
+        public final Instant timestamp;
+
+        private PublishResult(String topic, int partition, long offset, Instant timestamp) {
+            this.topic = topic;
+            this.partition = partition;
+            this.offset = offset;
+            this.timestamp = timestamp;
+        }
+    }
+}

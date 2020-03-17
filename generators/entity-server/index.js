@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,33 +17,41 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const constants = require('../generator-constants');
 const writeFiles = require('./files').writeFiles;
 const utils = require('../utils');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 
 /* constants used throughout */
-let useBlueprint;
+let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
         utils.copyObjectProps(this, opts.context);
-        this.configOptions = this.options.configOptions || {};
-        if (this.databaseType === 'cassandra') {
-            this.pkType = 'UUID';
-        }
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        if (!opts.fromBlueprint) {
-            // use global variable since getters dont have access to instance property
-            useBlueprint = this.composeBlueprint(blueprint, 'entity-server', {
-                ...this.options,
-                context: opts.context,
-                debug: opts.context.isDebugEnabled,
-                configOptions: this.configOptions
-            });
-        } else {
-            useBlueprint = false;
-        }
+        this.jhipsterContext = opts.jhipsterContext || opts.context;
+        this.configOptions = opts.configOptions || {};
+
+        this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
+
+        useBlueprints =
+            !this.fromBlueprint &&
+            this.instantiateBlueprints('entity-server', { context: opts.context, debug: opts.context.isDebugEnabled });
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _initializing() {
+        return {
+            setupConstants() {
+                // Make constants available in templates
+                this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
+            }
+        };
+    }
+
+    get initializing() {
+        if (useBlueprints) return;
+        return this._initializing();
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -52,7 +60,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 };

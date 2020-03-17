@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Gateway",
+        "routes": {
+            "title": "Nykyiset reitit",
+            "url": "URL",
+            "service": "Palvelu",
+            "servers": "Aktiiviset palvelimet",
+            "error": "Varoitus: palvelimia ei saatavilla!"
+        },
+        "refresh": {
+            "button": "Päivitä"
+        }
+    }
+}

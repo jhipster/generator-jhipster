@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2019 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -27,7 +27,10 @@ const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
-let useBlueprint;
+const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+
+let useBlueprints;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -62,16 +65,8 @@ module.exports = class extends BaseBlueprintGenerator {
         });
 
         this.setupClientOptions(this);
-        const blueprint = this.options.blueprint || this.configOptions.blueprint || this.config.get('blueprint');
-        // use global variable since getters dont have access to instance property
-        if (!opts.fromBlueprint) {
-            useBlueprint = this.composeBlueprint(blueprint, 'client', {
-                ...this.options,
-                configOptions: this.configOptions
-            });
-        } else {
-            useBlueprint = false;
-        }
+
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('client');
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -89,23 +84,31 @@ module.exports = class extends BaseBlueprintGenerator {
 
             setupClientconsts() {
                 // Make constants available in templates
-                this.MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
-                this.TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
+                this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
+                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
                 this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
+                    this.clientFramework = ANGULAR;
                 }
                 if (this.clientFramework === 'angular' || this.clientFramework === 'angular2') {
                     /* for backward compatibility */
-                    this.clientFramework = 'angularX';
+                    this.clientFramework = ANGULAR;
                 }
+
+                this.clientTheme = configuration.get('clientTheme');
+                if (!this.clientTheme) {
+                    this.clientTheme = 'none';
+                }
+                this.clientThemeVariant = configuration.get('clientThemeVariant');
+
                 this.enableTranslation = configuration.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
                 this.nativeLanguage = configuration.get('nativeLanguage');
                 this.languages = configuration.get('languages');
@@ -171,7 +174,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get initializing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -181,15 +184,20 @@ module.exports = class extends BaseBlueprintGenerator {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
             askFori18n: prompts.askFori18n,
+            askForClientTheme: prompts.askForClientTheme,
+            askForClientThemeVariant: prompts.askForClientThemeVariant,
 
             setSharedConfigOptions() {
+                this.configOptions.skipClient = this.skipClient;
                 this.configOptions.clientFramework = this.clientFramework;
+                this.configOptions.clientTheme = this.clientTheme;
+                this.configOptions.clientThemeVariant = this.clientThemeVariant;
             }
         };
     }
 
     get prompting() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._prompting();
     }
 
@@ -208,6 +216,10 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             configureGlobal() {
+                // Make constants available in templates
+                this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
+                this.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
+
                 // Application name modified, using each technology's conventions
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.angularAppName = this.getAngularAppName();
@@ -227,12 +239,18 @@ module.exports = class extends BaseBlueprintGenerator {
                     jhipsterVersion: packagejs.version,
                     applicationType: this.applicationType,
                     baseName: this.baseName,
-                    clientFramework: this.clientFramework,
                     useSass: true,
                     enableTranslation: this.enableTranslation,
                     skipCommitHook: this.skipCommitHook,
                     clientPackageManager: this.clientPackageManager
                 };
+                if (this.skipClient) {
+                    config.skipClient = true;
+                } else {
+                    config.clientFramework = this.clientFramework;
+                    config.clientTheme = this.clientTheme;
+                    config.clientThemeVariant = this.clientThemeVariant;
+                }
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     config.nativeLanguage = this.nativeLanguage;
                     config.languages = this.languages;
@@ -255,7 +273,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get configuring() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._configuring();
     }
 
@@ -327,7 +345,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
                 this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
-                this.CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
             },
 
             composeLanguages() {
@@ -339,7 +356,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get default() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._default();
     }
 
@@ -347,18 +364,19 @@ module.exports = class extends BaseBlueprintGenerator {
     _writing() {
         return {
             write() {
+                if (this.skipClient) return;
                 switch (this.clientFramework) {
-                    case 'react':
-                        return writeReactFiles.call(this, useBlueprint);
+                    case REACT:
+                        return writeReactFiles.call(this, useBlueprints);
                     default:
-                        return writeAngularFiles.call(this, useBlueprint);
+                        return writeAngularFiles.call(this, useBlueprints);
                 }
             }
         };
     }
 
     get writing() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._writing();
     }
 
@@ -366,6 +384,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _install() {
         return {
             installing() {
+                if (this.skipClient) return;
                 const logMsg = `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
                 const installConfig = {
@@ -389,7 +408,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get install() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._install();
     }
 
@@ -397,6 +416,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _end() {
         return {
             end() {
+                if (this.skipClient) return;
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
                 const logMsg = `Start your Webpack development server with:\n ${chalk.yellow.bold(`${this.clientPackageManager} start`)}\n`;
@@ -410,7 +430,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get end() {
-        if (useBlueprint) return;
+        if (useBlueprints) return;
         return this._end();
     }
 };
