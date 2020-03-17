@@ -693,6 +693,12 @@
             <version>1.0.2.RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-common</artifactId>
+            <version>4.1.46.Final</version>
+        </dependency>
 <%_ } _%>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>

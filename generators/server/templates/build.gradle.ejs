@@ -562,6 +562,9 @@ dependencies {
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
     testImplementation "io.projectreactor.tools:blockhound-junit-platform:1.0.2.RELEASE"
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.0.0'
+    // See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up
+    implementation 'io.netty:netty-common:4.1.46.Final'
     <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
