@@ -10,7 +10,7 @@
                     "required": "Username anda diperlukan.",
                     "minlength": "Username anda diperlukan minimal 1 karakter.",
                     "maxlength": "Username anda tidak boleh lebih dari 50 karakter.",
-                    "pattern": "Username anda hanya boleh mengandung huruf kecil dan angka."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Pendaftaran berhasil!</strong> Silakan cek email untuk melakukan aktivasi akun.",

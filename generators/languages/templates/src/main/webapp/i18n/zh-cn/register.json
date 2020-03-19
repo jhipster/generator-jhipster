@@ -10,7 +10,7 @@
                     "required": "您的账号是必填项.",
                     "minlength": "您的账号长度至少要有1个字符",
                     "maxlength": "您的账号长度不能超过50个字符",
-                    "pattern": "你的账号只能使用小写英文以及数字"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>注册成功!</strong> 请检查您的邮箱.",
