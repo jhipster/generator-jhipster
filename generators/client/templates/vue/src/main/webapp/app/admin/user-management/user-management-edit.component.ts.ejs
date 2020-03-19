@@ -8,7 +8,7 @@ const loginValidator = (value: string) => {
   if (!value) {
     return true;
   }
-  return /^[_.@A-Za-z0-9-]*$/.test(value);
+  return /^[a-zA-Z0-9!#$&\'*+=?^_`{|}~.-]+@?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value);
 };
 
 const validations: any = {
