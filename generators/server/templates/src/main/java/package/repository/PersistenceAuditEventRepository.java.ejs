@@ -137,7 +137,7 @@ class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEve
         return databaseClient.execute("SELECT COUNT(DISTINCT event_id) FROM <%= jhiTablePrefix %>_persistent_audit_event " +
             "WHERE event_date > :fromDate AND event_date < :toDate")
             .bind("fromDate", fromDateLocal)
-            .bind("toDate", fromDateLocal)
+            .bind("toDate", toDateLocal)
             .as(Long.class)
             .fetch()
             .one();
