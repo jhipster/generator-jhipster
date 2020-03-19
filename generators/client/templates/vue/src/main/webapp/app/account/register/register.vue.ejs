@@ -32,7 +32,7 @@
                         <label class="form-control-label" for="username" v-text="$t('global.form[\'username.label\']')">Username</label>
                         <input type="text" class="form-control" v-model="$v.registerAccount.login.$model" id="username" name="login"
                                :class="{'valid': !$v.registerAccount.login.$invalid, 'invalid': $v.registerAccount.login.$invalid }"
-                               required minlength="1" maxlength="50" pattern="^[_.@A-Za-z0-9-]*$" v-bind:placeholder="$t('global.form[\'username.placeholder\']')">
+                               required minlength="1" maxlength="50" pattern="^[a-zA-Z0-9!#$&'*+=?^_`{|}~.-]+@?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" v-bind:placeholder="$t('global.form[\'username.placeholder\']')">
                         <div v-if="$v.registerAccount.login.$anyDirty && $v.registerAccount.login.$invalid">
                             <small class="form-text text-danger" v-if="!$v.registerAccount.login.required"
                                    v-text="$t('register.messages.validate.login.required')">
