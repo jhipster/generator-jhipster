@@ -31,7 +31,7 @@ const GRADLE_VERSION = '6.1';
 // Libraries version
 const JIB_VERSION = '2.1.0';
 
-const LIQUIBASE_VERSION = '3.8.7';
+const LIQUIBASE_VERSION = '3.8.8';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
 
