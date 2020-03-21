@@ -1128,6 +1128,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.databaseType,
                     context.relationships
                 );
+                // Deprecated: kept for compatibility, should be removed in next major release
+                context.pkType = context.primaryKeyType;
+                context.hasUserField = hasUserField;
             },
 
             insight() {
