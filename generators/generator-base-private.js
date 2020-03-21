@@ -1142,15 +1142,16 @@ module.exports = class extends Generator {
     /**
      * Generate Entity Client Field Declarations
      *
-     * @param {string} tsKeyType - key type in Typescript
+     * @param {string} pkType - type of primary key
      * @param {Array|Object} fields - array of fields
      * @param {Array|Object} relationships - array of relationships
      * @param {string} dto - dto
      * @param {boolean} embedded - either the actual entity is embedded or not
      * @returns variablesWithTypes: Array
      */
-    generateEntityClientFields(tsKeyType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
+    generateEntityClientFields(pkType, fields, relationships, dto, customDateType = 'Moment', embedded = false) {
         const variablesWithTypes = [];
+        const tsKeyType = this.getTypescriptKeyType(pkType);
         if (!embedded) {
             variablesWithTypes.push(`id?: ${tsKeyType}`);
         }

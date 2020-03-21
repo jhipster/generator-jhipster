@@ -18,7 +18,7 @@
 -%>
 <%_
 const tsKeyId = generateTestEntityId(primaryKeyType);
-const variablesWithTypes = generateEntityClientFields(tsKeyType, fields, relationships, dto, undefined, embedded);
+const variablesWithTypes = generateEntityClientFields(primaryKeyType, fields, relationships, dto, undefined, embedded);
 const enumImports = generateEntityClientEnumImports(fields);
 _%>
 import { TestBed, getTestBed } from '@angular/core/testing';
