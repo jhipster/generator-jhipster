@@ -33,16 +33,13 @@ const entityToDtoReference = mapper + '::'+ 'toDto';
 const repository = entityInstance  + 'Repository';
 const searchRepository = entityInstance  + 'SearchRepository';
 let isUsingMapsId = false;
-let primaryKeyType = pkType;
 let mapsIdAssoc;
 for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-    if ( isUsingMapsId === true) {
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
+    if (isUsingMapsId) {
         mapsIdAssoc = relationships[idx];
-        primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
         break;
     }
-    isUsingMapsId = false;
 }
 _%>
 <%_ if (service === 'serviceImpl') { _%>

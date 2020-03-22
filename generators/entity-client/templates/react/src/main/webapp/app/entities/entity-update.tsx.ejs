@@ -23,10 +23,6 @@ for (const idx in fields) {
         i18nToLoad.push(fields[idx].enumInstance);
     }
 }
-// const query = generateEntityQueries(relationships, entityInstance, dto);
-// const queries = query.queries;
-// const variables = query.variables;
-// let hasManyToMany = query.hasManyToMany;
 _%>
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
