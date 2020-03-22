@@ -126,6 +126,7 @@ import org.jgroups.protocols.pbcast.STABLE;
 import org.jgroups.stack.IpAddress;
 import org.jgroups.stack.ProtocolStack;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import org.springframework.beans.factory.BeanInitializationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -586,13 +587,12 @@ public class CacheConfiguration {
      * from registry and sends only unicast messages to the host list.
      */
     private JChannel getTransportChannel() {
-        JChannel channel = null;
-        List<PhysicalAddress> initialHosts = new ArrayList<>();
+        JChannel channel;
+        List<InetSocketAddress> initialHosts = new ArrayList<>();
         try {
             for (ServiceInstance instance : discoveryClient.getInstances(registration.getServiceId())) {
-                String clusterMember = instance.getHost() + ":7800";
-                log.debug("Adding Infinispan cluster member {}", clusterMember);
-                initialHosts.add(new IpAddress(clusterMember));
+                log.debug("Adding Infinispan cluster member {}:{}", instance.getHost(), 7800);
+                initialHosts.add(new InetSocketAddress(instance.getHost(), 7800));
             }
             TCP tcp = new TCP();
             tcp.setBindAddress(InetAddress.getLocalHost());
@@ -602,7 +602,7 @@ public class CacheConfiguration {
             tcp.setThreadPoolKeepAliveTime(60000);
 
             TCPPING tcpping = new TCPPING();
-            initialHosts.add(new IpAddress(InetAddress.getLocalHost(), 7800));
+            initialHosts.add(new InetSocketAddress(InetAddress.getLocalHost(), 7800));
             tcpping.setInitialHosts(initialHosts);
             tcpping.setErgonomics(false);
             tcpping.setPortRange(10);
