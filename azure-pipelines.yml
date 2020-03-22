@@ -58,6 +58,9 @@ jobs:
               ms-micro-eureka-jwt:
                   JHI_APP: ms-micro-eureka-jwt
                   JHI_ENTITY: micro
+              ms-micro-eureka-infinispan:
+                  JHI_APP: ms-micro-eureka-infinispan
+                  JHI_ENTITY: micro
               ms-react-gateway-consul-jwt:
                   JHI_APP: ms-react-gateway-consul-jwt
                   JHI_ENTITY: sqllight
