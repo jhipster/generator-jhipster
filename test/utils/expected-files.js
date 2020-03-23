@@ -365,7 +365,9 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/login-modal.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/home/home.component.spec.ts`
     ],
 
     client: [
@@ -519,6 +521,8 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/metrics/metrics.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/core/user/account.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/layouts/main/main.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/layouts/navbar/navbar.component.spec.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/alert/alert-error.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/shared/login/login.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-account.service.ts`,
@@ -527,6 +531,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-event-manager.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-language.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-login.service.ts`,
+        `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-login-modal.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-route.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/mock-state-storage.service.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/helpers/spyobject.ts`,
