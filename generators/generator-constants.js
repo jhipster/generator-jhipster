@@ -184,6 +184,7 @@ const LANGUAGES = [
         value: 'bn',
         momentLocaleId: 'bn-bd'
     },
+    { name: 'Bulgarian', dispName: 'Български', value: 'bg' },
     {
         name: 'Catalan',
         dispName: 'Català',
