@@ -29,7 +29,6 @@ const entityListToDto = mapper + '.' + 'toDto';
 const entityToDtoReference = mapper + '::'+ 'toDto';
 const repository = entityInstance  + 'Repository';
 const criteria = entityClass + 'Criteria';
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 _%>
 import java.util.List;
 

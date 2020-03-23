@@ -24,8 +24,8 @@ import <%= packageName %>.web.rest.TestUtil;
 <%_
 let hasOauthUser = false;
 for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-    if (isUsingMapsId === true) {
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
+    if (isUsingMapsId) {
         hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
         break;
     }

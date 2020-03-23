@@ -10,7 +10,7 @@
                     "required": "Kullanıcı adı zorunlu.",
                     "minlength": "Kullanıcı adı en az 1 karakter olmak zorundadır",
                     "maxlength": "Kullanıcı adı en fazla 50 karakter olabilir",
-                    "pattern": "Kullanıcı adınız sadece küçük harfler ve numaralardan oluşabilir"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Kayıt işlemi yapıldı!</strong> Lütfen onay için e-posta'nızı kontrol edin.",

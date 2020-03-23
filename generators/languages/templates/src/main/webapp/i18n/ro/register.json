@@ -10,7 +10,7 @@
                     "required": "Numele de utilizator este necesar.",
                     "minlength": "Numele de utilizator nu poate fi mai scurt de 1 caracter.",
                     "maxlength": "Numele de utilizator nu poate fi mai lung de 50 caractere.",
-                    "pattern": "Numele de utilizator poate conține doar litere mici și numere."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Înregistrare salvată!</strong> Vă rugăm să vă verificați emailul pentru confirmare.",
