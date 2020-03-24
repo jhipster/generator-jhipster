@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyType = getTypescriptKeyType(getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships));
 let searchType = 'Search';
 if (pagination === 'pagination' || pagination === 'infinite-scroll') {
     searchType = 'SearchWithPagination';

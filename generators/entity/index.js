@@ -879,7 +879,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.validation = true;
                     }
                 });
-                context.hasUserField = context.saveUserSnapshot = false;
+                let hasUserField = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach(relationship => {
                     const otherEntityName = relationship.otherEntityName;
@@ -893,6 +893,11 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
                     const jhiTablePrefix = context.jhiTablePrefix;
+
+                    relationship.otherEntityPrimaryKeyType =
+                        relationship.otherEntityName === 'user' && context.authenticationType === 'oauth2'
+                            ? 'String'
+                            : this.getPkType(context.databaseType);
 
                     // Look for fields at the other other side of the relationship
                     if (otherEntityData && otherEntityData.relationships) {
@@ -994,7 +999,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                     if (otherEntityName === 'user') {
                         relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
-                        context.hasUserField = true;
+                        hasUserField = true;
                     } else {
                         relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;
                         if (!relationship.otherEntityTableName) {
@@ -1005,11 +1010,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             relationship.otherEntityTableName = `${jhiTablePrefix}_${otherEntityTableName}`;
                         }
                     }
-                    context.saveUserSnapshot =
-                        context.applicationType === 'microservice' &&
-                        context.authenticationType === 'oauth2' &&
-                        context.hasUserField &&
-                        context.dto === 'no';
 
                     if (_.isUndefined(relationship.otherEntityNamePlural)) {
                         relationship.otherEntityNamePlural = pluralize(relationship.otherEntityName);
@@ -1117,7 +1117,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.differentRelationships[entityType].push(relationship);
                 });
 
-                context.pkType = this.getPkType(context.databaseType);
+                context.saveUserSnapshot =
+                    context.applicationType === 'microservice' &&
+                    context.authenticationType === 'oauth2' &&
+                    hasUserField &&
+                    context.dto === 'no';
+
+                context.primaryKeyType = this.getPkTypeBasedOnDBAndAssociation(
+                    context.authenticationType,
+                    context.databaseType,
+                    context.relationships
+                );
+                // Deprecated: kept for compatibility, should be removed in next major release
+                context.pkType = context.primaryKeyType;
+                context.hasUserField = hasUserField;
             },
 
             insight() {

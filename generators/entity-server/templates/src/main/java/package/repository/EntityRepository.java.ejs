@@ -18,9 +18,6 @@
 -%>
 package <%= packageName %>.repository;
 
-<%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
-_%>
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 
 <%_ if (fieldsContainOwnerManyToMany) { _%>

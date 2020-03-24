@@ -604,7 +604,7 @@ const expectedFiles = {
         `${DOCKER_DIR}kafka.yml`
     ],
 
-    swaggerCodegen: [`${SERVER_MAIN_RES_DIR}swagger/api.yml`],
+    swaggerCodegen: [`${SERVER_MAIN_RES_DIR}swagger/api.yml`, `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/OpenApiConfiguration.java`],
 
     swaggerCodegenGradle: ['gradle/swagger.gradle'],
 

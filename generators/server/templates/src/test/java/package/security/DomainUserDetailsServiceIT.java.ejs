@@ -29,7 +29,7 @@ import <%= packageName %>.RedisTestContainerExtension;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (databaseType === 'sql' && reactive) { _%>
-import com.mycompany.myapp.config.Constants;
+import <%= packageName %>.config.Constants;
 <%_ } _%>
 import <%= packageName %>.domain.<%= asEntity('User') %>;
 import <%= packageName %>.repository.UserRepository;

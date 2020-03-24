@@ -19,7 +19,6 @@
 package <%= packageName %>.service;
 
 <%_
-const primaryKeyType = getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships);
 const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
 const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
 const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';

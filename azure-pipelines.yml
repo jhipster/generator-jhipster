@@ -28,7 +28,7 @@ jobs:
           JHI_JDK: 11
           # if JHI_LIB_BRANCH value is release, use the release from Maven
           JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-          JHI_LIB_BRANCH: release
+          JHI_LIB_BRANCH: master
           # if JHI_GEN_BRANCH value is release, use the release from NPM
           JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
           JHI_GEN_BRANCH: master
@@ -57,6 +57,9 @@ jobs:
                   JHI_ENTITY: uaa
               ms-micro-eureka-jwt:
                   JHI_APP: ms-micro-eureka-jwt
+                  JHI_ENTITY: micro
+              ms-micro-eureka-infinispan:
+                  JHI_APP: ms-micro-eureka-infinispan
                   JHI_ENTITY: micro
               ms-react-gateway-consul-jwt:
                   JHI_APP: ms-react-gateway-consul-jwt

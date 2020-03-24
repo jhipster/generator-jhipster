@@ -549,6 +549,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/UserJWTController.java`
                 }
             ]
+        },
+        {
+            condition: generator => !!generator.enableSwaggerCodegen,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/OpenApiConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/OpenApiConfiguration.java`
+                }
+            ]
         }
     ],
     serverJavaGateway: [

@@ -26,8 +26,8 @@ let mapsIdEntityInstance;
 let mapsIdRepoInstance;
 let hasOauthUser = false;
 for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-    if ( isUsingMapsId === true) {
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
+    if (isUsingMapsId) {
         mapsIdAssoc = relationships[idx];
         mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
         mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
