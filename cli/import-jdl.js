@@ -229,7 +229,6 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         });
     } else {
         /* Traditional entity only generation */
-        const callback = isLastEntityToGenerate ? done : () => {};
         env.run(
             command,
             {
@@ -237,7 +236,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
                 force: options.force || !options.interactive,
                 'skip-install': !shouldTriggerInstall
             },
-            callback
+            isLastEntityToGenerate ? done : () => {}
         );
     }
 };
