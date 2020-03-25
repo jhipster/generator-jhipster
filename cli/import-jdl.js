@@ -180,7 +180,7 @@ const generateApplicationFiles = ({ generator, application, withEntities, inFold
  * @param {boolean} shouldTriggerInstall
  * @param {function} forkProcess
  */
-const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInstall, forkProcess) => {
+const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInstall, forkProcess, isLastEntityToGenerate) => {
     const options = {
         ...generator.options,
         regenerate: true,
@@ -229,6 +229,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         });
     } else {
         /* Traditional entity only generation */
+        const callback = isLastEntityToGenerate ? done : () => {};
         env.run(
             command,
             {
@@ -236,7 +237,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
                 force: options.force || !options.interactive,
                 'skip-install': !shouldTriggerInstall
             },
-            done
+            callback
         );
     }
 };
@@ -440,7 +441,8 @@ class JDLProcessor {
                     this.importState.exportedApplications.length > 1,
                     env,
                     shouldTriggerInstall(this, i),
-                    forkProcess
+                    forkProcess,
+                    i === this.importState.exportedEntities.length - 1
                 );
             });
         } catch (error) {
