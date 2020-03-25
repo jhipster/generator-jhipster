@@ -25,8 +25,7 @@ const pretty = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
-const waitUntil = require('./wait-until');
-const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs } = require('./utils');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
 
 const packagejs = require('../package.json');
@@ -37,25 +36,8 @@ const runYeomanProcess = require.resolve('./run-yeoman-process.js');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-// holds the state of generation for interactive mode
-const generationCompletionState = {
-    exportedEntities: {},
-    exportedApplications: {},
-    exportedDeployments: {}
-};
-
 const getBaseName = application => application && application[GENERATOR_NAME] && application[GENERATOR_NAME].baseName;
 const getDeploymentType = deployment => deployment && deployment[GENERATOR_NAME] && deployment[GENERATOR_NAME].deploymentType;
-
-/**
- * update the initial state
- */
-const updateDeploymentState = importState =>
-    Object.entries(importState).forEach(([key, val]) => {
-        val.forEach(it => {
-            generationCompletionState[key][getBaseName(it) || getDeploymentType(it) || it.name] = false;
-        });
-    });
 
 /**
  * Imports the Applications and Entities defined in JDL
@@ -74,7 +56,6 @@ function importJDL(jdlImporter) {
         logger.debug(`importState exportedEntities: ${importState.exportedEntities.length}`);
         logger.debug(`importState exportedApplications: ${importState.exportedApplications.length}`);
         logger.debug(`importState exportedDeployments: ${importState.exportedDeployments.length}`);
-        updateDeploymentState(importState);
         if (importState.exportedEntities.length > 0) {
             const entityNames = _.uniq(importState.exportedEntities.map(exportedEntity => exportedEntity.name)).join(', ');
             logger.info(`Found entities: ${chalk.yellow(entityNames)}.`);
@@ -113,7 +94,7 @@ const shouldGenerateDeployments = generator =>
  * Generate deployment source code for JDL deployments defined.
  * @param {any} config
  * @param {function} forkProcess
- * @returns {obj} Nodejs ChildProcess: https://nodejs.org/api/child_process.html#child_process_child_process
+ * @returns Promise
  */
 const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProcess) => {
     const deploymentType = getDeploymentType(deployment);
@@ -131,12 +112,14 @@ const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProces
             cwd
         }
     );
-    childProc.on('exit', code => {
-        if (code !== 0) {
-            process.exitCode = code;
-        }
-        logger.info(`Deployment: child process exited with code ${code}`);
-        generationCompletionState.exportedDeployments[deploymentType] = true;
+    return new Promise(resolve => {
+        childProc.on('exit', code => {
+            if (code !== 0) {
+                process.exitCode = code;
+            }
+            logger.info(`Deployment: child process exited with code ${code}`);
+            resolve();
+        });
     });
 };
 
@@ -144,7 +127,7 @@ const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProces
  * Generate application source code for JDL apps defined.
  * @param {any} config
  * @param {function} forkProcess
- * @returns {obj} Nodejs ChildProcess: https://nodejs.org/api/child_process.html#child_process_child_process
+ * @returns Promise
  */
 const generateApplicationFiles = ({ generator, application, withEntities, inFolder }, forkProcess) => {
     const baseName = getBaseName(application);
@@ -162,12 +145,14 @@ const generateApplicationFiles = ({ generator, application, withEntities, inFold
             cwd
         }
     );
-    childProc.on('exit', code => {
-        if (code !== 0) {
-            process.exitCode = code;
-        }
-        logger.info(`App: child process exited with code ${code}`);
-        generationCompletionState.exportedApplications[baseName] = true;
+    return new Promise(resolve => {
+        childProc.on('exit', code => {
+            if (code !== 0) {
+                process.exitCode = code;
+            }
+            logger.info(`App: child process exited with code ${code}`);
+            resolve();
+        });
     });
 };
 
@@ -179,6 +164,7 @@ const generateApplicationFiles = ({ generator, application, withEntities, inFold
  * @param {any} env
  * @param {boolean} shouldTriggerInstall
  * @param {function} forkProcess
+ * @return Promise
  */
 const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInstall, forkProcess) => {
     const options = {
@@ -196,49 +182,41 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
     const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inFolder) {
         /* Generating entities inside multiple apps */
-        let previousEntity;
         const callGenerator = baseName => {
-            logger.info(`Generating entities for application ${baseName} in a new parallel process`);
+            logger.info(`Generating entity ${entity.name} for application ${baseName} in a new parallel process`);
             const cwd = path.join(generator.pwd, baseName);
             logger.debug(`Child process will be triggered for ${runYeomanProcess} with cwd: ${cwd}`);
 
             const childProc = forkProcess(runYeomanProcess, [command, ...getOptionAsArgs(options, false, !options.interactive)], { cwd });
-            childProc.on('exit', code => {
-                if (code !== 0) {
-                    process.exitCode = code;
-                }
-                logger.info(`Entity: child process exited with code ${code}`);
-                generationCompletionState.exportedEntities[entity.name] = true;
+            return new Promise(resolve => {
+                childProc.on('exit', code => {
+                    if (code !== 0) {
+                        process.exitCode = code;
+                    }
+                    logger.info(`Entity: child process exited with code ${code}`);
+                    resolve();
+                });
             });
-            previousEntity = entity.name;
         };
         const baseNames = entity.applications;
-        baseNames.forEach(baseName => {
-            if (generator.options.interactive) {
-                waitUntil()
-                    .interval(500)
-                    .times(200) // approximate 2 minutes
-                    .condition(() => generationCompletionState.exportedEntities[previousEntity] || !previousEntity)
-                    .done(result => {
-                        logger.debug(`Result from waitUntil for application ${previousEntity} to finish: ${result}`);
-                        callGenerator(baseName);
-                    });
-            } else {
-                callGenerator(baseName);
-            }
-        });
-    } else {
-        /* Traditional entity only generation */
-        env.run(
-            command,
-            {
-                ...options,
-                force: options.force || !options.interactive,
-                'skip-install': !shouldTriggerInstall
-            },
-            done
-        );
+        if (generator.options.interactive) {
+            return baseNames.reduce((promise, baseName) => {
+                return promise.then(() => callGenerator(baseName));
+            }, Promise.resolve());
+        }
+        return Promise.all(baseNames.map(callGenerator));
     }
+    /* Traditional entity only generation */
+    return env.run(
+        command,
+        {
+            ...options,
+            force: options.force || !options.interactive,
+            'skip-install': !shouldTriggerInstall
+        },
+        /* Create done with empty success message */
+        doneFactory()
+    );
 };
 
 /**
@@ -252,8 +230,6 @@ const shouldTriggerInstall = (generator, index) =>
     !generator.skipClient &&
     !generator.options['json-only'] &&
     !shouldGenerateApplications(generator);
-
-const isAllCompleted = items => Object.values(items).every(it => it);
 
 class JDLProcessor {
     constructor(jdlFiles, jdlContent, options) {
@@ -320,16 +296,15 @@ class JDLProcessor {
     generateApplications(forkProcess) {
         if (!shouldGenerateApplications(this)) {
             logger.debug('Applications not generated');
-            return;
+            return Promise.resolve();
         }
         logger.info(
             `Generating ${this.importState.exportedApplications.length} ` +
                 `${pluralize('application', this.importState.exportedApplications.length)}.`
         );
-        let previousApp;
         const callGenerator = application => {
             try {
-                generateApplicationFiles(
+                return generateApplicationFiles(
                     {
                         generator: this,
                         application,
@@ -338,32 +313,23 @@ class JDLProcessor {
                     },
                     forkProcess
                 );
-                previousApp = getBaseName(application);
             } catch (error) {
                 logger.error(`Error while generating applications from the parsed JDL\n${error}`, error);
                 throw error;
             }
         };
-        this.importState.exportedApplications.forEach(application => {
-            if (this.options.interactive) {
-                waitUntil()
-                    .interval(500)
-                    .times(500) // approximate 5 minutes
-                    .condition(() => generationCompletionState.exportedApplications[previousApp] || !previousApp)
-                    .done(result => {
-                        logger.debug(`Result from waitUntil for application ${previousApp} to finish: ${result}`);
-                        callGenerator(application);
-                    });
-            } else {
-                callGenerator(application);
-            }
-        });
+        if (this.options.interactive) {
+            return this.importState.exportedApplications.reduce((promise, application) => {
+                return promise.then(() => callGenerator(application));
+            }, Promise.resolve());
+        }
+        return Promise.all(this.importState.exportedApplications.map(callGenerator));
     }
 
     generateDeployments(forkProcess) {
         if (!shouldGenerateDeployments(this)) {
             logger.debug('Deployments not generated');
-            return;
+            return Promise.resolve();
         }
         logger.info(
             `Generating ${this.importState.exportedDeployments.length} ` +
@@ -371,10 +337,9 @@ class JDLProcessor {
         );
 
         const callDeploymentGenerator = () => {
-            let previousDeployment;
             const callGenerator = deployment => {
                 try {
-                    generateDeploymentFiles(
+                    return generateDeploymentFiles(
                         {
                             generator: this,
                             deployment,
@@ -382,67 +347,49 @@ class JDLProcessor {
                         },
                         forkProcess
                     );
-                    previousDeployment = getDeploymentType(deployment);
                 } catch (error) {
                     logger.error(`Error while generating deployments from the parsed JDL\n${error}`, error);
                     throw error;
                 }
             };
-            this.importState.exportedDeployments.forEach(deployment => {
-                if (this.options.interactive) {
-                    waitUntil()
-                        .interval(500)
-                        .times(200) // approximate 2 minutes
-                        .condition(() => generationCompletionState.exportedDeployments[previousDeployment] || !previousDeployment)
-                        .done(result => {
-                            logger.debug(`Result from waitUntil for deployment ${previousDeployment} to finish: ${result}`);
-                            callGenerator(deployment);
-                        });
-                } else {
-                    callGenerator(deployment);
-                }
-            });
+            if (this.options.interactive) {
+                // Queue callGenerator in chain
+                return this.importState.exportedDeployments.reduce((promise, deployment) => {
+                    return promise.then(() => callGenerator(deployment));
+                }, Promise.resolve());
+            }
+            return Promise.all(this.importState.exportedDeployments.map(callGenerator));
         };
 
-        if (shouldGenerateApplications(this)) {
-            waitUntil()
-                .interval(500)
-                .times(1000) // approximate 10 minutes
-                .condition(() => isAllCompleted(generationCompletionState.exportedApplications))
-                .done(result => {
-                    logger.info('Done waiting for application generation');
-                    logger.debug(`Result from waitUntil for all applications to finish: ${result}`);
-                    callDeploymentGenerator();
-                });
-        } else {
-            callDeploymentGenerator();
-        }
+        return callDeploymentGenerator();
     }
 
     generateEntities(env, forkProcess) {
         if (this.importState.exportedEntities.length === 0 || shouldGenerateApplications(this)) {
             logger.debug('Entities not generated');
-            return;
+            return Promise.resolve();
         }
         if (this.options['json-only']) {
             logger.info('Entity JSON files created. Entity generation skipped.');
-            return;
+            return Promise.resolve();
         }
         try {
             logger.info(
                 `Generating ${this.importState.exportedEntities.length} ` +
                     `${pluralize('entity', this.importState.exportedEntities.length)}.`
             );
-            this.importState.exportedEntities.forEach((exportedEntity, i) => {
-                generateEntityFiles(
-                    this,
-                    exportedEntity,
-                    this.importState.exportedApplications.length > 1,
-                    env,
-                    shouldTriggerInstall(this, i),
-                    forkProcess
-                );
-            });
+            return Promise.all(
+                this.importState.exportedEntities.map((exportedEntity, i) => {
+                    return generateEntityFiles(
+                        this,
+                        exportedEntity,
+                        this.importState.exportedApplications.length > 1,
+                        env,
+                        shouldTriggerInstall(this, i),
+                        forkProcess
+                    );
+                })
+            );
         } catch (error) {
             logger.error(`Error while generating entities from the parsed JDL\n${error}`, error);
             throw error;
@@ -482,10 +429,17 @@ module.exports = (args, options, env, forkProcess = fork) => {
         jdlImporter.getConfig();
         jdlImporter.importJDL();
         jdlImporter.sendInsight();
-        jdlImporter.generateApplications(forkProcess);
-        jdlImporter.generateEntities(env, forkProcess);
-        jdlImporter.generateDeployments(forkProcess);
+        return jdlImporter
+            .generateApplications(forkProcess)
+            .then(() => {
+                return jdlImporter.generateEntities(env, forkProcess);
+            })
+            .then(() => {
+                return jdlImporter.generateDeployments(forkProcess);
+            })
+            .then(printSuccess);
     } catch (e) {
         logger.error(`Error during import-jdl: ${e.message}`, e);
+        return Promise.resolve();
     }
 };
