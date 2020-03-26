@@ -171,6 +171,7 @@ describe('JHipsterApplicationExporter', () => {
       });
 
       context('when exporting an application to JSON with creationTimestampConfig', () => {
+        let content;
         before(() => {
           exportApplication(
             createJDLApplication({
@@ -184,6 +185,7 @@ describe('JHipsterApplicationExporter', () => {
             }),
             { creationTimestampConfig: 1546300800000 }
           );
+          content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
         });
 
         after(() => {
@@ -191,7 +193,6 @@ describe('JHipsterApplicationExporter', () => {
         });
 
         it('sets creationTimestamp on .yo-rc.json', () => {
-          const content = JSON.parse(fs.readFileSync(path.join('.yo-rc.json'), { encoding: 'utf8' }));
           expect(content['generator-jhipster']).not.to.be.undefined;
           expect(content['generator-jhipster'].creationTimestamp).to.equal(1546300800000);
         });
