@@ -204,6 +204,16 @@ const done = errorMsg => {
     }
 };
 
+const doneEntity = isLastEntityToGenerate => {
+    return errorMsg => {
+        if (errorMsg) {
+            logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+        } else if (isLastEntityToGenerate) {
+            logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+        }
+    };
+};
+
 const createYeomanEnv = packagePatterns => {
     const env = yeoman.createEnv();
     // Register jhipster generators.
@@ -338,6 +348,7 @@ module.exports = {
     getCommand,
     getCommandOptions,
     done,
+    doneEntity,
     createYeomanEnv,
     loadBlueprints,
     loadBlueprintsFromYoRc,

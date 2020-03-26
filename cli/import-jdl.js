@@ -26,7 +26,7 @@ const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
 const waitUntil = require('./wait-until');
-const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, done, getOptionAsArgs } = require('./utils');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, doneEntity, getOptionAsArgs } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
 
 const packagejs = require('../package.json');
@@ -236,7 +236,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
                 force: options.force || !options.interactive,
                 'skip-install': !shouldTriggerInstall
             },
-            isLastEntityToGenerate ? done : () => {}
+            doneEntity(isLastEntityToGenerate)
         );
     }
 };
