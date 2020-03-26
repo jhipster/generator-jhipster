@@ -732,6 +732,47 @@ describe('JHipsterEntityExporter', () => {
           expect(fs.statSync(path.join('.jhipster', 'A.json')).isFile()).to.be.true;
         });
       });
+
+      context('skip file write', () => {
+        before(() => {
+          const entity = {
+            fields: [],
+            relationships: [],
+            changelogDate: '42',
+            javadoc: '',
+            entityTableName: 'a',
+            dto: 'no',
+            pagination: 'no',
+            service: 'no',
+            fluentMethods: true,
+            jpaMetamodelFiltering: false,
+            clientRootFolder: '',
+            applications: ['toto']
+          };
+          const application = createJDLApplication({
+            applicationType: ApplicationTypes.MONOLITH,
+            baseName: 'toto'
+          });
+          application.addEntityNames(['A']);
+          JHipsterEntityExporter.exportEntitiesInApplications({
+            entities: { A: entity },
+            skipEntityFilesGeneration: true,
+            applications: {
+              toto: application
+            }
+          });
+        });
+
+        after(() => {
+          fs.rmdirSync('.jhipster');
+        });
+
+        it("doesn't create the entity in the current folder", () => {
+          expect(fs.statSync('.jhipster').isDirectory()).to.be.true;
+          expect(() => fs.statSync(path.join('.jhipster', 'A.json'))).to.throw();
+        });
+      });
+
       context('with more than one application', () => {
         let application1;
         let application2;

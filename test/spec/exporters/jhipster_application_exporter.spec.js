@@ -148,6 +148,28 @@ describe('JHipsterApplicationExporter', () => {
           });
         });
       });
+
+      describe('when exporting an application to JSON with skipYoRcGeneration', () => {
+        before(() => {
+          exportApplication(
+            createJDLApplication({
+              applicationType: MONOLITH,
+              baseName: 'toto',
+              packageName: 'com.mathieu.sample',
+              enableTranslation: false,
+              languages: ['en', 'fr'],
+              jhipsterVersion: '4.9.0',
+              otherModules: ['MyModule']
+            }),
+            { skipYoRcGeneration: true }
+          );
+        });
+
+        it("doesn't create the .yo-rc.json in the current folder", () => {
+          expect(() => fs.statSync('.yo-rc.json')).to.throw();
+        });
+      });
+
       describe('when exporting an existing application to JSON', () => {
         let content;
 
