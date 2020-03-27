@@ -925,21 +925,6 @@ const serverFiles = {
             templates: [{ file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` }]
         },
         {
-            // TODO: remove when supported by spring-data
-            condition: generator => generator.reactive,
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/config/ReactivePageableHandlerMethodArgumentResolver.java',
-                    renameTo: generator => `${generator.javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`
-                },
-                {
-                    file: 'package/config/ReactiveSortHandlerMethodArgumentResolver.java',
-                    renameTo: generator => `${generator.javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`
-                }
-            ]
-        },
-        {
             condition: generator =>
                 ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(generator.cacheProvider) ||
                 generator.applicationType === 'gateway',
