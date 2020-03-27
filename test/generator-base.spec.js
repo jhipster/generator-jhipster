@@ -1,5 +1,4 @@
 const expect = require('chai').expect;
-const jhiCore = require('jhipster-core');
 const expectedFiles = require('./utils/expected-files');
 const BaseGenerator = require('../generators/generator-base').prototype;
 
@@ -32,48 +31,6 @@ describe('Generator Base', () => {
         describe('when called', () => {
             it('returns an array', () => {
                 expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
-            });
-        });
-    });
-    describe('getExistingEntities', () => {
-        describe('when entities change on-disk', () => {
-            before(() => {
-                const entities = {
-                    Region: {
-                        fluentMethods: true,
-                        relationships: [],
-                        fields: [
-                            {
-                                fieldName: 'regionName',
-                                fieldType: 'String'
-                            }
-                        ],
-                        changelogDate: '20170623093902',
-                        entityTableName: 'region',
-                        dto: 'mapstruct',
-                        pagination: 'no',
-                        service: 'serviceImpl',
-                        angularJSSuffix: 'mySuffix'
-                    }
-                };
-                jhiCore.exportEntities({
-                    entities,
-                    forceNoFiltering: true,
-                    application: {}
-                });
-                BaseGenerator.getExistingEntities();
-                entities.Region.fields.push({ fieldName: 'regionDesc', fieldType: 'String' });
-                jhiCore.exportEntities({
-                    entities,
-                    forceNoFiltering: true,
-                    application: {}
-                });
-            });
-            it('returns an up-to-date state', () => {
-                expect(BaseGenerator.getExistingEntities().find(it => it.name === 'Region').definition.fields[1]).to.eql({
-                    fieldName: 'regionDesc',
-                    fieldType: 'String'
-                });
             });
         });
     });
