@@ -26,7 +26,7 @@ const NODE_VERSION = '12.16.1';
 const YARN_VERSION = '1.22.4';
 const NPM_VERSION = '6.14.3';
 
-const GRADLE_VERSION = '6.1';
+const GRADLE_VERSION = '6.3';
 
 // Libraries version
 const JIB_VERSION = '2.1.0';
