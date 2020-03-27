@@ -63,6 +63,21 @@ export const AuditsPage = (props: IAuditsPageProps) => {
     transition();
   }, [pagination.activePage, pagination.order, pagination.sort]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(props.location.search);
+    const page = params.get('page');
+    const sort = params.get('sort');
+    if (page && sort) {
+      const sortSplit = sort.split(',');
+      setPagination({
+        ...pagination,
+        activePage: +page,
+        sort: sortSplit[0],
+        order: sortSplit[1]
+      });
+    }
+  }, [props.location.search]);
+
   const onChangeFromDate = evt => setFromDate(evt.target.value);
 
   const onChangeToDate = evt => setToDate(evt.target.value);
@@ -75,7 +90,10 @@ export const AuditsPage = (props: IAuditsPageProps) => {
     });
 
   const transition = () => {
-    props.history.push(`${props.location.pathname}?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`);
+    const endURL = `?page=${pagination.activePage}&sort=${pagination.sort},${pagination.order}`;
+    if (props.location.search !== endURL) {
+      props.history.push(`${props.location.pathname}${endURL}`);
+    }
   };
 
   const handlePagination = currentPage =>

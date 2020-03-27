@@ -163,7 +163,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
   const sortEntities = () => {
     getAllEntities();
-    props.history.push(`${props.location.pathname}?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`);
+    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    if (props.location.search !== endURL) {
+      props.history.push(`${props.location.pathname}${endURL}`);
+    }
   };
   <%_ } _%>
 
@@ -177,6 +180,23 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     sortEntities();
     <% } %>
   }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %><%_ if (searchEngine === 'elasticsearch') { _%>, search<% } %>]);
+
+  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+  useEffect(() => {
+    const params = new URLSearchParams(props.location.search);
+    const page = params.get('page');
+    const sort = params.get('sort');
+    if (page && sort) {
+      const sortSplit = sort.split(',');
+      setPaginationState({
+        ...paginationState,
+        activePage: +page,
+        sort: sortSplit[0],
+        order: sortSplit[1]
+      });
+    }
+  }, [props.location.search]);
+  <%_ } _%>
 
   const sort = p => () => {
     <% if (pagination === 'infinite-scroll') { %>
