@@ -49,6 +49,10 @@ import org.springframework.context.annotation.Profile;
     <%_ } _%>
 import org.springframework.core.annotation.Order;
 <%_ } _%>
+<%_ if (reactive) { _%>
+import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
+<%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
@@ -64,9 +68,9 @@ import org.springframework.web.filter.CorsFilter;
 <%_ if (reactive) { _%>
 import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-<%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
+    <%_ if (!skipClient && ['monolith','gateway'].includes(applicationType)) { _%>
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
-<%_ } _%>
+    <%_ } _%>
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer;
 import org.springframework.web.server.WebExceptionHandler;
