@@ -28,7 +28,7 @@ const options = getCommandOptions(packageJson, process.argv.slice(3));
 logger.info(chalk.yellow(`Executing ${command} on ${process.cwd()}`));
 logger.info(chalk.yellow(`Options: ${toString(options)}`));
 try {
-    env.run(command, options, doneFactory('JHipster process is complete!'));
+    env.run(command, options, doneFactory());
 } catch (e) {
     logger.error(e.message, e);
     process.exitCode = 1;
