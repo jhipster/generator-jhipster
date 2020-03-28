@@ -940,7 +940,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             });
                         }
                     }
-                    if(!_.isUndefined(relationship.otherEntityRelationshipName)) {
+                    if (!_.isUndefined(relationship.otherEntityRelationshipName)) {
                         if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
                             relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
                         }
