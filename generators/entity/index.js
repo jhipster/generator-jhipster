@@ -941,18 +941,20 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
-                        relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
-                    }
+                    if (!_.isUndefined(relationship.otherEntityRelationshipName)) {
+                        if (_.isUndefined(relationship.otherEntityRelationshipNamePlural)) {
+                            relationship.otherEntityRelationshipNamePlural = pluralize(relationship.otherEntityRelationshipName);
+                        }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalized)) {
-                        relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
-                    }
+                        if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalized)) {
+                            relationship.otherEntityRelationshipNameCapitalized = _.upperFirst(relationship.otherEntityRelationshipName);
+                        }
 
-                    if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalizedPlural)) {
-                        relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
-                            _.upperFirst(relationship.otherEntityRelationshipName)
-                        );
+                        if (_.isUndefined(relationship.otherEntityRelationshipNameCapitalizedPlural)) {
+                            relationship.otherEntityRelationshipNameCapitalizedPlural = pluralize(
+                                _.upperFirst(relationship.otherEntityRelationshipName)
+                            );
+                        }
                     }
 
                     if (_.isUndefined(relationship.relationshipNameCapitalized)) {
