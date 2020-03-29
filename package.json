@@ -84,7 +84,7 @@
         "yeoman-generator": "4.6.0"
     },
     "devDependencies": {
-        "@openapitools/openapi-generator-cli": "1.0.10-4.2.3",
+        "@openapitools/openapi-generator-cli": "1.0.12-4.3.0",
         "chai": "4.2.0",
         "ejs-lint": "0.3.0",
         "eslint": "6.2.2",
