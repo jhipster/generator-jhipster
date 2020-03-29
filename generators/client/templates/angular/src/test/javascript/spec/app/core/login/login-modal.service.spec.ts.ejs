@@ -29,9 +29,9 @@ describe('Service Tests', () => {
 
                 // THEN
                 expect(modalService.open).toHaveBeenCalled();
-                });
+            });
 
-                it('Should call open method for NgbModal one time when open method is called twice', () => {
+            it('Should call open method for NgbModal one time when open method is called twice', () => {
                 // GIVEN
                 const mockModalRef: MockNgbModalRef = new MockNgbModalRef();
                 spyOn(modalService, 'open').and.returnValue(mockModalRef);
