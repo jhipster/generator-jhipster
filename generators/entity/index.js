@@ -269,8 +269,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             validateEntityName() {
                 const entityName = this.context.name;
-                if (!/^([a-zA-Z0-9_]*)$/.test(entityName)) {
-                    this.error('The entity name cannot contain special characters');
+                if (!/^([a-zA-Z0-9]*)$/.test(entityName)) {
+                    this.error('The entity name must be alphanumeric only');
                 } else if (/^[0-9].*$/.test(entityName)) {
                     this.error('The entity name cannot start with a number');
                 } else if (entityName === '') {
