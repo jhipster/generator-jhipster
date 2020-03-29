@@ -7,9 +7,9 @@ out/
 /.jhipster/
 jhipster-jdl.jh
 .sonar
-coverage/*
-.nyc_output/*
+coverage/
+.nyc_output/
 yarn-error.log
 jhipster-core.iml
 .project
-.vscode/*
+.vscode/
