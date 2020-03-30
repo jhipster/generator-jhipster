@@ -162,8 +162,9 @@ spring:
     <%_ } _%>
     application:
         name: <%= baseName %>
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    <%_ if (serviceDiscoveryType === 'consul' || (applicationType === 'gateway' && reactive)) { _%>
     cloud:
+        <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             discovery:
                 healthCheckPath: /management/health
@@ -172,9 +173,8 @@ spring:
             config:
                 watch:
                     enabled: false
-    <%_ } _%>
-    <%_ if (applicationType === 'gateway' && reactive) { _%>
-    cloud:
+        <%_ } _%>
+        <%_ if (applicationType === 'gateway' && reactive) { _%>
         gateway:
             default-filters:
                 - <% if (authenticationType === 'jwt') { %>JWTRelay<% } else { %>TokenRelay<% } %>
@@ -194,6 +194,7 @@ spring:
             httpclient:
                 pool:
                     max-connections: 1000
+        <%_ } _%>
     <%_ } _%>
     <%_ if (!serviceDiscoveryType) { _%>
     profiles:
