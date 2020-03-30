@@ -25,6 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_TIMESTAMP_FORMAT } from 'app/config/constants';
 import { ITEMS_PER_PAGE } from 'app/shared/util/pagination.constants';
+import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-utils';
 
 import { IRootState } from 'app/shared/reducers';
 import { getAudits } from '../administration.reducer';
@@ -49,7 +50,7 @@ const today = (): string => {
 };
 
 export const AuditsPage = (props: IAuditsPageProps) => {
-  const [pagination, setPagination] = useState(getSortState(props.location, ITEMS_PER_PAGE));
+  const [pagination, setPagination] = useState(overridePaginationStateWithQueryParams(getSortState(props.location, ITEMS_PER_PAGE), props.location.search));
   const [fromDate, setFromDate] = useState(previousMonth());
   const [toDate, setToDate] = useState(today());
 
@@ -159,7 +160,7 @@ export const AuditsPage = (props: IAuditsPageProps) => {
           <Translate contentKey="audits.notFound">No audit found</Translate>
         </div>
       )}
-      <div className={audits && audits.length > 0 ? '' : 'd-none'}>
+      { props.totalItems && props.totalItems !== 0 ? (<div className={audits && audits.length > 0 ? '' : 'd-none'}>
         <Row className="justify-content-center">
           <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
         </Row>
@@ -172,7 +173,7 @@ export const AuditsPage = (props: IAuditsPageProps) => {
             totalItems={props.totalItems}
           />
         </Row>
-      </div>
+      </div>) : '' }
     </div>
   );
 };
