@@ -252,16 +252,12 @@ public class <%= asDto(entityClass) %> implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof <%= asDto(entityClass) %>)) {
             return false;
         }
 
         <%_ if (!embedded) { _%>
-        <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = (<%= asDto(entityClass) %>) o;
-        if (<%= asDto(entityInstance) %>.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), <%= asDto(entityInstance) %>.getId());
+        return id != null && id.equals(((<%= asDto(entityClass) %>) o).id);
         <%_ } else { _%>
         return false;
         <%_ } _%>
@@ -269,11 +265,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
 
     @Override
     public int hashCode() {
-    <%_ if (!embedded) { _%>
-        return Objects.hashCode(getId());
-    <%_ } else { _%>
         return 31;
-    <%_ } _%>
     }
 
     @Override
