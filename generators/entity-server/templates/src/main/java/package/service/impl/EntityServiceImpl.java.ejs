@@ -166,6 +166,16 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     public Mono<Long> countAll() {
         return <%= entityInstance %>Repository.count();
     }
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+
+    /**
+    * Returns the number of <%= entityInstancePlural %> available in search repository.
+    *
+    */
+    public Mono<Long> searchCount() {
+        return <%= entityInstance %>SearchRepository.count();
+    }
+    <%_  } _%>
 
 <%_  } _%>
     /**
@@ -194,7 +204,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKeyType %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);
-<%- include('../../common/delete_template', {viaService: viaService}); -%>
+<%- include('../../common/delete_template', {viaService: false, fromResource: false}); -%>
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -213,10 +223,10 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>) {
         <%_ if (pagination === 'no') { _%>
-        log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
+        log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: false, fromResource: false}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        return <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
+        return <%= entityInstance %>SearchRepository.search(<%= reactive ? 'query' : 'queryStringQuery(query)' %>, pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
             .map(<%= entityToDtoReference %>);
         <%_ } } _%>
     }

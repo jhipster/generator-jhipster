@@ -126,13 +126,13 @@ import java.util.Optional;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (!viaService && (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true)) { _%>
+<%_ if ((searchEngine === 'elasticsearch' && !reactive) || fieldsContainNoOwnerOneToOne === true) { _%>
+    <%_ if (!viaService) { _%>
 import java.util.stream.Collectors;
-<%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' || fieldsContainNoOwnerOneToOne === true) { _%>
+    <%_ } _%>
 import java.util.stream.StreamSupport;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 <%_ } _%>
@@ -331,11 +331,10 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%= entityClass %>(@PathVariable <%= primaryKeyType %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
+<%- include('../../common/delete_template', {viaService: viaService, fromResource: true}); -%>
     <%_ if (!reactive) { _%>
-<%- include('../../common/delete_template', {viaService: viaService}); -%>
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build();
+    return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build();
     <%_ } else { _%>
-        return <%= entityInstance %><%= service !== 'no' ? 'Service.delete' : 'Repository.deleteById' %>(id)
             .map(result -> ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build()
             );

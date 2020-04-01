@@ -55,11 +55,11 @@ _%>
         return <%= entityInstance %>Service.findAll()<% if (reactive) { %>.collectList()<% } %>;
         <%_ } else if (dto === 'mapstruct') { _%>
         <%= reactive ? 'Flux' : 'List' %><<%= asEntity(entityClass) %>> <%= entityInstancePlural %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>();
-            <% if (!reactive) { %>
+            <%_ if (!reactive) { _%>
         return <%= entityListToDtoListReference %>(<%= entityInstancePlural %>);
-            <% } else { %>
+            <%_ } else { _%>
         return <%= entityInstancePlural %>.map(<%= entityToDtoReference %>).collectList();
-            <% } %>
+            <%_ } _%>
         <%_ } else { _%>
         return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (reactive) { %>.collectList()<% } %>;
         <%_ } _%>

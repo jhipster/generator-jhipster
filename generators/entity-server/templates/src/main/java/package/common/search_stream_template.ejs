@@ -19,11 +19,18 @@
 <%_
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto'; %>
-        <%_ if (!viaService) { _%>
+<%_ if (!viaService) { _%>
+    <%_ if (!reactive) { _%>
         return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto === 'mapstruct') { %>
-            .map(<%= entityToDtoReference %>)<% } %>
-            .collect(Collectors.toList());
-        <%_ } else { _%>
-        return <%= entityInstance %>Service.search(query);
+            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)
+        <%_ if (dto === 'mapstruct') { _%>
+            .map(<%= entityToDtoReference %>)
         <%_ } _%>
+            .collect(Collectors.toList());
+    <%_ } else { _%>
+        return <%= entityInstance %>SearchRepository.search(query)<%_ if (dto === 'mapstruct') { %>
+            .map(<%= entityToDtoReference %>)<%_ } %><%_ if (fromResource) { _%>.collectList()<%_ } _%>;
+    <%_ } _%>
+<%_ } else { _%>
+        return <%= entityInstance %>Service.search(query)<% if (reactive && fromResource) { %>.collectList()<% } %>;
+<%_ } _%>
