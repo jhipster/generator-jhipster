@@ -68,7 +68,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (!reactive) { _%>
@@ -77,13 +77,10 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
-    <%_ if (searchEngine === 'elasticsearch' || reactive) { _%>
-import org.springframework.data.mongodb.repository.MongoRepository;
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
     <%_ } _%>
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-    <%_ if (reactive) { _%>
-import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
-    <%_ } _%>
+import org.springframework.data.mongodb.repository.config.Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.data.convert.ReadingConverter;
@@ -155,11 +152,11 @@ import java.util.UUID;
 @EnableTransactionManagement
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-@EnableElasticsearchRepositories("<%= packageName %>.repository.search")
+@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-@EnableMongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>MongoRepository.class))
     <%_ } else { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
     <%_ } _%>
