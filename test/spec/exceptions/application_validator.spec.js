@@ -18,7 +18,12 @@
  */
 
 /* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
+const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
+
+chai.use(sinonChai);
+const { expect } = chai;
 
 const ApplicationValidator = require('../../../lib/validators/application_validator');
 
@@ -34,6 +39,7 @@ const {
   NEO4J
 } = require('../../../lib/core/jhipster/database_types');
 const JDLApplication = require('../../../lib/core/jdl_application');
+const logger = require('../../../lib/utils/objects/logger');
 
 describe('ApplicationValidator', () => {
   let validator;
@@ -319,10 +325,19 @@ describe('ApplicationValidator', () => {
         });
       });
       context('with unknown options', () => {
-        it('should fail', () => {
-          expect(() =>
-            validator.validate(new JDLApplication({ config: { ...basicValidApplicationConfig, toto: 42 } }))
-          ).to.throw(/^Unrecognised application option name: toto\.$/);
+        let loggerDebug;
+        before(() => {
+          loggerDebug = sinon.spy(logger, 'debug');
+          new JDLApplication({ config: { ...basicValidApplicationConfig, toto: 42 } });
+        });
+        after(() => {
+          loggerDebug.restore();
+        });
+        it('it should send a debug message', () => {
+          expect(loggerDebug).to.have.been.calledOnce;
+          expect(loggerDebug.getCall(0).args[0]).to.equal(
+            'Unrecognized application option name and value: toto and 42'
+          );
         });
       });
       context('with unknown values', () => {
