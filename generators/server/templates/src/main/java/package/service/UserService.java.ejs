@@ -178,6 +178,9 @@ public class UserService {
             <%_ } else { _%>
                 return saveUser(user);
             })
+                <%_ if (searchEngine === 'elasticsearch') { _%>
+            .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
+                <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
                 <%_ } _%>
@@ -294,8 +297,10 @@ public class UserService {
         authorities.add(AuthoritiesConstants.USER);
         <%_ } _%>
         newUser.setAuthorities(authorities);
-        userRepository.save(newUser);<% if (searchEngine === 'elasticsearch') { %>
-        userSearchRepository.save(newUser);<% } %>
+        userRepository.save(newUser);
+        <%_ if (searchEngine === 'elasticsearch') { _%>
+        userSearchRepository.save(newUser);
+        <%_ } _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
         this.clearUserCaches(newUser);
         <%_ } _%>
@@ -362,6 +367,9 @@ public class UserService {
                 newUser.setAuthorities(authorities);
                 return saveUser(newUser)
                 <%_ } _%>
+                    <%_ if (searchEngine === 'elasticsearch') { _%>
+                    .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
+                    <%_ } _%>
                     <%_ if (cacheManagerIsAvailable === true) { _%>
                     .doOnNext(this::clearUserCaches)
                     <%_ } _%>
@@ -453,6 +461,9 @@ public class UserService {
                 return newUser;
             })
             .flatMap(this::saveUser)
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            .flatMap(user1 -> userSearchRepository.save(user1).thenReturn(user1))
+            <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
             <%_ } _%>
@@ -536,6 +547,9 @@ public class UserService {
                 <%_ } _%>
             })
             .flatMap(this::saveUser)
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
+            <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
             <%_ } _%>
@@ -564,6 +578,9 @@ public class UserService {
     public Mono<Void> deleteUser(String login) {
         return userRepository.findOneByLogin(login)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            .flatMap(user -> userSearchRepository.delete(user).thenReturn(user))
+            <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
             <%_ } _%>
@@ -615,6 +632,9 @@ public class UserService {
             <%_ } else { _%>
                 return saveUser(user);
             })
+                <%_ if (searchEngine === 'elasticsearch') { _%>
+            .flatMap(user -> userSearchRepository.save(user).thenReturn(user))
+                <%_ } _%>
                 <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
                 <%_ } _%>
@@ -809,6 +829,9 @@ public class UserService {
         return userRepository
             .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(<%_ if (databaseType === 'sql') { _%>LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)<%_ } else { _%>Instant.now().minus(3, ChronoUnit.DAYS)<%_ } _%>)
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            .flatMap(user -> userSearchRepository.delete(user).thenReturn(user))
+            <%_ } _%>
             <%_ if (cacheManagerIsAvailable === true) { _%>
             .doOnNext(this::clearUserCaches)
             <%_ } _%>
