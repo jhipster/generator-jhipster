@@ -18,6 +18,7 @@
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     eventSubscriber?: Subscription;
+    queryParamMapObs?: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
     currentSearch: string;
     <%_ } _%>
@@ -87,5 +88,16 @@
             this.ngbPaginationPage = data.pagingParams.page;
             this.loadPage();
         });
+        this.handleBackNavigation();
         this.registerChangeIn<%= entityClassPlural %>();
+    }
+
+    handleBackNavigation(): void {
+        this.queryParamMapObs = this.activatedRoute.queryParamMap.subscribe((params: ParamMap) => {
+            const prevPage = params.get('page');
+            if (prevPage && +prevPage !== this.page) {
+                this.ngbPaginationPage = +prevPage;
+                this.loadPage(+prevPage);
+            }
+        });
     }
