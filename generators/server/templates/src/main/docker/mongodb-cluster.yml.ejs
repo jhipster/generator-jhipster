@@ -22,7 +22,7 @@ services:
         image: <%= DOCKER_MONGODB %>
         ports:
             - "27017:27017"
-        command: mongos --configdb csvr/<%= baseName.toLowerCase() %>-mongodb-config
+        command: mongos --configdb csvr/<%= baseName.toLowerCase() %>-mongodb-config --bind_ip 0.0.0.0
     <%= baseName.toLowerCase() %>-mongodb-node:
         build:
             context: .
