@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import { Component, Inject } from 'vue-property-decorator';
-import { required, minLength, maxLength, helpers, email } from 'vuelidate/lib/validators';
+import { email, helpers, maxLength, minLength, required, sameAs } from 'vuelidate/lib/validators';
 import LoginService from '@/account/login.service';
 import RegisterService from '@/account/register/register.service';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
@@ -29,9 +29,14 @@ const validations: any = {
   confirmPassword: {
     required,
     minLength: minLength(4),
-    maxLength: maxLength(254)
+    maxLength: maxLength(50),
+    // prettier-ignore
+    sameAsPassword: sameAs(function() {
+      return this.registerAccount.password;
+    })
   }
 };
+
 @Component({
   validations
 })
@@ -44,40 +49,34 @@ export default class Register extends Vue {
     password: undefined
   };
   public confirmPassword: any = null;
-  public doNotMatch = '';
   public error = '';
   public errorEmailExists = '';
   public errorUserExists = '';
   public success = false;
 
   public register() : void {
-    if (this.registerAccount.password !== this.confirmPassword) {
-      this.doNotMatch = 'ERROR';
-    } else {
-      this.doNotMatch = null;
-      this.error = null;
-      this.errorUserExists = null;
-      this.errorEmailExists = null;
-      <%_ if (enableTranslation) { _%>
-      this.registerAccount.langKey = this.$store.getters.currentLanguage;
-      <%_ } else { _%>
-      this.registerAccount.langKey = 'en';
-      <%_ } _%>
-      this.registerService().processRegistration(this.registerAccount)
-        .then(() => {
-          this.success = true;
-        })
-        .catch(error => {
-          this.success = null;
-          if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
-            this.errorUserExists = 'ERROR';
-          } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-            this.errorEmailExists = 'ERROR';
-          } else {
-            this.error = 'ERROR';
-          }
-        });
-    }
+    this.error = null;
+    this.errorUserExists = null;
+    this.errorEmailExists = null;
+    <%_ if (enableTranslation) { _%>
+    this.registerAccount.langKey = this.$store.getters.currentLanguage;
+    <%_ } else { _%>
+    this.registerAccount.langKey = 'en';
+    <%_ } _%>
+    this.registerService().processRegistration(this.registerAccount)
+      .then(() => {
+        this.success = true;
+      })
+      .catch(error => {
+        this.success = null;
+        if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
+          this.errorUserExists = 'ERROR';
+        } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+          this.errorEmailExists = 'ERROR';
+        } else {
+          this.error = 'ERROR';
+        }
+      });
   }
 
   public openLogin() : void {
