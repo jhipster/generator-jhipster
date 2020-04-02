@@ -85,6 +85,87 @@ describe('FormatUtils', () => {
       });
     });
   });
+  describe('::formatDateForLiquibase', () => {
+    context('when passing both arguments', () => {
+      it('uses the increment with the passed date', () => {
+        const now = new Date();
+        const increment = 1000042;
+        const result = FormatUtils.formatDateForLiquibase({ date: now, increment });
+        now.setMinutes(now.getMinutes() + increment);
+        const nowUtc = new Date(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate(),
+          now.getUTCHours(),
+          now.getUTCMinutes(),
+          now.getUTCSeconds()
+        );
+        const year = `${nowUtc.getFullYear()}`;
+        let month = `${nowUtc.getMonth() + 1}`;
+        if (month.length === 1) {
+          month = `0${month}`;
+        }
+        let day = `${nowUtc.getDate()}`;
+        if (day.length === 1) {
+          day = `0${day}`;
+        }
+        let hour = `${nowUtc.getHours()}`;
+        if (hour.length === 1) {
+          hour = `0${hour}`;
+        }
+        let minute = `${nowUtc.getMinutes()}`;
+        if (minute.length === 1) {
+          minute = `0${minute}`;
+        }
+        let second = `${nowUtc.getSeconds()}`;
+        if (second.length === 1) {
+          second = `0${second}`;
+        }
+        expect(result).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+      });
+    });
+    context('when not passing the date', () => {
+      it('does not fail', () => {
+        expect(FormatUtils.formatDateForLiquibase().length).to.equal(14);
+      });
+    });
+    context('when not passing the increment', () => {
+      it('formats the current time for liquibase with no increment', () => {
+        const now = new Date();
+        const result = FormatUtils.formatDateForLiquibase({ date: now });
+        const nowUtc = new Date(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate(),
+          now.getUTCHours(),
+          now.getUTCMinutes(),
+          now.getUTCSeconds()
+        );
+        const year = `${nowUtc.getFullYear()}`;
+        let month = `${nowUtc.getMonth() + 1}`;
+        if (month.length === 1) {
+          month = `0${month}`;
+        }
+        let day = `${nowUtc.getDate()}`;
+        if (day.length === 1) {
+          day = `0${day}`;
+        }
+        let hour = `${nowUtc.getHours()}`;
+        if (hour.length === 1) {
+          hour = `0${hour}`;
+        }
+        let minute = `${nowUtc.getMinutes()}`;
+        if (minute.length === 1) {
+          minute = `0${minute}`;
+        }
+        let second = `${nowUtc.getSeconds() % 60}`;
+        if (second.length === 1) {
+          second = `0${second}`;
+        }
+        expect(result).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+      });
+    });
+  });
   describe('::dateFormatForLiquibase', () => {
     context('when passing both arguments', () => {
       it('uses the increment with the passed date', () => {

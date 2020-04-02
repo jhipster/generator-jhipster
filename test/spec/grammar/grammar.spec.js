@@ -89,7 +89,8 @@ MAX = 43`);
           entities: {
             entityList: [],
             excluded: []
-          }
+          },
+          options: {}
         });
       });
     });
@@ -115,7 +116,8 @@ MAX = 43`);
           entities: {
             entityList: [],
             excluded: []
-          }
+          },
+          options: {}
         });
       });
     });
@@ -150,7 +152,8 @@ application {
             entities: {
               entityList: [],
               excluded: []
-            }
+            },
+            options: {}
           },
           {
             config: {
@@ -160,7 +163,8 @@ application {
             entities: {
               entityList: [],
               excluded: []
-            }
+            },
+            options: {}
           }
         ]);
       });
@@ -226,6 +230,44 @@ application {
           it('should parse the list', () => {
             expect(application.entities.excluded).to.deep.equal(['A']);
           });
+        });
+      });
+    });
+    context('when having options', () => {
+      let application;
+
+      before(() => {
+        const content = parseFromContent(`application {
+  config {
+    baseName superApp
+    applicationType monolith
+  }
+  entities A, B, C
+  readOnly B
+  paginate A with pagination
+  search * with couchbase except C
+}`);
+        application = content.applications[0];
+      });
+
+      it('should parse them', () => {
+        expect(application.options).to.deep.equal({
+          readOnly: {
+            list: ['B'],
+            excluded: []
+          },
+          pagination: {
+            pagination: {
+              list: ['A'],
+              excluded: []
+            }
+          },
+          search: {
+            couchbase: {
+              list: ['*'],
+              excluded: ['C']
+            }
+          }
         });
       });
     });

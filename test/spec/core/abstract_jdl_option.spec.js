@@ -19,32 +19,22 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const AbstractJDLOption = require('../../../lib/core/abstract_jdl_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 
 describe('AbstractJDLOption', () => {
-  describe('::resolveEntityNames', () => {
-    context('when not passing an option', () => {
-      it('fails', () => {
-        expect(() => {
-          AbstractJDLOption.resolveEntityNames(null, ['A', 'B']);
-        }).to.throw('An option has to be passed to resolve its entity names.');
-      });
-    });
+  describe('resolveEntityNames', () => {
     context('when not passing entity names', () => {
       it('fails', () => {
         expect(() => {
-          AbstractJDLOption.resolveEntityNames(
-            new JDLBinaryOption({
-              name: BinaryOptions.Options.SERVICE,
-              value: BinaryOptions.Values.service.SERVICE_CLASS
-            })
-          );
-        }).to.throw("Entity names have to be passed to resolve the option's entities.");
+          new JDLBinaryOption({
+            name: BinaryOptions.Options.SERVICE,
+            value: BinaryOptions.Values.service.SERVICE_CLASS
+          }).resolveEntityNames();
+        }).to.throw(/^Entity names have to be passed to resolve the option's entities\.$/);
       });
     });
-    context('when passing valid values', () => {
+    context('when passing entity names', () => {
       let result;
 
       before(() => {
@@ -53,7 +43,7 @@ describe('AbstractJDLOption', () => {
           value: BinaryOptions.Values.service.SERVICE_CLASS,
           excludedNames: ['C']
         });
-        result = AbstractJDLOption.resolveEntityNames(option, ['A', 'B', 'C']);
+        result = option.resolveEntityNames(['A', 'B', 'C']);
       });
 
       it("resolves the option's entity names", () => {

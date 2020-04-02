@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new */
-/* eslint-disable no-unused-expressions */
+/* eslint-disable no-new,no-unused-expressions */
 const { expect } = require('chai');
 const JSONEntity = require('../../../../lib/core/jhipster/json_entity');
 
@@ -148,6 +147,34 @@ describe('JSONEntity', () => {
       });
     });
   });
+  describe('#addFields', () => {
+    let entity;
+
+    before(() => {
+      entity = new JSONEntity({
+        entityName: 'toto'
+      });
+    });
+
+    context('when not passing anything', () => {
+      before(() => {
+        entity.addFields();
+      });
+
+      it('does nothing', () => {
+        expect(entity.fields).to.deep.equal([]);
+      });
+    });
+    context('when passing something', () => {
+      before(() => {
+        entity.addFields([42, 43]);
+      });
+
+      it('adds it', () => {
+        expect(entity.fields).to.deep.equal([42, 43]);
+      });
+    });
+  });
   describe('#addRelationship', () => {
     let entity;
 
@@ -173,6 +200,89 @@ describe('JSONEntity', () => {
 
       it('adds it', () => {
         expect(entity.relationships).to.deep.equal([42]);
+      });
+    });
+  });
+  describe('#addRelationships', () => {
+    let entity;
+
+    before(() => {
+      entity = new JSONEntity({
+        entityName: 'toto'
+      });
+    });
+
+    context('when not passing anything', () => {
+      before(() => {
+        entity.addRelationships();
+      });
+
+      it('does nothing', () => {
+        expect(entity.relationships).to.deep.equal([]);
+      });
+    });
+    context('when passing something', () => {
+      before(() => {
+        entity.addRelationships([42, 43]);
+      });
+
+      it('adds it', () => {
+        expect(entity.relationships).to.deep.equal([42, 43]);
+      });
+    });
+  });
+  describe('#setOptions', () => {
+    context('when not passing options', () => {
+      let originalJSONEntity;
+      let touchedJSONEntity;
+
+      before(() => {
+        originalJSONEntity = new JSONEntity({
+          entityName: 'Toto'
+        });
+        touchedJSONEntity = new JSONEntity({
+          entityName: 'Toto'
+        });
+        touchedJSONEntity.setOptions();
+      });
+
+      it('should not modify the object', () => {
+        expect(touchedJSONEntity).to.deep.equal(originalJSONEntity);
+      });
+    });
+    context('when passing options', () => {
+      let jsonEntity;
+
+      before(() => {
+        jsonEntity = new JSONEntity({
+          entityName: 'Toto',
+          changelogDate: 42,
+          javadoc: 'A comment'
+        });
+        jsonEntity.setOptions({
+          dto: 'mapstruct',
+          pagination: 'pagination'
+        });
+      });
+
+      it('should set them', () => {
+        expect(jsonEntity).to.deep.equal({
+          applications: [],
+          changelogDate: 42,
+          clientRootFolder: '',
+          dto: 'mapstruct',
+          embedded: false,
+          entityTableName: 'toto',
+          fields: [],
+          fluentMethods: true,
+          javadoc: 'A comment',
+          jpaMetamodelFiltering: false,
+          name: 'Toto',
+          pagination: 'pagination',
+          readOnly: false,
+          relationships: [],
+          service: 'no'
+        });
       });
     });
   });

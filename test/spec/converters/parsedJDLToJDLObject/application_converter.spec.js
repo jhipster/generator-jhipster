@@ -43,7 +43,8 @@ describe('ApplicationConverter', () => {
               entities: {
                 entityList: [],
                 excluded: []
-              }
+              },
+              options: {}
             }
           ]);
           expectedApplication = [
@@ -74,7 +75,8 @@ describe('ApplicationConverter', () => {
                   entities: {
                     entityList: [],
                     excluded: []
-                  }
+                  },
+                  options: {}
                 }
               ],
               { creationTimestamp: 42 }
@@ -107,7 +109,8 @@ describe('ApplicationConverter', () => {
                   entities: {
                     entityList: [],
                     excluded: []
-                  }
+                  },
+                  options: {}
                 }
               ],
               { generatorVersion: '7.0.0' }
@@ -140,7 +143,8 @@ describe('ApplicationConverter', () => {
                 entities: {
                   entityList: ['*'],
                   excluded: []
-                }
+                },
+                options: {}
               }
             ],
             {},
@@ -158,6 +162,32 @@ describe('ApplicationConverter', () => {
           expect(convertedApplication).to.deep.equal(expectedApplication);
         });
       });
+      context('when including some entities in an application', () => {
+        context("if entities don't exist", () => {
+          let applicationsToConvert;
+
+          before(() => {
+            applicationsToConvert = [
+              {
+                config: {
+                  baseName: 'mono'
+                },
+                entities: {
+                  entityList: ['B'],
+                  excluded: []
+                },
+                options: {}
+              }
+            ];
+          });
+
+          it('should fail', () => {
+            expect(() => {
+              convertApplications(applicationsToConvert, {}, ['A']);
+            }).to.throw(/^The entity B which is declared in mono's entity list doesn't exist\.$/);
+          });
+        });
+      });
       context('when excluding entities in an application', () => {
         let convertedApplication;
         let expectedApplication;
@@ -172,7 +202,8 @@ describe('ApplicationConverter', () => {
                 entities: {
                   entityList: ['*'],
                   excluded: ['A']
-                }
+                },
+                options: {}
               }
             ],
             {},
@@ -188,6 +219,72 @@ describe('ApplicationConverter', () => {
 
         it('should exclude them', () => {
           expect(convertedApplication).to.deep.equal(expectedApplication);
+        });
+      });
+      context('when having entity options in an application', () => {
+        context('if the entity list does not contain some entities mentioned in options', () => {
+          let applicationsToConvert;
+
+          before(() => {
+            applicationsToConvert = [
+              {
+                config: {
+                  baseName: 'mono'
+                },
+                entities: {
+                  entityList: ['A'],
+                  excluded: []
+                },
+                options: {
+                  dto: {
+                    mapstruct: {
+                      list: ['C'],
+                      excluded: []
+                    }
+                  }
+                }
+              }
+            ];
+          });
+
+          it('should fail', () => {
+            expect(() => convertApplications(applicationsToConvert, {}, ['A', 'B', 'C'])).to.throw(
+              /^The entity C in the dto option isn't declared in mono's entity list\.$/
+            );
+          });
+        });
+        context('if the entity list contains the entities mentioned in options', () => {
+          let convertedApplications;
+
+          before(() => {
+            convertedApplications = convertApplications(
+              [
+                {
+                  config: {
+                    baseName: 'mono'
+                  },
+                  entities: {
+                    entityList: ['*'],
+                    excluded: []
+                  },
+                  options: {
+                    dto: {
+                      mapstruct: {
+                        list: ['A'],
+                        excluded: []
+                      }
+                    }
+                  }
+                }
+              ],
+              {},
+              ['A', 'B']
+            );
+          });
+
+          it('should include them', () => {
+            expect(convertedApplications[0].options.size()).to.equal(1);
+          });
         });
       });
     });

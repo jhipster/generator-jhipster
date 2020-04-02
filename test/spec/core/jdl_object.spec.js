@@ -93,6 +93,47 @@ describe('JDLObject', () => {
       });
     });
   });
+  describe('#getApplication', () => {
+    context('when not passing an application name', () => {
+      let jdlObject;
+
+      before(() => {
+        jdlObject = new JDLObject();
+        jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+      });
+
+      it('should return undefined', () => {
+        expect(jdlObject.getApplication()).to.be.undefined;
+      });
+    });
+    context("when passing an application's name", () => {
+      context('that does not exist', () => {
+        let jdlObject;
+
+        before(() => {
+          jdlObject = new JDLObject();
+          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+        });
+
+        it('should return undefined', () => {
+          expect(jdlObject.getApplication('tata')).to.be.undefined;
+        });
+      });
+
+      context('that exists', () => {
+        let jdlObject;
+
+        before(() => {
+          jdlObject = new JDLObject();
+          jdlObject.addApplication(createJDLApplication({ baseName: 'toto' }));
+        });
+
+        it('should return undefined', () => {
+          expect(jdlObject.getApplication('toto')).not.to.be.undefined;
+        });
+      });
+    });
+  });
   describe('#addDeployment', () => {
     context('when adding an invalid deployment', () => {
       const object = new JDLObject();
@@ -256,6 +297,36 @@ describe('JDLObject', () => {
     context('when passing a name', () => {
       it('returns the entity', () => {
         expect(jdlObject.getEntity('A')).not.to.be.undefined;
+      });
+    });
+  });
+  describe('#getEntities', () => {
+    context('when there are no entities', () => {
+      let object;
+
+      before(() => {
+        object = new JDLObject();
+      });
+
+      it('should return an empty array', () => {
+        expect(object.getEntities()).to.deep.equal([]);
+      });
+    });
+    context('when there are entities', () => {
+      let entity;
+      let returnedEntities;
+
+      before(() => {
+        const object = new JDLObject();
+        entity = new JDLEntity({
+          name: 'toto'
+        });
+        object.addEntity(entity);
+        returnedEntities = object.getEntities();
+      });
+
+      it('should return them in an array', () => {
+        expect(returnedEntities).to.deep.equal([entity]);
       });
     });
   });

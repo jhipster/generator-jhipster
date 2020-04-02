@@ -25,6 +25,7 @@ const { expect } = require('chai');
 const ApplicationTypes = require('../../../lib/core/jhipster/application_types');
 const DatabaseTypes = require('../../../lib/core/jhipster/database_types');
 const { createImporterFromFiles, createImporterFromContent } = require('../../../lib/jdl/jdl_importer');
+const { formatDateForLiquibase } = require('../../../lib/utils/format_utils');
 
 describe('JDLImporter', () => {
   describe('createImporterFromFiles', () => {
@@ -1016,6 +1017,7 @@ relationship OneToOne {
           expect(readJSON).to.deep.equal(expectedApplications[index]);
         });
       });
+
       it('exports the entities for each application', () => {
         APPLICATION_NAMES.forEach(applicationName => {
           let readJSON;
@@ -1077,6 +1079,7 @@ relationship OneToOne {
 
       before(() => {
         const importer = createImporterFromFiles([path.join('test', 'test_files', 'annotations.jdl')], {
+          applicationName: 'toto',
           databaseType: DatabaseTypes.SQL
         });
         returned = importer.import();
@@ -1646,6 +1649,166 @@ relationship OneToOne {
         expect(exported.fields[0].fieldValues).to.equal(
           'ARCHIVE (archive),DEV (development),INTEGRATION (integration),PROD (production),TEST (test),UAT (uat),NON_PROD (nonProd)'
         );
+      });
+    });
+    context('when parsing JDL applications with options inside', () => {
+      let entityA;
+      let entityB;
+      let entityCInTata;
+      let entityCInTutu;
+      let entityD;
+      let entityE;
+      let entityF;
+
+      before(() => {
+        const importer = createImporterFromContent(
+          `application {
+  config {
+    applicationType monolith
+    baseName tata
+  }
+  entities A, B, C
+  paginate A, C with pagination
+}
+application {
+  config {
+    applicationType monolith
+    baseName tutu
+  }
+  entities C, D, E
+  dto D with mapstruct
+}
+entity A
+entity B
+entity C
+entity D
+entity E
+entity F
+
+paginate * with infinite-scroll
+`,
+          {
+            creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
+            generatorVersion: '7.0.0'
+          }
+        );
+        importer.import();
+        entityA = JSON.parse(fse.readFileSync(path.join('tata', '.jhipster', 'A.json'), 'utf-8'));
+        entityB = JSON.parse(fse.readFileSync(path.join('tata', '.jhipster', 'B.json'), 'utf-8'));
+        entityCInTata = JSON.parse(fse.readFileSync(path.join('tata', '.jhipster', 'C.json'), 'utf-8'));
+        entityCInTutu = JSON.parse(fse.readFileSync(path.join('tutu', '.jhipster', 'C.json'), 'utf-8'));
+        entityD = JSON.parse(fse.readFileSync(path.join('tutu', '.jhipster', 'D.json'), 'utf-8'));
+        entityE = JSON.parse(fse.readFileSync(path.join('tutu', '.jhipster', 'E.json'), 'utf-8'));
+        entityF =
+          fse.pathExistsSync(path.join('tata', '.jhipster', 'F.json')) ||
+          fse.pathExistsSync(path.join('tutu', '.jhipster', 'F.json'));
+      });
+
+      after(() => {
+        fse.removeSync('tata');
+        fse.removeSync('tutu');
+      });
+
+      it('should set them', () => {
+        expect(entityA).to.deep.equal({
+          applications: ['tata'],
+          changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 1 }),
+          clientRootFolder: '',
+          dto: 'no',
+          embedded: false,
+          entityTableName: 'a',
+          fields: [],
+          fluentMethods: true,
+          jpaMetamodelFiltering: false,
+          name: 'A',
+          pagination: 'pagination',
+          readOnly: false,
+          relationships: [],
+          service: 'no'
+        });
+        expect(entityB).to.deep.equal({
+          applications: ['tata'],
+          changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 2 }),
+          clientRootFolder: '',
+          dto: 'no',
+          embedded: false,
+          entityTableName: 'b',
+          fields: [],
+          fluentMethods: true,
+          jpaMetamodelFiltering: false,
+          name: 'B',
+          pagination: 'infinite-scroll',
+          readOnly: false,
+          relationships: [],
+          service: 'no'
+        });
+        expect(entityCInTata).to.deep.equal({
+          applications: ['tata', 'tutu'],
+          changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 3 }),
+          clientRootFolder: '',
+          dto: 'no',
+          embedded: false,
+          entityTableName: 'c',
+          fields: [],
+          fluentMethods: true,
+          jpaMetamodelFiltering: false,
+          name: 'C',
+          pagination: 'pagination',
+          readOnly: false,
+          relationships: [],
+          service: 'no'
+        });
+        expect(entityCInTutu).to.deep.equal({
+          applications: ['tata', 'tutu'],
+          changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 3 }),
+          clientRootFolder: '',
+          dto: 'no',
+          embedded: false,
+          entityTableName: 'c',
+          fields: [],
+          fluentMethods: true,
+          jpaMetamodelFiltering: false,
+          name: 'C',
+          pagination: 'pagination',
+          readOnly: false,
+          relationships: [],
+          service: 'no'
+        });
+        expect(entityD).to.deep.equal({
+          applications: ['tutu'],
+          changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 4 }),
+          clientRootFolder: '',
+          dto: 'mapstruct',
+          embedded: false,
+          entityTableName: 'd',
+          fields: [],
+          fluentMethods: true,
+          jpaMetamodelFiltering: false,
+          name: 'D',
+          pagination: 'infinite-scroll',
+          readOnly: false,
+          relationships: [],
+          service: 'serviceClass'
+        });
+        expect(entityE).to.deep.equal({
+          applications: ['tutu'],
+          changelogDate: formatDateForLiquibase({ date: new Date(2020, 0, 1, 1, 0, 0), increment: 5 }),
+          clientRootFolder: '',
+          dto: 'no',
+          embedded: false,
+          entityTableName: 'e',
+          fields: [],
+          fluentMethods: true,
+          jpaMetamodelFiltering: false,
+          name: 'E',
+          pagination: 'infinite-scroll',
+          readOnly: false,
+          relationships: [],
+          service: 'no'
+        });
+      });
+      it('should not generate entity not in any app', () => {
+        expect(entityF).to.be.false;
       });
     });
   });

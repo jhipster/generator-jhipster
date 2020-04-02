@@ -113,22 +113,22 @@ describe('JDLRelationship', () => {
   });
   describe('#forEachOption', () => {
     let relationship;
+    let options;
 
     before(() => {
+      options = { custom: 1, anotherCustom: 42 };
       relationship = new JDLRelationship({
         from: 'A',
         to: 'B',
         injectedFieldInTo: 'a',
         type: RelationshipTypes.ONE_TO_ONE,
-        options: { 1: 1, 2: 2, 3: 3 }
+        options
       });
     });
 
     it('executes the function for each element', () => {
-      let i = 1;
-      relationship.forEachOption(option => {
-        expect(option).to.equal(i);
-        i++;
+      relationship.forEachOption((optionName, optionValue) => {
+        expect(optionValue).to.equal(options[optionName]);
       });
     });
   });

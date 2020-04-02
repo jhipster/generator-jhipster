@@ -91,7 +91,7 @@ describe('JDLReader', () => {
         it('fails', () => {
           expect(() => {
             JDLReader.parseFromFiles(['./test/test_files/test_file.jdl']);
-          }).to.throw(SyntaxError);
+          }).to.throw();
         });
       });
       context('when reading a single JDL file', () => {

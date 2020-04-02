@@ -108,7 +108,6 @@ module.exports = {
   convertJsonServerOptionsToJDL: convertServerOptionsToJDL,
   /* Entity exporting to JSON */
   exportEntities: JHipsterEntityExporter.exportEntities,
-  exportEntitiesInApplications: JHipsterEntityExporter.exportEntitiesInApplications,
   /* Application exporting */
   exportApplications: JHipsterApplicationExporter.exportApplications,
   exportApplication: JHipsterApplicationExporter.exportApplication,

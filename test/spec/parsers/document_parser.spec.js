@@ -833,6 +833,75 @@ describe('DocumentParser', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B').options.jpaDerivedIdentifier).to.be.true;
         });
       });
+      context('when parsing entity options in applications', () => {
+        context('if the entity list does not contain some entities mentioned in options', () => {
+          let parsedContent;
+
+          before(() => {
+            parsedContent = JDLReader.parseFromContent(`application {
+  config {
+    baseName testApp1
+  }
+  entities A
+  readOnly B
+}
+
+entity A
+entity B
+`);
+          });
+
+          it('should fail', () => {
+            expect(() =>
+              DocumentParser.parseFromConfigurationObject({
+                parsedContent
+              })
+            ).to.throw(/^The entity B in the readOnly option isn't declared in testApp1's entity list.$/);
+          });
+        });
+        context('if the entity list contains all the entities mentioned in options', () => {
+          let optionsForFirstApplication;
+          let optionsForSecondApplication;
+
+          before(() => {
+            const input = JDLReader.parseFromContent(`application {
+  config {
+    baseName testApp1
+  }
+  entities A, B, C
+  readOnly A
+  paginate * with pagination except C
+  search C with couchbase
+}
+
+application {
+  config {
+    baseName testApp2
+  }
+  entities A, D
+  readOnly D
+}
+
+entity A
+entity B
+entity C
+entity D
+
+skipClient D
+`);
+            const jdlObject = DocumentParser.parseFromConfigurationObject({
+              parsedContent: input
+            });
+            optionsForFirstApplication = jdlObject.applications.testApp1.options;
+            optionsForSecondApplication = jdlObject.applications.testApp2.options;
+          });
+
+          it('should parse them', () => {
+            expect(optionsForFirstApplication.size()).to.equal(3);
+            expect(optionsForSecondApplication.size()).to.equal(1);
+          });
+        });
+      });
     });
   });
 });
