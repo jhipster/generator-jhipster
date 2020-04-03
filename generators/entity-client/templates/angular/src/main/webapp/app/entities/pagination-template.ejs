@@ -95,9 +95,17 @@
     handleBackNavigation(): void {
         this.queryParamMapObs = this.activatedRoute.queryParamMap.subscribe((params: ParamMap) => {
             const prevPage = params.get('page');
+            const prevSort = params.get('sort');
+            const prevSortSplit = prevSort?.split(',');
+            if (prevSortSplit) {
+                this.predicate = prevSortSplit[0];
+                this.ascending = prevSortSplit[1] === 'asc';
+            }
             if (prevPage && +prevPage !== this.page) {
                 this.ngbPaginationPage = +prevPage;
                 this.loadPage(+prevPage);
+            } else {
+                this.loadPage(this.page);
             }
         });
     }
