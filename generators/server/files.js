@@ -925,6 +925,16 @@ const serverFiles = {
             templates: [{ file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` }]
         },
         {
+            condition: generator => generator.reactive,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/ReactorConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/ReactorConfiguration.java`
+                }
+            ]
+        },
+        {
             condition: generator =>
                 ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(generator.cacheProvider) ||
                 generator.applicationType === 'gateway',

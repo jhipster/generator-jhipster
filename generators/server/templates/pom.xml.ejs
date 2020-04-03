@@ -686,6 +686,20 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+<%_ if (reactive) { _%>
+        <dependency>
+            <groupId>io.projectreactor.tools</groupId>
+            <artifactId>blockhound-junit-platform</artifactId>
+            <version>1.0.2.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-common</artifactId>
+            <version>4.1.46.Final</version>
+        </dependency>
+<%_ } _%>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
@@ -752,7 +766,7 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <scope>runtime</scope>
+            <scope><% if (reactive) { %>compile<% } else { %>runtime<% } %></scope>
         </dependency>
 <%_ } _%>
 <%_ if (authenticationType === 'uaa') { _%>
