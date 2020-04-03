@@ -12,7 +12,7 @@
         "databaseType": "couchbase",
         "devDatabaseType": "couchbase",
         "prodDatabaseType": "couchbase",
-        "searchEngine": false,
+        "searchEngine": "elasticsearch",
         "buildTool": "gradle",
         "enableTranslation": true,
         "nativeLanguage": "en",

@@ -12,7 +12,7 @@
         "databaseType": "mongodb",
         "devDatabaseType": "mongodb",
         "prodDatabaseType": "mongodb",
-        "searchEngine": false,
+        "searchEngine": "elasticsearch",
         "buildTool": "maven",
         "enableTranslation": true,
         "nativeLanguage": "en",
