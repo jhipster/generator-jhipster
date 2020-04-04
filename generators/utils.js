@@ -211,6 +211,10 @@ function copyWebResource(source, dest, regex, type, generator, opt = {}, templat
     if (generator.enableTranslation) {
         generator.template(source, dest, generator, opt);
     } else {
+        dest = generator.destinationPath(dest);
+        if (!dest) {
+            return;
+        }
         renderContent(source, generator, generator, opt, body => {
             body = body.replace(regex, '');
             switch (type) {
