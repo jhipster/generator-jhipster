@@ -147,52 +147,50 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hipster-labs/jhipster-daily-builds)
 
-| Type                 | Status                                                 |
-| :------------------- | :----------------------------------------------------- |
-| Docker               | [![Build Status][img-docker]][azure-url]               |
-| Official             | [![Build Status][img-official]][azure-url]             |
-| Windows Official     | [![Build Status][img-windows-official]][azure-url]     |
-| Angular.Maven        | [![Build Status][img-angular-maven]][azure-url]        |
-| Angular.Maven.NoSQL  | [![Build Status][img-angular-maven-nosql]][azure-url]  |
-| Angular.Gradle       | [![Build Status][img-angular-gradle]][azure-url]       |
-| Angular.Gradle.NoSQL | [![Build Status][img-angular-gradle-nosql]][azure-url] |
-| React.Maven          | [![Build Status][img-react-maven]][azure-url]          |
-| React.Maven.NoSQL    | [![Build Status][img-react-maven-nosql]][azure-url]    |
-| React.Gradle         | [![Build Status][img-react-gradle]][azure-url]         |
-| React.Gradle.NoSQL   | [![Build Status][img-react-gradle-nosql]][azure-url]   |
-| Elasticsearch        | [![Build Status][img-elasticsearch]][azure-url]        |
-| Microservices.JWT    | [![Build Status][img-ms-jwt]][azure-url]               |
-| Microservices.OAuth2 | [![Build Status][img-ms-oauth2]][azure-url]            |
-| Microservices.UAA    | [![Build Status][img-ms-uaa]][azure-url]               |
-| Monolith.OAuth2      | [![Build Status][img-monolith-oauth2]][azure-url]      |
-| Official OpenJDK 8   | [![Build Status][img-official-openjdk8]][azure-url]    |
-| Yarn                 | [![Build Status][img-yarn]][azure-url]                 |
-| No Database          | [![Build Status][img-nodatabase]][azure-url]           |
+| Pipeline Status                                                                |
+| :------------------------------------------------------------------------------|
+| [![Angular Maven][github-angular-maven]][github-actions]                       |
+| [![Angular Maven NoSQL][github-angular-maven-nosql]][github-actions]           |
+| [![Angular Gradle][github-angular-gradle]][github-actions]                     |
+| [![Angular Gradle NoSQL][github-angular-gradle-nosql]][github-actions]         |
+| [![React Maven][github-react-maven]][github-actions]                           |
+| [![React Maven NoSQL][github-react-maven-nosql]][github-actions]               |
+| [![React Gradle][github-react-gradle]][github-actions]                         |
+| [![React Gradle NoSQL][github-react-gradle-nosql]][github-actions]             |
+| [![Elasticsearch][github-elasticsearch]][github-actions]                       |
+| [![Monolith OAuth2][github-monolith-oauth2]][github-actions]                   |
+| [![Yarn][github-yarn]][github-actions]                                         |
+| [![No Database][github-no-database]][github-actions]                           |
+| [![Microservices JWT][github-ms-jwt]][github-actions]                          |
+| [![Microservices OAuth2][github-ms-oauth2]][github-actions]                    |
+| [![Microservices UAA][github-ms-uaa]][github-actions]                          |
+| [![Docker Image][github-docker-image]][github-actions]                         |
+| [![Neo4j][github-neo4j]][github-actions]                                       |
+| [![Couchbase][github-couchbase]][github-actions]                               |
 
 ## Analysis of the sample JHipster project
 
 [![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
-[azure-url]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_build
-[img-docker]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Docker.Image
-[img-official]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Official
-[img-windows-official]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Windows.GitBash.Official?branchName=master
-[img-angular-maven]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven
-[img-angular-maven-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Maven.NoSQL
-[img-angular-gradle]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Gradle
-[img-angular-gradle-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Angular.Gradle.NoSQL
-[img-react-maven]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/React.Maven
-[img-react-maven-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/React.Maven.NoSQL
-[img-react-gradle]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/React.Gradle
-[img-react-gradle-nosql]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/React.Gradle.NoSQL
-[img-elasticsearch]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Elasticsearch
-[img-ms-jwt]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.JWT
-[img-ms-oauth2]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.OAuth2
-[img-ms-uaa]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Microservices.UAA
-[img-monolith-oauth2]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Monolith.OAuth2
-[img-official-openjdk8]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Official.OpenJDK8
-[img-yarn]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/Yarn
-[img-nodatabase]: https://dev.azure.com/hipster-labs/jhipster-daily-builds/_apis/build/status/NoDatabase
+[github-actions]: https://github.com/hipster-labs/jhipster-daily-builds/actions
+[github-angular-maven]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven/badge.svg
+[github-angular-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven%20NoSQL/badge.svg
+[github-angular-gradle]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Gradle/badge.svg
+[github-angular-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Gradle%20NoSQL/badge.svg
+[github-react-maven]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Maven/badge.svg
+[github-react-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Maven%20NoSQL/badge.svg
+[github-react-gradle]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle/badge.svg
+[github-react-gradle-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/React%20Gradle%20NoSQL/badge.svg
+[github-elasticsearch]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Elasticsearch/badge.svg
+[github-monolith-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Monolith%20OAuth2/badge.svg
+[github-yarn]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Yarn/badge.svg
+[github-no-database]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/No%20Database/badge.svg
+[github-ms-jwt]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20JWT/badge.svg
+[github-ms-oauth2]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20OAuth2/badge.svg
+[github-ms-uaa]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Microservices%20UAA/badge.svg
+[github-docker-image]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Docker%20Image/badge.svg
+[github-neo4j]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Neo4j/badge.svg
+[github-couchbase]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Couchbase/badge.svg
 [sonar-url]: https://sonarcloud.io/dashboard?id=jhipster-sample-application
 [sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=alert_status
 [sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-sample-application&metric=coverage
