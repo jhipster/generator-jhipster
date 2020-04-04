@@ -20,9 +20,9 @@
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
 cs=csvc
-suffix=pack
+suffix=helm
 <%_ if (kubernetesNamespace !== 'default') { _%>
-kubectl apply -f namespace.yaml
+kubectl apply -f namespace.yml
 <%_ } _%>
 <%_ if (istio) { _%>
 kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled
@@ -32,18 +32,18 @@ if [ -d "${cs}-${suffix}" ]; then
 helm delete --purge ${cs} 2>/dev/null
 helm dep up ./${cs}-${suffix}
   if [ $helmVersion -eq 1 ]; then
-helm install ${cs} ./${cs}-${suffix} --namespace <%- kubernetesNamespace %>
+helm install ${cs} ./${cs}-${suffix} --replace --namespace <%- kubernetesNamespace %>
   else
-helm install --name ${cs} ./${cs}-${suffix} --namespace <%- kubernetesNamespace %>
+helm install --name ${cs} ./${cs}-${suffix} --replace --namespace <%- kubernetesNamespace %>
   fi
 fi
 <%_ appConfigs.forEach((appConfig, index) =>  { _%>
 helm delete --purge <%- appConfig.baseName.toLowerCase() %> 2>/dev/null
 helm dep up ./<%- appConfig.baseName.toLowerCase() %>-${suffix}
 if [ $helmVersion -eq 1 ]; then
-helm install <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --namespace <%- kubernetesNamespace %>
+helm install <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --replace --namespace <%- kubernetesNamespace %>
 else
-helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --namespace <%- kubernetesNamespace %>
+helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --replace --namespace <%- kubernetesNamespace %>
 fi
 <%_ }) _%>
 

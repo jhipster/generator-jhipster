@@ -19,11 +19,13 @@
 -%>
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
-if [ -d "csvc" ]; then
-helm dep up ./csvc
-helm upgrade --install csvc ./csvc --namespace <%- kubernetesNamespace %>
+cs=csvc
+suffix=knative
+if [ -d "${cs}-${suffix}" ]; then
+helm dep up ./${cs}-${suffix}
+helm upgrade --install ${cs} ./${cs}-${suffix} --namespace <%- kubernetesNamespace %>
 fi
 <%_ appConfigs.forEach((appConfig, index) =>  { _%>
-helm dep up ./<%- appConfig.baseName.toLowerCase() %>
-helm upgrade --install <%- appConfig.baseName.toLowerCase() %> ./<%- appConfig.baseName.toLowerCase() %> --namespace <%- kubernetesNamespace %>
+helm dep up ./<%- appConfig.baseName.toLowerCase() %>-${suffix}
+helm upgrade --install <%- appConfig.baseName.toLowerCase() %> ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --namespace <%- kubernetesNamespace %>
 <%_ }) _%>

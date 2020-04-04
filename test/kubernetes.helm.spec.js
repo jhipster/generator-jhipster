@@ -4,75 +4,75 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    csvcfiles: ['./csvc-pack/Chart.yaml', './csvc-pack/requirements.yaml', './csvc-pack/values.yaml', './csvc-pack/templates/_helpers.tpl'],
-    eurekaregistry: ['./csvc-pack/templates/jhipster-registry.yaml', './csvc-pack/templates/application-configmap.yaml'],
+    csvcfiles: ['./csvc-helm/Chart.yml', './csvc-helm/requirements.yml', './csvc-helm/values.yml', './csvc-helm/templates/_helpers.tpl'],
+    eurekaregistry: ['./csvc-helm/templates/jhipster-registry.yml', './csvc-helm/templates/application-configmap.yml'],
     consulregistry: [
-        './csvc-pack/templates/consul.yaml',
-        './csvc-pack/templates/consul-config-loader.yaml',
-        './csvc-pack/templates/application-configmap.yaml'
+        './csvc-helm/templates/consul.yml',
+        './csvc-helm/templates/consul-config-loader.yml',
+        './csvc-helm/templates/application-configmap.yml'
     ],
     jhgate: [
-        './jhgate-pack/templates/jhgate-deployment.yaml',
-        './jhgate-pack/templates/jhgate-service.yaml',
-        './jhgate-pack/Chart.yaml',
-        './jhgate-pack/requirements.yaml',
-        './jhgate-pack/values.yaml',
-        './jhgate-pack/templates/_helpers.tpl'
+        './jhgate-helm/templates/jhgate-deployment.yml',
+        './jhgate-helm/templates/jhgate-service.yml',
+        './jhgate-helm/Chart.yml',
+        './jhgate-helm/requirements.yml',
+        './jhgate-helm/values.yml',
+        './jhgate-helm/templates/_helpers.tpl'
     ],
-    jhgateingress: ['./jhgate-pack/templates/jhgate-ingress.yaml'],
-    customnamespace: ['./namespace.yaml'],
+    jhgateingress: ['./jhgate-helm/templates/jhgate-ingress.yml'],
+    customnamespace: ['./namespace.yml'],
     jhconsole: [
-        './csvc-pack/templates/jhipster-console.yaml',
-        './csvc-pack/templates/jhipster-logstash.yaml',
-        './csvc-pack/templates/jhipster-dashboard-console.yaml',
-        './csvc-pack/templates/jhipster-zipkin.yaml'
+        './csvc-helm/templates/jhipster-console.yml',
+        './csvc-helm/templates/jhipster-logstash.yml',
+        './csvc-helm/templates/jhipster-dashboard-console.yml',
+        './csvc-helm/templates/jhipster-zipkin.yml'
     ],
     msmysql: [
-        './msmysql-pack/Chart.yaml',
-        './msmysql-pack/requirements.yaml',
-        './msmysql-pack/values.yaml',
-        './msmysql-pack/templates/_helpers.tpl',
-        './msmysql-pack/templates/msmysql-deployment.yaml',
-        './msmysql-pack/templates/msmysql-service.yaml'
+        './msmysql-helm/Chart.yml',
+        './msmysql-helm/requirements.yml',
+        './msmysql-helm/values.yml',
+        './msmysql-helm/templates/_helpers.tpl',
+        './msmysql-helm/templates/msmysql-deployment.yml',
+        './msmysql-helm/templates/msmysql-service.yml'
     ],
     mspsql: [
-        './mspsql-pack/Chart.yaml',
-        './mspsql-pack/requirements.yaml',
-        './mspsql-pack/values.yaml',
-        './mspsql-pack/templates/_helpers.tpl',
-        './mspsql-pack/templates/mspsql-deployment.yaml',
-        './mspsql-pack/templates/mspsql-service.yaml'
+        './mspsql-helm/Chart.yml',
+        './mspsql-helm/requirements.yml',
+        './mspsql-helm/values.yml',
+        './mspsql-helm/templates/_helpers.tpl',
+        './mspsql-helm/templates/mspsql-deployment.yml',
+        './mspsql-helm/templates/mspsql-service.yml'
     ],
     msmongodb: [
-        './msmongodb-pack/Chart.yaml',
-        './msmongodb-pack/requirements.yaml',
-        './msmongodb-pack/values.yaml',
-        './msmongodb-pack/templates/_helpers.tpl',
-        './msmongodb-pack/templates/msmongodb-deployment.yaml',
-        './msmongodb-pack/templates/msmongodb-service.yaml'
+        './msmongodb-helm/Chart.yml',
+        './msmongodb-helm/requirements.yml',
+        './msmongodb-helm/values.yml',
+        './msmongodb-helm/templates/_helpers.tpl',
+        './msmongodb-helm/templates/msmongodb-deployment.yml',
+        './msmongodb-helm/templates/msmongodb-service.yml'
     ],
     msmariadb: [
-        './msmariadb-pack/Chart.yaml',
-        './msmariadb-pack/requirements.yaml',
-        './msmariadb-pack/values.yaml',
-        './msmariadb-pack/templates/_helpers.tpl',
-        './msmariadb-pack/templates/msmariadb-deployment.yaml',
-        './msmariadb-pack/templates/msmariadb-service.yaml'
+        './msmariadb-helm/Chart.yml',
+        './msmariadb-helm/requirements.yml',
+        './msmariadb-helm/values.yml',
+        './msmariadb-helm/templates/_helpers.tpl',
+        './msmariadb-helm/templates/msmariadb-deployment.yml',
+        './msmariadb-helm/templates/msmariadb-service.yml'
     ],
     monolith: [
-        './samplemysql-pack/Chart.yaml',
-        './samplemysql-pack/requirements.yaml',
-        './samplemysql-pack/values.yaml',
-        './samplemysql-pack/templates/_helpers.tpl',
-        './samplemysql-pack/templates/samplemysql-deployment.yaml',
-        './samplemysql-pack/templates/samplemysql-service.yaml',
-        './samplemysql-pack/templates/samplemysql-elasticsearch.yaml'
+        './samplemysql-helm/Chart.yml',
+        './samplemysql-helm/requirements.yml',
+        './samplemysql-helm/values.yml',
+        './samplemysql-helm/templates/_helpers.tpl',
+        './samplemysql-helm/templates/samplemysql-deployment.yml',
+        './samplemysql-helm/templates/samplemysql-service.yml',
+        './samplemysql-helm/templates/samplemysql-elasticsearch.yml'
     ],
-    kafka: ['./samplekafka-pack/templates/samplekafka-deployment.yaml', './samplekafka-pack/templates/samplekafka-service.yaml'],
+    kafka: ['./samplekafka-helm/templates/samplekafka-deployment.yml', './samplekafka-helm/templates/samplekafka-service.yml'],
     jhgategateway: [
-        './jhgate-pack/templates/jhgate-gateway.yaml',
-        './jhgate-pack/templates/jhgate-destination-rule.yaml',
-        './jhgate-pack/templates/jhgate-virtual-service.yaml'
+        './jhgate-helm/templates/jhgate-gateway.yml',
+        './jhgate-helm/templates/jhgate-destination-rule.yml',
+        './jhgate-helm/templates/jhgate-virtual-service.yml'
     ],
     applyScript: ['./helm-apply.sh', './helm-upgrade.sh'],
 };
@@ -106,7 +106,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.jhgate);
-            assert.fileContent('./jhgate-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./jhgate-helm/requirements.yml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -143,7 +143,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -178,12 +178,12 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
         });
         it('creates expected jhipster-console files', () => {
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.jhconsole);
-            assert.fileContent('./csvc-pack/requirements.yaml', /name: elasticsearch/);
+            assert.fileContent('./csvc-helm/requirements.yml', /name: elasticsearch/);
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
@@ -228,7 +228,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
             assert.file(expectedFiles.jhgate);
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.jhgateingress);
-            assert.fileContent('./jhgate-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./jhgate-helm/requirements.yml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -266,11 +266,11 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
         });
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
-            assert.fileContent('./mspsql-pack/requirements.yaml', /name: postgresql/);
+            assert.fileContent('./mspsql-helm/requirements.yml', /name: postgresql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -308,19 +308,19 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
         });
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
-            assert.fileContent('./mspsql-pack/requirements.yaml', /name: postgresql/);
+            assert.fileContent('./mspsql-helm/requirements.yml', /name: postgresql/);
         });
         it('creates expected mongodb files', () => {
             assert.file(expectedFiles.msmongodb);
-            assert.fileContent('./msmongodb-pack/requirements.yaml', /name: mongodb-replicaset/);
+            assert.fileContent('./msmongodb-helm/requirements.yml', /name: mongodb-replicaset/);
         });
         it('creates expected mariadb files', () => {
             assert.file(expectedFiles.msmariadb);
-            assert.fileContent('./msmariadb-pack/requirements.yaml', /name: mariadb/);
+            assert.fileContent('./msmariadb-helm/requirements.yml', /name: mariadb/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -353,7 +353,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
-            assert.fileContent('./samplemysql-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./samplemysql-helm/requirements.yml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -384,8 +384,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.kafka);
-            assert.fileContent('./csvc-pack/requirements.yaml', /name: kafka/);
-            assert.fileContent('./samplekafka-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./csvc-helm/requirements.yml', /name: kafka/);
+            assert.fileContent('./samplekafka-helm/requirements.yml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -417,12 +417,12 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-pack/requirements.yaml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
         });
         it('creates expected prometheus files', () => {
             assert.file(expectedFiles.csvcfiles);
-            assert.fileContent('./csvc-pack/requirements.yaml', /name: prometheus/);
-            assert.fileContent('./csvc-pack/requirements.yaml', /name: grafana/);
+            assert.fileContent('./csvc-helm/requirements.yml', /name: prometheus/);
+            assert.fileContent('./csvc-helm/requirements.yml', /name: grafana/);
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
