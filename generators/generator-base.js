@@ -27,6 +27,8 @@ const exec = require('child_process').exec;
 const os = require('os');
 const pluralize = require('pluralize');
 const jhiCore = require('jhipster-core');
+const normalize = require('normalize-path');
+
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -70,20 +72,21 @@ module.exports = class extends PrivateBase {
     /**
      * Apply output customizer.
      *
-     * @param {string} path - Path to customize.
+     * @param {string} outputPath - Path to customize.
      */
-    applyOutputPathCustomizer(path) {
+    applyOutputPathCustomizer(outputPath) {
         const outputPathCustomizer = this.options.outputPathCustomizer;
         if (!outputPathCustomizer) {
-            return path;
+            return outputPath;
         }
+        outputPath = outputPath ? normalize(outputPath) : outputPath;
         if (Array.isArray(outputPathCustomizer)) {
             outputPathCustomizer.forEach(customizer => {
-                path = customizer.call(this, path);
+                outputPath = customizer.call(this, outputPath);
             });
-            return path;
+            return outputPath;
         }
-        return outputPathCustomizer.call(this, path);
+        return outputPathCustomizer.call(this, outputPath);
     }
 
     /**

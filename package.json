@@ -66,6 +66,7 @@
         "lodash": "4.17.13",
         "meow": "5.0.0",
         "mkdirp": "0.5.1",
+        "normalize-path": "3.0.0",
         "ora": "3.4.0",
         "os-locale": "3.1.0",
         "parse-gitignore": "1.0.1",
