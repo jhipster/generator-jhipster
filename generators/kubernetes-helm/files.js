@@ -37,7 +37,7 @@ function writeFiles() {
                 this.template(`${kubernetesSubgenPath}/deployment.yml.ejs`, `${appOut}/templates/${appName}-deployment.yml`);
                 this.template(`${kubernetesSubgenPath}/service.yml.ejs`, `${appOut}/templates/${appName}-service.yml`);
                 this.template('app/values.yml.ejs', `${appOut}/values.yml`);
-                this.template('app/Chart.yml.ejs', `${appOut}/Chart.yml`);
+                this.template('app/Chart.yml.ejs', `${appOut}/Chart.yaml`);
                 this.template('app/requirements.yml.ejs', `${appOut}/requirements.yml`);
                 this.template('app/helpers.tpl.ejs', `${appOut}/templates/_helpers.tpl`);
 
@@ -85,7 +85,7 @@ function writeFiles() {
                 this.serviceDiscoveryType === 'consul'
             ) {
                 this.template('csvc/values.yml.ejs', `${csOut}/values.yml`);
-                this.template('csvc/Chart.yml.ejs', `${csOut}/Chart.yml`);
+                this.template('csvc/Chart.yml.ejs', `${csOut}/Chart.yaml`);
                 this.template('csvc/requirements.yml.ejs', `${csOut}/requirements.yml`);
                 this.template('csvc/helpers.tpl.ejs', `${csOut}/templates/_helpers.tpl`);
             }

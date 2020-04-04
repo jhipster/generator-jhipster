@@ -108,7 +108,7 @@ function writeFiles() {
 
                     this.template('service.yml.ejs', `${appOut}/templates/${appName}-service.yml`);
                     this.template(`${helm}/app/values.yml.ejs`, `${appOut}/values.yml`);
-                    this.template(`${helm}/app/Chart.yml.ejs`, `${appOut}/Chart.yml`);
+                    this.template(`${helm}/app/Chart.yml.ejs`, `${appOut}/Chart.yaml`);
                     this.template(`${helm}/app/requirements.yml.ejs`, `${appOut}/requirements.yml`);
                     this.template(`${helm}/app/helpers.tpl.ejs`, `${appOut}/templates/_helpers.tpl`);
 
@@ -141,7 +141,7 @@ function writeFiles() {
                     this.serviceDiscoveryType === 'consul'
                 ) {
                     this.template(`${helm}/csvc/values.yml.ejs`, `${csOut}/values.yml`);
-                    this.template(`${helm}/csvc/Chart.yml.ejs`, `${csOut}/Chart.yml`);
+                    this.template(`${helm}/csvc/Chart.yml.ejs`, `${csOut}/Chart.yaml`);
                     this.template(`${helm}/csvc/requirements.yml.ejs`, `${csOut}/requirements.yml`);
                     this.template(`${helm}/csvc/helpers.tpl.ejs`, `${csOut}/templates/_helpers.tpl`);
                 }

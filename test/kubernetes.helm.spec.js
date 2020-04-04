@@ -4,7 +4,7 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    csvcfiles: ['./csvc-helm/Chart.yml', './csvc-helm/requirements.yml', './csvc-helm/values.yml', './csvc-helm/templates/_helpers.tpl'],
+    csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yml', './csvc-helm/values.yml', './csvc-helm/templates/_helpers.tpl'],
     eurekaregistry: ['./csvc-helm/templates/jhipster-registry.yml', './csvc-helm/templates/application-configmap.yml'],
     consulregistry: [
         './csvc-helm/templates/consul.yml',
@@ -14,7 +14,7 @@ const expectedFiles = {
     jhgate: [
         './jhgate-helm/templates/jhgate-deployment.yml',
         './jhgate-helm/templates/jhgate-service.yml',
-        './jhgate-helm/Chart.yml',
+        './jhgate-helm/Chart.yaml',
         './jhgate-helm/requirements.yml',
         './jhgate-helm/values.yml',
         './jhgate-helm/templates/_helpers.tpl'
@@ -28,7 +28,7 @@ const expectedFiles = {
         './csvc-helm/templates/jhipster-zipkin.yml'
     ],
     msmysql: [
-        './msmysql-helm/Chart.yml',
+        './msmysql-helm/Chart.yaml',
         './msmysql-helm/requirements.yml',
         './msmysql-helm/values.yml',
         './msmysql-helm/templates/_helpers.tpl',
@@ -36,7 +36,7 @@ const expectedFiles = {
         './msmysql-helm/templates/msmysql-service.yml'
     ],
     mspsql: [
-        './mspsql-helm/Chart.yml',
+        './mspsql-helm/Chart.yaml',
         './mspsql-helm/requirements.yml',
         './mspsql-helm/values.yml',
         './mspsql-helm/templates/_helpers.tpl',
@@ -44,7 +44,7 @@ const expectedFiles = {
         './mspsql-helm/templates/mspsql-service.yml'
     ],
     msmongodb: [
-        './msmongodb-helm/Chart.yml',
+        './msmongodb-helm/Chart.yaml',
         './msmongodb-helm/requirements.yml',
         './msmongodb-helm/values.yml',
         './msmongodb-helm/templates/_helpers.tpl',
@@ -52,7 +52,7 @@ const expectedFiles = {
         './msmongodb-helm/templates/msmongodb-service.yml'
     ],
     msmariadb: [
-        './msmariadb-helm/Chart.yml',
+        './msmariadb-helm/Chart.yaml',
         './msmariadb-helm/requirements.yml',
         './msmariadb-helm/values.yml',
         './msmariadb-helm/templates/_helpers.tpl',
@@ -60,7 +60,7 @@ const expectedFiles = {
         './msmariadb-helm/templates/msmariadb-service.yml'
     ],
     monolith: [
-        './samplemysql-helm/Chart.yml',
+        './samplemysql-helm/Chart.yaml',
         './samplemysql-helm/requirements.yml',
         './samplemysql-helm/values.yml',
         './samplemysql-helm/templates/_helpers.tpl',

@@ -29,7 +29,11 @@ kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled
 <%_ } _%>
 helmVersion=$(helm version --client | grep -E "v3\\.[0-9]{1,3}\\.[0-9]{1,3}" | wc -l)
 if [ -d "${cs}-${suffix}" ]; then
+  if [ $helmVersion -eq 1 ]; then
+helm uninstall ${cs} 2>/dev/null
+  else
 helm delete --purge ${cs} 2>/dev/null
+  fi
 helm dep up ./${cs}-${suffix}
   if [ $helmVersion -eq 1 ]; then
 helm install ${cs} ./${cs}-${suffix} --replace --namespace <%- kubernetesNamespace %>
@@ -38,13 +42,17 @@ helm install --name ${cs} ./${cs}-${suffix} --replace --namespace <%- kubernetes
   fi
 fi
 <%_ appConfigs.forEach((appConfig, index) =>  { _%>
+  if [ $helmVersion -eq 1 ]; then
+helm uninstall <%- appConfig.baseName.toLowerCase() %> 2>/dev/null
+  else
 helm delete --purge <%- appConfig.baseName.toLowerCase() %> 2>/dev/null
+  fi
 helm dep up ./<%- appConfig.baseName.toLowerCase() %>-${suffix}
-if [ $helmVersion -eq 1 ]; then
+  if [ $helmVersion -eq 1 ]; then
 helm install <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --replace --namespace <%- kubernetesNamespace %>
-else
+  else
 helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --replace --namespace <%- kubernetesNamespace %>
-fi
+  fi
 <%_ }) _%>
 
 <%_ if (istio && kubernetesServiceType === 'Ingress') { _%>

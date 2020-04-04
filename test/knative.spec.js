@@ -46,7 +46,7 @@ const expectedFiles = {
 
 const helmExpectedFiles = {
     csvcfiles: [
-        './csvc-knative/Chart.yml',
+        './csvc-knative/Chart.yaml',
         './csvc-knative/requirements.yml',
         './csvc-knative/values.yml',
         './csvc-knative/templates/_helpers.tpl'
@@ -59,7 +59,7 @@ const helmExpectedFiles = {
     ],
     jhgate: [
         './jhgate-knative/templates/jhgate-service.yml',
-        './jhgate-knative/Chart.yml',
+        './jhgate-knative/Chart.yaml',
         './jhgate-knative/requirements.yml',
         './jhgate-knative/values.yml',
         './jhgate-knative/templates/_helpers.tpl'
@@ -72,21 +72,21 @@ const helmExpectedFiles = {
         './csvc-knative/templates/jhipster-zipkin.yml'
     ],
     msmysql: [
-        './msmysql-knative/Chart.yml',
+        './msmysql-knative/Chart.yaml',
         './msmysql-knative/requirements.yml',
         './msmysql-knative/values.yml',
         './msmysql-knative/templates/_helpers.tpl',
         './msmysql-knative/templates/msmysql-service.yml'
     ],
     mspsql: [
-        './mspsql-knative/Chart.yml',
+        './mspsql-knative/Chart.yaml',
         './mspsql-knative/requirements.yml',
         './mspsql-knative/values.yml',
         './mspsql-knative/templates/_helpers.tpl',
         './mspsql-knative/templates/mspsql-service.yml'
     ],
     msmongodb: [
-        './msmongodb-knative/Chart.yml',
+        './msmongodb-knative/Chart.yaml',
         './msmongodb-knative/requirements.yml',
         './msmongodb-knative/values.yml',
         './msmongodb-knative/templates/_helpers.tpl',
@@ -94,7 +94,7 @@ const helmExpectedFiles = {
         './msmongodb-knative/templates/msmongodb-service.yml'
     ],
     msmariadb: [
-        './msmariadb-knative/Chart.yml',
+        './msmariadb-knative/Chart.yaml',
         './msmariadb-knative/requirements.yml',
         './msmariadb-knative/values.yml',
         './msmariadb-knative/templates/_helpers.tpl',
