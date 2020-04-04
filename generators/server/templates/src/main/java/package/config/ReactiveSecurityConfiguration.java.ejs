@@ -37,10 +37,6 @@ import <%= packageName %>.service.AuditEventService;
     <%_ } _%>
 import io.github.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
-<%_ if (authenticationType === 'oauth2') { _%>
-import org.springframework.beans.factory.annotation.Value;
-import io.github.jhipster.config.JHipsterProperties;
-<%_ } _%>
 <%_ if (skipUserManagement && authenticationType !== 'oauth2') { _%>
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 <%_ } _%>
@@ -152,17 +148,9 @@ public class SecurityConfiguration {
     private final AuditEventService auditEventService;
 
     <%_ } _%>
-    <%_ if (authenticationType === 'oauth2') { _%>
-
-    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
-    private String issuerUri;
-
-    private final JHipsterProperties jHipsterProperties;
-
-    <%_ } _%>
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (authenticationType === 'session' && !skipUserManagement || authenticationType === 'oauth2') { %>AuditEventService auditEventService, <% } %><% if (authenticationType === 'oauth2') { %>JHipsterProperties jHipsterProperties, <% } %>SecurityProblemSupport problemSupport) {
+    public SecurityConfiguration(<% if (!skipUserManagement && authenticationType !== 'oauth2') { %>ReactiveUserDetailsService userDetailsService, <% } %><% if (authenticationType === 'jwt') { %>TokenProvider tokenProvider, <% } %><% if (authenticationType === 'session' && !skipUserManagement || authenticationType === 'oauth2') { %>AuditEventService auditEventService, <% } %>SecurityProblemSupport problemSupport) {
         <%_ if (!skipUserManagement && authenticationType !== 'oauth2') { _%>
         this.userDetailsService = userDetailsService;
         <%_ } _%>
@@ -171,9 +159,6 @@ public class SecurityConfiguration {
         <%_ } _%>
         <%_ if (authenticationType === 'session' && !skipUserManagement || authenticationType === 'oauth2') { _%>
         this.auditEventService = auditEventService;
-        <%_ } _%>
-        <%_ if (authenticationType === 'oauth2') { _%>
-        this.jHipsterProperties = jHipsterProperties;
         <%_ } _%>
         this.problemSupport = problemSupport;
     }
@@ -333,19 +318,6 @@ public class SecurityConfiguration {
                 return new DefaultOidcUser(mappedAuthorities, user.getIdToken(), user.getUserInfo());
             });
         };
-    }
-
-    @Bean
-    ReactiveJwtDecoder jwtDecoder() {
-        NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
-
-        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
-        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
-        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
-
-        jwtDecoder.setJwtValidator(withAudience);
-
-        return jwtDecoder;
     }
 
     private ServerAuthenticationSuccessHandler redirectServerAuthenticationSuccessHandler = new RedirectServerAuthenticationSuccessHandler();
