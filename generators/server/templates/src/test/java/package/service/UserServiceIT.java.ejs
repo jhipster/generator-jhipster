@@ -93,6 +93,9 @@ import org.springframework.security.test.context.support.WithAnonymousUser;
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')) { _%>
 import java.time.Instant;
@@ -131,6 +134,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+<%_ } _%>
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
 import static org.mockito.Mockito.when;
@@ -368,6 +375,12 @@ public class UserServiceIT <% if (databaseType === 'neo4j') { %>extends Abstract
         Instant now = Instant.now();
         <%_ if (databaseType === 'sql' && !reactive) { _%>
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
+        <%_ } _%>
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+        when(mockUserSearchRepository.delete(any())).thenReturn(Mono.empty());
         <%_ } _%>
         user.setActivated(false);
         user.setActivationKey(RandomStringUtils.random(20));
