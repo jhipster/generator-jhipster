@@ -399,6 +399,7 @@ describe('JHipsterEntityExporter', () => {
         context('inside a microservice', () => {
           context('and when entities without the microservice option are passed', () => {
             let entities;
+            let returnedContent;
 
             before(() => {
               entities = [
@@ -501,7 +502,7 @@ describe('JHipsterEntityExporter', () => {
                   name: 'G'
                 }
               ];
-              JHipsterEntityExporter.exportEntities({
+              returnedContent = JHipsterEntityExporter.exportEntities({
                 entities,
                 application: {
                   name: 'client',
@@ -516,6 +517,13 @@ describe('JHipsterEntityExporter', () => {
               });
             });
 
+            it('returns every entity', () => {
+              expect(returnedContent.length).to.be.equal(7);
+              ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
+                expect(returnedContent.filter(entity => entity.name === entityName) !== undefined).to.be.true;
+              });
+            });
+
             after(() => {
               ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
                 fs.unlinkSync(`.jhipster/${entityName}.json`);
@@ -525,6 +533,7 @@ describe('JHipsterEntityExporter', () => {
           });
           context('and when microservice entities are passed', () => {
             let entities;
+            let returnedContent;
 
             before(() => {
               entities = [
@@ -589,7 +598,7 @@ describe('JHipsterEntityExporter', () => {
                   name: 'Product'
                 }
               ];
-              JHipsterEntityExporter.exportEntities({
+              returnedContent = JHipsterEntityExporter.exportEntities({
                 entities,
                 application: {
                   name: 'client',
@@ -603,6 +612,10 @@ describe('JHipsterEntityExporter', () => {
               expect(FileUtils.doesFileExist('.jhipster/Location.json'));
             });
 
+            it('only returns the entities that should be inside the microservice', () => {
+              expect(returnedContent.length).to.be.equal(2);
+            });
+
             after(() => {
               fs.unlinkSync('.jhipster/Client.json');
               fs.unlinkSync('.jhipster/Location.json');
@@ -614,6 +627,7 @@ describe('JHipsterEntityExporter', () => {
       context('when exporting updated entities', () => {
         let originalContent;
         let newContent;
+        let returnedContent;
 
         before(() => {
           originalContent = {
@@ -647,7 +661,7 @@ describe('JHipsterEntityExporter', () => {
             changelogDate: '43'
           };
           const entities = [changedContent];
-          JHipsterEntityExporter.exportEntities({
+          returnedContent = JHipsterEntityExporter.exportEntities({
             entities,
             application: {
               name: 'MyApp',
@@ -668,6 +682,10 @@ describe('JHipsterEntityExporter', () => {
             name: 'A',
             customAttribute: '42'
           });
+        });
+
+        it('returns the new content', () => {
+          expect(newContent).to.deep.equal(returnedContent[0]);
         });
       });
     });
