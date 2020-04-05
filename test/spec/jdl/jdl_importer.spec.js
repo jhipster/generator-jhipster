@@ -1811,5 +1811,43 @@ paginate * with infinite-scroll
         expect(entityF).to.be.false;
       });
     });
+
+    context('when passing skipYoRcGeneration and skipEntityFilesGeneration options', () => {
+      before(() => {
+        expect(fse.existsSync('.yo-rc.json')).to.be.false;
+        expect(fse.existsSync('.jhipster')).to.be.false;
+
+        const importer = createImporterFromContent(
+          `application {
+  config {
+    applicationType monolith
+    baseName tata
+    clientFramework angularX
+  }
+  entities A
+}
+
+entity A
+
+paginate * with infinite-scroll
+`,
+          {
+            creationTimestamp: new Date(2020, 0, 1, 1, 0, 0),
+            generatorVersion: '7.0.0',
+            skipYoRcGeneration: true,
+            skipEntityFilesGeneration: true
+          }
+        );
+        importer.import();
+      });
+
+      it('should not write .yo-rc.json', () => {
+        expect(fse.existsSync('.yo-rc.json')).to.be.false;
+      });
+
+      it('should not write .jhipster', () => {
+        expect(fse.existsSync('.jhipster')).to.be.false;
+      });
+    });
   });
 });
