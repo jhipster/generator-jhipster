@@ -28,10 +28,6 @@ export default class AccountService {
   }
 
   public init(): void {
-    const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
-    if (!this.store.getters.account && !this.store.getters.logon && token) {
-      this.retrieveAccount();
-    }
     this.retrieveProfiles();
   }
 
@@ -44,9 +40,10 @@ export default class AccountService {
     });
   }
 
-  public retrieveAccount(): void {
-    this.store.commit('authenticate');
-    axios.get('api/account').then((response) => {
+  public async retrieveAccount(): Promise<void> {
+    await axios
+      .get('api/account').then((response) => {
+      this.store.commit('authenticate');
       const account = response.data;
       if (account) {
         this.store.commit('authenticated', account);
@@ -72,7 +69,6 @@ export default class AccountService {
       <%_ } _%>
     }).catch(() => {
       this.store.commit('logout');
-      this.router.push('/');
     });
   }
 
@@ -82,6 +78,30 @@ export default class AccountService {
     }
     if (!this.authenticated || !this.userAuthorities) {
       return false;
+    }
+
+    for (let i = 0; i < authorities.length; i++) {
+      if (this.userAuthorities.includes(authorities[i])) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  public async hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
+    if (typeof authorities === 'string') {
+      authorities = [authorities];
+    }
+
+    if (!this.authenticated || !this.userAuthorities) {
+      const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
+      if (!this.store.getters.account && !this.store.getters.logon && token) {
+        await this.retrieveAccount();
+        return this.authenticated;
+      } else {
+        return false;
+      }
     }
 
     for (let i = 0; i < authorities.length; i++) {
