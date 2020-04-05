@@ -70,7 +70,9 @@ class <%= upperFirstCamelCase(baseName) %>KafkaResourceIT {
     }
 
     private static void startTestcontainer() {
-        kafkaContainer = new KafkaContainer("<%= KAFKA_VERSION %>");
+        // TODO: withNetwork will need to be removed soon
+        // See discussion at https://github.com/jhipster/generator-jhipster/issues/11544#issuecomment-609065206
+        kafkaContainer = new KafkaContainer("<%= KAFKA_VERSION %>").withNetwork(null);
         kafkaContainer.start();
     }
 
