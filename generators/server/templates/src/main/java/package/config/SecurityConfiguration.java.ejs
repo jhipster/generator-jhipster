@@ -101,6 +101,10 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
     <%_ if (applicationType !== 'microservice') { _%>
 import org.springframework.web.filter.CorsFilter;
     <%_ } _%>
+    <%_ if (!reactive && applicationType === 'gateway' && !serviceDiscoveryType) { _%>
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.client.RestTemplate;
+    <%_ } _%>
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @EnableWebSecurity
@@ -359,6 +363,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new AuthorizationHeaderFilter(headerUtil);
     }
         <%_ } _%>
+    <%_ } _%>
+    <%_ if (!reactive && applicationType === 'gateway' && !serviceDiscoveryType) { _%>
+
+    @Bean
+    @Qualifier("vanillaRestTemplate")
+    public RestTemplate vanillaRestTemplate() {
+        return new RestTemplate();
+    }
     <%_ } _%>
 }
 <%_ } _%>
