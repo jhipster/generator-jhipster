@@ -1,0 +1,163 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "Вие използвате <strong>остарял</strong> уеб браузър. Моля <a href=\"http://browsehappy.com/?locale=en\">обновете вашия браузър</a> за да подобрите работата му.",
+        "menu": {
+            "home": "Начална страница",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "Обекти",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Акаунт",
+                "settings": "Настройки",
+                "password": "Парола",
+                "sessions": "Сесии",
+                "login": "Вход",
+                "logout": "Изход",
+                "register": "Регистрация"
+            },
+            "admin": {
+                "main": "Администрация",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "Шлюз",
+                <%_ } _%>
+                "userManagement": "Управление на потребителите",
+                "tracker": "Тракер на потребителите",
+                "metrics": "Метрики",
+                "health": "Състояние",
+                "configuration": "Настройки",
+                "logs": "Логове",
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+                "audits": "Одити",
+                <%_ } _%>
+                "apidocs": "API",
+                "database": "База данни",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "Език"
+        },
+        "form": {
+            "username.label": "Потребителско име",
+            "username.placeholder": "Вашето потребителско име",
+            "currentpassword.label": "Текуща парола",
+            "currentpassword.placeholder": "Текуща парола",
+            "newpassword.label": "Нова парола",
+            "newpassword.placeholder": "Нова парола",
+            "confirmpassword.label": "Потвърждение на новата парола",
+            "confirmpassword.placeholder": "Потвърждение на новата парола",
+            "email.label": "Имейл",
+            "email.placeholder": "Вашият имейл"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "Ако желаете да ",
+                    "link": "влезете в системата",
+                    "suffix": ", Вие можете да използвате създадените вече акаунти:<br/>- Администратор (потребителско име=\"admin\" и парола=\"admin\") <br/>- Потребител (потребителско име=\"user\" и парола=\"user\")."
+                },
+                "register": {
+                    "noaccount": "Нямате ли все още акаунт?",
+                    "link": "Регистрирайте нов акаунт"
+                }
+            },
+            "error": {
+                "dontmatch": "Паролата и нейното потвърждение не съвпадат!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Вашата парола е задължителна.",
+                    "minlength": "Вашата парола трябва да съдържа поне 4 символа.",
+                    "maxlength": "Вашата парола не може да бъде по-дълга от 50 символа.",
+                    "strength": "Сложност на паролата:"
+                },
+                "confirmpassword": {
+                    "required": "Полето за потвърждаване на вашата парола е задължително.",
+                    "minlength": "Полето за потвърждаване на вашата парола трябва да съдържа поне 4 символа.",
+                    "maxlength": "Полето за потвърждаване на вашата парола не може да бъде по-дълго от 50 символа."
+                },
+                "email": {
+                    "required": "Вашият имейл е задължителен.",
+                    "invalid": "Вашият имейл е невалиден.",
+                    "minlength": "Вашият имейл трябва да съдържа поне 5 символа.",
+                    "maxlength": "Вашият имейл не може да бъде по-дълъг от 50 символа."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "Разработка"
+        },
+        "item-count": "Показани {{first}} - {{second}} от {{total}} записа."
+    },
+    "entity": {
+        "action": {
+            "addblob": "Добавяне на двоичен обект",
+            "addimage": "Добавяне на изображение",
+            "back": "Обратно",
+            "cancel": "Отмяна",
+            "delete": "Изтриване",
+            "edit": "Редактиране",
+            "open": "Отваряне",
+            "save": "Запазване",
+            "view": "Преглед"
+        },
+        "detail": {
+            "field": "Поле",
+            "value": "Стойност"
+        },
+        "delete": {
+            "title": "Потвърдете операцията за изтриване"
+        },
+        "validation": {
+            "required": "Това поле е задължително.",
+            "minlength": "Това поле трябва да съдържа поне {{ min }} символа.",
+            "maxlength": "Това поле не може да бъде по-дълго от {{ max }} символа.",
+            "min": "Стойността на това поле трябва да бъде поне {{ min }}.",
+            "max": "Стойността на това поле не може да бъде повече от {{ max }}.",
+            "minbytes": "Това поле трябва да бъде поне {{ min }} байта.",
+            "maxbytes": "Това поле не може да бъде повече от {{ max }} байта.",
+            "pattern": "Това поле трябва да следва модела {{ pattern }}.",
+            "number": "Това поле трябва да бъде число.",
+            "datetimelocal": "Това поле трябва да бъде дата и час.",
+            "patternLogin": "Това поле може да съдържа само букви, цифри и имейл адреси."
+        }
+    },
+    "error": {
+        "internalServerError": "Вътрешна грешка в сървъра",
+        "server.not.reachable": "Сървърът е недостъпен",
+        "url.not.found": "Не е намерен",
+        "NotNull": "Полето {{ fieldName }} не може да бъде празно!",
+        "Size": "Полето {{ fieldName }} не отговаря на минималните / максимални изисквания за размер!",
+        "userexists": "Потребителското име вече се използва!",
+        "emailexists": "Имейлът вече се използва!",
+        "idexists": "Новият обект {{ entityName }} не може вече да има ID",
+        "idnull": "Невалидно ID",
+        "file": {
+            "could.not.extract": "Файлът не може да бъде извлечен",
+            "not.image": "Файлът се очакваше да бъде изображение, но беше установено, че е \"{{ fileType }}\""
+        }
+    },
+    "footer": "Това е долнището на вашата страница."
+}
