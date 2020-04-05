@@ -768,7 +768,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>() throws Exception {
+    public void getAll<%= entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -804,7 +804,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     }
     <% if (fieldsContainOwnerManyToMany === true) { %>
     @SuppressWarnings({"unchecked"})
-    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() throws Exception {
+    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (service !== 'no') { _%>
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
         <%_ } else { _%>
@@ -828,7 +828,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     }
 
     @SuppressWarnings({"unchecked"})
-    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() throws Exception {
+    public void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (service !== 'no') { _%>
         when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (!reactive) { %>new PageImpl(new ArrayList<>())<% } else { %>Flux.empty()<% }%>);
         <%_ } else { _%>
@@ -854,7 +854,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void get<%= entityClass %>() throws Exception {
+    public void get<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -892,7 +892,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void get<%= entityClassPlural %>ByIdFiltering() throws Exception {
+    public void get<%= entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -916,7 +916,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -929,7 +929,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNotEqualToSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNotEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -942,7 +942,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -955,7 +955,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -971,7 +971,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
                 _%>
                 @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -984,7 +984,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -1017,7 +1017,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -1030,7 +1030,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -1043,7 +1043,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -1056,7 +1056,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
         <%= entityInstance %>Repository.saveAndFlush(<%= asEntity(entityInstance) %>);
 
@@ -1073,7 +1073,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() throws Exception {
+    public void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         <%_ if (relationship.relationshipValidate === true || relationship.useJPADerivedIdentifier === true) { _%>
         // Get already existing entity
         <%= asEntity(relationship.otherEntityNameCapitalized) %> <%= relationship.relationshipFieldName %> = <%= asEntity(entityInstance) %>.get<%= relationship.relationshipNameCapitalized %>();
@@ -1106,7 +1106,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     /**
      * Executes the search, and checks that the default entity is returned.
      */
-    private void default<%= entityClass %>ShouldBeFound(String filter) throws Exception {
+    private void default<%= entityClass %>ShouldBeFound(String filter) <% if (!reactive) { %>throws Exception <% } %>{
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -1126,7 +1126,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     /**
      * Executes the search, and checks that the default entity is not returned.
      */
-    private void default<%= entityClass %>ShouldNotBeFound(String filter) throws Exception {
+    private void default<%= entityClass %>ShouldNotBeFound(String filter) <% if (!reactive) { %>throws Exception <% } %>{
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -1143,7 +1143,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 <%_  } _%>
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void getNonExisting<%= entityClass %>() throws Exception {
+    public void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the <%= entityInstance %>
         <%_ if (!reactive) { _%>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { %>Long.MAX_VALUE<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
@@ -1279,7 +1279,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void delete<%= entityClass %>() throws Exception {
+    public void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
 <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
         // Configure the mock search repository
     <%_ if (service !== 'no') { _%>
@@ -1331,7 +1331,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
-    public void search<%= entityClass %>() throws Exception {
+    public void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Configure the mock search repository
 <%_ if (reactive) { _%>
         when(mock<%= entityClass %>SearchRepository.save(any()))
