@@ -129,6 +129,7 @@
     <%_ if (cacheProvider === 'infinispan') { _%>
     <logger name="unknown.jul.logger" level="WARN"/>
     <%_ } _%>
+    <logger name="com.tngtech.archunit.core.importer" level="ERROR"/>
 
     <root>
         <level>WARN</level>
