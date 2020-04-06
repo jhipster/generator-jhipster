@@ -24,14 +24,14 @@ const JSONEntity = require('../../../../lib/core/jhipster/json_entity');
 describe('JSONEntity', () => {
   describe('::new', () => {
     context('when not passing a configuration', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JSONEntity();
         }).to.throw('At least an entity name must be passed');
       });
     });
     context('when not passing an entity name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JSONEntity({});
         }).to.throw('At least an entity name must be passed');
@@ -46,7 +46,7 @@ describe('JSONEntity', () => {
         });
       });
 
-      it('sets default values', () => {
+      it('should set default values', () => {
         expect(entity.changelogDate).not.to.be.undefined;
         delete entity.changelogDate;
         expect(entity).to.deep.equal({
@@ -94,7 +94,7 @@ describe('JSONEntity', () => {
         });
       });
 
-      it('uses them', () => {
+      it('should use them', () => {
         expect(entity).to.deep.equal({
           name: 'Titi',
           dto: 'mapstruct',
@@ -133,7 +133,7 @@ describe('JSONEntity', () => {
         entity.addField();
       });
 
-      it('does nothing', () => {
+      it('should do nothing', () => {
         expect(entity.fields).to.deep.equal([]);
       });
     });
@@ -142,7 +142,7 @@ describe('JSONEntity', () => {
         entity.addField(42);
       });
 
-      it('adds it', () => {
+      it('should add it', () => {
         expect(entity.fields).to.deep.equal([42]);
       });
     });
@@ -161,7 +161,7 @@ describe('JSONEntity', () => {
         entity.addFields();
       });
 
-      it('does nothing', () => {
+      it('should do nothing', () => {
         expect(entity.fields).to.deep.equal([]);
       });
     });
@@ -170,7 +170,7 @@ describe('JSONEntity', () => {
         entity.addFields([42, 43]);
       });
 
-      it('adds it', () => {
+      it('should add it', () => {
         expect(entity.fields).to.deep.equal([42, 43]);
       });
     });
@@ -189,7 +189,7 @@ describe('JSONEntity', () => {
         entity.addRelationship();
       });
 
-      it('does nothing', () => {
+      it('should do nothing', () => {
         expect(entity.relationships).to.deep.equal([]);
       });
     });
@@ -198,7 +198,7 @@ describe('JSONEntity', () => {
         entity.addRelationship(42);
       });
 
-      it('adds it', () => {
+      it('should add it', () => {
         expect(entity.relationships).to.deep.equal([42]);
       });
     });
@@ -217,7 +217,7 @@ describe('JSONEntity', () => {
         entity.addRelationships();
       });
 
-      it('does nothing', () => {
+      it('should do nothing', () => {
         expect(entity.relationships).to.deep.equal([]);
       });
     });
@@ -226,7 +226,7 @@ describe('JSONEntity', () => {
         entity.addRelationships([42, 43]);
       });
 
-      it('adds it', () => {
+      it('should add it', () => {
         expect(entity.relationships).to.deep.equal([42, 43]);
       });
     });

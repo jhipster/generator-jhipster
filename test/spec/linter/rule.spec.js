@@ -24,14 +24,14 @@ const { INFO, ERROR } = require('../../../lib/linter/rule_levels');
 describe('Rule', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new Rule();
         }).to.throw('A rule must at least have a name.');
       });
     });
     context('when not passing any name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new Rule({});
         }).to.throw('A rule must at least have a name.');
@@ -59,14 +59,14 @@ describe('Rule', () => {
     });
 
     context('when comparing to no rule', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           rule.compareTo();
         }).to.throw('A rule has to be passed so as to be compared.');
       });
     });
     context('when comparing two equal rules', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(rule.compareTo(otherRule)).to.equal(0);
       });
     });
@@ -75,7 +75,7 @@ describe('Rule', () => {
         rule.level = ERROR;
       });
 
-      it('returns 1', () => {
+      it('should return 1', () => {
         expect(rule.compareTo(otherRule)).to.equal(1);
       });
     });
@@ -84,7 +84,7 @@ describe('Rule', () => {
         otherRule.level = ERROR;
       });
 
-      it('returns 1', () => {
+      it('should return 1', () => {
         expect(rule.compareTo(otherRule)).to.equal(-1);
       });
     });

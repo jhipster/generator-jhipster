@@ -23,28 +23,28 @@ const RelationshipIssue = require('../../../../lib/linter/issues/relationship_is
 describe('RelationshipIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new RelationshipIssue();
         }).to.throw('An issue must at least have a rule name.');
       });
     });
     context('when not passing a rule name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new RelationshipIssue({});
         }).to.throw('An issue must at least have a rule name.');
       });
     });
     context('when not passing a source', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new RelationshipIssue({ ruleName: 'Toto', to: 'to', type: 'type' });
         }).to.throw("A relationship's source, destination & type must be passed.");
       });
     });
     context('when not passing a destination', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new RelationshipIssue({ ruleName: 'Toto', source: 'source', type: 'type' });
         }).to.throw("A relationship's source, destination & type must be passed.");
@@ -52,7 +52,7 @@ describe('RelationshipIssue', () => {
     });
   });
   context('when not passing a type', () => {
-    it('fails', () => {
+    it('should fail', () => {
       expect(() => {
         new RelationshipIssue({ ruleName: 'Toto', source: 'source', to: 'to' });
       }).to.throw("A relationship's source, destination & type must be passed.");

@@ -29,14 +29,14 @@ describe('JSONReader', () => {
   describe('::parseFromDir', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {
-        it('throws an error', () => {
+        it('should fail', () => {
           expect(() => {
             JSONReader.parseFromDir(null);
           }).to.throw('The app directory must be passed to read JSON files.');
         });
       });
       context('such as a file', () => {
-        it('throws an error', () => {
+        it('should fail', () => {
           expect(() => {
             JSONReader.parseFromDir('../../test_files/invalid_file.txt');
           }).to.throw(
@@ -45,7 +45,7 @@ describe('JSONReader', () => {
         });
       });
       context('such as a dir that does not exist', () => {
-        it('throws an error', () => {
+        it('should fail', () => {
           expect(() => {
             JSONReader.parseFromDir('nodir');
           }).to.throw("The passed directory 'nodir' must exist and must be a directory to read JSON files.");
@@ -70,7 +70,7 @@ describe('JSONReader', () => {
           );
         });
 
-        it('reads it', () => {
+        it('should read it', () => {
           expect(content.entities.Country).not.to.be.undefined;
           expect(content.entities.Department).not.to.be.undefined;
           expect(content.entities.Employee).not.to.be.undefined;

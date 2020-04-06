@@ -50,7 +50,7 @@ describe('ApplicationValidator', () => {
 
   describe('validate', () => {
     context('when not passing any application config', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           validator.validate();
         }).to.throw(/^An application must be passed to be validated\.$/);
@@ -69,7 +69,7 @@ describe('ApplicationValidator', () => {
       });
 
       context('without the required options', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             validator.validate(new JDLApplication({ config: {} }));
           }).to.throw(
@@ -87,7 +87,7 @@ describe('ApplicationValidator', () => {
         });
       });
       context('with invalid test framework values', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             validator.validate(
               new JDLApplication({
@@ -102,7 +102,7 @@ describe('ApplicationValidator', () => {
       });
       context('with different options for databaseType, devDatabaseType and prodDatabaseType', () => {
         context('mysql', () => {
-          it('does not fail', () => {
+          it('should not fail', () => {
             expect(() => {
               validator.validate(
                 new JDLApplication({
@@ -119,7 +119,7 @@ describe('ApplicationValidator', () => {
           });
         });
         context('postgresql', () => {
-          it('does not fail', () => {
+          it('should not fail', () => {
             expect(() => {
               validator.validate(
                 new JDLApplication({
@@ -136,7 +136,7 @@ describe('ApplicationValidator', () => {
           });
         });
         context('mongodb', () => {
-          it('does not fail', () => {
+          it('should not fail', () => {
             expect(() => {
               validator.validate(
                 new JDLApplication({
@@ -153,7 +153,7 @@ describe('ApplicationValidator', () => {
           });
         });
         context('cassandra', () => {
-          it('does not fail', () => {
+          it('should not fail', () => {
             expect(() => {
               validator.validate(
                 new JDLApplication({
@@ -170,7 +170,7 @@ describe('ApplicationValidator', () => {
           });
         });
         context('couchbase', () => {
-          it('does not fail', () => {
+          it('should not fail', () => {
             expect(() => {
               validator.validate(
                 new JDLApplication({
@@ -187,7 +187,7 @@ describe('ApplicationValidator', () => {
           });
         });
         context('neo4j', () => {
-          it('does not fail', () => {
+          it('should not fail', () => {
             expect(() => {
               validator.validate(
                 new JDLApplication({
@@ -207,7 +207,7 @@ describe('ApplicationValidator', () => {
       context('with an invalid combination for databaseType, devDatabaseType and prodDatabaseType', () => {
         context("for 'sql' as databaseType", () => {
           context('with an invalid prodDatabaseType', () => {
-            it('fails', () => {
+            it('should fail', () => {
               expect(() => {
                 validator.validate(
                   new JDLApplication({
@@ -225,7 +225,7 @@ describe('ApplicationValidator', () => {
             });
           });
           context('with an invalid devDatabaseType', () => {
-            it('fails', () => {
+            it('should fail', () => {
               expect(() => {
                 validator.validate(
                   new JDLApplication({
@@ -243,7 +243,7 @@ describe('ApplicationValidator', () => {
             });
           });
           context('with both devDatabaseType and prodDatabaseType as invalid values', () => {
-            it('fails', () => {
+            it('should fail', () => {
               expect(() => {
                 validator.validate(
                   new JDLApplication({
@@ -263,7 +263,7 @@ describe('ApplicationValidator', () => {
         });
         context("for either 'mongodb', 'couchbase', 'neo4j' or 'cassandra'", () => {
           context('when the devDatabaseType is not the same as the databaseType', () => {
-            it('fails', () => {
+            it('should fail', () => {
               expect(() => {
                 validator.validate(
                   new JDLApplication({
@@ -281,7 +281,7 @@ describe('ApplicationValidator', () => {
             });
           });
           context('when the prodDatabaseType is not the same as the databaseType', () => {
-            it('fails', () => {
+            it('should fail', () => {
               expect(() => {
                 validator.validate(
                   new JDLApplication({

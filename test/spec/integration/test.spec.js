@@ -48,7 +48,7 @@ describe('integration tests', () => {
       fs.unlinkSync('exported.jdl');
     });
 
-    it('keeps the same JDL content', () => {
+    it('should keep the same JDL content', () => {
       expect(writtenContent.toString()).to.equal(originalContent.toString());
     });
   });

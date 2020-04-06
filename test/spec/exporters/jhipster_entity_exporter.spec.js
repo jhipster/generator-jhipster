@@ -30,7 +30,7 @@ describe('JHipsterEntityExporter', () => {
   describe('::exportEntities', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
-        it('throws an error', () => {
+        it('should fail', () => {
           expect(() => {
             JHipsterEntityExporter.exportEntities();
           }).to.throw('Entities have to be passed to be exported.');
@@ -82,10 +82,10 @@ describe('JHipsterEntityExporter', () => {
           fs.rmdirSync('.jhipster');
         });
 
-        it('returns the exported entities', () => {
+        it('should return the exported entities', () => {
           expect(returned).to.deep.equal(entities);
         });
-        it('exports the entities', () => {
+        it('should export the entities', () => {
           expect(aEntityContent).to.deep.equal(entities[0]);
         });
       });
@@ -140,7 +140,7 @@ describe('JHipsterEntityExporter', () => {
           }, 1000);
         });
 
-        it('returns the exported entities', () => {
+        it('should return the exported entities', () => {
           expect(returned).to.deep.equal([
             {
               name: 'A',
@@ -165,7 +165,7 @@ describe('JHipsterEntityExporter', () => {
             }
           ]);
         });
-        it('exports it with same changelogDate', () => {
+        it('should export it with same changelogDate', () => {
           expect(newChangelogDate).to.eq(previousChangelogDate);
         });
 
@@ -284,7 +284,7 @@ describe('JHipsterEntityExporter', () => {
             });
           });
 
-          it('returns the exported entities', () => {
+          it('should return the exported entities', () => {
             expect(returned).to.deep.equal([
               {
                 name: 'Client',
@@ -381,7 +381,7 @@ describe('JHipsterEntityExporter', () => {
               }
             ]);
           });
-          it('exports every entity', () => {
+          it('should export every entity', () => {
             expect(FileUtils.doesFileExist('.jhipster/Client.json'));
             expect(FileUtils.doesFileExist('.jhipster/Location.json'));
             expect(FileUtils.doesFileExist('.jhipster/LocalStore.json'));
@@ -511,13 +511,13 @@ describe('JHipsterEntityExporter', () => {
               });
             });
 
-            it('exports every entity', () => {
+            it('should export every entity', () => {
               ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
                 expect(FileUtils.doesFileExist(`.jhipster/${entityName}.json`)).to.be.true;
               });
             });
 
-            it('returns every entity', () => {
+            it('should return every entity', () => {
               expect(returnedContent.length).to.be.equal(7);
               ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
                 expect(returnedContent.filter(entity => entity.name === entityName) !== undefined).to.be.true;
@@ -607,12 +607,12 @@ describe('JHipsterEntityExporter', () => {
               });
             });
 
-            it('only exports the entities that should be inside the microservice', () => {
+            it('should export the entities that should be inside the microservice', () => {
               expect(FileUtils.doesFileExist('.jhipster/Client.json'));
               expect(FileUtils.doesFileExist('.jhipster/Location.json'));
             });
 
-            it('only returns the entities that should be inside the microservice', () => {
+            it('should return the entities that should be inside the microservice', () => {
               expect(returnedContent.length).to.be.equal(2);
             });
 
@@ -676,7 +676,7 @@ describe('JHipsterEntityExporter', () => {
           fs.rmdirSync('.jhipster');
         });
 
-        it('merges the existing content with the new one and preserves changelogDate original value', () => {
+        it('should merge the existing content with the new one', () => {
           expect(newContent).to.deep.equal({
             ...originalContent,
             name: 'A',
@@ -684,7 +684,11 @@ describe('JHipsterEntityExporter', () => {
           });
         });
 
-        it('returns the new content', () => {
+        it('should keep changelogDate original value', () => {
+          expect(newContent.customAttribute).to.equal('42');
+        });
+
+        it('should return the new content', () => {
           expect(newContent).to.deep.equal(returnedContent[0]);
         });
       });

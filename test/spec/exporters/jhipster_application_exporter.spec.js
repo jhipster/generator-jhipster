@@ -30,7 +30,7 @@ describe('JHipsterApplicationExporter', () => {
   describe('::exportApplication', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
-        it('throws an error', () => {
+        it('should fail', () => {
           expect(() => {
             exportApplication();
           }).to.throw('An application has to be passed to be exported.');
@@ -68,7 +68,7 @@ describe('JHipsterApplicationExporter', () => {
           fs.unlinkSync(path.join('.yo-rc.json'));
         });
 
-        it('returns the exported application', () => {
+        it('should return the exported application', () => {
           expect(returned).to.deep.equal({
             entities: [],
             'generator-jhipster': {
@@ -108,10 +108,10 @@ describe('JHipsterApplicationExporter', () => {
             }
           });
         });
-        it('exports it', () => {
+        it('should export it', () => {
           expect(content).not.to.be.undefined;
         });
-        it('formats it', () => {
+        it('should format it', () => {
           expect(content['generator-jhipster']).not.to.be.undefined;
           const config = content['generator-jhipster'];
           expect(config).to.deep.equal({
@@ -168,7 +168,7 @@ describe('JHipsterApplicationExporter', () => {
           );
         });
 
-        it("doesn't create the .yo-rc.json in the current folder", () => {
+        it('should not create the .yo-rc.json in the current folder', () => {
           expect(() => fs.statSync('.yo-rc.json')).to.throw();
         });
       });
@@ -236,11 +236,11 @@ describe('JHipsterApplicationExporter', () => {
           fs.unlinkSync(path.join('.yo-rc.json'));
         });
 
-        it("doesn't override creationTimestamp value", () => {
+        it('should not override the creationTimestamp value', () => {
           expect(content['generator-jhipster'].creationTimestamp).to.equal('old');
         });
 
-        it('adds the read content to the exported application', () => {
+        it('should add the read content to the exported application', () => {
           expect(content).to.deep.equal({
             entities: [],
             test: 1234,
@@ -287,7 +287,7 @@ describe('JHipsterApplicationExporter', () => {
   describe('::exportApplications', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
-        it('throws an error', () => {
+        it('should fail', () => {
           expect(() => {
             exportApplications();
           }).to.throw('Applications have to be passed to be exported.');
@@ -319,7 +319,7 @@ describe('JHipsterApplicationExporter', () => {
           });
         });
 
-        it('returns the exported applications', () => {
+        it('should return the exported applications', () => {
           expect(returned).to.have.lengthOf(2);
         });
         context('for the first application', () => {
@@ -340,11 +340,11 @@ describe('JHipsterApplicationExporter', () => {
             fs.rmdirSync('toto');
           });
 
-          it('exports it', done => {
+          it('should export it', done => {
             fs.readFile(path.join('toto', '.yo-rc.json'), { encoding: 'utf8' }, done);
           });
 
-          it('formats it', () => {
+          it('should format it', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
             expect(config).to.deep.equal({
@@ -400,11 +400,11 @@ describe('JHipsterApplicationExporter', () => {
             fs.rmdirSync('titi');
           });
 
-          it('exports it', done => {
+          it('should export it', done => {
             fs.readFile(path.join('titi', '.yo-rc.json'), { encoding: 'utf8' }, done);
           });
 
-          it('formats it', () => {
+          it('should format it', () => {
             expect(content['generator-jhipster']).not.to.be.undefined;
             const config = content['generator-jhipster'];
             expect(config).to.deep.equal({

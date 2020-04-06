@@ -25,12 +25,12 @@ const { JPA_DERIVED_IDENTIFIER, exists } = require('../../../../lib/core/jhipste
 describe('RelationshipOptions', () => {
   describe('exists', () => {
     describe('when the option does not exist', () => {
-      it('returns false', () => {
+      it('should return false', () => {
         expect(exists('toto')).to.be.false;
       });
     });
     describe('when the option exists', () => {
-      it('returns true', () => {
+      it('should return true', () => {
         expect(exists(JPA_DERIVED_IDENTIFIER)).to.be.true;
       });
     });

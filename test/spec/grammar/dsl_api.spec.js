@@ -31,7 +31,7 @@ describe('JDL DSL API', () => {
         ast = parse('@service(serviceClass) entity A {@Id field String}');
       });
 
-      it('returns an AST', () => {
+      it('should return an AST', () => {
         expect(ast.entities).to.have.lengthOf(1);
         expect(ast.entities[0]).to.deep.eql({
           name: 'A',
@@ -58,11 +58,11 @@ describe('JDL DSL API', () => {
         parseInvalidToken = () => parse('entity ± {');
       });
 
-      it('throws an error with the offset information', () => {
+      it('should throw an error with the offset information', () => {
         expect(parseInvalidToken).to.throw('offset: 7');
       });
 
-      it('throws an error with the unexpected character', () => {
+      it('should throw an error with the unexpected character', () => {
         expect(parseInvalidToken).to.throw('±');
       });
     });
@@ -75,7 +75,7 @@ describe('JDL DSL API', () => {
           parseWrongClosingBraces = () => parse('entity Person { ]');
         });
 
-        it('throws an error with position information', () => {
+        it('should throw an error with position information', () => {
           expect(parseWrongClosingBraces)
             .to.throw()
             .and.to.have.property('message')
@@ -83,7 +83,7 @@ describe('JDL DSL API', () => {
             .that.includes('column: 17');
         });
 
-        it('throws an error with typeof MismatchTokenException', () => {
+        it('should throw an error with typeof MismatchTokenException', () => {
           expect(parseWrongClosingBraces).to.throw('MismatchedTokenException');
         });
       });
@@ -95,11 +95,11 @@ describe('JDL DSL API', () => {
           parseMissingClosingBraces = () => parse('entity Person {');
         });
 
-        it('throws an error with typeof MismatchTokenException', () => {
+        it('should throw an error with typeof MismatchTokenException', () => {
           expect(parseMissingClosingBraces).to.throw('MismatchedTokenException');
         });
 
-        it('throws an error without any location information', () => {
+        it('should throw an error without any location information', () => {
           // The 'EOF' token that is found instead of the expected '}' is a virtual token
           // It has no location information to report, An error (api.js) handler may choose
           // to manually add the last line/column in that case.
@@ -109,7 +109,7 @@ describe('JDL DSL API', () => {
     });
 
     context('with a semantic validation error', () => {
-      it('throws an error', () => {
+      it('should throw an error', () => {
         // lower case entityName first char
         const invalidInput = 'entity person { }';
         expect(() => parse(invalidInput)).to.throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
@@ -125,7 +125,7 @@ describe('JDL DSL API', () => {
         result = getSyntacticAutoCompleteSuggestions('');
       });
 
-      it('provides suggestions', () => {
+      it('should provide suggestions', () => {
         expect(result).to.have.lengthOf(10);
         expect(result).to.have.members([
           tokens.AT,
@@ -149,7 +149,7 @@ describe('JDL DSL API', () => {
         result = getSyntacticAutoCompleteSuggestions(input, 'fieldDeclaration');
       });
 
-      it('provides suggestions', () => {
+      it('should provide suggestions', () => {
         expect(result).to.have.lengthOf(5);
         // Note that because we are using token Inheritance with the MIN_MAX_KEYWORD an auto-complete provider would have
         // to translate this to concrete tokens (MIN/MAX/MAX_BYTES/MIN_BYTES/...)
@@ -170,7 +170,7 @@ describe('JDL DSL API', () => {
         result = getSyntacticAutoCompleteSuggestions(input);
       });
 
-      it('provides suggestions', () => {
+      it('should provide suggestions', () => {
         expect(result).to.have.lengthOf(9);
         expect(result).to.have.members([
           tokens.REQUIRED,

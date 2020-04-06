@@ -42,7 +42,7 @@ describe('JDLObject', () => {
       const object = new JDLObject();
 
       context('such as a nil application', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             object.addApplication(null);
           }).to.throw(/^Can't add nil application\.$/);
@@ -61,7 +61,7 @@ describe('JDLObject', () => {
         addedApplication = object.applications[baseName];
       });
 
-      it('works', () => {
+      it('should work', () => {
         expect(addedApplication).to.deep.equal(originalApplication);
       });
     });
@@ -74,7 +74,7 @@ describe('JDLObject', () => {
     });
 
     context('when having no application', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(jdlObject.getApplicationQuantity()).to.equal(0);
       });
     });
@@ -88,7 +88,7 @@ describe('JDLObject', () => {
         );
       });
 
-      it('returns the number of applications', () => {
+      it('should return the number of applications', () => {
         expect(jdlObject.getApplicationQuantity()).to.equal(1);
       });
     });
@@ -139,7 +139,7 @@ describe('JDLObject', () => {
       const object = new JDLObject();
 
       context('such as a nil deployment', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             object.addDeployment(null);
           }).to.throw(/^Can't add nil deployment\.$/);
@@ -160,7 +160,7 @@ describe('JDLObject', () => {
         object.addDeployment(application);
       });
 
-      it('works', () => {
+      it('should work', () => {
         expect(object.deployments[application.deploymentType]).to.deep.eq(application);
       });
     });
@@ -173,7 +173,7 @@ describe('JDLObject', () => {
     });
 
     context('when having no deployment', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(jdlObject.getDeploymentQuantity()).to.equal(0);
       });
     });
@@ -189,7 +189,7 @@ describe('JDLObject', () => {
         );
       });
 
-      it('returns the number of applications', () => {
+      it('should return the number of applications', () => {
         expect(jdlObject.getDeploymentQuantity()).to.equal(1);
       });
     });
@@ -204,7 +204,7 @@ describe('JDLObject', () => {
     });
 
     context('when not passing a function', () => {
-      it('does not fail', () => {
+      it('should not fail', () => {
         jdlObject.forEachApplication();
       });
     });
@@ -217,7 +217,7 @@ describe('JDLObject', () => {
         });
       });
 
-      it('uses each entity name', () => {
+      it('should use each entity name', () => {
         expect(result).to.deep.equal(['A', 'B']);
       });
     });
@@ -227,7 +227,7 @@ describe('JDLObject', () => {
       const object = new JDLObject();
 
       context('such as a nil object', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             object.addEntity(null);
           }).to.throw(/^Can't add nil entity\.$/);
@@ -248,7 +248,7 @@ describe('JDLObject', () => {
         object.addEntity(entity);
       });
 
-      it('works', () => {
+      it('should work', () => {
         expect(object.entities[entity.name]).to.deep.eq(entity);
       });
     });
@@ -273,7 +273,7 @@ describe('JDLObject', () => {
         object.addEntity(entity2);
       });
 
-      it('replaces the former one', () => {
+      it('should replace the former one', () => {
         expect(object.entities[entity.name]).to.deep.eq(entity2);
       });
     });
@@ -287,7 +287,7 @@ describe('JDLObject', () => {
     });
 
     context('when not passing a name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           jdlObject.getEntity();
         }).to.throw('An entity name must be passed so as to be retrieved.');
@@ -295,7 +295,7 @@ describe('JDLObject', () => {
     });
 
     context('when passing a name', () => {
-      it('returns the entity', () => {
+      it('should return the entity', () => {
         expect(jdlObject.getEntity('A')).not.to.be.undefined;
       });
     });
@@ -338,7 +338,7 @@ describe('JDLObject', () => {
     });
 
     context('when having no entity', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(jdlObject.getEntityQuantity()).to.equal(0);
       });
     });
@@ -352,7 +352,7 @@ describe('JDLObject', () => {
         );
       });
 
-      it('returns the number of entities', () => {
+      it('should return the number of entities', () => {
         expect(jdlObject.getEntityQuantity()).to.equal(1);
       });
     });
@@ -369,7 +369,7 @@ describe('JDLObject', () => {
     });
 
     context('when having no entity', () => {
-      it('returns an empty list', () => {
+      it('should return an empty list', () => {
         expect(jdlObject.getEntityNames()).to.be.empty;
       });
     });
@@ -380,7 +380,7 @@ describe('JDLObject', () => {
         jdlObject.addEntity(new JDLEntity({ name: 'C' }));
       });
 
-      it('returns the entity names', () => {
+      it('should return the entity names', () => {
         expect(jdlObject.getEntityNames()).to.deep.equal(['A', 'B', 'C']);
       });
     });
@@ -395,7 +395,7 @@ describe('JDLObject', () => {
     });
 
     context('when not passing a function', () => {
-      it('does not fail', () => {
+      it('should not fail', () => {
         jdlObject.forEachEntity();
       });
     });
@@ -408,7 +408,7 @@ describe('JDLObject', () => {
         });
       });
 
-      it('uses each entity name', () => {
+      it('should use each entity name', () => {
         expect(result).to.deep.equal(['A', 'B']);
       });
     });
@@ -418,7 +418,7 @@ describe('JDLObject', () => {
       const object = new JDLObject();
 
       context('such as a nil enum', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             object.addEnum(null);
           }).to.throw(/^Can't add nil enum\.$/);
@@ -435,7 +435,7 @@ describe('JDLObject', () => {
         object.addEnum(enumObject);
       });
 
-      it('works', () => {
+      it('should work', () => {
         expect(object.getEnum(enumObject.name)).to.deep.eq(enumObject);
       });
     });
@@ -452,7 +452,7 @@ describe('JDLObject', () => {
         object.addEnum(enumObject2);
       });
 
-      it('replaces the old one', () => {
+      it('should replace the old one', () => {
         expect(object.getEnum(enumObject.name)).to.deep.equal(enumObject2);
       });
     });
@@ -465,7 +465,7 @@ describe('JDLObject', () => {
     });
 
     context('when fetching an absent enum', () => {
-      it('returns null', () => {
+      it('should return null', () => {
         expect(object.getEnum('A')).to.be.undefined;
       });
     });
@@ -477,7 +477,7 @@ describe('JDLObject', () => {
         object.addEnum(jdlEnum);
       });
 
-      it('returns it', () => {
+      it('should return it', () => {
         expect(object.getEnum(jdlEnum.name)).to.deep.equal(jdlEnum);
       });
     });
@@ -490,7 +490,7 @@ describe('JDLObject', () => {
     });
 
     context('when fetching an absent enum', () => {
-      it('returns false', () => {
+      it('should return false', () => {
         expect(object.hasEnum('A')).to.be.false;
       });
     });
@@ -502,7 +502,7 @@ describe('JDLObject', () => {
         object.addEnum(jdlEnum);
       });
 
-      it('returns true', () => {
+      it('should return true', () => {
         expect(object.hasEnum(jdlEnum.name)).to.be.true;
       });
     });
@@ -515,7 +515,7 @@ describe('JDLObject', () => {
     });
 
     context('when having no enum', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(jdlObject.getEnumQuantity()).to.equal(0);
       });
     });
@@ -529,7 +529,7 @@ describe('JDLObject', () => {
         );
       });
 
-      it('returns the number of enums', () => {
+      it('should return the number of enums', () => {
         expect(jdlObject.getEnumQuantity()).to.equal(1);
       });
     });
@@ -544,7 +544,7 @@ describe('JDLObject', () => {
     });
 
     context('when not passing a function', () => {
-      it('does not fail', () => {
+      it('should not fail', () => {
         jdlObject.forEachEnum();
       });
     });
@@ -557,7 +557,7 @@ describe('JDLObject', () => {
         });
       });
 
-      it('uses each enum name', () => {
+      it('should use each enum name', () => {
         expect(result).to.deep.equal(['A', 'B']);
       });
     });
@@ -567,14 +567,14 @@ describe('JDLObject', () => {
       const object = new JDLObject();
 
       context('such as a nil relationship', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             object.addRelationship(null);
           }).to.throw(/^Can't add nil relationship\.$/);
         });
       });
       context('such as an incomplete relationship', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             object.addRelationship(
               new JDLRelationship({
@@ -603,7 +603,7 @@ describe('JDLObject', () => {
         object.addRelationship(relationship);
       });
 
-      it('works', () => {
+      it('should work', () => {
         expect(object.relationships.getManyToMany(relationship.getId())).to.deep.eq(relationship);
       });
     });
@@ -636,7 +636,7 @@ describe('JDLObject', () => {
     });
 
     context('when having no relationship', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(jdlObject.getRelationshipQuantity()).to.equal(0);
       });
     });
@@ -653,7 +653,7 @@ describe('JDLObject', () => {
         );
       });
 
-      it('returns the number of relationships', () => {
+      it('should return the number of relationships', () => {
         expect(jdlObject.getRelationshipQuantity()).to.equal(1);
       });
     });
@@ -682,7 +682,7 @@ describe('JDLObject', () => {
     });
 
     context('when not passing a function', () => {
-      it('does not fail', () => {
+      it('should not fail', () => {
         jdlObject.forEachRelationship();
       });
     });
@@ -695,7 +695,7 @@ describe('JDLObject', () => {
         });
       });
 
-      it('uses each relationship', () => {
+      it('should use each relationship', () => {
         expect(result).to.deep.equal(['OneToOne', 'OneToMany']);
       });
     });
@@ -705,14 +705,14 @@ describe('JDLObject', () => {
       const object = new JDLObject();
 
       context('such as a nil option', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             object.addOption(null);
           }).to.throw(/^Can't add nil option\.$/);
         });
       });
       context('such as an empty object', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             object.addOption({});
           }).to.throw(/^Can't add nil option\.$/);
@@ -720,7 +720,7 @@ describe('JDLObject', () => {
       });
     });
     context('when adding a valid option', () => {
-      it('works', () => {
+      it('should work', () => {
         new JDLObject().addOption(new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT }));
       });
     });
@@ -737,12 +737,12 @@ describe('JDLObject', () => {
     });
 
     context('when passing an invalid name', () => {
-      it('returns an empty array', () => {
+      it('should return an empty array', () => {
         expect(jdlObject.getOptionsForName()).to.be.empty;
       });
     });
     context('when checking for an absent option', () => {
-      it('returns an empty array', () => {
+      it('should return an empty array', () => {
         expect(jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.be.empty;
       });
     });
@@ -769,7 +769,7 @@ describe('JDLObject', () => {
         jdlObject.addOption(option3);
       });
 
-      it('returns it', () => {
+      it('should return it', () => {
         expect(jdlObject.getOptionsForName(UnaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
         expect(jdlObject.getOptionsForName(BinaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
       });
@@ -783,7 +783,7 @@ describe('JDLObject', () => {
     });
 
     context('when having no option', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(jdlObject.getOptionQuantity()).to.equal(0);
       });
     });
@@ -797,7 +797,7 @@ describe('JDLObject', () => {
         );
       });
 
-      it('returns the number of options', () => {
+      it('should return the number of options', () => {
         expect(jdlObject.getOptionQuantity()).to.equal(1);
       });
     });
@@ -820,7 +820,7 @@ describe('JDLObject', () => {
     });
 
     context('when not passing a function', () => {
-      it('does not fail', () => {
+      it('should not fail', () => {
         jdlObject.forEachOption();
       });
     });
@@ -833,7 +833,7 @@ describe('JDLObject', () => {
         });
       });
 
-      it('uses each option', () => {
+      it('should use each option', () => {
         expect(result).to.deep.equal(['skipClient', 'skipServer']);
       });
     });
@@ -888,7 +888,7 @@ describe('JDLObject', () => {
           jdlObject.addOption(microserviceOption);
         });
 
-        it('returns true', () => {
+        it('should return true', () => {
           expect(jdlObject.isEntityInMicroservice('A')).to.be.true;
         });
       });
@@ -904,7 +904,7 @@ describe('JDLObject', () => {
           jdlObject.addOption(microserviceOption);
         });
 
-        it('returns true', () => {
+        it('should return true', () => {
           expect(jdlObject.isEntityInMicroservice('A')).to.be.true;
         });
       });
@@ -920,7 +920,7 @@ describe('JDLObject', () => {
         jdlObject.addOption(microserviceOption);
       });
 
-      it('returns false', () => {
+      it('should return false', () => {
         expect(jdlObject.isEntityInMicroservice('B')).to.be.false;
       });
     });
@@ -974,7 +974,7 @@ describe('JDLObject', () => {
       object.addOption(option2);
     });
 
-    it('stringifies the JDL object', () => {
+    it('should stringify the JDL object', () => {
       expect(object.toString()).to.equal(
         `${application.toString()}
 

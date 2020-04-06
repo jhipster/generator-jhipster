@@ -34,7 +34,7 @@ describe('Issues', () => {
     });
 
     describe('when there is no issue', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(issues.getNumberOfIssues()).to.equal(0);
       });
     });
@@ -69,7 +69,7 @@ describe('Issues', () => {
         ]);
       });
 
-      it('returns the total amount', () => {
+      it('should return the total amount', () => {
         expect(issues.getNumberOfIssues()).to.equal(4);
       });
     });
@@ -82,7 +82,7 @@ describe('Issues', () => {
     });
 
     describe('when there is no issue', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(issues.getNumberOfEntityIssues()).to.equal(0);
       });
     });
@@ -96,7 +96,7 @@ describe('Issues', () => {
         ]);
       });
 
-      it('returns the total amount', () => {
+      it('should return the total amount', () => {
         expect(issues.getNumberOfEntityIssues()).to.equal(1);
       });
     });
@@ -109,7 +109,7 @@ describe('Issues', () => {
     });
 
     describe('when there is no issue', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(issues.getNumberOfEnumIssues()).to.equal(0);
       });
     });
@@ -123,7 +123,7 @@ describe('Issues', () => {
         ]);
       });
 
-      it('returns the total amount', () => {
+      it('should return the total amount', () => {
         expect(issues.getNumberOfEnumIssues()).to.equal(1);
       });
     });
@@ -136,7 +136,7 @@ describe('Issues', () => {
     });
 
     describe('when there is no issue', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(issues.getNumberOfFieldIssues()).to.equal(0);
       });
     });
@@ -151,7 +151,7 @@ describe('Issues', () => {
         ]);
       });
 
-      it('returns the total amount', () => {
+      it('should return the total amount', () => {
         expect(issues.getNumberOfFieldIssues()).to.equal(1);
       });
     });
@@ -164,7 +164,7 @@ describe('Issues', () => {
     });
 
     describe('when there is no issue', () => {
-      it('returns 0', () => {
+      it('should return 0', () => {
         expect(issues.getNumberOfRelationshipIssues()).to.equal(0);
       });
     });
@@ -180,7 +180,7 @@ describe('Issues', () => {
         ]);
       });
 
-      it('returns the total amount', () => {
+      it('should return the total amount', () => {
         expect(issues.getNumberOfRelationshipIssues()).to.equal(1);
       });
     });
@@ -193,7 +193,7 @@ describe('Issues', () => {
     });
 
     describe('when there is no issue', () => {
-      it('returns an empty object', () => {
+      it('should return an empty object', () => {
         expect(issues.getIssues()).to.deep.equal({
           entities: [],
           enums: [],
@@ -235,7 +235,7 @@ describe('Issues', () => {
         issues.addRelationshipIssues([relationshipIssue]);
       });
 
-      it('returns the object containing the issues', () => {
+      it('should return the object containing the issues', () => {
         expect(issues.getIssues()).to.deep.equal({
           entities: [entityIssue],
           enums: [enumIssue],

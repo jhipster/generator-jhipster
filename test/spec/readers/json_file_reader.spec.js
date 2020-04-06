@@ -27,21 +27,21 @@ describe('JSONFileReader', () => {
   describe('::readEntityJSON', () => {
     context('when passing an invalid argument', () => {
       context('because it is nil', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             JSONFileReader.readEntityJSON();
           }).to.throw('The passed file path must not be nil to read the JSON entity.');
         });
       });
       context('because it is empty', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             JSONFileReader.readEntityJSON('');
           }).to.throw('The passed file path must not be nil to read the JSON entity.');
         });
       });
       context('because the file does not exist', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             JSONFileReader.readEntityJSON('test/test_files/WrongFile.json');
           }).to.throw(
@@ -50,7 +50,7 @@ describe('JSONFileReader', () => {
         });
       });
       context('because the file is a folder', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             JSONFileReader.readEntityJSON('test/test_files/');
           }).to.throw("The passed file 'test/test_files/' must exist and must not be a directory to be read.");
@@ -59,7 +59,7 @@ describe('JSONFileReader', () => {
     });
     context('when passing a valid entity name', () => {
       const content = JSONFileReader.readEntityJSON('test/test_files/MyEntity.json');
-      it('reads the file', () => {
+      it('should read the file', () => {
         expect(content).to.deep.eq({
           relationships: [],
           fields: [
@@ -80,32 +80,27 @@ describe('JSONFileReader', () => {
   describe('::toFilePath', () => {
     context('when converting an entity name to a path', () => {
       context('with a nil entity name', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             JSONFileReader.toFilePath();
           }).to.throw('The passed entity name must not be nil to be converted to file path.');
         });
       });
       context('with an empty entity name', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             JSONFileReader.toFilePath('');
           }).to.throw('The passed entity name must not be nil to be converted to file path.');
         });
       });
       context('with a valid entity name', () => {
-        it('returns the path', () => {
-          const name = 'MyEntity';
-          expect(JSONFileReader.toFilePath(name)).to.eq(`.jhipster${path.sep}${name}.json`);
+        it('should return the path', () => {
+          expect(JSONFileReader.toFilePath('MyEntity')).to.eq(`.jhipster${path.sep}${'MyEntity'}.json`);
         });
       });
       context('with a valid entity name with the first letter lowercase', () => {
-        it('returns the path, with the first letter upper-cased', () => {
-          const expectedFirstLetter = 'M';
-          const name = 'myEntity';
-          expect(JSONFileReader.toFilePath(name)).to.eq(
-            `.jhipster${path.sep}${expectedFirstLetter}${name.slice(1, name.length)}.json`
-          );
+        it('should return the path, with the first letter upper-cased', () => {
+          expect(JSONFileReader.toFilePath('myEntity')).to.eq(`.jhipster${path.sep}MyEntity.json`);
         });
       });
     });

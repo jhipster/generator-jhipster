@@ -26,7 +26,7 @@ const { lowerFirst, camelCase, upperFirst } = require('../../../lib/utils/string
 describe('StringUtils', () => {
   describe('::camelCase', () => {
     context('when passing a valid string', () => {
-      it('camel-cases it', () => {
+      it('should camel-case it', () => {
         expect(camelCase('e')).to.equal('e');
         expect(camelCase('entity')).to.equal('entity');
         expect(camelCase('Entity')).to.equal('entity');
@@ -40,14 +40,14 @@ describe('StringUtils', () => {
     });
     context('when passing an invalid parameter', () => {
       context('as it is nil', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             camelCase();
           }).to.throw('The passed string cannot be nil.');
         });
       });
       context('as it is empty', () => {
-        it('returns it', () => {
+        it('should return it', () => {
           expect(camelCase('')).to.equal('');
         });
       });
@@ -55,38 +55,38 @@ describe('StringUtils', () => {
   });
   describe('::lowerFirst', () => {
     context('when passing a nil string', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           lowerFirst();
         }).to.throw('The passed string cannot be nil.');
       });
     });
     context('when passing an empty string', () => {
-      it('returns it', () => {
+      it('should return it', () => {
         expect(lowerFirst('')).to.equal('');
       });
     });
     context('when passing a valid string', () => {
-      it('lowers the first letter', () => {
+      it('should lower the first letter', () => {
         expect(lowerFirst('Abc')).to.equal('abc');
       });
     });
   });
   describe('::upperFirst', () => {
     context('when passing a nil string', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           upperFirst();
         }).to.throw('The passed string cannot be nil.');
       });
     });
     context('when passing an empty string', () => {
-      it('returns it', () => {
+      it('should return it', () => {
         expect(upperFirst('')).to.equal('');
       });
     });
     context('when passing a valid string', () => {
-      it('uppers the first letter', () => {
+      it('should upper the first letter', () => {
         expect(upperFirst('abc')).to.equal('Abc');
       });
     });

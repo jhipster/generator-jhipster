@@ -24,19 +24,19 @@ const Validations = require('../../../../lib/core/jhipster/validations');
 describe('Validations', () => {
   describe('::exists', () => {
     describe('when checking for a valid validation', () => {
-      it('returns true', () => {
+      it('should return true', () => {
         expect(Validations.exists(Validations.MAXBYTES)).to.be.true;
       });
     });
     describe('when checking for an invalid validation', () => {
-      it('returns false', () => {
+      it('should return false', () => {
         expect(Validations.exists('NOTHING')).to.be.false;
       });
     });
   });
   describe('::needsValue', () => {
     describe('when checking whether a validation needs a value', () => {
-      it('returns so', () => {
+      it('should return so', () => {
         expect(Validations.needsValue(Validations.MAXLENGTH)).to.be.true;
         expect(Validations.needsValue(Validations.REQUIRED)).to.be.false;
       });

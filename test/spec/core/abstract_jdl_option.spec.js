@@ -25,7 +25,7 @@ const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 describe('AbstractJDLOption', () => {
   describe('resolveEntityNames', () => {
     context('when not passing entity names', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JDLBinaryOption({
             name: BinaryOptions.Options.SERVICE,
@@ -46,7 +46,7 @@ describe('AbstractJDLOption', () => {
         result = option.resolveEntityNames(['A', 'B', 'C']);
       });
 
-      it("resolves the option's entity names", () => {
+      it("should resolve the option's entity names", () => {
         expect(result).to.deep.equal(new Set(['B', 'A']));
       });
     });

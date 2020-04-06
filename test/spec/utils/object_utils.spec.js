@@ -35,7 +35,7 @@ describe('ObjectUtils', () => {
 
     context('when merging two object', () => {
       context('with the first being nil or empty', () => {
-        it('returns the second', () => {
+        it('should return the second', () => {
           const merged1 = ObjectUtils.merge(null, { a: 1 });
           const merged2 = ObjectUtils.merge({}, { a: 1 });
           expect(merged1).to.deep.eq({ a: 1 });
@@ -43,14 +43,14 @@ describe('ObjectUtils', () => {
         });
       });
       context('with the second being nil or empty', () => {
-        it('returns the first', () => {
+        it('should return the first', () => {
           const merged1 = ObjectUtils.merge({ a: 1 }, null);
           const merged2 = ObjectUtils.merge({ a: 1 }, null);
           expect(merged1).to.deep.eq({ a: 1 });
           expect(merged2).to.deep.eq({ a: 1 });
         });
       });
-      it('returns the merged object by merging the second into the first', () => {
+      it('should return the merged object by merging the second into the first', () => {
         expect(ObjectUtils.merge(object1, object2)).to.deep.equal({ a: 1, b: 3, c: 4 });
 
         expect(ObjectUtils.merge(object2, object1)).to.deep.equal({ a: 1, b: 2, c: 4 });
@@ -66,7 +66,7 @@ describe('ObjectUtils', () => {
   describe('::areEntitiesEqual', () => {
     context('when comparing two equal objects', () => {
       context('as they are empty', () => {
-        it('returns true', () => {
+        it('should return true', () => {
           const firstEmptyObject = {
             fields: [],
             relationships: []
@@ -79,7 +79,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('they have no fields, but only relationships', () => {
-        it('returns true', () => {
+        it('should return true', () => {
           const firstObject = {
             fields: [],
             relationships: [
@@ -110,7 +110,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('they have fields but no relationships', () => {
-        it('returns true', () => {
+        it('should return true', () => {
           const firstObject = {
             fields: [
               {
@@ -143,7 +143,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('they have both fields and relationships', () => {
-        it('returns true', () => {
+        it('should return true', () => {
           const firstObject = {
             fields: [
               {
@@ -192,7 +192,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('one object has key with undefined value, second object does not have this key', () => {
-        it('returns true', () => {
+        it('should return true', () => {
           const firstObject = {
             name: 'MyEntity',
             fields: [],
@@ -210,7 +210,7 @@ describe('ObjectUtils', () => {
     });
     context('when comparing two unequal objects', () => {
       context('as one of them is not empty, the other is', () => {
-        it('returns false', () => {
+        it('should return false', () => {
           let firstObject = {
             fields: [],
             relationships: []
@@ -250,7 +250,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as both of them have different fields', () => {
-        it('returns false', () => {
+        it('should return false', () => {
           const firstObject = {
             fields: [
               {
@@ -281,7 +281,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as both of them have different relationships', () => {
-        it('returns false', () => {
+        it('should return false', () => {
           const firstObject = {
             fields: [
               {
@@ -322,7 +322,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not possess the same number of fields', () => {
-        it('returns false', () => {
+        it('should return false', () => {
           const firstObject = {
             fields: [],
             relationships: [
@@ -354,7 +354,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the same number of keys in fields', () => {
-        it('returns false', () => {
+        it('should return false', () => {
           const firstObject = {
             fields: [
               {
@@ -396,7 +396,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not possess the same number of relationships', () => {
-        it('returns false', () => {
+        it('should return false', () => {
           const firstObject = {
             fields: [
               {
@@ -440,7 +440,7 @@ describe('ObjectUtils', () => {
           expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
         context('as they do not have the same number of fields in a relationship', () => {
-          it('returns false', () => {
+          it('should return false', () => {
             const firstObject = {
               fields: [
                 {
@@ -510,7 +510,7 @@ describe('ObjectUtils', () => {
             secondObject.dto = 'no';
           });
 
-          it('returns false', () => {
+          it('should return false', () => {
             expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
@@ -522,7 +522,7 @@ describe('ObjectUtils', () => {
             secondObject.pagination = 'no';
           });
 
-          it('returns false', () => {
+          it('should return false', () => {
             expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
@@ -534,7 +534,7 @@ describe('ObjectUtils', () => {
             secondObject.service = 'no';
           });
 
-          it('returns false', () => {
+          it('should return false', () => {
             expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
@@ -546,7 +546,7 @@ describe('ObjectUtils', () => {
             secondObject.searchEngine = 'no';
           });
 
-          it('returns false', () => {
+          it('should return false', () => {
             expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
@@ -559,7 +559,7 @@ describe('ObjectUtils', () => {
               secondObject.jpaMetamodelFiltering = 'no';
             });
 
-            it('returns true', () => {
+            it('should return true', () => {
               expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
             });
           });
@@ -571,14 +571,14 @@ describe('ObjectUtils', () => {
               secondObject.jpaMetamodelFiltering = false;
             });
 
-            it('returns false', () => {
+            it('should return false', () => {
               expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
             });
           });
         });
       });
       context('as they do not have the same table name', () => {
-        it('returns false', () => {
+        it('should return false', () => {
           const firstObject = {
             entityTableName: 'first',
             fields: [
@@ -635,7 +635,7 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the same comments', () => {
-        it('returns false', () => {
+        it('should return false', () => {
           const firstObject = {
             javadoc: 'My first comment',
             fields: [
@@ -751,7 +751,7 @@ describe('ObjectUtils', () => {
           };
         });
 
-        it('returns false', () => {
+        it('should return false', () => {
           expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });

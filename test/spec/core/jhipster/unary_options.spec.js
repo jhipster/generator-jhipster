@@ -24,12 +24,12 @@ const UnaryOptions = require('../../../../lib/core/jhipster/unary_options');
 describe('UnaryOptions', () => {
   describe('::exists', () => {
     context('when checking for a valid unary option', () => {
-      it('returns true', () => {
+      it('should return true', () => {
         expect(UnaryOptions.exists(UnaryOptions.SKIP_CLIENT)).to.be.true;
       });
     });
     context('when checking for an invalid unary option', () => {
-      it('returns false', () => {
+      it('should return false', () => {
         expect(UnaryOptions.exists('NOTHING')).to.be.false;
       });
     });

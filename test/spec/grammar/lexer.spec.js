@@ -36,11 +36,11 @@ describe('JDLLexer', () => {
       lexingResult = JDLLexer.tokenize(input);
     });
 
-    it('does not fail', () => {
+    it('should not fail', () => {
       expect(lexingResult.errors).to.be.empty;
     });
 
-    it('can lex a simple valid JDL text', () => {
+    it('should lex a simple valid JDL text', () => {
       const tokens = lexingResult.tokens;
       expect(tokens.length).to.equal(15);
       expect(tokens[0].image).to.equal('entity');
@@ -74,7 +74,7 @@ describe('JDLLexer', () => {
       lexingResult = JDLLexer.tokenize(input);
     });
 
-    it('reports the errors', () => {
+    it('should report the errors', () => {
       const errors = lexingResult.errors;
       expect(errors).to.have.lengthOf(1);
       expect(errors[0].line).to.equal(4);
@@ -83,7 +83,7 @@ describe('JDLLexer', () => {
       expect(errors[0].message).to.include('skipped 3 characters');
     });
 
-    it('can lex a simple invalid JDL text', () => {
+    it('should lex a simple invalid JDL text', () => {
       expect(lexingResult.tokens).to.have.lengthOf(
         9,
         'All 9 tokens should have been lexed even though "@@@" caused a syntax error'

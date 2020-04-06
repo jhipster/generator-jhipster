@@ -23,21 +23,21 @@ const EnumIssue = require('../../../../lib/linter/issues/enum_issue');
 describe('EnumIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new EnumIssue();
         }).to.throw('An issue must at least have a rule name.');
       });
     });
     context('when not passing a rule name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new EnumIssue({});
         }).to.throw('An issue must at least have a rule name.');
       });
     });
     context('when not passing an enum name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new EnumIssue({ ruleName: 'Toto' });
         }).to.throw('An enum name must be passed.');

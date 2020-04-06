@@ -23,21 +23,21 @@ const EntityIssue = require('../../../../lib/linter/issues/entity_issue');
 describe('EntityIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new EntityIssue();
         }).to.throw('An issue must at least have a rule name.');
       });
     });
     context('when not passing a rule name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new EntityIssue({});
         }).to.throw('An issue must at least have a rule name.');
       });
     });
     context('when not passing an entity name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new EntityIssue({ ruleName: 'Toto' });
         }).to.throw('An entity name must be passed.');

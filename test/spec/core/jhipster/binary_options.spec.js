@@ -24,12 +24,12 @@ const BinaryOptions = require('../../../../lib/core/jhipster/binary_options');
 describe('BinaryOptions', () => {
   describe('::exists', () => {
     context('when checking for a valid binary option', () => {
-      it('returns true', () => {
+      it('should return true', () => {
         expect(BinaryOptions.exists(BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
       });
     });
     context('when checking for a custom binary option', () => {
-      it('returns true', () => {
+      it('should return true', () => {
         expect(BinaryOptions.exists('customOption')).to.be.true;
         expect(BinaryOptions.exists('customOption', 'customValue')).to.be.true;
       });

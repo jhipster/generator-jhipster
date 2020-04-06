@@ -31,7 +31,7 @@ describe('JDLValidation', () => {
         validation = new JDLValidation();
       });
 
-      it("defaults on the 'required' validation", () => {
+      it("should default on the 'required' validation", () => {
         expect(validation.name).to.eq('required');
         expect(validation.value).to.eq('');
       });
@@ -46,7 +46,7 @@ describe('JDLValidation', () => {
         });
       });
 
-      it('uses them', () => {
+      it('should use them', () => {
         expect(validation.name).to.eq('min');
         expect(validation.value).to.eq(42);
       });
@@ -60,7 +60,7 @@ describe('JDLValidation', () => {
         validation = new JDLValidation();
       });
 
-      it('stringifies its content', () => {
+      it('should stringifiy its content', () => {
         expect(validation.toString()).to.eq('required');
       });
     });
@@ -76,12 +76,12 @@ describe('JDLValidation', () => {
         validation = new JDLValidation(args);
       });
 
-      it('stringifies its content', () => {
+      it('should stringifiy its content', () => {
         expect(validation.toString()).to.eq(`${args.name}(${args.value})`);
       });
     });
     context('when exporting a regexp pattern', () => {
-      it('properly formats it', () => {
+      it('should format it', () => {
         expect(
           new JDLValidation({
             name: Validations.PATTERN,

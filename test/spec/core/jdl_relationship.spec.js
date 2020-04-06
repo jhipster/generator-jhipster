@@ -27,7 +27,7 @@ const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types
 describe('JDLRelationship', () => {
   describe('::new', () => {
     context('when not passing at least one injected field', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JDLRelationship({
             from: 'Abc',
@@ -38,7 +38,7 @@ describe('JDLRelationship', () => {
       });
     });
     context('when passing an invalid type', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JDLRelationship({
             from: 'Abc',
@@ -61,7 +61,7 @@ describe('JDLRelationship', () => {
         });
       });
 
-      it('succeeds', () => {
+      it('should not create the relationship', () => {
         expect(relationship.to).to.eq('Abc2');
         expect(relationship.from).to.eq('Abc');
         expect(relationship.injectedFieldInFrom).to.eq('something');
@@ -81,7 +81,7 @@ describe('JDLRelationship', () => {
       });
     });
 
-    it('returns an unique representation of the relationship', () => {
+    it('should return an unique representation of the relationship', () => {
       expect(relationship.getId()).to.eq(
         `${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`
       );
@@ -101,12 +101,12 @@ describe('JDLRelationship', () => {
     });
 
     context('when the option does not exist', () => {
-      it('returns false', () => {
+      it('should return false', () => {
         expect(relationship.hasOption('toto')).to.be.false;
       });
     });
     context('when the option exists', () => {
-      it('returns true', () => {
+      it('should return true', () => {
         expect(relationship.hasOption(JPA_DERIVED_IDENTIFIER)).to.be.true;
       });
     });
@@ -126,7 +126,7 @@ describe('JDLRelationship', () => {
       });
     });
 
-    it('executes the function for each element', () => {
+    it('should loop over the function for each element', () => {
       relationship.forEachOption((optionName, optionValue) => {
         expect(optionValue).to.equal(options[optionName]);
       });
@@ -145,7 +145,7 @@ describe('JDLRelationship', () => {
         });
       });
 
-      it('stringifies the relationship', () => {
+      it('should stringify the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
@@ -167,7 +167,7 @@ describe('JDLRelationship', () => {
         });
       });
 
-      it('stringifies the relationship', () => {
+      it('should stringify the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
   /**
@@ -195,7 +195,7 @@ describe('JDLRelationship', () => {
         });
       });
 
-      it('stringifies the relationship', () => {
+      it('should stringify the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
   /**
@@ -219,7 +219,7 @@ describe('JDLRelationship', () => {
         });
       });
 
-      it('stringifies the relationship', () => {
+      it('should stringify the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to
@@ -243,7 +243,7 @@ describe('JDLRelationship', () => {
         });
       });
 
-      it('stringifies the relationship', () => {
+      it('should stringify the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
@@ -264,7 +264,7 @@ describe('JDLRelationship', () => {
         });
       });
 
-      it('stringifies the relationship', () => {
+      it('should stringify the relationship', () => {
         expect(relationship.toString()).to.eq(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{${relationship.injectedFieldInTo}}
@@ -286,7 +286,7 @@ describe('JDLRelationship', () => {
         });
       });
 
-      it('adds them', () => {
+      it('should add them', () => {
         expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{` +

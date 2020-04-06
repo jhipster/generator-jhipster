@@ -500,7 +500,7 @@ describe('JDLImporter', () => {
         fse.removeSync('.jhipster');
       });
 
-      it('returns the final state', () => {
+      it('should return the final state', () => {
         expect(returned).to.deep.equal({
           exportedEntities: [
             expectedContent.Country,
@@ -516,10 +516,10 @@ describe('JDLImporter', () => {
           exportedDeployments: []
         });
       });
-      it('creates the files', () => {
+      it('should create the files', () => {
         expect(filesExist).to.be.true;
       });
-      it('exports their content', () => {
+      it('should export their content', () => {
         ENTITY_NAMES.forEach(entityName => {
           const entityContent = JSON.parse(fse.readFileSync(path.join('.jhipster', `${entityName}.json`), 'utf-8'));
           if (expectedContent[entityName].javadoc === '') {
@@ -565,15 +565,15 @@ relationship OneToOne {
         fse.removeSync('.jhipster');
       });
 
-      it('returns the import state', () => {
+      it('should return the import state', () => {
         expect(returned.exportedEntities).to.have.lengthOf(1);
         expect(returned.exportedApplications).to.have.lengthOf(1);
         expect(returned.exportedDeployments).to.have.lengthOf(0);
       });
-      it('creates the app config file in the same folder', () => {
+      it('should create the app config file in the same folder', () => {
         expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
       });
-      it('creates the entity folder in the same folder', () => {
+      it('should create the entity folder in the same folder', () => {
         expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
         expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
       });
@@ -605,15 +605,15 @@ relationship OneToOne {
         fse.removeSync('.jhipster');
       });
 
-      it('returns the import state', () => {
+      it('should return the import state', () => {
         expect(returned.exportedEntities).to.have.lengthOf(1);
         expect(returned.exportedApplications).to.have.lengthOf(1);
         expect(returned.exportedDeployments).to.have.lengthOf(0);
       });
-      it('creates the app config file in the same folder', () => {
+      it('should create the app config file in the same folder', () => {
         expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
       });
-      it('creates the entity folder in the same folder', () => {
+      it('should create the entity folder in the same folder', () => {
         expect(fse.statSync('.jhipster').isDirectory()).to.be.true;
         expect(fse.statSync(path.join('.jhipster', 'BankAccount.json')).isFile()).to.be.true;
       });
@@ -636,11 +636,11 @@ relationship OneToOne {
         fse.removeSync('.jhipster');
       });
 
-      it('returns the import state', () => {
+      it('should return the import state', () => {
         expect(returned.exportedEntities).to.have.lengthOf(1);
         expect(returned.exportedApplications).to.have.lengthOf(1);
       });
-      it('creates the app config file in the same folder', () => {
+      it('should create the app config file in the same folder', () => {
         expect(fse.statSync('.yo-rc.json').isFile()).to.be.true;
         expect(content['generator-jhipster'].entitySuffix).to.equal('Entity');
         expect(content['generator-jhipster'].dtoSuffix).to.equal('DTO');
@@ -807,13 +807,13 @@ relationship OneToOne {
         });
       });
 
-      it('creates the folders and the .yo-rc.json files', () => {
+      it('should create the folders and the .yo-rc.json files', () => {
         APPLICATION_NAMES.forEach(applicationName => {
           expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
           expect(fse.statSync(applicationName).isDirectory()).to.be.true;
         });
       });
-      it('exports the application contents', () => {
+      it('should export the application contents', () => {
         expect(contents).to.deep.equal(expectedContents);
       });
     });
@@ -1003,12 +1003,12 @@ relationship OneToOne {
         });
       });
 
-      it('generates correct import state', () => {
+      it('should generate correct import state', () => {
         expect(importState.exportedApplications.length).to.eql(3);
         expect(importState.exportedEntities.length).to.eql(4);
       });
 
-      it('exports the applications', () => {
+      it('should export the applications', () => {
         APPLICATION_NAMES.forEach((applicationName, index) => {
           expect(fse.statSync(path.join(applicationName)).isDirectory()).to.be.true;
           const appConfPath = path.join(applicationName, '.yo-rc.json');
@@ -1018,7 +1018,7 @@ relationship OneToOne {
         });
       });
 
-      it('exports the entities for each application', () => {
+      it('should export the entities for each application', () => {
         APPLICATION_NAMES.forEach(applicationName => {
           let readJSON;
           expect(fse.statSync(path.join(applicationName, '.jhipster')).isDirectory()).to.be.true;
@@ -1333,17 +1333,17 @@ relationship OneToOne {
         fse.removeSync('docker-compose');
       });
 
-      it('creates the folders and the .yo-rc.json files', () => {
+      it('should create the folders and the .yo-rc.json files', () => {
         APPLICATION_NAMES.forEach(applicationName => {
           expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
           expect(fse.statSync(applicationName).isDirectory()).to.be.true;
         });
       });
-      it('creates the docker-compose folder with .yo-rc.json file', () => {
+      it('should create the docker-compose folder with .yo-rc.json file', () => {
         expect(fse.statSync(path.join('docker-compose', '.yo-rc.json')).isFile()).to.be.true;
         expect(fse.statSync('docker-compose').isDirectory()).to.be.true;
       });
-      it('exports the application & deployment contents', () => {
+      it('should export the application & deployment contents', () => {
         expect(contents).to.deep.equal(expectedContents);
       });
     });
@@ -1415,13 +1415,13 @@ relationship OneToOne {
         });
       });
 
-      it('creates the folders and the .yo-rc.json files', () => {
+      it('should create the folders and the .yo-rc.json files', () => {
         DEPLOYMENT_NAMES.forEach(name => {
           expect(fse.statSync(path.join(name, '.yo-rc.json')).isFile()).to.be.true;
           expect(fse.statSync(name).isDirectory()).to.be.true;
         });
       });
-      it('exports the deployment contents', () => {
+      it('should export the deployment contents', () => {
         expect(contents).to.deep.equal(expectedContents);
       });
     });
@@ -1617,13 +1617,13 @@ relationship OneToOne {
         });
       });
 
-      it('creates the folders and the .yo-rc.json files', () => {
+      it('should create the folders and the .yo-rc.json files', () => {
         FOLDER_NAMES.forEach(applicationName => {
           expect(fse.statSync(path.join(applicationName, '.yo-rc.json')).isFile()).to.be.true;
           expect(fse.statSync(applicationName).isDirectory()).to.be.true;
         });
       });
-      it('exports the application & deployment contents', () => {
+      it('should export the application & deployment contents', () => {
         expect(contents).to.deep.equal(expectedContents);
       });
     });
@@ -1811,7 +1811,6 @@ paginate * with infinite-scroll
         expect(entityF).to.be.false;
       });
     });
-
     context('when passing skipYoRcGeneration and skipEntityFilesGeneration options', () => {
       before(() => {
         expect(fse.existsSync('.yo-rc.json')).to.be.false;
@@ -1841,11 +1840,11 @@ paginate * with infinite-scroll
         importer.import();
       });
 
-      it('should not write .yo-rc.json', () => {
+      it('should not write the .yo-rc.json file', () => {
         expect(fse.existsSync('.yo-rc.json')).to.be.false;
       });
 
-      it('should not write .jhipster', () => {
+      it('should not create the .jhipster folder', () => {
         expect(fse.existsSync('.jhipster')).to.be.false;
       });
     });

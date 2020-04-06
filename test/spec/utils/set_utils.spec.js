@@ -23,7 +23,7 @@ const { addAll, join } = require('../../../lib/utils/set_utils');
 describe('SetUtils', () => {
   describe('addAll', () => {
     context('when not passing a set', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => addAll()).to.throw('A Set must be passed so as to insert elements.');
       });
     });
@@ -35,7 +35,7 @@ describe('SetUtils', () => {
         addAll(set);
       });
 
-      it('returns the set unchanged', () => {
+      it('should return the set unchanged', () => {
         expect(set).to.deep.equal(new Set([1, 2, 3]));
       });
     });
@@ -47,7 +47,7 @@ describe('SetUtils', () => {
         addAll(set, []);
       });
 
-      it('returns the set unchanged', () => {
+      it('should return the set unchanged', () => {
         expect(set).to.deep.equal(new Set([1, 2, 3]));
       });
     });
@@ -59,14 +59,14 @@ describe('SetUtils', () => {
         addAll(set, [3, 42]);
       });
 
-      it('adds them to the set', () => {
+      it('should add them to the set', () => {
         expect(set).to.deep.equal(new Set([1, 2, 3, 42]));
       });
     });
   });
   describe('join', () => {
     context('when not passing a set', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => join()).to.throw('A Set must be passed so as to join elements.');
       });
     });
@@ -80,12 +80,12 @@ describe('SetUtils', () => {
         result = join(set);
       });
 
-      it('joins the elements using a comma', () => {
+      it('should join the elements using a comma', () => {
         expect(result).to.equal('42,a');
       });
     });
     context('when passing a separator', () => {
-      it('uses it', () => {
+      it('should use it', () => {
         let result;
 
         before(() => {
@@ -95,7 +95,7 @@ describe('SetUtils', () => {
           result = join(set, ', ');
         });
 
-        it('joins the elements using the separator', () => {
+        it('should join the elements using the separator', () => {
           expect(result).to.equal('42, a');
         });
       });

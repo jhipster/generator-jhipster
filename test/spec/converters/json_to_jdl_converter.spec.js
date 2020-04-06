@@ -29,6 +29,7 @@ describe('JSONToJDLConverter', () => {
       let dir;
       let jdlFilename;
       let jdlFileContent;
+
       context('without entities', () => {
         before(() => {
           dir = path.join('test', 'test_files', 'json_to_jdl_converter', 'only_app');
@@ -40,7 +41,7 @@ describe('JSONToJDLConverter', () => {
           fs.unlinkSync(path.join(dir, jdlFilename));
         });
 
-        it('writes a JDL file with the application', () => {
+        it('should write a JDL file with the application', () => {
           expect(jdlFileContent).to.equal(`application {
   config {
     applicationType microservice
@@ -88,7 +89,7 @@ describe('JSONToJDLConverter', () => {
           fs.unlinkSync(path.join(dir, jdlFilename));
         });
 
-        it('exports apps & entities', () => {
+        it('should export apps & entities', () => {
           expect(jdlFileContent).to.equal(`application {
   config {
     applicationType microservice
@@ -217,7 +218,7 @@ paginate Country with pager
           fs.unlinkSync(path.join(rootDir, jdlFilename));
         });
 
-        it('exports each app', () => {
+        it('should export each app', () => {
           expect(jdlFileContent).to.equal(`application {
   config {
     applicationType microservice

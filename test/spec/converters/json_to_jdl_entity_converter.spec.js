@@ -38,7 +38,7 @@ const {
 describe('JSONToJDLEntityConverter', () => {
   describe('::convertEntitiesToJDL', () => {
     context('when not passing entities', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => convertEntitiesToJDL({})).to.throw('Entities have to be passed to be converted.');
       });
     });
@@ -67,28 +67,28 @@ describe('JSONToJDLEntityConverter', () => {
       });
 
       context('when parsing a JSON entity to JDL', () => {
-        it('parses entity javadoc', () => {
+        it('should parse entity javadoc', () => {
           expect(jdlObject.entities.Employee.comment).eq('The Employee entity.');
         });
-        it('parses tableName', () => {
+        it('should parse tableName', () => {
           expect(jdlObject.entities.Employee.tableName).eq('emp');
         });
-        it('parses mandatory fields', () => {
+        it('should parse mandatory fields', () => {
           expect(jdlObject.entities.Country.fields.countryId.type).eq('Long');
           expect(jdlObject.entities.Country.fields.countryName.type).eq('String');
         });
-        it('parses field javadoc', () => {
+        it('should parse field javadoc', () => {
           expect(jdlObject.entities.Country.fields.countryId.comment).eq('The country Id');
           expect(jdlObject.entities.Country.fields.countryName.comment).to.be.undefined;
         });
-        it('parses validations', () => {
+        it('should parse validations', () => {
           expect(jdlObject.entities.Department.fields.departmentName.validations.required.name).eq('required');
           expect(jdlObject.entities.Department.fields.departmentName.validations.required.value).to.be.undefined;
           expect(jdlObject.entities.Employee.fields.salary.validations.min.value).eq(10000);
           expect(jdlObject.entities.Employee.fields.salary.validations.max.value).eq(1000000);
           expect(jdlObject.entities.Employee.fields.employeeId.validations).to.be.empty;
         });
-        it('parses enums', () => {
+        it('should parse enums', () => {
           const languageEnum = jdlObject.getEnum('Language');
           expect(languageEnum.name).eq('Language');
           expect(languageEnum.values.has('FRENCH')).to.be.true;
@@ -96,7 +96,7 @@ describe('JSONToJDLEntityConverter', () => {
           expect(languageEnum.values.has('ENGLISH')).to.be.true;
           expect(languageEnum.values.has('SPANISH')).to.be.true;
         });
-        it('parses options', () => {
+        it('should parse options', () => {
           expect(
             jdlObject
               .getOptions()
@@ -172,30 +172,30 @@ describe('JSONToJDLEntityConverter', () => {
       });
 
       context('when parsing JSON entities to JDL', () => {
-        it('parses unidirectional OneToOne relationships', () => {
+        it('should parse unidirectional OneToOne relationships', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_Department{location}_Location')).not.to.be.undefined;
         });
-        it('parses bidirectional OneToOne relationships', () => {
+        it('should parse bidirectional OneToOne relationships', () => {
           expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')).not.to.be.undefined;
         });
-        it('parses bidirectional OneToMany relationships', () => {
+        it('should parse bidirectional OneToMany relationships', () => {
           expect(jdlObject.relationships.getOneToMany('OneToMany_Department{employee}_Employee{department(foo)}')).not
             .to.be.undefined;
         });
-        it('parses unidirectional ManyToOne relationships', () => {
+        it('should parse unidirectional ManyToOne relationships', () => {
           expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).not.to.be.undefined;
         });
-        it('parses ManyToMany relationships', () => {
+        it('should parse ManyToMany relationships', () => {
           expect(jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}')).not.to.be.undefined;
         });
-        it('parses comments in relationships for owner', () => {
+        it('should parse comments in relationships for owner', () => {
           const relationship = jdlObject.relationships.getOneToMany(
             'OneToMany_Department{employee}_Employee{department(foo)}'
           );
           expect(relationship.commentInFrom).to.eq('A relationship');
           expect(relationship.commentInTo).to.equal('Another side of the same relationship');
         });
-        it('parses comments in relationships for owned', () => {
+        it('should parse comments in relationships for owned', () => {
           const entities = new Map([
             ['Department', readJsonEntity('Department')],
             ['Employee', readJsonEntity('Employee')]
@@ -207,14 +207,14 @@ describe('JSONToJDLEntityConverter', () => {
           expect(relationship.commentInFrom).to.equal('A relationship');
           expect(relationship.commentInTo).to.eq('Another side of the same relationship');
         });
-        it('parses required relationships in owner', () => {
+        it('should parse required relationships in owner', () => {
           const relationship = jdlObject.relationships.getOneToMany(
             'OneToMany_Department{employee}_Employee{department(foo)}'
           );
           expect(relationship.isInjectedFieldInFromRequired).to.be.true;
           expect(relationship.isInjectedFieldInToRequired).to.be.undefined;
         });
-        it('parses required relationships in owned', () => {
+        it('should parse required relationships in owned', () => {
           const relationship = jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}');
           expect(relationship.isInjectedFieldInToRequired).to.be.true;
           expect(relationship.isInjectedFieldInFromRequired).to.be.undefined;
@@ -230,7 +230,7 @@ describe('JSONToJDLEntityConverter', () => {
               jdlObject = convertEntitiesToJDL({ entities: new Map([['Country', readJsonEntity('Country')]]) });
             });
 
-            it('parses relationships to the JHipster managed User entity', () => {
+            it('should parse relationships to the JHipster managed User entity', () => {
               expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User')).not.to.be.undefined;
             });
           });
@@ -244,7 +244,7 @@ describe('JSONToJDLEntityConverter', () => {
               ]);
             });
 
-            it('throws an error ', () => {
+            it('should fail', () => {
               expect(() => {
                 convertEntitiesToJDL({
                   entities
@@ -266,7 +266,7 @@ describe('JSONToJDLEntityConverter', () => {
             jdlObject = convertEntitiesToJDL({ entities, skippedUserManagement: true });
           });
 
-          it('parses the User.json entity if skipUserManagement flag is set', () => {
+          it('should parse the User entity', () => {
             expect(jdlObject.entities.Country).not.to.be.undefined;
             expect(jdlObject.entities.User).not.to.be.undefined;
             expect(jdlObject.entities.User.fields.regionId).not.to.be.undefined;
@@ -282,7 +282,7 @@ describe('JSONToJDLEntityConverter', () => {
             });
           });
 
-          it('parses tableName', () => {
+          it('should parse the tableName', () => {
             expect(jdlObject.entities.CassBankAccount.tableName).eq('cassBankAccount');
           });
         });
@@ -290,7 +290,7 @@ describe('JSONToJDLEntityConverter', () => {
 
       context('when parsing relationships with options', () => {
         context('such as jpaDerivedIdentifier', () => {
-          it('accepts it', () => {
+          it('should accept it', () => {
             expect(
               jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}').options[
                 JPA_DERIVED_IDENTIFIER
@@ -301,7 +301,7 @@ describe('JSONToJDLEntityConverter', () => {
       });
 
       context('when parsing an unrecognised blob-typed field', () => {
-        it('fails', () => {
+        it('should fail', () => {
           expect(() =>
             convertEntitiesToJDL({ entities: new Map([['InvalidBlobType', readJsonEntity('InvalidBlobType')]]) })
           ).to.throw("Unrecognised blob type: 'unknown'");

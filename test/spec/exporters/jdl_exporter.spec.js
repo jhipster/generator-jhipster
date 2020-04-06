@@ -29,7 +29,7 @@ describe('JDLExporter', () => {
   describe('::exportToJDL', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
-        it('throws an error', () => {
+        it('should fail', () => {
           expect(() => {
             JDLExporter.exportToJDL();
           }).to.throw('A JDLObject has to be passed to be exported.');
@@ -58,10 +58,10 @@ describe('JDLExporter', () => {
           fs.unlinkSync(PATH);
         });
 
-        it('exports the JDL to the passed path', () => {
+        it('should export the JDL to the passed path', () => {
           expect(fileExistence).to.be.true;
         });
-        it('writes the JDL inside the file', () => {
+        it('should write the JDL inside the file', () => {
           expect(jdlContent).to.equal('entity Toto\n');
         });
       });
@@ -86,10 +86,10 @@ describe('JDLExporter', () => {
           fs.unlinkSync(DEFAULT_PATH);
         });
 
-        it('exports the JDL to the default one', () => {
+        it('should export the JDL to the default one', () => {
           expect(fileExistence).to.be.true;
         });
-        it('writes the JDL inside the file', () => {
+        it('should write the JDL inside the file', () => {
           expect(jdlContent).to.equal('entity Toto\n');
         });
       });

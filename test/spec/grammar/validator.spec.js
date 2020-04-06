@@ -24,7 +24,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
   context('when declaring an application', () => {
     context('and using for applicationType', () => {
       context('a valid value', () => {
-        it('does not report a syntax error for name', () => {
+        it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
             application {
@@ -37,7 +37,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as a number', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -49,7 +49,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as an invalid character', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -61,7 +61,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as a capitalized letters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -74,7 +74,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
 
         context('having illegal characters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -90,7 +90,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for authenticationType', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -102,7 +102,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -116,7 +116,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -128,7 +128,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -144,7 +144,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for baseName', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -156,7 +156,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -170,7 +170,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -182,7 +182,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -198,7 +198,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for buildTool', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -210,7 +210,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -224,7 +224,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -236,7 +236,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -252,7 +252,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for cacheProvider', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -264,7 +264,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -278,7 +278,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -290,7 +290,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -306,7 +306,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for clientFramework', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -318,7 +318,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -332,7 +332,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -344,7 +344,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -360,7 +360,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for clientPackageManager', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -372,7 +372,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -386,7 +386,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -398,7 +398,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -414,7 +414,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for databaseType', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -426,7 +426,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -440,7 +440,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -452,7 +452,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -468,7 +468,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for devDatabaseType', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -480,7 +480,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -494,7 +494,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -506,7 +506,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -521,7 +521,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for enableHibernateCache', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -534,7 +534,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -548,7 +548,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for enableSwaggerCodegen', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -561,7 +561,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -575,7 +575,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for enableTranslation', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -588,7 +588,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -602,7 +602,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for frontendBuilder', () => {
       context('a valid value', () => {
-        it('does not report a syntax error for name', () => {
+        it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
             application {
@@ -615,7 +615,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as a number', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -627,7 +627,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as an invalid character', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -640,7 +640,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
 
         context('having illegal characters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -655,7 +655,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for jhipsterVersion', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -668,7 +668,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -682,7 +682,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for jhiPrefix', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -695,7 +695,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('when the prefix begins by a digit', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -707,7 +707,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('when the prefix begins by a dash', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -722,7 +722,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for languages', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -736,7 +736,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
 
       context('an invalid value', () => {
         context('such as having numbers inside the list', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -748,7 +748,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as not a list', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -764,7 +764,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for messageBroker', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -776,7 +776,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -790,7 +790,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -802,7 +802,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -817,7 +817,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for nativeLanguage', () => {
       context('a valid value', () => {
-        it('does not report a syntax error for name', () => {
+        it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
             application {
@@ -830,7 +830,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as a number', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -842,7 +842,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as an invalid character', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -854,7 +854,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as a capitalized letters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -867,7 +867,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
 
         context('having illegal characters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -882,7 +882,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for packageName', () => {
       context('a valid value', () => {
-        it('does not report a syntax error for name', () => {
+        it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
             application {
@@ -895,7 +895,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as an invalid character', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -907,7 +907,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as a capitalized letters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -923,7 +923,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for prodDatabaseType', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -935,7 +935,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -949,7 +949,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -961,7 +961,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -977,7 +977,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for searchEngine', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -989,7 +989,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -1003,7 +1003,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -1015,7 +1015,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -1030,7 +1030,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for serverPort', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1044,7 +1044,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
 
       context('an invalid value', () => {
         context('such as letters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               application {
@@ -1060,7 +1060,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for serviceDiscoveryType', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -1074,7 +1074,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -1086,7 +1086,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -1098,7 +1098,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -1113,7 +1113,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for skipClient', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1126,7 +1126,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1140,7 +1140,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for skipServer', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1153,7 +1153,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1167,7 +1167,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for skipUserManagement', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1180,7 +1180,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1194,7 +1194,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for testFrameworks', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1208,7 +1208,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
 
       context('an invalid value', () => {
         context('such as having numbers inside the list', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -1220,7 +1220,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as not a list', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -1235,7 +1235,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for uaaBaseName', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1247,7 +1247,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
       });
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1261,7 +1261,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for useSass', () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1274,7 +1274,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
 
       context('an invalid value', () => {
-        it('will report a syntax error', () => {
+        it('should report a syntax error', () => {
           expect(() =>
             parse(`
             application {
@@ -1289,7 +1289,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     context('and using for websocket', () => {
       context('a valid value', () => {
         context('with only letters', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -1301,7 +1301,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('with both letters and numbers', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             application {
@@ -1315,7 +1315,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as quotes', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -1327,7 +1327,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as numbers', () => {
-          it('fails', () => {
+          it('should fail', () => {
             expect(() =>
               parse(`
             application {
@@ -1344,7 +1344,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
   context('when declaring a deployment', () => {
     context('and using for deploymentType', () => {
       context('a valid value', () => {
-        it('does not report a syntax error for name', () => {
+        it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
             deployment {
@@ -1355,7 +1355,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as a number', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               deployment {
@@ -1365,7 +1365,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as an invalid character', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
             deployment {
@@ -1375,7 +1375,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as a capitalized letters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               deployment {
@@ -1386,7 +1386,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
 
         context('having illegal characters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               deployment {
@@ -1401,7 +1401,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     ALPHABETIC_LOWER.forEach(type => {
       context(`and using for ${type}`, () => {
         context('a valid value', () => {
-          it('does not report a syntax error for name', () => {
+          it('should not report a syntax error for name', () => {
             expect(() =>
               parse(`
               deployment {
@@ -1412,7 +1412,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
         context('an invalid value', () => {
           context('such as a number', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1422,7 +1422,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             });
           });
           context('such as an invalid character', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
               deployment {
@@ -1432,7 +1432,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             });
           });
           context('such as a capitalized letters', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1443,7 +1443,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
 
           context('having illegal characters', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1457,7 +1457,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context('and using for directoryPath', () => {
       context('a valid value', () => {
-        it('does not report a syntax error for name', () => {
+        it('should not report a syntax error for name', () => {
           expect(() =>
             parse(`
             deployment {
@@ -1468,7 +1468,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
       context('an invalid value', () => {
         context('such as a number', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               deployment {
@@ -1478,7 +1478,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as an invalid character', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
             deployment {
@@ -1488,7 +1488,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as a invalid pattern', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               deployment {
@@ -1499,7 +1499,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
         });
 
         context('having illegal characters', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               deployment {
@@ -1515,7 +1515,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     ALPHANUMERIC_LIST.forEach(type => {
       context(`and using for ${type}`, () => {
         context('a valid value', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             deployment {
@@ -1527,7 +1527,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
 
         context('an invalid value', () => {
           context('such as having special character inside the list', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1537,7 +1537,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             });
           });
           context('such as not a list', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1554,7 +1554,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     ALPHANUMERIC_NAME.forEach(type => {
       context(`and using for ${type}`, () => {
         context('a valid value', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             deployment {
@@ -1566,7 +1566,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
 
         context('an invalid value', () => {
           context('such as having special character', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1576,7 +1576,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             });
           });
           context('such as not a name', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1593,7 +1593,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     ALPHANUMERIC_DASH_NAME.forEach(type => {
       context(`and using for ${type}`, () => {
         context('a valid value', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             deployment {
@@ -1605,7 +1605,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
 
         context('an invalid value', () => {
           context('such as having special character', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1615,7 +1615,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             });
           });
           context('such as not a name', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1632,7 +1632,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     URL_TYPE.forEach(type => {
       context(`and using for ${type}`, () => {
         context('a valid value', () => {
-          it('does not report a syntax error', () => {
+          it('should not report a syntax error', () => {
             expect(() =>
               parse(`
             deployment {
@@ -1660,7 +1660,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
 
         context('an invalid value', () => {
           context('such as having invalid url', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1672,7 +1672,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             });
           });
           context('such as not a name', () => {
-            it('will report a syntax error', () => {
+            it('should report a syntax error', () => {
               expect(() =>
                 parse(`
                 deployment {
@@ -1686,7 +1686,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
     });
     context(`and using for dockerPushCommand`, () => {
       context('a valid value', () => {
-        it('does not report a syntax error', () => {
+        it('should not report a syntax error', () => {
           expect(() =>
             parse(`
           deployment {
@@ -1698,7 +1698,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
 
       context('an invalid value', () => {
         context('such as having special chars', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               deployment {
@@ -1708,7 +1708,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
           });
         });
         context('such as not a name', () => {
-          it('will report a syntax error', () => {
+          it('should report a syntax error', () => {
             expect(() =>
               parse(`
               deployment {

@@ -25,14 +25,14 @@ const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 describe('JDLBinaryOption', () => {
   describe('::new', () => {
     context('when passing no argument', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JDLBinaryOption();
         }).to.throw("The option's name must be passed to create an option.");
       });
     });
     context('when passing a name but no value', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JDLBinaryOption({ name: BinaryOptions.Options.DTO });
         }).to.throw(/^A binary option must have a value\.$/);
@@ -102,7 +102,7 @@ describe('JDLBinaryOption', () => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
       });
 
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           option.addEntityName(null);
         }).to.throw('An entity name has to be passed so as to be added to the option.');
@@ -116,7 +116,7 @@ describe('JDLBinaryOption', () => {
         option.addEntityName('A');
       });
 
-      it('changes the set', () => {
+      it('should change the set', () => {
         expect(option.entityNames.size).to.eq(1);
       });
     });
@@ -129,7 +129,7 @@ describe('JDLBinaryOption', () => {
         option.addEntityName('A');
       });
 
-      it('does not change the size', () => {
+      it('should not change the size', () => {
         expect(option.entityNames.size).to.eq(1);
       });
     });
@@ -142,7 +142,7 @@ describe('JDLBinaryOption', () => {
         option.excludeEntityName('A');
       });
 
-      it('does not change the sizes', () => {
+      it('should not change the sizes', () => {
         expect(option.entityNames.size).to.eq(1);
         expect(option.excludedNames.size).to.eq(0);
       });
@@ -156,7 +156,7 @@ describe('JDLBinaryOption', () => {
         option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
       });
 
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           option.excludeEntityName(null);
         }).to.throw('An entity name has to be passed so as to be excluded from the option.');
@@ -170,7 +170,7 @@ describe('JDLBinaryOption', () => {
         option.excludeEntityName('A');
       });
 
-      it('changes the set', () => {
+      it('should change the set', () => {
         expect(option.excludedNames.size).to.eq(1);
       });
     });
@@ -183,7 +183,7 @@ describe('JDLBinaryOption', () => {
         option.excludeEntityName('A');
       });
 
-      it('does not change the size', () => {
+      it('should not change the size', () => {
         expect(option.excludedNames.size).to.eq(1);
       });
     });
@@ -196,7 +196,7 @@ describe('JDLBinaryOption', () => {
         option.addEntityName('A');
       });
 
-      it('does not change the size', () => {
+      it('should not change the size', () => {
         expect(option.entityNames.size).to.eq(1);
       });
     });
@@ -210,7 +210,7 @@ describe('JDLBinaryOption', () => {
     });
 
     context('when passing an invalid option', () => {
-      it('returns false', () => {
+      it('should return false', () => {
         expect(option.addEntitiesFromAnotherOption(null)).to.be.false;
       });
     });
@@ -227,20 +227,22 @@ describe('JDLBinaryOption', () => {
         returned = option.addEntitiesFromAnotherOption(option2);
       });
 
-      it('returns true', () => {
+      it('should return true', () => {
         expect(returned).to.be.true;
       });
-      it('adds the source entities to the target option', () => {
+      it('should add the source entities to the target option', () => {
         expect(option.entityNames).to.deep.equal(new Set(['B', 'C', 'A']));
       });
-      it('adds the excluded source entities to the target option', () => {
+      it('should add the excluded source entities to the target option', () => {
         expect(option.excludedNames).to.deep.equal(new Set(['Z', 'Y']));
       });
     });
   });
   describe('#toString', () => {
-    it('stringifies the option', () => {
-      let option = new JDLBinaryOption({
+    let option;
+
+    before(() => {
+      option = new JDLBinaryOption({
         name: BinaryOptions.Options.DTO,
         value: BinaryOptions.Values.dto.MAPSTRUCT
       });
@@ -265,6 +267,9 @@ describe('JDLBinaryOption', () => {
         name: BinaryOptions.Options.PAGINATION,
         value: BinaryOptions.Values.pagination.PAGINATION
       });
+    });
+
+    it('should stringify the option', () => {
       expect(option.toString()).to.eq(`paginate * with ${BinaryOptions.Values.pagination.PAGINATION}`);
     });
   });

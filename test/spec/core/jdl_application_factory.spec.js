@@ -30,7 +30,7 @@ describe('JDLApplicationFactory', () => {
         application = createJDLApplication({ applicationType: MICROSERVICE });
       });
 
-      it('creates the app', () => {
+      it('should create the app', () => {
         expect(application.getConfigurationOptionValue('applicationType')).to.equal(MICROSERVICE);
       });
     });
@@ -41,7 +41,7 @@ describe('JDLApplicationFactory', () => {
         application = createJDLApplication({ applicationType: GATEWAY });
       });
 
-      it('creates the app', () => {
+      it('should create the app', () => {
         expect(application.getConfigurationOptionValue('applicationType')).to.equal(GATEWAY);
       });
     });
@@ -52,7 +52,7 @@ describe('JDLApplicationFactory', () => {
         application = createJDLApplication({ applicationType: MONOLITH });
       });
 
-      it('creates the app', () => {
+      it('should create the app', () => {
         expect(application.getConfigurationOptionValue('applicationType')).to.equal(MONOLITH);
       });
     });
@@ -63,7 +63,7 @@ describe('JDLApplicationFactory', () => {
         application = createJDLApplication({ applicationType: UAA });
       });
 
-      it('creates the app', () => {
+      it('should create the app', () => {
         expect(application.getConfigurationOptionValue('applicationType')).to.equal(UAA);
       });
     });

@@ -34,27 +34,27 @@ describe('FormatUtils', () => {
       const expectedResult3 = 'multi word\tcomment';
 
       context(buildTestTitle(oneLineComment1), () => {
-        it(`returns ${buildTestTitle(expectedResult1)}`, () => {
+        it(`should return ${buildTestTitle(expectedResult1)}`, () => {
           expect(FormatUtils.formatComment(oneLineComment1)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(oneLineComment2), () => {
-        it(`returns ${buildTestTitle(expectedResult1)}`, () => {
+        it(`should return ${buildTestTitle(expectedResult1)}`, () => {
           expect(FormatUtils.formatComment(oneLineComment2)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(oneLineComment3), () => {
-        it(`returns ${buildTestTitle(expectedResult2)}`, () => {
+        it(`should return ${buildTestTitle(expectedResult2)}`, () => {
           expect(FormatUtils.formatComment(oneLineComment3)).to.equal(expectedResult2);
         });
       });
       context(buildTestTitle(oneLineComment4), () => {
-        it(`returns ${buildTestTitle(expectedResult3)}`, () => {
+        it(`should return ${buildTestTitle(expectedResult3)}`, () => {
           expect(FormatUtils.formatComment(oneLineComment4)).to.equal(expectedResult3);
         });
       });
       context(buildTestTitle(oneLineComment5), () => {
-        it(`returns ${buildTestTitle(expectedResult3)}`, () => {
+        it(`should return ${buildTestTitle(expectedResult3)}`, () => {
           expect(FormatUtils.formatComment(oneLineComment5)).to.equal(expectedResult3);
         });
       });
@@ -69,17 +69,17 @@ describe('FormatUtils', () => {
       const expectedResult3 = 'abcde\\nfghij\\nnothing';
 
       context(buildTestTitle(multiLineComment1), () => {
-        it(`returns ${buildTestTitle(expectedResult1)}`, () => {
+        it(`should return ${buildTestTitle(expectedResult1)}`, () => {
           expect(FormatUtils.formatComment(multiLineComment1)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(multiLineComment2), () => {
-        it(`returns ${buildTestTitle(expectedResult2)}`, () => {
+        it(`should return ${buildTestTitle(expectedResult2)}`, () => {
           expect(FormatUtils.formatComment(multiLineComment2)).to.equal(expectedResult2);
         });
       });
       context(buildTestTitle(multiLineComment3), () => {
-        it(`returns ${buildTestTitle(expectedResult3)}`, () => {
+        it(`should return ${buildTestTitle(expectedResult3)}`, () => {
           expect(FormatUtils.formatComment(multiLineComment3)).to.equal(expectedResult3);
         });
       });
@@ -87,7 +87,7 @@ describe('FormatUtils', () => {
   });
   describe('::formatDateForLiquibase', () => {
     context('when passing both arguments', () => {
-      it('uses the increment with the passed date', () => {
+      it('should use the increment with the passed date', () => {
         const now = new Date();
         const increment = 1000042;
         const result = FormatUtils.formatDateForLiquibase({ date: now, increment });
@@ -130,7 +130,7 @@ describe('FormatUtils', () => {
       });
     });
     context('when not passing the increment', () => {
-      it('formats the current time for liquibase with no increment', () => {
+      it('should format the current time for liquibase with no increment', () => {
         const now = new Date();
         const result = FormatUtils.formatDateForLiquibase({ date: now });
         const nowUtc = new Date(
@@ -168,7 +168,7 @@ describe('FormatUtils', () => {
   });
   describe('::dateFormatForLiquibase', () => {
     context('when passing both arguments', () => {
-      it('uses the increment with the passed date', () => {
+      it('should use the increment with the passed date', () => {
         const now = new Date();
         const increment = 1000042;
         const result = FormatUtils.dateFormatForLiquibase({ date: now, increment });
@@ -206,12 +206,12 @@ describe('FormatUtils', () => {
       });
     });
     context('when not passing the date', () => {
-      it('does not fail', () => {
+      it('should not fail', () => {
         expect(FormatUtils.dateFormatForLiquibase().length).to.equal(14);
       });
     });
     context('when not passing the increment', () => {
-      it('formats the current time for liquibase with no increment', () => {
+      it('should format the current time for liquibase with no increment', () => {
         const now = new Date();
         const result = FormatUtils.dateFormatForLiquibase({ date: now });
         const nowUtc = new Date(

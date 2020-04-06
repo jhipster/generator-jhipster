@@ -23,28 +23,28 @@ const FieldIssue = require('../../../../lib/linter/issues/field_issue');
 describe('FieldIssue', () => {
   describe('new', () => {
     context('when not passing any arg', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new FieldIssue();
         }).to.throw('An issue must at least have a rule name.');
       });
     });
     context('when not passing a rule name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new FieldIssue({});
         }).to.throw('An issue must at least have a rule name.');
       });
     });
     context('when not passing an entity name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new FieldIssue({ ruleName: 'Toto' });
         }).to.throw("A field name and its entity's name must be passed.");
       });
     });
     context('when not passing a field name', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new FieldIssue({ ruleName: 'Toto', entityName: 'A' });
         }).to.throw("A field name and its entity's name must be passed.");

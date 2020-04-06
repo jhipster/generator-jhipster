@@ -50,7 +50,7 @@ describe('BusinessErrorChecker', () => {
     let checker;
 
     context('with no passed JDL object', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new BusinessErrorChecker();
         }).to.throw('A JDL object must be passed to check for business errors.');
@@ -125,7 +125,7 @@ describe('BusinessErrorChecker', () => {
         optionCheckSpy.restore();
       });
 
-      it('checks it', () => {
+      it('should check it', () => {
         expect(applicationCheckSpy).to.have.been.called;
         expect(entityCheckSpy).to.have.been.called;
         expect(fieldCheckSpy).to.have.been.called;
@@ -180,7 +180,7 @@ describe('BusinessErrorChecker', () => {
         delete jdlObject.entities.valid;
       });
 
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           checker.checkForEntityErrors();
         }).to.throw("The name 'Continue' is a reserved keyword and can not be used as an entity class name.");
@@ -206,7 +206,7 @@ describe('BusinessErrorChecker', () => {
           loggerStub.restore();
         });
 
-        it('warns', () => {
+        it('should warn', () => {
           expect(loggerStub).to.have.been.calledOnce;
           expect(loggerStub.getCall(0).args[0]).to.equal(
             "The table name 'continue' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'."
@@ -238,7 +238,7 @@ describe('BusinessErrorChecker', () => {
           loggerStub.restore();
         });
 
-        it('warns', () => {
+        it('should warn', () => {
           expect(loggerStub).to.have.been.calledOnce;
           expect(loggerStub.getCall(0).args[0]).to.equal(
             "The table name 'continue' is a reserved keyword for at least one of these applications: jhipster, " +
@@ -294,7 +294,7 @@ describe('BusinessErrorChecker', () => {
         loggerStub.restore();
       });
 
-      it('warns', () => {
+      it('should warn', () => {
         expect(loggerStub).to.have.been.calledOnce;
         expect(loggerStub.getCall(0).args[0]).to.equal(
           "The name 'catch' is a reserved keyword, so it will be prefixed with the value of 'jhiPrefix'."
@@ -349,7 +349,7 @@ describe('BusinessErrorChecker', () => {
           checker = new BusinessErrorChecker(jdlObject);
         });
 
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
           }).to.throw("The type 'WeirdType' is an unknown field type for field 'validField' of entity 'Valid'.");
@@ -372,7 +372,7 @@ describe('BusinessErrorChecker', () => {
           });
         });
 
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             checker.checkForFieldErrors('Valid', jdlObject.getEntity('Valid').fields);
           }).to.throw("The type 'WeirdType' is an unknown field type for field 'validField' of entity 'Valid'.");
@@ -408,7 +408,7 @@ describe('BusinessErrorChecker', () => {
         checker = new BusinessErrorChecker(jdlObject);
       });
 
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           checker.checkForValidationErrors(jdlObject.getEntity('Valid').fields.validField);
         }).to.throw("The validation 'min' isn't supported for the type 'String'.");
@@ -440,7 +440,7 @@ describe('BusinessErrorChecker', () => {
         checker = new BusinessErrorChecker(jdlObject);
       });
 
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           checker.checkForRelationshipErrors();
         }).to.throw('In the relationship between Source and Valid, Source is not declared.');
@@ -467,7 +467,7 @@ describe('BusinessErrorChecker', () => {
             checker = new BusinessErrorChecker(jdlObject);
           });
 
-          it('does not fail', () => {
+          it('should not fail', () => {
             expect(() => {
               checker.checkForRelationshipErrors();
             }).not.to.throw();
@@ -502,7 +502,7 @@ describe('BusinessErrorChecker', () => {
             checker = new BusinessErrorChecker(jdlObject);
           });
 
-          it('fails', () => {
+          it('should fail', () => {
             expect(() => {
               checker.checkForRelationshipErrors();
             }).to.throw('In the relationship between Source and User, User is not declared.');
@@ -528,7 +528,7 @@ describe('BusinessErrorChecker', () => {
           checker = new BusinessErrorChecker(jdlObject);
         });
 
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             checker.checkForRelationshipErrors();
           }).to.throw('In the relationship between Source and Other, Other is not declared.');
@@ -602,7 +602,7 @@ describe('BusinessErrorChecker', () => {
         );
         checker = new BusinessErrorChecker(jdlObject);
       });
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           checker.checkForRelationshipErrors();
         }).to.throw("Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application.");
@@ -644,7 +644,7 @@ describe('BusinessErrorChecker', () => {
           checker = new BusinessErrorChecker(jdlObject);
         });
 
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             checker.checkForOptionErrors();
           }).to.throw(
@@ -663,7 +663,7 @@ describe('BusinessErrorChecker', () => {
           checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.CASSANDRA });
         });
 
-        it('fails', () => {
+        it('should fail', () => {
           expect(() => {
             checker.checkForOptionErrors();
           }).to.throw("Pagination isn't allowed when the app uses Cassandra.");
@@ -689,7 +689,7 @@ describe('BusinessErrorChecker', () => {
         checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
       });
 
-      it('does not fail', () => {
+      it('should not fail', () => {
         expect(() => {
           checker.checkForOptionErrors();
         }).not.to.throw();
@@ -728,7 +728,7 @@ describe('BusinessErrorChecker', () => {
         );
         checker = new BusinessErrorChecker(jdlObject, { databaseType: DatabaseTypes.SQL });
       });
-      it("doesn't fail", () => {
+      it('should not fail', () => {
         expect(() => {
           checker.checkForOptionErrors();
         }).not.to.throw();

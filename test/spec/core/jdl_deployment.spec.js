@@ -24,14 +24,14 @@ const JDLDeployment = require('../../../lib/core/jdl_deployment');
 describe('JDLDeployment', () => {
   describe('::new', () => {
     context('when not passing any argument', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JDLDeployment();
         }).to.throw('The deploymentType is mandatory to create a deployment.');
       });
     });
     context('when not passing the deploymentType', () => {
-      it('fails', () => {
+      it('should fail', () => {
         expect(() => {
           new JDLDeployment({ deploymentType: null });
         }).to.throw('The deploymentType is mandatory to create a deployment.');
@@ -50,7 +50,7 @@ describe('JDLDeployment', () => {
         deployment = new JDLDeployment(args);
       });
 
-      it('creates a new instance', () => {
+      it('should create a new instance', () => {
         expect(deployment.deploymentType).to.eq(args.deploymentType);
         expect(deployment.appsFolders).to.eq(args.appsFolders);
         expect(deployment.dockerRepositoryName).to.eq(args.dockerRepositoryName);
@@ -73,7 +73,7 @@ describe('JDLDeployment', () => {
         deployment = new JDLDeployment(args);
       });
 
-      it('stringifies its content without default values', () => {
+      it('should stringify its content without default values', () => {
         expect(deployment.toString()).to.eql(`deployment {
     deploymentType ${args.deploymentType}
     appsFolders [${args.appsFolders.join(', ').replace(/'/g, '')}]
@@ -97,7 +97,7 @@ describe('JDLDeployment', () => {
         deployment = new JDLDeployment(args);
       });
 
-      it('stringifies it', () => {
+      it('should stringify it', () => {
         expect(deployment.toString()).to.eql(`deployment {
     deploymentType ${args.deploymentType}
     monitoring ${args.monitoring}
