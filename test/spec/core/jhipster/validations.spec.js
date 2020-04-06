@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const Validations = require('../../../../lib/core/jhipster/validations');
 
 describe('Validations', () => {
-  describe('::exists', () => {
+  describe('exists', () => {
     describe('when checking for a valid validation', () => {
       it('should return true', () => {
         expect(Validations.exists(Validations.MAXBYTES)).to.be.true;
@@ -34,7 +34,7 @@ describe('Validations', () => {
       });
     });
   });
-  describe('::needsValue', () => {
+  describe('needsValue', () => {
     describe('when checking whether a validation needs a value', () => {
       it('should return so', () => {
         expect(Validations.needsValue(Validations.MAXLENGTH)).to.be.true;

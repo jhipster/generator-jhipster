@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const FileReader = require('../../../lib/readers/file_reader');
 
 describe('FileReader', () => {
-  describe('::readFile', () => {
+  describe('readFile', () => {
     context('when passing a nil path', () => {
       it('should fail', () => {
         expect(() => {
@@ -54,7 +54,7 @@ describe('FileReader', () => {
       });
     });
   });
-  describe('::readFiles', () => {
+  describe('readFiles', () => {
     context('when passing a nil iterable', () => {
       it('should fail', () => {
         expect(() => {

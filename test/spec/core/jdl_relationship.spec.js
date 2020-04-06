@@ -25,7 +25,7 @@ const { JPA_DERIVED_IDENTIFIER } = require('../../../lib/core/jhipster/relations
 const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types');
 
 describe('JDLRelationship', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when not passing at least one injected field', () => {
       it('should fail', () => {
         expect(() => {
@@ -69,7 +69,7 @@ describe('JDLRelationship', () => {
       });
     });
   });
-  describe('#getId', () => {
+  describe('getId', () => {
     let relationship;
 
     before(() => {
@@ -87,7 +87,7 @@ describe('JDLRelationship', () => {
       );
     });
   });
-  describe('#hasOption', () => {
+  describe('hasOption', () => {
     let relationship;
 
     before(() => {
@@ -111,7 +111,7 @@ describe('JDLRelationship', () => {
       });
     });
   });
-  describe('#forEachOption', () => {
+  describe('forEachOption', () => {
     let relationship;
     let options;
 
@@ -132,7 +132,7 @@ describe('JDLRelationship', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     context('without any comment', () => {
       let relationship;
 

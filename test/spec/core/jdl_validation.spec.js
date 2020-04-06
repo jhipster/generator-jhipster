@@ -23,7 +23,7 @@ const JDLValidation = require('../../../lib/core/jdl_validation');
 const Validations = require('../../../lib/core/jhipster/validations');
 
 describe('JDLValidation', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when not passing any argument', () => {
       let validation;
 
@@ -52,7 +52,7 @@ describe('JDLValidation', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     context('with no value', () => {
       let validation;
 

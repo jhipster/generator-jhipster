@@ -27,7 +27,7 @@ const JHipsterEntityExporter = require('../../../lib/exporters/jhipster_entity_e
 const FileUtils = require('../../../lib/utils/file_utils');
 
 describe('JHipsterEntityExporter', () => {
-  describe('::exportEntities', () => {
+  describe('exportEntities', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('should fail', () => {

@@ -25,7 +25,7 @@ const { DeploymentTypes, Options } = require('../../../../lib/core/jhipster/depl
 
 describe('DeploymentOptions', () => {
   describe('DeploymentTypes', () => {
-    describe('::exists', () => {
+    describe('exists', () => {
       context('when passing a nil arg', () => {
         it('should return false', () => {
           expect(DeploymentTypes.exists()).to.be.false;
@@ -46,7 +46,7 @@ describe('DeploymentOptions', () => {
   });
 
   describe('Options', () => {
-    describe('::defaults', () => {
+    describe('defaults', () => {
       context('when passing no args', () => {
         it('should return docker deployment config', () => {
           expect(Options.defaults()).to.eql({

@@ -23,7 +23,7 @@ const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 
 describe('JDLBinaryOption', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when passing no argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -77,7 +77,7 @@ describe('JDLBinaryOption', () => {
       });
     });
   });
-  describe('#setEntityNames', () => {
+  describe('setEntityNames', () => {
     let option;
 
     before(() => {
@@ -94,7 +94,7 @@ describe('JDLBinaryOption', () => {
       expect(option.entityNames.has('A')).to.be.true;
     });
   });
-  describe('#addEntityName', () => {
+  describe('addEntityName', () => {
     context('when passing a nil name', () => {
       let option;
 
@@ -148,7 +148,7 @@ describe('JDLBinaryOption', () => {
       });
     });
   });
-  describe('#excludeEntityName', () => {
+  describe('excludeEntityName', () => {
     context('when passing a nil name', () => {
       let option;
 
@@ -201,7 +201,7 @@ describe('JDLBinaryOption', () => {
       });
     });
   });
-  describe('#addEntitiesFromAnotherOption', () => {
+  describe('addEntitiesFromAnotherOption', () => {
     const option = new JDLBinaryOption({
       name: BinaryOptions.Options.DTO,
       value: BinaryOptions.Values.dto.MAPSTRUCT,
@@ -238,7 +238,7 @@ describe('JDLBinaryOption', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     let option;
 
     before(() => {

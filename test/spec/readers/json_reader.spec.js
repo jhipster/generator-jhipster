@@ -26,7 +26,7 @@ const JSONReader = require('../../../lib/readers/json_reader');
 const { SKIP_CLIENT, SKIP_SERVER } = require('../../../lib/core/jhipster/unary_options');
 
 describe('JSONReader', () => {
-  describe('::parseFromDir', () => {
+  describe('parseFromDir', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {
         it('should fail', () => {

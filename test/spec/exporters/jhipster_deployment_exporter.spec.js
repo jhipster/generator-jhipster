@@ -26,7 +26,7 @@ const JHipsterDeploymentExporter = require('../../../lib/exporters/jhipster_depl
 const JDLDeployment = require('../../../lib/core/jdl_deployment');
 
 describe('JHipsterDeploymentExporter', () => {
-  describe('::exportDeployments', () => {
+  describe('exportDeployments', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('should fail', () => {

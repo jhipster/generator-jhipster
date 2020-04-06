@@ -36,7 +36,7 @@ const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 
 describe('ValidatedJDLObject', () => {
-  describe('#addApplication', () => {
+  describe('addApplication', () => {
     context('when adding an invalid application', () => {
       const object = new ValidatedJDLObject();
 
@@ -65,7 +65,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getApplicationQuantity', () => {
+  describe('getApplicationQuantity', () => {
     let jdlObject;
 
     before(() => {
@@ -88,7 +88,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#addDeployment', () => {
+  describe('addDeployment', () => {
     context('when adding an invalid deployment', () => {
       const object = new ValidatedJDLObject();
 
@@ -130,7 +130,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getDeploymentQuantity', () => {
+  describe('getDeploymentQuantity', () => {
     let jdlObject;
 
     before(() => {
@@ -159,7 +159,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#forEachApplication', () => {
+  describe('forEachApplication', () => {
     let jdlObject;
 
     before(() => {
@@ -187,7 +187,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#addEntity', () => {
+  describe('addEntity', () => {
     context('when adding an invalid entity', () => {
       const object = new ValidatedJDLObject();
 
@@ -259,7 +259,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getEntity', () => {
+  describe('getEntity', () => {
     let jdlObject;
 
     before(() => {
@@ -281,7 +281,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getEntityQuantity', () => {
+  describe('getEntityQuantity', () => {
     let jdlObject;
 
     before(() => {
@@ -308,7 +308,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getEntityNames', () => {
+  describe('getEntityNames', () => {
     let jdlObject;
 
     before(() => {
@@ -336,7 +336,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#forEachEntity', () => {
+  describe('forEachEntity', () => {
     let jdlObject;
 
     before(() => {
@@ -364,7 +364,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#addEnum', () => {
+  describe('addEnum', () => {
     context('when adding an invalid enum', () => {
       const object = new ValidatedJDLObject();
 
@@ -415,7 +415,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getEnum', () => {
+  describe('getEnum', () => {
     let object;
 
     before(() => {
@@ -440,7 +440,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#hasEnum', () => {
+  describe('hasEnum', () => {
     let object;
 
     before(() => {
@@ -465,7 +465,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getEnumQuantity', () => {
+  describe('getEnumQuantity', () => {
     let jdlObject;
 
     before(() => {
@@ -492,7 +492,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#forEachEnum', () => {
+  describe('forEachEnum', () => {
     let jdlObject;
 
     before(() => {
@@ -520,7 +520,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#addRelationship', () => {
+  describe('addRelationship', () => {
     context('when adding an invalid relationship', () => {
       const object = new ValidatedJDLObject();
 
@@ -586,7 +586,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getRelationshipQuantity', () => {
+  describe('getRelationshipQuantity', () => {
     let jdlObject;
 
     before(() => {
@@ -616,7 +616,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#forEachRelationship', () => {
+  describe('forEachRelationship', () => {
     let jdlObject;
 
     before(() => {
@@ -658,7 +658,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#addOption', () => {
+  describe('addOption', () => {
     context('when adding an invalid option', () => {
       const object = new ValidatedJDLObject();
 
@@ -683,7 +683,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getOptionsForName', () => {
+  describe('getOptionsForName', () => {
     let jdlObject;
 
     before(() => {
@@ -733,7 +733,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#getOptionQuantity', () => {
+  describe('getOptionQuantity', () => {
     let jdlObject;
 
     before(() => {
@@ -760,7 +760,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#forEachOption', () => {
+  describe('forEachOption', () => {
     let jdlObject;
 
     before(() => {
@@ -796,7 +796,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#isEntityInMicroservice', () => {
+  describe('isEntityInMicroservice', () => {
     let jdlObject;
 
     context('when an entity is in a microservice', () => {
@@ -847,7 +847,7 @@ describe('ValidatedJDLObject', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     let application;
     let deployment;
     let object;

@@ -24,7 +24,7 @@ const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
 const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 
 describe('JDLUnaryOption', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when passing no argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -65,7 +65,7 @@ describe('JDLUnaryOption', () => {
       });
     });
   });
-  describe('#setEntityNames', () => {
+  describe('setEntityNames', () => {
     let option;
 
     before(() => {
@@ -81,7 +81,7 @@ describe('JDLUnaryOption', () => {
       expect(option.entityNames.has('A')).to.be.true;
     });
   });
-  describe('#addEntityName', () => {
+  describe('addEntityName', () => {
     context('when passing a nil name', () => {
       let option;
 
@@ -135,7 +135,7 @@ describe('JDLUnaryOption', () => {
       });
     });
   });
-  describe('#addEntitiesFromAnotherOption', () => {
+  describe('addEntitiesFromAnotherOption', () => {
     let option;
 
     before(() => {
@@ -174,7 +174,7 @@ describe('JDLUnaryOption', () => {
       });
     });
   });
-  describe('#excludeEntityName', () => {
+  describe('excludeEntityName', () => {
     context('when passing a nil name', () => {
       let option;
 
@@ -227,7 +227,7 @@ describe('JDLUnaryOption', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     let option;
 
     before(() => {

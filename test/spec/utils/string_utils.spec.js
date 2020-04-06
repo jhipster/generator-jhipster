@@ -24,7 +24,7 @@ const { expect } = require('chai');
 const { lowerFirst, camelCase, upperFirst } = require('../../../lib/utils/string_utils');
 
 describe('StringUtils', () => {
-  describe('::camelCase', () => {
+  describe('camelCase', () => {
     context('when passing a valid string', () => {
       it('should camel-case it', () => {
         expect(camelCase('e')).to.equal('e');
@@ -53,7 +53,7 @@ describe('StringUtils', () => {
       });
     });
   });
-  describe('::lowerFirst', () => {
+  describe('lowerFirst', () => {
     context('when passing a nil string', () => {
       it('should fail', () => {
         expect(() => {
@@ -72,7 +72,7 @@ describe('StringUtils', () => {
       });
     });
   });
-  describe('::upperFirst', () => {
+  describe('upperFirst', () => {
     context('when passing a nil string', () => {
       it('should fail', () => {
         expect(() => {

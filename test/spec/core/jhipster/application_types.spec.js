@@ -24,7 +24,7 @@ const { expect } = require('chai');
 const ApplicationTypes = require('../../../../lib/core/jhipster/application_types');
 
 describe('ApplicationTypes', () => {
-  describe('::exists', () => {
+  describe('exists', () => {
     context('when passing a nil arg', () => {
       it('should return false', () => {
         expect(ApplicationTypes.exists()).to.be.false;

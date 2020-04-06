@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const JDLEnum = require('../../../lib/core/jdl_enum');
 
 describe('JDLEnum', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -43,7 +43,7 @@ describe('JDLEnum', () => {
       });
     });
   });
-  describe('#getValuesAsString', () => {
+  describe('getValuesAsString', () => {
     let result;
 
     before(() => {
@@ -55,7 +55,7 @@ describe('JDLEnum', () => {
       expect(result).to.equal('A (aaaa),B');
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     context('with simple enum values', () => {
       let values = [];
       let jdlEnum;

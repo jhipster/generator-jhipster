@@ -26,7 +26,7 @@ const Validations = require('../../../../lib/core/jhipster/validations');
 const JDLEnum = require('../../../../lib/core/jdl_enum');
 
 describe('FieldTypes', () => {
-  describe('::isCommonDBType', () => {
+  describe('isCommonDBType', () => {
     context('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -53,7 +53,7 @@ describe('FieldTypes', () => {
       });
     });
   });
-  describe('::isCassandraType', () => {
+  describe('isCassandraType', () => {
     context('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -80,7 +80,7 @@ describe('FieldTypes', () => {
       });
     });
   });
-  describe('::getIsType', () => {
+  describe('getIsType', () => {
     context('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -125,7 +125,7 @@ describe('FieldTypes', () => {
       });
     });
   });
-  describe('::hasValidation', () => {
+  describe('hasValidation', () => {
     context('when passing an invalid argument', () => {
       it('should fail', () => {
         expect(() => {

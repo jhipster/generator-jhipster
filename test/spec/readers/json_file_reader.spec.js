@@ -24,7 +24,7 @@ const path = require('path');
 const JSONFileReader = require('../../../lib/readers/json_file_reader');
 
 describe('JSONFileReader', () => {
-  describe('::readEntityJSON', () => {
+  describe('readEntityJSON', () => {
     context('when passing an invalid argument', () => {
       context('because it is nil', () => {
         it('should fail', () => {
@@ -77,7 +77,7 @@ describe('JSONFileReader', () => {
       });
     });
   });
-  describe('::toFilePath', () => {
+  describe('toFilePath', () => {
     context('when converting an entity name to a path', () => {
       context('with a nil entity name', () => {
         it('should fail', () => {

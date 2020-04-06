@@ -26,7 +26,7 @@ const JDLValidation = require('../../../lib/core/jdl_validation');
 const Validations = require('../../../lib/core/jhipster/validations');
 
 describe('JDLField', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -74,7 +74,7 @@ describe('JDLField', () => {
       });
     });
   });
-  describe('#addValidation', () => {
+  describe('addValidation', () => {
     let field;
 
     before(() => {
@@ -117,7 +117,7 @@ describe('JDLField', () => {
       });
     });
   });
-  describe('#forEachValidation', () => {
+  describe('forEachValidation', () => {
     context('when not passing a function', () => {
       let field;
 
@@ -158,7 +158,7 @@ describe('JDLField', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     context('without comment', () => {
       let args = {};
       let field;

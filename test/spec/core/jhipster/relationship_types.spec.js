@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const RelationshipTypes = require('../../../../lib/core/jhipster/relationship_types');
 
 describe('RelationshipTypes', () => {
-  describe('::exists', () => {
+  describe('exists', () => {
     context('when checking for a valid unary relationship type', () => {
       it('should return true', () => {
         expect(RelationshipTypes.exists(RelationshipTypes.MANY_TO_ONE)).to.be.true;

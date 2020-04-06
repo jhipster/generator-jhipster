@@ -23,7 +23,7 @@ const JDLEnums = require('../../../lib/core/jdl_enums');
 const JDLEnum = require('../../../lib/core/jdl_enum');
 
 describe('JDLEnums', () => {
-  describe('#add', () => {
+  describe('add', () => {
     let jdlEnums;
 
     before(() => {
@@ -52,7 +52,7 @@ describe('JDLEnums', () => {
       });
     });
   });
-  describe('#get', () => {
+  describe('get', () => {
     let jdlEnums;
 
     before(() => {
@@ -77,7 +77,7 @@ describe('JDLEnums', () => {
       });
     });
   });
-  describe('#has', () => {
+  describe('has', () => {
     let jdlEnums;
 
     before(() => {
@@ -102,7 +102,7 @@ describe('JDLEnums', () => {
       });
     });
   });
-  describe('#forEach', () => {
+  describe('forEach', () => {
     let jdlEnums;
 
     before(() => {
@@ -130,7 +130,7 @@ describe('JDLEnums', () => {
       });
     });
   });
-  describe('#size', () => {
+  describe('size', () => {
     let jdlEnums;
 
     before(() => {
@@ -167,7 +167,7 @@ describe('JDLEnums', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     let jdlEnums;
 
     before(() => {

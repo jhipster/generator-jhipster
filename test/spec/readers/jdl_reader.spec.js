@@ -23,7 +23,7 @@ const fs = require('fs');
 const JDLReader = require('../../../lib/readers/jdl_reader');
 
 describe('JDLReader', () => {
-  describe('::parseFromFiles', () => {
+  describe('parseFromFiles', () => {
     context('when passing invalid parameters', () => {
       context('such as nil', () => {
         it('should fail', () => {
@@ -136,7 +136,7 @@ describe('JDLReader', () => {
       });
     });
   });
-  describe('::parseFromContent', () => {
+  describe('parseFromContent', () => {
     context('when passing an invalid content', () => {
       it('should fail', () => {
         expect(() => {

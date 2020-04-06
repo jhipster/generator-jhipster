@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const FormatUtils = require('../../../lib/utils/format_utils');
 
 describe('FormatUtils', () => {
-  describe('::formatComment', () => {
+  describe('formatComment', () => {
     context('when the comment is in the one-line form', () => {
       const oneLineComment1 = ' comment ';
       const oneLineComment2 = 'comment';
@@ -85,7 +85,7 @@ describe('FormatUtils', () => {
       });
     });
   });
-  describe('::formatDateForLiquibase', () => {
+  describe('formatDateForLiquibase', () => {
     context('when passing both arguments', () => {
       it('should use the increment with the passed date', () => {
         const now = new Date();
@@ -166,7 +166,7 @@ describe('FormatUtils', () => {
       });
     });
   });
-  describe('::dateFormatForLiquibase', () => {
+  describe('dateFormatForLiquibase', () => {
     context('when passing both arguments', () => {
       it('should use the increment with the passed date', () => {
         const now = new Date();

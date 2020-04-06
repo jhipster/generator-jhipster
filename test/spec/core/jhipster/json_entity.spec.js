@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const JSONEntity = require('../../../../lib/core/jhipster/json_entity');
 
 describe('JSONEntity', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when not passing a configuration', () => {
       it('should fail', () => {
         expect(() => {
@@ -119,7 +119,7 @@ describe('JSONEntity', () => {
       });
     });
   });
-  describe('#addField', () => {
+  describe('addField', () => {
     let entity;
 
     before(() => {
@@ -147,7 +147,7 @@ describe('JSONEntity', () => {
       });
     });
   });
-  describe('#addFields', () => {
+  describe('addFields', () => {
     let entity;
 
     before(() => {
@@ -175,7 +175,7 @@ describe('JSONEntity', () => {
       });
     });
   });
-  describe('#addRelationship', () => {
+  describe('addRelationship', () => {
     let entity;
 
     before(() => {
@@ -203,7 +203,7 @@ describe('JSONEntity', () => {
       });
     });
   });
-  describe('#addRelationships', () => {
+  describe('addRelationships', () => {
     let entity;
 
     before(() => {
@@ -231,7 +231,7 @@ describe('JSONEntity', () => {
       });
     });
   });
-  describe('#setOptions', () => {
+  describe('setOptions', () => {
     context('when not passing options', () => {
       let originalJSONEntity;
       let touchedJSONEntity;

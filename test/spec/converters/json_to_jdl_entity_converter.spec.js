@@ -36,7 +36,7 @@ const {
 } = require('../../../lib/core/jhipster/binary_options');
 
 describe('JSONToJDLEntityConverter', () => {
-  describe('::convertEntitiesToJDL', () => {
+  describe('convertEntitiesToJDL', () => {
     context('when not passing entities', () => {
       it('should fail', () => {
         expect(() => convertEntitiesToJDL({})).to.throw('Entities have to be passed to be converted.');

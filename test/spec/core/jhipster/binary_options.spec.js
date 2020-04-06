@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const BinaryOptions = require('../../../../lib/core/jhipster/binary_options');
 
 describe('BinaryOptions', () => {
-  describe('::exists', () => {
+  describe('exists', () => {
     context('when checking for a valid binary option', () => {
       it('should return true', () => {
         expect(BinaryOptions.exists(BinaryOptions.Options.DTO, BinaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
@@ -35,7 +35,7 @@ describe('BinaryOptions', () => {
       });
     });
   });
-  describe('::forEach', () => {
+  describe('forEach', () => {
     context('when not passing a function', () => {
       it('should fail', () => {
         expect(() => BinaryOptions.forEach()).to.throw(

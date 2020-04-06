@@ -25,7 +25,7 @@ const RelationshipTypes = require('../../../lib/core/jhipster/relationship_types
 const JDLRelationships = require('../../../lib/core/jdl_relationships');
 
 describe('JDLRelationships', () => {
-  describe('#add', () => {
+  describe('add', () => {
     context('when passing an invalid relationship', () => {
       context('because it is nil', () => {
         it('should fail', () => {
@@ -63,7 +63,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#get', () => {
+  describe('get', () => {
     context('when passing an invalid type', () => {
       it('should fail', () => {
         expect(() => {
@@ -105,7 +105,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#getOneToOne', () => {
+  describe('getOneToOne', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
@@ -140,7 +140,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#getOneToMany', () => {
+  describe('getOneToMany', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
@@ -175,7 +175,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#getManyToOne', () => {
+  describe('getManyToOne', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
@@ -210,7 +210,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#getManyToMany', () => {
+  describe('getManyToMany', () => {
     context('when passing an invalid id', () => {
       it('should fail', () => {
         expect(() => {
@@ -246,7 +246,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#toArray', () => {
+  describe('toArray', () => {
     let relationships;
     let relationship1;
     let relationship2;
@@ -275,7 +275,7 @@ describe('JDLRelationships', () => {
       expect(array).to.deep.eq([relationship1, relationship2]);
     });
   });
-  describe('#oneToOneQuantity', () => {
+  describe('oneToOneQuantity', () => {
     context('when there is no OtO relationship', () => {
       it('should return 0', () => {
         expect(new JDLRelationships().oneToOneQuantity()).to.equal(0);
@@ -301,7 +301,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#oneToManyQuantity', () => {
+  describe('oneToManyQuantity', () => {
     context('when there is no OtM relationship', () => {
       it('should return 0', () => {
         expect(new JDLRelationships().oneToManyQuantity()).to.equal(0);
@@ -327,7 +327,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#manyToOneQuantity', () => {
+  describe('manyToOneQuantity', () => {
     context('when there is no MtO relationship', () => {
       it('should return 0', () => {
         expect(new JDLRelationships().manyToOneQuantity()).to.equal(0);
@@ -353,7 +353,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#manyToManyQuantity', () => {
+  describe('manyToManyQuantity', () => {
     context('when there is no OtO relationship', () => {
       it('should return 0', () => {
         expect(new JDLRelationships().manyToManyQuantity()).to.equal(0);
@@ -380,7 +380,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#size', () => {
+  describe('size', () => {
     let relationships;
 
     before(() => {
@@ -400,7 +400,7 @@ describe('JDLRelationships', () => {
       expect(relationships.size()).to.equal(1);
     });
   });
-  describe('#forEach', () => {
+  describe('forEach', () => {
     let jdlRelationships;
 
     before(() => {
@@ -453,7 +453,7 @@ describe('JDLRelationships', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     context('when there is no relationship', () => {
       it('should return an emptry string', () => {
         expect(new JDLRelationships().toString()).to.equal('');

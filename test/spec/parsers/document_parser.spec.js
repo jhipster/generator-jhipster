@@ -38,7 +38,7 @@ const BinaryOptions = require('../../../lib/core/jhipster/binary_options').Optio
 const BinaryOptionValues = require('../../../lib/core/jhipster/binary_options').Values;
 
 describe('DocumentParser', () => {
-  describe('::parse', () => {
+  describe('parse', () => {
     context('when passing invalid args', () => {
       context('because there is no parsedContent', () => {
         it('should fail', () => {

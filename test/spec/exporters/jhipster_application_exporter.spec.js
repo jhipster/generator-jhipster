@@ -27,7 +27,7 @@ const { MONOLITH } = require('../../../lib/core/jhipster/application_types');
 const { createJDLApplication } = require('../../../lib/core/jdl_application_factory');
 
 describe('JHipsterApplicationExporter', () => {
-  describe('::exportApplication', () => {
+  describe('exportApplication', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('should fail', () => {
@@ -284,7 +284,7 @@ describe('JHipsterApplicationExporter', () => {
       });
     });
   });
-  describe('::exportApplications', () => {
+  describe('exportApplications', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('should fail', () => {

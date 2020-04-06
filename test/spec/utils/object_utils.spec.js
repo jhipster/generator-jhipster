@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const ObjectUtils = require('../../../lib/utils/object_utils');
 
 describe('ObjectUtils', () => {
-  describe('::merge', () => {
+  describe('merge', () => {
     const object1 = {
       a: 1,
       b: 2
@@ -63,7 +63,7 @@ describe('ObjectUtils', () => {
       });
     });
   });
-  describe('::areEntitiesEqual', () => {
+  describe('areEntitiesEqual', () => {
     context('when comparing two equal objects', () => {
       context('as they are empty', () => {
         it('should return true', () => {

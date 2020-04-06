@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const JDLDeployment = require('../../../lib/core/jdl_deployment');
 
 describe('JDLDeployment', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -57,7 +57,7 @@ describe('JDLDeployment', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     context('with some default options', () => {
       let deployment;
       let args;

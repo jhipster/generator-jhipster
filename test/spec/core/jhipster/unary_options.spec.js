@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const UnaryOptions = require('../../../../lib/core/jhipster/unary_options');
 
 describe('UnaryOptions', () => {
-  describe('::exists', () => {
+  describe('exists', () => {
     context('when checking for a valid unary option', () => {
       it('should return true', () => {
         expect(UnaryOptions.exists(UnaryOptions.SKIP_CLIENT)).to.be.true;
@@ -34,7 +34,7 @@ describe('UnaryOptions', () => {
       });
     });
   });
-  describe('::forEach', () => {
+  describe('forEach', () => {
     context('when not passing a function', () => {
       it('should fail', () => {
         expect(() => UnaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);

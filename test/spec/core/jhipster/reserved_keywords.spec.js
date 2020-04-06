@@ -22,7 +22,7 @@ const { expect } = require('chai');
 const ReservedKeywords = require('../../../../lib/core/jhipster/reserved_keywords');
 
 describe('ReservedKeywords', () => {
-  describe('::isReserved', () => {
+  describe('isReserved', () => {
     context('when passing a nil or empty keyword', () => {
       it('should return false', () => {
         expect(ReservedKeywords.isReserved()).to.be.false;
@@ -56,7 +56,7 @@ describe('ReservedKeywords', () => {
       });
     });
   });
-  describe('::isReservedClassName', () => {
+  describe('isReservedClassName', () => {
     context('when passing a valid entity name', () => {
       it('should return false', () => {
         expect(ReservedKeywords.isReservedClassName('document')).to.be.false;
@@ -70,7 +70,7 @@ describe('ReservedKeywords', () => {
       });
     });
   });
-  describe('::isReservedFieldName', () => {
+  describe('isReservedFieldName', () => {
     context('when passing a valid field name', () => {
       it('should return false', () => {
         expect(ReservedKeywords.isReservedFieldName('item')).to.be.false;

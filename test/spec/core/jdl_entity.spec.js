@@ -24,7 +24,7 @@ const JDLField = require('../../../lib/core/jdl_field');
 const JDLValidation = require('../../../lib/core/jdl_validation');
 
 describe('JDLEntity', () => {
-  describe('::new', () => {
+  describe('new', () => {
     context('when not passing any argument', () => {
       it('should fail', () => {
         expect(() => {
@@ -79,7 +79,7 @@ describe('JDLEntity', () => {
       });
     });
   });
-  describe('#addField', () => {
+  describe('addField', () => {
     let entity;
 
     before(() => {
@@ -160,7 +160,7 @@ describe('JDLEntity', () => {
       });
     });
   });
-  describe('#forEachField', () => {
+  describe('forEachField', () => {
     context('when not passing a function', () => {
       let entity;
 
@@ -204,7 +204,7 @@ describe('JDLEntity', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     context('without a comment', () => {
       let entity;
       let args;

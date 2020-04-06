@@ -25,7 +25,7 @@ const { expect } = require('chai');
 const { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } = require('../../../lib/utils/file_utils');
 
 describe('FileUtils', () => {
-  describe('::doesFileExist', () => {
+  describe('doesFileExist', () => {
     context('when checking a file path', () => {
       context('with a nil file path', () => {
         it('should return false', () => {
@@ -44,7 +44,7 @@ describe('FileUtils', () => {
       });
     });
   });
-  describe('::doesDirectoryExist', () => {
+  describe('doesDirectoryExist', () => {
     context('when checking a directory path', () => {
       context('with a nil directory path', () => {
         it('return false', () => {
@@ -63,7 +63,7 @@ describe('FileUtils', () => {
       });
     });
   });
-  describe('::createFolderIfItDoesNotExist', () => {
+  describe('createFolderIfItDoesNotExist', () => {
     context('when not passing a directory', () => {
       it('should fail', () => {
         expect(() => {

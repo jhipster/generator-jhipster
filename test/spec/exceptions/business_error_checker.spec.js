@@ -46,7 +46,7 @@ const JDLValidation = require('../../../lib/core/jdl_validation');
 const logger = require('../../../lib/utils/objects/logger');
 
 describe('BusinessErrorChecker', () => {
-  describe('#checkForErrors', () => {
+  describe('checkForErrors', () => {
     let checker;
 
     context('with no passed JDL object', () => {
@@ -136,7 +136,7 @@ describe('BusinessErrorChecker', () => {
       });
     });
   });
-  describe('#checkForEntityErrors', () => {
+  describe('checkForEntityErrors', () => {
     let checker;
     let jdlObject;
     let checkForFieldErrorsStub;
@@ -248,7 +248,7 @@ describe('BusinessErrorChecker', () => {
       });
     });
   });
-  describe('#checkForFieldErrors', () => {
+  describe('checkForFieldErrors', () => {
     let checker;
     let jdlObject;
     let checkForValidationErrorsStub;
@@ -380,7 +380,7 @@ describe('BusinessErrorChecker', () => {
       });
     });
   });
-  describe('#checkForValidationErrors', () => {
+  describe('checkForValidationErrors', () => {
     let checker;
     let jdlObject;
 
@@ -415,7 +415,7 @@ describe('BusinessErrorChecker', () => {
       });
     });
   });
-  describe('#checkForRelationshipErrors', () => {
+  describe('checkForRelationshipErrors', () => {
     context('when the source entity is missing', () => {
       let checker;
 
@@ -609,7 +609,7 @@ describe('BusinessErrorChecker', () => {
       });
     });
   });
-  describe('#checkForOptionErrors', () => {
+  describe('checkForOptionErrors', () => {
     let checker;
     let jdlObject;
 

@@ -63,7 +63,7 @@ describe('JDLLinter', () => {
       });
     });
   });
-  describe('#check', () => {
+  describe('check', () => {
     context('when checking for useless entity braces', () => {
       let linter;
       let issue;

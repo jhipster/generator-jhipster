@@ -26,7 +26,7 @@ const JDLEntity = require('../../../lib/core/jdl_entity');
 const JDLExporter = require('../../../lib/exporters/jdl_exporter');
 
 describe('JDLExporter', () => {
-  describe('::exportToJDL', () => {
+  describe('exportToJDL', () => {
     context('when passing invalid parameters', () => {
       context('such as undefined', () => {
         it('should fail', () => {

@@ -27,7 +27,7 @@ const UnaryOptions = require('../../../lib/core/jhipster/unary_options');
 const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 
 describe('JDLOptions', () => {
-  describe('#addOption', () => {
+  describe('addOption', () => {
     context('when passing an invalid option', () => {
       let options;
 
@@ -87,7 +87,7 @@ describe('JDLOptions', () => {
       });
     });
   });
-  describe('#has', () => {
+  describe('has', () => {
     context('with an invalid input', () => {
       it('should return false', () => {
         expect(new JDLOptions().has(null)).to.be.false;
@@ -112,7 +112,7 @@ describe('JDLOptions', () => {
       });
     });
   });
-  describe('#size', () => {
+  describe('size', () => {
     let options;
 
     before(() => {
@@ -131,7 +131,7 @@ describe('JDLOptions', () => {
       expect(options.size()).to.equal(1);
     });
   });
-  describe('#forEach', () => {
+  describe('forEach', () => {
     let jdlOptions;
 
     before(() => {
@@ -167,7 +167,7 @@ describe('JDLOptions', () => {
       });
     });
   });
-  describe('#getOptionsForName', () => {
+  describe('getOptionsForName', () => {
     let jdlOptions;
 
     before(() => {
@@ -217,7 +217,7 @@ describe('JDLOptions', () => {
       });
     });
   });
-  describe('#toString', () => {
+  describe('toString', () => {
     const options = new JDLOptions();
 
     before(() => {
