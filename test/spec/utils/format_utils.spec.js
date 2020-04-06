@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const FormatUtils = require('../../../lib/utils/format_utils');
+const { formatDateForLiquibase, formatComment, dateFormatForLiquibase } = require('../../../lib/utils/format_utils');
 
 describe('FormatUtils', () => {
   describe('formatComment', () => {
@@ -35,31 +35,30 @@ describe('FormatUtils', () => {
 
       context(buildTestTitle(oneLineComment1), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment1)).to.equal(expectedResult1);
+          expect(formatComment(oneLineComment1)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(oneLineComment2), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment2)).to.equal(expectedResult1);
+          expect(formatComment(oneLineComment2)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(oneLineComment3), () => {
         it(`should return ${buildTestTitle(expectedResult2)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment3)).to.equal(expectedResult2);
+          expect(formatComment(oneLineComment3)).to.equal(expectedResult2);
         });
       });
       context(buildTestTitle(oneLineComment4), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment4)).to.equal(expectedResult3);
+          expect(formatComment(oneLineComment4)).to.equal(expectedResult3);
         });
       });
       context(buildTestTitle(oneLineComment5), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
-          expect(FormatUtils.formatComment(oneLineComment5)).to.equal(expectedResult3);
+          expect(formatComment(oneLineComment5)).to.equal(expectedResult3);
         });
       });
     });
-
     context('when the comment is in the multi-line form', () => {
       const multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
       const multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
@@ -70,180 +69,76 @@ describe('FormatUtils', () => {
 
       context(buildTestTitle(multiLineComment1), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
-          expect(FormatUtils.formatComment(multiLineComment1)).to.equal(expectedResult1);
+          expect(formatComment(multiLineComment1)).to.equal(expectedResult1);
         });
       });
       context(buildTestTitle(multiLineComment2), () => {
         it(`should return ${buildTestTitle(expectedResult2)}`, () => {
-          expect(FormatUtils.formatComment(multiLineComment2)).to.equal(expectedResult2);
+          expect(formatComment(multiLineComment2)).to.equal(expectedResult2);
         });
       });
       context(buildTestTitle(multiLineComment3), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
-          expect(FormatUtils.formatComment(multiLineComment3)).to.equal(expectedResult3);
+          expect(formatComment(multiLineComment3)).to.equal(expectedResult3);
         });
       });
     });
   });
   describe('formatDateForLiquibase', () => {
     context('when passing both arguments', () => {
+      let result;
+
+      before(() => {
+        result = formatDateForLiquibase({ date: new Date(Date.UTC(0, 0, 0, 0, 0, 0)), increment: 1 });
+      });
+
       it('should use the increment with the passed date', () => {
-        const now = new Date();
-        const increment = 1000042;
-        const result = FormatUtils.formatDateForLiquibase({ date: now, increment });
-        now.setMinutes(now.getMinutes() + increment);
-        const nowUtc = new Date(
-          now.getUTCFullYear(),
-          now.getUTCMonth(),
-          now.getUTCDate(),
-          now.getUTCHours(),
-          now.getUTCMinutes(),
-          now.getUTCSeconds()
-        );
-        const year = `${nowUtc.getFullYear()}`;
-        let month = `${nowUtc.getMonth() + 1}`;
-        if (month.length === 1) {
-          month = `0${month}`;
-        }
-        let day = `${nowUtc.getDate()}`;
-        if (day.length === 1) {
-          day = `0${day}`;
-        }
-        let hour = `${nowUtc.getHours()}`;
-        if (hour.length === 1) {
-          hour = `0${hour}`;
-        }
-        let minute = `${nowUtc.getMinutes()}`;
-        if (minute.length === 1) {
-          minute = `0${minute}`;
-        }
-        let second = `${nowUtc.getSeconds()}`;
-        if (second.length === 1) {
-          second = `0${second}`;
-        }
-        expect(result).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+        expect(result).to.equal('18991231000100');
       });
     });
     context('when not passing the date', () => {
-      it('does not fail', () => {
-        expect(FormatUtils.formatDateForLiquibase().length).to.equal(14);
+      it('should not fail', () => {
+        expect(formatDateForLiquibase().length).to.equal(14);
       });
     });
     context('when not passing the increment', () => {
+      let result;
+
+      before(() => {
+        result = formatDateForLiquibase({ date: new Date(Date.UTC(0, 0, 0, 0, 0, 0)) });
+      });
+
       it('should format the current time for liquibase with no increment', () => {
-        const now = new Date();
-        const result = FormatUtils.formatDateForLiquibase({ date: now });
-        const nowUtc = new Date(
-          now.getUTCFullYear(),
-          now.getUTCMonth(),
-          now.getUTCDate(),
-          now.getUTCHours(),
-          now.getUTCMinutes(),
-          now.getUTCSeconds()
-        );
-        const year = `${nowUtc.getFullYear()}`;
-        let month = `${nowUtc.getMonth() + 1}`;
-        if (month.length === 1) {
-          month = `0${month}`;
-        }
-        let day = `${nowUtc.getDate()}`;
-        if (day.length === 1) {
-          day = `0${day}`;
-        }
-        let hour = `${nowUtc.getHours()}`;
-        if (hour.length === 1) {
-          hour = `0${hour}`;
-        }
-        let minute = `${nowUtc.getMinutes()}`;
-        if (minute.length === 1) {
-          minute = `0${minute}`;
-        }
-        let second = `${nowUtc.getSeconds() % 60}`;
-        if (second.length === 1) {
-          second = `0${second}`;
-        }
-        expect(result).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+        expect(result).to.equal('18991231000000');
       });
     });
   });
   describe('dateFormatForLiquibase', () => {
     context('when passing both arguments', () => {
+      let result;
+
+      before(() => {
+        result = dateFormatForLiquibase({ date: new Date(Date.UTC(0, 0, 0, 0, 0, 0)), increment: 1 });
+      });
+
       it('should use the increment with the passed date', () => {
-        const now = new Date();
-        const increment = 1000042;
-        const result = FormatUtils.dateFormatForLiquibase({ date: now, increment });
-        now.setMinutes(now.getMinutes() + increment);
-        const nowUtc = new Date(
-          now.getUTCFullYear(),
-          now.getUTCMonth(),
-          now.getUTCDate(),
-          now.getUTCHours(),
-          now.getUTCMinutes(),
-          now.getUTCSeconds()
-        );
-        const year = `${nowUtc.getFullYear()}`;
-        let month = `${nowUtc.getMonth() + 1}`;
-        if (month.length === 1) {
-          month = `0${month}`;
-        }
-        let day = `${nowUtc.getDate()}`;
-        if (day.length === 1) {
-          day = `0${day}`;
-        }
-        let hour = `${nowUtc.getHours()}`;
-        if (hour.length === 1) {
-          hour = `0${hour}`;
-        }
-        let minute = `${nowUtc.getMinutes()}`;
-        if (minute.length === 1) {
-          minute = `0${minute}`;
-        }
-        let second = `${nowUtc.getSeconds()}`;
-        if (second.length === 1) {
-          second = `0${second}`;
-        }
-        expect(result).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+        expect(result).to.equal('18991231000100');
       });
     });
     context('when not passing the date', () => {
       it('should not fail', () => {
-        expect(FormatUtils.dateFormatForLiquibase().length).to.equal(14);
+        expect(dateFormatForLiquibase().length).to.equal(14);
       });
     });
     context('when not passing the increment', () => {
+      let result;
+
+      before(() => {
+        result = dateFormatForLiquibase({ date: new Date(Date.UTC(0, 0, 0, 0, 0, 0)) });
+      });
+
       it('should format the current time for liquibase with no increment', () => {
-        const now = new Date();
-        const result = FormatUtils.dateFormatForLiquibase({ date: now });
-        const nowUtc = new Date(
-          now.getUTCFullYear(),
-          now.getUTCMonth(),
-          now.getUTCDate(),
-          now.getUTCHours(),
-          now.getUTCMinutes(),
-          now.getUTCSeconds()
-        );
-        const year = `${nowUtc.getFullYear()}`;
-        let month = `${nowUtc.getMonth() + 1}`;
-        if (month.length === 1) {
-          month = `0${month}`;
-        }
-        let day = `${nowUtc.getDate()}`;
-        if (day.length === 1) {
-          day = `0${day}`;
-        }
-        let hour = `${nowUtc.getHours()}`;
-        if (hour.length === 1) {
-          hour = `0${hour}`;
-        }
-        let minute = `${nowUtc.getMinutes()}`;
-        if (minute.length === 1) {
-          minute = `0${minute}`;
-        }
-        let second = `${nowUtc.getSeconds() % 60}`;
-        if (second.length === 1) {
-          second = `0${second}`;
-        }
-        expect(result).to.equal(`${year}${month}${day}${hour}${minute}${second}`);
+        expect(result).to.equal('18991231000000');
       });
     });
   });
