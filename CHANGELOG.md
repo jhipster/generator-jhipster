@@ -1,3 +1,21 @@
+# Unreleased
+
+## What's new
+  - JDL:
+    - Options like `dto` or `service` can now be declared inside applications, with no change in the syntax.
+  - The `.yo-rc.json` file generation can now be skipped (by passing `skipYoRcGeneration` to the JDL importer)
+  - There won't be any thrown error if a JDL content contains an unknown option value. Instead, a message will be
+    displayed (thanks to @SudharakaP).
+
+## Bug fixes
+  - When not generating entity files (in the .jhipster folder), JHipster Core won't generate the .jhipster folder if
+    didn't already exist (thanks to @mshima).
+
+## Minor improvements
+  - Exported JSON files are now formatted as JHipster does (thanks to @mshima).
+
+---
+
 # Latest: v7.1.0
 
 ## What's new
