@@ -89,6 +89,25 @@ describe('JHipsterEntityExporter', () => {
           expect(aEntityContent).to.deep.equal(entities[0]);
         });
       });
+      context('when not exporting entities', () => {
+        let returned;
+
+        before(() => {
+          returned = JHipsterEntityExporter.exportEntities({
+            entities: [],
+            application: {
+              name: 'MyApp',
+              type: ApplicationTypes.MONOLITH
+            }
+          });
+        });
+        it('should return an empty list', () => {
+          expect(returned).to.deep.equal([]);
+        });
+        it('should not create a .jhipster folder', () => {
+          expect(FileUtils.doesDirectoryExist('.jhipster')).to.be.false;
+        });
+      });
       context('when exporting the same entity', () => {
         let entities;
         let previousChangelogDate;

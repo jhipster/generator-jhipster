@@ -75,8 +75,10 @@ describe('JDLWithApplicationsToJSONConverter', () => {
         });
       });
 
-      it('should return a map with no entity', () => {
-        expect(result.size).to.equal(0);
+      it('should return a map with no entiy', () => {
+        result.forEach(entities => {
+          expect(entities.length).to.equal(0);
+        });
       });
     });
     context('when passing a JDL object with entities', () => {

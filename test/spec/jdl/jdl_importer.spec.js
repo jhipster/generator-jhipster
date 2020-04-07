@@ -1848,5 +1848,22 @@ paginate * with infinite-scroll
         expect(fse.existsSync('.jhipster')).to.be.false;
       });
     });
+    context('when not exporting entities but only applications', () => {
+      before(() => {
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'application.jdl')], {
+          creationTimestamp: '2019-01-01'
+        });
+        importer.import();
+      });
+      after(() => {
+        fse.removeSync('.yo-rc.json');
+      });
+      it('should export the .yo-rc.json file', () => {
+        expect(fse.existsSync('.yo-rc.json')).to.be.true;
+      });
+      it('should not create the .jhipster folder', () => {
+        expect(fse.existsSync('.jhipster')).to.be.false;
+      });
+    });
   });
 });
