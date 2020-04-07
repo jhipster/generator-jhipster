@@ -47,7 +47,7 @@ describe('JDLEntity', () => {
       });
 
       it('should use the names as value', () => {
-        expect(entity.tableName).to.eq('Abc');
+        expect(entity.tableName).to.equal('Abc');
       });
     });
     context('when passing arguments', () => {
@@ -72,9 +72,9 @@ describe('JDLEntity', () => {
       });
 
       it('should create a new instance', () => {
-        expect(entity.name).to.eq(args.name);
-        expect(entity.tableName).to.eq(args.tableName);
-        expect(entity.comment).to.eq(args.comment);
+        expect(entity.name).to.equal(args.name);
+        expect(entity.tableName).to.equal(args.tableName);
+        expect(entity.comment).to.equal(args.comment);
         expect(entity.fields).to.deep.eq(args.fields);
       });
     });
@@ -218,7 +218,7 @@ describe('JDLEntity', () => {
       });
 
       it('should stringify its content', () => {
-        expect(entity.toString()).to.eq(`entity ${args.name} (${args.tableName})`);
+        expect(entity.toString()).to.equal(`entity ${args.name} (${args.tableName})`);
       });
     });
     context('with a table equal to the name (snakecase)', () => {
@@ -267,7 +267,7 @@ describe('JDLEntity', () => {
       });
 
       it('should stringify its content', () => {
-        expect(entity.toString()).to.eq(
+        expect(entity.toString()).to.equal(
           `/**
  * ${args.comment}
  */
@@ -301,7 +301,7 @@ entity ${args.name} (${args.tableName})`
       it('should stringify its content', () => {
         entity.addField(field1);
         entity.addField(field2);
-        expect(entity.toString()).to.eq(
+        expect(entity.toString()).to.equal(
           `/**
  * ${entity.comment}
  */

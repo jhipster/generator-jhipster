@@ -62,10 +62,10 @@ describe('JDLRelationship', () => {
       });
 
       it('should not create the relationship', () => {
-        expect(relationship.to).to.eq('Abc2');
-        expect(relationship.from).to.eq('Abc');
-        expect(relationship.injectedFieldInFrom).to.eq('something');
-        expect(relationship.type).to.eq(RelationshipTypes.ONE_TO_ONE);
+        expect(relationship.to).to.equal('Abc2');
+        expect(relationship.from).to.equal('Abc');
+        expect(relationship.injectedFieldInFrom).to.equal('something');
+        expect(relationship.type).to.equal(RelationshipTypes.ONE_TO_ONE);
       });
     });
   });
@@ -82,7 +82,7 @@ describe('JDLRelationship', () => {
     });
 
     it('should return an unique representation of the relationship', () => {
-      expect(relationship.getId()).to.eq(
+      expect(relationship.getId()).to.equal(
         `${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`
       );
     });
@@ -146,7 +146,7 @@ describe('JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.eq(
+        expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
 }`
@@ -168,7 +168,7 @@ describe('JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.eq(
+        expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   /**
    * ${relationship.commentInFrom}
@@ -196,7 +196,7 @@ describe('JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.eq(
+        expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   /**
    * ${relationship.commentInFrom}
@@ -220,7 +220,7 @@ describe('JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.eq(
+        expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to
   /**
@@ -244,7 +244,7 @@ describe('JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.eq(
+        expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
 }`
@@ -265,7 +265,7 @@ describe('JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.eq(
+        expect(relationship.toString()).to.equal(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{${relationship.injectedFieldInTo}}
 }`

@@ -50,8 +50,8 @@ describe('JDLBinaryOption', () => {
 
       it('creates the option', () => {
         expect(option).not.to.be.null;
-        expect(option.name).to.eq(BinaryOptions.Options.DTO);
-        expect(option.value).to.eq(BinaryOptions.Values.dto.MAPSTRUCT);
+        expect(option.name).to.equal(BinaryOptions.Options.DTO);
+        expect(option.value).to.equal(BinaryOptions.Values.dto.MAPSTRUCT);
       });
     });
     context('when passing a list of entity names and excluded names with some of them being repeated', () => {
@@ -67,11 +67,11 @@ describe('JDLBinaryOption', () => {
       });
 
       it('removes the dupes', () => {
-        expect(option.entityNames.size).to.eq(3);
+        expect(option.entityNames.size).to.equal(3);
         expect(option.entityNames.has('A')).to.be.true;
         expect(option.entityNames.has('B')).to.be.true;
         expect(option.entityNames.has('C')).to.be.true;
-        expect(option.excludedNames.size).to.eq(2);
+        expect(option.excludedNames.size).to.equal(2);
         expect(option.excludedNames.has('E')).to.be.true;
         expect(option.excludedNames.has('D')).to.be.true;
       });
@@ -117,7 +117,7 @@ describe('JDLBinaryOption', () => {
       });
 
       it('should change the set', () => {
-        expect(option.entityNames.size).to.eq(1);
+        expect(option.entityNames.size).to.equal(1);
       });
     });
     context('when passing a name that has already been added', () => {
@@ -130,7 +130,7 @@ describe('JDLBinaryOption', () => {
       });
 
       it('should not change the size', () => {
-        expect(option.entityNames.size).to.eq(1);
+        expect(option.entityNames.size).to.equal(1);
       });
     });
     context('when passing an excluded name', () => {
@@ -143,8 +143,8 @@ describe('JDLBinaryOption', () => {
       });
 
       it('should not change the sizes', () => {
-        expect(option.entityNames.size).to.eq(1);
-        expect(option.excludedNames.size).to.eq(0);
+        expect(option.entityNames.size).to.equal(1);
+        expect(option.excludedNames.size).to.equal(0);
       });
     });
   });
@@ -171,7 +171,7 @@ describe('JDLBinaryOption', () => {
       });
 
       it('should change the set', () => {
-        expect(option.excludedNames.size).to.eq(1);
+        expect(option.excludedNames.size).to.equal(1);
       });
     });
     context('when passing a name that has already been excluded', () => {
@@ -184,7 +184,7 @@ describe('JDLBinaryOption', () => {
       });
 
       it('should not change the size', () => {
-        expect(option.excludedNames.size).to.eq(1);
+        expect(option.excludedNames.size).to.equal(1);
       });
     });
     context('when passing an added name', () => {
@@ -197,7 +197,7 @@ describe('JDLBinaryOption', () => {
       });
 
       it('should not change the size', () => {
-        expect(option.entityNames.size).to.eq(1);
+        expect(option.entityNames.size).to.equal(1);
       });
     });
   });
@@ -246,21 +246,21 @@ describe('JDLBinaryOption', () => {
         name: BinaryOptions.Options.DTO,
         value: BinaryOptions.Values.dto.MAPSTRUCT
       });
-      expect(option.toString()).to.eq(`${BinaryOptions.Options.DTO} * with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
+      expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} * with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
       option.addEntityName('D');
-      expect(option.toString()).to.eq(`${BinaryOptions.Options.DTO} D with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
+      expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} D with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
       option.addEntityName('E');
       option.addEntityName('F');
-      expect(option.toString()).to.eq(
+      expect(option.toString()).to.equal(
         `${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT}`
       );
       option.excludeEntityName('A');
-      expect(option.toString()).to.eq(
+      expect(option.toString()).to.equal(
         `${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A`
       );
       option.excludeEntityName('B');
       option.excludeEntityName('C');
-      expect(option.toString()).to.eq(
+      expect(option.toString()).to.equal(
         `${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A, B, C`
       );
       option = new JDLBinaryOption({
@@ -270,7 +270,7 @@ describe('JDLBinaryOption', () => {
     });
 
     it('should stringify the option', () => {
-      expect(option.toString()).to.eq(`paginate * with ${BinaryOptions.Values.pagination.PAGINATION}`);
+      expect(option.toString()).to.equal(`paginate * with ${BinaryOptions.Values.pagination.PAGINATION}`);
     });
   });
 });

@@ -62,7 +62,12 @@ describe('JSONFileReader', () => {
       });
     });
     context('when passing a valid entity name', () => {
-      const content = JSONFileReader.readEntityJSON('test/test_files/MyEntity.json');
+      let content;
+
+      before(() => {
+        content = JSONFileReader.readEntityJSON('test/test_files/MyEntity.json');
+      });
+
       it('should read the file', () => {
         expect(content).to.deep.eq({
           relationships: [],
@@ -99,12 +104,12 @@ describe('JSONFileReader', () => {
       });
       context('with a valid entity name', () => {
         it('should return the path', () => {
-          expect(JSONFileReader.toFilePath('MyEntity')).to.eq(`.jhipster${path.sep}${'MyEntity'}.json`);
+          expect(JSONFileReader.toFilePath('MyEntity')).to.equal(`.jhipster${path.sep}${'MyEntity'}.json`);
         });
       });
       context('with a valid entity name with the first letter lowercase', () => {
         it('should return the path, with the first letter upper-cased', () => {
-          expect(JSONFileReader.toFilePath('myEntity')).to.eq(`.jhipster${path.sep}MyEntity.json`);
+          expect(JSONFileReader.toFilePath('myEntity')).to.equal(`.jhipster${path.sep}MyEntity.json`);
         });
       });
     });

@@ -95,7 +95,7 @@ describe('FieldTypes', () => {
     });
     context('when passing a valid argument without callback', () => {
       it('should return isType', () => {
-        expect(FieldTypes.getIsType('mysql')).to.eq(FieldTypes.isCommonDBType);
+        expect(FieldTypes.getIsType('mysql')).to.equal(FieldTypes.isCommonDBType);
       });
     });
     context('when passing a valid argument and callback', () => {
@@ -104,7 +104,7 @@ describe('FieldTypes', () => {
           FieldTypes.getIsType('sql', () => {
             // do nothing
           })
-        ).to.eq(FieldTypes.isCommonDBType);
+        ).to.equal(FieldTypes.isCommonDBType);
       });
     });
     context('when passing an invalid argument', () => {

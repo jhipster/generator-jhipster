@@ -172,7 +172,7 @@ describe('JDLField', () => {
       });
 
       it('should stringifiy the fields', () => {
-        expect(field.toString()).to.eq(`${args.name} ${args.type}`);
+        expect(field.toString()).to.equal(`${args.name} ${args.type}`);
       });
     });
     context('without any validation', () => {
@@ -189,7 +189,7 @@ describe('JDLField', () => {
       });
 
       it('should stringifiy the fields', () => {
-        expect(field.toString()).to.eq(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
+        expect(field.toString()).to.equal(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
       });
     });
     context('with everything', () => {
@@ -213,7 +213,7 @@ describe('JDLField', () => {
       });
 
       it('should stringifiy the field', () => {
-        expect(field.toString()).to.eq(
+        expect(field.toString()).to.equal(
           `/**\n * ${args.comment}\n */\n` +
             `${args.name} ${args.type} ${args.validations[0].name} ` +
             `${args.validations[1].name}(${args.validations[1].value})`

@@ -253,8 +253,8 @@ describe('DocumentParser', () => {
         });
 
         it('is processed', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User').to).to.eq('User');
-          expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User').to).to.eq('User');
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User').to).to.equal('User');
+          expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User').to).to.equal('User');
         });
       });
       context('with Authority entity as destination for a relationship', () => {
@@ -268,8 +268,8 @@ describe('DocumentParser', () => {
         });
 
         it('is processed', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{authority}_Authority').to).to.eq('Authority');
-          expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority').to).to.eq('Authority');
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{authority}_Authority').to).to.equal('Authority');
+          expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority').to).to.equal('Authority');
         });
       });
       context('with an invalid option', () => {
@@ -348,19 +348,19 @@ describe('DocumentParser', () => {
         });
 
         it('should accept them', () => {
-          expect(jdlObject.entities.A.fields.name.comment).to.eq('abc');
-          expect(jdlObject.entities.A.fields.thing.comment).to.eq('def');
-          expect(jdlObject.entities.A.fields.another.comment).to.eq(undefined);
+          expect(jdlObject.entities.A.fields.name.comment).to.equal('abc');
+          expect(jdlObject.entities.A.fields.thing.comment).to.equal('def');
+          expect(jdlObject.entities.A.fields.another.comment).to.equal(undefined);
         });
         context('when having both forms of comments', () => {
           it('should accept the one defined first', () => {
-            expect(jdlObject.entities.B.fields.name.comment).to.eq('xyz');
+            expect(jdlObject.entities.B.fields.name.comment).to.equal('xyz');
           });
         });
         context('when using commas', () => {
           it('should assign the comment to the next field', () => {
             expect(jdlObject.entities.C.fields.name.comment).to.be.undefined;
-            expect(jdlObject.entities.C.fields.thing.comment).to.eq('abc');
+            expect(jdlObject.entities.C.fields.thing.comment).to.equal('abc');
           });
         });
       });
@@ -385,7 +385,7 @@ describe('DocumentParser', () => {
         });
         context('checking the options', () => {
           it('should parse them', () => {
-            expect(options.length).to.eq(7);
+            expect(options.length).to.equal(7);
             expect(options[0].name).to.equal('skipClient');
             expect(options[1].name).to.equal('skipServer');
             expect(options[2].name).to.equal('dto');
@@ -474,7 +474,7 @@ describe('DocumentParser', () => {
               parsedContent: input
             });
           } catch (error) {
-            expect(error.name).to.eq('IllegalOptionException');
+            expect(error.name).to.equal('IllegalOptionException');
           }
         });
       });

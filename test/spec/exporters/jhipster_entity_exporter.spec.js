@@ -166,7 +166,7 @@ describe('JHipsterEntityExporter', () => {
           ]);
         });
         it('should export it with same changelogDate', () => {
-          expect(newChangelogDate).to.eq(previousChangelogDate);
+          expect(newChangelogDate).to.equal(previousChangelogDate);
         });
 
         after(() => {

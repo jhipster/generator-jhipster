@@ -51,9 +51,9 @@ describe('JDLDeployment', () => {
       });
 
       it('should create a new instance', () => {
-        expect(deployment.deploymentType).to.eq(args.deploymentType);
-        expect(deployment.appsFolders).to.eq(args.appsFolders);
-        expect(deployment.dockerRepositoryName).to.eq(args.dockerRepositoryName);
+        expect(deployment.deploymentType).to.equal(args.deploymentType);
+        expect(deployment.appsFolders).to.equal(args.appsFolders);
+        expect(deployment.dockerRepositoryName).to.equal(args.dockerRepositoryName);
       });
     });
   });

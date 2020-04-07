@@ -59,7 +59,7 @@ describe('JDLRelationships', () => {
       });
 
       it('succeeds', () => {
-        expect(relationships.size()).to.eq(2);
+        expect(relationships.size()).to.equal(2);
       });
     });
   });
@@ -519,7 +519,7 @@ relationship ${oneToManyRelationship.type} {
       });
 
       it('should use the new string form', () => {
-        expect(relationships.toString()).to.eq(`relationship ${oneToOneRelationship1.type} {
+        expect(relationships.toString()).to.equal(`relationship ${oneToOneRelationship1.type} {
   ${oneToOneRelationship1.from}{${oneToOneRelationship1.injectedFieldInFrom}} to ${oneToOneRelationship1.to}{${oneToOneRelationship1.injectedFieldInTo}},
   ${oneToOneRelationship2.from}{${oneToOneRelationship2.injectedFieldInFrom}} to ${oneToOneRelationship2.to}{${oneToOneRelationship2.injectedFieldInTo}}
 }`);

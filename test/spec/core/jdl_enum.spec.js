@@ -70,7 +70,7 @@ describe('JDLEnum', () => {
       });
 
       it('should stringify the enum', () => {
-        expect(jdlEnum.toString()).to.eq(
+        expect(jdlEnum.toString()).to.equal(
           `/**
  * ${jdlEnum.comment}
  */

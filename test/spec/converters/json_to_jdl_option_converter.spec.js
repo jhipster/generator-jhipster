@@ -72,27 +72,3 @@ describe('JSONToJDLOptionConverter', () => {
     });
   });
 });
-
-/*
-    context('when parsing app config file to JDL', () => {
-      let jdlObject;
-
-      before(() => {
-        const yoRcJson = readJsonYoFile();
-        jdlObject = parseServerOptions(yoRcJson['generator-jhipster']);
-      });
-
-      it('parses server options', () => {
-        expect(
-          jdlObject
-            .getOptions()
-            .filter(option => option.name === UnaryOptions.SKIP_CLIENT && option.entityNames.has('*')).length
-        ).to.eq(1);
-        expect(
-          jdlObject
-            .getOptions()
-            .filter(option => option.name === UnaryOptions.SKIP_SERVER && option.entityNames.has('*')).length
-        ).to.eq(1);
-      });
-    });
- */

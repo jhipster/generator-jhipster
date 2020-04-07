@@ -32,8 +32,8 @@ describe('JDLValidation', () => {
       });
 
       it("should default on the 'required' validation", () => {
-        expect(validation.name).to.eq('required');
-        expect(validation.value).to.eq('');
+        expect(validation.name).to.equal('required');
+        expect(validation.value).to.equal('');
       });
     });
     context('when passing arguments', () => {
@@ -47,8 +47,8 @@ describe('JDLValidation', () => {
       });
 
       it('should use them', () => {
-        expect(validation.name).to.eq('min');
-        expect(validation.value).to.eq(42);
+        expect(validation.name).to.equal('min');
+        expect(validation.value).to.equal(42);
       });
     });
   });
@@ -61,7 +61,7 @@ describe('JDLValidation', () => {
       });
 
       it('should stringifiy its content', () => {
-        expect(validation.toString()).to.eq('required');
+        expect(validation.toString()).to.equal('required');
       });
     });
     context('with a value', () => {
@@ -77,7 +77,7 @@ describe('JDLValidation', () => {
       });
 
       it('should stringifiy its content', () => {
-        expect(validation.toString()).to.eq(`${args.name}(${args.value})`);
+        expect(validation.toString()).to.equal(`${args.name}(${args.value})`);
       });
     });
     context('when exporting a regexp pattern', () => {

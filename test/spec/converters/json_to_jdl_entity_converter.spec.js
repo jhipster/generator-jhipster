@@ -102,7 +102,7 @@ describe('JSONToJDLEntityConverter', () => {
               .getOptions()
               .filter(option => option.name === DTO && option.value === MAPSTRUCT && option.entityNames.has('Employee'))
               .length
-          ).to.eq(1);
+          ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
@@ -112,7 +112,7 @@ describe('JSONToJDLEntityConverter', () => {
                   option.value === pagination['INFINITE-SCROLL'] &&
                   option.entityNames.has('Employee')
               ).length
-          ).to.eq(1);
+          ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
@@ -120,7 +120,7 @@ describe('JSONToJDLEntityConverter', () => {
                 option =>
                   option.name === SERVICE && option.value === SERVICE_CLASS && option.entityNames.has('Employee')
               ).length
-          ).to.eq(1);
+          ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
@@ -128,7 +128,7 @@ describe('JSONToJDLEntityConverter', () => {
                 option =>
                   option.name === SEARCH && option.value === ELASTIC_SEARCH && option.entityNames.has('Employee')
               ).length
-          ).to.eq(1);
+          ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
@@ -138,7 +138,7 @@ describe('JSONToJDLEntityConverter', () => {
                   option.value === 'mymicroservice' &&
                   option.entityNames.has('Employee')
               ).length
-          ).to.eq(1);
+          ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
@@ -146,18 +146,18 @@ describe('JSONToJDLEntityConverter', () => {
                 option =>
                   option.name === ANGULAR_SUFFIX && option.value === 'myentities' && option.entityNames.has('Employee')
               ).length
-          ).to.eq(1);
+          ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
               .filter(option => option.name === UnaryOptions.NO_FLUENT_METHOD && option.entityNames.has('Employee'))
               .length
-          ).to.eq(1);
+          ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
               .filter(option => option.name === UnaryOptions.FILTER && option.entityNames.has('Employee')).length
-          ).to.eq(1);
+          ).to.equal(1);
           expect(
             jdlObject
               .getOptions()
@@ -192,7 +192,7 @@ describe('JSONToJDLEntityConverter', () => {
           const relationship = jdlObject.relationships.getOneToMany(
             'OneToMany_Department{employee}_Employee{department(foo)}'
           );
-          expect(relationship.commentInFrom).to.eq('A relationship');
+          expect(relationship.commentInFrom).to.equal('A relationship');
           expect(relationship.commentInTo).to.equal('Another side of the same relationship');
         });
         it('should parse comments in relationships for owned', () => {
@@ -205,7 +205,7 @@ describe('JSONToJDLEntityConverter', () => {
             'OneToMany_Department{employee}_Employee{department(foo)}'
           );
           expect(relationship.commentInFrom).to.equal('A relationship');
-          expect(relationship.commentInTo).to.eq('Another side of the same relationship');
+          expect(relationship.commentInTo).to.equal('Another side of the same relationship');
         });
         it('should parse required relationships in owner', () => {
           const relationship = jdlObject.relationships.getOneToMany(

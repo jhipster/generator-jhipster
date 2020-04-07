@@ -239,7 +239,7 @@ describe('ValidatedJDLOptions', () => {
     });
 
     it('stringifies the options', () => {
-      expect(options.toString()).to.eq('skipClient A, B, C, J except M, N, O\nskipServer D');
+      expect(options.toString()).to.equal('skipClient A, B, C, J except M, N, O\nskipServer D');
     });
   });
 });
