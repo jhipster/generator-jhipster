@@ -1,9 +1,10 @@
-# Unreleased
+# Latest: v7.2.0
 
 ## What's new
   - JDL:
     - Options like `dto` or `service` can now be declared inside applications, with no change in the syntax.
-  - The `.yo-rc.json` file generation can now be skipped (by passing `skipYoRcGeneration` to the JDL importer)
+  - The `.yo-rc.json` file generation can now be skipped (by passing `skipYoRcGeneration` to the JDL importer, 
+    thanks to @mshima).
   - There won't be any thrown error if a JDL content contains an unknown option value. Instead, a message will be
     displayed (thanks to @SudharakaP).
 
@@ -16,7 +17,7 @@
 
 ---
 
-# Latest: v7.1.0
+# v7.1.0
 
 ## What's new
   - `Authority` is now allowed as a special relationship source/destination, just like `User` (thanks to @xetys for
