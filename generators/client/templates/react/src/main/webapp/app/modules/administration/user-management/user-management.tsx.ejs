@@ -185,7 +185,7 @@ export const UserManagement = (props: IUserManagementProps) => {
         </tbody>
       </Table>
       <%_ if (databaseType !== 'cassandra') { _%>
-        { props.totalItems && props.totalItems !== 0 ? (<div className={ users && users.length > 0 ? '' : 'd-none' }>
+        { props.totalItems ? (<div className={ users && users.length > 0 ? '' : 'd-none' }>
           <Row className="justify-content-center">
             <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
           </Row>

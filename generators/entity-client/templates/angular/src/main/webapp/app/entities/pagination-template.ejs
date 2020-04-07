@@ -18,7 +18,6 @@
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     eventSubscriber?: Subscription;
-    queryParamMapObs?: Subscription;
     <%_ if (searchEngine === 'elasticsearch') { _%>
     currentSearch: string;
     <%_ } _%>
@@ -93,7 +92,7 @@
     }
 
     handleBackNavigation(): void {
-        this.queryParamMapObs = this.activatedRoute.queryParamMap.subscribe((params: ParamMap) => {
+        this.activatedRoute.queryParamMap.subscribe((params: ParamMap) => {
             const prevPage = params.get('page');
             const prevSort = params.get('sort');
             const prevSortSplit = prevSort?.split(',');

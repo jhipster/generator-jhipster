@@ -160,7 +160,7 @@ export const AuditsPage = (props: IAuditsPageProps) => {
           <Translate contentKey="audits.notFound">No audit found</Translate>
         </div>
       )}
-      { props.totalItems && props.totalItems !== 0 ? (<div className={audits && audits.length > 0 ? '' : 'd-none'}>
+      { props.totalItems ? (<div className={audits && audits.length > 0 ? '' : 'd-none'}>
         <Row className="justify-content-center">
           <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} i18nEnabled />
         </Row>
