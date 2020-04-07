@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const ObjectUtils = require('../../../lib/utils/object_utils');
+const { areEntitiesEqual, merge } = require('../../../lib/utils/object_utils');
 
 describe('ObjectUtils', () => {
   describe('merge', () => {
@@ -27,7 +27,7 @@ describe('ObjectUtils', () => {
       let merged;
 
       before(() => {
-        merged = ObjectUtils.merge(null, { a: 1 });
+        merged = merge(null, { a: 1 });
       });
 
       it('should return the second one', () => {
@@ -38,7 +38,7 @@ describe('ObjectUtils', () => {
       let merged;
 
       before(() => {
-        merged = ObjectUtils.merge({}, { a: 1 });
+        merged = merge({}, { a: 1 });
       });
 
       it('should return the first one', () => {
@@ -57,7 +57,7 @@ describe('ObjectUtils', () => {
           b: 3,
           c: 4
         };
-        merged = ObjectUtils.merge(object1, object2);
+        merged = merge(object1, object2);
       });
 
       it('should merge them', () => {
@@ -79,7 +79,7 @@ describe('ObjectUtils', () => {
             fields: [],
             relationships: []
           };
-          result = ObjectUtils.areEntitiesEqual(firstEmptyObject, secondEmptyObject);
+          result = areEntitiesEqual(firstEmptyObject, secondEmptyObject);
         });
 
         it('should return true', () => {
@@ -116,7 +116,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return true', () => {
@@ -155,7 +155,7 @@ describe('ObjectUtils', () => {
             ],
             relationships: []
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return true', () => {
@@ -210,7 +210,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return true', () => {
@@ -232,7 +232,7 @@ describe('ObjectUtils', () => {
             fields: [],
             relationships: []
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return true', () => {
@@ -262,7 +262,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return false', () => {
@@ -299,7 +299,7 @@ describe('ObjectUtils', () => {
             ],
             relationships: []
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return false', () => {
@@ -346,7 +346,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return false', () => {
@@ -384,7 +384,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return false', () => {
@@ -432,7 +432,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return false', () => {
@@ -483,7 +483,7 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return false', () => {
@@ -530,7 +530,7 @@ describe('ObjectUtils', () => {
                 }
               ]
             };
-            result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+            result = areEntitiesEqual(firstObject, secondObject);
           });
 
           it('should return false', () => {
@@ -567,7 +567,7 @@ describe('ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
         context('when not having the same pagination option value', () => {
@@ -579,7 +579,7 @@ describe('ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
         context('when not having the same service option value', () => {
@@ -591,7 +591,7 @@ describe('ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
         context('when not having the same search engine', () => {
@@ -603,7 +603,7 @@ describe('ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
           });
         });
         context('when not having the same jpaMetamodelFiltering option value', () => {
@@ -616,7 +616,7 @@ describe('ObjectUtils', () => {
             });
 
             it('should return true', () => {
-              expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
+              expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
             });
           });
           context('when they have opposite values', () => {
@@ -628,7 +628,7 @@ describe('ObjectUtils', () => {
             });
 
             it('should return false', () => {
-              expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+              expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
             });
           });
         });
@@ -689,7 +689,7 @@ describe('ObjectUtils', () => {
             pagination: 'no',
             service: 'no'
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return false', () => {
@@ -752,7 +752,7 @@ describe('ObjectUtils', () => {
             pagination: 'no',
             service: 'no'
           };
-          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          result = areEntitiesEqual(firstObject, secondObject);
         });
 
         it('should return false', () => {
@@ -820,7 +820,7 @@ describe('ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
         });
       });
     });
