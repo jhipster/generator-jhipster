@@ -67,7 +67,7 @@ describe('SetUtils', () => {
   describe('join', () => {
     context('when not passing a set', () => {
       it('should fail', () => {
-        expect(() => join()).to.throw('A Set must be passed so as to join elements.');
+        expect(() => join()).to.throw(/^A Set must be passed so as to join elements\.$/);
       });
     });
     context('when not passing the separator', () => {
