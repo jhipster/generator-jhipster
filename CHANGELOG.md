@@ -1,4 +1,12 @@
-# Latest: v7.2.0
+# Latest: v7.2.1
+
+## Bug fix:
+  - Fixed bug when parsing a JDL content with no entity     
+    - The failing cases happened when parsing applications without entities, and it failed because we wanted to export no entities.
+
+___
+
+# v7.2.0
 
 ## What's new
   - JDL:
