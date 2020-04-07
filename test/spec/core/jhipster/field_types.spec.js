@@ -31,10 +31,10 @@ describe('FieldTypes', () => {
       it('should fail', () => {
         expect(() => {
           FieldTypes.isCommonDBType(null);
-        }).to.throw('The passed type must not be nil.');
+        }).to.throw(/^The passed type must not be nil\.$/);
         expect(() => {
           FieldTypes.isCommonDBType('');
-        }).to.throw('The passed type must not be nil.');
+        }).to.throw(/^The passed type must not be nil\.$/);
       });
     });
     context('when passing a false type', () => {
@@ -58,10 +58,10 @@ describe('FieldTypes', () => {
       it('should fail', () => {
         expect(() => {
           FieldTypes.isCassandraType();
-        }).to.throw('The passed type must not be nil.');
+        }).to.throw(/^The passed type must not be nil\.$/);
         expect(() => {
           FieldTypes.isCassandraType('');
-        }).to.throw('The passed type must not be nil.');
+        }).to.throw(/^The passed type must not be nil\.$/);
       });
     });
     context('when passing a false type', () => {
@@ -85,12 +85,12 @@ describe('FieldTypes', () => {
       it('should fail', () => {
         expect(() => {
           FieldTypes.getIsType(null);
-        }).to.throw('The passed type must not be nil.');
+        }).to.throw(/^The passed type must not be nil\.$/);
         expect(() => {
           FieldTypes.getIsType(null, () => {
             // do nothing
           });
-        }).to.throw('The passed type must not be nil.');
+        }).to.throw(/^The passed type must not be nil\.$/);
       });
     });
     context('when passing a valid argument without callback', () => {
@@ -130,13 +130,13 @@ describe('FieldTypes', () => {
       it('should fail', () => {
         expect(() => {
           FieldTypes.hasValidation();
-        }).to.throw('The passed type and value must not be nil.');
+        }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
           FieldTypes.hasValidation(null, Validations.MAXLENGTH);
-        }).to.throw('The passed type and value must not be nil.');
+        }).to.throw(/^The passed type and value must not be nil\.$/);
         expect(() => {
           FieldTypes.hasValidation(FieldTypes.CassandraTypes.BIG_DECIMAL);
-        }).to.throw('The passed type and value must not be nil.');
+        }).to.throw(/^The passed type and value must not be nil\.$/);
       });
     });
     context('when passing a false argument', () => {

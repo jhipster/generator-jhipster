@@ -27,14 +27,14 @@ describe('FileReader', () => {
       it('should fail', () => {
         expect(() => {
           FileReader.readFile(null);
-        }).to.throw('The passed file must not be nil to be read.');
+        }).to.throw(/^The passed file must not be nil to be read\.$/);
       });
     });
     context('when passing a directory', () => {
       it('should fail', () => {
         expect(() => {
           FileReader.readFile('.');
-        }).to.throw("The passed file '.' must exist and must not be a directory to be read.");
+        }).to.throw(/^The passed file '.' must exist and must not be a directory to be read\.$/);
       });
     });
     context('when passing a valid text file', () => {
@@ -59,14 +59,14 @@ describe('FileReader', () => {
       it('should fail', () => {
         expect(() => {
           FileReader.readFiles(null);
-        }).to.throw('The passed files must not be nil.');
+        }).to.throw(/^The passed files must not be nil\.$/);
       });
     });
     context('when passing a directory among the files', () => {
       it('should fail', () => {
         expect(() => {
           FileReader.readFiles(['.']);
-        }).to.throw("The passed file '.' must exist and must not be a directory to be read.");
+        }).to.throw(/^The passed file '.' must exist and must not be a directory to be read\.$/);
       });
     });
     context('when passing valid text files', () => {

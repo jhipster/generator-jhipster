@@ -68,7 +68,7 @@ describe('FileUtils', () => {
       it('should fail', () => {
         expect(() => {
           createFolderIfItDoesNotExist();
-        }).to.throw('A directory must be passed to be created.');
+        }).to.throw(/^A directory must be passed to be created\.$/);
       });
     });
     context('when passing a directory that does not yet exist', () => {
@@ -88,7 +88,7 @@ describe('FileUtils', () => {
       it('should fail', () => {
         expect(() => {
           createFolderIfItDoesNotExist('./package.json');
-        }).to.throw("The directory to create './package.json' is a file.");
+        }).to.throw(/^The directory to create '\.\/package.json' is a file\.$/);
       });
     });
     context('when passing a directory that exists', () => {

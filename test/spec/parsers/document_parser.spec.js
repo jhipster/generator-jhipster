@@ -44,7 +44,7 @@ describe('DocumentParser', () => {
         it('should fail', () => {
           expect(() => {
             DocumentParser.parseFromConfigurationObject({});
-          }).to.throw('The parsed JDL content must be passed.');
+          }).to.throw(/^The parsed JDL content must be passed\.$/);
         });
       });
     });

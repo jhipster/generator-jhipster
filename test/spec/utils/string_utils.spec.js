@@ -77,7 +77,7 @@ describe('StringUtils', () => {
       it('should fail', () => {
         expect(() => {
           upperFirst();
-        }).to.throw('The passed string cannot be nil.');
+        }).to.throw(/^The passed string cannot be nil\.$/);
       });
     });
     context('when passing an empty string', () => {

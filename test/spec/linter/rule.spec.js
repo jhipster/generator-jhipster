@@ -27,14 +27,14 @@ describe('Rule', () => {
       it('should fail', () => {
         expect(() => {
           new Rule();
-        }).to.throw('A rule must at least have a name.');
+        }).to.throw(/^A rule must at least have a name\.$/);
       });
     });
     context('when not passing any name', () => {
       it('should fail', () => {
         expect(() => {
           new Rule({});
-        }).to.throw('A rule must at least have a name.');
+        }).to.throw(/^A rule must at least have a name\.$/);
       });
     });
     context('when not passing a level', () => {
@@ -62,7 +62,7 @@ describe('Rule', () => {
       it('should fail', () => {
         expect(() => {
           rule.compareTo();
-        }).to.throw('A rule has to be passed so as to be compared.');
+        }).to.throw(/^A rule has to be passed so as to be compared\.$/);
       });
     });
     context('when comparing two equal rules', () => {

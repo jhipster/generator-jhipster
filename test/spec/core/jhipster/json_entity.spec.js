@@ -27,14 +27,14 @@ describe('JSONEntity', () => {
       it('should fail', () => {
         expect(() => {
           new JSONEntity();
-        }).to.throw('At least an entity name must be passed');
+        }).to.throw(/^At least an entity name must be passed\.$/);
       });
     });
     context('when not passing an entity name', () => {
       it('should fail', () => {
         expect(() => {
           new JSONEntity({});
-        }).to.throw('At least an entity name must be passed');
+        }).to.throw(/^At least an entity name must be passed\.$/);
       });
     });
     context('when only passing an entity name', () => {

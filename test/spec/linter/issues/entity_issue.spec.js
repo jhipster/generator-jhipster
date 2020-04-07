@@ -26,21 +26,21 @@ describe('EntityIssue', () => {
       it('should fail', () => {
         expect(() => {
           new EntityIssue();
-        }).to.throw('An issue must at least have a rule name.');
+        }).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
     context('when not passing a rule name', () => {
       it('should fail', () => {
         expect(() => {
           new EntityIssue({});
-        }).to.throw('An issue must at least have a rule name.');
+        }).to.throw(/^An issue must at least have a rule name\.$/);
       });
     });
     context('when not passing an entity name', () => {
       it('should fail', () => {
         expect(() => {
           new EntityIssue({ ruleName: 'Toto' });
-        }).to.throw('An entity name must be passed.');
+        }).to.throw(/^An entity name must be passed\.$/);
       });
     });
   });

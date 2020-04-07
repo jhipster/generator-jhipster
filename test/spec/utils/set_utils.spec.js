@@ -24,7 +24,7 @@ describe('SetUtils', () => {
   describe('addAll', () => {
     context('when not passing a set', () => {
       it('should fail', () => {
-        expect(() => addAll()).to.throw('A Set must be passed so as to insert elements.');
+        expect(() => addAll()).to.throw(/^A Set must be passed so as to insert elements\.$/);
       });
     });
     context('when not passing elements', () => {

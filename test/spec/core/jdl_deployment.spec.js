@@ -27,14 +27,14 @@ describe('JDLDeployment', () => {
       it('should fail', () => {
         expect(() => {
           new JDLDeployment();
-        }).to.throw('The deploymentType is mandatory to create a deployment.');
+        }).to.throw(/^The deploymentType is mandatory to create a deployment\.$/);
       });
     });
     context('when not passing the deploymentType', () => {
       it('should fail', () => {
         expect(() => {
           new JDLDeployment({ deploymentType: null });
-        }).to.throw('The deploymentType is mandatory to create a deployment.');
+        }).to.throw(/^The deploymentType is mandatory to create a deployment\.$/);
       });
     });
     context('when passing arguments', () => {

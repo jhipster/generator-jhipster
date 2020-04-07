@@ -32,7 +32,7 @@ describe('JDLExporter', () => {
         it('should fail', () => {
           expect(() => {
             JDLExporter.exportToJDL();
-          }).to.throw('A JDLObject has to be passed to be exported.');
+          }).to.throw(/^A JDLObject has to be passed to be exported\.$/);
         });
       });
     });

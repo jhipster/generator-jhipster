@@ -32,7 +32,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 applicationType foo
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
       context('an invalid value', () => {
@@ -45,7 +45,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   applicationType 666
                 }
               }`)
-            ).to.throw('A name is expected, but found: "666"');
+            ).to.throw(new RegExp('^A name is expected, but found: "666"'));
           });
         });
         context('such as an invalid character', () => {
@@ -57,7 +57,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   applicationType -
                 }
               }`)
-            ).to.throw('unexpected character: ->-<-');
+            ).to.throw(new RegExp('^unexpected character: ->-<-'));
           });
         });
         context('such as a capitalized letters', () => {
@@ -69,7 +69,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   applicationType FOO
                 }
               }`)
-            ).to.throw('The applicationType property name must match: /^[a-z]+$/');
+            ).to.throw(new RegExp('^The applicationType property name must match: '));
           });
         });
 
@@ -82,7 +82,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   applicationType foo.bar
                 }
               }`)
-            ).to.throw('A single name is expected, but found a fully qualified name');
+            ).to.throw(new RegExp('^A single name is expected, but found a fully qualified name'));
           });
         });
       });
@@ -98,7 +98,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 authenticationType jwt
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -110,7 +110,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 authenticationType jwt42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -124,7 +124,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 authenticationType "jwt"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""jwt""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""jwt""'));
           });
         });
         context('such as numbers', () => {
@@ -136,7 +136,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 authenticationType 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -152,7 +152,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 baseName mySuperApp
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -164,7 +164,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 baseName mySuperApp42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -178,7 +178,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 baseName "mySuperApp"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""mySuperApp""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""mySuperApp""'));
           });
         });
         context('such as numbers', () => {
@@ -190,7 +190,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 baseName 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -206,7 +206,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 buildTool maven
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -218,7 +218,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 buildTool maven42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -232,7 +232,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 buildTool "maven"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""maven""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""maven""'));
           });
         });
         context('such as numbers', () => {
@@ -244,7 +244,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 buildTool 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -260,7 +260,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 cacheProvider ehcache
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -272,7 +272,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 cacheProvider ehcache42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -286,7 +286,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 cacheProvider "ehcache"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""ehcache""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""ehcache""'));
           });
         });
         context('such as numbers', () => {
@@ -298,7 +298,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 cacheProvider 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -314,7 +314,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 clientFramework angular
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -326,7 +326,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 clientFramework angular42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -340,7 +340,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 clientFramework "react"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""react""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""react""'));
           });
         });
         context('such as numbers', () => {
@@ -352,7 +352,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 clientFramework 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -368,7 +368,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 clientPackageManager yarn
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -380,7 +380,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 clientPackageManager yarn42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -394,7 +394,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 clientPackageManager "yarn"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""yarn""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""yarn""'));
           });
         });
         context('such as numbers', () => {
@@ -406,7 +406,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 clientPackageManager 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -422,7 +422,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 databaseType sql
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -434,7 +434,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 databaseType sql42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -448,7 +448,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 databaseType "sql"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""sql""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""sql""'));
           });
         });
         context('such as numbers', () => {
@@ -460,7 +460,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 databaseType 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -476,7 +476,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 devDatabaseType postgresql
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -488,7 +488,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 devDatabaseType postgresql42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -502,7 +502,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 devDatabaseType "postgresql"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""postgresql""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""postgresql""'));
           });
         });
         context('such as numbers', () => {
@@ -514,7 +514,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 devDatabaseType 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -529,7 +529,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 enableHibernateCache true
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -542,7 +542,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 enableHibernateCache 666
               }
             }`)
-          ).to.throw('A boolean literal is expected, but found: "666"');
+          ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
         });
       });
     });
@@ -556,7 +556,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 enableSwaggerCodegen true
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -569,7 +569,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 enableSwaggerCodegen 666
               }
             }`)
-          ).to.throw('A boolean literal is expected, but found: "666"');
+          ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
         });
       });
     });
@@ -583,7 +583,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 enableTranslation true
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -596,7 +596,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 enableTranslation 666
               }
             }`)
-          ).to.throw('A boolean literal is expected, but found: "666"');
+          ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
         });
       });
     });
@@ -610,7 +610,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 frontendBuilder fooBar
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
       context('an invalid value', () => {
@@ -623,7 +623,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   frontendBuilder 666
                 }
               }`)
-            ).to.throw('A name is expected, but found: "666"');
+            ).to.throw(new RegExp('^A name is expected, but found: "666"'));
           });
         });
         context('such as an invalid character', () => {
@@ -635,7 +635,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   frontendBuilder -
                 }
               }`)
-            ).to.throw('unexpected character: ->-<-');
+            ).to.throw(new RegExp('^unexpected character: ->-<-'));
           });
         });
 
@@ -648,7 +648,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   frontendBuilder foo.bar
                 }
               }`)
-            ).to.throw('A single name is expected, but found a fully qualified name');
+            ).to.throw(new RegExp('^A single name is expected, but found a fully qualified name'));
           });
         });
       });
@@ -663,7 +663,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 jhipsterVersion "5.0.0"
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -676,7 +676,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 jhipsterVersion abc
               }
             }`)
-          ).to.throw('A string literal is expected, but found: "abc"\n\tat line: 4, column: 33');
+          ).to.throw(new RegExp('^A string literal is expected, but found: "abc"\\n\\tat line: 4, column: 33'));
         });
       });
     });
@@ -690,7 +690,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 jhiPrefix abcD42-_f
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
       context('an invalid value', () => {
@@ -715,7 +715,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 jhiPrefix -abc
               }
             }`)
-            ).to.throw('unexpected character: ->-<-');
+            ).to.throw(new RegExp('^unexpected character: ->-<-'));
           });
         });
       });
@@ -730,7 +730,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 languages [ab,bc, cd, zh-cn]
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -756,7 +756,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 languages true
               }
             }`)
-            ).to.throw('An array of names is expected, but found: "true"');
+            ).to.throw(new RegExp('^An array of names is expected, but found: "true"'));
           });
         });
       });
@@ -772,7 +772,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 messageBroker ehcache
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -784,7 +784,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 messageBroker ehcache42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -798,7 +798,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 messageBroker "ehcache"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""ehcache""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""ehcache""'));
           });
         });
         context('such as numbers', () => {
@@ -810,7 +810,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 messageBroker 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -825,7 +825,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 nativeLanguage foo
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
       context('an invalid value', () => {
@@ -838,7 +838,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   nativeLanguage 666
                 }
               }`)
-            ).to.throw('A name is expected, but found: "666"');
+            ).to.throw(new RegExp('^A name is expected, but found: "666"'));
           });
         });
         context('such as an invalid character', () => {
@@ -850,7 +850,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   nativeLanguage -
                 }
               }`)
-            ).to.throw('unexpected character: ->-<-');
+            ).to.throw(new RegExp('^unexpected character: ->-<-'));
           });
         });
         context('such as a capitalized letters', () => {
@@ -862,7 +862,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   nativeLanguage FOO
                 }
               }`)
-            ).to.throw('The nativeLanguage property name must match: /^[a-z]+(-[A-Za-z0-9]+)*$/');
+            ).to.throw(new RegExp('^The nativeLanguage property name must match: '));
           });
         });
 
@@ -875,7 +875,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   nativeLanguage foo.bar
                 }
               }`)
-            ).to.throw('A single name is expected, but found a fully qualified name');
+            ).to.throw(new RegExp('^A single name is expected, but found a fully qualified name'));
           });
         });
       });
@@ -890,7 +890,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 packageName foo
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
       context('an invalid value', () => {
@@ -903,7 +903,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   packageName -
                 }
               }`)
-            ).to.throw('unexpected character: ->-<-');
+            ).to.throw(new RegExp('^unexpected character: ->-<-'));
           });
         });
         context('such as a capitalized letters', () => {
@@ -915,7 +915,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   packageName FOO
                 }
               }`)
-            ).to.throw('The packageName property name must match: /^[a-z_][a-z0-9_]*$/');
+            ).to.throw(new RegExp('^The packageName property name must match: '));
           });
         });
       });
@@ -931,7 +931,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 prodDatabaseType ehcache
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -943,7 +943,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 prodDatabaseType ehcache42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -957,7 +957,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 prodDatabaseType "ehcache"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""ehcache""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""ehcache""'));
           });
         });
         context('such as numbers', () => {
@@ -969,7 +969,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 prodDatabaseType 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -985,7 +985,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 searchEngine ehcache
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -997,7 +997,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 searchEngine ehcache42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -1011,7 +1011,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 searchEngine "ehcache"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""ehcache""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""ehcache""'));
           });
         });
         context('such as numbers', () => {
@@ -1023,7 +1023,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 searchEngine 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -1038,7 +1038,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 serverPort 6666
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -1052,7 +1052,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                   serverPort abc
                 }
               }`)
-            ).to.throw('An integer literal is expected, but found: "abc"');
+            ).to.throw(new RegExp('^An integer literal is expected, but found: "abc"'));
           });
         });
       });
@@ -1068,7 +1068,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 serviceDiscoveryType ehcache
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -1082,7 +1082,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 serviceDiscoveryType "ehcache"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""ehcache""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""ehcache""'));
           });
         });
         context('with both letters and numbers', () => {
@@ -1094,7 +1094,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 serviceDiscoveryType eHcache42
               }
             }`)
-            ).to.throw('The serviceDiscoveryType property name must match: /^[a-z]+$/');
+            ).to.throw(new RegExp('^The serviceDiscoveryType property name must match: '));
           });
         });
         context('such as numbers', () => {
@@ -1106,7 +1106,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 serviceDiscoveryType 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -1121,7 +1121,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 skipClient true
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -1134,7 +1134,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 skipClient 666
               }
             }`)
-          ).to.throw('A boolean literal is expected, but found: "666"');
+          ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
         });
       });
     });
@@ -1148,7 +1148,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 skipServer true
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -1161,7 +1161,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 skipServer 666
               }
             }`)
-          ).to.throw('A boolean literal is expected, but found: "666"');
+          ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
         });
       });
     });
@@ -1175,7 +1175,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 skipUserManagement true
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -1188,7 +1188,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 skipUserManagement 666
               }
             }`)
-          ).to.throw('A boolean literal is expected, but found: "666"');
+          ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
         });
       });
     });
@@ -1202,7 +1202,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 testFrameworks [a,b, c]
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -1228,7 +1228,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 testFrameworks true
               }
             }`)
-            ).to.throw('An array of names is expected, but found: "true"');
+            ).to.throw(new RegExp('^An array of names is expected, but found: "true"'));
           });
         });
       });
@@ -1243,7 +1243,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 uaaBaseName "bamba"
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
       context('an invalid value', () => {
@@ -1255,7 +1255,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 uaaBaseName abc
               }
             }`)
-          ).to.throw('A string literal is expected, but found: "abc"');
+          ).to.throw(new RegExp('^A string literal is expected, but found: "abc"'));
         });
       });
     });
@@ -1269,7 +1269,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 useSass true
               }
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
 
@@ -1282,7 +1282,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 useSass 666
               }
             }`)
-          ).to.throw('A boolean literal is expected, but found: "666"');
+          ).to.throw(new RegExp('^A boolean literal is expected, but found: "666"'));
         });
       });
     });
@@ -1297,7 +1297,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 websocket ehcache-
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('with both letters and numbers', () => {
@@ -1309,7 +1309,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 websocket ehcache42
               }
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
       });
@@ -1323,7 +1323,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 websocket "ehcache"
               }
             }`)
-            ).to.throw('A name is expected, but found: ""ehcache""');
+            ).to.throw(new RegExp('^A name is expected, but found: ""ehcache""'));
           });
         });
         context('such as numbers', () => {
@@ -1335,7 +1335,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 websocket 42
               }
             }`)
-            ).to.throw('A name is expected, but found: "42"');
+            ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
         });
       });
@@ -1350,7 +1350,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             deployment {
               deploymentType docker-compose
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
       context('an invalid value', () => {
@@ -1361,7 +1361,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 deploymentType 666
               }`)
-            ).to.throw('A name is expected, but found: "666"');
+            ).to.throw(new RegExp('^A name is expected, but found: "666"'));
           });
         });
         context('such as an invalid character', () => {
@@ -1371,7 +1371,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             deployment {
               deploymentType -
             }`)
-            ).to.throw('unexpected character: ->-<-');
+            ).to.throw(new RegExp('^unexpected character: ->-<-'));
           });
         });
         context('such as a capitalized letters', () => {
@@ -1381,7 +1381,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 deploymentType FOO
               }`)
-            ).to.throw('The deploymentType property name must match: /^[a-z][a-z-]*$/');
+            ).to.throw(new RegExp('^The deploymentType property name must match: '));
           });
         });
 
@@ -1392,7 +1392,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 deploymentType foo.bar
               }`)
-            ).to.throw('A single name is expected, but found a fully qualified name');
+            ).to.throw(new RegExp('^A single name is expected, but found a fully qualified name'));
           });
         });
       });
@@ -1407,7 +1407,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 ${type} valid
               }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
         context('an invalid value', () => {
@@ -1418,7 +1418,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} 666
                 }`)
-              ).to.throw('A name is expected, but found: "666"');
+              ).to.throw(new RegExp('^A name is expected, but found: "666"'));
             });
           });
           context('such as an invalid character', () => {
@@ -1428,7 +1428,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 ${type} -
               }`)
-              ).to.throw('unexpected character: ->-<-');
+              ).to.throw(new RegExp('^unexpected character: ->-<-'));
             });
           });
           context('such as a capitalized letters', () => {
@@ -1438,7 +1438,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} FOO
                 }`)
-              ).to.throw(`The ${type} property name must match: /^[a-z]+$/`);
+              ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
 
@@ -1449,7 +1449,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} foo.bar
                 }`)
-              ).to.throw('A single name is expected, but found a fully qualified name');
+              ).to.throw(new RegExp('^A single name is expected, but found a fully qualified name'));
             });
           });
         });
@@ -1463,7 +1463,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             deployment {
               directoryPath "../"
             }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
       context('an invalid value', () => {
@@ -1474,7 +1474,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 directoryPath 666
               }`)
-            ).to.throw('A string literal is expected, but found: "666"');
+            ).to.throw(new RegExp('^A string literal is expected, but found: "666"'));
           });
         });
         context('such as an invalid character', () => {
@@ -1484,7 +1484,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             deployment {
               directoryPath -
             }`)
-            ).to.throw('unexpected character: ->-<-');
+            ).to.throw(new RegExp('^unexpected character: ->-<-'));
           });
         });
         context('such as a invalid pattern', () => {
@@ -1494,7 +1494,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 directoryPath "/test"
               }`)
-            ).to.throw('The directoryPath property name must match: /^"([^\\/]+).*"$/');
+            ).to.throw(new RegExp('^The directoryPath property name must match: '));
           });
         });
 
@@ -1505,7 +1505,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 directoryPath foo.bar
               }`)
-            ).to.throw('A string literal is expected, but found: "foo"');
+            ).to.throw(new RegExp('^A string literal is expected, but found: "foo"'));
           });
         });
       });
@@ -1521,7 +1521,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             deployment {
               ${type} [test, test2,fooBar]
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
 
@@ -1543,7 +1543,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} true
               }`)
-              ).to.throw('An array of names is expected, but found: "true"');
+              ).to.throw(new RegExp('^An array of names is expected, but found: "true"'));
             });
           });
         });
@@ -1560,7 +1560,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             deployment {
               ${type} test23
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
 
@@ -1572,7 +1572,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} test-123
               }`)
-              ).to.throw(`The ${type} property name must match: /^[A-Za-z][A-Za-z0-9]*$/`);
+              ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
           context('such as not a name', () => {
@@ -1582,7 +1582,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} "true"
               }`)
-              ).to.throw('A name is expected, but found: ""true""');
+              ).to.throw(new RegExp('^A name is expected, but found: ""true""'));
             });
           });
         });
@@ -1599,7 +1599,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
             deployment {
               ${type} test-23
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
           });
         });
 
@@ -1611,7 +1611,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} test_123
               }`)
-              ).to.throw(`The ${type} property name must match: /^[A-Za-z][A-Za-z0-9-]*$/`);
+              ).to.throw(new RegExp(`^The ${type} property name must match: `));
             });
           });
           context('such as not a name', () => {
@@ -1621,7 +1621,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} "true"
               }`)
-              ).to.throw('A name is expected, but found: ""true""');
+              ).to.throw(new RegExp('^A name is expected, but found: ""true""'));
             });
           });
         });
@@ -1641,20 +1641,13 @@ describe('JDLSyntaxValidatorVisitor', () => {
             deployment {
               ${type} "gcr.io.192.120.0.0.io"
             }`)
-            ).to.not.throw();
+            ).not.to.throw();
             expect(() =>
               parse(`
             deployment {
               ${type} "test105"
             }`)
-            ).to.not.throw();
-            // find a way to support this as well
-            /* expect(() =>
-              parse(`
-            deployment {
-              ${type} test105
-            }`)
-            ).to.not.throw(); */
+            ).not.to.throw();
           });
         });
 
@@ -1678,10 +1671,20 @@ describe('JDLSyntaxValidatorVisitor', () => {
                 deployment {
                   ${type} true
               }`)
-              ).to.throw('A string literal is expected, but found: "true"');
+              ).to.throw(new RegExp('^A string literal is expected, but found: "true"'));
             });
           });
         });
+      });
+    });
+    context('such as having special chars', () => {
+      it('should report a syntax error', () => {
+        expect(() =>
+          parse(`
+              deployment {
+                dockerPushCommand "test@123"
+            }`)
+        ).to.throw(new RegExp('^The dockerPushCommand property name must match:'));
       });
     });
     context(`and using for dockerPushCommand`, () => {
@@ -1692,21 +1695,10 @@ describe('JDLSyntaxValidatorVisitor', () => {
           deployment {
             dockerPushCommand "docker push"
           }`)
-          ).to.not.throw();
+          ).not.to.throw();
         });
       });
-
       context('an invalid value', () => {
-        context('such as having special chars', () => {
-          it('should report a syntax error', () => {
-            expect(() =>
-              parse(`
-              deployment {
-                dockerPushCommand "test@123"
-            }`)
-            ).to.throw('The dockerPushCommand property name must match: /^"?[A-Za-z][A-Za-z0-9- ]*"?$/');
-          });
-        });
         context('such as not a name', () => {
           it('should report a syntax error', () => {
             expect(() =>
@@ -1714,7 +1706,7 @@ describe('JDLSyntaxValidatorVisitor', () => {
               deployment {
                 dockerPushCommand true
             }`)
-            ).to.throw('A string literal is expected, but found: "true"');
+            ).to.throw(new RegExp('^A string literal is expected, but found: "true"'));
           });
         });
       });

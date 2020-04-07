@@ -53,7 +53,7 @@ describe('BusinessErrorChecker', () => {
       it('should fail', () => {
         expect(() => {
           new BusinessErrorChecker();
-        }).to.throw('A JDL object must be passed to check for business errors.');
+        }).to.throw(/^A JDL object must be passed to check for business errors\.$/);
       });
     });
     context('with a complete JDL object', () => {

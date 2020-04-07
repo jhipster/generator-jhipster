@@ -32,7 +32,7 @@ describe('JHipsterDeploymentExporter', () => {
         it('should fail', () => {
           expect(() => {
             JHipsterDeploymentExporter.exportDeployments();
-          }).to.throw('Deployments have to be passed to be exported.');
+          }).to.throw(/^Deployments have to be passed to be exported\.$/);
         });
       });
     });
