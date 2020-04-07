@@ -23,50 +23,54 @@ const ObjectUtils = require('../../../lib/utils/object_utils');
 
 describe('ObjectUtils', () => {
   describe('merge', () => {
-    const object1 = {
-      a: 1,
-      b: 2
-    };
+    context('when merging a nil object with a not-empty one', () => {
+      let merged;
 
-    const object2 = {
-      b: 3,
-      c: 4
-    };
-
-    context('when merging two object', () => {
-      context('with the first being nil or empty', () => {
-        it('should return the second', () => {
-          const merged1 = ObjectUtils.merge(null, { a: 1 });
-          const merged2 = ObjectUtils.merge({}, { a: 1 });
-          expect(merged1).to.deep.eq({ a: 1 });
-          expect(merged2).to.deep.eq({ a: 1 });
-        });
-      });
-      context('with the second being nil or empty', () => {
-        it('should return the first', () => {
-          const merged1 = ObjectUtils.merge({ a: 1 }, null);
-          const merged2 = ObjectUtils.merge({ a: 1 }, null);
-          expect(merged1).to.deep.eq({ a: 1 });
-          expect(merged2).to.deep.eq({ a: 1 });
-        });
-      });
-      it('should return the merged object by merging the second into the first', () => {
-        expect(ObjectUtils.merge(object1, object2)).to.deep.equal({ a: 1, b: 3, c: 4 });
-
-        expect(ObjectUtils.merge(object2, object1)).to.deep.equal({ a: 1, b: 2, c: 4 });
+      before(() => {
+        merged = ObjectUtils.merge(null, { a: 1 });
       });
 
-      it('does not modify any of the two objects', () => {
-        ObjectUtils.merge(object1, object2);
-        expect(object1).to.deep.equal({ a: 1, b: 2 });
-        expect(object2).to.deep.equal({ b: 3, c: 4 });
+      it('should return the second one', () => {
+        expect(merged).to.deep.equal({ a: 1 });
+      });
+    });
+    context('when merging a not-empty object with a nil one', () => {
+      let merged;
+
+      before(() => {
+        merged = ObjectUtils.merge({}, { a: 1 });
+      });
+
+      it('should return the first one', () => {
+        expect(merged).to.deep.equal({ a: 1 });
+      });
+    });
+    context('when merging two not-empty objects', () => {
+      let merged;
+
+      before(() => {
+        const object1 = {
+          a: 1,
+          b: 2
+        };
+        const object2 = {
+          b: 3,
+          c: 4
+        };
+        merged = ObjectUtils.merge(object1, object2);
+      });
+
+      it('should merge them', () => {
+        expect(merged).to.deep.equal({ a: 1, b: 3, c: 4 });
       });
     });
   });
   describe('areEntitiesEqual', () => {
     context('when comparing two equal objects', () => {
       context('as they are empty', () => {
-        it('should return true', () => {
+        let result;
+
+        before(() => {
           const firstEmptyObject = {
             fields: [],
             relationships: []
@@ -75,11 +79,17 @@ describe('ObjectUtils', () => {
             fields: [],
             relationships: []
           };
-          expect(ObjectUtils.areEntitiesEqual(firstEmptyObject, secondEmptyObject)).to.be.true;
+          result = ObjectUtils.areEntitiesEqual(firstEmptyObject, secondEmptyObject);
+        });
+
+        it('should return true', () => {
+          expect(result).to.be.true;
         });
       });
-      context('they have no fields, but only relationships', () => {
-        it('should return true', () => {
+      context('as they have no fields, but only relationships', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             fields: [],
             relationships: [
@@ -106,11 +116,17 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return true', () => {
+          expect(result).to.be.true;
         });
       });
-      context('they have fields but no relationships', () => {
-        it('should return true', () => {
+      context('as they have fields but no relationships', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             fields: [
               {
@@ -139,11 +155,17 @@ describe('ObjectUtils', () => {
             ],
             relationships: []
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return true', () => {
+          expect(result).to.be.true;
         });
       });
       context('they have both fields and relationships', () => {
-        it('should return true', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             fields: [
               {
@@ -188,11 +210,17 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return true', () => {
+          expect(result).to.be.true;
         });
       });
-      context('one object has key with undefined value, second object does not have this key', () => {
-        it('should return true', () => {
+      context('when one attribute in the object is missing from the other', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             name: 'MyEntity',
             fields: [],
@@ -204,53 +232,47 @@ describe('ObjectUtils', () => {
             fields: [],
             relationships: []
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.true;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return true', () => {
+          expect(result).to.be.true;
         });
       });
     });
     context('when comparing two unequal objects', () => {
-      context('as one of them is not empty, the other is', () => {
+      context('as one of them is not empty', () => {
+        let result;
+
+        before(() => {
+          const firstObject = {
+            fields: [],
+            relationships: []
+          };
+          const secondObject = {
+            fields: [],
+            relationships: [
+              {
+                id: 1,
+                theAnswer: 42
+              },
+              {
+                id: 2,
+                notTheAnswer: 43
+              }
+            ]
+          };
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
         it('should return false', () => {
-          let firstObject = {
-            fields: [],
-            relationships: []
-          };
-          let secondObject = {
-            fields: [],
-            relationships: [
-              {
-                id: 1,
-                theAnswer: 42
-              },
-              {
-                id: 2,
-                notTheAnswer: 43
-              }
-            ]
-          };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
-          firstObject = {
-            fields: [],
-            relationships: [
-              {
-                id: 1,
-                theAnswer: 42
-              },
-              {
-                id: 2,
-                notTheAnswer: 43
-              }
-            ]
-          };
-          secondObject = {
-            fields: [],
-            relationships: []
-          };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(result).to.be.false;
         });
       });
       context('as both of them have different fields', () => {
-        it('should return false', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             fields: [
               {
@@ -277,11 +299,17 @@ describe('ObjectUtils', () => {
             ],
             relationships: []
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return false', () => {
+          expect(result).to.be.false;
         });
       });
       context('as both of them have different relationships', () => {
-        it('should return false', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             fields: [
               {
@@ -318,11 +346,17 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return false', () => {
+          expect(result).to.be.false;
         });
       });
       context('as they do not possess the same number of fields', () => {
-        it('should return false', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             fields: [],
             relationships: [
@@ -350,11 +384,17 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return false', () => {
+          expect(result).to.be.false;
         });
       });
       context('as they do not have the same number of keys in fields', () => {
-        it('should return false', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             fields: [
               {
@@ -392,11 +432,17 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return false', () => {
+          expect(result).to.be.false;
         });
       });
       context('as they do not possess the same number of relationships', () => {
-        it('should return false', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             fields: [
               {
@@ -437,10 +483,16 @@ describe('ObjectUtils', () => {
               }
             ]
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return false', () => {
+          expect(result).to.be.false;
         });
         context('as they do not have the same number of fields in a relationship', () => {
-          it('should return false', () => {
+          let result;
+
+          before(() => {
             const firstObject = {
               fields: [
                 {
@@ -478,7 +530,11 @@ describe('ObjectUtils', () => {
                 }
               ]
             };
-            expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+          });
+
+          it('should return false', () => {
+            expect(result).to.be.false;
           });
         });
       });
@@ -578,7 +634,9 @@ describe('ObjectUtils', () => {
         });
       });
       context('as they do not have the same table name', () => {
-        it('should return false', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             entityTableName: 'first',
             fields: [
@@ -631,11 +689,17 @@ describe('ObjectUtils', () => {
             pagination: 'no',
             service: 'no'
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return false', () => {
+          expect(result).to.be.false;
         });
       });
       context('as they do not have the same comments', () => {
-        it('should return false', () => {
+        let result;
+
+        before(() => {
           const firstObject = {
             javadoc: 'My first comment',
             fields: [
@@ -688,7 +752,11 @@ describe('ObjectUtils', () => {
             pagination: 'no',
             service: 'no'
           };
-          expect(ObjectUtils.areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          result = ObjectUtils.areEntitiesEqual(firstObject, secondObject);
+        });
+
+        it('should return false', () => {
+          expect(result).to.be.false;
         });
       });
       context('as they do not have the same number of attributes', () => {
