@@ -279,12 +279,10 @@ describe('DocumentParser', () => {
           input = JDLReader.parseFromFiles(['./test/test_files/invalid_option.jdl']);
         });
 
-        it('should fail', () => {
-          expect(() => {
-            DocumentParser.parseFromConfigurationObject({
-              parsedContent: input
-            });
-          }).to.throw(/^Can't add invalid option\. Error: The 'dto' option is not valid for value 'wrong'\.$/);
+        it('should not fail', () => {
+          DocumentParser.parseFromConfigurationObject({
+            parsedContent: input
+          });
         });
       });
       context('with a required enum', () => {
