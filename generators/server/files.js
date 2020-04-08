@@ -841,6 +841,18 @@ const serverFiles = {
         },
         {
             condition: generator =>
+                (!generator.reactive && generator.applicationType === 'gateway' && !generator.serviceDiscoveryType) ||
+                generator.authenticationType === 'uaa',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/RestTemplateConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/RestTemplateConfiguration.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
                 !(
                     generator.applicationType !== 'microservice' &&
                     !(
