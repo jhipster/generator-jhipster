@@ -30,8 +30,11 @@ jobs:
       matrix:
         node-version: [8.x, 10.x, 12.x]
 
+    env:
+      SONAR_NODE_VERSION: 10.x
+
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -43,3 +46,9 @@ jobs:
         npm test
       env:
         CI: true
+    - name: SonarCloud Scan
+      if: matrix.node-version == env.SONAR_NODE_VERSION && github.ref == 'refs/heads/master' && github.event_name == 'push' 
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
