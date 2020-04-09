@@ -1,6 +1,8 @@
 [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
 
-[![GitHub Actions Build Status][github-actions-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url] [![Quality Gate Status][sonar-image]][sonar-url]
+[![GitHub Actions Build Status][github-actions-image]][github-actions-url] [![Azure DevOps Build Status][azure-devops-image]][azure-devops-url]
+
+[![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
 ---
 
@@ -31,5 +33,8 @@ For more details about the project structure and detailed examples on how to upd
 [github-actions-url]: https://github.com/jhipster/jhipster-core/actions
 [npm-image]: https://badge.fury.io/js/jhipster-core.svg
 [npm-url]: https://npmjs.org/package/jhipster-core
-[sonar-image]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-core&metric=alert_status
+[sonar-bugs]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-core&metric=bugs
+[sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-core&metric=coverage
+[sonar-quality-gate]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-core&metric=alert_status
 [sonar-url]: https://sonarcloud.io/dashboard?id=jhipster-core
+[sonar-vulnerabilities]: https://sonarcloud.io/api/project_badges/measure?project=jhipster-core&metric=vulnerabilities
