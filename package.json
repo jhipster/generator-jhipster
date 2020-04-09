@@ -82,7 +82,7 @@
         "through2": "3.0.1",
         "uuid": "3.3.3",
         "yeoman-environment": "2.8.0",
-        "yeoman-generator": "4.6.0"
+        "yeoman-generator": "4.8.0"
     },
     "devDependencies": {
         "@openapitools/openapi-generator-cli": "1.0.12-4.3.0",
@@ -98,7 +98,7 @@
         "mocha": "6.1.4",
         "sinon": "7.2.5",
         "yeoman-assert": "3.1.1",
-        "yeoman-test": "2.2.0"
+        "yeoman-test": "2.4.1"
     },
     "resolutions": {
         "inquirer": "6.3.1"
