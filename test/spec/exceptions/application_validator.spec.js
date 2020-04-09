@@ -38,7 +38,11 @@ const {
   COUCHBASE,
   NEO4J
 } = require('../../../lib/core/jhipster/database_types');
+const { READ_ONLY } = require('../../../lib/core/jhipster/unary_options');
+const BinaryOptions = require('../../../lib/core/jhipster/binary_options');
 const JDLApplication = require('../../../lib/core/jdl_application');
+const JDLUnaryOption = require('../../../lib/core/jdl_unary_option');
+const JDLBinaryOption = require('../../../lib/core/jdl_binary_option');
 const logger = require('../../../lib/utils/objects/logger');
 
 describe('ApplicationValidator', () => {
@@ -447,6 +451,87 @@ describe('ApplicationValidator', () => {
                 )
               ).not.to.throw();
             });
+          });
+        });
+      });
+      context('with options', () => {
+        context('without error', () => {
+          let application;
+
+          before(() => {
+            application = new JDLApplication({
+              config: {
+                ...basicValidApplicationConfig
+              }
+            });
+            application.addOption(
+              new JDLUnaryOption({
+                name: READ_ONLY,
+                entityNames: ['A']
+              })
+            );
+            application.addOption(
+              new JDLBinaryOption({
+                name: BinaryOptions.Options.DTO,
+                value: BinaryOptions.Values.dto.MAPSTRUCT,
+                entityNames: ['A']
+              })
+            );
+          });
+
+          it('should not fail', () => {
+            expect(() => validator.validate(application)).not.to.throw();
+          });
+        });
+        context('when an option is faulty', () => {
+          let application;
+
+          before(() => {
+            application = new JDLApplication({
+              config: {
+                ...basicValidApplicationConfig
+              }
+            });
+            application.addOption(
+              new JDLBinaryOption({
+                name: BinaryOptions.Options.DTO,
+                value: 'unknown',
+                entityNames: ['A']
+              })
+            );
+          });
+
+          it('should fail', () => {
+            expect(() => validator.validate(application)).to.throw(
+              /^The 'dto' option is not valid for value 'unknown'\.$/
+            );
+          });
+        });
+        context('when the application uses cassandra with pagination', () => {
+          let application;
+
+          before(() => {
+            application = new JDLApplication({
+              config: {
+                ...basicValidApplicationConfig,
+                databaseType: CASSANDRA,
+                devDatabaseType: CASSANDRA,
+                prodDatabaseType: CASSANDRA
+              }
+            });
+            application.addOption(
+              new JDLBinaryOption({
+                name: BinaryOptions.Options.PAGINATION,
+                value: BinaryOptions.Values.pagination.PAGINATION,
+                entityNames: ['A']
+              })
+            );
+          });
+
+          it('should fail', () => {
+            expect(() => validator.validate(application)).to.throw(
+              /^Pagination isn't allowed when the app uses Cassandra\.$/
+            );
           });
         });
       });
