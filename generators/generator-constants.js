@@ -255,6 +255,7 @@ const LANGUAGES = [
     { name: 'Russian', dispName: 'Русский', value: 'ru' },
     { name: 'Slovak', dispName: 'Slovenský', value: 'sk' },
     { name: 'Serbian', dispName: 'Srpski', value: 'sr' },
+    { name: 'Sinhala', dispName: 'සිංහල', value: 'si' },
     { name: 'Spanish', dispName: 'Español', value: 'es' },
     { name: 'Swedish', dispName: 'Svenska', value: 'sv' },
     { name: 'Turkish', dispName: 'Türkçe', value: 'tr' },
