@@ -31,9 +31,9 @@ const GRADLE_VERSION = '6.4.1';
 const JIB_VERSION = '2.2.0';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '3.7.1';
+const JHIPSTER_DEPENDENCIES_VERSION = '3.8.0-SNAPSHOT';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.2.7.RELEASE';
+const SPRING_BOOT_VERSION = '2.3.0.M4';
 const LIQUIBASE_VERSION = '3.9.0';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;

@@ -37,7 +37,7 @@
             </snapshots>
         </repository>
         <%_ } _%>
-        <%_ if (reactive) { _%>
+        <%_ if (!SPRING_BOOT_VERSION.endsWith('-RELEASE') || reactive) { _%>
         <repository>
             <id>spring-milestone</id>
             <url>https://repo.spring.io/milestone</url>
@@ -56,6 +56,13 @@
     </repositories>
 
     <pluginRepositories>
+        <%_ if (!SPRING_BOOT_VERSION.endsWith('-RELEASE')) { _%>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </pluginRepository>
+        <%_ } _%>
         <!-- jhipster-needle-maven-plugin-repository -->
     </pluginRepositories>
 

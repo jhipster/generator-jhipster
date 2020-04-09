@@ -18,6 +18,12 @@
 -%>
 
 pluginManagement {
+     <%_ if (!SPRING_BOOT_VERSION.endsWith('-RELEASE')) { _%>
+     repositories {
+          maven { url 'https://repo.spring.io/milestone' }
+          gradlePluginPortal()
+     }
+     <%_ } _%>
      plugins {
           id 'org.springframework.boot' version "${spring_boot_version}"
           id 'com.google.cloud.tools.jib' version "${jib_plugin_version}"
