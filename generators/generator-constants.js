@@ -31,7 +31,7 @@ const GRADLE_VERSION = '6.3';
 // Libraries version
 const JIB_VERSION = '2.1.0';
 
-const LIQUIBASE_VERSION = '3.8.8';
+const LIQUIBASE_VERSION = '3.8.9';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
 
@@ -51,7 +51,7 @@ const DOCKER_CASSANDRA = 'cassandra:3.11.5';
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2017-latest-ubuntu';
 const DOCKER_NEO4J = 'neo4j:4.0';
 const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.9'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11244
-const DOCKER_MEMCACHED = 'memcached:1.6.2-alpine';
+const DOCKER_MEMCACHED = 'memcached:1.6.3-alpine';
 const DOCKER_REDIS = 'redis:5.0.8';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:9.0.0'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
 const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.7'; // The version should be coherent with the one from spring-data-elasticsearch project
@@ -69,7 +69,7 @@ const DOCKER_CONSUL = 'consul:1.7.2';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.0';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.17.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.20.0';
-const DOCKER_GRAFANA = 'grafana/grafana:6.7.1';
+const DOCKER_GRAFANA = 'grafana/grafana:6.7.2';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';

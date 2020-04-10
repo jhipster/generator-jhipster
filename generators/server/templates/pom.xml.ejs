@@ -105,9 +105,25 @@
         <h2.version>1.4.200</h2.version>
     <%_ } _%>
     <%_ if (reactive) { _%>
-        <r2dbc-h2.version>0.8.1.RELEASE</r2dbc-h2.version>
+        <r2dbc-h2.version>0.8.3.RELEASE</r2dbc-h2.version>
+    <%_ } _%>
+    <%_ if (reactive && prodDatabaseType === 'mysql') { _%>
+        <r2dbc-mysql.version>0.8.1.RELEASE</r2dbc-mysql.version>
+    <%_ } _%>
+    <%_ if (reactive && prodDatabaseType === 'mssql') { _%>
+        <r2dbc-mssql.version>0.8.2.RELEASE</r2dbc-mssql.version>
+    <%_ } _%>
+    <%_ if (reactive && prodDatabaseType === 'postgresql') { _%>
+        <r2dbc-postgresql.version>0.8.2.RELEASE</r2dbc-postgresql.version>
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+        <spring-boot-starter-data-r2dbc.version>0.1.0.M3</spring-boot-starter-data-r2dbc.version>
     <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
+<%_ } _%>
+<%_ if (reactive) { _%>
+        <blockhound-junit-platform.version>1.0.3.RELEASE</blockhound-junit-platform.version>
+        <netty-common.version>4.1.48.Final</netty-common.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
@@ -124,6 +140,9 @@
         <caffeine.version>2.8.1</caffeine.version>
         <typesafe.version>1.4.0</typesafe.version>
 <%_ } _%>
+<%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
+        <springfox.version>3.0.0-SNAPSHOT</springfox.version>
+<%_ } _%>
         <!-- Plugin versions -->
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -136,7 +155,7 @@
         <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
         <maven-checkstyle.version>3.1.1</maven-checkstyle.version>
-        <checkstyle.version>8.30</checkstyle.version>
+        <checkstyle.version>8.31</checkstyle.version>
         <spring-nohttp-checkstyle.version>0.0.4.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
         <frontend-maven-plugin.version>1.9.1</frontend-maven-plugin.version>
@@ -322,17 +341,17 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>${springfox.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>${springfox.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-spring-webflux</artifactId>
-            <version>3.0.0-SNAPSHOT</version>
+            <version>${springfox.version}</version>
         </dependency>
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
@@ -424,7 +443,7 @@
         <dependency>
             <groupId>dev.miku</groupId>
             <artifactId>r2dbc-mysql</artifactId>
-            <version>0.8.1.RELEASE</version>
+            <version>${r2dbc-mysql.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -459,7 +478,7 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-mssql</artifactId>
-            <version>0.8.1.RELEASE</version>
+            <version>${r2dbc-mssql.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -556,7 +575,7 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-postgresql</artifactId>
-            <version>0.8.1.RELEASE</version>
+            <version>${r2dbc-postgresql.version}</version>
         </dependency>
         <%_ } _%>
 <%_ } _%>
@@ -596,7 +615,7 @@
         <dependency>
             <groupId>org.springframework.boot.experimental</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-            <version>0.1.0.M3</version>
+            <version>${spring-boot-starter-data-r2dbc.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -690,14 +709,14 @@
         <dependency>
             <groupId>io.projectreactor.tools</groupId>
             <artifactId>blockhound-junit-platform</artifactId>
-            <version>1.0.2.RELEASE</version>
+            <version>${blockhound-junit-platform.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-common</artifactId>
-            <version>4.1.46.Final</version>
+            <version>${netty-common.version}</version>
         </dependency>
 <%_ } _%>
         <dependency>
