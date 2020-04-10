@@ -384,7 +384,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
         <%_ } else { _%>
-    implementation "org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.M3"
+    implementation "org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:${spring_boot_starter_data_r2dbc_version}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
