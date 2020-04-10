@@ -118,6 +118,7 @@
     <%_ } _%>
     <%_ if (reactive) { _%>
         <spring-boot-starter-data-r2dbc.version>0.1.0.M3</spring-boot-starter-data-r2dbc.version>
+        <blockhound-junit-platform.version>1.0.3.RELEASE</blockhound-junit-platform.version>
     <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
@@ -702,7 +703,7 @@
         <dependency>
             <groupId>io.projectreactor.tools</groupId>
             <artifactId>blockhound-junit-platform</artifactId>
-            <version>1.0.2.RELEASE</version>
+            <version>${blockhound-junit-platform.version}</version>
             <scope>test</scope>
         </dependency>
         <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
