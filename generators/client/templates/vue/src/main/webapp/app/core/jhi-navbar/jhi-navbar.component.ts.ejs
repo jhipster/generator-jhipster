@@ -81,8 +81,8 @@ export default class JhiNavbar extends Vue {
     return this.$store.getters.authenticated;
   }
 
-  public async hasAnyAuthority(authorities: any): Promise<boolean> {
-    return await this.accountService().hasAnyAuthorityAndCheckAuth(authorities);
+  public hasAnyAuthority(authorities: any): Promise<boolean> {
+    return this.accountService().hasAnyAuthorityAndCheckAuth(authorities);
   }
 
   public get swaggerEnabled() : boolean {

@@ -66,19 +66,21 @@ const translationService = new TranslationService(store, i18n);
 const loginService = new LoginService();
 const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
 
   if (!to.matched.length) {
     next('/not-found');
   }
 
   if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
-    if (!await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities)) {
-      sessionStorage.setItem('requested-url', to.fullPath);
-      next('/forbidden');
-    } else {
-      next();
-    }
+    accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
+      if (!value) {
+        sessionStorage.setItem('requested-url', to.fullPath);
+        next('/forbidden');
+      } else {
+        next();
+      }
+    });
   } else {
     // no authorities, so just proceed
     next();
