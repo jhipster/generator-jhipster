@@ -113,6 +113,9 @@
     <%_ if (reactive && prodDatabaseType === 'mssql') { _%>
         <r2dbc-mssql.version>0.8.2.RELEASE</r2dbc-mssql.version>
     <%_ } _%>
+    <%_ if (reactive && prodDatabaseType === 'postgresql') { _%>
+        <r2dbc-postgresql.version>0.8.2.RELEASE</r2dbc-postgresql.version>
+    <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
@@ -562,7 +565,7 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-postgresql</artifactId>
-            <version>0.8.1.RELEASE</version>
+            <version>${r2dbc-postgresql.version}</version>
         </dependency>
         <%_ } _%>
 <%_ } _%>
