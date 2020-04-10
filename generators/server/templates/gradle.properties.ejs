@@ -50,6 +50,9 @@ liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
 <%_ if (databaseType === 'sql' && reactive) { _%>
+  <%_ if (prodDatabaseType === 'mysql') { _%>
+r2dbc_mysql_version=0.8.1.RELEASE
+  <%_ } _%>
 spring_boot_starter_data_r2dbc_version=0.1.0.M3
 <%_ } _%>
 
