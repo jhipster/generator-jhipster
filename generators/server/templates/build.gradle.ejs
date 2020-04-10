@@ -511,7 +511,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "mysql:mysql-connector-java"
         <%_ } else { _%>
-    implementation "dev.miku:r2dbc-mysql:0.8.1.RELEASE"
+    implementation "dev.miku:r2dbc-mysql:${r2dbc_mysql_version}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
