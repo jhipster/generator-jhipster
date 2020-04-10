@@ -73,6 +73,9 @@ openapi_plugin_version=4.3.0
 <%_ } _%>
 spring_no_http_plugin_version=0.0.4.RELEASE
 checkstyle_version=8.31
+<%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
+springfox_version=3.0.0-SNAPSHOT
+<%_ } _%>
 
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 
