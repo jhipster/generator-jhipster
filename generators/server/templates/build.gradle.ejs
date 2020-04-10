@@ -533,7 +533,7 @@ dependencies {
     liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-mssql:0.8.1.RELEASE"
+    implementation "io.r2dbc:r2dbc-mssql:${r2dbc_mssql_version}"
         <%_ } _%>
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
