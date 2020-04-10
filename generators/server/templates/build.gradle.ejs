@@ -584,7 +584,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "com.h2database:h2"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-h2:0.8.1.RELEASE"
+    implementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle') { _%>
