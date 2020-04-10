@@ -107,6 +107,9 @@
     <%_ if (reactive) { _%>
         <r2dbc-h2.version>0.8.3.RELEASE</r2dbc-h2.version>
     <%_ } _%>
+    <%_ if (reactive && prodDatabaseType === 'mysql') { _%>
+        <r2dbc-mysql.version>0.8.1.RELEASE</r2dbc-mysql.version>
+    <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
@@ -424,7 +427,7 @@
         <dependency>
             <groupId>dev.miku</groupId>
             <artifactId>r2dbc-mysql</artifactId>
-            <version>0.8.1.RELEASE</version>
+            <version>${r2dbc-mysql.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
