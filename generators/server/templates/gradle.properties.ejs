@@ -49,6 +49,10 @@ liquibase_hibernate5_version=3.8
 liquibaseTaskPrefix=liquibase
 <%_ } _%>
 
+<%_ if (databaseType === 'sql' && reactive) { _%>
+spring_boot_starter_data_r2dbc_version=0.1.0.M3
+<%_ } _%>
+
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
 jaxb_runtime_version=2.3.2
 <%_ } _%>
