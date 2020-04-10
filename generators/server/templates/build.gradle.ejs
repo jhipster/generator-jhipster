@@ -561,7 +561,7 @@ dependencies {
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
-    testImplementation "io.projectreactor.tools:blockhound-junit-platform:1.0.2.RELEASE"
+    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.0.0'
     // See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up
     implementation 'io.netty:netty-common:4.1.46.Final'
