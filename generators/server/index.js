@@ -202,6 +202,30 @@ module.exports = class extends BaseBlueprintGenerator {
                     // sql
                     this.devDatabaseType = configuration.get('devDatabaseType');
                     this.prodDatabaseType = configuration.get('prodDatabaseType');
+
+                    let dbContainer;
+                    switch (this.prodDatabaseType) {
+                        case 'mysql':
+                            dbContainer = this.DOCKER_MYSQL;
+                            break;
+                        case 'mariadb':
+                            dbContainer = this.DOCKER_MARIADB;
+                            break;
+                        case 'postgresql':
+                            dbContainer = this.DOCKER_POSTGRESQL;
+                            break;
+                        case 'mssql':
+                            dbContainer = this.DOCKER_MSSQL;
+                            break;
+                        case 'oracle':
+                        default:
+                            dbContainer = null;
+                    }
+                    if (dbContainer != null && dbContainer.includes(':')) {
+                        this.containerVersion = dbContainer.split(':')[1];
+                    } else {
+                        this.containerVersion = 'latest';
+                    }
                 }
                 this.skipFakeData = configuration.get('skipFakeData') || this.configOptions.skipFakeData;
 

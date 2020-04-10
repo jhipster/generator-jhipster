@@ -696,19 +696,37 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java`,
     ],
 
-    mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
+    mysql: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+        `${DOCKER_DIR}mysql.yml`,
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`
+    ],
 
-    mariadb: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mariadb.yml`],
+    mariadb: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+        `${DOCKER_DIR}mariadb.yml`,
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`
+    ],
 
-    mssql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mssql.yml`],
+    mssql: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+        `${DOCKER_DIR}mssql.yml`,
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`
+    ],
 
-    postgresql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}postgresql.yml`],
+    postgresql: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+        `${DOCKER_DIR}postgresql.yml`,
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`
+    ],
 
     liquibase: [
         `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
     ],
+
+    testcontainersGradle: ['gradle/testcontainers.gradle'],
 
     hazelcast: [`${DOCKER_DIR}hazelcast-management-center.yml`],
 

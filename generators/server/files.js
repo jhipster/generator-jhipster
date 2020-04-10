@@ -189,6 +189,10 @@ const serverFiles = {
             templates: ['gradle/swagger.gradle'],
         },
         {
+            condition: generator => generator.buildTool === 'gradle' && generator.prodDatabaseType === 'sql',
+            templates: ['gradle/testcontainers.gradle']
+        },
+        {
             condition: generator => generator.buildTool === 'maven',
             templates: [
                 { file: 'mvnw', method: 'copy', noEjs: true },
@@ -1403,7 +1407,7 @@ const serverFiles = {
         },
         {
             path: SERVER_TEST_RES_DIR,
-            templates: ['config/application.yml', 'logback.xml'],
+            templates: ['config/application.yml', 'config/application-testcontainers.yml', 'logback.xml'],
         },
         {
             // TODO : add these tests to reactive
