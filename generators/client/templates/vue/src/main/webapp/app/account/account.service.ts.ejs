@@ -76,23 +76,6 @@ export default class AccountService {
     });
   }
 
-  public hasAnyAuthority(authorities: any): boolean {
-    if (typeof authorities === "string") {
-      authorities = [authorities];
-    }
-    if (!this.authenticated || !this.userAuthorities) {
-      return false;
-    }
-
-    for (let i = 0; i < authorities.length; i++) {
-      if (this.userAuthorities.includes(authorities[i])) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   public hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
     if (typeof authorities === 'string') {
       authorities = [authorities];
