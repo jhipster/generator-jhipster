@@ -110,6 +110,9 @@
     <%_ if (reactive && prodDatabaseType === 'mysql') { _%>
         <r2dbc-mysql.version>0.8.1.RELEASE</r2dbc-mysql.version>
     <%_ } _%>
+    <%_ if (reactive && prodDatabaseType === 'mssql') { _%>
+        <r2dbc-mssql.version>0.8.2.RELEASE</r2dbc-mssql.version>
+    <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
@@ -462,7 +465,7 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-mssql</artifactId>
-            <version>0.8.1.RELEASE</version>
+            <version>${r2dbc-mssql.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
