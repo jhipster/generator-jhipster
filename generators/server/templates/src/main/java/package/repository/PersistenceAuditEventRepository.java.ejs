@@ -28,9 +28,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
 import org.springframework.data.r2dbc.core.DatabaseClient;
-import org.springframework.data.r2dbc.query.Criteria;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.data.relational.core.query.Criteria;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Repository;
 <%_ } _%>
@@ -86,6 +86,8 @@ public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Re
     Flux<PersistentAuditEvent> findAllBy(Pageable pageable);
 
     Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate);
+
+    Mono<Void> deleteAll();
     <%_ } _%>
 }
 <%_ if (databaseType === 'sql' && reactive) { _%>
@@ -172,6 +174,16 @@ class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEve
             })
             .all()
             .collectMap(Pair::getFirst, Pair::getSecond);
+    }
+
+    @Override
+    public Mono<Void> deleteAll() {
+        return databaseClient.execute("DELETE FROM <%= jhiTablePrefix %>_persistent_audit_evt_data")
+            .then()
+            .then(databaseClient.delete()
+                .from(PersistentAuditEvent.class)
+                .then()
+            );
     }
 }
 <%_ } _%>
