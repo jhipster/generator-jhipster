@@ -502,9 +502,9 @@ dependencies {
     }
     implementation "io.springfox:springfox-bean-validators"
     <%_ } else if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
-    implementation "io.springfox:springfox-swagger2:3.0.0-SNAPSHOT"
-    implementation "io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT"
-    implementation "io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT"
+    implementation "io.springfox:springfox-swagger2:${springfox_version}"
+    implementation "io.springfox:springfox-swagger-ui:${springfox_version}"
+    implementation "io.springfox:springfox-spring-webflux:${springfox_version}"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
