@@ -81,7 +81,7 @@
         "tabtab": "2.2.2",
         "through2": "3.0.1",
         "uuid": "3.3.3",
-        "yeoman-environment": "2.8.0",
+        "yeoman-environment": "2.9.0",
         "yeoman-generator": "4.8.0"
     },
     "devDependencies": {
