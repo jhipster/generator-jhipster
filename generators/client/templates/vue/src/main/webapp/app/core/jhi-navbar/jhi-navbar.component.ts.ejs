@@ -17,6 +17,7 @@ export default class JhiNavbar extends Vue {
   public version = VERSION ? 'v' + VERSION : '';
   private currentLanguage = this.$store.getters.currentLanguage;
   private languages: any = this.$store.getters.languages;
+  private hasAnyAuthorityValue = false;
 
   created() {
     <%_ if (enableTranslation) { _%>
@@ -81,8 +82,11 @@ export default class JhiNavbar extends Vue {
     return this.$store.getters.authenticated;
   }
 
-  public hasAnyAuthority(authorities: any): Promise<boolean> {
-    return this.accountService().hasAnyAuthorityAndCheckAuth(authorities);
+  public hasAnyAuthority(authorities: any): boolean {
+    this.accountService().hasAnyAuthorityAndCheckAuth(authorities).then(value => {
+      this.hasAnyAuthorityValue = value;
+    });
+    return this.hasAnyAuthorityValue;
   }
 
   public get swaggerEnabled() : boolean {

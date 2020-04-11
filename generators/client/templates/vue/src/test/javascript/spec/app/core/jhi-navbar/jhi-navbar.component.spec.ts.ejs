@@ -31,7 +31,7 @@ let wrapper: Wrapper<JhiNavbarClass>;
   <%_ } else if (authenticationType === 'oauth2') { _%>
   const loginService = { login: jest.fn(), logout: jest.fn() };
   <%_ } _%>
-  const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn() };
+  const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
   <%_ if (enableTranslation) { _%>
   const translationService = { refreshTranslation: jest.fn() };
   <%_ } _%>
