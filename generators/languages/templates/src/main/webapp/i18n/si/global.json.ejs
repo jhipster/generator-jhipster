@@ -1,0 +1,163 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "global": {
+        "title": "<%= capitalizedBaseName %>",
+        "browsehappy": "ඔබ භාවිතා කරන්නේ <strong>යල් පැන ගිය</strong> බ්‍රව්සරයකි. ඔබගේ අත්දැකීම් වැඩි දියුණු කිරීමට කරුණාකර ඔබගේ <a href=\"http://browsehappy.com/?locale=en\">බ්‍රව්සරය යාවත්කාලීන කරන්න</a>.",
+        "menu": {
+            "home": "නිවස",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+            "entities": {
+                "main": "ආයතන",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "ගිණුම",
+                "settings": "සැකසුම්",
+                "password": "මුරපදය",
+                "sessions": "සැසිවාර",
+                "login": "පුරන්න",
+                "logout": "වරන්න",
+                "register": "ලියාපදිංචි වන්න"
+            },
+            "admin": {
+                "main": "පරිපාලනය",
+                <%_ if (applicationType === 'gateway') { _%>
+                "gateway": "දොරටුව",
+                <%_ } _%>
+                "userManagement": "පරිශීලක කළමනාකරණය",
+                "tracker": "පරිශීලක ට්රැකර්",
+                "metrics": "මිනුම්",
+                "health": "සෞඛ්‍යය",
+                "configuration": "වින්‍යාසය",
+                "logs": "Logs",
+                <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+                "audits": "විගණනය",
+                <%_ } _%>
+                "apidocs": "API",
+                "database": "දත්ත සමුදාය",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
+            },
+            "language": "භාෂාව"
+        },
+        "form": {
+            "username.label": "පරිශීලක නාමය",
+            "username.placeholder": "ඔබගේ පරිශීලක නාමය",
+            "currentpassword.label": "වත්මන් මුරපදය",
+            "currentpassword.placeholder": "වත්මන් මුරපදය",
+            "newpassword.label": "නව මුරපදය",
+            "newpassword.placeholder": "නව මුරපදය",
+            "confirmpassword.label": "නව මුරපද තහවුරු කිරීම",
+            "confirmpassword.placeholder": "නව මුරපදය තහවුරු කරන්න",
+            "email.label": "විද්යුත් තැපෑල",
+            "email.placeholder": "ඔබේ විද්යුත් තැපැල් ලිපිනය"
+        },
+        "messages": {
+            "info": {
+                "authenticated": {
+                    "prefix": "ඔබට අවශ්ය නම් ",
+                    "link": "පුරන්න",
+                    "suffix": ", ඔබට සුපුරුදු ගිණුම් උත්සාහ කළ හැකිය:<br/>- පරිපාලක (ඇතුල් වන්න=\"admin\" හා මුරපදය=\"admin\") <br/>- පරිශීලක (ඇතුල් වන්න=\"user\" හා මුරපදය=\"user\")."
+                },
+                "register": {
+                    "noaccount": "ඔබට තවම ගිණුමක් නොමැත?",
+                    "link": "නව ගිණුමක් ලියාපදිංචි කරන්න"
+                }
+            },
+            "error": {
+                "dontmatch": "මුරපදය සහ එය තහවුරු කිරීම නොගැලපේ!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "ඔබගේ මුරපදය අවශ්‍ය වේ.",
+                    "minlength": "ඔබගේ මුරපදය අවම වශයෙන් අක්ෂර 4 ක් විය යුතුය.",
+                    "maxlength": "ඔබගේ මුරපදය අක්ෂර 50 ට වඩා වැඩි විය නොහැක.",
+                    "strength": "මුරපදයේ ශක්තිය:"
+                },
+                "confirmpassword": {
+                    "required": "ඔබගේ තහවුරු කිරීමේ මුරපදය අවශ්‍ය වේ.",
+                    "minlength": "ඔබගේ තහවුරු කිරීමේ මුරපදය අවම වශයෙන් අක්ෂර 4 ක් විය යුතුය.",
+                    "maxlength": "ඔබගේ තහවුරු කිරීමේ මුරපදය අක්ෂර 50 ට වඩා වැඩි විය නොහැක."
+                },
+                "email": {
+                    "required": "ඔබගේ විද්‍යුත් තැපෑල අවශ්‍ය වේ.",
+                    "invalid": "ඔබගේ විද්‍යුත් ලිපිනය අවලංගුය.",
+                    "minlength": "ඔබගේ විද්‍යුත් තැපෑල අවම වශයෙන් අක්ෂර 5 ක් විය යුතුය.",
+                    "maxlength": "ඔබගේ විද්‍යුත් ලිපිනය අක්ෂර 50 ට වඩා වැඩි විය නොහැක."
+                }
+            }
+        },
+        "field": {
+            "id": "ID"
+        },
+        "ribbon": {
+            "dev": "සංවර්ධනය"
+        },
+        "item-count": "{{first}} - {{second}} වල {{total}} අයිතම."
+    },
+    "entity": {
+        "action": {
+            "addblob": "බ්ලොබ් එක් කරන්න",
+            "addimage": "රූපය එක් කරන්න",
+            "back": "ආපසු",
+            "cancel": "අවලංගු කරන්න",
+            "delete": "මකන්න",
+            "edit": "සංස්කරණය කරන්න",
+            "open": "විවෘත",
+            "save": "සුරකින්න",
+            "view": "දැක්ම"
+        },
+        "detail": {
+            "field": "ක්ෂේත්‍රය",
+            "value": "ක්ෂේත්‍ර අගය"
+        },
+        "delete": {
+            "title": "මකාදැමීමේ ක්‍රියාවලිය තහවුරු කරන්න"
+        },
+        "validation": {
+            "required": "මෙම ක්ෂේත්රය අවශ්යයි.",
+            "minlength": "මෙම ක්ෂේත්‍රය අවම වශයෙන් {{min}} අක්ෂර විය යුතුය.",
+            "maxlength": "මෙම ක්ෂේත්‍රය {{ max }} අක්ෂරවලට වඩා දිගු විය නොහැක.",
+            "min": "මෙම ක්ෂේත්‍රය අවම වශයෙන් {{ min }} විය යුතුය.",
+            "max": "මෙම ක්ෂේත්‍රය {{max}ට වඩා වැඩි විය නොහැක.",
+            "minbytes": "මෙම ක්ෂේත්‍රය අවම වශයෙන් {{min}} බයිට් විය යුතුය.",
+            "maxbytes": "මෙම ක්ෂේත්‍රය {{ max }} බයිට් වලට වඩා වැඩි විය නොහැක.",
+            "pattern": "මෙම ක්ෂේත්‍රය සඳහා {{ pattern }} රටාව අනුගමනය කළ යුතුය.",
+            "number": "මෙම ක්ෂේත්‍රය අංකයක් විය යුතුය.",
+            "datetimelocal": "මෙම ක්ෂේත්‍රය දිනය හා වේලාව විය යුතුය.",
+            "patternLogin": "මෙම ක්ෂේත්‍රයට අඩංගු විය හැක්කේ අකුරු, ඉලක්කම් සහ විද්‍යුත් තැපැල් ලිපින පමණි."
+        }
+    },
+    "error": {
+        "internalServerError": "අභ්යන්තර සේවාදායක දෝෂය",
+        "server.not.reachable": "සේවාදායකය වෙත ළඟා විය නොහැක",
+        "url.not.found": "සොයා ගත නොහැක",
+        "NotNull": "ක්ෂේත්‍ර {{fieldName} හිස් විය නොහැක!",
+        "Size": "ක්ෂේත්‍ර {{fieldName} අවම / උපරිම ප්‍රමාණ අවශ්‍යතා සපුරාලන්නේ නැත!",
+        "userexists": "පිවිසුම් නම දැනටමත් භාවිතා කර ඇත!",
+        "emailexists": "විද්‍යුත් තැපෑල දැනටමත් භාවිතයේ පවතී!",
+        "idexists": "නව {{ entityName }}ට දැනටමත් හැඳුනුම්පතක් තිබිය නොහැක",
+        "idnull": "අවලංගු හැඳුනුම්පත",
+        "file": {
+            "could.not.extract": "ගොනුව උපුටා ගැනීමට නොහැකි විය",
+            "not.image": "ගොනුව රූපයක් වනු ඇතැයි අපේක්ෂා කළ නමුත් \"{{ fileType }}\""
+        }
+    },
+    "footer": "මෙය ඔබේ පාදකයයි"
+}

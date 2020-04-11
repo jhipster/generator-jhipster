@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "විගණනය",
+        "filter": {
+            "title": "දිනයකට පෙරහන් කරන්න",
+            "from": "සිට",
+            "to": "වෙත",
+            "button": {
+                "weeks": "සති",
+                "today": "අද",
+                "clear": "පැහැදිලිව",
+                "close": "වසන්න"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "පරිශීලක",
+                "date": "දිනය",
+                "status": "තත්ත්වය",
+                "data": "අමතර දත්ත"
+            },
+            "data": {
+                "remoteAddress": "දුරස්ථ ලිපිනය:"
+            }
+        },
+        "notFound": "විගණනයක් හමු නොවීය"
+    }
+}

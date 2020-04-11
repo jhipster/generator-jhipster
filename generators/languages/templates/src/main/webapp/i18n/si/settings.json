@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "[<strong>{{username}}</strong>] සඳහා පරිශීලක සැකසුම්",
+        "form": {
+            "firstname": "මුල් නම",
+            "firstname.placeholder": "ඔයාගේ මුල් නම",
+            "lastname": "අවසන් නම",
+            "lastname.placeholder": "ඔබේ අවසන් නම",
+            "language": "භාෂාව",
+            "button": "සුරකින්න"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>දෝෂයක් සිදුවී ඇත!</strong> සැකසුම් සුරැකිය නොහැක.",
+                "emailexists": "<strong>විද්\u200Dයුත් තැපෑල දැනටමත් භාවිතයේ පවතී!</strong> කරුණාකර තවත් එකක් තෝරන්න."
+            },
+            "success": "<strong>සැකසීම් සුරකින ලදි!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "ඔබේ මුල් නම අවශ්\u200Dයයි.",
+                    "minlength": "ඔබේ මුල් නම අවම වශයෙන් අක්ෂර 1 ක් විය යුතුය",
+                    "maxlength": "ඔබගේ මුල් නම අක්ෂර 50 ට වඩා වැඩි විය නොහැක"
+                },
+                "lastname": {
+                    "required": "ඔබගේ අවසාන නම අවශ්\u200Dයයි.",
+                    "minlength": "ඔබගේ අවසාන නම අවම වශයෙන් අක්ෂර 1 ක් විය යුතුය",
+                    "maxlength": "ඔබගේ අවසාන නම අක්ෂර 50 ට වඩා වැඩි විය නොහැක"
+                }
+            }
+        }
+    }
+}
