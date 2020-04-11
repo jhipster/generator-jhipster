@@ -53,6 +53,7 @@ describe('Configuration Component', () => {
       expect(mockedAxios.get).toHaveBeenCalledWith('management/configprops');
     });
   });
+
   describe('keys method', () => {
     it('should return the keys of an Object', () => {
       // GIVEN
@@ -64,6 +65,20 @@ describe('Configuration Component', () => {
       // THEN
       expect(configuration.keys(data)).toEqual(['key1', 'key2']);
       expect(configuration.keys(undefined)).toEqual([]);
+    });
+  });
+
+  describe('changeOrder function', () => {
+    it('should change order', () => {
+      // GIVEN
+      const rev = configuration.reverse;
+
+      // WHEN
+      configuration.changeOrder('prefix');
+
+      // THEN
+      expect(configuration.orderProp).toBe('prefix');
+      expect(configuration.reverse).toBe(!rev);
     });
   });
 });
