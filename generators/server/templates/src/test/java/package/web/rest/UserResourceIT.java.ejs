@@ -82,6 +82,9 @@ import org.springframework.test.web.servlet.MockMvc;
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 import javax.persistence.EntityManager;
@@ -100,14 +103,17 @@ import java.util.UUID;
 <%_ } _%>
 
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import static org.mockito.Mockito.*;
+<%_ } _%>
 <%_ if (!reactive) { _%>
     <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { _%>
 import static org.hamcrest.Matchers.hasItems;
     <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
-<%_ if (testsNeedCsrf) { _%>
+    <%_ if (testsNeedCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-<%_ } _%>
+    <%_ } _%>
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } else if (testsNeedCsrf) { _%>
@@ -261,7 +267,7 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     public void initTest() {
         <%_ if (databaseType === 'sql' && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
-        <%_ } _%> 
+        <%_ } _%>
         <%_ if (databaseType !== 'sql' || reactive) { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         user = createEntity();
@@ -282,6 +288,11 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     public void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+        <%_ } _%>
 
         // Create the User
         ManagedUserVM managedUserVM = new ManagedUserVM();
@@ -471,9 +482,6 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     public void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
-        <%_ } _%>
 
         // Get all the users
         <%_ if (!reactive) { _%>
@@ -584,8 +592,10 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     public void updateUser() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
         <%_ } _%>
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -648,8 +658,10 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     public void updateUserLogin() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
         <%_ } _%>
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -855,8 +867,9 @@ public class UserResourceIT <% if (databaseType === 'neo4j') { %>extends Abstrac
     public void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.delete(any())).thenReturn(Mono.empty());
         <%_ } _%>
         int databaseSizeBeforeDelete = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();

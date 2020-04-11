@@ -2,7 +2,7 @@
     "generator-jhipster": {
         "applicationType": "monolith",
         "reactive": true,
-        "baseName": "sampleWebflux",
+        "baseName": "sampleWebfluxCouchbaseOauth2",
         "packageName": "io.github.jhipster.sample",
         "packageFolder": "io/github/jhipster/sample",
         "authenticationType": "oauth2",
@@ -12,7 +12,7 @@
         "databaseType": "couchbase",
         "devDatabaseType": "couchbase",
         "prodDatabaseType": "couchbase",
-        "searchEngine": false,
+        "searchEngine": "elasticsearch",
         "buildTool": "gradle",
         "enableTranslation": true,
         "nativeLanguage": "en",

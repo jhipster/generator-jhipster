@@ -60,6 +60,9 @@ import java.util.Collection;
 <%_ } else { _%>
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.test.web.reactive.server.WebTestClient;
+    <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+import reactor.core.publisher.Mono;
+    <%_ } _%>
 
 import java.time.Instant;
 <%_ } _%>
@@ -67,6 +70,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import static org.mockito.Mockito.*;
+<%_ } _%>
 import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -170,6 +176,9 @@ public class AccountResourceIT <% if (databaseType === 'neo4j') { %>extends Abst
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import <%= packageName %>.repository.search.UserSearchRepository;
+<%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -193,6 +202,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import reactor.core.publisher.Mono;
+
+import static org.mockito.Mockito.*;
+<%_ } _%>
 import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 
 /**
@@ -213,6 +227,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     private MockMvc restAccountMockMvc;
     <%_ } else { _%>
     private WebTestClient accountWebTestClient;
+    <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
 
     @Test
@@ -255,6 +274,9 @@ import <%= packageName %>.repository.AuthorityRepository;
 import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%= packageName %>.repository.UserRepository;
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import <%= packageName %>.repository.search.UserSearchRepository;
+<%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.PasswordChangeDTO;
@@ -290,14 +312,20 @@ import org.springframework.test.web.servlet.MockMvc;
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
 
 import java.time.Instant;
-<%_ if (authenticationType === 'session' && !reactive && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')) { _%>
+<%_ if (authenticationType === 'session' && !reactive && ['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
 import java.time.LocalDate;
 <%_ } _%>
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import static org.mockito.Mockito.*;
+<%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import static org.hamcrest.Matchers.hasItem;
 <%_ } _%>
@@ -340,6 +368,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
+    <%_ } _%>
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -407,6 +440,12 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test
     public void testGetExistingAccount()<% if (!reactive) { %> throws Exception<% } %> {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
 
@@ -473,6 +512,12 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterValid() throws Exception {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         ManagedUserVM validUser = new ManagedUserVM();
         validUser.setLogin("test-register-valid");
         validUser.setPassword("password");
@@ -647,6 +692,12 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterDuplicateLogin() throws Exception {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         // First registration
         ManagedUserVM firstUser = new ManagedUserVM();
         firstUser.setLogin("alice");
@@ -736,6 +787,12 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterDuplicateEmail() throws Exception {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
         firstUser.setLogin("test-register-duplicate-email");
@@ -873,6 +930,12 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(
             post("/api/register")
@@ -897,6 +960,12 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testActivateAccount()<% if (!reactive) { %> throws Exception<% } %> {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         final String activationKey = "some activation key";
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
@@ -928,12 +997,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
-    <%_ if (!reactive) { _%>
     public void testActivateAccountWithWrongKey() <% if (!reactive) { %>throws Exception <% } %>{
+    <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey"))
             .andExpect(status().isInternalServerError());
     <%_ } else { _%>
-    public void testActivateAccountWithWrongKey() {
         accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey")
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -955,9 +1023,14 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (databaseType === 'sql' && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
         <%_ } _%>
-
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
@@ -1059,7 +1132,6 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (databaseType === 'sql' && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
         <%_ } _%>
-
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
@@ -1122,9 +1194,14 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ if (databaseType === 'sql' && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
         <%_ } _%>
-
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");

@@ -96,6 +96,14 @@ public interface <%= entityClass %>Service {
     *
     */
     Mono<Long> countAll();
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+
+    /**
+    * Returns the number of <%= entityInstancePlural %> available in search repository.
+    *
+    */
+    Mono<Long> searchCount();
+    <%_  } _%>
 
 <%_  } _%>
 
@@ -122,5 +130,5 @@ public interface <%= entityClass %>Service {
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);<% } %>
+    <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);<% } %>
 }
