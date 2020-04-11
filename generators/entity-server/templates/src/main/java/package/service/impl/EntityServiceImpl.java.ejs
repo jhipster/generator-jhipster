@@ -20,7 +20,6 @@ package <%= packageName %>.service<% if (service === 'serviceImpl') { %>.impl<% 
 
 <%_
 const serviceClassName = service === 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
-let viaService = false;
 const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
 const instanceName = (dto === 'mapstruct') ? asDto(entityInstance) : asEntity(entityInstance);
 const optionalOrMono = (reactive === true) ? 'Mono' : 'Optional';
@@ -87,10 +86,10 @@ import java.util.Optional;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' && !viaService) || dto === 'mapstruct'))) { _%>
+<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch') || dto === 'mapstruct'))) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch' && !viaService)) { _%>
+<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch')) { _%>
 import java.util.stream.StreamSupport;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -106,7 +105,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> implements <%= entityClass %>Service<% } %> {
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
-<%- include('../../common/inject_template', {asEntity, asDto, viaService: viaService, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
+<%- include('../../common/inject_template', {asEntity, asDto, viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
 
     /**
      * Save a <%= entityInstance %>.
@@ -119,7 +118,11 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-<%- include('../../common/save_template', {asEntity, asDto, viaService: viaService, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
+        <%_ if (!reactive) { _%>
+<%- include('../../common/save_template', {asEntity, asDto, viaService: false, returnDirectly: true, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: false}); -%>
+        <%_ } else { _%>
+<%- include('../../common/save_reactive_template', {asEntity, asDto, viaService: false, returnDirectly: true}); -%>
+        <%_ } _%>
     }
 
     /**
@@ -166,6 +169,16 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     public Mono<Long> countAll() {
         return <%= entityInstance %>Repository.count();
     }
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+
+    /**
+    * Returns the number of <%= entityInstancePlural %> available in search repository.
+    *
+    */
+    public Mono<Long> searchCount() {
+        return <%= entityInstance %>SearchRepository.count();
+    }
+    <%_  } _%>
 
 <%_  } _%>
     /**
@@ -181,7 +194,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     @Transactional(readOnly = true)
     <%_ } _%>
     public <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKeyType %> id) {
-        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService, returnDirectly:true}); -%>
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {asEntity, asDto, viaService: false, returnDirectly:true}); -%>
     }
 
     /**
@@ -194,7 +207,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKeyType %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);
-<%- include('../../common/delete_template', {viaService: viaService}); -%>
+<%- include('../../common/delete_template', {viaService: false, fromResource: false}); -%>
     }
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -213,10 +226,10 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ } _%>
     public <% if (pagination !== 'no') { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>) {
         <%_ if (pagination === 'no') { _%>
-        log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
+        log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: false, fromResource: false}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        return <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
+        return <%= entityInstance %>SearchRepository.search(<%= reactive ? 'query' : 'queryStringQuery(query)' %>, pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
             .map(<%= entityToDtoReference %>);
         <%_ } } _%>
     }

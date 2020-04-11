@@ -114,15 +114,18 @@ import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactiveRepositories) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
+<%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
 <%_ if (fieldsContainBlob === true) { _%>
 import org.springframework.util.Base64Utils;
 <%_ } _%>
-<%_ if (reactive && fieldsContainOwnerManyToMany === true) { _%>
+<%_ if (reactive && (fieldsContainOwnerManyToMany === true || searchEngine === 'elasticsearch')) { _%>
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
@@ -138,7 +141,7 @@ import java.time.temporal.ChronoUnit;<% } %>
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import java.util.ArrayList;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
 import java.util.Collections;
 <%_ } _%>
 import java.util.List;
@@ -150,7 +153,7 @@ import java.util.UUID;
 import static <%= packageName %>.web.rest.TestUtil.sameInstant;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 <%_ } _%>
 import static org.hamcrest.Matchers.hasItem;
@@ -184,7 +187,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 @SpringBootTest(classes = <%= mainClass %>.class)
 <%_ } _%>
-<% if (cacheProvider === 'redis') { %>@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })<% } else if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { %>@ExtendWith(MockitoExtension.class)<% } %>
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
+<%_ } else if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
+@ExtendWith(MockitoExtension.class)
+<%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
 <%_ } else { _%>
@@ -519,7 +526,11 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     public void create<%= entityClass %>() throws Exception {
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
-
+    <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+        // Configure the mock search repository
+        when(mock<%= entityClass %>SearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+    <%_ } _%>
         // Create the <%= entityClass %>
         <%_ if (dto === 'mapstruct') { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
@@ -667,11 +678,11 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
+            <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         verify(mock<%= entityClass %>SearchRepository, times(2)).save(<%= asEntity(entityInstance) %>);
-<%_ } else { _%>
+            <%_ } else { _%>
         verify(mock<%= entityClass %>SearchRepository, times(1)).save(<%= asEntity(entityInstance) %>);
-<%_ } _%>
+            <%_ } _%>
         <%_ } _%>
     }
 <%_ } _%>
@@ -1149,16 +1160,17 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
+    <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+        // Configure the mock search repository
+        when(mock<%= entityClass %>SearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+    <%_ } _%>
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
         <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
-        // As the test used the service layer, reset the Elasticsearch mock repository
-        reset(mock<%= entityClass %>SearchRepository);
-    <%_ } _%>
 <%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
 <%_ } _%>
@@ -1222,7 +1234,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(1)).save(test<%= entityClass %>);
+        verify(mock<%= entityClass %>SearchRepository, times(<%= service !== 'no' && dto !== 'mapstruct' ? '2' : '1' %>)).save(test<%= entityClass %>);
         <%_ } _%>
     }
 
@@ -1268,6 +1280,14 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void delete<%= entityClass %>() throws Exception {
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+        // Configure the mock search repository
+    <%_ if (service !== 'no') { _%>
+        when(mock<%= entityClass %>SearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+    <%_ } _%>
+        when(mock<%= entityClass %>SearchRepository.deleteById(any<%= primaryKeyType %>())).thenReturn(Mono.empty());
+<%_ } _%>
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -1312,6 +1332,14 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void search<%= entityClass %>() throws Exception {
+        // Configure the mock search repository
+<%_ if (reactive) { _%>
+        when(mock<%= entityClass %>SearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+    <%_ if (pagination !== 'no') { _%>
+        when(mock<%= entityClass %>SearchRepository.count()).thenReturn(Mono.just(1L));
+    <%_ } _%>
+<%_ } _%>
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -1321,12 +1349,17 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
 <%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' && pagination !== 'no') { _%>
+<%_ if (reactive) { _%>
+        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= asEntity(entityInstance) %>.getId()<%_ if (pagination !== 'no') { _%>, PageRequest.of(0, 20)<% }%>))
+            .thenReturn(Flux.just(<%= asEntity(entityInstance) %>));
+<%_ } else { _%>
+    <%_ if (pagination !== 'no') { _%>
         when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= asEntity(entityInstance) %>.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(<%= asEntity(entityInstance) %>), PageRequest.of(0, 1), 1));
-<%_ } else { _%>
+    <%_ } else { _%>
         when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= asEntity(entityInstance) %>.getId())))
             .thenReturn(Collections.singletonList(<%= asEntity(entityInstance) %>));
+    <%_ } _%>
 <%_ } _%>
 
         // Search the <%= entityInstance %>

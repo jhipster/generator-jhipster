@@ -91,7 +91,7 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -367,10 +367,14 @@ public class UserResource {
      * @return the result of the search.
      */
     @GetMapping("/_search/users/{query}")
-    public List<<%= asEntity('User') %>> search(@PathVariable String query) {
+    public <% if(reactive) { %>Mono<<% } %>List<<%= asEntity('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
+        <%_ if (!reactive) { _%>
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
+        <%_ } else { _%>
+        return userSearchRepository.search(query).collectList();
+        <%_ } _%>
     }
 <%_ } _%>
 }

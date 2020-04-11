@@ -624,6 +624,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
+        <%_ if (!reactive) { _%>
         <!-- Spring Data Jest dependencies for Elasticsearch -->
         <dependency>
             <groupId>com.github.vanroy</groupId>
@@ -635,6 +636,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <%_ } _%>
         <!-- log4j2-mock needed to create embedded elasticsearch instance with SLF4J -->
         <dependency>
             <groupId>de.dentrassi.elasticsearch</groupId>

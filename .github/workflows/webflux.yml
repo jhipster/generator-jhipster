@@ -46,20 +46,20 @@ jobs:
                 os: [ubuntu-latest]
                 app-type:
                     - webflux-mongodb
-                    - webflux-mongodb-session
+                    - webflux-mongodb-es-session
                     - webflux-mongodb-oauth2
                     - webflux-gateway-jwt
                     - webflux-gateway-oauth2
                     - webflux-couchbase
                     - webflux-couchbase-session
-                    - webflux-couchbase-oauth2
+                    - webflux-couchbase-es-oauth2
                 include:
                     - app-type: webflux-mongodb
                       entity: mongodb
                       profile: prod
                       war: 0
                       protractor: 1
-                    - app-type: webflux-mongodb-session
+                    - app-type: webflux-mongodb-es-session
                       entity: mongodb
                       profile: prod
                       war: 0
@@ -89,7 +89,7 @@ jobs:
                       profile: prod
                       war: 0
                       protractor: 1
-                    - app-type: webflux-couchbase-oauth2
+                    - app-type: webflux-couchbase-es-oauth2
                       entity: none
                       profile: prod
                       war: 0
