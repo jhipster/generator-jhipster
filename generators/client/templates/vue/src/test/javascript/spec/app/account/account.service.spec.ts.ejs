@@ -5,6 +5,9 @@ import AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
 import TranslationService from '@/locale/translation.service';
 <%_ } %>
+<%_ if (websocket === 'spring-websocket') { _%>
+import TrackerService from '@/admin/tracker/tracker.service';
+<%_ } _%>
 import * as config from '@/shared/config/config';
 
 const mockedAxios: any = axios;
@@ -46,7 +49,7 @@ describe('Account Service test suite', () => {
     expect(store.getters.ribbonOnProfiles).toBe('dev');
   });
 
-  it('should init service and retrieve account if already logged in before but no account found', async () => {
+  it('should init service and retrieve profiles if already logged in before but no account found', async () => {
     <%_ if (authenticationType == 'jwt') { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
     <%_ } %>
@@ -57,14 +60,10 @@ describe('Account Service test suite', () => {
     expect(store.getters.logon).toBe(false);
     expect(accountService.authenticated).toBe(false);
     expect(store.getters.account).toBe(null);
-    expect(mockedAxios.get).toHaveBeenCalledWith('api/account');
     expect(mockedAxios.get).toHaveBeenCalledWith('management/info');
-    <%_ if (enableTranslation) { _%>
-    expect(mockedAxios.get).toHaveBeenCalledWith('i18n/<%= nativeLanguage %>.json?buildTimestamp=undefined');
-    <%_ } %>
   });
 
-  it('should init service and retrieve account if already logged in before but exception occured and should be logged out', async () => {
+  it('should init service and retrieve profiles if already logged in before but exception occured and should be logged out', async () => {
     <%_ if (authenticationType == 'jwt') { _%>
     localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
     <%_ } %>
@@ -74,29 +73,57 @@ describe('Account Service test suite', () => {
     expect((<any>router).history.current.fullPath).toBe('/');
     expect(accountService.authenticated).toBe(false);
     expect(store.getters.account).toBe(null);
-    expect(mockedAxios.get).toHaveBeenCalledWith('api/account');
     expect(mockedAxios.get).toHaveBeenCalledWith('management/info');
   });
 
-  it('should init service and check for authority', async () => {
-    mockedAxios.get.mockReturnValue(Promise.resolve({ data: {authorities: ['USER']} } ));
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
+  it('should init service and check for authority after retrieving account but getAccount failed', async () => {
+    <%_ if (websocket === 'spring-websocket') { _%>
+    const trackerService = new TrackerService(null);
+    trackerService.connect = jest.fn();
+    <%_ } _%>
+    <%_ if (authenticationType == 'jwt') { _%>
+    localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
+    <%_ } %>
+    mockedAxios.get = jest.fn(apiName => Promise.reject());
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>trackerService,<%_ } %> router);
 
-    expect(accountService.hasAnyAuthority('USER')).toBe(true);
+    return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
+      expect(value).toBe(false);
+    });
   });
 
-  it('should init service and not return any authorities', async () => {
-    mockedAxios.get.mockReturnValue(Promise.resolve({ data: {authorities: ['USER']} } ));
-    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
+  it('should init service and check for authority after retrieving account', async () => {
+    <%_ if (websocket === 'spring-websocket') { _%>
+    const trackerService = new TrackerService(null);
+    trackerService.connect = jest.fn();
+    <%_ } _%>
+    <%_ if (authenticationType == 'jwt') { _%>
+    localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
+    <%_ } %>
+    mockedAxios.get.mockReturnValue(Promise.resolve({ data: { authorities: ['USER'] } }));
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>trackerService,<%_ } %> router);
 
-    expect(accountService.hasAnyAuthority('ADMIN')).toBe(false);
+    return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
+      expect(value).toBe(true);
+    });
   });
 
-  it('should init service as not authentified and not return any authorities', async () => {
-    mockedAxios.get = jest.fn(apiName => apiName === 'api/account' ? Promise.reject() : Promise.resolve({}));
+  it('should init service as not authentified and not return any authorities admin and not retrieve account', async () => {
+    mockedAxios.get = jest.fn(apiName => (apiName === 'api/account' ? Promise.reject() : Promise.resolve({})));
     accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
 
-    expect(accountService.hasAnyAuthority('ADMIN')).toBe(false);
+    return accountService.hasAnyAuthorityAndCheckAuth('ADMIN').then((value: boolean) => {
+      expect(value).toBe(false);
+    });
+  });
+
+  it('should init service as not authentified and return authority user', async () => {
+    mockedAxios.get = jest.fn(apiName => (apiName === 'api/account' ? Promise.reject() : Promise.resolve({})));
+    accountService = await new AccountService(store, <%_ if (enableTranslation) { _%>new TranslationService(store, i18n),<%_ } %><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>mockedCookie,<%_ } %><%_ if (websocket === 'spring-websocket') { _%>null,<%_ } %> router);
+
+    return accountService.hasAnyAuthorityAndCheckAuth('USER').then((value: boolean) => {
+      expect(value).toBe(true);
+    });
   });
 
 });

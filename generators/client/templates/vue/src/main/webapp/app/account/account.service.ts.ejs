@@ -28,10 +28,6 @@ export default class AccountService {
   }
 
   public init(): void {
-    const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
-    if (!this.store.getters.account && !this.store.getters.logon && token) {
-      this.retrieveAccount();
-    }
     this.retrieveProfiles();
   }
 
@@ -44,53 +40,63 @@ export default class AccountService {
     });
   }
 
-  public retrieveAccount(): void {
-    this.store.commit('authenticate');
-    axios.get('api/account').then((response) => {
-      const account = response.data;
-      if (account) {
-        this.store.commit('authenticated', account);
-        <%_ if (enableTranslation) { _%>
-        if (this.store.getters.currentLanguage !== account.langKey) {
-          this.store.commit('currentLanguage', account.langKey);
-        }
-        <%_ } _%>
-        if(sessionStorage.getItem('requested-url')) {
-          this.router.replace(sessionStorage.getItem("requested-url"));
+  public retrieveAccount(): Promise<boolean> {
+    return new Promise(resolve => {
+      axios
+        .get('api/account').then((response) => {
+        this.store.commit('authenticate');
+        const account = response.data;
+        if (account) {
+          this.store.commit('authenticated', account);
+          <%_ if (enableTranslation) { _%>
+          if (this.store.getters.currentLanguage !== account.langKey) {
+            this.store.commit('currentLanguage', account.langKey);
+          }
+          <%_ } _%>
+          if(sessionStorage.getItem('requested-url')) {
+            this.router.replace(sessionStorage.getItem("requested-url"));
+            sessionStorage.removeItem("requested-url");
+          }
+          <%_ if (websocket === 'spring-websocket') { _%>
+          this.trackerService.connect();
+          <%_ } _%>
+        } else {
+          this.store.commit('logout');
+          this.router.push('/');
           sessionStorage.removeItem("requested-url");
         }
-        <%_ if (websocket === 'spring-websocket') { _%>
-        this.trackerService.connect();
+        <%_ if (enableTranslation) { _%>
+        this.translationService.refreshTranslation(this.store.getters.currentLanguage);
         <%_ } _%>
-      } else {
+        resolve(true);
+      }).catch(() => {
         this.store.commit('logout');
-        this.router.push('/');
-        sessionStorage.removeItem("requested-url");
-      }
-      <%_ if (enableTranslation) { _%>
-      this.translationService.refreshTranslation(this.store.getters.currentLanguage);
-      <%_ } _%>
-    }).catch(() => {
-      this.store.commit('logout');
-      this.router.push('/');
+        resolve(false);
+      });
     });
   }
 
-  public hasAnyAuthority(authorities: any): boolean {
-    if (typeof authorities === "string") {
+  public hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
+    if (typeof authorities === 'string') {
       authorities = [authorities];
     }
+
     if (!this.authenticated || !this.userAuthorities) {
-      return false;
+      const token = <%_ if (authenticationType === 'jwt') { _%> localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken'); <%_ } else { _%> this.cookie.get('JSESSIONID') || this.cookie.get('XSRF-TOKEN'); <%_ } _%>
+      if (!this.store.getters.account && !this.store.getters.logon && token) {
+        return this.retrieveAccount();
+      } else {
+        return new Promise(resolve => { resolve(false); });;
+      }
     }
 
     for (let i = 0; i < authorities.length; i++) {
       if (this.userAuthorities.includes(authorities[i])) {
-        return true;
+        return new Promise(resolve => { resolve(true); });;
       }
     }
 
-    return false;
+    return new Promise(resolve => { resolve(false); });;
   }
 
   public get authenticated(): boolean {

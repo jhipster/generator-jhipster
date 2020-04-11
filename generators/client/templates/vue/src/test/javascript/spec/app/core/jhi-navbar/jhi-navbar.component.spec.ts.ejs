@@ -31,7 +31,7 @@ let wrapper: Wrapper<JhiNavbarClass>;
   <%_ } else if (authenticationType === 'oauth2') { _%>
   const loginService = { login: jest.fn(), logout: jest.fn() };
   <%_ } _%>
-  const accountService = { hasAnyAuthority: jest.fn() };
+  const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
   <%_ if (enableTranslation) { _%>
   const translationService = { refreshTranslation: jest.fn() };
   <%_ } _%>
@@ -94,7 +94,7 @@ let wrapper: Wrapper<JhiNavbarClass>;
   it('should use account service', () => {
     jhiNavbar.hasAnyAuthority('auth');
 
-    expect(accountService.hasAnyAuthority).toHaveBeenCalled();
+    expect(accountService.hasAnyAuthorityAndCheckAuth).toHaveBeenCalled();
   });
 
   it('logout should clear credentials', () => {

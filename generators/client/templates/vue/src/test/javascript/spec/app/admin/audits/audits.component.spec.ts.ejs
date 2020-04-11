@@ -58,6 +58,14 @@ describe('Audits Component', () => {
     });
   });
 
+  describe('changeOrder function ', () => {
+    it('should change order', () => {
+      audits.changeOrder('id', 'timestamp');
+      expect(audits.propOrder).toBe('id');
+      expect(audits.predicate).toBe('timestamp');
+    });
+  });
+
   describe('previousMonth function ', () => {
     it('should set fromDate to current date', () => {
       audits.previousMonth();
