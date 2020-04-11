@@ -89,7 +89,7 @@ function askForApplicationType(meta) {
             when: () => ['gateway', 'monolith', 'microservice'].includes(this.applicationType),
             type: 'confirm',
             name: 'reactive',
-            message: '[Alpha] Do you want to make it reactive with Spring WebFlux?',
+            message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
             default: false
         };
 
