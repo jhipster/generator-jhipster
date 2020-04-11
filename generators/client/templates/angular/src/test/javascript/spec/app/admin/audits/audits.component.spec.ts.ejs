@@ -191,14 +191,6 @@ describe('Component Tests', () => {
                 spyOn(comp, 'transition');
             });
 
-            it('Should not reload page already shown', () => {
-                // WHEN
-                comp.loadPage(1);
-
-                // THEN
-                expect(comp.transition).not.toBeCalled();
-            });
-
             it('Should load new page', () => {
                 // WHEN
                 comp.loadPage(2);

@@ -60,7 +60,7 @@ description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == "1.8" || "11" || "12" || "13"
+assert System.properties["java.specification.version"] == "1.8" || "11" || "12" || "13" || "14"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -384,7 +384,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
         <%_ } else { _%>
-    implementation "org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:0.1.0.M3"
+    implementation "org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:${spring_boot_starter_data_r2dbc_version}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -477,7 +477,7 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt-api"
     if (!project.hasProperty("gae")) {
         runtimeOnly "io.jsonwebtoken:jjwt-impl"
-        runtimeOnly "io.jsonwebtoken:jjwt-jackson"
+        <% if (reactive) { %>implementation<% } else { %>runtimeOnly<% } %> "io.jsonwebtoken:jjwt-jackson"
     } else {
         implementation "io.jsonwebtoken:jjwt-impl"
         implementation "io.jsonwebtoken:jjwt-jackson"
@@ -502,16 +502,16 @@ dependencies {
     }
     implementation "io.springfox:springfox-bean-validators"
     <%_ } else if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
-    implementation "io.springfox:springfox-swagger2:3.0.0-SNAPSHOT"
-    implementation "io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT"
-    implementation "io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT"
+    implementation "io.springfox:springfox-swagger2:${springfox_version}"
+    implementation "io.springfox:springfox-swagger-ui:${springfox_version}"
+    implementation "io.springfox:springfox-spring-webflux:${springfox_version}"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
         <%_ if (!reactive) { _%>
     liquibaseRuntime "mysql:mysql-connector-java"
         <%_ } else { _%>
-    implementation "dev.miku:r2dbc-mysql:0.8.1.RELEASE"
+    implementation "dev.miku:r2dbc-mysql:${r2dbc_mysql_version}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
@@ -519,7 +519,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "org.postgresql:postgresql"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-postgresql:0.8.1.RELEASE"
+    implementation "io.r2dbc:r2dbc-postgresql:${r2dbc_postgresql_version}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mariadb') { _%>
@@ -533,7 +533,7 @@ dependencies {
     liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-mssql:0.8.1.RELEASE"
+    implementation "io.r2dbc:r2dbc-mssql:${r2dbc_mssql_version}"
         <%_ } _%>
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
@@ -560,6 +560,12 @@ dependencies {
     }
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
+    <%_ if (reactive) { _%>
+    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
+    // See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up
+    implementation 'io.netty:netty-common:${netty_common_version}'
+    <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     <%_ if (databaseType === 'mongodb') { _%>
@@ -571,14 +577,14 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     testImplementation "com.h2database:h2"
         <%_ if (reactive) { _%>
-    testImplementation "io.r2dbc:r2dbc-h2:0.8.1.RELEASE"
+    testImplementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         <%_ if (!reactive) { _%>
     liquibaseRuntime "com.h2database:h2"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-h2:0.8.1.RELEASE"
+    implementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle') { _%>

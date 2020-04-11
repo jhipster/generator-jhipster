@@ -87,5 +87,24 @@
             this.ngbPaginationPage = data.pagingParams.page;
             this.loadPage();
         });
+        this.handleBackNavigation();
         this.registerChangeIn<%= entityClassPlural %>();
+    }
+
+    handleBackNavigation(): void {
+        this.activatedRoute.queryParamMap.subscribe((params: ParamMap) => {
+            const prevPage = params.get('page');
+            const prevSort = params.get('sort');
+            const prevSortSplit = prevSort?.split(',');
+            if (prevSortSplit) {
+                this.predicate = prevSortSplit[0];
+                this.ascending = prevSortSplit[1] === 'asc';
+            }
+            if (prevPage && +prevPage !== this.page) {
+                this.ngbPaginationPage = +prevPage;
+                this.loadPage(+prevPage);
+            } else {
+                this.loadPage(this.page);
+            }
+        });
     }

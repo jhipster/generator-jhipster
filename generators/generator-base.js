@@ -27,6 +27,8 @@ const exec = require('child_process').exec;
 const os = require('os');
 const pluralize = require('pluralize');
 const jhiCore = require('jhipster-core');
+const normalize = require('normalize-path');
+
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
@@ -70,20 +72,21 @@ module.exports = class extends PrivateBase {
     /**
      * Apply output customizer.
      *
-     * @param {string} path - Path to customize.
+     * @param {string} outputPath - Path to customize.
      */
-    applyOutputPathCustomizer(path) {
+    applyOutputPathCustomizer(outputPath) {
         const outputPathCustomizer = this.options.outputPathCustomizer;
         if (!outputPathCustomizer) {
-            return path;
+            return outputPath;
         }
+        outputPath = outputPath ? normalize(outputPath) : outputPath;
         if (Array.isArray(outputPathCustomizer)) {
             outputPathCustomizer.forEach(customizer => {
-                path = customizer.call(this, path);
+                outputPath = customizer.call(this, outputPath);
             });
-            return path;
+            return outputPath;
         }
-        return outputPathCustomizer.call(this, path);
+        return outputPathCustomizer.call(this, outputPath);
     }
 
     /**
@@ -1104,6 +1107,7 @@ module.exports = class extends PrivateBase {
             };
             try {
                 // if file is not present, we got an empty list, no exception
+                // TODO 7.0 this.destinationPath(MODULES_HOOK_FILE);
                 modules = this.fs.readJSON(MODULES_HOOK_FILE, []);
                 duplicate = _.findIndex(modules, moduleConfig) !== -1;
             } catch (err) {
@@ -1285,11 +1289,12 @@ module.exports = class extends PrivateBase {
         let entityJson = null;
 
         try {
+            let filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`);
             if (this.context.microservicePath) {
-                entityJson = this.fs.readJSON(path.join(this.context.microservicePath, JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
-            } else {
-                entityJson = this.fs.readJSON(path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`));
+                filename = path.join(this.context.microservicePath, filename);
             }
+            // TODO 7.0 filename = this.destinationPath(filename);
+            entityJson = this.fs.readJSON(filename);
         } catch (err) {
             this.log(chalk.red(`The JHipster entity configuration file could not be read for file ${file}!`) + err);
             this.debug('Error:', err);
@@ -1308,15 +1313,19 @@ module.exports = class extends PrivateBase {
             return e1.definition.changelogDate - e2.definition.changelogDate;
         }
 
+        // TODO 7.0 this.destinationPath(JHIPSTER_CONFIG_DIR);
         if (!shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
             return entities;
         }
 
+        // TODO 7.0 this.destinationPath(JHIPSTER_CONFIG_DIR);
         return shelljs
             .ls(path.join(JHIPSTER_CONFIG_DIR, '*.json'))
             .reduce((acc, file) => {
                 try {
-                    const definition = jhiCore.readEntityJSON(file);
+                    const definition = this.fs.readJSON(file);
+                    // Execute a write operation to set the file as modified on mem-fs to trigger prettier.
+                    this.fs.append(file, '', { trimEnd: false, separator: '' });
                     acc.push({ name: path.basename(file, '.json'), definition });
                 } catch (error) {
                     // not an entity file / malformed?
