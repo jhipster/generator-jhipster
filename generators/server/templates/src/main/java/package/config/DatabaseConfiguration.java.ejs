@@ -34,6 +34,9 @@ import com.mongodb.MongoClient;
 import com.couchbase.client.java.Bucket;
 import com.github.couchmove.Couchmove;
 import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+import <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
+    <%_ } _%>
 import org.apache.commons.codec.binary.Base64;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
@@ -57,7 +60,7 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.context.annotation.Import;
 <%_ } _%>
-<%_ if ((searchEngine === 'elasticsearch' || reactive) && databaseType === 'mongodb') { _%>
+<%_ if (searchEngine === 'elasticsearch' && ['mongodb', 'couchbase'].includes(databaseType)) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
@@ -91,10 +94,7 @@ import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbase
     <%_ if (!reactive) { _%>
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
     <%_ } _%>
-import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
-    <%_ if (reactive) { _%>
-import org.springframework.data.couchbase.repository.config.EnableReactiveCouchbaseRepositories;
-    <%_ } _%>
+import org.springframework.data.couchbase.repository.config.Enable<%_ if (reactive) { _%>Reactive<% } %>CouchbaseRepositories;
 import org.springframework.util.StringUtils;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %>
 <%_ if (databaseType === 'sql') { _%>
@@ -173,10 +173,9 @@ import java.util.UUID;
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
-    <%_ if (reactive) { _%>
-@EnableReactiveCouchbaseRepositories(repositoryBaseClass = CustomReactiveN1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository")
-    <%_ } else { _%>
-@EnableCouchbaseRepositories(repositoryBaseClass = CustomN1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository")
+@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository"<%_ if (searchEngine === 'elasticsearch') { %>,
+    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class)<%_ } _%>)
+    <%_ if (!reactive) { _%>
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
     <%_ } _%>
 @Import(value = CouchbaseAutoConfiguration.class)
