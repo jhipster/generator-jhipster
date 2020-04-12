@@ -21,6 +21,7 @@ const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
+const fs = require('fs');
 const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
@@ -865,8 +866,7 @@ module.exports = class extends Generator {
             this.warning(msg);
             return undefined;
         }
-        // eslint-disable-next-line global-require,import/no-dynamic-require
-        return require(path.join(blueprintPackagePath, 'package.json'));
+        return JSON.parse(fs.readFileSync(path.join(blueprintPackagePath, 'package.json')));
     }
 
     /**
