@@ -65,11 +65,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     const command = getCommand(cmd, args, opts);
     logger.info(chalk.yellow(`Executing ${command}`));
     logger.info(chalk.yellow(`Options: ${toString(options)}`));
-    try {
-        env.run(command, options, done);
-    } catch (e) {
-        logger.error(e.message, e);
-    }
+    env.run(command, options).then(done, done);
 };
 
 program

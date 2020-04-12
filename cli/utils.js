@@ -199,9 +199,11 @@ const getCommandOptions = (pkg, argv) => {
 };
 
 const doneFactory = successMsg => {
-    return errorMsg => {
-        if (errorMsg) {
-            logger.error(`ERROR! ${errorMsg}`);
+    return errorOrMsg => {
+        if (errorOrMsg instanceof Error) {
+            logger.error(`ERROR! ${errorOrMsg.message}`, errorOrMsg);
+        } else if (errorOrMsg) {
+            logger.error(`ERROR! ${errorOrMsg}`);
         } else if (successMsg) {
             logger.info(chalk.green.bold(successMsg));
         }
@@ -217,7 +219,7 @@ const printSuccess = () => {
 };
 
 const createYeomanEnv = packagePatterns => {
-    const env = yeoman.createEnv();
+    const env = yeoman.createEnv(undefined, { newErrorHandler: true });
     // Register jhipster generators.
     env.lookup({ packagePaths: [path.join(__dirname, '..')] });
     if (packagePatterns) {
