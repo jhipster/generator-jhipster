@@ -28,87 +28,66 @@
 
 spring:
     datasource:
-       type: com.zaxxer.hikari.HikariDataSource
-       <%_ if (prodDatabaseType === 'mysql') { _%>
-       driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-       url: jdbc:tc:mysql:<%= containerVersion %>:///<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw
-       username: root
-       password:
-       <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-       driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-       url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw
-       username: root
-       password:
-       <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-       driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-       url: jdbc:tc:postgresql:<%= containerVersion %>:///<%= baseName %>?TC_TMPFS=/testtmpfs:rw
-       username: <%= baseName %>
-       password:
-       <%_ } else if (prodDatabaseType === 'mssql') { _%>
-       driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-       url: jdbc:tc:sqlserver:<%= containerVersion %>://;database=<%= baseName %>?TC_TMPFS=/testtmpfs:rw
-       username: SA
-       password: yourStrong(!)Password
-       <%_ } else if (prodDatabaseType === 'oracle') { _%>
-       driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-       url: jdbc:tc:oracle:thin:@///ORCL?TC_TMPFS=/testtmpfs:rw
-       username: system
-       password: oracle
-       <%_ } _%>
-       hikari:
-           poolName: Hikari
-           auto-commit: false
-       <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
-           data-source-properties:
-               cachePrepStmts: true
-               prepStmtCacheSize: 250
-               prepStmtCacheSqlLimit: 2048
-               useServerPrepStmts: true
-       <%_ } _%>
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+        <%_ if (prodDatabaseType === 'mysql') { _%>
+        url: jdbc:tc:mysql:<%= containerVersion %>:///<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw
+        username: root
+        password:
+        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+        url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw
+        username: root
+        password:
+        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+        url: jdbc:tc:postgresql:<%= containerVersion %>:///<%= baseName %>?TC_TMPFS=/testtmpfs:rw
+        username: <%= baseName %>
+        password:
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        url: jdbc:tc:sqlserver:<%= containerVersion %>://;database=<%= baseName %>?TC_TMPFS=/testtmpfs:rw
+        username: SA
+        password: yourStrong(!)Password
+        <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        url: jdbc:tc:oracle:thin:@///ORCL?TC_TMPFS=/testtmpfs:rw
+        username: system
+        password: oracle
+        <%_ } _%>
+        hikari:
+            poolName: Hikari
+            auto-commit: false
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb' || prodDatabaseType === 'mssql') { _%>
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
+        <%_ } _%>
     jpa:
-       <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-       database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-       <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-       database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
-       <%_ } else if (prodDatabaseType === 'oracle') { _%>
-       database-platform: org.hibernate.dialect.Oracle12cDialect
-       <%_ } else if (prodDatabaseType === 'mssql') { _%>
-       database-platform: org.hibernate.dialect.SQLServer2012Dialect
-       <%_ } else { _%>
-       database-platform: org.hibernate.dialect.HSQLDialect
-       <%_ } _%>
-       <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
-       database: MYSQL
-       <%_ } else if (prodDatabaseType === 'postgresql') { _%>
-       database: POSTGRESQL
-       <%_ } else if (prodDatabaseType === 'oracle') { _%>
-       database: ORACLE
-       <%_ } else if (prodDatabaseType === 'mssql') { _%>
-       database: SQL_SERVER
-       <%_ } else { _%>
-       database: HSQL
-       <%_ } _%>
-       show-sql: false
-       properties:
-           hibernate.id.new_generator_mappings: true
-           hibernate.connection.provider_disables_autocommit: true
-           hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
-           hibernate.cache.use_query_cache: false
-           hibernate.generate_statistics: false
-           <%_ if (enableHibernateCache) { _%>
-               <%_ if (cacheProvider === 'hazelcast') { _%>
-           hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
-           hibernate.cache.hazelcast.instance_name: <%= baseName %>
-               <%_ } else if (cacheProvider === 'infinispan') { _%>
-           hibernate.cache.region.factory_class: <%=packageName%>.config.CacheFactoryConfiguration
-           hibernate.cache.inifinispan.statistics: false
-           hibernate.cache.use_minimal_puts: true
-           hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
-           hibernate.cache.infinispan.entity.memory.size: 1000
-           hibernate.cache.infinispan.jgroups_cfg: default-configs/default-jgroups-tcp.xml
-               <%_ } _%>
-               <%_ if (cacheProvider === 'hazelcast') { _%>
-           hibernate.cache.use_minimal_puts: true
-           hibernate.cache.hazelcast.use_lite_member: true
-               <%_ } _%>
-           <%_ } _%>
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+        database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
+        <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        database-platform: org.hibernate.dialect.Oracle12cDialect
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        database-platform: org.hibernate.dialect.SQLServer2012Dialect
+        <%_ } else { _%>
+        database-platform: org.hibernate.dialect.HSQLDialect
+        <%_ } _%>
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+        database: MYSQL
+        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+        database: POSTGRESQL
+        <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        database: ORACLE
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        database: SQL_SERVER
+        <%_ } else { _%>
+        database: HSQL
+        <%_ } _%>
+        show-sql: false
+        properties:
+            hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
