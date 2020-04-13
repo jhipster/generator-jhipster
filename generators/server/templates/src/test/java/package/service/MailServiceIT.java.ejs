@@ -76,7 +76,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT)
+@ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 public class MailServiceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 

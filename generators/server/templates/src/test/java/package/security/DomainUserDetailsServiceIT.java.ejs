@@ -75,7 +75,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT)
+@ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
 @Transactional

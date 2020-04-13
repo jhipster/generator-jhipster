@@ -54,6 +54,9 @@ import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (!reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -138,7 +141,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT)
+@ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 

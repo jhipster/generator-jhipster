@@ -79,7 +79,7 @@ import static <%= packageName %>.repository.CustomAuditEventRepository.EVENT_DAT
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT)
+@ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 @Transactional
