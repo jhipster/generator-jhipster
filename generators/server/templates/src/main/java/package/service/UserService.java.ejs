@@ -281,7 +281,7 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
-        <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
+        <%_ if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
         newUser.setImageUrl(userDTO.getImageUrl());
         <%_ } _%>
         newUser.setLangKey(userDTO.getLangKey());

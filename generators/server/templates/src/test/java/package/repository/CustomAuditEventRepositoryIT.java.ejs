@@ -37,6 +37,9 @@ import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -75,10 +78,13 @@ import static <%= packageName %>.repository.CustomAuditEventRepository.EVENT_DAT
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT)
+<%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 @Transactional
 <%_ } _%>
-public class CustomAuditEventRepositoryIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %>{
+public class CustomAuditEventRepositoryIT {
 
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepository;

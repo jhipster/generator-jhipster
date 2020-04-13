@@ -31,6 +31,15 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+<%_ if (databaseType === 'neo4j') { _%>
+org:
+  neo4j:
+    migrations:
+      locations-to-scan:
+      packages-to-scan: <%= packageName %>.config.neo4j
+      installed-by: <%= baseName %>
+<%_ } _%>
+
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
