@@ -94,6 +94,9 @@ import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (!reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -193,7 +196,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-@ExtendWith(AbstractNeo4jIT)
+@ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 <%_ if (!reactive) { _%>
 @AutoConfigureMockMvc
