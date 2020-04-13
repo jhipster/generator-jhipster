@@ -57,7 +57,7 @@ function getJHipsterCli() {
     return cmd;
 }
 
-function testInTempDir(cb, keepInTestDir = false) {
+function testInTempDir(cb, keepInTestDir) {
     const cwd = process.cwd();
     /* eslint-disable-next-line no-console */
     console.log(`current cwd: ${cwd}`);

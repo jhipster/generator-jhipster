@@ -201,7 +201,7 @@ const getCommandOptions = (pkg, argv) => {
 const doneFactory = successMsg => {
     return errorMsg => {
         if (errorMsg) {
-            logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+            logger.error(`ERROR! ${errorMsg}`);
         } else if (successMsg) {
             logger.info(chalk.green.bold(successMsg));
         }
@@ -212,7 +212,7 @@ const printSuccess = () => {
     if (process.exitCode === undefined || process.exitCode === 0) {
         logger.info(chalk.green.bold(SUCCESS_MESSAGE));
     } else {
-        logger.error(`${chalk.red.bold('ERROR!')} JHipster finished with code ${process.exitCode}`);
+        logger.error(`ERROR! JHipster finished with code ${process.exitCode}`);
     }
 };
 
