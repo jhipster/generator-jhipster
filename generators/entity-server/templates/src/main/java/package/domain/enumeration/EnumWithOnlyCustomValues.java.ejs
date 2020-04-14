@@ -22,5 +22,17 @@ package <%= packageName %>.domain.enumeration;
  * The <%= enumName %> enumeration.
  */
 public enum <%= enumName %> {
-    <%= enumValues %>
+<%_ enumValuesForBackEndFiles.forEach((enumWithCustomValue, index) => { _%>
+    <%= enumWithCustomValue.name %>("<%= enumWithCustomValue.value %>")<% if (index < enumValuesForBackEndFiles.length - 1) { %>,<% } else { %>;<% } %>
+<%_ }); _%>
+
+    private final String value;
+
+    <%= enumName %>(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

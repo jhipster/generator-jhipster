@@ -460,22 +460,43 @@ function getJavadoc(text, indentSize) {
  */
 function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
     const fieldType = field.fieldType;
+    // Todo: check if the next line does a side-effect and refactor it.
     field.enumInstance = _.lowerFirst(fieldType);
     const enums = field.fieldValues.replace(/\s/g, '').split(',');
-    const enumsWithCustomValue = getEnumsWithCustomValue(enums);
+    const customValuesState = getCustomValuesState(enums);
     return {
         enumName: fieldType,
-        enumValues: field.fieldValues.split(',').join(', '),
         enumInstance: field.enumInstance,
         enums,
-        enumsWithCustomValue,
+        ...customValuesState,
+        enumValuesForFrontEndFiles: getEnumsForFrontEndFiles(enums),
+        enumValuesForBackEndFiles: getEnumsForBackEndFiles(enums, customValuesState),
         angularAppName,
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
 }
 
-function getEnumsWithCustomValue(enums) {
+function getCustomValuesState(enumValues) {
+    const state = {
+        withoutCustomValue: 0,
+        withCustomValue: 0
+    };
+    enumValues.forEach(enumValue => {
+        if (doesTheEnumValueHaveACustomValue(enumValue)) {
+            state.withCustomValue++;
+        } else {
+            state.withoutCustomValue++;
+        }
+    });
+    return {
+        withoutCustomValues: state.withCustomValue === 0,
+        withSomeCustomValues: state.withCustomValue !== 0 && state.withoutCustomValue !== 0,
+        withCustomValues: state.withoutCustomValue === 0
+    };
+}
+
+function getEnumsForFrontEndFiles(enums) {
     return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
         if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
             const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
@@ -487,6 +508,21 @@ function getEnumsWithCustomValue(enums) {
         }
         return enumsWithCustomValueArray;
     }, []);
+}
+
+function getEnumsForBackEndFiles(enums, customValuesState) {
+    if (customValuesState.withoutCustomValues) {
+        return enums.join(', ');
+    }
+    return enums.map(enumValue => {
+        if (doesTheEnumValueHaveACustomValue(enumValue)) {
+            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(enumValue);
+            const enumValueName = matches[1];
+            const enumValueCustomValue = matches[3];
+            return { name: enumValueName, value: enumValueCustomValue };
+        }
+        return { name: enumValue, value: false };
+    });
 }
 
 function doesTheEnumValueHaveACustomValue(enumValue) {

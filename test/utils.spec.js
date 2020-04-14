@@ -47,14 +47,164 @@ describe('JHipster Utils', () => {
             assert.objectContent(dst, src);
         });
     });
-    describe('::buildEnumFunction', () => {
-        it('describes all the properties of the entity', () => {
-            const packageName = 'com.package';
-            const angularAppName = 'myApp';
-            const clientRootFolder = 'root';
-            const entity = { enumName: 'entityName', fieldValues: 'field1, field2' };
-            const infos = utils.buildEnumInfo(entity, angularAppName, packageName, clientRootFolder);
-            assert.objectContent(infos, { packageName, angularAppName, clientRootFolder: `${clientRootFolder}-` });
+    describe('::buildEnumInfo', () => {
+        describe('when passing field data', () => {
+            let enumInfo;
+
+            before(() => {
+                const packageName = 'com.package';
+                const angularAppName = 'myApp';
+                const clientRootFolder = 'root';
+                const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB' };
+                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+            });
+
+            it("returns the enum's name", () => {
+                assert.strictEqual(enumInfo.enumName, 'BigLetters');
+            });
+            it("returns the enum's instance", () => {
+                assert.strictEqual(enumInfo.enumInstance, 'bigLetters');
+            });
+            it('returns the enums values', () => {
+                assert.deepStrictEqual(enumInfo.enums, ['AAA', 'BBB']);
+            });
+        });
+        describe("when the enums don't have custom values", () => {
+            let enumInfo;
+
+            before(() => {
+                const packageName = 'com.package';
+                const angularAppName = 'myApp';
+                const clientRootFolder = 'root';
+                const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
+                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+            });
+
+            it('returns whether there are custom enums', () => {
+                assert.strictEqual(enumInfo.withoutCustomValues, true);
+                assert.strictEqual(enumInfo.withSomeCustomValues, false);
+                assert.strictEqual(enumInfo.withCustomValues, false);
+            });
+            it('returns the enum values for front-end files', () => {
+                assert.deepStrictEqual(enumInfo.enumValuesForFrontEndFiles, [
+                    {
+                        name: 'AAA',
+                        value: false
+                    },
+                    {
+                        name: 'BBB',
+                        value: false
+                    }
+                ]);
+            });
+            it('returns the enums values for the back-end files', () => {
+                assert.deepStrictEqual(enumInfo.enumValuesForBackEndFiles, 'AAA, BBB');
+            });
+        });
+        describe('when some enums have custom values', () => {
+            let enumInfo;
+
+            before(() => {
+                const packageName = 'com.package';
+                const angularAppName = 'myApp';
+                const clientRootFolder = 'root';
+                const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB' };
+                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+            });
+
+            it('returns whether there are custom enums', () => {
+                assert.strictEqual(enumInfo.withoutCustomValues, false);
+                assert.strictEqual(enumInfo.withSomeCustomValues, true);
+                assert.strictEqual(enumInfo.withCustomValues, false);
+            });
+            it('returns the enum values for front-end files', () => {
+                assert.deepStrictEqual(enumInfo.enumValuesForFrontEndFiles, [
+                    {
+                        name: 'AAA',
+                        value: 'aaa'
+                    },
+                    {
+                        name: 'BBB',
+                        value: false
+                    }
+                ]);
+            });
+            it('returns the enums values for the back-end files', () => {
+                assert.deepStrictEqual(enumInfo.enumValuesForBackEndFiles, [
+                    {
+                        name: 'AAA',
+                        value: 'aaa'
+                    },
+                    { name: 'BBB', value: false }
+                ]);
+            });
+        });
+        describe('when all the enums have custom values', () => {
+            let enumInfo;
+
+            before(() => {
+                const packageName = 'com.package';
+                const angularAppName = 'myApp';
+                const clientRootFolder = 'root';
+                const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
+                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+            });
+
+            it('returns whether there are custom enums', () => {
+                assert.strictEqual(enumInfo.withoutCustomValues, false);
+                assert.strictEqual(enumInfo.withSomeCustomValues, false);
+                assert.strictEqual(enumInfo.withCustomValues, true);
+            });
+            it('returns the enum values for front-end files', () => {
+                assert.deepStrictEqual(enumInfo.enumValuesForFrontEndFiles, [
+                    {
+                        name: 'AAA',
+                        value: 'aaa'
+                    },
+                    {
+                        name: 'BBB',
+                        value: 'bbb'
+                    }
+                ]);
+            });
+            it('returns the enums values for the back-end files', () => {
+                assert.deepStrictEqual(enumInfo.enumValuesForBackEndFiles, [
+                    {
+                        name: 'AAA',
+                        value: 'aaa'
+                    },
+                    { name: 'BBB', value: 'bbb' }
+                ]);
+            });
+        });
+        describe('when not passing a client root folder', () => {
+            let enumInfo;
+
+            before(() => {
+                const packageName = 'com.package';
+                const angularAppName = 'myApp';
+                const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
+                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName);
+            });
+
+            it('returns an empty string for the clientRootFolder property', () => {
+                assert.strictEqual(enumInfo.clientRootFolder, '');
+            });
+        });
+        describe('when passing a client root folder', () => {
+            let enumInfo;
+
+            before(() => {
+                const packageName = 'com.package';
+                const angularAppName = 'myApp';
+                const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
+                const clientRootFolder = 'root';
+                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+            });
+
+            it('returns the clientRootFolder property suffixed by a dash', () => {
+                assert.strictEqual(enumInfo.clientRootFolder, 'root-');
+            });
         });
     });
     describe('::deepFind function', () => {

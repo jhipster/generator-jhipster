@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 export const enum <%= enumName %> {
-<% enumsWithCustomValue.forEach((enumWithCustomValue, index) => { %>
-  <% if (!enumWithCustomValue.value) { %>
-  <%= enumWithCustomValue.name %> = '<%= enumWithCustomValue.name %>'
+<% enumValuesForFrontEndFiles.forEach((enumValue, index) => { %>
+  <% if (!enumValue.value) { %>
+  <%= enumValue.name %> = '<%= enumValue.name %>'
   <% } else { %>
-  <%= enumWithCustomValue.name %> = '<%= enumWithCustomValue.value %>'
-  <% } %><% if (index < enumsWithCustomValue.length - 1) { %>,<% } %>
+  <%= enumValue.name %> = '<%= enumValue.value %>'
+  <% } %><% if (index < enumValuesForFrontEndFiles.length - 1) { %>,<% } %>
 <% }); %>
 }

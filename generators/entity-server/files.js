@@ -386,22 +386,32 @@ function writeFiles() {
 
         writeEnumFiles() {
             this.fields.forEach(field => {
-                if (field.fieldIsEnum === true) {
-                    const fieldType = field.fieldType;
-                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
-                    if (!this.skipServer) {
-                        this.template(
-                            `${this.fetchFromInstalledJHipster(
-                                'entity-server/templates'
-                            )}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
-                            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
-                            this,
-                            {},
-                            enumInfo
-                        );
-                    }
+                if (!field.fieldIsEnum) {
+                    return;
+                }
+                const fieldType = field.fieldType;
+                const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
+                if (!this.skipServer) {
+                    this.template(
+                        getTemplateFileForEnums(this.fetchFromInstalledJHipster('entity-server/templates'), enumInfo),
+                        `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
+                        this,
+                        {},
+                        enumInfo
+                    );
                 }
             });
         }
     };
+}
+
+function getTemplateFileForEnums(jhipsterInstallationPath, enumInfo) {
+    const pathToEnumFolder = `${jhipsterInstallationPath}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration`;
+    if (enumInfo.withoutCustomValues) {
+        return `${pathToEnumFolder}/EnumWithoutCustomValues.java.ejs`;
+    }
+    if (enumInfo.withSomeCustomValues) {
+        return `${pathToEnumFolder}/EnumWithSomeCustomValues.java.ejs`;
+    }
+    return `${pathToEnumFolder}/EnumWithOnlyCustomValues.java.ejs`;
 }

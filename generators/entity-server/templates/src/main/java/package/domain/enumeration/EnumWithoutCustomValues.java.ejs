@@ -16,12 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export const enum <%= enumName %> {
-<% enumValuesForFrontEndFiles.forEach((enumValue, index) => { %>
-<% if (!enumValue.value) { %>
-  <%= enumValue.name %> = '<%= enumValue.name %>'
-<% } else { %>
-  <%= enumValue.name %> = '<%= enumValue.value %>'
-<% } %><% if (index < enumValuesForFrontEndFiles.length - 1) { %>,<% } %>
-<% }); %>
+package <%= packageName %>.domain.enumeration;
+
+/**
+ * The <%= enumName %> enumeration.
+ */
+public enum <%= enumName %> {
+    <%= enumValuesForBackEndFiles %>
 }
