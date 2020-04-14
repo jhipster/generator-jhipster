@@ -47,7 +47,7 @@ describe('JHipster Utils', () => {
             assert.objectContent(dst, src);
         });
     });
-    describe.only('::buildEnumInfo', () => {
+    describe('::buildEnumInfo', () => {
         describe('when passing field data', () => {
             let enumInfo;
 
