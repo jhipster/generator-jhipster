@@ -499,6 +499,26 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
     };
 }
 
+/**
+ * @deprecated
+ * private function to remove for jhipster v7
+ * @param enums
+ * @return {*}
+ */
+function getEnumsWithCustomValue(enums) {
+    return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
+        if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
+            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
+            const enumValueName = matches[1];
+            const enumValueCustomValue = matches[3];
+            enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
+        } else {
+            enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
+        }
+        return enumsWithCustomValueArray;
+    }, []);
+}
+
 function getCustomValuesState(enumValues) {
     const state = {
         withoutCustomValue: 0,
