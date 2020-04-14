@@ -56,6 +56,7 @@ module.exports = {
     deepFind,
     getJavadoc,
     buildEnumInfo,
+    getEnumInfo,
     copyObjectProps,
     decodeBase64,
     getAllJhipsterConfig,
@@ -453,10 +454,11 @@ function getJavadoc(text, indentSize) {
 
 /**
  * Build an enum object
- * @param {any} field : entity field
- * @param {string} clientRootFolder
+ * @param {Object} field - entity field
+ * @param {String} clientRootFolder - the client's root folder
+ * @return {Object} the enum info.
  */
-function buildEnumInfo(field, clientRootFolder) {
+function getEnumInfo(field, clientRootFolder) {
     const fieldType = field.fieldType;
     // Todo: check if the next line does a side-effect and refactor it.
     field.enumInstance = _.lowerFirst(fieldType);
@@ -468,6 +470,31 @@ function buildEnumInfo(field, clientRootFolder) {
         enums,
         ...customValuesState,
         enumValues: getEnums(enums, customValuesState),
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
+    };
+}
+
+/**
+ * @Deprecated
+ * Build an enum object, deprecated use getEnumInfoInstead
+ * @param {any} field : entity field
+ * @param {string} angularAppName
+ * @param {string} packageName
+ * @param {string} clientRootFolder
+ */
+function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
+    const fieldType = field.fieldType;
+    field.enumInstance = _.lowerFirst(fieldType);
+    const enums = field.fieldValues.replace(/\s/g, '').split(',');
+    const enumsWithCustomValue = getEnumsWithCustomValue(enums);
+    return {
+        enumName: fieldType,
+        enumValues: field.fieldValues.split(',').join(', '),
+        enumInstance: field.enumInstance,
+        enums,
+        enumsWithCustomValue,
+        angularAppName,
+        packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
 }

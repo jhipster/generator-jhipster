@@ -33,7 +33,7 @@ function writeFiles() {
             this.fields.forEach(field => {
                 if (field.fieldIsEnum === true) {
                     const enumInfo = {
-                        ...utils.buildEnumInfo(field, this.clientRootFolder),
+                        ...utils.getEnumInfo(field, this.clientRootFolder),
                         angularAppName: this.angularAppName,
                         packageName: this.packageName
                     };

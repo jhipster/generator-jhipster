@@ -47,14 +47,14 @@ describe('JHipster Utils', () => {
             assert.objectContent(dst, src);
         });
     });
-    describe('::buildEnumInfo', () => {
+    describe('::getEnumInfo', () => {
         describe('when passing field data', () => {
             let enumInfo;
 
             before(() => {
                 const clientRootFolder = 'root';
                 const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB' };
-                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
+                enumInfo = utils.getEnumInfo(field, clientRootFolder);
             });
 
             it("returns the enum's name", () => {
@@ -73,7 +73,7 @@ describe('JHipster Utils', () => {
             before(() => {
                 const clientRootFolder = 'root';
                 const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
+                enumInfo = utils.getEnumInfo(field, clientRootFolder);
             });
 
             it('returns whether there are custom enums', () => {
@@ -94,7 +94,7 @@ describe('JHipster Utils', () => {
             before(() => {
                 const clientRootFolder = 'root';
                 const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB' };
-                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
+                enumInfo = utils.getEnumInfo(field, clientRootFolder);
             });
 
             it('returns whether there are custom enums', () => {
@@ -118,7 +118,7 @@ describe('JHipster Utils', () => {
             before(() => {
                 const clientRootFolder = 'root';
                 const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
-                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
+                enumInfo = utils.getEnumInfo(field, clientRootFolder);
             });
 
             it('returns whether there are custom enums', () => {
@@ -141,7 +141,7 @@ describe('JHipster Utils', () => {
 
             before(() => {
                 const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-                enumInfo = utils.buildEnumInfo(field);
+                enumInfo = utils.getEnumInfo(field);
             });
 
             it('returns an empty string for the clientRootFolder property', () => {
@@ -154,7 +154,7 @@ describe('JHipster Utils', () => {
             before(() => {
                 const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
                 const clientRootFolder = 'root';
-                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
+                enumInfo = utils.getEnumInfo(field, clientRootFolder);
             });
 
             it('returns the clientRootFolder property suffixed by a dash', () => {
