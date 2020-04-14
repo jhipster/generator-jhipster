@@ -85,20 +85,11 @@ describe('JHipster Utils', () => {
                 assert.strictEqual(enumInfo.withSomeCustomValues, false);
                 assert.strictEqual(enumInfo.withCustomValues, false);
             });
-            it('returns the enum values for front-end files', () => {
-                assert.deepStrictEqual(enumInfo.enumValuesForFrontEndFiles, [
-                    {
-                        name: 'AAA',
-                        value: false
-                    },
-                    {
-                        name: 'BBB',
-                        value: false
-                    }
+            it('returns the enums values', () => {
+                assert.deepStrictEqual(enumInfo.enumValues, [
+                    { name: 'AAA', value: false },
+                    { name: 'BBB', value: false }
                 ]);
-            });
-            it('returns the enums values for the back-end files', () => {
-                assert.deepStrictEqual(enumInfo.enumValuesForBackEndFiles, ['AAA', 'BBB']);
             });
         });
         describe('when some enums have custom values', () => {
@@ -117,20 +108,8 @@ describe('JHipster Utils', () => {
                 assert.strictEqual(enumInfo.withSomeCustomValues, true);
                 assert.strictEqual(enumInfo.withCustomValues, false);
             });
-            it('returns the enum values for front-end files', () => {
-                assert.deepStrictEqual(enumInfo.enumValuesForFrontEndFiles, [
-                    {
-                        name: 'AAA',
-                        value: 'aaa'
-                    },
-                    {
-                        name: 'BBB',
-                        value: false
-                    }
-                ]);
-            });
-            it('returns the enums values for the back-end files', () => {
-                assert.deepStrictEqual(enumInfo.enumValuesForBackEndFiles, [
+            it('returns the enums values', () => {
+                assert.deepStrictEqual(enumInfo.enumValues, [
                     {
                         name: 'AAA',
                         value: 'aaa'
@@ -155,20 +134,8 @@ describe('JHipster Utils', () => {
                 assert.strictEqual(enumInfo.withSomeCustomValues, false);
                 assert.strictEqual(enumInfo.withCustomValues, true);
             });
-            it('returns the enum values for front-end files', () => {
-                assert.deepStrictEqual(enumInfo.enumValuesForFrontEndFiles, [
-                    {
-                        name: 'AAA',
-                        value: 'aaa'
-                    },
-                    {
-                        name: 'BBB',
-                        value: 'bbb'
-                    }
-                ]);
-            });
-            it('returns the enums values for the back-end files', () => {
-                assert.deepStrictEqual(enumInfo.enumValuesForBackEndFiles, [
+            it('returns the enums values', () => {
+                assert.deepStrictEqual(enumInfo.enumValues, [
                     {
                         name: 'AAA',
                         value: 'aaa'

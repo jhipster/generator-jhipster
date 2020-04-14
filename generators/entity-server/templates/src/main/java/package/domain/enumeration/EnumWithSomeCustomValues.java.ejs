@@ -22,11 +22,11 @@ package <%= packageName %>.domain.enumeration;
  * The <%= enumName %> enumeration.
  */
 public enum <%= enumName %> {
-<%_ enumValuesForBackEndFiles.forEach((enumWithCustomValue, index) => {
+<%_ enumValues.forEach((enumWithCustomValue, index) => {
     if (!enumWithCustomValue.value) { _%>
-    <%= enumWithCustomValue.name %><% if (index < enumValuesForBackEndFiles.length - 1) { %>,<% } else { %>;<% } %>
+    <%= enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ } else { _%>
-    <%= enumWithCustomValue.name %>("<%= enumWithCustomValue.value %>")<% if (index < enumValuesForBackEndFiles.length - 1) { %>,<% } else { %>;<% } %>
+    <%= enumWithCustomValue.name %>("<%= enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ } _%>
 <%_ }); _%>
 

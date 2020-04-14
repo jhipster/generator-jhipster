@@ -469,8 +469,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enumInstance: field.enumInstance,
         enums,
         ...customValuesState,
-        enumValuesForFrontEndFiles: getEnumsForFrontEndFiles(enums),
-        enumValuesForBackEndFiles: getEnumsForBackEndFiles(enums, customValuesState),
+        enumValues: getEnums(enums, customValuesState),
         angularAppName,
         packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
@@ -496,23 +495,9 @@ function getCustomValuesState(enumValues) {
     };
 }
 
-function getEnumsForFrontEndFiles(enums, customValuesState) {
-    return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
-        if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
-            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
-            const enumValueName = matches[1];
-            const enumValueCustomValue = matches[3];
-            enumsWithCustomValueArray.push({ name: enumValueName, value: enumValueCustomValue });
-        } else {
-            enumsWithCustomValueArray.push({ name: currentEnumValue, value: false });
-        }
-        return enumsWithCustomValueArray;
-    }, []);
-}
-
-function getEnumsForBackEndFiles(enums, customValuesState) {
+function getEnums(enums, customValuesState) {
     if (customValuesState.withoutCustomValues) {
-        return enums;
+        return enums.map(enumValue => ({ name: enumValue, value: false }));
     }
     return enums.map(enumValue => {
         if (doesTheEnumValueHaveACustomValue(enumValue)) {
