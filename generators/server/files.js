@@ -189,7 +189,7 @@ const serverFiles = {
             templates: ['gradle/swagger.gradle'],
         },
         {
-            condition: generator => generator.buildTool === 'gradle' && generator.prodDatabaseType === 'sql',
+            condition: generator => generator.buildTool === 'gradle' && generator.databaseType === 'sql',
             templates: ['gradle/testcontainers.gradle']
         },
         {

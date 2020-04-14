@@ -243,6 +243,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.dockerServices);
                 assert.file(expectedFiles.mysql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
+                assert.file(expectedFiles.testcontainersGradle);
                 assert.file(
                     getFilesForOptions(angularFiles, {
                         enableTranslation: true,
@@ -1082,6 +1083,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.gatling);
                 assert.file(expectedFiles.swaggerCodegen);
                 assert.file(expectedFiles.swaggerCodegenGradle);
+                assert.file(expectedFiles.testcontainersGradle);
             });
         });
     });
@@ -1578,6 +1580,7 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.gradle);
                 assert.file(expectedFiles.mysql);
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
+                assert.file(expectedFiles.testcontainersGradle);
                 assert.noFile(
                     getFilesForOptions(
                         angularFiles,
