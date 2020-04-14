@@ -390,7 +390,11 @@ function writeFiles() {
                     return;
                 }
                 const fieldType = field.fieldType;
-                const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
+                const enumInfo = {
+                    ...utils.buildEnumInfo(field, this.clientRootFolder),
+                    angularAppName: this.angularAppName,
+                    packageName: this.packageName
+                };
                 if (!this.skipServer) {
                     this.template(
                         getTemplateFileForEnums(this.fetchFromInstalledJHipster('entity-server/templates'), enumInfo),

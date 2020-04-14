@@ -454,11 +454,9 @@ function getJavadoc(text, indentSize) {
 /**
  * Build an enum object
  * @param {any} field : entity field
- * @param {string} angularAppName
- * @param {string} packageName
  * @param {string} clientRootFolder
  */
-function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
+function buildEnumInfo(field, clientRootFolder) {
     const fieldType = field.fieldType;
     // Todo: check if the next line does a side-effect and refactor it.
     field.enumInstance = _.lowerFirst(fieldType);
@@ -470,8 +468,6 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enums,
         ...customValuesState,
         enumValues: getEnums(enums, customValuesState),
-        angularAppName,
-        packageName,
         clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
     };
 }

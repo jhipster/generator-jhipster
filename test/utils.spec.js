@@ -52,11 +52,9 @@ describe('JHipster Utils', () => {
             let enumInfo;
 
             before(() => {
-                const packageName = 'com.package';
-                const angularAppName = 'myApp';
                 const clientRootFolder = 'root';
                 const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB' };
-                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
             });
 
             it("returns the enum's name", () => {
@@ -73,11 +71,9 @@ describe('JHipster Utils', () => {
             let enumInfo;
 
             before(() => {
-                const packageName = 'com.package';
-                const angularAppName = 'myApp';
                 const clientRootFolder = 'root';
                 const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
             });
 
             it('returns whether there are custom enums', () => {
@@ -96,11 +92,9 @@ describe('JHipster Utils', () => {
             let enumInfo;
 
             before(() => {
-                const packageName = 'com.package';
-                const angularAppName = 'myApp';
                 const clientRootFolder = 'root';
                 const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB' };
-                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
             });
 
             it('returns whether there are custom enums', () => {
@@ -122,11 +116,9 @@ describe('JHipster Utils', () => {
             let enumInfo;
 
             before(() => {
-                const packageName = 'com.package';
-                const angularAppName = 'myApp';
                 const clientRootFolder = 'root';
                 const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
-                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
             });
 
             it('returns whether there are custom enums', () => {
@@ -148,10 +140,8 @@ describe('JHipster Utils', () => {
             let enumInfo;
 
             before(() => {
-                const packageName = 'com.package';
-                const angularAppName = 'myApp';
                 const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName);
+                enumInfo = utils.buildEnumInfo(field);
             });
 
             it('returns an empty string for the clientRootFolder property', () => {
@@ -162,11 +152,9 @@ describe('JHipster Utils', () => {
             let enumInfo;
 
             before(() => {
-                const packageName = 'com.package';
-                const angularAppName = 'myApp';
                 const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
                 const clientRootFolder = 'root';
-                enumInfo = utils.buildEnumInfo(field, angularAppName, packageName, clientRootFolder);
+                enumInfo = utils.buildEnumInfo(field, clientRootFolder);
             });
 
             it('returns the clientRootFolder property suffixed by a dash', () => {
