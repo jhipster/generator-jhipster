@@ -47,7 +47,7 @@ describe('JHipster Utils', () => {
             assert.objectContent(dst, src);
         });
     });
-    describe('::buildEnumInfo', () => {
+    describe.only('::buildEnumInfo', () => {
         describe('when passing field data', () => {
             let enumInfo;
 
@@ -98,7 +98,7 @@ describe('JHipster Utils', () => {
                 ]);
             });
             it('returns the enums values for the back-end files', () => {
-                assert.deepStrictEqual(enumInfo.enumValuesForBackEndFiles, 'AAA, BBB');
+                assert.deepStrictEqual(enumInfo.enumValuesForBackEndFiles, ['AAA', 'BBB']);
             });
         });
         describe('when some enums have custom values', () => {

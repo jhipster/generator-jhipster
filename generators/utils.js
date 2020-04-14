@@ -496,7 +496,7 @@ function getCustomValuesState(enumValues) {
     };
 }
 
-function getEnumsForFrontEndFiles(enums) {
+function getEnumsForFrontEndFiles(enums, customValuesState) {
     return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
         if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
             const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(currentEnumValue);
@@ -512,7 +512,7 @@ function getEnumsForFrontEndFiles(enums) {
 
 function getEnumsForBackEndFiles(enums, customValuesState) {
     if (customValuesState.withoutCustomValues) {
-        return enums.join(', ');
+        return enums;
     }
     return enums.map(enumValue => {
         if (doesTheEnumValueHaveACustomValue(enumValue)) {
