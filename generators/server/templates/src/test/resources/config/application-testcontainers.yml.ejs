@@ -62,7 +62,9 @@ spring:
                 useServerPrepStmts: true
         <%_ } _%>
     jpa:
-        <%_ if (prodDatabaseType === 'postgresql') { _%>
+        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        <%_ } else if (prodDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
         <%_ } _%>
         show-sql: false
