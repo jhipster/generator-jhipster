@@ -440,11 +440,6 @@
 <%_ if (databaseType === 'sql') { _%>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
     <%_ if (prodDatabaseType === 'mysql') { _%>
             <artifactId>mysql</artifactId>
     <%_ } else if (prodDatabaseType === 'mariadb') { _%>
