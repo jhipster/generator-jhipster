@@ -33,7 +33,7 @@ public enum <%= enumName %> {
         <%_ }
     }); _%>
 
-    private String value;
+    private<% if (withCustomValues) { %> final<% } %> String value;
 
 <%_ if (withSomeCustomValues) { _%>
     <%= enumName %>() {}
