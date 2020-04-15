@@ -396,8 +396,11 @@ function writeFiles() {
                     packageName: this.packageName
                 };
                 if (!this.skipServer) {
+                    const pathToTemplateFile = `${this.fetchFromInstalledJHipster(
+                        'entity-server/templates'
+                    )}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`;
                     this.template(
-                        getTemplateFileForEnums(this.fetchFromInstalledJHipster('entity-server/templates'), enumInfo),
+                        pathToTemplateFile,
                         `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
                         this,
                         {},
@@ -407,15 +410,4 @@ function writeFiles() {
             });
         }
     };
-}
-
-function getTemplateFileForEnums(jhipsterInstallationPath, enumInfo) {
-    const pathToEnumFolder = `${jhipsterInstallationPath}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration`;
-    if (enumInfo.withoutCustomValues) {
-        return `${pathToEnumFolder}/EnumWithoutCustomValues.java.ejs`;
-    }
-    if (enumInfo.withSomeCustomValues) {
-        return `${pathToEnumFolder}/EnumWithSomeCustomValues.java.ejs`;
-    }
-    return `${pathToEnumFolder}/EnumWithOnlyCustomValues.java.ejs`;
 }
