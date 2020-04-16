@@ -16,6 +16,7 @@ module.exports = {
     shouldBeV3DockerfileCompatible,
     getJHipsterCli,
     testInTempDir,
+    revertTempDir,
     copyBlueprint,
     copyFakeBlueprint,
     lnYeoman
@@ -56,7 +57,7 @@ function getJHipsterCli() {
     return cmd;
 }
 
-function testInTempDir(cb) {
+function testInTempDir(cb, keepInTestDir) {
     const cwd = process.cwd();
     /* eslint-disable-next-line no-console */
     console.log(`current cwd: ${cwd}`);
@@ -67,6 +68,13 @@ function testInTempDir(cb) {
     /* eslint-disable-next-line no-console */
     console.log(`New cwd: ${process.cwd()}`);
     cb(tempDir);
+    if (!keepInTestDir) {
+        revertTempDir(cwd);
+    }
+    return cwd;
+}
+
+function revertTempDir(cwd) {
     process.chdir(cwd);
     /* eslint-disable-next-line no-console */
     console.log(`current cwd: ${process.cwd()}`);

@@ -18,6 +18,7 @@
  */
 const through = require('through2');
 const prettier = require('prettier');
+const prettierJava = require('prettier-plugin-java');
 
 const prettierOptions = {
     printWidth: 140,
@@ -27,7 +28,8 @@ const prettierOptions = {
     // js and ts rules:
     arrowParens: 'avoid',
     // jsx and tsx rules:
-    jsxBracketSameLine: false
+    jsxBracketSameLine: false,
+    plugins: [prettierJava]
 };
 
 const prettierTransform = function(defaultOptions) {
@@ -36,9 +38,7 @@ const prettierTransform = function(defaultOptions) {
         prettier.resolveConfig(file.relative).then(options => {
             if (file.state !== 'deleted') {
                 const str = file.contents.toString('utf8');
-                if (!options || Object.keys(options).length === 0) {
-                    options = defaultOptions;
-                }
+                options = { ...defaultOptions, ...options };
                 // for better errors
                 options.filepath = file.relative;
                 const data = prettier.format(str, options);
@@ -50,6 +50,11 @@ const prettierTransform = function(defaultOptions) {
     return through.obj(transform);
 };
 
+/**
+ * @deprecated
+ * Not used.
+ * Remove for jhipster 7.
+ */
 const prettierFormat = function(str, options = {}) {
     return prettier.format(str, { ...prettierOptions, ...options });
 };

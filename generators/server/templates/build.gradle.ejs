@@ -389,10 +389,12 @@ dependencies {
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
+        <%_ if (!reactive) { _%>
     // Spring Data Jest dependencies for Elasticsearch
     implementation ("com.github.vanroy:spring-boot-starter-data-jest") {
         exclude module: "commons-logging"
     }
+        <%_ } _%>
     // log4j2-mock needed to create embedded elasticsearch instance with SLF4J
     runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:${log4j2_mock_version}"
     // end of Spring Data Jest dependencies

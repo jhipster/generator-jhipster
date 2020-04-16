@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "පරිශීලකයින්",
+            "createLabel": "නව පරිශීලකයෙකු සාදන්න",
+            "createOrEditLabel": "පරිශීලකයෙකු සාදන්න හෝ සංස්කරණය කරන්න"
+        },
+        "created": "{{ param }} හඳුනාගැනීමෙන් නව පරිශීලකයෙකු නිර්මාණය වේ",
+        "updated": "{{ param }} හඳුනාගැනීමෙන් පරිශීලකයෙකු යාවත්කාලීන වේ",
+        "deleted": "{{ param }} හඳුනාගැනීමෙන් පරිශීලකයෙකු මකා දමනු ලැබේ",
+        "delete": {
+            "question": "පරිශීලක {{ login }} මකා දැමීමට ඔබට අවශ්\u200Dය බව ඔබට විශ්වාසද?"
+        },
+        "detail": {
+            "title": "පරිශීලක"
+        },
+        "login": "ඇතුල් වන්න",
+        "firstName": "මුල් නම",
+        "lastName": "අවසන් නම",
+        "email": "විද්යුත් තැපෑල",
+        "activated": "සක්\u200Dරිය කර ඇත",
+        "deactivated": "අක්\u200Dරිය කර ඇත",
+        "profiles": "පැතිකඩ",
+        "langKey": "භාෂාව",
+        "createdBy": "නිර්මාණය කළේ",
+        "createdDate": "නිර්මාණය කළ දිනය",
+        "lastModifiedBy": "විසින් වෙනස් කරන ලදි",
+        "lastModifiedDate": "වෙනස් කළ දිනය"
+    }
+}
