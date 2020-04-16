@@ -189,10 +189,6 @@ const serverFiles = {
             templates: ['gradle/swagger.gradle'],
         },
         {
-            condition: generator => generator.buildTool === 'gradle' && generator.databaseType === 'sql',
-            templates: ['gradle/testcontainers.gradle']
-        },
-        {
             condition: generator => generator.buildTool === 'maven',
             templates: [
                 { file: 'mvnw', method: 'copy', noEjs: true },

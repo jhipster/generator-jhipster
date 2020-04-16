@@ -67,9 +67,6 @@ apply from: "gradle/sonar.gradle"
 <%_ if (enableSwaggerCodegen) { _%>
 apply from: "gradle/swagger.gradle"
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
-apply from: "gradle/testcontainers.gradle"
-<%_ } _%>
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty("prod") || project.hasProperty("gae")) {
@@ -148,6 +145,10 @@ task integrationTest(type: Test) {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
+    if (project.hasProperty('testcontainers')) {
+        environment 'spring.profiles.active', 'testcontainers'
+    }
+
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
@@ -410,6 +411,21 @@ dependencies {
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
     testImplementation "org.testcontainers:neo4j"
     testImplementation 'org.testcontainers:junit-jupiter'
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mysql') { _%>
+    testImplementation "org.testcontainers:mysql"
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mariadb') { _%>
+    testImplementation "org.testcontainers:mariadb"
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
+    testImplementation "org.testcontainers:postgresql"
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
+    testImplementation "org.testcontainers:mssqlserver"
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'oracle') { _%>
+    testImplementation "org.testcontainers:oracle-xe"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
         <%_ if (!reactive) { _%>

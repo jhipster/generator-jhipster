@@ -726,8 +726,6 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
     ],
 
-    testcontainersGradle: ['gradle/testcontainers.gradle'],
-
     hazelcast: [`${DOCKER_DIR}hazelcast-management-center.yml`],
 
     mongodb: [
