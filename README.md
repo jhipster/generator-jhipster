@@ -167,12 +167,14 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 | [![Docker Image][github-docker-image]][github-actions]                         |
 | [![Neo4j][github-neo4j]][github-actions]                                       |
 | [![Couchbase][github-couchbase]][github-actions]                               |
+| [![Official Windows][github-official-windows]][github-actions]                 |
 
 ## Analysis of the sample JHipster project
 
 [![sonar-quality-gate][sonar-quality-gate]][sonar-url] [![sonar-coverage][sonar-coverage]][sonar-url] [![sonar-bugs][sonar-bugs]][sonar-url] [![sonar-vulnerabilities][sonar-vulnerabilities]][sonar-url]
 
 [github-actions]: https://github.com/hipster-labs/jhipster-daily-builds/actions
+[github-official-windows]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Official%20Windows/badge.svg
 [github-angular-maven]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven/badge.svg
 [github-angular-maven-nosql]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Maven%20NoSQL/badge.svg
 [github-angular-gradle]: https://github.com/hipster-labs/jhipster-daily-builds/workflows/Angular%20Gradle/badge.svg
