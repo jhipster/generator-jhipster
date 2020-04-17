@@ -62,15 +62,16 @@ spring:
                 useServerPrepStmts: true
         <%_ } _%>
     jpa:
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+        <%_ if (prodDatabaseType === 'mysql') { _%>
         database-platform: org.hibernate.dialect.MySQL8Dialect
+        <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+        database-platform: org.hibernate.dialect.MariaDB103Dialect
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
+        <%_ } else if (prodDatabaseType === 'oracle') { _%>
+        database-platform: org.hibernate.dialect.Oracle12cDialect
+        <%_ } else if (prodDatabaseType === 'mssql') { _%>
+        database-platform: org.hibernate.dialect.SQLServer2012Dialect
+        <%_ } else { _%>
+        database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
-        show-sql: false
-        properties:
-            hibernate.id.new_generator_mappings: true
-            hibernate.connection.provider_disables_autocommit: true
-            hibernate.cache.use_second_level_cache: false
-            hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: false
