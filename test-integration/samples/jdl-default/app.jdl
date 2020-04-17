@@ -40,9 +40,9 @@ entity Operation {
 }
 
 enum BankAccountType {
-  CHECKING,
-  SAVINGS,
-  LOAN
+  CHECKING (checking_account),
+  SAVINGS (savings_account),
+  LOAN (loan_account)
 }
 
 entity Department {

@@ -138,7 +138,7 @@ for (lineNb = 1; lineNb <= numberOfRows; lineNb++) {
         }
         if (fields[idx].fieldIsEnum) {
             if (fields[idx].fieldValues.length !== 0) {
-                const enums = fields[idx].fieldValues.split(',');
+                const enums = fields[idx].fieldValues.split(',')[0].replace(/(.+?)\(.*/, (match, firstGroup) => firstGroup);
                 data = enums[this.faker.random.number(enums.length-1)];
             } else {
                 data = '';
