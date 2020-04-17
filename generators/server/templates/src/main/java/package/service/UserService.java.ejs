@@ -604,7 +604,7 @@ public class UserService {
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { %>, String imageUrl<% } %>) {
+    public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> updateUser(String firstName, String lastName, String email, String langKey<% if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { %>, String imageUrl<% } %>) {
         <% if (reactive) { %>return <% } %>SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .<% if (reactive) { %>flatMap<% } else { %>ifPresent<% } %>(user -> {
@@ -614,7 +614,7 @@ public class UserService {
                     user.setEmail(email.toLowerCase());
                 }
                 user.setLangKey(langKey);
-                <%_ if (['sql', 'mongodb', 'couchbase'].includes(databaseType)) { _%>
+                <%_ if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
                 user.setImageUrl(imageUrl);
                 <%_ } _%>
             <%_ if (!reactive) { _%>
@@ -967,7 +967,7 @@ public class UserService {
         <%= databaseType === 'no' ? asDto('User') : asEntity('User') %> user = getUser(attributes);
         user.setAuthorities(authToken.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
-            <%_ if (databaseType === 'sql' || databaseType === 'mongodb') { _%>
+            <%_ if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
             .map(authority -> {
                 Authority auth = new Authority();
                 auth.setName(authority);
