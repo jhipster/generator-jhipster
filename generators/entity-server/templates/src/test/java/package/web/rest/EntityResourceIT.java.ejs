@@ -520,7 +520,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     <%_ } _%>
     @BeforeEach
     public void initTest() {
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra') { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j' ) { _%>
         <%= entityInstance %>Repository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         <%_ } _%>
         <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
