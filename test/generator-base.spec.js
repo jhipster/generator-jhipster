@@ -268,7 +268,6 @@ describe('Generator Base', () => {
             });
         });
     });
-
     describe('writeFilesToDisk', () => {
         describe('when called with default angular client options', () => {
             it('should produce correct files', () => {
@@ -301,6 +300,47 @@ describe('Generator Base', () => {
                 filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
+            });
+        });
+    });
+    describe('getEnumValuesWithoutCustomValues', () => {
+        describe('when not passing anything', () => {
+            it('should fail', () => {
+                expect(() => BaseGenerator.getEnumValuesWithoutCustomValues()).to.throw(
+                    /^Enumeration values must be passed to get the formatted values\.$/
+                );
+            });
+        });
+        describe('when passing an empty string', () => {
+            it('should fail', () => {
+                expect(() => BaseGenerator.getEnumValuesWithoutCustomValues('')).to.throw(
+                    /^Enumeration values must be passed to get the formatted values\.$/
+                );
+            });
+        });
+        describe('when passing a string without custom enum values', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithoutCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
+                    'FRANCE',
+                    'ENGLAND',
+                    'ICELAND'
+                ]);
+            });
+        });
+        describe('when passing a string with some custom enum values', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithoutCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
+                    'FRANCE',
+                    'ENGLAND',
+                    'ICELAND'
+                ]);
+            });
+        });
+        describe('when passing a string custom enum values for each value', () => {
+            it('should return a formatted list', () => {
+                expect(
+                    BaseGenerator.getEnumValuesWithoutCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')
+                ).to.deep.equal(['FRANCE', 'ENGLAND', 'ICELAND']);
             });
         });
     });

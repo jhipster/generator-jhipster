@@ -68,7 +68,7 @@ describe('Service Tests', () => {
                 const fieldType = field.fieldType;
             _%>
                 <%_ if (field.fieldIsEnum) { _%>
-                <%= fieldType + '.' + field.fieldValues.replace(/\s/g, '').split(',')[0].replace(/(.+?)\(.*/, (match, firstGroup) => firstGroup) %>,
+                <%= fieldType + '.' + getEnumValuesWithoutCustomValues(field.fieldValues)[0] %>,
                 <%_ } else if (fieldType === 'Boolean') { _%>
                 false,
                 <%_ } else if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) { _%>
