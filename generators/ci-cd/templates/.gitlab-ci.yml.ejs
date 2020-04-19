@@ -19,7 +19,7 @@
 <%_ if (insideDocker) { _%>
 image: jhipster/jhipster:v<%= jhipsterVersion %>
 
-    <%_ if (cacheProvider === 'redis' || prodDatabaseType === 'cassandra' || prodDatabaseType === 'couchbase' || prodDatabaseType === 'neo4j') { _%>
+    <%_ if (cacheProvider === 'redis' || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
 # DinD service is required for Testcontainers
 services:
     - docker:dind
