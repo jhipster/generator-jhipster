@@ -125,6 +125,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
                 this.JIB_VERSION = constants.JIB_VERSION;
+                this.JHIPSTER_DEPENDENCIES_VERSION = constants.JHIPSTER_DEPENDENCIES_VERSION;
+                this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
                 this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
                 this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;

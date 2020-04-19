@@ -27,10 +27,12 @@ const YARN_VERSION = '1.22.4';
 const NPM_VERSION = '6.14.4';
 
 const GRADLE_VERSION = '6.3';
-
-// Libraries version
 const JIB_VERSION = '2.2.0';
 
+// Libraries version
+const JHIPSTER_DEPENDENCIES_VERSION = '3.7.0-SNAPSHOT';
+// The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
+const SPRING_BOOT_VERSION = '2.2.6.RELEASE';
 const LIQUIBASE_VERSION = '3.8.9';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
@@ -353,6 +355,8 @@ const constants = {
 
     // Libraries
     JIB_VERSION,
+    JHIPSTER_DEPENDENCIES_VERSION,
+    SPRING_BOOT_VERSION,
     LIQUIBASE_VERSION,
     LIQUIBASE_DTD_VERSION,
     JACOCO_VERSION,
