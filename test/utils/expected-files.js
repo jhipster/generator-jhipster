@@ -705,7 +705,8 @@ const expectedFiles = {
     mariadb: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
         `${DOCKER_DIR}mariadb.yml`,
-        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`,
+        `${SERVER_TEST_RES_DIR}/testcontainers/mariadb/my.cnf`
     ],
 
     mssql: [

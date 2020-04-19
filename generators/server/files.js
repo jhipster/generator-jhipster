@@ -1411,6 +1411,11 @@ const serverFiles = {
             templates: ['config/application-testcontainers.yml'],
         },
         {
+            condition: generator => generator.prodDatabaseType === 'mariadb',
+            path: SERVER_TEST_RES_DIR,
+            templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }]
+        },
+        {
             // TODO : add these tests to reactive
             condition: generator => !generator.reactive,
             path: SERVER_TEST_SRC_DIR,

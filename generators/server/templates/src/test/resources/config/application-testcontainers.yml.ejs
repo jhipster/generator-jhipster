@@ -45,7 +45,7 @@ spring:
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw
+        url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?TC_MY_CNF=testcontainers/mariadb&useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
