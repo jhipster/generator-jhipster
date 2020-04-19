@@ -80,7 +80,7 @@ gradle-test:
 
 gradle-integration-test:
 <%_ if (insideDocker) { _%>
-    <%_ if (cacheProvider === 'redis' || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
+    <%_ if (cacheProvider === 'redis' || databaseType === "sql" || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
     # DinD service is required for Testcontainers
     services:
         - docker:dind
@@ -95,7 +95,7 @@ gradle-integration-test:
 
     stage: test
     script:
-        - ./gradlew integrationTest -PnodeInstall --no-daemon
+        - ./gradlew integrationTest -PnodeInstall --no-daemon <% if (insideDocker && databaseType === "sql") { %>-Ptestcontainers<% } %>
     artifacts:
         reports:
             junit: build/test-results/integrationTest/TEST-*.xml
@@ -199,7 +199,7 @@ maven-compile:
 
 maven-test:
 <%_ if (insideDocker) { _%>
-    <%_ if (cacheProvider === 'redis' || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
+    <%_ if (cacheProvider === 'redis' || databaseType === "sql" || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
     # DinD service is required for Testcontainers
     services:
         - docker:dind
@@ -214,7 +214,7 @@ maven-test:
 
     stage: test
     script:
-        - ./mvnw -ntp verify -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw -ntp verify -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME <% if (insideDocker && databaseType === "sql") { %>-Dspring.profiles.active=testcontainers<% } %>
     artifacts:
         reports:
             junit: target/test-results/**/TEST-*.xml
