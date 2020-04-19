@@ -2183,13 +2183,23 @@ module.exports = class extends PrivateBase {
      * @param {String} enumValues - an enum's values.
      * @return {Array<String>} the formatted enum's values.
      */
-    getEnumValuesWithoutCustomValues(enumValues) {
+    getEnumValuesWithCustomValues(enumValues) {
         if (!enumValues || enumValues === '') {
             throw new Error('Enumeration values must be passed to get the formatted values.');
         }
         return enumValues
             .replace(/\s/g, '')
             .split(',')
-            .map(enumValue => enumValue.replace(/(.+?)\(.*/, (match, firstGroup) => firstGroup));
+            .map(enumValue => {
+                if (!enumValue.includes('(')) {
+                    return { name: enumValue, value: enumValue };
+                }
+                // eslint-disable-next-line no-unused-vars
+                const matched = /(.+?)\((.+?)\)/.exec(enumValue);
+                return {
+                    name: matched[1],
+                    value: matched[2]
+                };
+            });
     }
 };

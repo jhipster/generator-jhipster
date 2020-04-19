@@ -278,7 +278,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             />
           <%_
             } else if (fields[idx].fieldIsEnum) {
-              const enumValues = getEnumValuesWithoutCustomValues(fields[idx].fieldValues);
+              const enumValues = getEnumValuesWithCustomValues(fields[idx].fieldValues);
           _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
               <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
@@ -290,17 +290,17 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               type="select"
               className="form-control"
               name="<%= fieldName %>"
-              value={(!isNew && <%= entityInstance %>Entity.<%= fieldName %>) || '<%= enumValues[0] %>'}
+              value={(!isNew && <%= entityInstance %>Entity.<%= fieldName %>) || '<%= enumValues[0].name %>'}
             >
             <%_
               const enumPrefix = angularAppName + '.'+ fieldType;
               enumValues.forEach(enumValue => {
             _%>
-              <option value="<%= enumValue %>">
+              <option value="<%= enumValue.name %>">
               <%_ if (enableTranslation) { _%>
-                {translate("<%= enumPrefix %>.<%= enumValue %>")}
+                {translate("<%= enumPrefix %>.<%= enumValue.name %>")}
               <%_ } else { _%>
-                <%= enumValue %>
+                <%= enumValue.value %>
               <%_ } _%>
               </option>
             <%_ }); _%>

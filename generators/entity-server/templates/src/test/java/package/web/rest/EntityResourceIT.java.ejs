@@ -233,7 +233,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     let enumValue1;
     let enumValue2;
     if (isEnum) {
-        const enumValues = getEnumValuesWithoutCustomValues(fields[idx].fieldValues);
+        const enumValues = getEnumValuesWithCustomValues(fields[idx].fieldValues);
         enumValue1 = enumValues[0];
         if (enumValues.length > 1) {
             enumValue2 = enumValues[1];
@@ -368,8 +368,8 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'neo4j') { %>e
     private static final String <%= updatedValueName %>_CONTENT_TYPE = "image/png";
     <%_ } else if (isEnum) { _%>
 
-    private static final <%= fieldType %> <%= defaultValueName %> = <%= fieldType %>.<%= enumValue1 %>;
-    private static final <%= fieldType %> <%= updatedValueName %> = <%= fieldType %>.<%= enumValue2 %>;
+    private static final <%= fieldType %> <%= defaultValueName %> = <%= fieldType %>.<%= enumValue1.name %>;
+    private static final <%= fieldType %> <%= updatedValueName %> = <%= fieldType %>.<%= enumValue2.name %>;
     <%_ } } _%>
 
     @Autowired

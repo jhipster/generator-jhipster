@@ -549,7 +549,7 @@ function getEnums(enums, customValuesState) {
             const enumValueCustomValue = matches[3];
             return { name: enumValueName, value: enumValueCustomValue };
         }
-        return { name: enumValue, value: false };
+        return { name: enumValue, value: enumValue };
     });
 }
 
