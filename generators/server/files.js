@@ -1403,7 +1403,12 @@ const serverFiles = {
         },
         {
             path: SERVER_TEST_RES_DIR,
-            templates: ['config/application.yml', 'config/application-testcontainers.yml', 'logback.xml'],
+            templates: ['config/application.yml', 'logback.xml']
+        },
+        {
+            condition: generator => generator.databaseType === 'sql',
+            path: SERVER_TEST_RES_DIR,
+            templates: ['config/application-testcontainers.yml'],
         },
         {
             // TODO : add these tests to reactive
