@@ -563,8 +563,9 @@ dependencies {
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
-    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
+    // Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
+    // testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
+    // testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
     // See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up
     implementation 'io.netty:netty-common:${netty_common_version}'
     <%_ } _%>
