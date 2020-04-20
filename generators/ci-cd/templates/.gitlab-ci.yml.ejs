@@ -18,18 +18,6 @@
 -%>
 <%_ if (insideDocker) { _%>
 image: jhipster/jhipster:v<%= jhipsterVersion %>
-
-    <%_ if (cacheProvider === 'redis' || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
-# DinD service is required for Testcontainers
-services:
-    - docker:dind
-
-variables:
-    # Instruct Testcontainers to use the daemon of DinD.
-    DOCKER_HOST: 'tcp://docker:2375'
-    # Improve performance with overlayfs.
-    DOCKER_DRIVER: overlay2
-    <%_ } _%>
 <%_ } _%>
 
 <%_ if (buildTool === 'gradle') { _%>
@@ -79,6 +67,20 @@ gradle-compile:
         expire_in: 1 day
 
 gradle-test:
+<%_ if (insideDocker) { _%>
+    <%_ if (cacheProvider === 'redis' || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
+    # DinD service is required for Testcontainers
+    services:
+        - docker:dind
+
+    variables:
+        # Instruct Testcontainers to use the daemon of DinD.
+        DOCKER_HOST: 'tcp://docker:2375'
+        # Improve performance with overlayfs.
+        DOCKER_DRIVER: overlay2
+    <%_ } _%>
+<%_ } _%>
+
     stage: test
     script:
         - ./gradlew test -PnodeInstall --no-daemon
@@ -196,6 +198,20 @@ maven-compile:
         expire_in: 1 day
 
 maven-test:
+<%_ if (insideDocker) { _%>
+    <%_ if (cacheProvider === 'redis' || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
+    # DinD service is required for Testcontainers
+    services:
+        - docker:dind
+
+    variables:
+        # Instruct Testcontainers to use the daemon of DinD.
+        DOCKER_HOST: 'tcp://docker:2375'
+        # Improve performance with overlayfs.
+        DOCKER_DRIVER: overlay2
+    <%_ } _%>
+<%_ } _%>
+
     stage: test
     script:
         - ./mvnw -ntp verify -P-webpack -Dmaven.repo.local=$MAVEN_USER_HOME
