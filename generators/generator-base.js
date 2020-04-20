@@ -1218,7 +1218,7 @@ module.exports = class extends PrivateBase {
     loadEntityJson(fromPath = this.context.fromPath) {
         const context = this.context;
         try {
-            context.fileData = this.fs.readJSON(fromPath);
+            context.fileData = context.fileData || this.fs.readJSON(fromPath);
         } catch (err) {
             this.debug('Error:', err);
             this.error('\nThe entity configuration file could not be read!\n');

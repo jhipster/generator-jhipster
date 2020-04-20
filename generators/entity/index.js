@@ -145,7 +145,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
             getConfig() {
                 const context = this.context;
                 const configuration = this.getAllJhipsterConfig(this, true);
-                context.useConfigurationFile = false;
                 context.options = this.options;
                 context.baseName = configuration.get('baseName');
                 context.capitalizedBaseName = _.upperFirst(context.baseName);
@@ -213,11 +212,16 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         context.clientRootFolder = context.microserviceName;
                     }
                 }
+
                 // TODO 7.0 context.filename = this.destinationPath(context.filename);
                 context.filename = `${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
-                if (this.fs.exists(context.filename)) {
+                // TODO 7.0 Move to constructor, context.filename isn't defined on constructor
+                // keep here for jhipster 6 backward compatibility
+                this.entityConfig = this.createStorage(context.filename);
+                this.context.useConfigurationFile = this.entityConfig.existed;
+
+                if (context.useConfigurationFile) {
                     this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
-                    context.useConfigurationFile = true;
                 }
 
                 context.entitySuffix = configuration.get('entitySuffix');
@@ -302,6 +306,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 } else {
                     // existing entity reading values from file
                     this.log(`\nThe entity ${entityName} is being updated.\n`);
+                    this.context.fileData = this.entityConfig.getAll();
                     this.loadEntityJson(context.filename);
                 }
             },
@@ -642,6 +647,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 }
 
                 // Keep existing config by cloning fileData
+                // @deprecate remove for jhipster 7
                 const storageData = this.context.fileData ? { ...this.context.fileData } : {};
                 storageData.fluentMethods = context.fluentMethods;
                 storageData.clientRootFolder = context.clientRootFolder;
@@ -679,7 +685,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.storageData = storageData;
                 }
 
-                this.fs.writeJSON(context.filename, this.storageData, null, 4);
+                this.entityConfig.set(this.storageData);
 
                 // Keep this.data for compatibility with existing blueprints
                 this.data = this.storageData;

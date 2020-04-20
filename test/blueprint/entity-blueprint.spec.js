@@ -34,14 +34,19 @@ const mockBlueprintSubGen = class extends EntityGenerator {
                 this.context.fileData.customBlueprintConfigKey = 'customPreConfigValue';
 
                 // Override with new value
+                // @deprecate remove for jhipster 7
                 this.storageData = {
                     customBlueprintConfigKey: 'customBlueprintConfigValue'
                 };
+
+                // At this point this.entityConfig doesn't exists at jhipster 6
+                assert.equal(this.entityConfig, undefined);
             }
         };
         const customPostPhaseSteps = {
             changeProperty() {
                 this.context.angularAppName = 'awesomeAngularAppName';
+                this.entityConfig.set('entityConfigPostConfigKey', 'entityConfigPostConfigValue');
             }
         };
         return {
@@ -60,7 +65,13 @@ const mockBlueprintSubGen = class extends EntityGenerator {
     }
 
     get default() {
-        return super._default();
+        return {
+            ...super._default(),
+            verifyProperty() {
+                this.context.angularAppName = 'awesomeAngularAppName';
+                assert.equal(this.entityConfig.get('entityConfigPostConfigKey'), 'entityConfigPostConfigValue');
+            }
+        };
     }
 
     get writing() {
@@ -121,6 +132,9 @@ describe('JHipster entity generator with blueprint', () => {
             });
             it('contains the specific config added by the blueprint', () => {
                 assert.fileContent('.jhipster/Foo.json', /"customBlueprintConfigKey": "customBlueprintConfigValue"/);
+            });
+            it('contains the specific config added by the blueprint with entityConfig', () => {
+                assert.fileContent('.jhipster/Foo.json', /"entityConfigPostConfigKey": "entityConfigPostConfigValue"/);
             });
         });
     });
