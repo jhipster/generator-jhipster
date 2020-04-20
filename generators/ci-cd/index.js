@@ -99,6 +99,7 @@ module.exports = class extends BaseGenerator {
                 }
                 this.clientFramework = configuration.get('clientFramework');
                 this.testFrameworks = configuration.get('testFrameworks');
+                this.cacheProvider = configuration.get('cacheProvider');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
                 this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
