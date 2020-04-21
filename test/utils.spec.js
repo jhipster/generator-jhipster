@@ -113,27 +113,53 @@ describe('JHipster Utils', () => {
             });
         });
         describe('when all the enums have custom values', () => {
-            let enumInfo;
+            describe('without spaces inside them', () => {
+                let enumInfo;
 
-            before(() => {
-                const clientRootFolder = 'root';
-                const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
-                enumInfo = utils.getEnumInfo(field, clientRootFolder);
-            });
+                before(() => {
+                    const clientRootFolder = 'root';
+                    const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
+                    enumInfo = utils.getEnumInfo(field, clientRootFolder);
+                });
 
-            it('returns whether there are custom enums', () => {
-                assert.strictEqual(enumInfo.withoutCustomValues, false);
-                assert.strictEqual(enumInfo.withSomeCustomValues, false);
-                assert.strictEqual(enumInfo.withCustomValues, true);
+                it('returns whether there are custom enums', () => {
+                    assert.strictEqual(enumInfo.withoutCustomValues, false);
+                    assert.strictEqual(enumInfo.withSomeCustomValues, false);
+                    assert.strictEqual(enumInfo.withCustomValues, true);
+                });
+                it('returns the enums values', () => {
+                    assert.deepStrictEqual(enumInfo.enumValues, [
+                        {
+                            name: 'AAA',
+                            value: 'aaa'
+                        },
+                        { name: 'BBB', value: 'bbb' }
+                    ]);
+                });
             });
-            it('returns the enums values', () => {
-                assert.deepStrictEqual(enumInfo.enumValues, [
-                    {
-                        name: 'AAA',
-                        value: 'aaa'
-                    },
-                    { name: 'BBB', value: 'bbb' }
-                ]);
+            describe('with spaces inside them', () => {
+                let enumInfo;
+
+                before(() => {
+                    const clientRootFolder = 'root';
+                    const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb and b)' };
+                    enumInfo = utils.getEnumInfo(field, clientRootFolder);
+                });
+
+                it('returns whether there are custom enums', () => {
+                    assert.strictEqual(enumInfo.withoutCustomValues, false);
+                    assert.strictEqual(enumInfo.withSomeCustomValues, false);
+                    assert.strictEqual(enumInfo.withCustomValues, true);
+                });
+                it('returns the enums values', () => {
+                    assert.deepStrictEqual(enumInfo.enumValues, [
+                        {
+                            name: 'AAA',
+                            value: 'aaa'
+                        },
+                        { name: 'BBB', value: 'bbb and b' }
+                    ]);
+                });
             });
         });
         describe('when not passing a client root folder', () => {

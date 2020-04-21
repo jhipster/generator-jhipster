@@ -462,7 +462,7 @@ function getEnumInfo(field, clientRootFolder) {
     const fieldType = field.fieldType;
     // Todo: check if the next line does a side-effect and refactor it.
     field.enumInstance = _.lowerFirst(fieldType);
-    const enums = field.fieldValues.replace(/\s/g, '').split(',');
+    const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
     const customValuesState = getCustomValuesState(enums);
     return {
         enumName: fieldType,
