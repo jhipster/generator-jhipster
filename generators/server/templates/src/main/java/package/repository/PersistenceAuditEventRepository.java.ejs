@@ -56,7 +56,7 @@ import java.util.List;
 <%_ } _%>
 
 /**
- * Spring Data <% if (databaseType === 'sql' && !reactive) { %>JPA<% } else if (databaseType === 'sql' && reactive) { %>R2DBC<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } %> repository for the {@link PersistentAuditEvent} entity.
+ * Spring Data <% if (databaseType === 'sql' && !reactive) { %>JPA<% } else if (databaseType === 'sql' && reactive) { %>R2DBC<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } else if (databaseType === 'neo4j') { %>Neo4j<% } %> repository for the {@link PersistentAuditEvent} entity.
  */
 <%_ if (databaseType === 'sql' && reactive) { _%>
 @Repository
@@ -68,6 +68,7 @@ public interface PersistenceAuditEventRepository extends R2dbcRepository<Persist
 
 interface PersistenceAuditEventRepositoryInternal {
 <%_ } else { _%>
+@Repository
 public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') {
  %><PersistentAuditEvent, String><% } %> {
 <%_ } _%>
