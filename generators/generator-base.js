@@ -2187,19 +2187,16 @@ module.exports = class extends PrivateBase {
         if (!enumValues || enumValues === '') {
             throw new Error('Enumeration values must be passed to get the formatted values.');
         }
-        return enumValues
-            .replace(/\s/g, '')
-            .split(',')
-            .map(enumValue => {
-                if (!enumValue.includes('(')) {
-                    return { name: enumValue, value: enumValue };
-                }
-                // eslint-disable-next-line no-unused-vars
-                const matched = /(.+?)\((.+?)\)/.exec(enumValue);
-                return {
-                    name: matched[1],
-                    value: matched[2]
-                };
-            });
+        return enumValues.split(',').map(enumValue => {
+            if (!enumValue.includes('(')) {
+                return { name: enumValue.trim(), value: enumValue.trim() };
+            }
+            // eslint-disable-next-line no-unused-vars
+            const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
+            return {
+                name: matched[1],
+                value: matched[2]
+            };
+        });
     }
 };

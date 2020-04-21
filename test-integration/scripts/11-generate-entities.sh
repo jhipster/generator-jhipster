@@ -99,6 +99,7 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
+    moveEntity FieldTestEnumWithValue
 
     moveEntity TestEntity
     moveEntity TestMapstruct
@@ -139,6 +140,7 @@ elif [[ "$JHI_ENTITY" == "sql" ]]; then
     moveEntity FieldTestServiceImplEntity
     moveEntity FieldTestInfiniteScrollEntity
     moveEntity FieldTestPaginationEntity
+    moveEntity FieldTestEnumWithValue
 
     moveEntity EntityWithDTO
     moveEntity EntityWithPaginationAndDTO

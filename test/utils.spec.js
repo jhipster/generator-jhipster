@@ -108,7 +108,7 @@ describe('JHipster Utils', () => {
                         name: 'AAA',
                         value: 'aaa'
                     },
-                    { name: 'BBB', value: false }
+                    { name: 'BBB', value: 'BBB' }
                 ]);
             });
         });
