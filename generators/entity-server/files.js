@@ -395,6 +395,7 @@ function writeFiles() {
                     angularAppName: this.angularAppName,
                     packageName: this.packageName
                 };
+                // eslint-disable-next-line no-console
                 if (!this.skipServer) {
                     const pathToTemplateFile = `${this.fetchFromInstalledJHipster(
                         'entity-server/templates'

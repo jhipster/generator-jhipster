@@ -83,8 +83,8 @@ describe('JHipster Utils', () => {
             });
             it('returns the enums values', () => {
                 assert.deepStrictEqual(enumInfo.enumValues, [
-                    { name: 'AAA', value: false },
-                    { name: 'BBB', value: false }
+                    { name: 'AAA', value: 'AAA' },
+                    { name: 'BBB', value: 'BBB' }
                 ]);
             });
         });

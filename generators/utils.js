@@ -540,16 +540,18 @@ function getCustomValuesState(enumValues) {
 
 function getEnums(enums, customValuesState) {
     if (customValuesState.withoutCustomValues) {
-        return enums.map(enumValue => ({ name: enumValue, value: false }));
+        return enums.map(enumValue => ({ name: enumValue, value: enumValue }));
     }
     return enums.map(enumValue => {
-        if (doesTheEnumValueHaveACustomValue(enumValue)) {
-            const matches = /([A-Z\-_]+)(\((.+?)\))?/.exec(enumValue);
-            const enumValueName = matches[1];
-            const enumValueCustomValue = matches[3];
-            return { name: enumValueName, value: enumValueCustomValue };
+        if (!doesTheEnumValueHaveACustomValue(enumValue)) {
+            return { name: enumValue.trim(), value: enumValue.trim() };
         }
-        return { name: enumValue, value: enumValue };
+        // eslint-disable-next-line no-unused-vars
+        const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
+        return {
+            name: matched[1],
+            value: matched[2]
+        };
     });
 }
 
