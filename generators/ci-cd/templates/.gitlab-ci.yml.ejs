@@ -67,6 +67,18 @@ gradle-compile:
         expire_in: 1 day
 
 gradle-test:
+    stage: test
+    script:
+        - ./gradlew test -PnodeInstall --no-daemon
+    artifacts:
+        reports:
+            junit: build/test-results/test/TEST-*.xml
+        paths:
+            - build/test-results/
+            - build/jacoco/
+        expire_in: 1 day
+
+gradle-integration-test:
 <%_ if (insideDocker) { _%>
     <%_ if (cacheProvider === 'redis' || ['cassandra', 'couchbase', 'neo4j'].includes(prodDatabaseType)) { _%>
     # DinD service is required for Testcontainers
@@ -81,18 +93,6 @@ gradle-test:
     <%_ } _%>
 <%_ } _%>
 
-    stage: test
-    script:
-        - ./gradlew test -PnodeInstall --no-daemon
-    artifacts:
-        reports:
-            junit: build/test-results/test/TEST-*.xml
-        paths:
-            - build/test-results/
-            - build/jacoco/
-        expire_in: 1 day
-
-gradle-integration-test:
     stage: test
     script:
         - ./gradlew integrationTest -PnodeInstall --no-daemon
