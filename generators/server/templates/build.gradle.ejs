@@ -596,6 +596,9 @@ dependencies {
     <%_ if (messageBroker === 'kafka') { _%>
     testImplementation "org.testcontainers:kafka"
     <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { %>
+    testImplementation "org.testcontainers:testcontainers"
+    <%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 

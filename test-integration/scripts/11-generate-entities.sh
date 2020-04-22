@@ -49,9 +49,10 @@ if [[ ("$JHI_ENTITY" == "mongodb") || ("$JHI_ENTITY" == "couchbase") ]]; then
     moveEntity EntityWithServiceImplPaginationAndDTO
 
 elif [[ "$JHI_ENTITY" == "neo4j" ]]; then
-    moveEntity BankAccount
-    moveEntity Label
-    moveEntity Operation
+    moveEntity Album
+    moveEntity Track
+    moveEntity Genre
+    moveEntity Artist
 
 elif [[ "$JHI_ENTITY" == "cassandra" ]]; then
     moveEntity CassBankAccount
