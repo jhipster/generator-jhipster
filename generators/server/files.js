@@ -1659,7 +1659,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1855,7 +1855,8 @@ const serverFiles = {
         },
         {
             // TODO : add tests for reactive
-            condition: generator => !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            condition: generator =>
+                !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
