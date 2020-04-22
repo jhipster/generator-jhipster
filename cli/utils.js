@@ -220,7 +220,7 @@ const createYeomanEnv = packagePatterns => {
     const env = yeoman.createEnv();
     // Register jhipster generators.
     env.lookup({ packagePaths: [path.join(__dirname, '..')] });
-    if (packagePatterns) {
+    if (packagePatterns && packagePatterns.length > 0) {
         // Lookup for blueprints.
         env.lookup({ filterPaths: true, packagePatterns });
     }
