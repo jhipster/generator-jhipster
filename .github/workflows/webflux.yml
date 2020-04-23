@@ -53,7 +53,6 @@ jobs:
                     - webflux-couchbase
                     - webflux-couchbase-es-oauth2
                     - webflux-psql
-                    - webflux-nodb-oauth2
                 include:
                     - app-type: webflux-mongodb
                       entity: mongodb
@@ -91,11 +90,6 @@ jobs:
                       war: 0
                       protractor: 1
                     - app-type: webflux-psql
-                      entity: none
-                      profile: prod
-                      war: 0
-                      protractor: 1
-                    - app-type: webflux-nodb-oauth2
                       entity: none
                       profile: prod
                       war: 0
