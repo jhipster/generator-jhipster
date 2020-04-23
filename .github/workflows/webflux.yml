@@ -99,7 +99,7 @@ jobs:
                       entity: none
                       profile: prod
                       war: 0
-                      protractor: 0
+                      protractor: 1
         env:
             JHI_ENTITY: ${{ matrix.entity }}
             JHI_APP: ${{ matrix.app-type }}
