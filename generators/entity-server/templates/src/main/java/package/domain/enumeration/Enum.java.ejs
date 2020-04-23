@@ -20,7 +20,7 @@ package <%= packageName %>.domain.enumeration;
 
 /**
  * The <%= enumName %> enumeration.
-*/
+ */
 public enum <%= enumName %> {
 <%_ if (withoutCustomValues) { _%>
     <%= enumValues.map(enumValue => enumValue.name).join(', ') %>
