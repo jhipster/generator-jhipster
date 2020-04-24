@@ -1138,10 +1138,6 @@ const serverFiles = {
                 {
                     file: 'package/repository/search/package-info.java',
                     renameTo: generator => `${generator.javaDir}repository/search/package-info.java`
-                },
-                {
-                    file: 'package/repository/search/SearchRepositoryMarker.java',
-                    renameTo: generator => `${generator.javaDir}repository/search/SearchRepositoryMarker.java`
                 }
             ]
         },
@@ -1149,16 +1145,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 { file: 'package/repository/package-info.java', renameTo: generator => `${generator.javaDir}repository/package-info.java` }
-            ]
-        },
-        {
-            condition: generator => generator.databaseType === 'neo4j',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/RepositoryMarker.java',
-                    renameTo: generator => `${generator.javaDir}repository/RepositoryMarker.java`
-                }
             ]
         }
     ],

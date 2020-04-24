@@ -60,7 +60,7 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.context.annotation.Import;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' && ['mongodb', 'couchbase'].includes(databaseType)) { _%>
+<%_ if (searchEngine === 'elasticsearch' && ['mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
@@ -72,11 +72,12 @@ import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
-import <%= packageName %>.repository.search.SearchRepositoryMarker;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
 import org.neo4j.springframework.data.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
-import <%= packageName %>.repository.RepositoryMarker;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<%_ } _%>
 <%_ } _%> 
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (!reactive) { _%>
@@ -157,10 +158,14 @@ import java.util.UUID;
 @EnableTransactionManagement
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackageClasses = {RepositoryMarker.class})    
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
+    <%_ } else { _%>
+    @Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
+    <%_ } _%>    
 <%_ } _%>   
 <%_ if (searchEngine === 'elasticsearch') { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories(basePackageClasses = {SearchRepositoryMarker.class})
+@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
