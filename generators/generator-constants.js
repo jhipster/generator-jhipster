@@ -29,7 +29,7 @@ const NPM_VERSION = '6.14.4';
 const GRADLE_VERSION = '6.3';
 
 // Libraries version
-const JIB_VERSION = '2.1.0';
+const JIB_VERSION = '2.2.0';
 
 const LIQUIBASE_VERSION = '3.8.9';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
