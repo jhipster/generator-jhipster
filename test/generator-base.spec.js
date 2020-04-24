@@ -268,7 +268,6 @@ describe('Generator Base', () => {
             });
         });
     });
-
     describe('writeFilesToDisk', () => {
         describe('when called with default angular client options', () => {
             it('should produce correct files', () => {
@@ -301,6 +300,49 @@ describe('Generator Base', () => {
                 filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
+            });
+        });
+    });
+    describe('getEnumValuesWithCustomValues', () => {
+        describe('when not passing anything', () => {
+            it('should fail', () => {
+                expect(() => BaseGenerator.getEnumValuesWithCustomValues()).to.throw(
+                    /^Enumeration values must be passed to get the formatted values\.$/
+                );
+            });
+        });
+        describe('when passing an empty string', () => {
+            it('should fail', () => {
+                expect(() => BaseGenerator.getEnumValuesWithCustomValues('')).to.throw(
+                    /^Enumeration values must be passed to get the formatted values\.$/
+                );
+            });
+        });
+        describe('when passing a string without custom enum values', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
+                    { name: 'FRANCE', value: 'FRANCE' },
+                    { name: 'ENGLAND', value: 'ENGLAND' },
+                    { name: 'ICELAND', value: 'ICELAND' }
+                ]);
+            });
+        });
+        describe('when passing a string with some custom enum values', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
+                    { name: 'FRANCE', value: 'france' },
+                    { name: 'ENGLAND', value: 'ENGLAND' },
+                    { name: 'ICELAND', value: 'viking_country' }
+                ]);
+            });
+        });
+        describe('when passing a string custom enum values for each value', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).to.deep.equal([
+                    { name: 'FRANCE', value: 'france' },
+                    { name: 'ENGLAND', value: 'england' },
+                    { name: 'ICELAND', value: 'iceland' }
+                ]);
             });
         });
     });

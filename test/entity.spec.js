@@ -850,5 +850,76 @@ describe('JHipster generator for entity', () => {
                 });
             });
         });
+
+        context('when generating enums', () => {
+            let enumWithoutCustomValuesPath;
+            let enumWithSomeCustomValuesPath;
+            let enumWithOnlyCustomValuesPath;
+
+            before(done => {
+                enumWithoutCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumA.java`;
+                enumWithSomeCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumB.java`;
+                enumWithOnlyCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumC.java`;
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/enums'), dir);
+                    })
+                    .withArguments(['A'])
+                    .on('end', done);
+            });
+
+            context('for enum content without custom values', () => {
+                it('generates the java enum content', () => {
+                    assert.fileContent(enumWithoutCustomValuesPath, /AAA,\s+BBB/);
+                });
+                it('does not generate a private field', () => {
+                    assert.noFileContent(enumWithoutCustomValuesPath, /private final String value;/);
+                });
+                it('does not generate an empty constructor', () => {
+                    assert.noFileContent(enumWithoutCustomValuesPath, /MyEnumA\(\)/);
+                });
+                it('does not generate a non-empty constructor', () => {
+                    assert.noFileContent(enumWithoutCustomValuesPath, /MyEnumA\(String value\)/);
+                });
+                it('does not generate a getter for the value', () => {
+                    assert.noFileContent(enumWithoutCustomValuesPath, /public String getValue\(\)/);
+                });
+            });
+            context('for enum content with some custom values', () => {
+                it('generates the java enum content', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /AAA\("aaa_aaa"\),\s+BBB;/);
+                });
+                it('generates a non-final private field', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /private String value;/);
+                });
+                it('generates an empty constructor', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /MyEnumB\(\)/);
+                });
+                it('generates a non-empty constructor', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /MyEnumB\(String value\)/);
+                });
+                it('generates a getter for the value', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /public String getValue\(\)/);
+                });
+            });
+            context('for enum content with only custom values', () => {
+                it('generates the java enum content', () => {
+                    assert.fileContent(enumWithOnlyCustomValuesPath, /AAA\("aaa_aaa"\),\s+BBB\("bbb"\);/);
+                });
+                it('generates a final private field', () => {
+                    assert.fileContent(enumWithOnlyCustomValuesPath, /private final String value;/);
+                });
+                it('does not generate an empty constructor', () => {
+                    assert.noFileContent(enumWithOnlyCustomValuesPath, /MyEnumC\(\)/);
+                });
+                it('generates a non-empty constructor', () => {
+                    assert.fileContent(enumWithOnlyCustomValuesPath, /MyEnumC\(String value\)/);
+                });
+                it('generates a getter for the value', () => {
+                    assert.fileContent(enumWithOnlyCustomValuesPath, /public String getValue\(\)/);
+                });
+            });
+        });
     });
 });

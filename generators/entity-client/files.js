@@ -270,7 +270,11 @@ function addEnumerationFiles(generator, templateDir, clientFolder) {
     generator.fields.forEach(field => {
         if (field.fieldIsEnum === true) {
             const enumFileName = _.kebabCase(field.fieldType);
-            const enumInfo = utils.buildEnumInfo(field, generator.angularAppName, generator.packageName, generator.clientRootFolder);
+            const enumInfo = {
+                ...utils.getEnumInfo(field, generator.clientRootFolder),
+                angularAppName: generator.angularAppName,
+                packageName: generator.packageName
+            };
             if (!generator.skipClient) {
                 generator.template(
                     `${generator.fetchFromInstalledJHipster(
