@@ -261,7 +261,7 @@ repositories {
         }
     }
     <%_ } _%>
-    <%_ if (reactive && databaseType === 'sql') { _%>
+    <%_ if (reactive && databaseType === 'sql' || JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
         mavenContent {
