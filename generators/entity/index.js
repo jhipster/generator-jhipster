@@ -379,9 +379,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
         return {
             validateFile() {
                 const context = this.context;
-                if (!context.useConfigurationFile) {
-                    return;
-                }
                 const entityName = context.name;
                 // Validate entity json field content
                 context.fields.forEach(field => {
