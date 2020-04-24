@@ -40,7 +40,7 @@ import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 /**
  * Spring Data Elasticsearch repository for the User entity.
  */
-public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity('User') %>, <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } %><% if (databaseType === 'cassandra' || databaseType === 'mongodb' || authenticationType === 'oauth2') { %>String<% } %>><% if (reactive) {%>, UserSearchRepositoryInternal<% } %> {
+public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity('User') %>, <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } %><% if (databaseType === 'cassandra' || databaseType === 'mongodb' || databaseType === 'neo4j' || authenticationType === 'oauth2') { %>String<% } %>><% if (reactive) {%>, UserSearchRepositoryInternal<% } %> {
 }
 <%_ if (reactive) { _%>
 
