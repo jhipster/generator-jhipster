@@ -83,8 +83,8 @@
         "tabtab": "2.2.2",
         "through2": "3.0.1",
         "uuid": "3.3.3",
-        "yeoman-environment": "2.9.5",
-        "yeoman-generator": "4.8.3"
+        "yeoman-environment": "2.9.6",
+        "yeoman-generator": "4.9.0"
     },
     "devDependencies": {
         "@openapitools/openapi-generator-cli": "1.0.12-4.3.0",
