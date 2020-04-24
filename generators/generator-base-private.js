@@ -912,12 +912,15 @@ module.exports = class extends Generator {
         }
         const mainGeneratorJhipsterVersion = packagejs.version;
         const blueprintJhipsterVersion = blueprintPackageJson.dependencies && blueprintPackageJson.dependencies['generator-jhipster'];
-        if (blueprintJhipsterVersion && mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
-            this.error(
-                `The installed ${chalk.yellow(
-                    blueprintPkgName
-                )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
-            );
+        if (blueprintJhipsterVersion) {
+            if (mainGeneratorJhipsterVersion !== blueprintJhipsterVersion) {
+                this.error(
+                    `The installed ${chalk.yellow(
+                        blueprintPkgName
+                    )} blueprint targets JHipster v${blueprintJhipsterVersion} and is not compatible with this JHipster version. Either update the blueprint or JHipster. You can also disable this check using --skip-checks at your own risk`
+                );
+            }
+            return;
         }
         const blueprintPeerJhipsterVersion =
             blueprintPackageJson.peerDependencies && blueprintPackageJson.peerDependencies['generator-jhipster'];
@@ -1462,7 +1465,7 @@ module.exports = class extends Generator {
      *
      * @param {string} authenticationType - the auth type
      * @param {string} databaseType - the database type
-     * @param {any} relationships - relationships
+     * @param {T[]} relationships - relationships
      */
     getPkTypeBasedOnDBAndAssociation(authenticationType, databaseType, relationships) {
         let hasFound = false;
@@ -1548,12 +1551,11 @@ module.exports = class extends Generator {
      */
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
-        let prettierFilter;
+        let filterPatternForPrettier = '{,**/,.jhipster/**/}*.{md,json,ts,tsx,scss,css,yml}';
         if (this.prettierJava) {
-            prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml,java}'], { restore: true });
-        } else {
-            prettierFilter = filter(['.yo-rc.json', '{,**/}*.{md,json,ts,tsx,scss,css,yml}'], { restore: true });
+            filterPatternForPrettier = '{,**/,.jhipster/**/}*.{md,json,ts,tsx,scss,css,yml,java}';
         }
+        const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
     }

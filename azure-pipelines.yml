@@ -28,7 +28,7 @@ jobs:
           JHI_JDK: 11
           # if JHI_LIB_BRANCH value is release, use the release from Maven
           JHI_LIB_REPO: https://github.com/jhipster/jhipster.git
-          JHI_LIB_BRANCH: release
+          JHI_LIB_BRANCH: master
           # if JHI_GEN_BRANCH value is release, use the release from NPM
           JHI_GEN_REPO: https://github.com/jhipster/generator-jhipster.git
           JHI_GEN_BRANCH: master
@@ -58,6 +58,9 @@ jobs:
               ms-micro-eureka-jwt:
                   JHI_APP: ms-micro-eureka-jwt
                   JHI_ENTITY: micro
+              ms-micro-eureka-infinispan:
+                  JHI_APP: ms-micro-eureka-infinispan
+                  JHI_ENTITY: micro
               ms-react-gateway-consul-jwt:
                   JHI_APP: ms-react-gateway-consul-jwt
                   JHI_ENTITY: sqllight
@@ -72,38 +75,6 @@ jobs:
                   JHI_APP: jdl-default
                   JHI_ENTITY: jdl
                   JHI_PROFILE: prod
-                  JHI_PROTRACTOR: 1
-              webflux-mongodb:
-                  JHI_APP: webflux-mongodb
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-mongodb-session:
-                  JHI_APP: webflux-mongodb-session
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-mongodb-oauth2:
-                  JHI_APP: webflux-mongodb-oauth2
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-gateway-oauth2:
-                  JHI_APP: webflux-gateway-oauth2
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-gateway-jwt:
-                  JHI_APP: webflux-gateway-jwt
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-couchbase:
-                  JHI_APP: webflux-couchbase
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-couchbase-session:
-                  JHI_APP: webflux-couchbase-session
-                  JHI_ENTITY: none
-                  JHI_PROTRACTOR: 1
-              webflux-couchbase-oauth2:
-                  JHI_APP: webflux-couchbase-oauth2
-                  JHI_ENTITY: none
                   JHI_PROTRACTOR: 1
       steps:
           #----------------------------------------------------------------------

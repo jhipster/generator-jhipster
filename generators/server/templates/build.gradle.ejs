@@ -45,7 +45,7 @@ plugins {
     id "net.ltgt.apt-eclipse"
     id "net.ltgt.apt-idea"
     id "net.ltgt.apt"
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     id "org.liquibase.gradle"
     <%_ } _%>
     id "org.sonarqube"
@@ -60,7 +60,7 @@ description = ""
 
 sourceCompatibility=<%= JAVA_VERSION %>
 targetCompatibility=<%= JAVA_VERSION %>
-assert System.properties["java.specification.version"] == "1.8" || "11" || "12" || "13"
+assert System.properties["java.specification.version"] == "1.8" || "11" || "12" || "13" || "14"
 
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
@@ -184,7 +184,7 @@ task cucumberTestReport(type: TestReport) {
 }
 
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 if (!project.hasProperty("runList")) {
     project.ext.runList = "main"
 }
@@ -261,6 +261,14 @@ repositories {
         }
     }
     <%_ } _%>
+    <%_ if (reactive && databaseType === 'sql') { _%>
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    <%_ } _%>
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -286,7 +294,9 @@ dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     <%_ if (databaseType === 'sql') { _%>
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
+        <%_ if (!reactive) { _%>
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
+        <%_ } _%>
     <%_ } _%>
     implementation "com.fasterxml.jackson.core:jackson-annotations"
     implementation "com.fasterxml.jackson.core:jackson-databind"
@@ -308,9 +318,6 @@ dependencies {
     implementation "org.infinispan:infinispan-spring-boot-starter-embedded"
     implementation "org.infinispan:infinispan-core"
     implementation "org.infinispan:infinispan-jcache"
-    implementation ("org.infinispan:infinispan-cloud") {
-        exclude module: "undertow-core"
-    }
     <%_ } _%>
     <%_ if (cacheProvider === 'memcached') { _%>
     implementation "com.google.code.simple-spring-memcached:spring-cache"
@@ -357,12 +364,16 @@ dependencies {
         <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
+        <%_ if (!reactive) { _%>
     implementation "org.hibernate:hibernate-entitymanager"
+        <%_ } _%>
     implementation "org.hibernate.validator:hibernate-validator"
     implementation "org.liquibase:liquibase-core"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "org.liquibase:liquibase-core"
     liquibaseRuntime "org.liquibase.ext:liquibase-hibernate5:${liquibase_hibernate5_version}"
     liquibaseRuntime sourceSets.main.compileClasspath
+        <%_ } _%>
     <%_ } _%>
     implementation "org.springframework.boot:spring-boot-loader-tools"
     implementation "org.springframework.boot:spring-boot-starter-mail"
@@ -370,14 +381,20 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-aop"
     <%_ if (databaseType === 'sql') { _%>
+        <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+        <%_ } else { _%>
+    implementation "org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:${spring_boot_starter_data_r2dbc_version}"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
+        <%_ if (!reactive) { _%>
     // Spring Data Jest dependencies for Elasticsearch
     implementation ("com.github.vanroy:spring-boot-starter-data-jest") {
         exclude module: "commons-logging"
     }
+        <%_ } _%>
     // log4j2-mock needed to create embedded elasticsearch instance with SLF4J
     runtimeOnly "de.dentrassi.elasticsearch:log4j2-mock:${log4j2_mock_version}"
     // end of Spring Data Jest dependencies
@@ -462,7 +479,7 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt-api"
     if (!project.hasProperty("gae")) {
         runtimeOnly "io.jsonwebtoken:jjwt-impl"
-        runtimeOnly "io.jsonwebtoken:jjwt-jackson"
+        <% if (reactive) { %>implementation<% } else { %>runtimeOnly<% } %> "io.jsonwebtoken:jjwt-jackson"
     } else {
         implementation "io.jsonwebtoken:jjwt-impl"
         implementation "io.jsonwebtoken:jjwt-jackson"
@@ -487,17 +504,25 @@ dependencies {
     }
     implementation "io.springfox:springfox-bean-validators"
     <%_ } else if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
-    implementation "io.springfox:springfox-swagger2:3.0.0-SNAPSHOT"
-    implementation "io.springfox:springfox-swagger-ui:3.0.0-SNAPSHOT"
-    implementation "io.springfox:springfox-spring-webflux:3.0.0-SNAPSHOT"
+    implementation "io.springfox:springfox-swagger2:${springfox_version}"
+    implementation "io.springfox:springfox-swagger-ui:${springfox_version}"
+    implementation "io.springfox:springfox-spring-webflux:${springfox_version}"
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mysql') { _%>
     implementation "mysql:mysql-connector-java"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "mysql:mysql-connector-java"
+        <%_ } else { _%>
+    implementation "dev.miku:r2dbc-mysql:${r2dbc_mysql_version}"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
     implementation "org.postgresql:postgresql"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "org.postgresql:postgresql"
+        <%_ } else { _%>
+    implementation "io.r2dbc:r2dbc-postgresql:${r2dbc_postgresql_version}"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mariadb') { _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
@@ -506,8 +531,12 @@ dependencies {
     <%_ if (prodDatabaseType === 'mssql') { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
     implementation "com.github.sabomichal:liquibase-mssql"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
+        <%_ } else { _%>
+    implementation "io.r2dbc:r2dbc-mssql:${r2dbc_mssql_version}"
+        <%_ } _%>
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
@@ -533,6 +562,12 @@ dependencies {
     }
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
+    <%_ if (reactive) { _%>
+    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
+    // See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up
+    implementation 'io.netty:netty-common:${netty_common_version}'
+    <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
     <%_ if (databaseType === 'mongodb') { _%>
@@ -543,9 +578,16 @@ dependencies {
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     testImplementation "com.h2database:h2"
+        <%_ if (reactive) { _%>
+    testImplementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "com.h2database:h2"
+        <%_ } else { _%>
+    implementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle') { _%>
     implementation "com.oracle.database.jdbc:ojdbc8"
@@ -553,6 +595,9 @@ dependencies {
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testImplementation "org.testcontainers:kafka"
+    <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { %>
+    testImplementation "org.testcontainers:testcontainers"
     <%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }

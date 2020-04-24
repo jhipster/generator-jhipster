@@ -60,6 +60,9 @@ limitations under the License.
     "rxjs": "6.4.0",
     "sockjs-client": "1.3.0",
     <%_ } _%>
+    <%_ if (skipServer) { _%>
+    "sonar-scanner": "3.1.0",
+    <%_ } _%>
     "tslib": "1.10.0",
     "uuid": "3.3.3"<% if (websocket === 'spring-websocket') { %>,
     "webstomp-client": "1.2.6"
@@ -167,7 +170,7 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
-    "@openapitools/openapi-generator-cli": "1.0.10-4.2.3",
+    "@openapitools/openapi-generator-cli": "1.0.12-4.3.0",
     "webpack": "4.41.2",
     "webpack-cli": "3.3.10",
     "webpack-dev-server": "3.9.0",
@@ -194,6 +197,9 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
     "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
+    <%_ } _%>
+    <%_ if (skipServer) { _%>
+    "sonar": "sonar-scanner",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",

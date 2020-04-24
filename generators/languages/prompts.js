@@ -23,8 +23,7 @@ module.exports = {
 };
 
 function askForLanguages() {
-    if (this.languages) return;
-    const done = this.async();
+    if (this.languages) return undefined;
     const languageOptions = this.getAllSupportedLanguageOptions();
     const prompts = [
         {
@@ -35,11 +34,10 @@ function askForLanguages() {
         }
     ];
     if (this.enableTranslation || this.configOptions.enableTranslation) {
-        this.prompt(prompts).then(props => {
+        return this.prompt(prompts).then(props => {
             this.languagesToApply = props.languages || [];
-            done();
         });
-    } else {
-        this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
     }
+    this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
+    return undefined;
 }

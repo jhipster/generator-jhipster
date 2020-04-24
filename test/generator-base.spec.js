@@ -1,5 +1,4 @@
 const expect = require('chai').expect;
-const jhiCore = require('jhipster-core');
 const expectedFiles = require('./utils/expected-files');
 const BaseGenerator = require('../generators/generator-base').prototype;
 
@@ -32,48 +31,6 @@ describe('Generator Base', () => {
         describe('when called', () => {
             it('returns an array', () => {
                 expect(BaseGenerator.getAllSupportedLanguages()).to.not.have.length(0);
-            });
-        });
-    });
-    describe('getExistingEntities', () => {
-        describe('when entities change on-disk', () => {
-            before(() => {
-                const entities = {
-                    Region: {
-                        fluentMethods: true,
-                        relationships: [],
-                        fields: [
-                            {
-                                fieldName: 'regionName',
-                                fieldType: 'String'
-                            }
-                        ],
-                        changelogDate: '20170623093902',
-                        entityTableName: 'region',
-                        dto: 'mapstruct',
-                        pagination: 'no',
-                        service: 'serviceImpl',
-                        angularJSSuffix: 'mySuffix'
-                    }
-                };
-                jhiCore.exportEntities({
-                    entities,
-                    forceNoFiltering: true,
-                    application: {}
-                });
-                BaseGenerator.getExistingEntities();
-                entities.Region.fields.push({ fieldName: 'regionDesc', fieldType: 'String' });
-                jhiCore.exportEntities({
-                    entities,
-                    forceNoFiltering: true,
-                    application: {}
-                });
-            });
-            it('returns an up-to-date state', () => {
-                expect(BaseGenerator.getExistingEntities().find(it => it.name === 'Region').definition.fields[1]).to.eql({
-                    fieldName: 'regionDesc',
-                    fieldType: 'String'
-                });
             });
         });
     });
@@ -311,7 +268,6 @@ describe('Generator Base', () => {
             });
         });
     });
-
     describe('writeFilesToDisk', () => {
         describe('when called with default angular client options', () => {
             it('should produce correct files', () => {
@@ -344,6 +300,49 @@ describe('Generator Base', () => {
                 filesToAssert = filesToAssert.sort();
                 const out = BaseGenerator.writeFilesToDisk(files, generator, true).sort();
                 expect(out).to.eql(filesToAssert);
+            });
+        });
+    });
+    describe('getEnumValuesWithCustomValues', () => {
+        describe('when not passing anything', () => {
+            it('should fail', () => {
+                expect(() => BaseGenerator.getEnumValuesWithCustomValues()).to.throw(
+                    /^Enumeration values must be passed to get the formatted values\.$/
+                );
+            });
+        });
+        describe('when passing an empty string', () => {
+            it('should fail', () => {
+                expect(() => BaseGenerator.getEnumValuesWithCustomValues('')).to.throw(
+                    /^Enumeration values must be passed to get the formatted values\.$/
+                );
+            });
+        });
+        describe('when passing a string without custom enum values', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
+                    { name: 'FRANCE', value: 'FRANCE' },
+                    { name: 'ENGLAND', value: 'ENGLAND' },
+                    { name: 'ICELAND', value: 'ICELAND' }
+                ]);
+            });
+        });
+        describe('when passing a string with some custom enum values', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
+                    { name: 'FRANCE', value: 'france' },
+                    { name: 'ENGLAND', value: 'ENGLAND' },
+                    { name: 'ICELAND', value: 'viking_country' }
+                ]);
+            });
+        });
+        describe('when passing a string custom enum values for each value', () => {
+            it('should return a formatted list', () => {
+                expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).to.deep.equal([
+                    { name: 'FRANCE', value: 'france' },
+                    { name: 'ENGLAND', value: 'england' },
+                    { name: 'ICELAND', value: 'iceland' }
+                ]);
             });
         });
     });

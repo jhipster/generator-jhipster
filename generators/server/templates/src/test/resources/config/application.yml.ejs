@@ -31,6 +31,15 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+<%_ if (databaseType === 'neo4j') { _%>
+org:
+  neo4j:
+    migrations:
+      locations-to-scan:
+      packages-to-scan: <%= packageName %>.config.neo4j
+      installed-by: <%= baseName %>
+<%_ } _%>
+
 <%_ if (serviceDiscoveryType === 'eureka') { _%>
 eureka:
     client:
@@ -48,7 +57,7 @@ spring:
         exclude:
             - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
     <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -61,7 +70,7 @@ spring:
     jackson:
         serialization:
             write-durations-as-timestamps: false
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         open-in-view: false
@@ -117,6 +126,9 @@ spring:
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
         contexts: test
+        <%_ if (reactive) { _%>
+        url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        <%_ } _%>
     <%_ } _%>
     mail:
         host: localhost
@@ -127,6 +139,12 @@ spring:
     mvc:
         favicon:
             enabled: false
+    <%_ if (databaseType === 'sql' && reactive) { _%>
+    r2dbc:
+        url: r2dbc:h2:mem:///<%= baseName %>?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        username: r2dbc
+        password:
+    <%_ } _%>
     <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && authenticationType === 'jwt') { _%>
     security:
         user:
@@ -171,7 +189,7 @@ jhipster:
         name: "<%= angularAppName %>"
     logging:
         # To test json console appender
-        use-json-format: true # By default, logs are in Json format
+        use-json-format: false
         logstash:
             enabled: false
             host: localhost

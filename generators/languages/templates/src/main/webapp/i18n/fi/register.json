@@ -10,7 +10,7 @@
                     "required": "Käyttäjänimi on pakollinen.",
                     "minlength": "Käyttäjänimesi tulee olla vähintään yhden merkin pituinen.",
                     "maxlength": "Käyttäjänimesi ei voi olla pitempi kuin 50 merkkiä.",
-                    "pattern": "Käyttäjänimessäsi voi olla ainoastaan kirjaimia ja numeroita."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Rekisteröityminen tallennettu!</strong> Tarkista sähköpostistasi vahvistus.",

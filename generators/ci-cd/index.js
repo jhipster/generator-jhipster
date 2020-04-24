@@ -99,6 +99,7 @@ module.exports = class extends BaseGenerator {
                 }
                 this.clientFramework = configuration.get('clientFramework');
                 this.testFrameworks = configuration.get('testFrameworks');
+                this.cacheProvider = configuration.get('cacheProvider');
                 this.autoconfigureTravis = this.options['autoconfigure-travis'];
                 this.autoconfigureJenkins = this.options['autoconfigure-jenkins'];
                 this.autoconfigureGitlab = this.options['autoconfigure-gitlab'];
@@ -160,7 +161,7 @@ module.exports = class extends BaseGenerator {
             this.template('.gitlab-ci.yml.ejs', '.gitlab-ci.yml');
         }
         if (this.pipeline === 'circle') {
-            this.template('circle.yml.ejs', 'circle.yml');
+            this.template('circle.yml.ejs', '.circleci/config.yml');
         }
         if (this.pipeline === 'travis') {
             this.template('travis.yml.ejs', '.travis.yml');

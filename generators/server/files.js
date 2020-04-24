@@ -549,6 +549,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.javaDir}web/rest/UserJWTController.java`
                 }
             ]
+        },
+        {
+            condition: generator => !!generator.enableSwaggerCodegen,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/OpenApiConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/OpenApiConfiguration.java`
+                }
+            ]
         }
     ],
     serverJavaGateway: [
@@ -831,6 +841,18 @@ const serverFiles = {
         },
         {
             condition: generator =>
+                (!generator.reactive && generator.applicationType === 'gateway' && !generator.serviceDiscoveryType) ||
+                generator.authenticationType === 'uaa',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/RestTemplateConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/RestTemplateConfiguration.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
                 !(
                     generator.applicationType !== 'microservice' &&
                     !(
@@ -915,17 +937,12 @@ const serverFiles = {
             templates: [{ file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` }]
         },
         {
-            // TODO: remove when supported by spring-data
             condition: generator => generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/ReactivePageableHandlerMethodArgumentResolver.java',
-                    renameTo: generator => `${generator.javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`
-                },
-                {
-                    file: 'package/config/ReactiveSortHandlerMethodArgumentResolver.java',
-                    renameTo: generator => `${generator.javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`
+                    file: 'package/config/ReactorConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/ReactorConfiguration.java`
                 }
             ]
         },
@@ -1344,7 +1361,7 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.databaseType === 'sql',
+            condition: generator => generator.databaseType === 'sql' && !generator.reactive,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -1642,7 +1659,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1838,7 +1855,8 @@ const serverFiles = {
         },
         {
             // TODO : add tests for reactive
-            condition: generator => !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            condition: generator =>
+                !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

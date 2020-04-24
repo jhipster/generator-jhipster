@@ -10,6 +10,7 @@ Those are described in `.yo-rc.json` files which is the descriptor file created 
 - jdl-default
 - ms-micro-consul
 - ms-micro-eureka
+- ms-micro-eureka-infinispan
 - ms-micro-eureka-jwt
 - ms-ngx-gateway-consul
 - ms-ngx-gateway-eureka

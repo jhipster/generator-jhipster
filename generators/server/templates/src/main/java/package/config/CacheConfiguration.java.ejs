@@ -101,6 +101,7 @@ import javax.annotation.PreDestroy;
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
+import org.infinispan.jboss.marshalling.core.JBossUserMarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.jhipster.config.JHipsterProperties;
@@ -126,6 +127,7 @@ import org.jgroups.protocols.pbcast.STABLE;
 import org.jgroups.stack.IpAddress;
 import org.jgroups.stack.ProtocolStack;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import org.springframework.beans.factory.BeanInitializationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -387,8 +389,6 @@ public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
-    // Initialize the cache in a non Spring-managed bean
-    private static EmbeddedCacheManager cacheManager;
         <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
 
     private DiscoveryClient discoveryClient;
@@ -405,14 +405,6 @@ public class CacheConfiguration {
         this.discoveryClient = discoveryClient;
     }
         <%_ } _%>
-
-    public static EmbeddedCacheManager getCacheManager() {
-        return cacheManager;
-    }
-
-    public static void setCacheManager(EmbeddedCacheManager cacheManager) {
-        CacheConfiguration.cacheManager = cacheManager;
-    }
 
     /**
      * Inject a {@link org.infinispan.configuration.global.GlobalConfiguration GlobalConfiguration} for Infinispan cache.
@@ -444,31 +436,35 @@ public class CacheConfiguration {
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().defaultCacheName("infinispan-<%= baseName %>-cluster-cache").transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
-                    .clusterName("infinispan-<%= baseName %>-cluster").globalJmxStatistics()
-                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                    .allowDuplicateDomains(true).build();
+                    .clusterName("infinispan-<%= baseName %>-cluster")
+                    .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .serialization().marshaller(new JBossUserMarshaller())
+                    .build();
             } else if (discoveryClient.getInstances(registration.getServiceId()).size() == 0) {
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().defaultCacheName("infinispan-<%= baseName %>-cluster-cache").transport()
                     .transport(new JGroupsTransport())
-                    .clusterName("infinispan-<%= baseName %>-cluster").globalJmxStatistics()
-                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                    .allowDuplicateDomains(true).build();
+                    .clusterName("infinispan-<%= baseName %>-cluster")
+                    .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .serialization().marshaller(new JBossUserMarshaller())
+                    .build();
             } else {
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().defaultCacheName("infinispan-<%= baseName %>-cluster-cache").transport()
                     .transport(new JGroupsTransport(getTransportChannel()))
-                    .clusterName("infinispan-<%= baseName %>-cluster").globalJmxStatistics()
-                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                    .allowDuplicateDomains(true).build();
+                    .clusterName("infinispan-<%= baseName %>-cluster")
+                    .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .serialization().marshaller(new JBossUserMarshaller())
+                    .build();
             }
         <%_ } else { _%>
             return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().defaultCacheName("infinispan-<%= baseName %>-cluster-cache").transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
-                    .clusterName("infinispan-<%= baseName %>-cluster").globalJmxStatistics()
-                    .enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
-                    .allowDuplicateDomains(true).build();
+                    .clusterName("infinispan-<%= baseName %>-cluster")
+                    .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .serialization().marshaller(new JBossUserMarshaller())
+                    .build();
         <%_ } _%>
     }
 
@@ -517,45 +513,45 @@ public class CacheConfiguration {
             // initialize application cache
             manager.defineConfiguration("local-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.LOCAL)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             manager.defineConfiguration("dist-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.DIST_SYNC).hash().numOwners(cacheInfo.getDistributed().getInstanceCount())
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getDistributed().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getDistributed().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             manager.defineConfiguration("repl-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.REPL_SYNC)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getReplicated().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getReplicated().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
 
             // initialize Hibernate L2 cache configuration templates
             manager.defineConfiguration("entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.INVALIDATION_SYNC)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("replicated-entity", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_SYNC)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("local-query", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("replicated-query", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_ASYNC)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("timestamps", new ConfigurationBuilder().clustering().cacheMode(CacheMode.REPL_ASYNC)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .locking().concurrencyLevel(1000).lockAcquisitionTimeout(15000).template(true).build());
             manager.defineConfiguration("pending-puts", new ConfigurationBuilder().clustering().cacheMode(CacheMode.LOCAL)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .simpleCache(true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).template(true).build());
 
             <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
             Stream.of(<%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE)
                 .forEach(cacheName -> manager.defineConfiguration(cacheName, new ConfigurationBuilder().clustering()
                     .cacheMode(CacheMode.INVALIDATION_SYNC)
-                    .jmxStatistics()
+                    .statistics()
                     .enabled(cacheInfo.isStatsEnabled())
                     .locking()
                     .concurrencyLevel(1000)
@@ -565,12 +561,11 @@ public class CacheConfiguration {
             <%_ if (authenticationType === 'oauth2' && applicationType === 'microservice') { _%>
             manager.defineConfiguration("oAuth2Authentication", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.LOCAL)
-                .jmxStatistics().enabled(cacheInfo.isStatsEnabled())
+                .statistics().enabled(cacheInfo.isStatsEnabled())
                 .memory().evictionType(EvictionType.COUNT).size(cacheInfo.getLocal().getMaxEntries()).expiration()
                 .lifespan(cacheInfo.getLocal().getTimeToLiveSeconds(), TimeUnit.SECONDS).build());
             <%_ } _%>
 
-            setCacheManager(manager);
         };
     }
         <%_ if (enableHibernateCache) { _%>
@@ -597,13 +592,12 @@ public class CacheConfiguration {
      * from registry and sends only unicast messages to the host list.
      */
     private JChannel getTransportChannel() {
-        JChannel channel = null;
-        List<PhysicalAddress> initialHosts = new ArrayList<>();
+        JChannel channel;
+        List<InetSocketAddress> initialHosts = new ArrayList<>();
         try {
             for (ServiceInstance instance : discoveryClient.getInstances(registration.getServiceId())) {
-                String clusterMember = instance.getHost() + ":7800";
-                log.debug("Adding Infinispan cluster member {}", clusterMember);
-                initialHosts.add(new IpAddress(clusterMember));
+                log.debug("Adding Infinispan cluster member {}:{}", instance.getHost(), 7800);
+                initialHosts.add(new InetSocketAddress(instance.getHost(), 7800));
             }
             TCP tcp = new TCP();
             tcp.setBindAddress(InetAddress.getLocalHost());
@@ -613,7 +607,7 @@ public class CacheConfiguration {
             tcp.setThreadPoolKeepAliveTime(60000);
 
             TCPPING tcpping = new TCPPING();
-            initialHosts.add(new IpAddress(InetAddress.getLocalHost(), 7800));
+            initialHosts.add(new InetSocketAddress(InetAddress.getLocalHost(), 7800));
             tcpping.setInitialHosts(initialHosts);
             tcpping.setErgonomics(false);
             tcpping.setPortRange(10);

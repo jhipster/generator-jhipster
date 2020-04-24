@@ -10,7 +10,7 @@
                     "required": "Bạn phải nhập tên tài khoản.",
                     "minlength": "Tên tài khoản phải có ít nhất 1 ký tự.",
                     "maxlength": "Tên tài khoản không được vượt quá 50 ký tự.",
-                    "pattern": "Tên tài khoản chỉ có thể chứa các ký tự in thường và số."
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Đăng ký thành công!</strong> Bạn vui lòng kiểm tra hộp thư để xác nhận tài khoản.",

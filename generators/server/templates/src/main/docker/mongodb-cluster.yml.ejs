@@ -22,13 +22,13 @@ services:
         image: <%= DOCKER_MONGODB %>
         ports:
             - "27017:27017"
-        command: mongos --configdb <%= baseName.toLowerCase() %>-mongodb-config
+        command: mongos --configdb csvr/<%= baseName.toLowerCase() %>-mongodb-config --bind_ip 0.0.0.0
     <%= baseName.toLowerCase() %>-mongodb-node:
         build:
             context: .
             dockerfile: mongodb/MongoDB.Dockerfile
-        command: mongod --replSet rs1 --noprealloc --smallfiles
+        command: mongod --shardsvr --replSet rs1
     <%= baseName.toLowerCase() %>-mongodb-config:
         image: <%= DOCKER_MONGODB %>
         container_name: <%= baseName.toLowerCase() %>-mongodb-config
-        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
+        command: mongod --configsvr --dbpath /data/db --replSet csvr

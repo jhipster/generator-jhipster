@@ -164,10 +164,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/EntityRepository.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
-                },
-                {
                     file: 'package/web/rest/EntityResource.java',
                     renameTo: generator => `${generator.packageFolder}/web/rest/${generator.entityClass}Resource.java`
                 }
@@ -199,12 +195,23 @@ const serverFiles = {
         },
         {
             condition: generator =>
+                (!generator.reactive || !['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType)) && !generator.embedded,
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/repository/EntityRepository.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
+                }
+            ]
+        },
+        {
+            condition: generator =>
                 generator.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType) && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/repository/reactive/EntityReactiveRepository.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/reactive/${generator.entityClass}ReactiveRepository.java`
+                    file: 'package/repository/EntityReactiveRepository.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}Repository.java`
                 }
             ]
         },
@@ -253,8 +260,7 @@ const serverFiles = {
     ],
     test: [
         {
-            // TODO: add test for reactive
-            condition: generator => !generator.reactive && !generator.embedded,
+            condition: generator => !generator.embedded,
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -380,20 +386,27 @@ function writeFiles() {
 
         writeEnumFiles() {
             this.fields.forEach(field => {
-                if (field.fieldIsEnum === true) {
-                    const fieldType = field.fieldType;
-                    const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
-                    if (!this.skipServer) {
-                        this.template(
-                            `${this.fetchFromInstalledJHipster(
-                                'entity-server/templates'
-                            )}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`,
-                            `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
-                            this,
-                            {},
-                            enumInfo
-                        );
-                    }
+                if (!field.fieldIsEnum) {
+                    return;
+                }
+                const fieldType = field.fieldType;
+                const enumInfo = {
+                    ...utils.getEnumInfo(field, this.clientRootFolder),
+                    angularAppName: this.angularAppName,
+                    packageName: this.packageName
+                };
+                // eslint-disable-next-line no-console
+                if (!this.skipServer) {
+                    const pathToTemplateFile = `${this.fetchFromInstalledJHipster(
+                        'entity-server/templates'
+                    )}/${SERVER_MAIN_SRC_DIR}package/domain/enumeration/Enum.java.ejs`;
+                    this.template(
+                        pathToTemplateFile,
+                        `${SERVER_MAIN_SRC_DIR}${this.packageFolder}/domain/enumeration/${fieldType}.java`,
+                        this,
+                        {},
+                        enumInfo
+                    );
                 }
             });
         }

@@ -25,7 +25,6 @@ let importJsonIgnoreProperties = false;
 let importSet = false;
 let hasDto = dto === 'mapstruct';
 let isUsingMapsId = false;
-let primaryKeyType = pkType;
 let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
 const uniqueEnums = {};
@@ -33,12 +32,10 @@ _%>
 <%- include imports -%>
 <%_
 for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-    if ( isUsingMapsId === true) {
-        primaryKeyType = (relationships[idx].otherEntityName === 'user'  && authenticationType === 'oauth2') ? 'String' : pkType;
+    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
+    if (isUsingMapsId) {
         break;
     }
-    isUsingMapsId = false;
 }
 for (idx in fields) {
     if (prodDatabaseType === 'postgresql' && fields[idx].fieldTypeBlobContent === 'text') {
@@ -349,7 +346,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @Relationship("<%= relationshipFieldName %>")
     <%_ } _%>
     <%_ if (otherEntityRelationshipNamePlural !== undefined && otherEntityRelationshipNamePlural !== '') { _%>
-    @JsonIgnoreProperties("<%= otherEntityRelationshipNamePlural %>")
+    @JsonIgnoreProperties(value = "<%= otherEntityRelationshipNamePlural %>", allowSetters = true)
     <%_ } _%>
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
@@ -420,7 +417,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     <%_ }
     } _%>
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     <%_ if (!embedded) { _%>
     public <% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'neo4j') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
         return id;
@@ -572,7 +569,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     }
     <%_ } _%>
 <%_ } _%>
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {

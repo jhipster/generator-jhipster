@@ -426,11 +426,14 @@ const files = {
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
                 'spec/app/core/user/account.service.spec.ts',
+                'spec/app/home/home.component.spec.ts',
                 'spec/app/layouts/main/main.component.spec.ts',
+                'spec/app/layouts/navbar/navbar.component.spec.ts',
                 'spec/helpers/spyobject.ts',
                 'spec/helpers/mock-account.service.ts',
                 'spec/helpers/mock-route.service.ts',
                 'spec/helpers/mock-login.service.ts',
+                'spec/helpers/mock-login-modal.service.ts',
                 'spec/helpers/mock-event-manager.service.ts',
                 'spec/helpers/mock-active-modal.service.ts',
                 'spec/helpers/mock-state-storage.service.ts',
@@ -453,7 +456,12 @@ const files = {
         {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
-            templates: ['spec/app/shared/login/login.component.spec.ts', 'spec/app/shared/alert/alert-error.component.spec.ts']
+            templates: [
+                'spec/app/shared/login/login.component.spec.ts',
+                'spec/app/shared/alert/alert.component.spec.ts',
+                'spec/app/shared/alert/alert-error.component.spec.ts',
+                'spec/app/core/login/login-modal.service.spec.ts'
+            ]
         },
         {
             condition: generator =>

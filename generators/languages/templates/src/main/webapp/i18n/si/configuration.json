@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "වින්\u200Dයාසය",
+        "filter": "පෙරණය (උපසර්ගය අනුව)",
+        "table": {
+            "prefix": "උපසර්ගය",
+            "properties": "දේපළ"
+        }
+    }
+}

@@ -29,6 +29,8 @@ const { normalizeBlueprintName, packageNameToNamespace, loadYoRc, loadBlueprints
 const CLI_NAME = 'jhipster';
 const GENERATOR_NAME = 'generator-jhipster';
 
+const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
+
 const debug = function(msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
@@ -196,11 +198,21 @@ const getCommandOptions = (pkg, argv) => {
     return { 'from-cli': true };
 };
 
-const done = errorMsg => {
-    if (errorMsg) {
-        logger.error(`${chalk.red.bold('ERROR!')} ${errorMsg}`);
+const doneFactory = successMsg => {
+    return errorMsg => {
+        if (errorMsg) {
+            logger.error(`ERROR! ${errorMsg}`);
+        } else if (successMsg) {
+            logger.info(chalk.green.bold(successMsg));
+        }
+    };
+};
+
+const printSuccess = () => {
+    if (process.exitCode === undefined || process.exitCode === 0) {
+        logger.info(chalk.green.bold(SUCCESS_MESSAGE));
     } else {
-        logger.info(chalk.green.bold('Congratulations, JHipster execution is complete!'));
+        logger.error(`ERROR! JHipster finished with code ${process.exitCode}`);
     }
 };
 
@@ -208,7 +220,7 @@ const createYeomanEnv = packagePatterns => {
     const env = yeoman.createEnv();
     // Register jhipster generators.
     env.lookup({ packagePaths: [path.join(__dirname, '..')] });
-    if (packagePatterns) {
+    if (packagePatterns && packagePatterns.length > 0) {
         // Lookup for blueprints.
         env.lookup({ filterPaths: true, packagePatterns });
     }
@@ -337,7 +349,9 @@ module.exports = {
     getOptionsFromArgs,
     getCommand,
     getCommandOptions,
-    done,
+    doneFactory,
+    done: doneFactory(SUCCESS_MESSAGE),
+    printSuccess,
     createYeomanEnv,
     loadBlueprints,
     loadBlueprintsFromYoRc,

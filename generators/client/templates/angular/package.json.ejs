@@ -56,6 +56,9 @@
     "sockjs-client": "1.4.0",
     "webstomp-client": "1.2.6",
     <%_ } _%>
+    <%_ if (skipServer) { _%>
+    "sonar-scanner": "3.1.0",
+    <%_ } _%>
     "tslib": "1.10.0",
     "zone.js": "0.10.2"
   },
@@ -63,7 +66,7 @@
     "@angular/cli": "9.0.4",
     "@angular/compiler-cli": "9.0.4",
     "@ngtools/webpack": "9.0.4",
-    "@openapitools/openapi-generator-cli": "1.0.10-4.2.3",
+    "@openapitools/openapi-generator-cli": "1.0.12-4.3.0",
     <%_ if (protractorTests) { _%>
     "@types/chai": "4.2.7",
     "@types/chai-string": "1.4.2",
@@ -175,6 +178,9 @@
     "postinstall": "node node_modules/protractor/bin/webdriver-manager update --gecko false",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
+    <%_ if (skipServer) { _%>
+    "sonar": "sonar-scanner",
+    <%_ } _%>
     "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
     "serve": "<%= clientPackageManager %> run start",
     "build": "<%= clientPackageManager %> run webpack:prod",

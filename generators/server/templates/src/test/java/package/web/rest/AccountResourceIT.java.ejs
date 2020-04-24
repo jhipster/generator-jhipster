@@ -52,7 +52,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
     <%_ } _%>
 
@@ -60,6 +60,9 @@ import java.util.Collection;
 <%_ } else { _%>
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.test.web.reactive.server.WebTestClient;
+    <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+import reactor.core.publisher.Mono;
+    <%_ } _%>
 
 import java.time.Instant;
 <%_ } _%>
@@ -67,6 +70,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import static org.mockito.Mockito.*;
+<%_ } _%>
 import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -89,7 +95,10 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-public class AccountResourceIT <% if (databaseType === 'neo4j') { %>extends AbstractNeo4jIT <% } %><% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
+public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     static final String TEST_USER_LOGIN = "test";
 
@@ -115,7 +124,7 @@ public class AccountResourceIT <% if (databaseType === 'neo4j') { %>extends Abst
     }
 
     <%_ } _%>
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
     <%_ if (!reactive) { _%>
@@ -170,10 +179,16 @@ public class AccountResourceIT <% if (databaseType === 'neo4j') { %>extends Abst
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import <%= packageName %>.repository.search.UserSearchRepository;
+<%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,6 +207,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } else { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import reactor.core.publisher.Mono;
+
+import static org.mockito.Mockito.*;
 <%_ } _%>
 import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 
@@ -213,6 +233,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     private MockMvc restAccountMockMvc;
     <%_ } else { _%>
     private WebTestClient accountWebTestClient;
+    <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>
 
     @Test
@@ -244,9 +269,6 @@ import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
-<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'neo4j') { _%>
-import <%= packageName %>.domain.Authority;
-<%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import <%= packageName %>.domain.PersistentToken;
 <%_ } _%>
@@ -258,6 +280,9 @@ import <%= packageName %>.repository.AuthorityRepository;
 import <%= packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 import <%= packageName %>.repository.UserRepository;
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import <%= packageName %>.repository.search.UserSearchRepository;
+<%_ } _%>
 import <%= packageName %>.security.AuthoritiesConstants;
 import <%= packageName %>.service.UserService;
 import <%= packageName %>.service.dto.PasswordChangeDTO;
@@ -286,22 +311,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.test.web.servlet.MockMvc;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
+<%_ } _%>
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import reactor.core.publisher.Mono;
 <%_ } _%>
 
 import java.time.Instant;
-<%_ if (authenticationType === 'session' && !reactive && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')) { _%>
+<%_ if (authenticationType === 'session' && !reactive && ['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
 import java.time.LocalDate;
 <%_ } _%>
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
+import static org.mockito.Mockito.*;
+<%_ } _%>
 <%_ if (authenticationType === 'session' && !reactive) { _%>
 import static org.hamcrest.Matchers.hasItem;
 <%_ } _%>
@@ -344,6 +374,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     @Autowired
     private PersistentTokenRepository persistentTokenRepository;
 <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
+    <%_ } _%>
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -411,6 +446,12 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 
     @Test
     public void testGetExistingAccount()<% if (!reactive) { %> throws Exception<% } %> {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
 
@@ -474,9 +515,15 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     <%_ } _%>
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterValid() throws Exception {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         ManagedUserVM validUser = new ManagedUserVM();
         validUser.setLogin("test-register-valid");
         validUser.setPassword("password");
@@ -508,11 +555,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(userRepository.findOneByLogin("test-register-valid")<% if (reactive) { %>.blockOptional()<% } %>.isPresent()).isTrue();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterInvalidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("funky-log!n");// <-- invalid
+        invalidUser.setLogin("funky-log(n");// <-- invalid
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Funky");
         invalidUser.setLastName("One");
@@ -543,7 +590,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(user.isPresent()).isFalse();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterInvalidEmail() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
@@ -578,7 +625,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(user.isPresent()).isFalse();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterInvalidPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
@@ -613,7 +660,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(user.isPresent()).isFalse();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterNullPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
@@ -648,9 +695,15 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(user.isPresent()).isFalse();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterDuplicateLogin() throws Exception {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         // First registration
         ManagedUserVM firstUser = new ManagedUserVM();
         firstUser.setLogin("alice");
@@ -737,9 +790,15 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterDuplicateEmail() throws Exception {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
         firstUser.setLogin("test-register-duplicate-email");
@@ -861,7 +920,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRegisterAdminIsIgnored() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
@@ -877,6 +936,12 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
 
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(
             post("/api/register")
@@ -892,15 +957,21 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .expectStatus().isCreated();
         <%_ } _%>
 
-        Optional<<%= asEntity('User') %>> userDup = userRepository.findOneByLogin("badguy")<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%= asEntity('User') %>> userDup = userRepository.findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin("badguy")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
             .containsExactly(<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>authorityRepository.findById(AuthoritiesConstants.USER).<% if (reactive) { %>block<% } else { %>get<% } %>()<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>AuthoritiesConstants.USER<% } %>);
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testActivateAccount()<% if (!reactive) { %> throws Exception<% } %> {
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+
+        <%_ } _%>
         final String activationKey = "some activation key";
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
@@ -911,8 +982,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(false);
         user.setActivationKey(activationKey);
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
 
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(get("/api/activate?key={activationKey}", activationKey))
@@ -927,21 +1001,20 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(user.getActivated()).isTrue();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
-    <%_ if (!reactive) { _%>
     public void testActivateAccountWithWrongKey() <% if (!reactive) { %>throws Exception <% } %>{
+    <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(get("/api/activate?key=wrongActivationKey"))
             .andExpect(status().isInternalServerError());
     <%_ } else { _%>
-    public void testActivateAccountWithWrongKey() {
         accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey")
             .exchange()
             .expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     <%_ } _%>
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("save-account")
     public void testSaveAccount() throws Exception {
@@ -953,9 +1026,17 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setEmail("save-account@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
 
+        <%_ } _%>
         <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
@@ -983,7 +1064,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .expectStatus().isOk();
         <%_ } _%>
 
-        <%= asEntity('User') %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
+        <%= asEntity('User') %> updatedUser = userRepository.findOne<% if (databaseType === 'sql') { %>WithAuthorities<% } %>ByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
         assertThat(updatedUser.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -994,7 +1075,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(updatedUser.getAuthorities()).isEmpty();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("save-invalid-email")
     public void testSaveInvalidEmail() throws Exception {
@@ -1006,8 +1087,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setEmail("save-invalid-email@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
 
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
         userDTO.setLogin("not-used");
@@ -1039,7 +1123,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")<% if (reactive) { %>.blockOptional()<% } %>).isNotPresent();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("save-existing-email")
     public void testSaveExistingEmail() throws Exception {
@@ -1051,8 +1135,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setEmail("save-existing-email@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
         <%_ if (databaseType === 'cassandra') { _%>
@@ -1062,8 +1148,11 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         anotherUser.setEmail("save-existing-email2@example.com");
         anotherUser.setPassword(RandomStringUtils.random(60));
         anotherUser.setActivated(true);
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        anotherUser.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
 
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
 
         <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
         userDTO.setLogin("not-used");
@@ -1096,7 +1185,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("save-existing-email-and-login")
     public void testSaveExistingEmailAndLogin() throws Exception {
@@ -1108,9 +1197,17 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setEmail("save-existing-email-and-login@example.com");
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
+        // Configure the mock search repository
+        when(mockUserSearchRepository.save(any()))
+            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
 
+        <%_ } _%>
         <%= asDto('User') %> userDTO = new <%= asDto('User') %>();
         userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
@@ -1142,7 +1239,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("change-password-wrong-existing-password")
     public void testChangePasswordWrongExistingPassword() throws Exception {
@@ -1154,7 +1251,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-wrong-existing-password");
         user.setEmail("change-password-wrong-existing-password@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
@@ -1176,7 +1276,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("change-password")
     public void testChangePassword() throws Exception {
@@ -1188,7 +1288,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password");
         user.setEmail("change-password@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
@@ -1209,7 +1312,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("change-password-too-small")
     public void testChangePasswordTooSmall() throws Exception {
@@ -1221,7 +1324,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-too-small");
         user.setEmail("change-password-too-small@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
 
@@ -1244,7 +1350,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("change-password-too-long")
     public void testChangePasswordTooLong() throws Exception {
@@ -1256,7 +1362,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-too-long");
         user.setEmail("change-password-too-long@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
 
@@ -1279,7 +1388,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("change-password-empty")
     public void testChangePasswordEmpty() throws Exception {
@@ -1291,7 +1400,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setPassword(passwordEncoder.encode(currentPassword));
         user.setLogin("change-password-empty");
         user.setEmail("change-password-empty@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(post("/api/account/change-password")
@@ -1313,7 +1425,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     }
     <%_ if (authenticationType === 'session' && !reactive) { _%>
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("current-sessions")
     public void testGetCurrentSessions() <% if (!reactive) { %>throws Exception <% } %>{
@@ -1324,7 +1436,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setPassword(RandomStringUtils.random(60));
         user.setLogin("current-sessions");
         user.setEmail("current-sessions@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         PersistentToken token = new PersistentToken();
         token.setSeries("current-sessions");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
@@ -1336,7 +1451,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         token.setTokenDate(new Date(1490714757123L));<% } %>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
-        persistentTokenRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(token);
+        persistentTokenRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(token);
 
         restAccountMockMvc.perform(get("/api/account/sessions"))
             .andExpect(status().isOk())
@@ -1346,7 +1461,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .andExpect(jsonPath("$.[*].tokenDate").value(hasItem(<% if (databaseType === 'cassandra') { %>"2017-03-28T15:25:57.123+0000"<% } else { %>token.getTokenDate().toString()<% } %>)));
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     @WithMockUser("invalidate-session")
     public void testInvalidateSession() <% if (!reactive) { %>throws Exception <% } %>{
@@ -1357,7 +1472,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setPassword(RandomStringUtils.random(60));
         user.setLogin("invalidate-session");
         user.setEmail("invalidate-session@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         PersistentToken token = new PersistentToken();
         token.setSeries("invalidate-session");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
@@ -1369,7 +1487,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         token.setTokenDate(new Date(1490714757123L));<% } %>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
-        persistentTokenRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(token);
+        persistentTokenRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(token);
 
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
 
@@ -1380,7 +1498,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     }
     <%_ } _%>
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRequestPasswordReset()<% if (!reactive) { %> throws Exception<% } %> {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
@@ -1391,7 +1509,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setActivated(true);
         user.setLogin("password-reset");
         user.setEmail("password-reset@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
@@ -1407,7 +1528,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testRequestPasswordResetUpperCaseEmail()<% if (!reactive) { %> throws Exception<% } %> {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
@@ -1416,19 +1537,22 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         <%_ } _%>
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-        user.setLogin("password-reset");
-        user.setEmail("password-reset@example.com");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        user.setLogin("password-reset-upper-case");
+        user.setEmail("password-reset-upper-case@example.com");
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
-            .content("password-reset@EXAMPLE.COM")
+            .content("password-reset-upper-case@EXAMPLE.COM")
             <%_ if (testsNeedCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
         <%_ } else { _%>
         accountWebTestClient.post().uri("/api/account/reset-password/init")
-            .bodyValue("password-reset@EXAMPLE.COM")
+            .bodyValue("password-reset-upper-case@EXAMPLE.COM")
             .exchange()
             .expectStatus().isOk();
         <%_ } _%>
@@ -1451,7 +1575,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
     <%_ } _%>
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testFinishPasswordReset() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
@@ -1463,7 +1587,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setEmail("finish-password-reset@example.com");
         user.setResetDate(Instant.now().plusSeconds(60));
         user.setResetKey("reset key");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
         keyAndPassword.setKey(user.getResetKey());
@@ -1488,7 +1615,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isTrue();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testFinishPasswordResetTooSmall() throws Exception {
         <%= asEntity('User') %> user = new <%= asEntity('User') %>();
@@ -1500,7 +1627,10 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         user.setEmail("finish-password-reset-too-small@example.com");
         user.setResetDate(Instant.now().plusSeconds(60));
         user.setResetKey("reset key too small");
-        userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+        user.setCreatedBy(Constants.SYSTEM_ACCOUNT);
+        <%_ } _%>
+        userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
         keyAndPassword.setKey(user.getResetKey());
@@ -1525,7 +1655,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isFalse();
     }
 
-    @Test<% if (databaseType === 'sql') { %>
+    @Test<% if (databaseType === 'sql' && !reactive) { %>
     @Transactional<% } %>
     public void testFinishPasswordResetWrongKey() throws Exception {
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();

@@ -10,7 +10,7 @@
                     "required": "Login kiritilsin.",
                     "minlength": "Login kamida 1 ta harfdan iborat bo'lsin",
                     "maxlength": "Login ko'pi bilan 50 ta harfdan iborat bo'lsin",
-                    "pattern": "Login harf va sonlardan iborat bo'lsin"
+                    "pattern": "Your username is invalid."
                 }
             },
             "success": "<strong>Ro'yhatdan o'tildi!</strong> Iltimos, faollashtirsh uchun emailingizni tekshiring.",

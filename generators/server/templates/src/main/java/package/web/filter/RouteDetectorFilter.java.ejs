@@ -48,7 +48,7 @@ public class RouteDetectorFilter implements Filter {
     private final ZuulProperties zuulProperties;
     private final ZuulHandlerMapping zuulHandlerMapping;
 
-    public RouteDetectorFilter(@Qualifier("vanillaRestTemplate") RestTemplate restTemplate, ZuulProperties zuulProperties, ZuulHandlerMapping zuulHandlerMapping) {
+    public RouteDetectorFilter(@Qualifier("restTemplate") RestTemplate restTemplate, ZuulProperties zuulProperties, ZuulHandlerMapping zuulHandlerMapping) {
         this.restTemplate = restTemplate;
         this.zuulProperties = zuulProperties;
         this.zuulHandlerMapping = zuulHandlerMapping;

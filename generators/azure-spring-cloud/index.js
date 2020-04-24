@@ -417,11 +417,14 @@ for more detailed information.`
 
                 const done = this.async();
                 this.log(chalk.bold('\nDeploying application...'));
-
+                let buildDir = 'target';
+                if (this.buildTool === 'gradle') {
+                    buildDir = 'build/libs';
+                }
                 exec(
                     `az spring-cloud app deploy --resource-group ${this.azureSpringCloudResourceGroupName} \
 --service ${this.azureSpringCloudServiceName} --name ${this.azureSpringCloudAppName} \
---jar-path target/*.jar`,
+--jar-path ${buildDir}/*.jar`,
                     (err, stdout) => {
                         if (err) {
                             this.abort = true;
@@ -429,7 +432,7 @@ for more detailed information.`
                         } else {
                             const json = JSON.parse(stdout);
                             this.log(`${chalk.green(chalk.bold('Success!'))} Your application has been deployed.`);
-                            this.log(`Provisitioning state: ${chalk.bold(json.properties.provisioningState)}`);
+                            this.log(`Provisioning state: ${chalk.bold(json.properties.provisioningState)}`);
                             this.log(`Application status  : ${chalk.bold(json.properties.status)}`);
                         }
                         done();

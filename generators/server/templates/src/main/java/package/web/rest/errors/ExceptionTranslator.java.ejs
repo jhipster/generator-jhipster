@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.ConcurrencyFailureException;
 <%_ } _%>
 import org.springframework.http.ResponseEntity;
+<%_ if (reactive && databaseType === 'sql') { _%>
+import org.springframework.stereotype.Component;
+<%_ } _%>
 import org.springframework.validation.BindingResult;
 <%_ if (!reactive) { _%>
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -62,6 +65,9 @@ import java.util.stream.Collectors;
  * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
  */
 @ControllerAdvice
+<%_ if (databaseType === 'sql' && reactive) { _%>
+@Component("jhiExceptionTranslator")
+<%_ } _%>
 public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
 
 <%_

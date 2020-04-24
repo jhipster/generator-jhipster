@@ -153,7 +153,7 @@ management:
                         enabled: true
 
 spring:
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch' && !reactive) { _%>
     autoconfigure:
         exclude: <% if (databaseType === 'sql' && messageBroker === 'kafka') { %>org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration,<% } %>org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration,org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
     <%_ } else if (databaseType === 'sql' && messageBroker === 'kafka') { _%>
@@ -162,8 +162,9 @@ spring:
     <%_ } _%>
     application:
         name: <%= baseName %>
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    <%_ if (serviceDiscoveryType === 'consul' || (applicationType === 'gateway' && reactive)) { _%>
     cloud:
+        <%_ if (serviceDiscoveryType === 'consul') { _%>
         consul:
             discovery:
                 healthCheckPath: /management/health
@@ -172,9 +173,8 @@ spring:
             config:
                 watch:
                     enabled: false
-    <%_ } _%>
-    <%_ if (applicationType === 'gateway' && reactive) { _%>
-    cloud:
+        <%_ } _%>
+        <%_ if (applicationType === 'gateway' && reactive) { _%>
         gateway:
             default-filters:
                 - <% if (authenticationType === 'jwt') { %>JWTRelay<% } else { %>TokenRelay<% } %>
@@ -194,6 +194,7 @@ spring:
             httpclient:
                 pool:
                     max-connections: 1000
+        <%_ } _%>
     <%_ } _%>
     <%_ if (!serviceDiscoveryType) { _%>
     profiles:
@@ -204,7 +205,7 @@ spring:
     <%_ } _%>
     jmx:
         enabled: false
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
     data:
         jpa:
             repositories:
@@ -236,7 +237,7 @@ spring:
             hibernate.cache.hazelcast.instance_name: <%= baseName %>
             hibernate.cache.hazelcast.use_lite_member: true
                 <%_ } else if (cacheProvider === 'infinispan') { _%>
-            hibernate.cache.infinispan.statistics: true
+            hibernate.cache.infinispan.statistics: false
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.infinispan.entity.expiration.lifespan: 3600000
             hibernate.cache.infinispan.entity.memory.size: 1000
