@@ -72,7 +72,12 @@ import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
+import <%= packageName %>.repository.search.SearchRepositoryMarker;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
+import <%= packageName %>.repository.RepositoryMarker;
+<%_ } _%> 
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
@@ -151,8 +156,11 @@ import java.util.UUID;
     <%_ } _%>
 @EnableTransactionManagement
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackageClasses = {RepositoryMarker.class})    
+<%_ } _%>   
 <%_ if (searchEngine === 'elasticsearch') { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
+@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories(basePackageClasses = {SearchRepositoryMarker.class})
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -171,7 +179,7 @@ import java.util.UUID;
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
     <%_ } _%>
-<%_ } _%>
+<%_ } _%> 
 <%_ if (databaseType === 'couchbase') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository"<%_ if (searchEngine === 'elasticsearch') { %>,
     includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class)<%_ } _%>)
