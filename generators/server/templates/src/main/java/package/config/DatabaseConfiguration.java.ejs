@@ -161,7 +161,7 @@ import java.util.UUID;
     <%_ if (searchEngine === 'elasticsearch') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
     <%_ } else { _%>
-    @Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%= packageName %>.repository")
     <%_ } _%>    
 <%_ } _%>   
 <%_ if (searchEngine === 'elasticsearch') { _%>
