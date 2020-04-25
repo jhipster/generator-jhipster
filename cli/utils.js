@@ -219,7 +219,7 @@ const printSuccess = () => {
 };
 
 const createYeomanEnv = packagePatterns => {
-    const env = yeoman.createEnv(undefined, { newErrorHandler: true });
+    const env = yeoman.createEnv();
     // Register jhipster generators.
     env.lookup({ packagePaths: [path.join(__dirname, '..')] });
     if (packagePatterns) {
