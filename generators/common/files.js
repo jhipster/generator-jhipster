@@ -54,6 +54,12 @@ const commonFiles = {
                 }
             ]
         }
+    ],
+    commitHooks: [
+        {
+            condition: generator => !generator.skipCommitHook,
+            templates: ['.huskyrc', '.lintstagedrc.js']
+        }
     ]
 };
 

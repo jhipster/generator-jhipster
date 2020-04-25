@@ -30,9 +30,21 @@
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
     "generator-jhipster": "<%= jhipsterVersion %>",
+    <%_ if (!skipCommitHook) { _%>
+    "husky": "3.1.0",
+    <%# Not using the latest version because of https://github.com/jhipster/generator-jhipster/issues/11131 -%>
+    "lint-staged": "8.2.1",
+    <%_ } _%>
+    "prettier": "1.19.1",
+    <%_ if (prettierJava) { _%>
+    "prettier-plugin-java": "0.7.1",
+    <%_ } _%>
     "@openapitools/openapi-generator-cli": "1.0.12-4.3.0"
   },
   "engines": {
     "node": ">=8.9.0"
+  },
+  "scripts": {
+    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,yml<%= prettierJava ? ',java' : '' %>}\""
   }
 }

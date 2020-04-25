@@ -48,10 +48,6 @@ const files = {
         {
             condition: generator => generator.protractorTests,
             templates: ['tsconfig.e2e.json']
-        },
-        {
-            condition: generator => !generator.skipCommitHook,
-            templates: ['.huskyrc', '.lintstagedrc.js']
         }
     ],
     sass: [

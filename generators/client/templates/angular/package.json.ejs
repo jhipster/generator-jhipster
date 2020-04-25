@@ -128,7 +128,10 @@
     "moment-locales-webpack-plugin": "1.2.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
-    "prettier": "2.0.5",
+    "prettier": "1.19.1",
+    <%_ if (!skipServer && prettierJava) { _%>
+    "prettier-plugin-java": "0.7.1",
+    <%_ } _%>
     <%_ if (protractorTests) { _%>
     "protractor": "5.4.4",
     <%_ } _%>
@@ -167,7 +170,7 @@
     "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml}\"",
+    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,css,scss,yml<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "ngc": "ngc -p tsconfig.app.json",

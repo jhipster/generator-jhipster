@@ -140,6 +140,9 @@ limitations under the License.
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "postcss-loader": "3.0.0",
     "prettier": "1.19.1",
+    <%_ if (!skipServer && prettierJava) { _%>
+    "prettier-plugin-java": "0.7.1",
+    <%_ } _%>
     <%_ if (protractorTests) { _%>
     "protractor": "5.4.2",
     <%_ } _%>
@@ -190,7 +193,7 @@ limitations under the License.
     "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml}\"",
+    "prettier:format": "prettier --write \"{,src/**/}*.{md,json,ts,tsx,css,scss,yml<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= DIST_DIR %>",

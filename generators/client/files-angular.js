@@ -47,10 +47,6 @@ const files = {
                 'postcss.config.js',
                 { file: 'webpack/logo-jhipster.png', method: 'copy' }
             ]
-        },
-        {
-            condition: generator => !generator.skipCommitHook,
-            templates: ['.huskyrc', '.lintstagedrc.js']
         }
     ],
     sass: [
