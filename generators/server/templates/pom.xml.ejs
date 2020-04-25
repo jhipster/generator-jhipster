@@ -717,12 +717,14 @@
             <scope>test</scope>
         </dependency>
 <%_ if (reactive) { _%>
+        <!-- # Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
         <dependency>
             <groupId>io.projectreactor.tools</groupId>
             <artifactId>blockhound-junit-platform</artifactId>
             <version>${blockhound-junit-platform.version}</version>
             <scope>test</scope>
         </dependency>
+        -->
         <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
         <dependency>
             <groupId>io.netty</groupId>
