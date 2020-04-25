@@ -109,6 +109,17 @@ const serverFiles = {
                     renameTo: generator => `config/cql/changelog/${generator.changelogDate}_added_entity_${generator.entityClass}.cql`
                 }
             ]
+        },
+        {
+            condition: generator => generator.searchEngine === 'couchbase' && !generator.skipDbChangelog,
+            path: SERVER_MAIN_RES_DIR,
+            templates: [
+                {
+                    file: 'config/couchmove/changelog/entity.fts',
+                    renameTo: generator =>
+                        `config/couchmove/changelog/V${generator.changelogDate}__${generator.entityInstance.toLowerCase()}.fts`
+                }
+            ]
         }
     ],
     fakeData: [

@@ -574,6 +574,42 @@ describe('JHipster generator', () => {
             shouldBeV3DockerfileCompatible('postgresql');
         });
 
+        describe('couchbase FTS', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'no',
+                        enableHibernateCache: false,
+                        databaseType: 'couchbase',
+                        devDatabaseType: 'couchbase',
+                        prodDatabaseType: 'couchbase',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: ['searchEngine:couchbase']
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with "Couchbbase FTS"', () => {
+                assert.file(expectedFiles.couchbase);
+                assert.file(expectedFiles.couchbaseSearch);
+            });
+            shouldBeV3DockerfileCompatible('couchbase');
+        });
+
         describe('no database', () => {
             before(done => {
                 helpers

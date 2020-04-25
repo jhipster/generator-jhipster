@@ -86,7 +86,7 @@ import java.util.Optional;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch') || dto === 'mapstruct'))) { _%>
+<%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && ((searchEngine === 'elasticsearch' || searchEngine === 'couchbase') || dto === 'mapstruct'))) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
 <%_ if (fieldsContainNoOwnerOneToOne === true || (pagination === 'no' && searchEngine === 'elasticsearch')) { _%>
@@ -209,7 +209,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         log.debug("Request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: false, fromResource: false}); -%>
     }
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine === 'elasticsearch' || searchEngine === 'couchbase') { _%>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.
@@ -229,7 +229,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: false, fromResource: false}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        return <%= entityInstance %>SearchRepository.search(<%= reactive ? 'query' : 'queryStringQuery(query)' %>, pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
+        return <%= entityInstance %>SearchRepository.search(<% if (searchEngine === 'elasticsearch') { %><%= reactive ? 'query' : 'queryStringQuery(query)' %><% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
             .map(<%= entityToDtoReference %>);
         <%_ } } _%>
     }
