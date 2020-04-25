@@ -22,11 +22,11 @@ const packageJson = require('../package.json');
 const { logger, createYeomanEnv, toString, getCommandOptions, doneFactory } = require('./utils');
 
 const env = createYeomanEnv();
-/* Create done with empty success message */
-const done = doneFactory();
 
 const command = process.argv[2];
 const options = getCommandOptions(packageJson, process.argv.slice(3));
 logger.info(chalk.yellow(`Executing ${command} on ${process.cwd()}`));
 logger.info(chalk.yellow(`Options: ${toString(options)}`));
-env.run(command, options).then(done, done);
+
+/* Create done with empty success message */
+env.run(command, options).catch(doneFactory());

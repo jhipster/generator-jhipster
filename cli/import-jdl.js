@@ -206,8 +206,6 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         }
         return Promise.all(baseNames.map(callGenerator));
     }
-    /* Create done with empty success message */
-    const done = doneFactory();
     /* Traditional entity only generation */
     return env
         .run(command, {
@@ -215,7 +213,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
             force: options.force || !options.interactive,
             'skip-install': !shouldTriggerInstall
         })
-        .then(done, done);
+        .catch(doneFactory()); // Create done with empty success message
 };
 
 /**
