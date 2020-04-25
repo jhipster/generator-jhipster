@@ -85,6 +85,10 @@ module.exports = class extends BaseBlueprintGenerator {
             setupClientconsts() {
                 // Make constants available in templates
                 this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+                this.HUSKY_VERSION = constants.HUSKY_VERSION;
+                this.LINT_STAGED_VERSION = constants.LINT_STAGED_VERSION;
+                this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
+                this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
 
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;

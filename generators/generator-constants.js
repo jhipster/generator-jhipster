@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const semver = require('semver');
+const packagejs = require('../package.json');
 
 // Version of Java
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
@@ -40,6 +41,14 @@ const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}
 const JACOCO_VERSION = '0.8.5';
 const KAFKA_VERSION = '5.5.0';
 const JACKSON_DATABIND_NULLABLE_VERSION = '0.2.1';
+
+// NPM packages version
+const HUSKY_VERSION = '4.2.5';
+// Not using the latest version because of https://github.com/jhipster/generator-jhipster/issues/11131
+const LINT_STAGED_VERSION = '8.2.1';
+// The installed prettier version should be the same that the one used during JHipster generation to avoid formatting differences
+const PRETTIER_VERSION = packagejs.dependencies.prettier;
+const PRETTIER_JAVA_VERSION = packagejs.dependencies['prettier-plugin-java'];
 
 // Version of docker images
 const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.1.2';
@@ -361,6 +370,12 @@ const constants = {
     LIQUIBASE_DTD_VERSION,
     JACOCO_VERSION,
     JACKSON_DATABIND_NULLABLE_VERSION,
+
+    // NPM
+    HUSKY_VERSION,
+    LINT_STAGED_VERSION,
+    PRETTIER_VERSION,
+    PRETTIER_JAVA_VERSION,
 
     DOCKER_JENKINS,
     DOCKER_SWAGGER_EDITOR,

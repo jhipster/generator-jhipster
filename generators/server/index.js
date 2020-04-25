@@ -88,6 +88,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
                 this.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
 
+                this.HUSKY_VERSION = constants.HUSKY_VERSION;
+                this.LINT_STAGED_VERSION = constants.LINT_STAGED_VERSION;
+                this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
+                this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
+
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
                 this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
                 this.DOCKER_MYSQL = constants.DOCKER_MYSQL;
