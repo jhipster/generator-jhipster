@@ -54,6 +54,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfigurati
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -78,7 +79,7 @@ import org.neo4j.springframework.data.repository.config.Enable<% if (reactive) {
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
-<%_ } _%> 
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
@@ -162,8 +163,8 @@ import java.util.UUID;
 @Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
     <%_ } else { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%= packageName %>.repository")
-    <%_ } _%>    
-<%_ } _%>   
+    <%_ } _%>
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
@@ -184,7 +185,7 @@ import java.util.UUID;
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
     <%_ } _%>
-<%_ } _%> 
+<%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository"<%_ if (searchEngine === 'elasticsearch') { %>,
     includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class)<%_ } _%>)
@@ -287,11 +288,11 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public Couchmove couchmove(Bucket couchbaseBucket) {
+    public Couchmove couchmove(Bucket couchbaseBucket, CouchbaseProperties properties) {
         log.debug("Configuring Couchmove");
-        Couchmove couchMove = new Couchmove(couchbaseBucket, "config/couchmove/changelog");
-        couchMove.migrate();
-        return couchMove;
+        Couchmove couchmove = new Couchmove(couchbaseBucket, properties.getBucket().getName(), properties.getBucket().getPassword(), "config/couchmove/changelog");
+        couchmove.migrate();
+        return couchmove;
     }
 
     /**
