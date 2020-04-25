@@ -1547,8 +1547,7 @@ module.exports = class extends PrivateBase {
         if (this._debug && this._debug.enabled) {
             this._debug(`${chalk.red.bold('ERROR!')} ${msg}`);
         }
-        // Terminate current environment.
-        this.env.error(`${msg}`);
+        throw new Error(`${msg}`);
     }
 
     /**
