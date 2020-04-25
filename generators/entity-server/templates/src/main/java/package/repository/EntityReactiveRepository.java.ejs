@@ -26,6 +26,11 @@ import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import org.springframework.data.couchbase.core.query.Query;
 import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.ReactiveNeo4jRepository;
+import org.neo4j.springframework.data.repository.query.Query;
+import java.util.List;
+<%_ } _%>
 <%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -48,16 +53,12 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } %> reactive repository for the <%= asEntity(entityClass) %> entity.
+ * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } if (databaseType === 'neo4j') { %>Neo4j<% } %> reactive repository for the <%= asEntity(entityClass) %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>CouchbaseSorting<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>> {
-    <%_ if (databaseType === 'couchbase') { _%>
+public interface <%= entityClass %>Repository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>N1qlCouchbase<% } if (databaseType === 'neo4j') { %>Neo4j<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>> {
 
-    @Query("#{#n1ql.selectEntity} WHERE #{#n1ql.filter}")
-    Flux<<%= asEntity(entityClass) %>> findAll();
-    <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
 
     Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
@@ -72,6 +73,16 @@ public interface <%= entityClass %>Repository extends Reactive<% if (databaseTyp
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
 
     @Query("<%- (databaseType === 'mongodb') ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
+    Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
+        <%_ } _%>
+        <%_ if (databaseType === 'neo4j') { _%>
+    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
+    
+    @Query("MATCH (n:<%= asEntity(entityClass) %>)<-[]-(m) RETURN n,m")
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+
+    @Query("MATCH (e:<%= asEntity(entityClass) %> {id: $id}) RETURN e")
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
         <%_ } _%>
     <%_ } _%>
