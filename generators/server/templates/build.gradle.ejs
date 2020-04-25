@@ -399,7 +399,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
         <%_ } else { _%>
-    implementation "org.springframework.boot.experimental:spring-boot-starter-data-r2dbc:${spring_boot_starter_data_r2dbc_version}"
+    implementation "org.springframework.boot:spring-boot-starter-data-r2dbc"
         <%_ } _%>
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
@@ -534,7 +534,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "mysql:mysql-connector-java"
         <%_ } else { _%>
-    implementation "dev.miku:r2dbc-mysql:${r2dbc_mysql_version}"
+    implementation "dev.miku:r2dbc-mysql"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'postgresql') { _%>
@@ -542,7 +542,7 @@ dependencies {
         <%_ if (!reactive) { _%>
     liquibaseRuntime "org.postgresql:postgresql"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-postgresql:${r2dbc_postgresql_version}"
+    implementation "io.r2dbc:r2dbc-postgresql"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mariadb') { _%>
@@ -556,7 +556,7 @@ dependencies {
     liquibaseRuntime  "com.microsoft.sqlserver:mssql-jdbc"
     liquibaseRuntime "com.github.sabomichal:liquibase-mssql"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-mssql:${r2dbc_mssql_version}"
+    implementation "io.r2dbc:r2dbc-mssql"
         <%_ } _%>
     <%_ } _%>
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
@@ -590,8 +590,6 @@ dependencies {
     // Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
     // testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
     // testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
-    // See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up
-    implementation 'io.netty:netty-common:${netty_common_version}'
     <%_ } _%>
     testImplementation "com.tngtech.archunit:archunit-junit5-api:${archunit_junit5_version}"
     testRuntimeOnly "com.tngtech.archunit:archunit-junit5-engine:${archunit_junit5_version}"
@@ -604,14 +602,14 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     testImplementation "com.h2database:h2"
         <%_ if (reactive) { _%>
-    testImplementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
+    testImplementation "io.r2dbc:r2dbc-h2"
         <%_ } _%>
     <%_ } _%>
     <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         <%_ if (!reactive) { _%>
     liquibaseRuntime "com.h2database:h2"
         <%_ } else { _%>
-    implementation "io.r2dbc:r2dbc-h2:${r2dbc_h2_version}"
+    implementation "io.r2dbc:r2dbc-h2"
         <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'oracle') { _%>
