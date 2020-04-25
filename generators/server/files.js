@@ -932,7 +932,8 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => !generator.skipUserManagement || ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+            condition: generator =>
+                !generator.skipUserManagement || ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [{ file: 'package/config/Constants.java', renameTo: generator => `${generator.javaDir}config/Constants.java` }]
         },
@@ -1681,7 +1682,7 @@ const serverFiles = {
             condition: generator =>
                 !generator.reactive &&
                 generator.authenticationType === 'oauth2' &&
-                ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1692,7 +1693,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+                generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -1705,7 +1706,7 @@ const serverFiles = {
             condition: generator =>
                 !generator.reactive &&
                 generator.authenticationType === 'oauth2' &&
-                ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
@@ -1746,7 +1747,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+                !generator.reactive &&
+                !generator.skipUserManagement &&
+                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1871,7 +1874,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                !generator.reactive && !generator.skipUserManagement && ['sql', 'mongodb', 'couchbase'].includes(generator.databaseType),
+                !generator.reactive &&
+                !generator.skipUserManagement &&
+                ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {

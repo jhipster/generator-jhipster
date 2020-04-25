@@ -60,7 +60,7 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.context.annotation.Import;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' && ['mongodb', 'couchbase'].includes(databaseType)) { _%>
+<%_ if (searchEngine === 'elasticsearch' && ['mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
@@ -73,6 +73,12 @@ import org.springframework.core.convert.converter.Converter;
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<%_ } _%>
+<%_ } _%> 
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
@@ -151,6 +157,13 @@ import java.util.UUID;
     <%_ } _%>
 @EnableTransactionManagement
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
+    <%_ } else { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%= packageName %>.repository")
+    <%_ } _%>    
+<%_ } _%>   
 <%_ if (searchEngine === 'elasticsearch') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
@@ -171,7 +184,7 @@ import java.util.UUID;
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
     <%_ } _%>
-<%_ } _%>
+<%_ } _%> 
 <%_ if (databaseType === 'couchbase') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository"<%_ if (searchEngine === 'elasticsearch') { %>,
     includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class)<%_ } _%>)

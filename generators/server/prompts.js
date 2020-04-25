@@ -360,13 +360,13 @@ function askForOptionalItems(meta) {
     const applicationType = this.applicationType;
     const choices = [];
     const defaultChoice = [];
+    if (['sql', 'mongodb', 'neo4j'].includes(this.databaseType)) {
+        choices.push({
+            name: 'Search engine using Elasticsearch',
+            value: 'searchEngine:elasticsearch'
+        });
+    }
     if (!this.reactive) {
-        if (this.databaseType === 'sql' || this.databaseType === 'mongodb') {
-            choices.push({
-                name: 'Search engine using Elasticsearch',
-                value: 'searchEngine:elasticsearch'
-            });
-        }
         if (applicationType === 'monolith' || applicationType === 'gateway') {
             choices.push({
                 name: 'WebSockets using Spring Websocket',
