@@ -204,7 +204,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         <%_ }) _%>
       }
       <%_ if (uniqueRelationFields.has('users')) { _%>
-      entity.user = users[values.user];
+      entity.user = values.user;
       <%_ } _%>
 
       if (isNew) {
