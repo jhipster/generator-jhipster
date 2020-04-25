@@ -117,9 +117,7 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 <%_ } _%>
 import org.springframework.security.web.server.SecurityWebFilterChain;
 <%_ if (authenticationType === 'session') { _%>
-    <%_ if (withAudit) { _%>
 import org.springframework.security.web.server.WebFilterExchange;
-    <%_ } _%>
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
@@ -134,7 +132,7 @@ import org.springframework.security.web.server.util.matcher.OrServerWebExchangeM
 import org.springframework.util.StringUtils;
 <%_ } _%>
 import org.zalando.problem.spring.webflux.advice.security.SecurityProblemSupport;
-<%_ if (authenticationType === 'session' && withAudit || authenticationType === 'oauth2') { _%>
+<%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
@@ -252,10 +250,8 @@ public class SecurityConfiguration {
             .formLogin()
             .requiresAuthenticationMatcher(pathMatchers(HttpMethod.POST, "/api/authentication"))
             .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.OK))
-            <%_ if (withAudit) { _%>
             .authenticationSuccessHandler(this::onAuthenticationSuccess)
             .authenticationFailureHandler(this::onAuthenticationError)
-            <%_ } _%>
         .and()
             .logout()
             .logoutUrl("/api/logout")
@@ -373,26 +369,34 @@ public class SecurityConfiguration {
     }
         <%_ } _%>
     <%_ } _%>
-    <%_ if (authenticationType === 'session' && withAudit) { _%>
+    <%_ if (authenticationType === 'session') { _%>
 
     private Mono<Void> onAuthenticationError(WebFilterExchange exchange, AuthenticationException e) {
         exchange.getExchange().getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        <%_ if (withAudit) { _%>
         return exchange.getExchange()
                 .getFormData()
                 .map(data -> data.getFirst("username"))
                 .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
                 .flatMap(login -> auditEventService.saveAuthenticationError(login, e))
                 .then();
+        <%_ } else { _%>
+        return Mono.empty();
+        <%_ } _%>
     }
 
     private Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
         exchange.getExchange().getResponse().setStatusCode(HttpStatus.OK);
+        <%_ if (withAudit) { _%>
         return Mono.just(authentication.getPrincipal())
                 .filter(principal -> principal instanceof User)
                 .map(principal -> ((User) principal).getUsername())
                 .filter(login -> !Constants.ANONYMOUS_USER.equals(login))
                 .flatMap(auditEventService::saveAuthenticationSuccess)
                 .then();
+        <%_ } else { _%>
+        return Mono.empty();
+        <%_ } _%>
     }
     <%_ } _%>
     <%_ if(databaseType === 'couchbase') { _%>
