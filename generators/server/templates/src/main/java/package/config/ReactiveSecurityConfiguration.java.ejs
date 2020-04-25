@@ -74,7 +74,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 <%_ } _%>
 <%_ if (authenticationType === 'oauth2') { _%>
+    <%_ if (withAudit) { _%>
 import org.springframework.security.core.Authentication;
+    <%_ } _%>
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -85,12 +87,11 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.jwt.*;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
-import org.springframework.security.web.server.WebFilterExchange;
     <%_ if (withAudit) { _%>
+import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
 import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
     <%_ } _%>
@@ -116,7 +117,9 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 <%_ } _%>
 import org.springframework.security.web.server.SecurityWebFilterChain;
 <%_ if (authenticationType === 'session') { _%>
+    <%_ if (withAudit) { _%>
 import org.springframework.security.web.server.WebFilterExchange;
+    <%_ } _%>
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.HttpStatusReturningServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
@@ -160,7 +163,6 @@ public class SecurityConfiguration {
 
     <%_ } _%>
     <%_ if (authenticationType === 'oauth2') { _%>
-
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
 
@@ -302,12 +304,10 @@ public class SecurityConfiguration {
             .authenticationSuccessHandler(this::onAuthenticationSuccess)
             <%_ } _%>
             .and()
-            <%_ } _%>.oauth2ResourceServer()
-            .jwt()
-            .jwtAuthenticationConverter(jwtAuthenticationConverter())
-        .and()
-            .and()
-            .oauth2Client();
+            <% } %>.oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(jwtAuthenticationConverter());
+        http.oauth2Client();
             <%_ } _%>
         // @formatter:on
         return http.build();
@@ -395,8 +395,8 @@ public class SecurityConfiguration {
                 .then();
     }
     <%_ } _%>
-
     <%_ if(databaseType === 'couchbase') { _%>
+
     /**
      * Disables Spring security integration with SpEL expressions since it is not yet compatible with Reactor
      */
