@@ -52,9 +52,10 @@ module.exports = class extends Generator {
         // expose lodash to templates
         this._ = _;
 
-        // Load prompt/options definitions. Fallback to built-in definitions.
+        // Load prompt/options definitions.
         this.definitions = this.options.definitions;
         if (!this.definitions) {
+            // Fallback to built-in definitions.
             const definitionsOnly = fs.readJsonSync(path.join(__dirname, '../shared/definitions.json'));
             // eslint-disable-next-line global-require
             const validations = require('../shared/validations');
