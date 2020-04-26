@@ -199,9 +199,11 @@ const getCommandOptions = (pkg, argv) => {
 };
 
 const doneFactory = successMsg => {
-    return errorMsg => {
-        if (errorMsg) {
-            logger.error(`ERROR! ${errorMsg}`);
+    return errorOrMsg => {
+        if (errorOrMsg instanceof Error) {
+            logger.error(`ERROR! ${errorOrMsg.message}`, errorOrMsg);
+        } else if (errorOrMsg) {
+            logger.error(`ERROR! ${errorOrMsg}`);
         } else if (successMsg) {
             logger.info(chalk.green.bold(successMsg));
         }
