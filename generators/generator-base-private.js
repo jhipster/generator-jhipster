@@ -52,7 +52,7 @@ module.exports = class extends Generator {
         // expose lodash to templates
         this._ = _;
 
-        // Load prompt/options definitions.
+        // Load prompt/options definitions. Fallback to built-in definitions.
         this.definitions = this.options.definitions || fs.readJsonSync(path.join(__dirname, '../shared/definitions.json'));
     }
 
