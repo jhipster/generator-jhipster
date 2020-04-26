@@ -38,9 +38,6 @@ const mockBlueprintSubGen = class extends EntityGenerator {
                 this.storageData = {
                     customBlueprintConfigKey: 'customBlueprintConfigValue'
                 };
-
-                // At this point this.entityConfig doesn't exists at jhipster 6
-                assert.equal(this.entityConfig, undefined);
             }
         };
         const customPostPhaseSteps = {

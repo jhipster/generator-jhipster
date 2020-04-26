@@ -292,6 +292,7 @@ const constants = {
 
     MAIN_DIR,
     TEST_DIR,
+    JHIPSTER_CONFIG_DIR: '.jhipster',
 
     // supported client frameworks
     SUPPORTED_CLIENT_FRAMEWORKS,

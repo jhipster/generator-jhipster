@@ -29,6 +29,7 @@ const statistics = require('../statistics');
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
+const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 let useBlueprints;
 
 class EntityGenerator extends BaseBlueprintGenerator {
@@ -132,6 +133,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.setupEntityOptions(this, this, this.context);
         this.registerPrettierTransform();
 
+        this.entityConfig = this.createEntityStorage(this.context.entityNameCapitalized);
+
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity', { arguments: [this.context.name] });
     }
 
@@ -202,7 +205,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 context.angularAppName = this.getAngularAppName(context.baseName);
                 context.angularXAppName = this.getAngularXAppName(context.baseName);
-                context.jhipsterConfigDirectory = '.jhipster';
+                context.jhipsterConfigDirectory = JHIPSTER_CONFIG_DIR;
                 context.mainClass = this.getMainClassName(context.baseName);
                 context.microserviceAppName = '';
 
@@ -213,11 +216,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                 }
 
-                // TODO 7.0 context.filename = this.destinationPath(context.filename);
-                context.filename = `${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
-                // TODO 7.0 Move to constructor, context.filename isn't defined on constructor
-                // keep here for jhipster 6 backward compatibility
-                this.entityConfig = this.createStorage(context.filename);
                 this.context.useConfigurationFile = this.entityConfig.existed;
 
                 if (context.useConfigurationFile) {

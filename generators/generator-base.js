@@ -35,7 +35,7 @@ const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
 
-const JHIPSTER_CONFIG_DIR = '.jhipster';
+const JHIPSTER_CONFIG_DIR = constants.JHIPSTER_CONFIG_DIR;
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
 const GENERATOR_JHIPSTER = 'generator-jhipster';
 
@@ -87,6 +87,17 @@ module.exports = class extends PrivateBase {
             return outputPath;
         }
         return outputPathCustomizer.call(this, outputPath);
+    }
+
+    /**
+     * Create a Storage for the entity.
+     *
+     * @param {string} entityName - The name of entity.
+     * @returns {Object} The Storage.
+     */
+    createEntityStorage(entityName) {
+        const entityFile = path.join(JHIPSTER_CONFIG_DIR, `${entityName}.json`);
+        return this.createStorage(entityFile);
     }
 
     /**
