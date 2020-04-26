@@ -1,28 +1,28 @@
 {
-	"applicationOptions": {
-		"applicationType": {
-             "name": "applicationType",
-             "type": "string",
-             "promptMessage": "Which *type* of application would you like to create?",
-             "defaultValue": "monolith",
-             "values": [
-                 {
-                    "value": "monolith",
-                    "description": "Monolithic application (recommended for simple projects)"
-                 },
-                 {
-                    "value": "microservice",
-                    "description": "Microservice application"
-                 },
-                 {
-                    "value": "gateway",
-                    "description": "Microservice gateway"
-                 },
-                 {
-                    "value": "uaa",
-                    "description": "JHipster UAA server"
-                 }
-             ]
-         }
-     }
+    "applicationOptions": {
+        "applicationType": {
+            "name": "applicationType",
+            "type": "string",
+            "promptMessage": "Which *type* of application would you like to create?",
+            "defaultValue": "monolith",
+            "values": [
+                {
+                   "value": "monolith",
+                   "description": "Monolithic application (recommended for simple projects)"
+                },
+                {
+                   "value": "microservice",
+                   "description": "Microservice application"
+                },
+                {
+                   "value": "gateway",
+                   "description": "Microservice gateway"
+                },
+                {
+                   "value": "uaa",
+                   "description": "JHipster UAA server"
+                }
+            ]
+        }
+    }
 }
