@@ -48,13 +48,13 @@ function askForInsightOptIn() {
 function askForApplicationType(meta) {
     if (!meta && this.existingProject) return;
 
-    const PROMPT = this.definitionToPrompt(this.definitions.applicationOptions.applicationType);
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
+    const PROMPTS = this.definitionsToPrompt(this.definitions.applicationOptions.applicationType);
+    if (meta) return PROMPTS[0]; // eslint-disable-line consistent-return
 
     const done = this.async();
 
-    const DEFAULT_APPTYPE = PROMPT.default;
-    const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
+    const DEFAULT_APPTYPE = PROMPTS[0].default;
+    const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPTS);
     promise.then(prompt => {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
 

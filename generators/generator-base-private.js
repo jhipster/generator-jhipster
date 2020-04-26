@@ -76,30 +76,33 @@ module.exports = class extends Generator {
         return paths ? super.destinationPath(paths) : paths;
     }
 
-    definitionToPrompt(optionDefinitions) {
-        let type;
-        let choices;
-        if (optionDefinitions.values && Array.isArray(optionDefinitions.values)) {
-            choices = optionDefinitions.values.map(value => {
-                return {
-                    value: value.name,
-                    name: value.description
-                };
-            });
-        }
-        if (choices && optionDefinitions.type === 'string') {
-            type = 'list';
-        }
-        if (type === undefined) {
-            throw new Error(`Type was not defined for option ${JSON.stringify(optionDefinitions)}`);
-        }
-        return {
-            type,
-            name: optionDefinitions.name,
-            message: optionDefinitions.promptMessage,
-            choices,
-            default: optionDefinitions.defaultValue
-        };
+    definitionsToPrompt(...optionDefinitions) {
+        return optionDefinitions.map(optionDefinition => {
+            let choices;
+            const { type, message } = optionDefinition.prompt;
+            if (type === undefined) {
+                throw new Error(`Type was not defined for option ${JSON.stringify(optionDefinition)}`);
+            }
+            if (type === 'list') {
+                if (!optionDefinition.values) {
+                    throw new Error(`Values is required for prompt of type 'list'. Option ${JSON.stringify(optionDefinition)}`);
+                }
+                choices = Object.values(optionDefinition.values).map(value => {
+                    return {
+                        value: value.name,
+                        name: value.description
+                    };
+                });
+            }
+
+            return {
+                name: optionDefinition.name,
+                type,
+                message,
+                choices,
+                default: optionDefinition.defaultValue
+            };
+        });
     }
 
     /**
