@@ -104,6 +104,9 @@ module.exports = class extends Generator {
                             };
                         });
                 }
+                if (!prompt.validate && optionDefinition.validate) {
+                    prompt.validate = optionDefinition.validate;
+                }
                 Object.keys(prompt).forEach(promptName => {
                     if (typeof prompt[promptName] === 'function') {
                         // Binding the generator and definition so we can use it inside the function
