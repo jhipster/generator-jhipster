@@ -229,7 +229,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && reactive) { _%>
         userRepository.deleteAllUserAuthorities().block();
         <%_ } _%>
-        <%_ if (reactive || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+        <%_ if ((reactive && databaseType !== 'no') || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         userRepository.deleteAll()<% if (reactive) { %>.block()<% } %>;
         <%_ } _%>
         <%_ if (databaseType !== 'no') { _%>
@@ -273,9 +273,9 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if ((databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') && authenticationType === 'session' && !reactive) { _%>
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+        <%_ } _%>
     public void testRemoveOldPersistentTokens() {
         userRepository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(user);
         int existingCount = persistentTokenRepository.findByUser(user).size();
@@ -290,9 +290,9 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (authenticationType !== 'oauth2' && (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')) { _%>
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+        <%_ } _%>
     public void assertThatUserMustExistToResetPassword() {
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         Optional<<%= asEntity('User') %>> maybeUser = userService.requestPasswordReset("invalid.login@localhost")<% if (reactive) { %>.blockOptional()<% } %>;
@@ -306,9 +306,9 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     }
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+        <%_ } _%>
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
         user.setActivated(false);
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -319,9 +319,9 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     }
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+        <%_ } _%>
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         String resetKey = RandomUtil.generateResetKey();
@@ -336,9 +336,9 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     }
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+        <%_ } _%>
     public void assertThatResetKeyMustBeValid() {
         Instant daysAgo = Instant.now().minus(25, ChronoUnit.HOURS);
         user.setActivated(true);
@@ -352,9 +352,9 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     }
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+        <%_ } _%>
     public void assertThatUserCanResetPassword() {
         String oldPassword = user.getPassword();
         Instant daysAgo = Instant.now().minus(2, ChronoUnit.HOURS);
@@ -374,9 +374,9 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     }
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+        <%_ } _%>
     public void assertThatNotActivatedUsersWithNotNullActivationKeyCreatedBefore3DaysAreDeleted() {
         Instant now = Instant.now();
         <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -413,9 +413,9 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     }
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } _%>
+        <%_ } _%>
     public void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
         Instant now = Instant.now();
         <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -460,11 +460,11 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     <%_ if (databaseType !== 'no') { _%>
 
     @Test
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Transactional
-    <%_ } else if (databaseType === 'couchbase') { _%>
+        <%_ } else if (databaseType === 'couchbase') { _%>
     @WithAnonymousUser
-    <%_ } _%>
+        <%_ } _%>
     public void assertThatAnonymousUserIsNotGet() {
         <%_ if (authenticationType === 'oauth2') { _%>
         user.setId(Constants.ANONYMOUS_USER);

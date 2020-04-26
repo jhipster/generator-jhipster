@@ -258,7 +258,7 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
-            .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+            .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
             .jsonPath("$.login").isEqualTo(TEST_USER_LOGIN)
             .jsonPath("$.authorities").isEqualTo(AuthoritiesConstants.ADMIN);
