@@ -116,7 +116,6 @@ function _getFriendlyNameFromTag(awsObject) {
  */
 function askTypeOfApplication() {
     if (this.abort) return null;
-    const done = this.async();
 
     const prompts = [
         {
@@ -142,10 +141,8 @@ function askTypeOfApplication() {
         this.deploymentApplicationType = props.applicationType;
         if (applicationType) {
             this.log(applicationType);
-            done();
         } else {
             this.abort = true;
-            done();
         }
     });
 }
@@ -155,7 +152,6 @@ function askTypeOfApplication() {
  */
 function askRegion() {
     if (this.abort) return null;
-    const done = this.async();
     const prompts = [
         {
             type: 'list',
@@ -170,10 +166,8 @@ function askRegion() {
         const region = props.region;
         if (region) {
             this.aws.region = region;
-            done();
         } else {
             this.abort = true;
-            done();
         }
     });
 }
@@ -183,7 +177,6 @@ function askRegion() {
  */
 function askCloudFormation() {
     if (this.abort) return null;
-    const done = this.async();
     const prompts = [
         {
             type: 'input',
@@ -207,10 +200,8 @@ function askCloudFormation() {
                 this.aws.cloudFormationName = _.replace(this.aws.cloudFormationName, '_', '');
             }
             this.log(`CloudFormation Stack name will be ${this.aws.cloudFormationName}`);
-            done();
         } else {
             this.abort = true;
-            done();
         }
     });
 }
@@ -220,10 +211,8 @@ function askCloudFormation() {
  */
 function askPerformances() {
     if (this.abort || this.deploymentApplicationType === 'microservice') return null;
-    const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
-            done();
             return null;
         }
         const config = this.appConfigs[index];
@@ -281,8 +270,7 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
     ];
 
     return this.prompt(prompts).then(props => {
-        const performance = props.performance;
-        return performance;
+        return props.performance;
     });
 }
 
@@ -291,10 +279,8 @@ function promptPerformance(config, awsConfig = { performance: 'low' }) {
  */
 function askScaling() {
     if (this.abort || this.deploymentApplicationType === 'microservice') return null;
-    const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
-            done();
             return null;
         }
         const config = this.appConfigs[index];
@@ -347,7 +333,6 @@ function promptScaling(config, awsConfig = { scaling: 'low' }) {
  */
 function askVPC() {
     if (this.abort) return null;
-    const done = this.async();
 
     const vpcList = this.awsFacts.availableVpcs.map(vpc => {
         const friendlyName = _getFriendlyNameFromTag(vpc);
@@ -373,10 +358,8 @@ function askVPC() {
         if (targetVPC) {
             this.aws.vpc.id = targetVPC;
             this.aws.vpc.cidr = _.find(this.awsFacts.availableVpcs, ['VpcId', targetVPC]).CidrBlock;
-            done();
         } else {
             this.abort = true;
-            done();
         }
     });
 }
@@ -386,7 +369,6 @@ function askVPC() {
  */
 function askForSubnets() {
     if (this.abort) return null;
-    const done = this.async();
 
     const subnetList = _.map(this.awsFacts.availableSubnets, sn => {
         const friendlyName = _getFriendlyNameFromTag(sn);
@@ -445,16 +427,13 @@ function askForSubnets() {
         this.aws.vpc.elbSubnets = props.elbSubnets;
         this.aws.vpc.appSubnets = props.appSubnets;
         this.aws.vpc.appSubnetsLaunchWithPublicIP = shouldAppHavePublicIP;
-        done();
     });
 }
 
 function askForDBPasswords() {
     if (this.abort) return null;
-    const done = this.async();
     const chainPromises = index => {
         if (index === this.appConfigs.length) {
-            done();
             return null;
         }
         const config = this.appConfigs[index];
@@ -495,7 +474,6 @@ function promptDBPassword(config) {
  */
 function promptEKSClusterCreation() {
     if (this.abort || this.deploymentApplicationType === 'monolith') return null;
-    const done = this.async();
     const prompts = [
         {
             type: 'input',
@@ -582,7 +560,6 @@ function promptEKSClusterCreation() {
         this.aws.clusterRegion = props.clusterRegion;
         this.totalNumberOfNodes = props.totalNumberOfNodes;
         this.aws.totalNumberOfNodes = props.totalNumberOfNodes;
-        done();
     });
 }
 
@@ -591,7 +568,6 @@ function promptEKSClusterCreation() {
  */
 function askDeployNow() {
     if (this.abort) return null;
-    const done = this.async();
     const prompts = [
         {
             type: 'confirm',
@@ -603,6 +579,5 @@ function askDeployNow() {
 
     return this.prompt(prompts).then(props => {
         this.deployNow = props.deployNow;
-        done();
     });
 }
