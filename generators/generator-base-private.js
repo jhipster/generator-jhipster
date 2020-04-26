@@ -86,36 +86,34 @@ module.exports = class extends Generator {
     definitionsToPrompt(...optionDefinitions) {
         return optionDefinitions
             .map(optionDefinition => {
-                let choices;
                 const { type } = optionDefinition.prompt;
                 if (type === undefined) {
                     throw new Error(`Type was not defined for option ${JSON.stringify(optionDefinition)}`);
                 }
-                if (optionDefinition.shouldAddPrompt && !optionDefinition.shouldAddPrompt.call(optionDefinition, this)) {
-                    return undefined;
-                }
+                const prompt = { ...optionDefinition.prompt };
                 if (type === 'list') {
-                    if (!optionDefinition.values) {
+                    if (!optionDefinition.values && !prompt.choices) {
                         throw new Error(`Values is required for prompt of type 'list'. Option ${JSON.stringify(optionDefinition)}`);
                     }
-                    choices = Object.values(optionDefinition.values).map(value => {
-                        return {
-                            value: value.value,
-                            name: value.description
-                        };
-                    });
+                    prompt.choices =
+                        prompt.choices ||
+                        Object.values(optionDefinition.values).map(value => {
+                            return {
+                                value: value.value,
+                                name: value.description
+                            };
+                        });
                 }
-                let when = optionDefinition.prompt.when;
-                if (when) {
-                    // Binding so the function can use
-                    when = when.bind(this);
-                }
+                Object.keys(prompt).forEach(promptName => {
+                    if (typeof prompt[promptName] === 'function') {
+                        // Binding the generator and definition so we can use it inside the function
+                        prompt[promptName] = prompt[promptName].bind({ generator: this, definition: optionDefinition });
+                    }
+                });
                 return {
-                    ...optionDefinition.prompt,
                     name: optionDefinition.name,
-                    choices,
                     default: optionDefinition.defaultValue,
-                    when
+                    ...prompt
                 };
             })
             .filter(prompt => prompt);
