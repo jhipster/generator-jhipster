@@ -6,7 +6,7 @@
             "defaultValue": "monolith",
             "prompt": {
                 "type": "list",
-                "promptMessage": "Which *type* of application would you like to create?"
+                "message": "Which *type* of application would you like to create?"
             },
             "values": {
                 "monolith": {
@@ -25,6 +25,15 @@
                      "value": "uaa",
                      "description": "JHipster UAA server"
                 }
+            }
+        },
+        "reactive": {
+            "name": "reactive",
+            "type": "boolean",
+            "defaultValue": false,
+            "prompt": {
+                "type": "confirm",
+                "message": "[Beta] Do you want to make it reactive with Spring WebFlux?"
             }
         }
     }

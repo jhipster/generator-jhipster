@@ -46,30 +46,19 @@ function askForInsightOptIn() {
 }
 
 function askForApplicationType(meta) {
-    if (!meta && this.existingProject) return;
+    if (!meta && this.existingProject) return undefined;
 
-    const PROMPTS = this.definitionsToPrompt(this.definitions.applicationOptions.applicationType);
+    const PROMPTS = this.definitionsToPrompt(
+        this.definitions.applicationOptions.applicationType,
+        this.definitions.applicationOptions.reactive
+    );
     if (meta) return PROMPTS[0]; // eslint-disable-line consistent-return
 
-    const done = this.async();
-
-    const DEFAULT_APPTYPE = PROMPTS[0].default;
-    const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPTS);
-    promise.then(prompt => {
-        this.applicationType = this.configOptions.applicationType = prompt.applicationType;
-
-        const REACTIVE_PROMPT = {
-            when: () => ['gateway', 'monolith', 'microservice'].includes(this.applicationType),
-            type: 'confirm',
-            name: 'reactive',
-            message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
-            default: false
-        };
-
-        this.prompt(REACTIVE_PROMPT).then(reactivePrompt => {
-            this.reactive = this.configOptions.reactive = reactivePrompt.reactive;
-            done();
-        });
+    return this.prompt(PROMPTS, this.config).then(answers => {
+        if (answers.applicationType) {
+            this.applicationType = this.configOptions.applicationType = answers.applicationType;
+        }
+        this.reactive = this.configOptions.reactive = answers.reactive;
     });
 }
 

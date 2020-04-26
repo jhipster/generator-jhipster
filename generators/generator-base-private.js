@@ -53,7 +53,13 @@ module.exports = class extends Generator {
         this._ = _;
 
         // Load prompt/options definitions. Fallback to built-in definitions.
-        this.definitions = this.options.definitions || fs.readJsonSync(path.join(__dirname, '../shared/definitions.json'));
+        this.definitions = this.options.definitions;
+        if (!this.definitions) {
+            const definitionsOnly = fs.readJsonSync(path.join(__dirname, '../shared/definitions.json'));
+            // eslint-disable-next-line global-require
+            const validations = require('../shared/validations');
+            this.definitions = _.merge({}, definitionsOnly, validations);
+        }
     }
 
     /* ======================================================================== */
@@ -77,32 +83,41 @@ module.exports = class extends Generator {
     }
 
     definitionsToPrompt(...optionDefinitions) {
-        return optionDefinitions.map(optionDefinition => {
-            let choices;
-            const { type, message } = optionDefinition.prompt;
-            if (type === undefined) {
-                throw new Error(`Type was not defined for option ${JSON.stringify(optionDefinition)}`);
-            }
-            if (type === 'list') {
-                if (!optionDefinition.values) {
-                    throw new Error(`Values is required for prompt of type 'list'. Option ${JSON.stringify(optionDefinition)}`);
+        return optionDefinitions
+            .map(optionDefinition => {
+                let choices;
+                const { type } = optionDefinition.prompt;
+                if (type === undefined) {
+                    throw new Error(`Type was not defined for option ${JSON.stringify(optionDefinition)}`);
                 }
-                choices = Object.values(optionDefinition.values).map(value => {
-                    return {
-                        value: value.name,
-                        name: value.description
-                    };
-                });
-            }
-
-            return {
-                name: optionDefinition.name,
-                type,
-                message,
-                choices,
-                default: optionDefinition.defaultValue
-            };
-        });
+                if (optionDefinition.shouldAddPrompt && !optionDefinition.shouldAddPrompt.call(optionDefinition, this)) {
+                    return undefined;
+                }
+                if (type === 'list') {
+                    if (!optionDefinition.values) {
+                        throw new Error(`Values is required for prompt of type 'list'. Option ${JSON.stringify(optionDefinition)}`);
+                    }
+                    choices = Object.values(optionDefinition.values).map(value => {
+                        return {
+                            value: value.value,
+                            name: value.description
+                        };
+                    });
+                }
+                let when = optionDefinition.prompt.when;
+                if (when) {
+                    // Binding so the function can use
+                    when = when.bind(this);
+                }
+                return {
+                    ...optionDefinition.prompt,
+                    name: optionDefinition.name,
+                    choices,
+                    default: optionDefinition.defaultValue,
+                    when
+                };
+            })
+            .filter(prompt => prompt);
     }
 
     /**
