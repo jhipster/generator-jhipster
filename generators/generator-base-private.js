@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+const fs = require('fs-extra');
 const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
@@ -52,7 +53,7 @@ module.exports = class extends Generator {
         this._ = _;
 
         // Load prompt/options definitions.
-        this.definitions = this.options.definitions;
+        this.definitions = this.options.definitions || fs.readJsonSync(path.join(__dirname, '../shared/definitions.json'));
     }
 
     /* ======================================================================== */
