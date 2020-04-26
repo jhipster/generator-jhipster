@@ -50,6 +50,9 @@ module.exports = class extends Generator {
         super(args, opts);
         // expose lodash to templates
         this._ = _;
+
+        // Load prompt/options definitions.
+        this.definitions = this.options.definitions;
     }
 
     /* ======================================================================== */
@@ -70,6 +73,32 @@ module.exports = class extends Generator {
         paths = path.join(...paths);
         paths = this.applyOutputPathCustomizer(paths);
         return paths ? super.destinationPath(paths) : paths;
+    }
+
+    definitionToPrompt(optionDefinitions) {
+        let type;
+        let choices;
+        if (optionDefinitions.values && Array.isArray(optionDefinitions.values)) {
+            choices = optionDefinitions.values.map(value => {
+                return {
+                    value: value.name,
+                    name: value.description
+                };
+            });
+        }
+        if (choices && optionDefinitions.type === 'string') {
+            type = 'list';
+        }
+        if (type === undefined) {
+            throw new Error(`Type was not defined for option ${JSON.stringify(optionDefinitions)}`);
+        }
+        return {
+            type,
+            name: optionDefinitions.name,
+            message: optionDefinitions.promptMessage,
+            choices,
+            default: optionDefinitions.defaultValue
+        };
     }
 
     /**

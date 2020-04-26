@@ -19,6 +19,7 @@
 /* eslint-disable no-console */
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
+const fs = require('fs-extra');
 const meow = require('meow');
 const yeoman = require('yeoman-environment');
 const _ = require('lodash');
@@ -224,6 +225,8 @@ const createYeomanEnv = packagePatterns => {
         // Lookup for blueprints.
         env.lookup({ filterPaths: true, packagePatterns });
     }
+    const definitions = fs.readJsonSync(path.join(__dirname, '../shared/definitions.json'));
+    env.sharedOptions.definitions = definitions;
     return env;
 };
 

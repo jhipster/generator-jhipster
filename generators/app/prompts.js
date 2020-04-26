@@ -48,39 +48,12 @@ function askForInsightOptIn() {
 function askForApplicationType(meta) {
     if (!meta && this.existingProject) return;
 
-    const DEFAULT_APPTYPE = 'monolith';
-
-    const applicationTypeChoices = [
-        {
-            value: DEFAULT_APPTYPE,
-            name: 'Monolithic application (recommended for simple projects)'
-        },
-        {
-            value: 'microservice',
-            name: 'Microservice application'
-        },
-        {
-            value: 'gateway',
-            name: 'Microservice gateway'
-        },
-        {
-            value: 'uaa',
-            name: 'JHipster UAA server'
-        }
-    ];
-
-    const PROMPT = {
-        type: 'list',
-        name: 'applicationType',
-        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-        choices: applicationTypeChoices,
-        default: DEFAULT_APPTYPE
-    };
-
+    const PROMPT = this.definitionToPrompt(this.definitions.applicationOptions.applicationType);
     if (meta) return PROMPT; // eslint-disable-line consistent-return
 
     const done = this.async();
 
+    const DEFAULT_APPTYPE = PROMPT.default;
     const promise = this.skipServer ? Promise.resolve({ applicationType: DEFAULT_APPTYPE }) : this.prompt(PROMPT);
     promise.then(prompt => {
         this.applicationType = this.configOptions.applicationType = prompt.applicationType;
