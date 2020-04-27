@@ -136,7 +136,7 @@ function askForUpdate() {
     this.prompt(prompts).then(props => {
         context.updateEntity = props.updateEntity;
         if (context.updateEntity === 'none') {
-            this.env.error(chalk.green('Aborting entity update, no changes were made.'));
+            this.error(chalk.green('Aborting entity update, no changes were made.'));
         }
         done();
     });
