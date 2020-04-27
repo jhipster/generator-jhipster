@@ -42,7 +42,9 @@ export const UserManagementUpdate = (props: IUserManagementUpdateProps) => {
       props.getUser(props.match.params.login);
     }
     props.getRoles();
-    return () => props.reset();
+    return () => {
+      props.reset();
+    };
   }, []);
 
   const handleClose = () => {

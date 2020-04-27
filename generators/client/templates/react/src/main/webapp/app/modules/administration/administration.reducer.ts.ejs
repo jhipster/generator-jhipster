@@ -58,7 +58,7 @@ const initialState = {
     env: {} as any
   },
   <%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
-  audits: [],
+  audits: [] as any[],
   <%_ } _%>
   <%_ if (websocket === 'spring-websocket') { _%>
   tracker: {
@@ -216,7 +216,7 @@ export const getLoggers = () => ({
   payload: axios.get('management/loggers')
 });
 
-export const changeLogLevel = (name, configuredLevel) => {
+export const changeLogLevel: (name, configuredLevel) => void = (name, configuredLevel) => {
   const body = { configuredLevel };
   return async dispatch => {
     await dispatch({
