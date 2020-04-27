@@ -50,6 +50,11 @@ eureka:
 <%_ } _%>
 
 spring:
+<%_ if (databaseType === 'sql' && !reactive) { _%>
+    profiles:
+        # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
+        #active: testcontainers
+<%_ } _%>
     application:
         name: <%= baseName %>
     <%_ if (applicationType === 'gateway' && reactive) { _%>
