@@ -366,6 +366,12 @@ function askForOptionalItems(meta) {
             value: 'searchEngine:elasticsearch'
         });
     }
+    if (this.databaseType === 'couchbase') {
+        choices.push({
+            name: 'Search engine using Couchbase FTS',
+            value: 'searchEngine:couchbase'
+        });
+    }
     if (!this.reactive) {
         if (applicationType === 'monolith' || applicationType === 'gateway') {
             choices.push({

@@ -358,7 +358,7 @@ public class UserResource {
     <%_ } _%>
     }
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine !== false) { _%>
 
     /**
      * {@code SEARCH /_search/users/:query} : search for the User corresponding to the query.
@@ -368,6 +368,7 @@ public class UserResource {
      */
     @GetMapping("/_search/users/{query}")
     public <% if(reactive) { %>Mono<<% } %>List<<%= asEntity('User') %>><% if(reactive) { %>><% } %> search(@PathVariable String query) {
+    <%_ if (searchEngine === 'elasticsearch') { _%>
         <%_ if (!reactive) { _%>
         return StreamSupport
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
@@ -375,6 +376,9 @@ public class UserResource {
         <%_ } else { _%>
         return userSearchRepository.search(query).collectList();
         <%_ } _%>
+    <%_ } else { _%>
+        return userRepository.search(User.PREFIX, query)<% if (reactive) { %>.collectList()<% } %>;
+    <%_ } _%>
     }
 <%_ } _%>
 }

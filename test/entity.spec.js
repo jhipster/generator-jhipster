@@ -39,6 +39,34 @@ describe('JHipster generator for entity', () => {
             });
         });
 
+        context('monolith with couchbase FTS', () => {
+            describe('Couchbase search, no dto, no service, no pagination', () => {
+                before(done => {
+                    helpers
+                        .run(require.resolve('../generators/entity'))
+                        .inTmpDir(dir => {
+                            fse.copySync(path.join(__dirname, '../test/templates/default-couchbase-search'), dir);
+                        })
+                        .withOptions({ creationTimestamp: '2016-01-20', withEntities: true })
+                        .withArguments(['foo'])
+                        .withPrompts({
+                            fieldAdd: false,
+                            relationshipAdd: false,
+                            dto: 'no',
+                            service: 'no',
+                            pagination: 'no'
+                        })
+                        .on('end', done);
+                });
+
+                it('does creates search files', () => {
+                    assert.file(`${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V20160120000100__foo.fts`);
+                    assert.file(expectedFiles.server);
+                    assert.file(expectedFiles.gatling);
+                });
+            });
+        });
+
         context('monolith with entity and dto suffixes', () => {
             describe('with entity and dto suffixes', () => {
                 beforeEach(done => {

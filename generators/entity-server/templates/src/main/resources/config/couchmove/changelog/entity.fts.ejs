@@ -1,0 +1,37 @@
+{
+    "type": "fulltext-index",
+    "params": {
+        "doc_config": {
+            "docid_prefix_delim": "",
+            "docid_regexp": "",
+            "mode": "type_field",
+            "type_field": "_class"
+        },
+        "mapping": {
+            "default_analyzer": "standard",
+            "default_datetime_parser": "dateTimeOptional",
+            "default_field": "_all",
+            "default_mapping": {
+                "dynamic": true,
+                "enabled": false
+            },
+            "default_type": "_default",
+            "docvalues_dynamic": true,
+            "index_dynamic": true,
+            "store_dynamic": false,
+            "type_field": "_type",
+            "types": {
+                "<%= packageName %>.domain.<%= entityClass %>": {
+                    "dynamic": true,
+                    "enabled": true
+                }
+            }
+        },
+        "store": {
+            "indexType": "scorch",
+            "kvStoreName": ""
+        }
+    },
+    "sourceType": "couchbase",
+    "sourceName": "${bucket}"
+}

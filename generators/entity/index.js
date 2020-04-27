@@ -634,7 +634,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     return; // do not update if regenerating entity
                 }
                 // store information in a file for further use.
-                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra'].includes(context.databaseType)) {
+                if (_.isUndefined(context.changelogDate) && ['sql', 'cassandra', 'couchbase'].includes(context.databaseType)) {
                     context.changelogDate = this.dateFormatForLiquibase();
                 }
 

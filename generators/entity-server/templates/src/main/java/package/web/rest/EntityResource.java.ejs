@@ -126,7 +126,7 @@ import java.util.Optional;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if ((searchEngine === 'elasticsearch' && !reactive) || fieldsContainNoOwnerOneToOne === true) { _%>
+<%_ if ((searchEngine !== false && !reactive) || fieldsContainNoOwnerOneToOne === true) { _%>
     <%_ if (!viaService) { _%>
 import java.util.stream.Collectors;
     <%_ } _%>
@@ -347,7 +347,7 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
     }
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
+<%_ if (searchEngine !== false) { _%>
 
     /**
      * {@code SEARCH  /_search/<%= entityApiUrl %>?query=:query} : search for the <%= entityInstance %> corresponding

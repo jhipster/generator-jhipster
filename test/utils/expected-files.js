@@ -740,6 +740,11 @@ const expectedFiles = {
         `${DOCKER_DIR}neo4j.yml`
     ],
 
+    couchbaseSearch: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SearchCouchbaseRepository.java`,
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepositoryTest.java`
+    ],
+
     cassandra: [
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace-prod.cql`,
         `${SERVER_MAIN_RES_DIR}config/cql/create-keyspace.cql`,

@@ -16,11 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-/**
-<%_ if (searchEngine === 'elasticsearch') { _%>
- * Spring Data Elasticsearch repositories.
-<%_ } else if (searchEngine === 'couchbase') { _%>
- * Couchbase Full Text Search repositories.
-<%_ } _%>
- */
 package <%= packageName %>.repository.search;
+
+<%_ if (!reactive) { _%>
+import org.springframework.data.domain.Page;
+<%_ } _%>
+import org.springframework.data.domain.Pageable;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
+
+<%_ if (!reactive) { _%>
+import java.util.List;
+<%_ } _%>
+
+/**
+ * Full Text Search Couchbase repository.
+ */
+public interface SearchCouchbaseRepository<T, ID> {
+
+    <% if (reactive) { %>Flux<% } else { %>Page<% } %><T> search(String indexName, String request, Pageable pageable);
+
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><T> search(String indexName, String request);
+}

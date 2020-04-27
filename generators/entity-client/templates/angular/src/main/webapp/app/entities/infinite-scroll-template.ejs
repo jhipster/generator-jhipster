@@ -23,7 +23,7 @@
     page: number;
     predicate: string;
     ascending: boolean;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     currentSearch: string;
     <%_ } _%>
 
@@ -37,7 +37,7 @@
         protected modalService: NgbModal,
         <%_ } _%>
         protected parseLinks: JhiParseLinks,
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         protected activatedRoute: ActivatedRoute,
         <%_ } _%>
     ) {
@@ -49,14 +49,14 @@
         };
         this.predicate = 'id';
         this.ascending = true;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
             this.activatedRoute.snapshot.queryParams['search'] : '';
         <%_ } _%>
     }
 
     loadAll(): void {
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
@@ -90,7 +90,7 @@
         this.loadAll();
     }
 
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     search(query: string): void {
         this.<%= entityInstancePlural %> = [];
         this.links = {

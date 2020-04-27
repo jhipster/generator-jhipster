@@ -1333,17 +1333,19 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ } _%>
     }
 <%_ } _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
 
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+<%_ if (searchEngine === 'elasticsearch') { _%>
         // Configure the mock search repository
-<%_ if (reactive) { _%>
+    <%_ if (reactive) { _%>
         when(mock<%= entityClass %>SearchRepository.save(any()))
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-    <%_ if (pagination !== 'no') { _%>
+        <%_ if (pagination !== 'no') { _%>
         when(mock<%= entityClass %>SearchRepository.count()).thenReturn(Mono.just(1L));
+        <%_ } _%>
     <%_ } _%>
 <%_ } _%>
         // Initialize the database
@@ -1355,17 +1357,23 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ } else { _%>
         <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
 <%_ } _%>
-<%_ if (reactive) { _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (reactive) { _%>
         when(mock<%= entityClass %>SearchRepository.search("id:" + <%= asEntity(entityInstance) %>.getId()<%_ if (pagination !== 'no') { _%>, PageRequest.of(0, 20)<% }%>))
             .thenReturn(Flux.just(<%= asEntity(entityInstance) %>));
-<%_ } else { _%>
-    <%_ if (pagination !== 'no') { _%>
+    <%_ } else { _%>
+        <%_ if (pagination !== 'no') { _%>
         when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= asEntity(entityInstance) %>.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(<%= asEntity(entityInstance) %>), PageRequest.of(0, 1), 1));
-    <%_ } else { _%>
+        <%_     } else { _%>
         when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= asEntity(entityInstance) %>.getId())))
             .thenReturn(Collections.singletonList(<%= asEntity(entityInstance) %>));
+        <%_ } _%>
     <%_ } _%>
+<%_ } else if (searchEngine === 'couchbase') { _%>
+
+        // Wait for the <%= entityInstance %> to be indexed
+        TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, "id:" + <%= entityInstance %>.getId())<% if (reactive) { %>.collectList().block()<% } %>);
 <%_ } _%>
 
         // Search the <%= entityInstance %>

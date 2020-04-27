@@ -120,7 +120,7 @@ public interface <%= entityClass %>Service {
      *
      * @param id the id of the entity.
      */
-    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKeyType %> id);<% if (searchEngine === 'elasticsearch') { %>
+    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKeyType %> id);<% if (searchEngine !== false) { %>
 
     /**
      * Search for the <%= entityInstance %> corresponding to the query.

@@ -22,8 +22,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 <%_ } _%>
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Button, <% if (searchEngine === 'elasticsearch') { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
-<%_ if (searchEngine === 'elasticsearch') { _%>
+import { Button, <% if (searchEngine !== false) { %>InputGroup, <% } %>Col, Row, Table } from 'reactstrap';
+<%_ if (searchEngine !== false) { _%>
 import { AvForm, AvGroup, AvInput } from 'availity-reactstrap-validation';
 <%_ } _%>
 import {
@@ -33,7 +33,7 @@ import {
     <%_ } _%>
   byteSize,
   <%_ } _%>
-  Translate<% if (searchEngine === 'elasticsearch') { %>, translate, ICrudSearchAction<% } %>,
+  Translate<% if (searchEngine !== false) { %>, translate, ICrudSearchAction<% } %>,
   ICrudGetAllAction<% if (fieldsContainDate) { %>, TextFormat<% } %>
   <%_ if (pagination !== 'no') { _%>
   , getSortState, IPaginationBaseState
@@ -45,7 +45,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { IRootState } from 'app/shared/reducers';
 import {
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   getSearchEntities,
   <%_ } _%>
   getEntities
@@ -63,8 +63,8 @@ import { overridePaginationStateWithQueryParams } from 'app/shared/util/entity-u
 export interface I<%= entityReactName %>Props extends StateProps, DispatchProps, RouteComponentProps<{url: string}> {}
 
 export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
-  <%_ if (searchEngine === 'elasticsearch' || pagination !== 'no') { _%>
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false || pagination !== 'no') { _%>
+    <%_ if (searchEngine !== false) { _%>
   const [search, setSearch] = useState('');
     <%_ } _%>
     <%_ if (pagination !== 'no') { _%>
@@ -77,7 +77,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   <%_ if (pagination === 'pagination' || pagination === 'pager' || pagination === 'infinite-scroll' || pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
   const getAllEntities = () => {
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     if (search) {
       props.getSearchEntities(search, paginationState.activePage - 1, paginationState.itemsPerPage, `${paginationState.sort},${paginationState.order}`);
     } else {
@@ -109,7 +109,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   }, []);
   <%_ } _%>
 
-  <%_ if (searchEngine === 'elasticsearch') { _%>
+  <%_ if (searchEngine !== false) { _%>
   const startSearching = () => {
     if (search) {
       <%_ if (pagination === 'infinite-scroll') { _%>
@@ -180,7 +180,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <% } else { %>
     sortEntities();
     <% } %>
-  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %><%_ if (searchEngine === 'elasticsearch') { _%>, search<% } %>]);
+  }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %><%_ if (searchEngine !== false) { _%>, search<% } %>]);
 
   <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
   useEffect(() => {
@@ -239,7 +239,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
           </Translate>
         </Link>
       </h2>
-      <%_ if (searchEngine === 'elasticsearch') { _%>
+      <%_ if (searchEngine !== false) { _%>
       <Row>
         <Col sm="12">
           <AvForm onSubmit={startSearching}>
@@ -464,7 +464,7 @@ const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
 });
 
 const mapDispatchToProps = {
- <%_ if (searchEngine === 'elasticsearch') { _%>
+ <%_ if (searchEngine !== false) { _%>
  getSearchEntities,
  <%_ } _%>
  getEntities,
