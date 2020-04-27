@@ -72,7 +72,7 @@ export default (state: SettingsState = initialState, action): SettingsState => {
 // Actions
 const apiUrl = '<%= apiUaaPath %>api/account';
 
-export const saveAccountSettings = account => async <% if (enableTranslation) { %>(dispatch, getState)<% } else { %>dispatch<% } %> => {
+export const saveAccountSettings: (account: any) => void = account => async dispatch => {
   await dispatch({
     type: ACTION_TYPES.UPDATE_ACCOUNT,
     payload: axios.post(apiUrl, account),
@@ -84,7 +84,7 @@ export const saveAccountSettings = account => async <% if (enableTranslation) { 
     if (Storage.session.get(`locale`)) {
       Storage.session.remove(`locale`);
     }
-    <% } %>
+  <% } %>
   await dispatch(getSession());
   <% if (enableTranslation && enableI18nRTL) { %>
     document.querySelector('html').setAttribute('dir', isRTL(account.langKey) ? 'rtl' : 'ltr');

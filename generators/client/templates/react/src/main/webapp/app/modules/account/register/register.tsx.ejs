@@ -35,7 +35,12 @@ export type IRegisterProps = DispatchProps;
 export const RegisterPage = (props: IRegisterProps) => {
   const [password, setPassword] = useState('');
 
-  useEffect(() => () => props.reset(), []);
+  useEffect(
+    () => () => {
+      props.reset();
+    },
+    []
+  );
 
   const handleValidSubmit = (event, values) => {
     <%_ if (enableTranslation) { _%>
