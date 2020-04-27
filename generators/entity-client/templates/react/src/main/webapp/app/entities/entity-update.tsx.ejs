@@ -331,13 +331,15 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
             <br />
             {<%= fieldName %> ? (
               <div>
-                <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
-                <%_ if (isAnImage) { _%>
-                  <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
-                <%_ } else { _%>
-                  <Translate contentKey="entity.action.open">Open</Translate>
-                <%_ } _%>
-                </a>
+                {<%= fieldName %>ContentType ? (
+                  <a onClick={openFile(<%= fieldName %>ContentType, <%= fieldName %>)}>
+                  <%_ if (isAnImage) { _%>
+                    <img src={`data:${<%= fieldName %>ContentType};base64,${<%= fieldName %>}`} style={{ maxHeight: '100px' }} />
+                  <%_ } else { _%>
+                    <Translate contentKey="entity.action.open">Open</Translate>
+                  <%_ } _%>
+                  </a>
+                ) : null}
                 <br />
                 <Row>
                   <Col md="11">
