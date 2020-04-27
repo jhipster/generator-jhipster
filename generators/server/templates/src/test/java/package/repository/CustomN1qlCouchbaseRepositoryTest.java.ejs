@@ -33,7 +33,7 @@ class CustomN1qlCouchbaseRepositoryTest {
     @MethodSource
     @ParameterizedTest
     public void queryString(String query, AbstractFtsQuery ftsQuery) {
-        assertThat(CustomN1qlCouchbaseRepository.queryString(query).toString()).isEqualTo(ftsQuery.toString());
+        assertThat(Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.queryString(query).toString()).isEqualTo(ftsQuery.toString());
     }
 
     @SuppressWarnings("unused")

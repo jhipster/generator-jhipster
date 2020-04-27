@@ -1338,12 +1338,14 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+<%_ if (searchEngine === 'elasticsearch') { _%>
         // Configure the mock search repository
-<%_ if (reactive) { _%>
+    <%_ if (reactive) { _%>
         when(mock<%= entityClass %>SearchRepository.save(any()))
             .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-    <%_ if (pagination !== 'no') { _%>
+        <%_ if (pagination !== 'no') { _%>
         when(mock<%= entityClass %>SearchRepository.count()).thenReturn(Mono.just(1L));
+        <%_ } _%>
     <%_ } _%>
 <%_ } _%>
         // Initialize the database
@@ -1369,8 +1371,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ } _%>
     <%_ } _%>
 <%_ } else if (searchEngine === 'couchbase') { _%>
-    // Wait for the <%= entityInstance %> to be indexed
-    TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, "id:" + <%= entityInstance %>.getId()));
+
+        // Wait for the <%= entityInstance %> to be indexed
+        TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, "id:" + <%= entityInstance %>.getId())<% if (reactive) { %>.collectList().block()<% } %>);
 <%_ } _%>
 
         // Search the <%= entityInstance %>

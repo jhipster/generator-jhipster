@@ -377,7 +377,7 @@ public class UserResource {
         return userSearchRepository.search(query).collectList();
         <%_ } _%>
     <%_ } else { _%>
-        return userRepository.search(User.PREFIX, query);
+        return userRepository.search(User.PREFIX, query)<% if (reactive) { %>.collectList()<% } %>;
     <%_ } _%>
     }
 <%_ } _%>

@@ -229,7 +229,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
         log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: false, fromResource: false}); -%>
         <%_ } else { _%>
         log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
-        return <%= entityInstance %>SearchRepository.search(<% if (searchEngine === 'elasticsearch') { %><%= reactive ? 'query' : 'queryStringQuery(query)' %><% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
+        return <%= entityInstance %><% if (searchEngine === 'elasticsearch') { %>Search<% } %>Repository.search(<% if (searchEngine === 'elasticsearch') { %><%= reactive ? 'query' : 'queryStringQuery(query)' %><% } else { %><%= entityClass %>.PREFIX, query<% } %>, pageable)<%_ if (dto !== 'mapstruct') { _%>;<% } else { %>
             .map(<%= entityToDtoReference %>);
         <%_ } } _%>
     }
