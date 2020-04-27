@@ -1865,5 +1865,60 @@ paginate * with infinite-scroll
         expect(fse.existsSync('.jhipster')).to.be.false;
       });
     });
+    context('when importing a JDL application with blueprints', () => {
+      let importState;
+
+      before(() => {
+        const importer = createImporterFromFiles([path.join('test', 'test_files', 'application_with_blueprints.jdl')], {
+          creationTimestamp: '2019-01-01'
+        });
+        importState = importer.import();
+      });
+      after(() => {
+        fse.removeSync('.yo-rc.json');
+      });
+
+      it('should return the blueprints attributes in the application', () => {
+        expect(importState.exportedApplications).to.deep.equal([
+          {
+            entities: [],
+            'generator-jhipster': {
+              applicationType: 'monolith',
+              authenticationType: 'jwt',
+              baseName: 'appWithBlueprints',
+              blueprints: [{ name: 'generator-jhipster-vuejs' }, { name: 'generator-jhipster-dotnetcore' }],
+              buildTool: 'maven',
+              cacheProvider: 'ehcache',
+              clientFramework: 'angularX',
+              clientPackageManager: 'npm',
+              clientTheme: 'none',
+              clientThemeVariant: '',
+              creationTimestamp: 1546300800000,
+              databaseType: 'sql',
+              devDatabaseType: 'h2Disk',
+              enableHibernateCache: true,
+              enableSwaggerCodegen: false,
+              enableTranslation: true,
+              jhiPrefix: 'jhi',
+              languages: ['en', 'fr'],
+              messageBroker: false,
+              nativeLanguage: 'en',
+              packageFolder: 'com/mycompany/myapp',
+              packageName: 'com.mycompany.myapp',
+              prodDatabaseType: 'mysql',
+              searchEngine: false,
+              serverPort: '8080',
+              serviceDiscoveryType: false,
+              skipClient: false,
+              skipServer: false,
+              skipUserManagement: false,
+              testFrameworks: [],
+              useSass: true,
+              websocket: false
+            }
+          }
+        ]);
+      });
+    });
   });
 });

@@ -151,8 +151,7 @@ describe('JHipsterApplicationExporter', () => {
           });
         });
       });
-
-      describe('when exporting an application to JSON with skipYoRcGeneration', () => {
+      context('when exporting an application to JSON with skipYoRcGeneration', () => {
         before(() => {
           exportApplication(
             createJDLApplication({
@@ -172,7 +171,6 @@ describe('JHipsterApplicationExporter', () => {
           expect(() => fs.statSync('.yo-rc.json')).to.throw();
         });
       });
-
       context('when exporting an application to JSON with creationTimestampConfig', () => {
         let content;
         before(() => {
@@ -200,8 +198,7 @@ describe('JHipsterApplicationExporter', () => {
           expect(content['generator-jhipster'].creationTimestamp).to.equal(1546300800000);
         });
       });
-
-      describe('when exporting an existing application to JSON', () => {
+      context('when exporting an existing application to JSON', () => {
         let content;
 
         before(() => {
@@ -280,6 +277,33 @@ describe('JHipsterApplicationExporter', () => {
               creationTimestamp: 'old'
             }
           });
+        });
+      });
+      context('when the application has the blueprints option', () => {
+        let returned;
+
+        before(() => {
+          returned = exportApplication(
+            createJDLApplication({
+              baseName: 'toto',
+              blueprints: ['generator-jhipster-vuejs', 'generator-jhipster-nodejs']
+            })
+          );
+        });
+
+        after(() => {
+          fs.unlinkSync(path.join('.yo-rc.json'));
+        });
+
+        it('should format it', () => {
+          expect(returned['generator-jhipster'].blueprints).to.deep.equal([
+            {
+              name: 'generator-jhipster-vuejs'
+            },
+            {
+              name: 'generator-jhipster-nodejs'
+            }
+          ]);
         });
       });
     });

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable no-useless-escape */
 
 const { expect } = require('chai');
 const parse = require('../../../lib/dsl/api').parse;
@@ -192,6 +193,151 @@ describe('JDLSyntaxValidatorVisitor', () => {
             }`)
             ).to.throw(new RegExp('^A name is expected, but found: "42"'));
           });
+        });
+      });
+    });
+    context('and using for blueprints', () => {
+      context('an empty blueprint name', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [, generator-jhipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name with uppercase letters', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [Generator-JHipster-Super-Blueprint]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name starting with .', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [.generator-jhipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name starting with _', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [_generator-jhipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name with a whitespace inside', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator -jhipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name containing ~', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator-jh~ipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name containing ~', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator-jh~ipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name containing \\', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator-jh\\ipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context("a blueprint name containing '", () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator-'jhipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name containing !', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator-jhipster!-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name containing (', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator-(jhipster-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name containing )', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator-jhipster)-vuejs]
+  }
+}`)
+          ).to.throw();
+        });
+      });
+      context('a blueprint name containing *', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`application {
+  config {
+    blueprints [generator-jhipster-vue*js]
+  }
+}`)
+          ).to.throw();
         });
       });
     });

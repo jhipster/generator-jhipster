@@ -47,6 +47,7 @@ describe('JSONToJDLConverter', () => {
     applicationType microservice
     authenticationType jwt
     baseName truc
+    blueprints [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
     buildTool maven
     cacheProvider hazelcast
     clientPackageManager npm

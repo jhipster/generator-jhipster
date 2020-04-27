@@ -583,18 +583,6 @@ describe('JDLApplication', () => {
         });
       });
     });
-    context('when the blueprints option is present', () => {
-      let result;
-
-      before(() => {
-        const application = new JDLApplication({ config: { blueprints: ['whatever'] } });
-        result = application.toString();
-      });
-
-      it('should not stringify it', () => {
-        expect(result).not.to.include('blueprints');
-      });
-    });
     context('when the packageFolder option is present', () => {
       let result;
 

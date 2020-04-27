@@ -21,7 +21,6 @@
 const { expect } = require('chai');
 const JDLApplicationConfiguration = require('../../../lib/core/jdl_application_configuration');
 const StringJDLApplicationConfigurationOption = require('../../../lib/core/string_jdl_application_configuration_option');
-const ListJDLApplicationConfigurationOption = require('../../../lib/core/list_jdl_application_configuration_option');
 const { OptionNames } = require('../../../lib/core/jhipster/application_options');
 
 describe('JDLApplicationConfiguration', () => {
@@ -297,18 +296,6 @@ jhiPrefix prefix
         it('should stringify it', () => {
           expect(configuration.toString()).to.include('clientThemeVariant primary');
         });
-      });
-    });
-    context('when the configuration has the blueprints option', () => {
-      let configuration;
-
-      before(() => {
-        configuration = new JDLApplicationConfiguration();
-        configuration.setOption(new ListJDLApplicationConfigurationOption(OptionNames.BLUEPRINTS, []));
-      });
-
-      it('should not stringify it', () => {
-        expect(configuration.toString()).not.to.include('blueprints');
       });
     });
     context('when the configuration has the package folder option', () => {

@@ -95,29 +95,79 @@ MAX = 43`);
       });
     });
     context('with a custom configuration', () => {
-      let application;
+      context('when setting the applicationType', () => {
+        let application;
 
-      before(() => {
-        const content = parseFromContent(`application {
+        before(() => {
+          const content = parseFromContent(`application {
   config {
-    baseName superApp
     applicationType monolith
   }
 }`);
-        application = content.applications[0];
-      });
+          application = content.applications[0];
+        });
 
-      it('should parse it', () => {
-        expect(application).to.deep.equal({
-          config: {
-            baseName: 'superApp',
-            applicationType: 'monolith'
-          },
-          entities: {
-            entityList: [],
-            excluded: []
-          },
-          options: {}
+        it('should parse it', () => {
+          expect(application).to.deep.equal({
+            config: {
+              applicationType: 'monolith'
+            },
+            entities: {
+              entityList: [],
+              excluded: []
+            },
+            options: {}
+          });
+        });
+      });
+      context('when setting the baseName', () => {
+        let application;
+
+        before(() => {
+          const content = parseFromContent(`application {
+  config {
+    baseName toto
+  }
+}`);
+          application = content.applications[0];
+        });
+
+        it('should parse it', () => {
+          expect(application).to.deep.equal({
+            config: {
+              baseName: 'toto'
+            },
+            entities: {
+              entityList: [],
+              excluded: []
+            },
+            options: {}
+          });
+        });
+      });
+      context('when setting the blueprints', () => {
+        let application;
+
+        before(() => {
+          const content = parseFromContent(`application {
+  config {
+    blueprints [generator-jhipster-vuejs, generator-jhipster-nodejs]
+  }
+}`);
+          application = content.applications[0];
+        });
+
+        it('should parse it', () => {
+          expect(application).to.deep.equal({
+            config: {
+              blueprints: ['generator-jhipster-vuejs', 'generator-jhipster-nodejs']
+            },
+            entities: {
+              entityList: [],
+              excluded: []
+            },
+            options: {}
+          });
         });
       });
     });
