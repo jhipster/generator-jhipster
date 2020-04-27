@@ -438,7 +438,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               type="select"
               className="form-control"
               name="<%= relationshipFieldName %>.id"
-              value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>.id}
+              value={isNew ? <%= otherEntityNamePlural %>[0] && <%= otherEntityNamePlural %>[0].id : <%= entityInstance %>Entity.<%= relationshipName %>?.id}
               required
             >
               {
