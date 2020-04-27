@@ -145,9 +145,12 @@ task integrationTest(type: Test) {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
+
+<%_ if (databaseType === 'sql' && !reactive) { _%>
     if (project.hasProperty('testcontainers')) {
         environment 'spring.profiles.active', 'testcontainers'
     }
+<%_ } _%>
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
@@ -412,19 +415,19 @@ dependencies {
     testImplementation "org.testcontainers:neo4j"
     testImplementation 'org.testcontainers:junit-jupiter'
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mysql') { _%>
+    <%_ if (prodDatabaseType === 'mysql' && !reactive) { _%>
     testImplementation "org.testcontainers:mysql"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mariadb') { _%>
+    <%_ if (prodDatabaseType === 'mariadb' && !reactive) { _%>
     testImplementation "org.testcontainers:mariadb"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'postgresql') { _%>
+    <%_ if (prodDatabaseType === 'postgresql' && !reactive) { _%>
     testImplementation "org.testcontainers:postgresql"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'mssql') { _%>
+    <%_ if (prodDatabaseType === 'mssql' && !reactive) { _%>
     testImplementation "org.testcontainers:mssqlserver"
     <%_ } _%>
-    <%_ if (prodDatabaseType === 'oracle') { _%>
+    <%_ if (prodDatabaseType === 'oracle' && !reactive) { _%>
     testImplementation "org.testcontainers:oracle-xe"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>

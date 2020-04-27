@@ -437,7 +437,7 @@
             <scope>test</scope>
         </dependency>
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
         <dependency>
             <groupId>org.testcontainers</groupId>
     <%_ if (prodDatabaseType === 'mysql') { _%>

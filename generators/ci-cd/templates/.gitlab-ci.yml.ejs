@@ -95,7 +95,7 @@ gradle-integration-test:
 
     stage: test
     script:
-        - ./gradlew integrationTest -PnodeInstall --no-daemon <% if (insideDocker && databaseType === 'sql') { %>-Ptestcontainers<% } %>
+        - ./gradlew integrationTest -PnodeInstall --no-daemon <% if (insideDocker && databaseType === 'sql' && !reactive) { %>-Ptestcontainers<% } %>
     artifacts:
         reports:
             junit: build/test-results/integrationTest/TEST-*.xml
