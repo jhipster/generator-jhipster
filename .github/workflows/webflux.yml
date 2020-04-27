@@ -80,12 +80,12 @@ jobs:
                       war: 0
                       protractor: 1
                     - app-type: webflux-couchbase
-                      entity: none
+                      entity: couchbase
                       profile: prod
                       war: 0
                       protractor: 1
                     - app-type: webflux-couchbase-es-oauth2
-                      entity: none
+                      entity: couchbase
                       profile: prod
                       war: 0
                       protractor: 1
