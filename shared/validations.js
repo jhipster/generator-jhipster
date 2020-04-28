@@ -16,6 +16,26 @@ module.exports = {
                     return ['gateway', 'monolith', 'microservice'].includes(applicationType);
                 }
             }
+        },
+        testFrameworks: {
+            prompt: {
+                when() {
+                    return !this.generator.skipServer || !this.generator.skipClient;
+                },
+                choices(_) {
+                    const choices = [];
+                    const { availableChoices } = this.prompt;
+                    if (!this.generator.skipServer) {
+                        // all server side test frameworks should be added here
+                        choices.push(availableChoices.gatling, availableChoices.cucumber);
+                    }
+                    if (!this.generator.skipClient) {
+                        // all client side test frameworks should be added here
+                        choices.push(availableChoices.protractor);
+                    }
+                    return choices;
+                }
+            }
         }
     }
 };

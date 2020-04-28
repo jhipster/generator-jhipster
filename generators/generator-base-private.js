@@ -91,18 +91,25 @@ module.exports = class extends Generator {
                     throw new Error(`Type was not defined for option ${JSON.stringify(optionDefinition)}`);
                 }
                 const prompt = { ...optionDefinition.prompt };
-                if (type === 'list') {
+                if (type === 'list' || type === 'checkbox') {
                     if (!optionDefinition.values && !prompt.choices) {
                         throw new Error(`Values is required for prompt of type 'list'. Option ${JSON.stringify(optionDefinition)}`);
                     }
-                    prompt.choices =
-                        prompt.choices ||
-                        Object.values(optionDefinition.values).map(value => {
-                            return {
-                                value: value.value,
-                                name: value.description
-                            };
-                        });
+                    if (optionDefinition.values) {
+                        // Object.fromEntries is node >= 12
+                        prompt.availableChoices = Object.fromEntries(
+                            Object.entries(optionDefinition.values).map(([key, value]) => {
+                                return [
+                                    key,
+                                    {
+                                        value: value.value,
+                                        name: value.description
+                                    }
+                                ];
+                            })
+                        );
+                    }
+                    prompt.choices = prompt.choices || Object.values(prompt.availableChoices);
                 }
                 if (!prompt.validate && optionDefinition.validate) {
                     prompt.validate = optionDefinition.validate;
@@ -110,7 +117,12 @@ module.exports = class extends Generator {
                 Object.keys(prompt).forEach(promptName => {
                     if (typeof prompt[promptName] === 'function') {
                         // Binding the generator and definition so we can use it inside the function
-                        prompt[promptName] = prompt[promptName].bind({ generator: this, definition: optionDefinition });
+                        prompt[promptName] = prompt[promptName].bind({
+                            generator: this,
+                            definition: optionDefinition,
+                            prompt,
+                            config: this.config
+                        });
                     }
                 });
                 return {

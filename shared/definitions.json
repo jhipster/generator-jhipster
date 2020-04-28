@@ -35,6 +35,29 @@
                 "type": "confirm",
                 "message": "[Beta] Do you want to make it reactive with Spring WebFlux?"
             }
+        },
+        "testFrameworks": {
+            "name": "testFrameworks",
+            "type": "string",
+            "defaultValue": [],
+            "prompt": {
+                "type": "checkbox",
+                "message": "Besides JUnit and Jest, which testing frameworks would you like to use?"
+            },
+            "values": {
+                "gatling": {
+                     "value": "gatling",
+                     "description": "Gatling"
+                },
+                "cucumber": {
+                     "value": "cucumber",
+                     "description": "Cucumber"
+                },
+                "protractor": {
+                     "value": "protractor",
+                     "description": "Protractor"
+                }
+            }
         }
     }
 }

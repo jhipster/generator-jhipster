@@ -73,33 +73,14 @@ function askFori18n() {
 }
 
 function askForTestOpts(meta) {
-    if (!meta && this.existingProject) return;
+    if (!meta && this.existingProject) return undefined;
 
-    const choices = [];
-    const defaultChoice = [];
-    if (meta || !this.skipServer) {
-        // all server side test frameworks should be added here
-        choices.push({ name: 'Gatling', value: 'gatling' }, { name: 'Cucumber', value: 'cucumber' });
-    }
-    if (meta || !this.skipClient) {
-        // all client side test frameworks should be added here
-        choices.push({ name: 'Protractor', value: 'protractor' });
-    }
-    const PROMPT = {
-        type: 'checkbox',
-        name: 'testFrameworks',
-        message: 'Besides JUnit and Jest, which testing frameworks would you like to use?',
-        choices,
-        default: defaultChoice
-    };
+    const PROMPT = this.definitionsToPrompt(this.definitions.applicationOptions.testFrameworks);
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
+    if (meta) return PROMPT[0]; // eslint-disable-line consistent-return
 
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
+    return this.prompt(PROMPT, this.config).then(prompt => {
         this.testFrameworks = prompt.testFrameworks;
-        done();
     });
 }
 
