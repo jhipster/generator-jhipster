@@ -36,6 +36,9 @@ import org.neo4j.springframework.data.repository.query.Query;
 <%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
+<%_ if (databaseType === 'sql') { _%>
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
+<%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
 import org.springframework.data.mongodb.repository.Query;
@@ -55,11 +58,11 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Spring Data <% if (databaseType === 'mongodb') { %>MongoDB<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'cassandra') { %>Cassandra<% } if (databaseType === 'neo4j') { %>Neo4j<% } %> reactive repository for the <%= asEntity(entityClass) %> entity.
+ * Spring Data <%= humanDatabaseType %> reactive repository for the <%= asEntity(entityClass) %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>N1qlCouchbase<% } if (databaseType === 'neo4j') { %>Neo4j<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% } %> {
+public interface <%= entityClass %>Repository extends <% if (databaseType === 'sql') { %>R2dbc<% } if (databaseType === 'mongodb') { %>ReactiveMongo<% } if (databaseType === 'couchbase') { %>ReactiveN1qlCouchbase<% } if (databaseType === 'neo4j') { %>ReactiveNeo4j<% } if (databaseType === 'cassandra') { %>ReactiveCassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% } %> {
 
     <%_ if (pagination !== 'no') { _%>
 
@@ -90,3 +93,8 @@ public interface <%= entityClass %>Repository extends Reactive<% if (databaseTyp
     <%_ } _%>
 
 }
+<%_ if (databaseType === 'sql') { _%>
+interface <%= entityClass %>RepositoryInternal {
+    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
+}
+<%_ } _%>
