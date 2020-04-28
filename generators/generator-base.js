@@ -2024,6 +2024,7 @@ module.exports = class extends PrivateBase {
         dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         dest.skipUserManagement =
             context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.otherModules = context.configOptions.otherModules || [];
         dest.baseName = context.configOptions.baseName;
         dest.logo = context.configOptions.logo;
@@ -2037,6 +2038,7 @@ module.exports = class extends PrivateBase {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         dest.uaaBaseName = uaaBaseName;
+        dest.prettierJava = context.options['prettier-java'] || context.config.get('prettierJava');
     }
 
     /**
@@ -2050,7 +2052,6 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.authenticationType =
             context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');

@@ -149,7 +149,16 @@ const expectedFiles = {
 
     maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties', 'checkstyle.xml'],
 
-    common: ['.prettierignore', '.prettierrc', 'README.md', '.gitignore', '.gitattributes', '.editorconfig'],
+    common: [
+        '.prettierignore',
+        '.prettierrc',
+        'README.md',
+        '.gitignore',
+        '.gitattributes',
+        '.editorconfig',
+        '.huskyrc',
+        '.lintstagedrc.js'
+    ],
 
     server: [
         `${SERVER_MAIN_RES_DIR}banner.txt`,
@@ -372,8 +381,6 @@ const expectedFiles = {
         'angular.json',
         '.eslintrc.json',
         '.eslintignore',
-        '.huskyrc',
-        '.lintstagedrc.js',
         'package.json',
         'postcss.config.js',
         'proxy.conf.json',
