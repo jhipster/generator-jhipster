@@ -895,7 +895,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void get<%= entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         Long id = <%= asEntity(entityInstance) %>.getId();
 
@@ -918,7 +918,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.equals=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
@@ -930,7 +930,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNotEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> not equals to <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.notEquals=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
@@ -942,7 +942,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> in <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> or <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.in=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> + "," + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
@@ -954,7 +954,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is not null
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.specified=true");
@@ -969,7 +969,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
                 @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.contains=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
@@ -981,7 +981,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.doesNotContain=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>);
@@ -1013,7 +1013,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than or equal to <%= defaultValue %>
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= defaultValue %>);
@@ -1025,7 +1025,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than or equal to <%= defaultValue %>
         default<%= entityClass %>ShouldBeFound("<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= defaultValue %>);
@@ -1037,7 +1037,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than <%= defaultValue %>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.lessThan=" + <%= defaultValue %>);
@@ -1049,7 +1049,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Test<%= transactionalAnnotation %>
     void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
+        <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than <%= defaultValue %>
         default<%= entityClass %>ShouldNotBeFound("<%= searchBy.fieldName %>.greaterThan=" + <%= defaultValue %>);
