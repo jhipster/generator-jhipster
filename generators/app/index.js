@@ -219,7 +219,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        this.prettierJava = this.options['prettier-java'];
+        this.prettierJava = this.configOptions.prettierJava = this.options['prettier-java'] || this.config.get('prettierJava');
 
         let blueprints = this.options.blueprints || '';
         // check for old single blueprint declaration
@@ -505,6 +505,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.skipServer && (config.skipServer = true);
                 this.skipUserManagement && (config.skipUserManagement = true);
                 this.skipFakeData && (config.skipFakeData = true);
+                this.prettierJava && (config.prettierJava = true);
                 this.config.set(config);
             },
 
