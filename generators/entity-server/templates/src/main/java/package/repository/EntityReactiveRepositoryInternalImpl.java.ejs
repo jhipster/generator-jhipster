@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
+import org.springframework.data.r2dbc.query.Criteria;
 <%_ } _%>
 
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
@@ -42,7 +43,9 @@ public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass
 
     @Override
     public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable) {
-        
-        
+        return db.select().from(<%= asEntity(entityClass) %>.class)
+                .page(pageable)
+                .as(<%= asEntity(entityClass) %>.class)
+                .all();
     }
 }
