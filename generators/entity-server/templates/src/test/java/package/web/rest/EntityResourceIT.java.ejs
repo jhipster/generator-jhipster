@@ -46,6 +46,14 @@ let repositorySave = 'save';
 if (!reactive && databaseType === 'sql') {
     repositorySave = 'saveAndFlush';
 }
+let idValue = `${asEntity(entityInstance)}.getId()`;
+if (databaseType === 'sql' && hasOauthUser !== true) {
+    idValue = idValue + '.intValue()';
+} else if (databaseType === 'cassandra') {
+    idValue = idValue + '.toString()';
+}
+
+
 _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
@@ -799,12 +807,6 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             .expectBody()
         <%_ } _%>
         <%_ if (['sql', 'mongodb', 'couchbase', 'cassandra'].includes(databaseType)) {
-            let idValue = `${asEntity(entityInstance)}.getId()`;
-            if (databaseType === 'sql' && hasOauthUser !== true) {
-                idValue = idValue + '.intValue()';
-            } else if (databaseType === 'cassandra') {
-                idValue = idValue + '.toString()';
-            }
         _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].id").value(hasItem(<%= idValue %>))<%= !reactive ? ')' : '' %><%_ } _%><% for (idx in fields) { %>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -885,12 +887,6 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             .expectBody()
         <%_ } _%>
         <%_ if (['sql', 'mongodb', 'couchbase', 'cassandra'].includes(databaseType)) {
-            let idValue = `${asEntity(entityInstance)}.getId()`;
-            if (databaseType === 'sql' && hasOauthUser !== true) {
-                idValue = idValue + '.intValue()';
-            } else if (databaseType === 'cassandra') {
-                idValue = idValue + '.toString()';
-            }
         _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.id").value(<%= reactive ? 'is(' : '' %><%= idValue %>))<%_ } _%><% for (idx in fields) { %>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
@@ -1387,12 +1383,6 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
             .expectBody()
         <%_ } _%>
         <%_ if (['sql', 'mongodb', 'couchbase', 'cassandra'].includes(databaseType)) {
-            let idValue = `${asEntity(entityInstance)}.getId()`;
-            if (databaseType === 'sql' && hasOauthUser !== true) {
-                idValue = idValue + '.intValue()';
-            } else if (databaseType === 'cassandra') {
-                idValue = idValue + '.toString()';
-            }
         _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].id").value(hasItem(<%= idValue %>))<%= !reactive ? ')' : '' %><%_ } _%><% for (idx in fields) { %>
             <%_ if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
