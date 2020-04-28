@@ -188,7 +188,7 @@ limitations under the License.
   },
 <%_ } _%>
   "engines": {
-    "node": ">=10.20.1"<% if (clientPackageManager === 'yarn') { %>,
+    "node": ">=<%= NODE_VERSION %>"<% if (clientPackageManager === 'yarn') { %>,
     "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
