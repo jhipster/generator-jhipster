@@ -186,7 +186,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
 <%_ if (!embedded) { _%>
     @Id
-    <%_ if (databaseType === 'sql' && isUsingMapsId === false) { _%>
+    <%_ if (databaseType === 'sql' && isUsingMapsId === false && !reactive) { _%>
         <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
         <%_ }  else { _%>
@@ -229,7 +229,13 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
     <%_ } _%>
-    <%_ if (databaseType === 'sql') {
+    <%_ if (databaseType === 'sql' && reactive) {
+        if (fields[idx].fieldIsEnum) { _%>
+    @Enumerated(EnumType.STRING)
+        <%_ } _%>
+    @Column("<%- fieldNameAsDatabaseColumn %>")
+    <%_ } _%>
+    <%_ if (databaseType === 'sql' && !reactive) {
         if (fields[idx].fieldIsEnum) { _%>
     @Enumerated(EnumType.STRING)
         <%_ }
@@ -263,10 +269,16 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } _%>
 
     <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
-      <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
+      <%_ if ((databaseType === 'sql' && !reactive) || databaseType === 'cassandra') { _%>
     @Column(<% if (databaseType !== 'cassandra') { %>name = <% } %>"<%- fieldNameAsDatabaseColumn %>_content_type"<% if (required && databaseType !== 'cassandra') { %>, nullable = false<% } %>)
         <%_ if (required && databaseType === 'cassandra') { _%>
     @NotNull
+        <%_ } _%>
+      <%_ } _%>
+      <%_ if (databaseType === 'sql' && reactive) { _%>
+      @Column("<%- fieldNameAsDatabaseColumn %>_content_type")
+        <%_ if (required) { _%>
+      @NotNull
         <%_ } _%>
       <%_ } _%>
       <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
