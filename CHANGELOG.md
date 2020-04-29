@@ -1,3 +1,13 @@
+# Unreleased
+
+## What's new
+  - JDL:
+    - Support for quoted string values. It should be the new norm in v8, and unquoted string values removed in the next
+      major version. 
+    - The `blueprints` keyword is now available, it expects a list of blueprint names.
+
+---
+
 # Latest: v7.2.1
 
 ## Bug fix:
