@@ -1,0 +1,6 @@
+application {
+  config {
+    baseName appWithBlueprints
+    blueprints [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
+  }
+}

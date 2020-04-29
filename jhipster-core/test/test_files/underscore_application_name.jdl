@@ -1,0 +1,20 @@
+entity MyEntity
+
+application {
+  config {
+    baseName my_underscore_app,
+    applicationType microservice,
+    packageName com.my.app
+  }
+  entities MyEntity
+}
+
+deployment {
+  deploymentType docker-compose,
+  appsFolders [my_underscore_app],
+  directoryPath "../",
+  serviceDiscoveryType eureka,
+  dockerRepositoryName "test"
+}
+
+microservice MyEntity with my_underscore_app

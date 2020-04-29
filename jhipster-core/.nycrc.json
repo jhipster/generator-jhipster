@@ -1,0 +1,18 @@
+{
+  "cache": true,
+  "check-coverage": true,
+  "exclude": [
+    "lib/parsers/entity_parser.js",
+    "lib/dsl/gen/*.js",
+    "lib/dsl/self_checks/*.js",
+    "test/**/*.js"
+  ],
+  "reporter": [
+    "lcov",
+    "html"
+  ],
+  "lines": 90,
+  "statements": 90,
+  "functions": 90,
+  "branches": 90
+}

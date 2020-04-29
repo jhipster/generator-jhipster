@@ -1,0 +1,6 @@
+entity A
+entity B
+
+relationship OneToOne {
+  A{b} to B with jpaDerivedIdentifier
+}

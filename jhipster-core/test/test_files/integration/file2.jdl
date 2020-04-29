@@ -1,0 +1,22 @@
+application {
+  config {
+    baseName mySecondApp,
+    applicationType microservice,
+    serverPort 8091
+  }
+  entities E
+}
+
+application {
+  config {
+    baseName myThirdApp,
+    applicationType microservice,
+    serverPort 8092
+  }
+  entities F
+}
+
+entity E
+entity F
+
+microservice E with mySecondApp

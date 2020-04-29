@@ -1,0 +1,5 @@
+entity A
+entity B
+entity C
+
+noFluentMethod A

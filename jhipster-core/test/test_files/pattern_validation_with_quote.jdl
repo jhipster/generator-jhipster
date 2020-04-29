@@ -1,0 +1,11 @@
+entity Alumni {
+  firstName String required pattern(/(^[a-z ,.'-]+$)/),
+  lastName String required pattern(/(^[a-z ,.'-]+$)/),
+  nickName String,
+  emailAddress String,
+  phoneNumber String pattern(/(^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$)/),
+  cellPhone String pattern(/(^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$)/),
+  department String required,
+  yearOfPassing LocalDate required,
+  dateOfBirth LocalDate required
+}

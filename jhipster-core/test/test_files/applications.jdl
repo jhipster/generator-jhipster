@@ -1,0 +1,17 @@
+application {
+  config {
+    baseName toto
+    packageName com.mathieu.toto
+    enableTranslation false
+    languages [en, fr]
+  }
+}
+
+application {
+  config {
+    baseName titi
+    packageName com.mathieu.titi
+    enableTranslation false
+    languages [en, fr]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "fluentMethods": false,
+  "jpaMetamodelFiltering": false,
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipName": "region",
+      "otherEntityName": "region",
+      "otherEntityField": "id",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "country"
+    }
+  ],
+  "fields": [
+    {
+      "fieldName": "countryName",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20190524215046",
+  "dto": "no",
+  "pagination": "pager",
+  "service": "no",
+  "javadoc": "",
+  "entityTableName": "country"
+}

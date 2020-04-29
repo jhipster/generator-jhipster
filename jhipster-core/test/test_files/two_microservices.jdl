@@ -1,0 +1,16 @@
+entity Client (client)
+entity Location (location)
+entity LocalStore (local_store)
+entity Product (product) {
+  name String
+}
+
+relationship OneToMany {
+  Location{clients} to Client{location},
+  LocalStore{products} to Product{store}
+}
+
+service Client, Location, LocalStore, Product with serviceClass
+microservice Client, Location with client
+filter Client, Location, LocalStore, Product
+microservice LocalStore, Product with store

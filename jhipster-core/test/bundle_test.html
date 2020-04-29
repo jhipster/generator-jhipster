@@ -1,0 +1,70 @@
+<!--
+Simple Mocha html runner to test the bundled artifact works in browsers.
+This is just a simple manual smoke test...
+-->
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
+</head>
+<body>
+<div id="mocha"></div>
+
+<!-- runtime dependencies -->
+<script src='../node_modules/lodash/lodash.min.js'></script>
+
+<!-- our bundled JDL DSL apis -->
+<script src='../dist/jdl-core.min.js'></script>
+
+<!-- test Libraries -->
+<script src="https://unpkg.com/chai@4.1.2/chai.js"></script>
+<script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
+
+<script>
+  mocha.setup('bdd');
+  window.expect = chai.expect;
+</script>
+
+<script>
+
+  const parse = window.jdlCore.parse;
+
+  describe('JDL browser bundle', () => {
+    context('when wanting an AST', () => {
+      context('with a valid input', () => {
+        let ast;
+
+        before(() => {
+          ast = parse('@service(serviceClass) entity A {field String}');
+        });
+
+        it('returns an AST', () => {
+          expect(ast.entities).to.have.lengthOf(1);
+          expect(ast.entities[0]).to.deep.eql({
+            name: 'A',
+            tableName: 'A',
+            annotations: [{ option: 'service', method: 'serviceClass', type: 'BINARY' }],
+            body: [
+              {
+                name: 'field',
+                type: 'String',
+                validations: [],
+                javadoc: null
+              }
+            ],
+            javadoc: null
+          });
+        });
+      });
+    })
+  })
+</script>
+
+<script>
+  mocha.checkLeaks();
+  mocha.run();
+</script>
+</body>
+</html>

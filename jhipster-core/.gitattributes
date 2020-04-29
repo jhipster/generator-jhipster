@@ -1,0 +1,8 @@
+# All text files should have the "lf" (Unix) line endings
+* text eol=lf
+# Explicitly declare text files you want to always be normalized and
+converted
+# to native line endings on checkout.
+*.js text
+*.jh text
+*.txt text

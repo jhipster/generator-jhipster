@@ -1,0 +1,132 @@
+entity Department {
+  guid UUID required,
+  name String required unique,
+  description TextBlob,
+  advertisement Blob,
+  logo ImageBlob
+}
+
+/**
+ * JobHistory comment.
+ */
+entity JobHistory {
+  startDate ZonedDateTime,
+  endDate ZonedDateTime,
+  language Language
+}
+
+enum Language {
+  FRENCH, ENGLISH, SPANISH
+}
+
+enum JobType {
+  TYPE1, TYPE2
+}
+
+entity Job {
+  jobTitle String minlength(5) maxlength(25),
+  jobType JobType,
+  minSalary Long,
+  maxSalary Long
+}
+
+/**
+ * The Employee entity.
+ * Second line in javadoc.
+ */
+entity Employee {
+  /**
+   * The firstname attribute.
+   */
+  firstName String,
+  lastName String,
+  email String,
+  phoneNumber String,
+  hireDate ZonedDateTime,
+  salary Long,
+  commissionPct Long
+}
+
+entity Location {
+  streetAddress String,
+  postalCode String,
+  city String,
+  stateProvince String
+}
+
+entity Task {
+  title String,
+  description String
+}
+
+entity Country {
+  countryName String
+}
+
+entity Region {
+  regionName String
+}
+
+relationship OneToOne {
+  JobHistory{department} to Department
+}
+
+relationship OneToOne {
+  JobHistory{job} to Job
+}
+
+relationship OneToOne {
+  JobHistory{employee} to Employee
+}
+
+relationship ManyToMany {
+  Job{chore(title)} to Task{job}
+}
+
+relationship ManyToOne {
+  Employee{user(login)} to User
+}
+
+relationship OneToOne {
+  Department{location} to Location
+}
+
+relationship OneToMany {
+  /**
+   * A relationship
+   */
+  Department{employee} to
+  /**
+   * Another side of the same relationship
+   */
+  Employee{department}
+}
+
+relationship ManyToOne {
+  Employee{manager} to Employee
+}
+
+relationship OneToMany {
+  Employee{job} to Job{employee}
+}
+
+relationship OneToOne {
+  Location{country} to Country
+}
+
+relationship OneToOne {
+  Country{region} to Region
+}
+
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+dto Employee with mapstruct
+
+service Employee with serviceClass
+
+microservice * with mymicroservice
+
+search Employee with elasticsearch
+
+skipServer Country
