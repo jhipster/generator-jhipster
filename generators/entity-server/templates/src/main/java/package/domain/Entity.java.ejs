@@ -28,9 +28,44 @@ let isUsingMapsId = false;
 let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
 const uniqueEnums = {};
-_%>
-<%- include('imports'); -%>
-<%_
+
+for (idx in relationships) {
+    if (typeof relationships[idx].javadoc != 'undefined') {
+        importApiModelProperty = true;
+        break;
+    }
+}
+if (!importApiModelProperty) {
+  for (idx in fields) {
+      if (typeof fields[idx].javadoc != 'undefined') {
+          importApiModelProperty = true;
+          break;
+      }
+  }
+}
+for (idx in relationships) {
+    if (relationships[idx].ownerSide === false && ['one-to-many', 'one-to-one', 'many-to-many'].includes(relationships[idx].relationshipType)) {
+        importJsonIgnore = true;
+    } else if (relationships[idx].relationshipType === 'many-to-one') {
+        importJsonIgnoreProperties = true;
+    }
+    if (importJsonIgnore && importJsonIgnoreProperties) {
+        break;
+    }
+}
+for (idx in relationships) {
+    if (relationships[idx].relationshipType === 'one-to-many' || relationships[idx].relationshipType === 'many-to-many') {
+        importSet = true;
+        break;
+    }
+}
+for (idx in fields) {
+    if (fields[idx].fieldIsEnum && (
+            !uniqueEnums[fields[idx].fieldType] || (uniqueEnums[fields[idx].fieldType] && fields[idx].fieldValues.length !== 0))) {
+        uniqueEnums[fields[idx].fieldType] = fields[idx].fieldType;
+    }
+}
+
 for (idx in relationships) {
     isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
     if (isUsingMapsId) {
