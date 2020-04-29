@@ -18,7 +18,7 @@
 -%>
 <%# Checks which imports are needed -%>
 <%_
-
+let importApiModelProperty = false;
 for (idx in relationships) {
     if (typeof relationships[idx].javadoc != 'undefined') {
         importApiModelProperty = true;
@@ -33,7 +33,8 @@ if (!importApiModelProperty) {
       }
   }
 }
-
+let importJsonIgnore = false;
+let importJsonIgnoreProperties = false;
 for (idx in relationships) {
     if (relationships[idx].ownerSide === false && ['one-to-many', 'one-to-one', 'many-to-many'].includes(relationships[idx].relationshipType)) {
         importJsonIgnore = true;
@@ -44,14 +45,14 @@ for (idx in relationships) {
         break;
     }
 }
-
+let importSet = false;
 for (idx in relationships) {
     if (relationships[idx].relationshipType === 'one-to-many' || relationships[idx].relationshipType === 'many-to-many') {
         importSet = true;
         break;
     }
 }
-
+let uniqueEnums = {}
 for (idx in fields) {
     if (fields[idx].fieldIsEnum && (
             !uniqueEnums[fields[idx].fieldType] || (uniqueEnums[fields[idx].fieldType] && fields[idx].fieldValues.length !== 0))) {

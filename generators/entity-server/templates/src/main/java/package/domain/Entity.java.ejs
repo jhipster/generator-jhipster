@@ -29,7 +29,7 @@ let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
 const uniqueEnums = {};
 _%>
-<%- include imports -%>
+<%- include('imports'); -%>
 <%_
 for (idx in relationships) {
     isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
@@ -220,7 +220,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (fieldValidateRules.includes('unique')) {
             unique = true;
         } _%>
-    <%- include ../common/field_validators -%>
+    <%- include('../common/field_validators'); -%>
     <%_ } _%>
     <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
@@ -330,7 +330,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
         <%_ }
     } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
         if (databaseType === 'mongodb') { _%>
@@ -361,7 +361,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ }
         } if (ownerSide === true) {
             if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
         <%_ } _%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name = "<%= getColumnName(name) %>_id", referencedColumnName = "id"),
@@ -387,7 +387,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             if (ownerSide) { _%>
     @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
             <%_ if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
             <%_ } _%>
             <%_ if (isUsingMapsId === true) { %>
     @MapsId

@@ -25,7 +25,7 @@ let importJsonIgnoreProperties = false;
 let importSet = false;
 const uniqueEnums = {};
 _%>
-<%- include ../../domain/imports -%>
+<%- include('../../domain/imports'); -%>
 <%_ if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
 <%_ } if (importApiModelProperty === true) { _%>
@@ -100,7 +100,7 @@ public class <%= asDto(entityClass) %> implements Serializable {
             if (fieldValidateRules.includes('required')) {
                 required = true;
             } _%>
-    <%- include ../../common/field_validators -%>
+    <%- include('../../common/field_validators'); -%>
     <%_ } _%>
     <%_ if (typeof fields[idx].javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
