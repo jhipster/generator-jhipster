@@ -1480,6 +1480,51 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Returns the JDBC URL for a databaseType
+     *
+     * @param {string} databaseType
+     * @param {*} options
+     */
+    getJDBCUrl(databaseType, options = {}) {
+        if (!options.databaseName) {
+            throw new Error("option 'databaseName' is required");
+        }
+        if (['mysql', 'mariadb', 'postgresql', 'oracle', 'mssql'].includes(databaseType) && !options.hostname) {
+            throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
+        }
+        let jdbcUrl;
+        let extraOptions;
+        if (databaseType === 'mysql') {
+            jdbcUrl = `jdbc:mysql://${options.hostname}:3306/${options.databaseName}`;
+            extraOptions =
+                '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true';
+        } else if (databaseType === 'mariadb') {
+            jdbcUrl = `jdbc:mariadb://${options.hostname}:3306/${options.databaseName}`;
+            extraOptions = '?useLegacyDatetimeCode=false&serverTimezone=UTC';
+        } else if (databaseType === 'postgresql') {
+            jdbcUrl = `jdbc:postgresql://${options.hostname}:5432/${options.databaseName}`;
+        } else if (databaseType === 'oracle') {
+            jdbcUrl = `jdbc:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
+        } else if (databaseType === 'mssql') {
+            jdbcUrl = `jdbc:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+        } else if (databaseType === 'h2Disk') {
+            if (!options.localDirectory) {
+                throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
+            }
+            jdbcUrl = `jdbc:h2:file:./${options.localDirectory}/${options.databaseName}`;
+            extraOptions = ';DB_CLOSE_DELAY=-1';
+        } else if (databaseType === 'h2Memory') {
+            jdbcUrl = `jdbc:h2:mem:${options.databaseName}`;
+            extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
+        }
+
+        if (!options.skipExtraOptions && extraOptions) {
+            jdbcUrl += extraOptions;
+        }
+        return jdbcUrl;
+    }
+
+    /**
      * Returns the primary key value based on the primary key type, DB and default value
      *
      * @param {string} primaryKeyType - the primary key type
