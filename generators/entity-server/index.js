@@ -45,7 +45,7 @@ module.exports = class extends BaseBlueprintGenerator {
             setupConstants() {
                 // Make constants available in templates
                 this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
-            }
+            },
         };
     }
 

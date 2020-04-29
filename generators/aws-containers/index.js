@@ -70,20 +70,20 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This adds support for a `--skip-build` flag
         this.option('skip-build', {
             desc: 'Disables the project build step',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-upload` flag
         this.option('skip-upload', {
             desc: 'Skips the Docker Image Tag + Upload process',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.registerPrettierTransform();
     }
@@ -110,8 +110,8 @@ module.exports = class extends BaseGenerator {
                         vpc: {},
                         dockerLogin: {
                             accountId: null,
-                            password: null
-                        }
+                            password: null,
+                        },
                     };
                 }
                 this.defaultAppsFolders = this.aws.apps.map(a => a.baseName);
@@ -155,7 +155,7 @@ module.exports = class extends BaseGenerator {
                 this.awsFacts = {
                     apps: [],
                     defaultRegion: awsClient.DEFAULT_REGION,
-                    database_Password_InSSM: false
+                    database_Password_InSSM: false,
                 };
                 awsClient
                     .listRegions()
@@ -169,7 +169,7 @@ module.exports = class extends BaseGenerator {
                         this.abort = true;
                         done();
                     });
-            }
+            },
         };
     }
 
@@ -257,7 +257,7 @@ module.exports = class extends BaseGenerator {
                                 let fact = this.awsFacts.apps.find(a => a.baseName === app.baseName);
                                 if (_.isUndefined(fact)) {
                                     fact = {
-                                        baseName: app.baseName
+                                        baseName: app.baseName,
                                     };
                                     this.awsFacts.apps.push(fact);
                                 }
@@ -279,7 +279,7 @@ module.exports = class extends BaseGenerator {
                     });
             },
             askForDBPassword: prompts.askForDBPasswords,
-            askDeployNow: prompts.askDeployNow
+            askDeployNow: prompts.askDeployNow,
         };
     }
 
@@ -313,7 +313,7 @@ module.exports = class extends BaseGenerator {
                         this.abort = true;
                         done();
                     });
-            }
+            },
         };
     }
 
@@ -377,7 +377,7 @@ module.exports = class extends BaseGenerator {
                     const directory = `${this.directoryPath}${config.appFolder}`;
                     this.temp = {
                         baseName: config.baseName,
-                        packageName: config.packageName
+                        packageName: config.packageName,
                     };
                     this.template(AWSSSM_CONFIG_FILENAME, AWSSSM_CONFIG_PATH(directory, config.packageFolder));
                     this.template(SPRING_FACTORIES_FILENAME, SPRING_FACTORIES_PATH(directory));
@@ -400,12 +400,12 @@ module.exports = class extends BaseGenerator {
                 this.conflicter.resolve(() => {
                     done();
                 });
-            }
+            },
         };
     }
 
     _writeFileErrorHandler(generator) {
-        fs.writeFile('awsConstants.json', JSON.stringify(this.aws), function(error) {
+        fs.writeFile('awsConstants.json', JSON.stringify(this.aws), function (error) {
             if (error) {
                 generator.log.error(`There was an error writing the awsConstants.json file: ${error.message}`);
             } else {
@@ -443,7 +443,7 @@ module.exports = class extends BaseGenerator {
                 const promises = this.appConfigs.map(config =>
                     dockerUtils.checkAndBuildImages.call(this, {
                         cwd: `${this.directoryPath}${config.appFolder}/`,
-                        appConfig: { buildTool: config.buildTool }
+                        appConfig: { buildTool: config.buildTool },
                     })
                 );
 
@@ -727,7 +727,7 @@ module.exports = class extends BaseGenerator {
             saveConf() {
                 delete this.aws.dockerLogin;
                 this._writeFileErrorHandler(this);
-            }
+            },
         };
     }
 };

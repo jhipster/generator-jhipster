@@ -76,7 +76,7 @@ module.exports = class extends BaseGenerator {
                     default:
                         this.error('Sorry deployment for this database is not possible');
                 }
-            }
+            },
         };
     }
 
@@ -102,9 +102,9 @@ module.exports = class extends BaseGenerator {
                     instanceType: this.instanceType,
                     awsRegion: this.awsRegion,
                     dbName: this.dbName,
-                    dbInstanceClass: this.dbInstanceClass
+                    dbInstanceClass: this.dbInstanceClass,
                 });
-            }
+            },
         };
     }
 
@@ -155,7 +155,7 @@ module.exports = class extends BaseGenerator {
 
                 const params = {
                     bucket: this.bucketName,
-                    buildTool: this.buildTool
+                    buildTool: this.buildTool,
                 };
 
                 s3.uploadWar(params, (err, data) => {
@@ -180,7 +180,7 @@ module.exports = class extends BaseGenerator {
                     dbName: this.dbName,
                     dbEngine: this.dbEngine,
                     dbPassword: this.dbPassword,
-                    dbUsername: this.dbUsername
+                    dbUsername: this.dbUsername,
                 };
 
                 rds.createDatabase(params, (err, data) => {
@@ -205,7 +205,7 @@ module.exports = class extends BaseGenerator {
 
                 const params = {
                     dbName: this.dbName,
-                    dbEngine: this.dbEngine
+                    dbEngine: this.dbEngine,
                 };
 
                 rds.createDatabaseUrl(params, (err, data) => {
@@ -246,7 +246,7 @@ module.exports = class extends BaseGenerator {
                     dbUrl: this.dbUrl,
                     dbUsername: this.dbUsername,
                     dbPassword: this.dbPassword,
-                    instanceType: this.instanceType
+                    instanceType: this.instanceType,
                 };
 
                 eb.createApplication(params, (err, data) => {
@@ -257,7 +257,7 @@ module.exports = class extends BaseGenerator {
                         cb();
                     }
                 });
-            }
+            },
         };
     }
 };

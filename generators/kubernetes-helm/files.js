@@ -18,7 +18,7 @@
  */
 
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 function writeFiles() {
@@ -128,6 +128,6 @@ function writeFiles() {
             this.template(`${k8s}/istio/gateway/grafana-gateway.yml.ejs`, 'istio/grafana-gateway.yaml');
             this.template(`${k8s}/istio/gateway/zipkin-gateway.yml.ejs`, 'istio/zipkin-gateway.yaml');
             this.template(`${k8s}/istio/gateway/kiali-gateway.yml.ejs`, 'istio/kiali-gateway.yaml');
-        }
+        },
     };
 }

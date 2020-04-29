@@ -84,7 +84,7 @@ describe('JHipster Utils', () => {
             it('returns the enums values', () => {
                 assert.deepStrictEqual(enumInfo.enumValues, [
                     { name: 'AAA', value: 'AAA' },
-                    { name: 'BBB', value: 'BBB' }
+                    { name: 'BBB', value: 'BBB' },
                 ]);
             });
         });
@@ -106,9 +106,9 @@ describe('JHipster Utils', () => {
                 assert.deepStrictEqual(enumInfo.enumValues, [
                     {
                         name: 'AAA',
-                        value: 'aaa'
+                        value: 'aaa',
                     },
-                    { name: 'BBB', value: 'BBB' }
+                    { name: 'BBB', value: 'BBB' },
                 ]);
             });
         });
@@ -131,9 +131,9 @@ describe('JHipster Utils', () => {
                     assert.deepStrictEqual(enumInfo.enumValues, [
                         {
                             name: 'AAA',
-                            value: 'aaa'
+                            value: 'aaa',
                         },
-                        { name: 'BBB', value: 'bbb' }
+                        { name: 'BBB', value: 'bbb' },
                     ]);
                 });
             });
@@ -155,9 +155,9 @@ describe('JHipster Utils', () => {
                     assert.deepStrictEqual(enumInfo.enumValues, [
                         {
                             name: 'AAA',
-                            value: 'aaa'
+                            value: 'aaa',
                         },
-                        { name: 'BBB', value: 'bbb and b' }
+                        { name: 'BBB', value: 'bbb and b' },
                     ]);
                 });
             });
@@ -192,7 +192,7 @@ describe('JHipster Utils', () => {
         const jsonData = {
             foo11: 'foo11value',
             fooNested: { foo21: 'foo21value' },
-            foo21: 'foo21value'
+            foo21: 'foo21value',
         };
         describe('the key is found in the object that is searched', () => {
             it('returns the value associated to the key', () => {
@@ -232,7 +232,7 @@ describe('JHipster Utils', () => {
             const expected = [
                 { name: 'generator-jhipster-foo', version: 'latest' },
                 { name: 'generator-jhipster-bar', version: '1.0.1' },
-                { name: '@corp/foo', version: 'latest' }
+                { name: '@corp/foo', version: 'latest' },
             ];
             const actual = utils.parseBluePrints('foo,bar@1.0.1,@corp/foo');
             assert.deepStrictEqual(actual, expected);
@@ -273,7 +273,7 @@ describe('JHipster Utils', () => {
                 nativeLanguage: 'en',
                 languages: ['en', 'fr'],
                 rememberMeKey: '2bb60a80889aa6e6767e9ccd8714982681152aa5',
-                testFrameworks: ['gatling']
+                testFrameworks: ['gatling'],
             };
 
             it('load config from alternate directory', () => {
@@ -310,7 +310,7 @@ describe('JHipster Utils', () => {
                     nativeLanguage: 'en',
                     languages: ['en', 'fr'],
                     testFrameworks: ['gatling', 'protractor'],
-                    jhiPrefix: 'jhi'
+                    jhiPrefix: 'jhi',
                 };
                 const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true, configRootDir);
                 assert.objectContent(loadedConfig, expectedConfig);

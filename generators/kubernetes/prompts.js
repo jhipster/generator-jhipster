@@ -27,7 +27,7 @@ module.exports = {
     askForIstioSupport,
     askForPersistentStorage,
     askForStorageClassName,
-    ...dockerPrompts
+    ...dockerPrompts,
 };
 
 function askForKubernetesNamespace() {
@@ -39,8 +39,8 @@ function askForKubernetesNamespace() {
             type: 'input',
             name: 'kubernetesNamespace',
             message: 'What should we use for the Kubernetes namespace?',
-            default: this.kubernetesNamespace ? this.kubernetesNamespace : 'default'
-        }
+            default: this.kubernetesNamespace ? this.kubernetesNamespace : 'default',
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -64,19 +64,19 @@ function askForKubernetesServiceType() {
             choices: [
                 {
                     value: 'LoadBalancer',
-                    name: 'LoadBalancer - Let a Kubernetes cloud provider automatically assign an IP'
+                    name: 'LoadBalancer - Let a Kubernetes cloud provider automatically assign an IP',
                 },
                 {
                     value: 'NodePort',
-                    name: 'NodePort - expose the services to a random port (30000 - 32767) on all cluster nodes'
+                    name: 'NodePort - expose the services to a random port (30000 - 32767) on all cluster nodes',
                 },
                 {
                     value: 'Ingress',
-                    name: 'Ingress - create ingresses for your services. Requires a running ingress controller'
-                }
+                    name: 'Ingress - create ingresses for your services. Requires a running ingress controller',
+                },
             ],
-            default: this.kubernetesServiceType ? this.kubernetesServiceType : 'LoadBalancer'
-        }
+            default: this.kubernetesServiceType ? this.kubernetesServiceType : 'LoadBalancer',
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -99,15 +99,15 @@ function askForIngressType() {
             choices: [
                 {
                     value: 'nginx',
-                    name: 'NGINX Ingress - choose this if you are running on Minikube'
+                    name: 'NGINX Ingress - choose this if you are running on Minikube',
                 },
                 {
                     value: 'gke',
-                    name: 'Google Kubernetes Engine Ingress - choose this if you are running on GKE'
-                }
+                    name: 'Google Kubernetes Engine Ingress - choose this if you are running on GKE',
+                },
             ],
-            default: this.ingressType ? this.ingressType : 'nginx'
-        }
+            default: this.ingressType ? this.ingressType : 'nginx',
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -175,8 +175,8 @@ function askForIngressDomain() {
                 }
 
                 return true;
-            }
-        }
+            },
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -205,15 +205,15 @@ function askForIstioSupport() {
             choices: [
                 {
                     value: false,
-                    name: 'No'
+                    name: 'No',
                 },
                 {
                     value: true,
-                    name: 'Yes'
-                }
+                    name: 'Yes',
+                },
             ],
-            default: this.istio
-        }
+            default: this.istio,
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -241,15 +241,15 @@ function askForPersistentStorage() {
             choices: [
                 {
                     value: false,
-                    name: 'No'
+                    name: 'No',
                 },
                 {
                     value: true,
-                    name: 'Yes'
-                }
+                    name: 'Yes',
+                },
             ],
-            default: this.kubernetesUseDynamicStorage
-        }
+            default: this.kubernetesUseDynamicStorage,
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -269,8 +269,8 @@ function askForStorageClassName() {
             type: 'input',
             name: 'kubernetesStorageClassName',
             message: 'Do you want to use a specific storage class? (leave empty for using the clusters default storage class)',
-            default: this.kubernetesStorageClassName ? this.kubernetesStorageClassName : ''
-        }
+            default: this.kubernetesStorageClassName ? this.kubernetesStorageClassName : '',
+        },
     ];
 
     this.prompt(prompts).then(props => {

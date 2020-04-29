@@ -64,7 +64,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                 this.addAdminToModule('appName', 'adminAngularName', 'adminFolderName', 'adminFileName', true, ANGULAR);
                 this.addAngularModule('appName', 'angularName', 'folderName', 'fileName', true, ANGULAR);
                 this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -89,7 +89,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
@@ -97,7 +97,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['fr']
+                languages: ['fr'],
             })
             .on('end', done);
     });

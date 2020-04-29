@@ -199,7 +199,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -236,7 +236,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -270,7 +270,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -307,7 +307,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -345,7 +345,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -381,7 +381,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -416,7 +416,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -833,7 +833,7 @@ module.exports = class extends Generator {
             try {
                 const finalOptions = {
                     ...options,
-                    jhipsterContext: this
+                    jhipsterContext: this,
                 };
                 this.useBlueprint = true;
                 const blueprintGenerator = this.composeExternalModule(blueprint, subGen, finalOptions);
@@ -1103,7 +1103,7 @@ module.exports = class extends Generator {
             variables,
             rxjsMapIsUsed,
             selectableEntities,
-            selectableManyToManyEntities
+            selectableManyToManyEntities,
         };
     }
 

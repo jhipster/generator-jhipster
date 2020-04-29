@@ -53,7 +53,7 @@ const mockBlueprintSubGen = class extends LanguagesGenerator {
             addEntityTranslationKey() {
                 this.addEntityTranslationKey('my_entity_key', 'my entity value', 'en');
                 this.addEntityTranslationKey('ma_cle_entite', 'ma valeur entite', 'fr');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -73,7 +73,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
             .withPrompts({
@@ -81,7 +81,7 @@ describe('needle API i18n: JHipster language generator with blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['en', 'fr']
+                languages: ['en', 'fr'],
             })
             .on('end', done);
     });

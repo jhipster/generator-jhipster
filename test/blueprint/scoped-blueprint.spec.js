@@ -24,7 +24,7 @@ describe('JHipster application generator with scoped blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     skipChecks: true,
-                    blueprints: '@jhipster/generator-jhipster-scoped-blueprint'
+                    blueprints: '@jhipster/generator-jhipster-scoped-blueprint',
                 })
                 .withPrompts({
                     baseName: 'jhipster',
@@ -40,7 +40,7 @@ describe('JHipster application generator with scoped blueprint', () => {
                     prodDatabaseType: 'mysql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr']
+                    languages: ['fr'],
                 })
                 .on('end', done);
         });
@@ -53,14 +53,14 @@ describe('JHipster application generator with scoped blueprint', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });
 
         it('blueprint version is saved in .yo-rc.json', () => {
             assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { blueprints: [{ name: '@jhipster/generator-jhipster-scoped-blueprint', version: '9.9.9' }] }
+                'generator-jhipster': { blueprints: [{ name: '@jhipster/generator-jhipster-scoped-blueprint', version: '9.9.9' }] },
             });
         });
         it('blueprint module and version are in package.json', () => {

@@ -68,11 +68,11 @@ export * from './entityFolderName/entityFileName.state';`;
         describe('with relationships from or to the User', () => {
             const relationships = [
                 {
-                    otherEntityAngularName: 'User'
+                    otherEntityAngularName: 'User',
                 },
                 {
-                    otherEntityAngularName: 'AnEntity'
-                }
+                    otherEntityAngularName: 'AnEntity',
+                },
             ];
             describe('when called with dto option', () => {
                 it('return an empty Map', () => {
@@ -90,11 +90,11 @@ export * from './entityFolderName/entityFileName.state';`;
             describe('when called with 2 identical relationships without dto option', () => {
                 const relationships = [
                     {
-                        otherEntityAngularName: 'User'
+                        otherEntityAngularName: 'User',
                     },
                     {
-                        otherEntityAngularName: 'User'
-                    }
+                        otherEntityAngularName: 'User',
+                    },
                 ];
                 it('return a Map with 1 import', () => {
                     const imports = BaseGenerator.generateEntityClientImports(relationships, 'no');
@@ -111,13 +111,13 @@ export * from './entityFolderName/entityFileName.state';`;
                     {
                         otherEntityAngularName: 'AnEntity',
                         otherEntityFileName: 'AnEntity',
-                        otherEntityClientRootFolder: 'anEntity'
+                        otherEntityClientRootFolder: 'anEntity',
                     },
                     {
                         otherEntityAngularName: 'AnotherEntity',
                         otherEntityFileName: 'AnotherEntity',
-                        otherEntityClientRootFolder: 'anotherEntity'
-                    }
+                        otherEntityClientRootFolder: 'anotherEntity',
+                    },
                 ];
 
                 before(() => {
@@ -142,7 +142,7 @@ export * from './entityFolderName/entityFileName.state';`;
             it('return languages pipe syntax', () => {
                 expect(BaseGenerator.generateLanguageOptions(['en', 'fr'])).to.eql([
                     `'en': { name: 'English' }`, // eslint-disable-line
-                    `'fr': { name: 'Français' }` // eslint-disable-line
+                    `'fr': { name: 'Français' }`, // eslint-disable-line
                 ]);
             });
         });

@@ -29,7 +29,7 @@ module.exports = {
     setAppsFolderPaths,
     loadConfigs,
     loadFromYoRc,
-    setClusteredApps
+    setClusteredApps,
 };
 
 /**

@@ -27,7 +27,7 @@ const mockBlueprintSubGen = class extends CommonGenerator {
         const customPhaseSteps = {
             overridesDocumentationUrl() {
                 this.DOCUMENTATION_URL = 'https://myenterprise.intranet';
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -61,11 +61,11 @@ describe('JHipster common generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:common']])
                     .withPrompts({
-                        baseName: 'jhipster'
+                        baseName: 'jhipster',
                     })
                     .on('end', done);
             });
@@ -90,11 +90,11 @@ describe('JHipster common generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:common']])
                 .withPrompts({
-                    baseName: 'jhipster'
+                    baseName: 'jhipster',
                 })
                 .on('end', done);
         });

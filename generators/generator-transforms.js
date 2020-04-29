@@ -29,10 +29,10 @@ const prettierOptions = {
     arrowParens: 'avoid',
     // jsx and tsx rules:
     jsxBracketSameLine: false,
-    plugins: [prettierJava]
+    plugins: [prettierJava],
 };
 
-const prettierTransform = function(defaultOptions) {
+const prettierTransform = function (defaultOptions) {
     const transform = (file, encoding, callback) => {
         /* resolve from the projects config */
         prettier.resolveConfig(file.relative).then(options => {
@@ -55,12 +55,12 @@ const prettierTransform = function(defaultOptions) {
  * Not used.
  * Remove for jhipster 7.
  */
-const prettierFormat = function(str, options = {}) {
+const prettierFormat = function (str, options = {}) {
     return prettier.format(str, { ...prettierOptions, ...options });
 };
 
 module.exports = {
     prettierTransform,
     prettierFormat,
-    prettierOptions
+    prettierOptions,
 };

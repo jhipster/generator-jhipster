@@ -35,12 +35,12 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.option('default', {
             type: Boolean,
             default: false,
-            description: 'default option'
+            description: 'default option',
         });
         this.defaultOption = this.options.default;
 
@@ -61,7 +61,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');
                 this.databaseType = configuration.get('databaseType');
-            }
+            },
         };
     }
 
@@ -79,8 +79,8 @@ module.exports = class extends BaseBlueprintGenerator {
                         type: 'confirm',
                         name: 'useInterface',
                         message: '(1/1) Do you want to use an interface for your service?',
-                        default: false
-                    }
+                        default: false,
+                    },
                 ];
                 if (!this.defaultOption) {
                     const done = this.async();
@@ -91,7 +91,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 } else {
                     this.useInterface = true;
                 }
-            }
+            },
         };
     }
 
@@ -105,7 +105,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'service', { interface: this.useInterface });
-            }
+            },
         };
     }
 
@@ -134,7 +134,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         `${SERVER_MAIN_SRC_DIR + this.packageFolder}/service/impl/${this.serviceClass}Impl.java`
                     );
                 }
-            }
+            },
         };
     }
 

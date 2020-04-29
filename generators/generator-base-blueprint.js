@@ -114,7 +114,7 @@ module.exports = class extends BaseGenerator {
             blueprints.forEach(blueprint => {
                 let bpOptions = {
                     ...this.options,
-                    configOptions: this.configOptions
+                    configOptions: this.configOptions,
                 };
                 if (extraOptions) {
                     bpOptions = { ...bpOptions, ...extraOptions };

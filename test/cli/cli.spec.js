@@ -27,7 +27,7 @@ describe('jhipster cli test', () => {
         });
     });
 
-    it('should return error on unknown command', function(done) {
+    it('should return error on unknown command', function (done) {
         this.timeout(4000);
 
         exec(`${cmd} junkcmd`, (error, stdout, stderr) => {
@@ -38,7 +38,7 @@ describe('jhipster cli test', () => {
         });
     });
 
-    it('should delegate to blueprint on blueprint command but will not find it', function(done) {
+    it('should delegate to blueprint on blueprint command but will not find it', function (done) {
         this.timeout(4000);
 
         testInTempDir(tmpdir => {
@@ -54,7 +54,7 @@ describe('jhipster cli test', () => {
         });
     });
 
-    it('should delegate to blueprint on multiple blueprints command but will not find it', function(done) {
+    it('should delegate to blueprint on multiple blueprints command but will not find it', function (done) {
         this.timeout(4000);
 
         testInTempDir(tmpdir => {
@@ -71,7 +71,7 @@ describe('jhipster cli test', () => {
         });
     });
 
-    it('should delegate to blueprint on multiple blueprints command with sharedOptions and find it', function(done) {
+    it('should delegate to blueprint on multiple blueprints command with sharedOptions and find it', function (done) {
         this.timeout(4000);
 
         testInTempDir(tmpdir => {
@@ -87,7 +87,7 @@ describe('jhipster cli test', () => {
         });
     });
 
-    it('should delegate to blueprint on multiple blueprints command with multiple sharedOptions and find it', function(done) {
+    it('should delegate to blueprint on multiple blueprints command with multiple sharedOptions and find it', function (done) {
         this.timeout(4000);
 
         testInTempDir(tmpdir => {

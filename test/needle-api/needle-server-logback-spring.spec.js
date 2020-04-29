@@ -44,7 +44,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         const customPhaseSteps = {
             addlogStep() {
                 this.addLoggerForLogbackSpring('org.test.logTest', 'OFF');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -58,7 +58,7 @@ describe('needle API server log: JHipster server generator with blueprint', () =
                 'from-cli': true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
             .withPrompts({
@@ -77,7 +77,7 @@ describe('needle API server log: JHipster server generator with blueprint', () =
                 languages: ['fr'],
                 buildTool: 'maven',
                 rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                serverSideOptions: []
+                serverSideOptions: [],
             })
             .on('end', done);
     });

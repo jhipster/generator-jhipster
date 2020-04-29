@@ -19,7 +19,7 @@ describe('JHipster generator languages', () => {
                         })
                         .withOptions({ 'skip-install': true })
                         .withPrompts({
-                            languages: [language.value]
+                            languages: [language.value],
                         })
                         .on('end', done);
                 });
@@ -44,7 +44,7 @@ describe('JHipster generator languages', () => {
                         `${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/health.json`,
                         `${SERVER_MAIN_RES_DIR}i18n/messages_${language.value
                             .replace(/-/g, '_')
-                            .replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`
+                            .replace(/_[a-z]+$/g, lang => lang.toUpperCase())}.properties`,
                     ]);
                     assert.noFile([`${CLIENT_MAIN_SRC_DIR}i18n/${language.value}/gateway.json`]);
                 });

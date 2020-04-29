@@ -13,11 +13,11 @@ const serverFiles = {
             path: `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/`,
             templates: [
                 {
-                    file: 'dummy_changelog.xml'
-                }
-            ]
-        }
-    ]
+                    file: 'dummy_changelog.xml',
+                },
+            ],
+        },
+    ],
 };
 
 const mockBlueprintSubGen = class extends ServerGenerator {
@@ -86,7 +86,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                     `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
                     '            <column name="loadColumn" type="string" />'
                 );
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -106,7 +106,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
                 'from-cli': true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
             .withPrompts({
@@ -125,7 +125,7 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
                 languages: ['fr'],
                 buildTool: 'maven',
                 rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                serverSideOptions: []
+                serverSideOptions: [],
             })
             .on('end', done);
     });

@@ -31,18 +31,18 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.option('skip-build', {
             desc: 'Skips building the application',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.option('skip-deploy', {
             desc: 'Skips deployment to Azure Spring Cloud',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.azureSpringCloudSkipBuild = this.options['skip-build'];
@@ -145,7 +145,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
                 exec('az configure --list-defaults true', (err, stdout) => {
                     if (err) {
                         this.config.set({
-                            azureSpringCloudResourceGroupName: null
+                            azureSpringCloudResourceGroupName: null,
                         });
                         this.abort = true;
                         this.log.error('Could not retrieve your Azure default configuration.');
@@ -187,20 +187,20 @@ ${chalk.red('az extension add --name spring-cloud')}`
                         type: 'input',
                         name: 'azureSpringCloudResourceGroupName',
                         message: 'Azure resource group name:',
-                        default: this.azureSpringCloudResourceGroupName
+                        default: this.azureSpringCloudResourceGroupName,
                     },
                     {
                         type: 'input',
                         name: 'azureSpringCloudServiceName',
                         message: 'Azure Spring Cloud service name (the name of your cluster):',
-                        default: this.azureSpringCloudServiceName
+                        default: this.azureSpringCloudServiceName,
                     },
                     {
                         type: 'input',
                         name: 'azureSpringCloudAppName',
                         message: 'Azure Spring Cloud application name:',
-                        default: this.azureSpringCloudAppName || this.baseName
-                    }
+                        default: this.azureSpringCloudAppName || this.baseName,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -222,22 +222,22 @@ ${chalk.red('az extension add --name spring-cloud')}`
                         choices: [
                             {
                                 value: 'local',
-                                name: 'Build and deploy locally'
+                                name: 'Build and deploy locally',
                             },
                             {
                                 value: 'github-action',
-                                name: 'Build and deploy using GitHub Actions'
-                            }
+                                name: 'Build and deploy using GitHub Actions',
+                            },
                         ],
-                        default: 0
-                    }
+                        default: 0,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
                     this.azureSpringCloudDeploymentType = props.azureSpringCloudDeploymentType;
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -247,9 +247,9 @@ ${chalk.red('az extension add --name spring-cloud')}`
                 if (this.abort) return;
                 this.config.set({
                     azureSpringCloudAppName: this.azureSpringCloudAppName,
-                    azureSpringCloudDeploymentType: this.azureSpringCloudDeploymentType
+                    azureSpringCloudDeploymentType: this.azureSpringCloudDeploymentType,
                 });
-            }
+            },
         };
     }
 
@@ -312,7 +312,7 @@ ${chalk.red('az extension add --name spring-cloud')}`
                     });
                 }
                 done();
-            }
+            },
         };
     }
 
@@ -438,7 +438,7 @@ for more detailed information.`
                         done();
                     }
                 );
-            }
+            },
         };
     }
 };

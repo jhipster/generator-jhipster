@@ -14,14 +14,14 @@ const expectedFiles = {
         './console/jhipster-elasticsearch.yml',
         './console/jhipster-logstash.yml',
         './console/jhipster-dashboard-console.yml',
-        './console/jhipster-zipkin.yml'
+        './console/jhipster-zipkin.yml',
     ],
     msmysql: ['./msmysql/msmysql-service.yml', './msmysql/msmysql-mysql.yml'],
     mspsql: [
         './mspsql/mspsql-service.yml',
         './mspsql/mspsql-postgresql.yml',
         './mspsql/mspsql-service.yml',
-        './mspsql/mspsql-elasticsearch.yml'
+        './mspsql/mspsql-elasticsearch.yml',
     ],
     msmongodb: ['./msmongodb/msmongodb-service.yml', './msmongodb/msmongodb-mongodb.yml'],
     msmariadb: ['./msmariadb/msmariadb-service.yml', './msmariadb/msmariadb-mariadb.yml'],
@@ -30,10 +30,10 @@ const expectedFiles = {
         './monitoring/jhipster-prometheus-crd.yml',
         './monitoring/jhipster-prometheus-cr.yml',
         './monitoring/jhipster-grafana.yml',
-        './monitoring/jhipster-grafana-dashboard.yml'
+        './monitoring/jhipster-grafana-dashboard.yml',
     ],
     jhgategateway: ['./jhgate/jhgate-gateway.yml', './jhgate/jhgate-destination-rule.yml', './jhgate/jhgate-virtual-service.yml'],
-    applyScript: ['./kubectl-knative-apply.sh']
+    applyScript: ['./kubectl-knative-apply.sh'],
 };
 
 const helmExpectedFiles = {
@@ -42,35 +42,35 @@ const helmExpectedFiles = {
     consulregistry: [
         './csvc/templates/consul.yml',
         './csvc/templates/consul-config-loader.yml',
-        './csvc/templates/application-configmap.yml'
+        './csvc/templates/application-configmap.yml',
     ],
     jhgate: [
         './jhgate/templates/jhgate-service.yml',
         './jhgate/Chart.yml',
         './jhgate/requirements.yml',
         './jhgate/values.yml',
-        './jhgate/templates/_helpers.tpl'
+        './jhgate/templates/_helpers.tpl',
     ],
     customnamespace: ['./namespace.yml'],
     jhconsole: [
         './csvc/templates/jhipster-console.yml',
         './csvc/templates/jhipster-logstash.yml',
         './csvc/templates/jhipster-dashboard-console.yml',
-        './csvc/templates/jhipster-zipkin.yml'
+        './csvc/templates/jhipster-zipkin.yml',
     ],
     msmysql: [
         './msmysql/Chart.yml',
         './msmysql/requirements.yml',
         './msmysql/values.yml',
         './msmysql/templates/_helpers.tpl',
-        './msmysql/templates/msmysql-service.yml'
+        './msmysql/templates/msmysql-service.yml',
     ],
     mspsql: [
         './mspsql/Chart.yml',
         './mspsql/requirements.yml',
         './mspsql/values.yml',
         './mspsql/templates/_helpers.tpl',
-        './mspsql/templates/mspsql-service.yml'
+        './mspsql/templates/mspsql-service.yml',
     ],
     msmongodb: [
         './msmongodb/Chart.yml',
@@ -78,7 +78,7 @@ const helmExpectedFiles = {
         './msmongodb/values.yml',
         './msmongodb/templates/_helpers.tpl',
         './msmongodb/templates/msmongodb-service.yml',
-        './msmongodb/templates/msmongodb-service.yml'
+        './msmongodb/templates/msmongodb-service.yml',
     ],
     msmariadb: [
         './msmariadb/Chart.yml',
@@ -86,15 +86,15 @@ const helmExpectedFiles = {
         './msmariadb/values.yml',
         './msmariadb/templates/_helpers.tpl',
         './msmariadb/templates/msmariadb-service.yml',
-        './msmariadb/templates/msmariadb-service.yml'
+        './msmariadb/templates/msmariadb-service.yml',
     ],
     kafka: ['./samplekafka/templates/samplekafka-service.yml', './samplekafka/templates/samplekafka-service.yml'],
     jhgategateway: [
         './jhgate/templates/jhgate-gateway.yml',
         './jhgate/templates/jhgate-destination-rule.yml',
-        './jhgate/templates/jhgate-virtual-service.yml'
+        './jhgate/templates/jhgate-virtual-service.yml',
     ],
-    applyScript: ['./helm-knative-apply.sh', './helm-knative-upgrade.sh']
+    applyScript: ['./helm-knative-apply.sh', './helm-knative-upgrade.sh'],
 };
 
 describe('JHipster Knative Sub Generator', () => {
@@ -118,7 +118,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -153,7 +153,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -190,7 +190,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: true,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -230,7 +230,7 @@ describe('JHipster Knative Sub Generator', () => {
                         ingressDomain: 'example.com',
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -263,7 +263,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -302,7 +302,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -349,7 +349,7 @@ describe('JHipster Knative Sub Generator', () => {
                         kubernetesNamespace: 'mynamespace',
                         monitoring: 'prometheus',
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -388,7 +388,7 @@ describe('JHipster Knative Sub Generator', () => {
                         ingressDomain: 'example.com',
                         clusteredDbApps: [],
                         generatorType: 'k8s',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -427,7 +427,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -462,7 +462,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -501,7 +501,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: true,
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -545,7 +545,7 @@ describe('JHipster Knative Sub Generator', () => {
                         ingressDomain: 'example.com',
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -585,7 +585,7 @@ describe('JHipster Knative Sub Generator', () => {
                         jhipsterConsole: false,
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -629,7 +629,7 @@ describe('JHipster Knative Sub Generator', () => {
                         kubernetesServiceType: 'LoadBalancer',
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -679,7 +679,7 @@ describe('JHipster Knative Sub Generator', () => {
                         kubernetesNamespace: 'mynamespace',
                         monitoring: 'prometheus',
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });
@@ -721,7 +721,7 @@ describe('JHipster Knative Sub Generator', () => {
                         ingressDomain: 'example.com',
                         clusteredDbApps: [],
                         generatorType: 'helm',
-                        istio: true
+                        istio: true,
                     })
                     .on('end', done);
             });

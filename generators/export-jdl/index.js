@@ -30,7 +30,7 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
     }
 
@@ -50,7 +50,7 @@ module.exports = class extends BaseGenerator {
                 } catch (error) {
                     this.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
                 }
-            }
+            },
         };
     }
 

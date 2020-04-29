@@ -9,7 +9,7 @@ const expectedFiles = {
     consulregistry: [
         './csvc/templates/consul.yaml',
         './csvc/templates/consul-config-loader.yaml',
-        './csvc/templates/application-configmap.yaml'
+        './csvc/templates/application-configmap.yaml',
     ],
     jhgate: [
         './jhgate/templates/jhgate-deployment.yaml',
@@ -17,7 +17,7 @@ const expectedFiles = {
         './jhgate/Chart.yaml',
         './jhgate/requirements.yaml',
         './jhgate/values.yaml',
-        './jhgate/templates/_helpers.tpl'
+        './jhgate/templates/_helpers.tpl',
     ],
     jhgateingress: ['./jhgate/templates/jhgate-ingress.yaml'],
     customnamespace: ['./namespace.yaml'],
@@ -25,7 +25,7 @@ const expectedFiles = {
         './csvc/templates/jhipster-console.yaml',
         './csvc/templates/jhipster-logstash.yaml',
         './csvc/templates/jhipster-dashboard-console.yaml',
-        './csvc/templates/jhipster-zipkin.yaml'
+        './csvc/templates/jhipster-zipkin.yaml',
     ],
     msmysql: [
         './msmysql/Chart.yaml',
@@ -33,7 +33,7 @@ const expectedFiles = {
         './msmysql/values.yaml',
         './msmysql/templates/_helpers.tpl',
         './msmysql/templates/msmysql-deployment.yaml',
-        './msmysql/templates/msmysql-service.yaml'
+        './msmysql/templates/msmysql-service.yaml',
     ],
     mspsql: [
         './mspsql/Chart.yaml',
@@ -41,7 +41,7 @@ const expectedFiles = {
         './mspsql/values.yaml',
         './mspsql/templates/_helpers.tpl',
         './mspsql/templates/mspsql-deployment.yaml',
-        './mspsql/templates/mspsql-service.yaml'
+        './mspsql/templates/mspsql-service.yaml',
     ],
     msmongodb: [
         './msmongodb/Chart.yaml',
@@ -49,7 +49,7 @@ const expectedFiles = {
         './msmongodb/values.yaml',
         './msmongodb/templates/_helpers.tpl',
         './msmongodb/templates/msmongodb-deployment.yaml',
-        './msmongodb/templates/msmongodb-service.yaml'
+        './msmongodb/templates/msmongodb-service.yaml',
     ],
     msmariadb: [
         './msmariadb/Chart.yaml',
@@ -57,7 +57,7 @@ const expectedFiles = {
         './msmariadb/values.yaml',
         './msmariadb/templates/_helpers.tpl',
         './msmariadb/templates/msmariadb-deployment.yaml',
-        './msmariadb/templates/msmariadb-service.yaml'
+        './msmariadb/templates/msmariadb-service.yaml',
     ],
     monolith: [
         './samplemysql/Chart.yaml',
@@ -66,15 +66,15 @@ const expectedFiles = {
         './samplemysql/templates/_helpers.tpl',
         './samplemysql/templates/samplemysql-deployment.yaml',
         './samplemysql/templates/samplemysql-service.yaml',
-        './samplemysql/templates/samplemysql-elasticsearch.yaml'
+        './samplemysql/templates/samplemysql-elasticsearch.yaml',
     ],
     kafka: ['./samplekafka/templates/samplekafka-deployment.yaml', './samplekafka/templates/samplekafka-service.yaml'],
     jhgategateway: [
         './jhgate/templates/jhgate-gateway.yaml',
         './jhgate/templates/jhgate-destination-rule.yaml',
-        './jhgate/templates/jhgate-virtual-service.yaml'
+        './jhgate/templates/jhgate-virtual-service.yaml',
     ],
-    applyScript: ['./helm-apply.sh', './helm-upgrade.sh']
+    applyScript: ['./helm-apply.sh', './helm-upgrade.sh'],
 };
 
 describe('JHipster Kubernetes Helm Sub Generator', () => {
@@ -96,7 +96,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'jhipsternamespace',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -130,7 +130,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -168,7 +168,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     monitoring: 'elk',
                     jhipsterConsole: true,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -212,7 +212,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesServiceType: 'Ingress',
                     ingressType: 'gke',
                     ingressDomain: 'example.com',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -252,7 +252,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -294,7 +294,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -344,7 +344,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -377,7 +377,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     jhipsterConsole: false,
                     kubernetesServiceType: 'LoadBalancer',
-                    clusteredDbApps: []
+                    clusteredDbApps: [],
                 })
                 .on('end', done);
         });
@@ -408,7 +408,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     dockerPushCommand: 'docker push',
                     kubernetesNamespace: 'mynamespace',
                     monitoring: 'prometheus',
-                    kubernetesServiceType: 'LoadBalancer'
+                    kubernetesServiceType: 'LoadBalancer',
                 })
                 .on('end', done);
         });
@@ -449,7 +449,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
                     kubernetesNamespace: 'default',
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
-                    istio: true
+                    istio: true,
                 })
                 .on('end', done);
         });

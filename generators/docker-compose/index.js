@@ -53,16 +53,17 @@ module.exports = class extends BaseDockerGenerator {
                         if (composeVersionMajor < 1 || (composeVersionMajor === 1 && composeVersionMinor < 6)) {
                             this.log(
                                 chalk.red(
-                                    `${'Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
-                                        '         Docker Compose version found: '}${composeVersion}\n` +
-                                        '         Read https://docs.docker.com/compose/install/\n'
+                                    `${
+                                        'Docker Compose version 1.6.0 or later is not installed on your computer.\n' +
+                                        '         Docker Compose version found: '
+                                    }${composeVersion}\n` + '         Read https://docs.docker.com/compose/install/\n'
                                 )
                             );
                         }
                     }
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -233,9 +234,9 @@ module.exports = class extends BaseDockerGenerator {
                     monitoring: this.monitoring,
                     consoleOptions: this.consoleOptions,
                     serviceDiscoveryType: this.serviceDiscoveryType,
-                    jwtSecretKey: this.jwtSecretKey
+                    jwtSecretKey: this.jwtSecretKey,
                 });
-            }
+            },
         };
     }
 

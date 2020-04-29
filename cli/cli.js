@@ -34,7 +34,7 @@ const {
     loadBlueprintsFromYoRc,
     getBlueprintPackagePaths,
     loadBlueprintCommands,
-    loadSharedOptions
+    loadSharedOptions,
 } = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
@@ -72,10 +72,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     }
 };
 
-program
-    .version(version)
-    .usage('[command] [options]')
-    .allowUnknownOption();
+program.version(version).usage('[command] [options]').allowUnknownOption();
 
 const blueprintCommands = loadBlueprintCommands(getBlueprintPackagePaths(env, argBlueprints));
 const allCommands = { ...SUB_GENERATORS, ...blueprintCommands };

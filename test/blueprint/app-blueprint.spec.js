@@ -23,8 +23,8 @@ describe('JHipster application generator with blueprint', () => {
                         name: 'generator-jhipster-myblueprint',
                         version: '9.9.9',
                         dependencies: {
-                            'generator-jhipster': jhipsterVersion
-                        }
+                            'generator-jhipster': jhipsterVersion,
+                        },
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
@@ -35,7 +35,7 @@ describe('JHipster application generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     skipChecks: false,
-                    blueprint: 'myblueprint'
+                    blueprint: 'myblueprint',
                 })
                 .withPrompts({
                     baseName: 'jhipster',
@@ -51,7 +51,7 @@ describe('JHipster application generator with blueprint', () => {
                     prodDatabaseType: 'mysql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr']
+                    languages: ['fr'],
                 })
                 .on('end', done);
         });
@@ -64,14 +64,14 @@ describe('JHipster application generator with blueprint', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });
 
         it('blueprint version is saved in .yo-rc.json', () => {
             assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-myblueprint', version: '9.9.9' }] }
+                'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-myblueprint', version: '9.9.9' }] },
             });
         });
         it('blueprint module and version are in package.json', () => {
@@ -89,8 +89,8 @@ describe('JHipster application generator with blueprint', () => {
                         name: 'generator-jhipster-myblueprint',
                         version: '9.9.9',
                         dependencies: {
-                            'generator-jhipster': '1.1.1'
-                        }
+                            'generator-jhipster': '1.1.1',
+                        },
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
@@ -101,7 +101,7 @@ describe('JHipster application generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     skipChecks: false,
-                    blueprint: 'myblueprint'
+                    blueprint: 'myblueprint',
                 })
                 .withPrompts({
                     baseName: 'jhipster',
@@ -117,7 +117,7 @@ describe('JHipster application generator with blueprint', () => {
                     prodDatabaseType: 'mysql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr']
+                    languages: ['fr'],
                 })
                 .on('error', error => {
                     expect(error.message.includes('targets JHipster v1.1.1 and is not compatible with this JHipster version')).to.be.true;
@@ -140,8 +140,8 @@ describe('JHipster application generator with blueprint', () => {
                         name: 'generator-jhipster-myblueprint',
                         version: '9.9.9',
                         peerDependencies: {
-                            'generator-jhipster': '^6.0.0'
-                        }
+                            'generator-jhipster': '^6.0.0',
+                        },
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
@@ -152,7 +152,7 @@ describe('JHipster application generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     skipChecks: false,
-                    blueprint: 'myblueprint'
+                    blueprint: 'myblueprint',
                 })
                 .withPrompts({
                     baseName: 'jhipster',
@@ -168,7 +168,7 @@ describe('JHipster application generator with blueprint', () => {
                     prodDatabaseType: 'mysql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr']
+                    languages: ['fr'],
                 })
                 .on('end', done);
         });
@@ -181,14 +181,14 @@ describe('JHipster application generator with blueprint', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });
 
         it('blueprint version is saved in .yo-rc.json', () => {
             assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-myblueprint', version: '9.9.9' }] }
+                'generator-jhipster': { blueprints: [{ name: 'generator-jhipster-myblueprint', version: '9.9.9' }] },
             });
         });
         it('blueprint module and version are in package.json', () => {
@@ -206,8 +206,8 @@ describe('JHipster application generator with blueprint', () => {
                         name: 'generator-jhipster-myblueprint',
                         version: '9.9.9',
                         peerDependencies: {
-                            'generator-jhipster': '1.1.1'
-                        }
+                            'generator-jhipster': '1.1.1',
+                        },
                     };
                     const fakeBlueprintModuleDir = path.join(dir, 'node_modules/generator-jhipster-myblueprint');
                     fse.ensureDirSync(fakeBlueprintModuleDir);
@@ -218,7 +218,7 @@ describe('JHipster application generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     skipChecks: false,
-                    blueprint: 'myblueprint'
+                    blueprint: 'myblueprint',
                 })
                 .withPrompts({
                     baseName: 'jhipster',
@@ -234,7 +234,7 @@ describe('JHipster application generator with blueprint', () => {
                     prodDatabaseType: 'mysql',
                     enableTranslation: true,
                     nativeLanguage: 'en',
-                    languages: ['fr']
+                    languages: ['fr'],
                 })
                 .on('error', error => {
                     expect(error.message.includes('targets JHipster 1.1.1 and is not compatible with this JHipster version')).to.be.true;

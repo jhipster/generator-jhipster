@@ -41,7 +41,7 @@ const mockBlueprintSubGen = class extends SpringControllerGenerator {
         const customPhaseSteps = {
             customizeName() {
                 this.name = `${this.name}Entity`;
-            }
+            },
         };
         return { ...customPhaseSteps, ...phaseFromJHipster };
     }
@@ -67,7 +67,7 @@ describe('JHipster spring controller generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, '../templates/default'), dir);
@@ -100,7 +100,7 @@ describe('JHipster spring controller generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../templates/default'), dir);

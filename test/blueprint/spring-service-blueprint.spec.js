@@ -40,7 +40,7 @@ const mockBlueprintSubGen = class extends SpringServiceGenerator {
         const customPhaseSteps = {
             customizeName() {
                 this.name = `${this.name}Entity`;
-            }
+            },
         };
         return { ...customPhaseSteps, ...phaseFromJHipster };
     }
@@ -66,7 +66,7 @@ describe('JHipster spring service generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .inTmpDir(dir => {
                         fse.copySync(path.join(__dirname, '../templates/default'), dir);
@@ -80,14 +80,14 @@ describe('JHipster spring service generator with blueprint', () => {
             it('creates spring service files with different name from the default', () => {
                 assert.file([
                     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooEntityService.java`,
-                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooEntityServiceImpl.java`
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooEntityServiceImpl.java`,
                 ]);
             });
 
             it('doesnt create spring service files with default name', () => {
                 assert.noFile([
                     `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
-                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
+                    `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`,
                 ]);
             });
         });
@@ -101,7 +101,7 @@ describe('JHipster spring service generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../templates/default'), dir);
@@ -115,7 +115,7 @@ describe('JHipster spring service generator with blueprint', () => {
         it("doesn't create any expected files from jhipster spring service generator", () => {
             assert.noFile([
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`,
             ]);
         });
     });

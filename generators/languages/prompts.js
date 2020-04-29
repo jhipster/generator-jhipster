@@ -19,7 +19,7 @@
 const chalk = require('chalk');
 
 module.exports = {
-    askForLanguages
+    askForLanguages,
 };
 
 function askForLanguages() {
@@ -30,8 +30,8 @@ function askForLanguages() {
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
-            choices: languageOptions
-        }
+            choices: languageOptions,
+        },
     ];
     if (this.enableTranslation || this.configOptions.enableTranslation) {
         return this.prompt(prompts).then(props => {

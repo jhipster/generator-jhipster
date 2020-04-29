@@ -16,7 +16,7 @@ describe('JHipster generator service', () => {
                 })
                 .withArguments(['foo'])
                 .withPrompts({
-                    useInterface: false
+                    useInterface: false,
                 })
                 .on('end', done);
         });
@@ -39,7 +39,7 @@ describe('JHipster generator service', () => {
                 })
                 .withArguments(['foo'])
                 .withPrompts({
-                    useInterface: true
+                    useInterface: true,
                 })
                 .on('end', done);
         });
@@ -47,7 +47,7 @@ describe('JHipster generator service', () => {
         it('creates service file', () => {
             assert.file([
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`,
             ]);
         });
     });
@@ -67,7 +67,7 @@ describe('JHipster generator service', () => {
         it('creates service file', () => {
             assert.file([
                 `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
-                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
+                `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`,
             ]);
         });
     });

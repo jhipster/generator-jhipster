@@ -31,21 +31,21 @@ const GENERATOR_NAME = 'generator-jhipster';
 
 const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
 
-const debug = function(msg) {
+const debug = function (msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
     }
 };
 
-const info = function(msg) {
+const info = function (msg) {
     console.info(`${chalk.green.bold('INFO!')} ${msg}`);
 };
 
-const log = function(msg) {
+const log = function (msg) {
     console.log(msg);
 };
 
-const error = function(msg, trace) {
+const error = function (msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
@@ -58,7 +58,7 @@ const error = function(msg, trace) {
  *  process.exit is not recommended by Node.js.
  *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
  */
-const fatal = function(msg, trace) {
+const fatal = function (msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
@@ -66,7 +66,7 @@ const fatal = function(msg, trace) {
     process.exit(1);
 };
 
-const init = function(program) {
+const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
     const argv = program.normalize(process.argv);
@@ -83,7 +83,7 @@ const logger = {
     info,
     log,
     error,
-    fatal
+    fatal,
 };
 
 const toString = item => {
@@ -360,5 +360,5 @@ module.exports = {
     getBlueprintPackagePaths,
     loadBlueprintCommands,
     loadSharedOptions,
-    getOptionAsArgs
+    getOptionAsArgs,
 };
