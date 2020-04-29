@@ -55,7 +55,7 @@
         "commander": "2.19.0",
         "conf": "2.2.0",
         "didyoumean": "1.2.1",
-        "ejs": "2.6.1",
+        "ejs": "3.1.2",
         "faker": "4.1.0",
         "glob": "7.1.6",
         "gulp-filter": "5.1.0",
@@ -88,7 +88,7 @@
     "devDependencies": {
         "@openapitools/openapi-generator-cli": "1.0.12-4.3.0",
         "chai": "4.2.0",
-        "ejs-lint": "0.3.0",
+        "ejs-lint": "1.1.0",
         "eslint": "6.8.0",
         "eslint-config-airbnb-base": "14.1.0",
         "eslint-config-prettier": "6.11.0",
