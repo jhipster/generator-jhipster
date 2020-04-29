@@ -80,9 +80,9 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
             <%_ if (fieldType === 'Boolean') { _%>
               {<%= entityInstance %>Entity.<%= fieldName %> ? 'true' : 'false'}
             <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-              <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_DATE_FORMAT} />
+              {<%= entityInstance %>Entity.<%= fieldName %> ? <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_DATE_FORMAT} />: null}
             <%_ } else if (fieldType === 'LocalDate') { _%>
-              <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} />
+              {<%= entityInstance %>Entity.<%= fieldName %> ? <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} />: null}
             <%_
                 } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -91,13 +91,15 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
             _%>
                 {<%= entityInstance %>Entity.<%= fieldName %> ? (
                   <div>
-                    <a onClick={openFile(<%= entityInstance %>Entity.<%= fieldName %>ContentType, <%= entityInstance %>Entity.<%= fieldName %>)}>
-                    <%_ if (fieldBlobType === 'image') { _%>
-                      <img src={`data:${<%= entityInstance %>Entity.<%= fieldName %>ContentType};base64,${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
-                    <%_ } else { _%>
-                      <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
-                    <%_ } _%>
-                    </a>
+                    {<%= entityInstance %>Entity.<%= fieldName %>ContentType ? (
+                      <a onClick={openFile(<%= entityInstance %>Entity.<%= fieldName %>ContentType, <%= entityInstance %>Entity.<%= fieldName %>)}>
+                      <%_ if (fieldBlobType === 'image') { _%>
+                        <img src={`data:${<%= entityInstance %>Entity.<%= fieldName %>ContentType};base64,${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                      <%_ } else { _%>
+                        <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
+                      <%_ } _%>
+                      </a>
+                    ) : null}
                     <span>{<%= entityInstance %>Entity.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>Entity.<%= fieldName %>)}</span>
                   </div>
                 ) : null}
@@ -134,7 +136,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     {
       (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
           (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
-              <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+              <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
           )
       ) : null
     }                  <%_ } else { _%>
@@ -149,7 +151,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     {
         (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
             (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
-                <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
             )
         ) : null
     }

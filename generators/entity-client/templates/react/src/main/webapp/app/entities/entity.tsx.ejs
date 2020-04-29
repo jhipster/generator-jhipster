@@ -150,7 +150,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   }, [paginationState.activePage]);
 
   const handleLoadMore = () => {
-    if (window.pageYOffset > 0) {
+    if ((window as any).pageYOffset > 0) {
       setPaginationState({
         ...paginationState,
         activePage: paginationState.activePage + 1
@@ -306,9 +306,9 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                     <%_ if (fieldType === 'Boolean') { _%>
                       {<%= entityInstance %>.<%= fields[idx].fieldName %> ? 'true' : 'false'}
                     <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
-                      <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_DATE_FORMAT} />
+                      {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_DATE_FORMAT} />: null}
                     <%_ } else if (fieldType === 'LocalDate') { _%>
-                      <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_LOCAL_DATE_FORMAT} />
+                      {<%= entityInstance %>.<%= fieldName %> ? <TextFormat type="date" value={<%= entityInstance %>.<%= fieldName %>} format={APP_LOCAL_DATE_FORMAT} />: null}
                     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
                       <Translate contentKey={`<%= angularAppName %>.<%= fieldType %>.${<%= entityInstance %>.<%= fieldName %>}`} />
                     <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
@@ -319,14 +319,16 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       _%>
                         {<%= entityInstance %>.<%= fieldName %> ? (
                           <div>
+                            {<%= entityInstance %>.<%= fieldName %>ContentType ? (
                               <a onClick={openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)}>
-                              <%_ if (fieldBlobType === 'image') { _%>
-                                <img src={`data:${<%= entityInstance %>.<%= fieldName %>ContentType};base64,${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
-                              <%_ } else { _%>
-                                <Translate contentKey="entity.action.open">Open</Translate>
-                              <%_ } _%>
-                              &nbsp;
-                            </a>
+                                <%_ if (fieldBlobType === 'image') { _%>
+                                  <img src={`data:${<%= entityInstance %>.<%= fieldName %>ContentType};base64,${<%= entityInstance %>.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                                <%_ } else { _%>
+                                  <Translate contentKey="entity.action.open">Open</Translate>
+                                <%_ } _%>
+                                &nbsp;
+                              </a>
+                            ) : null}
                             <span>{<%= entityInstance %>.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>.<%= fieldName %>)}</span>
                           </div>
                         ) : null}
