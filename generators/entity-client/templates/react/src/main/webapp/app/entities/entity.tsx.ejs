@@ -232,12 +232,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <div>
       <h2 id="<%= entityFileName %>-heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
+        <%_ if (!readOnly) { _%>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />&nbsp;
           <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
             Create new <%= entityClassHumanized %>
           </Translate>
         </Link>
+        <%_ } _%>
       </h2>
       <%_ if (searchEngine !== false) { _%>
       <Row>
