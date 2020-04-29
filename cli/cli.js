@@ -117,7 +117,7 @@ initAutoCompletion(program, CLI_NAME);
 program.parse(process.argv);
 
 /* Run default when no commands are specified */
-if (program.args.length < 1) {
+if (program.rawArgs.length < 3) {
     logger.debug('No command specified. Running default');
     logger.info(chalk.yellow('Running default command'));
     const options = getCommandOptions(packageJson, process.argv.slice(2));
