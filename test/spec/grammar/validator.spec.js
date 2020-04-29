@@ -1858,4 +1858,27 @@ describe('JDLSyntaxValidatorVisitor', () => {
       });
     });
   });
+  context('when declaring an enum', () => {
+    context('with specific values', () => {
+      context('that contain whitespaces', () => {
+        it('should not fail', () => {
+          expect(() =>
+            parse(`enum MyEnum {
+  FRANCE ("stinky but good cheese country"),
+  ENGLAND ("tea country")
+}`)
+          ).not.to.throw();
+        });
+      });
+      context('that contain quotes', () => {
+        it('should fail', () => {
+          expect(() =>
+            parse(`enum MyEnum {
+  FRANCE ("stinky but g"ood cheese country")
+}`)
+          ).to.throw(/^unexpected character: ->"<-/);
+        });
+      });
+    });
+  });
 });

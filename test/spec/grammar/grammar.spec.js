@@ -937,6 +937,110 @@ entity A {
       });
     });
   });
+  context('when parsing enums', () => {
+    context('without custom values', () => {
+      let parsedEnum;
+
+      before(() => {
+        const content = parseFromContent(
+          `enum MyEnum {
+  FRANCE,
+  ENGLAND,
+  ICELAND
+}
+`
+        );
+        parsedEnum = content.enums[0];
+      });
+
+      it('should parse it', () => {
+        expect(parsedEnum).to.deep.equal({
+          name: 'MyEnum',
+          values: [
+            {
+              key: 'FRANCE'
+            },
+            {
+              key: 'ENGLAND'
+            },
+            {
+              key: 'ICELAND'
+            }
+          ]
+        });
+      });
+    });
+    context('without values', () => {
+      context('without spaces', () => {
+        let parsedEnum;
+
+        before(() => {
+          const content = parseFromContent(
+            `enum MyEnum {
+  FRANCE (cheese_and_wine_country),
+  ENGLAND (not_a_tea_country),
+  ICELAND
+}
+`
+          );
+          parsedEnum = content.enums[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedEnum).to.deep.equal({
+            name: 'MyEnum',
+            values: [
+              {
+                key: 'FRANCE',
+                value: 'cheese_and_wine_country'
+              },
+              {
+                key: 'ENGLAND',
+                value: 'not_a_tea_country'
+              },
+              {
+                key: 'ICELAND'
+              }
+            ]
+          });
+        });
+      });
+      context('with spaces', () => {
+        let parsedEnum;
+
+        before(() => {
+          const content = parseFromContent(
+            `enum MyEnum {
+  FRANCE ("cheese and wine country"),
+  ENGLAND ("not a tea country"),
+  ICELAND
+}
+`
+          );
+          parsedEnum = content.enums[0];
+        });
+
+        it('should parse it', () => {
+          expect(parsedEnum).to.deep.equal({
+            name: 'MyEnum',
+            values: [
+              {
+                key: 'FRANCE',
+                value: 'cheese and wine country'
+              },
+              {
+                key: 'ENGLAND',
+                value: 'not a tea country'
+              },
+              {
+                key: 'ICELAND'
+              }
+            ]
+          });
+        });
+      });
+    });
+  });
   context('when parsing a relationship', () => {
     [ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY].forEach(relationshipType => {
       context(`for a ${relationshipType} relationship`, () => {
