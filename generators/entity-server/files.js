@@ -207,7 +207,8 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                (!generator.reactive || !['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType)) && !generator.embedded,
+                (!generator.reactive || !['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(generator.databaseType)) &&
+                !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -218,7 +219,9 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(generator.databaseType) && !generator.embedded,
+                generator.reactive &&
+                ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(generator.databaseType) &&
+                !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -333,8 +336,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                generator.dto === 'mapstruct' &&
-                (generator.databaseType === 'sql' || generator.databaseType === 'mongodb' || generator.databaseType === 'couchbase'),
+                generator.dto === 'mapstruct' && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
