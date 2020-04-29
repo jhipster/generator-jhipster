@@ -151,12 +151,16 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
     <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
+  <%_ if (reactive) { _%>
+@Table("<%= entityTableName %>")
+  <%_ } else { _%>
 @Entity
 @Table(name = "<%= entityTableName %>")
-<%_     if (enableHibernateCache) { _%>
+    <%_ if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-<%_     }
-} if (!embedded) {
+    <%_ } _%>
+  <%_ } _%>
+<%_ } if (!embedded) {
     if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
 <%_ } if (databaseType === 'neo4j') { _%>
