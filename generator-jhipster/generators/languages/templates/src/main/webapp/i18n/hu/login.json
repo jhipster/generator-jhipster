@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Hitelesítés",
+        "form": {
+            "password": "Jelszó",
+            "password.placeholder": "Az Ön jelszava",
+            "rememberme": "Automatikus belépés",
+            "button": "Belépés"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Hitelesítés nem sikerült!</strong> Kérjük ellenörizze, hogy helyesen adta meg nevét és jelszavát, és próbálja újra."
+            }
+        },
+        "password": {
+            "forgot": "Elfelejtette a jelszavát?"
+        }
+    }
+}

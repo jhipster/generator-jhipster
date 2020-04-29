@@ -1,0 +1,29 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [
+        {
+            "relationshipName": "mapsIdParentEntityWithoutDTO",
+            "otherEntityName": "mapsIdParentEntityWithoutDTO",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "useJPADerivedIdentifier": true,
+            "otherEntityRelationshipName": "mapsIdChildEntityWithoutDTO"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "date",
+            "fieldType": "Instant"
+        }
+    ],
+    "changelogDate": "20190117074746",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "no",
+    "entityTableName": "child_entity_wo_dto",
+    "databaseType": "sql",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

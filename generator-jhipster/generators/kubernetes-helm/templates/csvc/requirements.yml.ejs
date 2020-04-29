@@ -1,0 +1,23 @@
+dependencies:
+<%_ if (useKafka) { _%>
+  - name: kafka
+    version: <%= HELM_KAFKA %>
+    repository: https://kubernetes-charts-incubator.storage.googleapis.com
+    condition: kafka.enabled
+<%_ } _%>
+<%_ if (monitoring === 'elk') { _%>
+  - name: elasticsearch
+    version: <%= HELM_ELASTICSEARCH %>
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: elk.enabled
+<%_ } _%>
+<%_ if (monitoring === 'prometheus') { _%>
+  - name: prometheus
+    version: <%= HELM_PROMETHEUS %>
+    repository: https://kubernetes-charts.storage.googleapis.com
+    condition: prometheus.enabled
+  - name: grafana
+    version: <%= HELM_GRAFANA %>
+    repository: https://kubernetes-charts.storage.googleapis.com
+    condition: prometheus.enabled
+<%_ } _%>

@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Asetukset",
+        "filter": "Suodatus (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Asetukset"
+        }
+    }
+}

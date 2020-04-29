@@ -1,0 +1,100 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest;
+
+import <%= packageName %>.web.rest.vm.RouteVM;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+<%_ if (!reactive) { _%>
+import org.springframework.cloud.netflix.zuul.filters.Route;
+import org.springframework.cloud.netflix.zuul.filters.RouteLocator;
+<%_ } else { _%>
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.gateway.route.Route;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import reactor.core.publisher.Flux;
+<%_ } _%>
+import org.springframework.http.*;
+import org.springframework.security.access.annotation.Secured;
+import <%= packageName %>.security.AuthoritiesConstants;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * REST controller for managing Gateway configuration.
+ */
+@RestController
+@RequestMapping("/api/gateway")
+public class GatewayResource {
+
+    private final RouteLocator routeLocator;
+
+    private final DiscoveryClient discoveryClient;
+
+<%_ if (reactive) { _%>
+    @Value("${spring.application.name}")
+    private String appName;
+<%_ } _%>
+
+    public GatewayResource(RouteLocator routeLocator, DiscoveryClient discoveryClient) {
+        this.routeLocator = routeLocator;
+        this.discoveryClient = discoveryClient;
+    }
+
+    /**
+     * {@code GET  /routes} : get the active routes.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of routes.
+     */
+    @GetMapping("/routes")
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<List<RouteVM>> activeRoutes() {
+    <%_ if (!reactive) { _%>
+        List<Route> routes = routeLocator.getRoutes();
+        List<RouteVM> routeVMs = new ArrayList<>();
+        routes.forEach(route -> {
+            RouteVM routeVM = new RouteVM();
+            routeVM.setPath(route.getFullPath());
+            routeVM.setServiceId(route.getId());
+            routeVM.setServiceInstances(discoveryClient.getInstances(route.getLocation()));
+            routeVMs.add(routeVM);
+        });
+    <%_ } else { _%>
+        Flux<Route> routes = routeLocator.getRoutes();
+        List<RouteVM> routeVMs = new ArrayList<>();
+        routes.subscribe(route -> {
+            RouteVM routeVM = new RouteVM();
+            // Manipulate strings to make Gateway routes look like Zuul's
+            String predicate = route.getPredicate().toString();
+            String path = predicate.substring(predicate.indexOf("[") + 1, predicate.indexOf("]"));
+            routeVM.setPath(path);
+            String serviceId = route.getId().substring(route.getId().indexOf("_") + 1).toLowerCase();
+            routeVM.setServiceId(serviceId);
+            // Exclude gateway app from routes
+            if (!serviceId.equalsIgnoreCase(appName)) {
+                routeVM.setServiceInstances(discoveryClient.getInstances(serviceId));
+                routeVMs.add(routeVM);
+            }
+        });
+    <%_ } _%>
+        return ResponseEntity.ok(routeVMs);
+    }
+}

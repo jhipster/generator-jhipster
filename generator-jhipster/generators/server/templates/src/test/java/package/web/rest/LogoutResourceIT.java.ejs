@@ -1,0 +1,141 @@
+<%#
+ Copyright 2013-2018 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest;
+
+import <%= packageName %>.<%= mainClass %>;
+<%_ if (cacheProvider === 'redis') { _%>
+import <%= packageName %>.RedisTestContainerExtension;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
+import <%= packageName %>.config.TestSecurityConfiguration;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+<%_ if (cacheProvider === 'redis') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (reactive) { _%>
+import org.springframework.context.ApplicationContext;
+<%_ } _%>
+import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.registration.<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+<%_ if (!reactive) { _%>
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+<%_ } else { _%>
+import org.springframework.test.web.reactive.server.WebTestClient;
+<%_ } _%>
+
+import java.time.Instant;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static <%= packageName %>.web.rest.TestUtil.ID_TOKEN;
+import static <%= packageName %>.web.rest.TestUtil.authenticationToken;
+<%_ if (!reactive) { _%>
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+<%_ } else { _%>
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
+<%_ } _%>
+
+/**
+ * Integration tests for the {@link LogoutResource} REST controller.
+ */
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+<%_ if (cacheProvider === 'redis') { _%>
+@ExtendWith(RedisTestContainerExtension.class)
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
+public class LogoutResourceIT {
+
+    @Autowired
+    private <% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository registrations;
+
+    @Autowired
+    private <% if (!reactive) { %>Web<% } %>ApplicationContext context;
+
+<%_ if (!reactive) { _%>
+    private MockMvc restLogoutMockMvc;
+<%_ } else { _%>
+    private WebTestClient webTestClient;
+<%_ } _%>
+
+    private OidcIdToken idToken;
+
+    @BeforeEach
+    public void before() <% if (!reactive) { %>throws Exception <% } %>{
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("groups", Collections.singletonList("ROLE_USER"));
+        claims.put("sub", 123);
+        this.idToken = new OidcIdToken(ID_TOKEN, Instant.now(), Instant.now().plusSeconds(60), claims);
+
+    <%_ if (!reactive) { _%>
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken(idToken));
+        SecurityContextHolderAwareRequestFilter authInjector = new SecurityContextHolderAwareRequestFilter();
+        authInjector.afterPropertiesSet();
+
+        this.restLogoutMockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    <%_ } else { _%>
+        this.webTestClient = WebTestClient.bindToApplicationContext(this.context)
+            .apply(springSecurity())
+            .configureClient()
+            .build();
+    <%_ } _%>
+    }
+
+    @Test
+    public void getLogoutInformation() <% if (!reactive) { %>throws Exception <% } %>{
+    <%_ if (!reactive) { _%>
+        String logoutUrl = this.registrations.findByRegistrationId("oidc").getProviderDetails()
+            .getConfigurationMetadata().get("end_session_endpoint").toString();
+        restLogoutMockMvc.perform(post("/api/logout"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.logoutUrl").value(logoutUrl))
+            .andExpect(jsonPath("$.idToken").value(ID_TOKEN));
+    <%_ } else { _%>
+        String logoutUrl = this.registrations.findByRegistrationId("oidc")
+            .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata()
+                .get("end_session_endpoint").toString()).block();
+
+        this.webTestClient.mutateWith(csrf())
+            .mutateWith(mockAuthentication(TestUtil.authenticationToken(idToken)))
+            .post().uri("/api/logout").exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+            .expectBody()
+            .jsonPath("$.logoutUrl").isEqualTo(logoutUrl.toString())
+            .jsonPath("$.idToken").isEqualTo(ID_TOKEN);
+    <%_ } _%>
+    }
+}

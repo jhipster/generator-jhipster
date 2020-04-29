@@ -1,0 +1,42 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+const config = {
+  VERSION: process.env.VERSION
+};
+
+export default config;
+
+export const SERVER_API_URL = process.env.SERVER_API_URL;
+
+export const AUTHORITIES = {
+  ADMIN: 'ROLE_ADMIN',
+  USER: 'ROLE_USER'
+};
+
+export const messages = {
+  DATA_ERROR_ALERT: 'Internal Error'
+};
+
+export const APP_DATE_FORMAT = 'DD/MM/YY HH:mm';
+export const APP_TIMESTAMP_FORMAT = 'DD/MM/YY HH:mm:ss';
+export const APP_LOCAL_DATE_FORMAT = 'DD/MM/YYYY';
+export const APP_LOCAL_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm';
+export const APP_LOCAL_DATETIME_FORMAT_Z = 'YYYY-MM-DDTHH:mm Z';
+export const APP_WHOLE_NUMBER_FORMAT = '0,0';
+export const APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT = '0,0.[00]';

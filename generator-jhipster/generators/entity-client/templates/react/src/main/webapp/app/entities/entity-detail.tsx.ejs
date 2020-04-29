@@ -1,0 +1,190 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { Button, <% if (haveFieldWithJavadoc) { %>UncontrolledTooltip, <% } %>Row, Col } from 'reactstrap';
+import {
+  Translate,
+  ICrudGetAction,
+  <%_ if (fieldsContainBlob) { _%>
+    <%_ if (fieldsContainBlobOrImage) { _%>
+  openFile,
+    <%_ } _%>
+  byteSize,
+  <%_ } _%>
+  <%_ if (fieldsContainDate) { _%>
+  TextFormat
+  <%_ } _%>
+} from 'react-jhipster';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { IRootState } from 'app/shared/reducers';
+import { getEntity } from './<%= entityFileName %>.reducer';
+import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+
+export interface I<%= entityReactName %>DetailProps extends StateProps, DispatchProps, RouteComponentProps<{id: string}>  {}
+
+export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>DetailProps) => {
+  useEffect(() => {
+    props.getEntity(props.match.params.id);
+  }, []);
+
+  const { <%= entityInstance %>Entity } = props;
+  return (
+    <Row>
+      <Col md="8">
+        <h2>
+          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%= entityClass %></Translate> [<b>{<%= entityInstance %>Entity.id}</b>]
+        </h2>
+          <dl className="jh-entity-details">
+          <%_ for (idx in fields) {
+              const fieldType = fields[idx].fieldType;
+              const fieldName = fields[idx].fieldName;
+              const fieldNameHumanized = fields[idx].fieldNameHumanized;
+          _%>
+            <dt>
+              <span id="<%= fieldName %>">
+                <Translate contentKey="<%= i18nKeyPrefix %>.<%= fieldName %>">
+                  <%= fieldNameHumanized %>
+                </Translate>
+              </span>
+              <%_ if (fields[idx].javadoc) { _%>
+              <UncontrolledTooltip target="<%= fieldName %>">
+                <%_ if (enableTranslation) { _%>
+                <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
+                <%_ } else { _%>
+                <%= fields[idx].javadoc %>
+                <%_ } _%>
+              </UncontrolledTooltip>
+              <%_ } _%>
+            </dt>
+            <dd>
+            <%_ if (fieldType === 'Boolean') { _%>
+              {<%= entityInstance %>Entity.<%= fieldName %> ? 'true' : 'false'}
+            <%_ } else if (fieldType === 'Instant' || fieldType === 'ZonedDateTime') { _%>
+              {<%= entityInstance %>Entity.<%= fieldName %> ? <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_DATE_FORMAT} />: null}
+            <%_ } else if (fieldType === 'LocalDate') { _%>
+              {<%= entityInstance %>Entity.<%= fieldName %> ? <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} />: null}
+            <%_
+                } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
+
+                  const fieldBlobType = fields[idx].fieldTypeBlobContent;
+                  if (fieldBlobType !== 'text') {
+            _%>
+                {<%= entityInstance %>Entity.<%= fieldName %> ? (
+                  <div>
+                    {<%= entityInstance %>Entity.<%= fieldName %>ContentType ? (
+                      <a onClick={openFile(<%= entityInstance %>Entity.<%= fieldName %>ContentType, <%= entityInstance %>Entity.<%= fieldName %>)}>
+                      <%_ if (fieldBlobType === 'image') { _%>
+                        <img src={`data:${<%= entityInstance %>Entity.<%= fieldName %>ContentType};base64,${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                      <%_ } else { _%>
+                        <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
+                      <%_ } _%>
+                      </a>
+                    ) : null}
+                    <span>{<%= entityInstance %>Entity.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>Entity.<%= fieldName %>)}</span>
+                  </div>
+                ) : null}
+              <%_ } else { _%>
+                {<%= entityInstance %>Entity.<%= fields[idx].fieldName %>}
+              <%_ } _%>
+            <%_ } else { _%>
+            {<%= entityInstance %>Entity.<%= fields[idx].fieldName %>}
+            <%_ } _%>
+            </dd>
+            <%_ } _%>
+            <%_ for (idx in relationships) {
+                const relationshipType = relationships[idx].relationshipType;
+                const ownerSide = relationships[idx].ownerSide;
+                const relationshipName = relationships[idx].relationshipName;
+                const relationshipFieldName = relationships[idx].relationshipFieldName;
+                const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+                const relationshipNameHumanized = relationships[idx].relationshipNameHumanized;
+                const otherEntityName = relationships[idx].otherEntityName;
+                const otherEntityStateName = relationships[idx].otherEntityStateName;
+                const otherEntityField = relationships[idx].otherEntityField;
+                const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                if (relationshipType === 'many-to-one'
+                || (relationshipType === 'one-to-one' && ownerSide === true)
+                || (relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+            <dt>
+              <Translate contentKey="<%= i18nKeyPrefix %>.<%= relationshipName %>">
+                <%= relationshipNameHumanized %>
+              </Translate>
+            </dt>
+            <dd>
+                <%_ if (otherEntityName === 'user') { _%>
+                    <%_ if (relationshipType === 'many-to-many') { _%>
+    {
+      (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
+          (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
+              <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+          )
+      ) : null
+    }                  <%_ } else { _%>
+                        <%_ if (dto === 'no') { _%>
+                {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
+                            <%_ } else { _%>
+                {<%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
+                        <%_ } _%>
+                    <%_ } _%>
+                <%_ } else { _%>
+                    <%_ if (relationshipType === 'many-to-many') { _%>
+    {
+        (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
+            (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
+                <span key={val.id}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+            )
+        ) : null
+    }
+                    <%_ } else { _%>
+                        <%_ if (dto === 'no') { _%>
+                {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
+                        <%_ } else { _%>
+                {<%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> ? <%= entityInstance + "Entity." + relationshipFieldName + otherEntityFieldCapitalized %> : ''}
+                        <%_ } _%>
+                    <%_ } _%>
+                <%_ } _%>
+            </dd>
+            <%_ } _%>
+          <%_ } _%>
+          </dl>
+        <Button tag={Link} to="/<%= entityFileName %>" replace color="info">
+          <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
+        </Button>&nbsp;
+        <Button tag={Link} to={`/<%= entityFileName %>/${<%= entityInstance %>Entity.id}/edit`} replace color="primary">
+          <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
+        </Button>
+      </Col>
+    </Row>
+  );
+};
+
+const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
+    <%= entityInstance %>Entity: <%= entityInstance %>.entity
+});
+
+const mapDispatchToProps = { getEntity };
+
+type StateProps = ReturnType<typeof mapStateToProps>;
+type DispatchProps = typeof mapDispatchToProps;
+
+export default connect(mapStateToProps, mapDispatchToProps)(<%= entityReactName %>Detail);

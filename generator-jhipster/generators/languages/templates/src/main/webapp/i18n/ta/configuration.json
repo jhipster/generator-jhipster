@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "கட்டமைப்பு",
+        "filter": "வடி (முன்னொட்டு)",
+        "table": {
+            "prefix": "முன்னொட்டு",
+            "properties": "பண்புகள்"
+        }
+    }
+}

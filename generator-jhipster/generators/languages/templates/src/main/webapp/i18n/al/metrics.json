@@ -1,0 +1,101 @@
+{
+    "metrics": {
+        "title": "Metrikat e aplikacionit",
+        "refresh.button": "Rifresko",
+        "updating": "Duke përditësuar...",
+        "jvm": {
+            "title": "Metrikat e JVM",
+            "memory": {
+                "title": "Kujtesa",
+                "total": "Kujtesa e përgjithshme",
+                "heap": "Kujtesa Heap",
+                "nonheap": "Kujtesa Non-Heap"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "Të gjitha",
+                "runnable": "Runnable",
+                "timedwaiting": "Pritje e matur",
+                "waiting": "Duke pritur",
+                "blocked": "Bllokuar",
+                "dump": {
+                    "title": "Lëroji threads",
+                    "id": "Id: ",
+                    "blockedtime": "Koha e bllokuar",
+                    "blockedcount": "Numri i bllokuar",
+                    "waitedtime": "Koha e pritur",
+                    "waitedcount": "Numri i prituar",
+                    "lockname": "Emri i lock",
+                    "stacktrace": "Stacktrace",
+                    "show": "Trego Stacktrace",
+                    "hide": "Fshih Stacktrace"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "Kërkesat HTTP (ngjarje për sekond)",
+                "active": "Kërkesa aktive:",
+                "total": "Kërkesa në total:",
+                "table": {
+                    "code": "Code",
+                    "count": "Numëri",
+                    "mean": "Mesi",
+                    "average": "Mesatarja"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Nuk u gjet",
+                    "servererror": "Gabim në server"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Statistikat e shërbimeve (matur në milisekonda)",
+            "table": {
+                "name": "Emri i shërbimit",
+                "count": "Numri",
+                "mean": "Mesi",
+                "min": "Min",
+                "max": "Maks",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Statistikat e Cache",
+            "cachename": "Emri i Cache",
+            "hits": "Cache Qëlluar",
+            "misses": "Cache Gabuar",
+            "gets": "Cache Gets",
+            "puts": "Cache Puts",
+            "removals": "Cache Heqje",
+            "evictions": "Cache Nxjerrje",
+            "hitPercent": "Cache Qëlluar %",
+            "missPercent": "Cache Miss %",
+            "averageGetTime": "Koha kthimit mesatare (µs)",
+            "averagePutTime": "Koha vendosjes mesatare (µs)",
+            "averageRemoveTime": "Koha fshirjes mesatare (µs)"
+        },
+        "datasource": {
+            "usage": "Përdorimi",
+            "title": "Statistikat e DataSource (kohë në milisekonda)",
+            "name": "Përdorimi i Pool",
+            "count": "Numri",
+            "mean": "Mesi",
+            "min": "Min",
+            "max": "Maks",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

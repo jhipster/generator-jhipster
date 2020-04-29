@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Աուդիտ",
+        "filter": {
+            "title": "Filter ըստ ամսաթվի",
+            "from": "սկսաց",
+            "to": "մինչև",
+            "button": {
+                "weeks": "Շաբաթներ",
+                "today": "Այսօր",
+                "clear": "հեռացնել",
+                "close": "փակել"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Օգտվող",
+                "date": "Ամսաթիվ",
+                "status": "Վիճակ",
+                "data": "Լրաց. տեցեկատվություն"
+            },
+            "data": {
+                "remoteAddress": "Remote Address:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Loggar",
+        "nbloggers": "Det finns totalt {{ total }} loggar.",
+        "filter": "Filter",
+        "table": {
+            "name": "Namn",
+            "level": "Nivå"
+        }
+    }
+}

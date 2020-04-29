@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "User settings for [<strong>{{username}}</strong>]",
+        "form": {
+            "firstname": "முதற்பெயர்",
+            "firstname.placeholder": "முதற்பெயர்",
+            "lastname": "குடும்பப்பெயர்",
+            "lastname.placeholder": "குடும்பப்பெயர்",
+            "language": "மொழி",
+            "button": "பதிவு"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>ஒரு தவறு ஏற்பட்டுவிட்டது!</strong> அமைப்புகள் பதிவு செய்ய முடியவில்லை.",
+                "emailexists": "<strong>மின்னஞ்சல் உபயோகிக்கப்பட்டது</strong> வேறு தேர்வு செய்க."
+            },
+            "success": "<strong>அமைப்புகள் பதிவு செய்யப்பட்டது!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "உங்கள் முதற்பெயர் தேவை.",
+                    "minlength": "உங்கள் முதற்பெயர்க்கு ஒரு எழுத்தாவது தேவை",
+                    "maxlength": "உங்கள் முதற்பெயர் 50 எழுத்துக்களுக்கு மேல் இருக்கக்கூடாது"
+                },
+                "lastname": {
+                    "required": "உங்கள் குடும்பப்பெயர் தேவை.",
+                    "minlength": "உங்கள் குடும்பப்பெயர்க்கு ஒரு எழுத்தாவது தேவை",
+                    "maxlength": "உங்கள் குடும்பப்பெயர் 50 எழுத்துக்களுக்கு மேல் இருக்கக்கூடாது"
+                }
+            }
+        }
+    }
+}

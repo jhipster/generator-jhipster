@@ -1,0 +1,57 @@
+{{/* vim: set filetype=mustache: */}}
+<%_ if (app.prodDatabaseType === 'mariadb') { _%>
+{{/*
+mariadb customisation
+*/}}
+{{- define "mariadb.name" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-mariadb" -}}
+{{- end -}}
+
+{{- define "mariadb.fullname" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-mariadb" -}}
+{{- end -}}
+<%_ } else if (app.prodDatabaseType === 'mysql') { _%>
+{{/*
+mysql customisation
+*/}}
+{{- define "mysql.name" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-mysql" -}}
+{{- end -}}
+
+{{- define "mysql.fullname" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-mysql" -}}
+{{- end -}}
+<%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
+{{/*
+postgresql customisation
+*/}}
+{{- define "postgresql.name" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-postgresql" -}}
+{{- end -}}
+
+{{- define "postgresql.fullname" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-postgresql" -}}
+{{- end -}}
+<%_ } else if (app.prodDatabaseType === 'mongodb') { _%>
+{{/*
+mongodb customisation
+*/}}
+{{- define "mongodb-replicaset.name" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-mongodb" -}}
+{{- end -}}
+
+{{- define "mongodb-replicaset.fullname" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-mongodb" -}}
+{{- end -}}
+<%_ } else if (app.prodDatabaseType === 'couchbase') { _%>
+{{/*
+couchdb customisation
+*/}}
+{{- define "couchdb.name" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-couchbase" -}}
+{{- end -}}
+
+{{- define "couchdb.fullname" -}}
+{{- default "<%= app.baseName.toLowerCase() %>-couchbase" -}}
+{{- end -}}
+<%_ } _%>

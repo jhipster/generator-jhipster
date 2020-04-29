@@ -1,0 +1,8 @@
+Description:
+    Creates a new JHipster service: this is a simple transactional Spring service bean.
+
+Example:
+    jhipster spring-service Foo
+
+    This will create:
+        src/main/java/package/service/FooService.java

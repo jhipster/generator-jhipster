@@ -1,0 +1,61 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { element, by, ElementFinder, ElementArrayFinder } from 'protractor';
+
+export default class <%= entityClass %>ComponentsPage {
+    <%_ if (!readOnly) { _%>
+    createButton: ElementFinder = element(by.id('jh-create-entity'));
+    deleteButtons = element.all(by.css('div table .btn-danger'));
+    <%_ } _%>
+    title: ElementFinder = element(by.id('<%= entityFileName %>-heading'));
+    noRecords: ElementFinder = element(by.css('#app-view-container .table-responsive div.alert.alert-warning'));
+    table: ElementFinder = element(by.css('#app-view-container div.table-responsive > table'));
+
+    records: ElementArrayFinder = this.table.all(by.css('tbody tr'));
+
+    getDetailsButton(record: ElementFinder) {
+      return record.element(by.css('a.btn.btn-info.btn-sm'));
+    }
+
+    <%_ if (!readOnly) { _%>
+    getEditButton(record: ElementFinder) {
+      return record.element(by.css('a.btn.btn-primary.btn-sm'));
+    }
+  
+    getDeleteButton(record: ElementFinder) {
+      return record.element(by.css('a.btn.btn-danger.btn-sm'));
+    }
+    <%_ } _%>
+}
+
+<%_ if (!readOnly) { _%>
+export class <%= entityClass %>DeleteDialog {
+    deleteModal = element(by.className('modal'));
+    private dialogTitle: ElementFinder = element(by.id('<%= i18nKeyPrefix %>.delete.question'));
+    private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
+
+    getDialogTitle() {
+        return this.dialogTitle;
+    }
+
+    async clickOnConfirmButton() {
+        await this.confirmButton.click();
+    }
+}
+<%_ } _%>

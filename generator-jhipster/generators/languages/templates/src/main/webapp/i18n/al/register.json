@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Regjistrimi",
+        "form": {
+            "button": "Regjistrohu"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Kërkohet përdoruesi.",
+                    "minlength": "Përdoruesi duhet të jetë të paktën 1 gërmë.",
+                    "maxlength": "Përdoruesi nuk mund të jetë më i gjatë se 50 gërma.",
+                    "pattern": "Your username is invalid."
+                }
+            },
+            "success": "<strong>Regjistrimi u ruajt!</strong> Ju lutem kontrolloni E-mailin.",
+            "error": {
+                "fail": "<strong>Regjistrimi dështoi!</strong> Ju lutemi provojeni sërisht më vonë.",
+                "userexists": "<strong>Përdoruesi është i zënë!</strong> Ju lutem zgjidhni një tjetër.",
+                "emailexists": "<strong>Email është i zënë!</strong> Ju lutem zgjidhni një tjetër."
+            }
+        }
+    }
+}

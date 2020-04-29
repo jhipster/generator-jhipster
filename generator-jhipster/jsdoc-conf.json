@@ -1,0 +1,29 @@
+{
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "include": [
+            "generators/cleanup.js",
+            "generators/docker-base.js",
+            "generators/docker-prompts.js",
+            "generators/generator-base.js",
+            "generators/generator-base-private.js",
+            "generators/generator-constants.js",
+            "generators/utils.js"
+        ]
+    },
+    "plugins": [],
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true,
+        "default": {
+            "outputSourceFiles": true
+        }
+    },
+    "opts": {
+        "recurse": true,
+        "destination": "./docs/",
+        "readme": "README.md"
+    }
+}

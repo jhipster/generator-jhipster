@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Revizije",
+        "filter": {
+            "title": "Filtriranje po datumu",
+            "from": "od",
+            "to": "do",
+            "button": {
+                "weeks": "Nedelje",
+                "today": "danas",
+                "clear": "poništi",
+                "close": "zatvori"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Korisnik",
+                "date": "Datum",
+                "status": "Stanje",
+                "data": "Dodatni podaci"
+            },
+            "data": {
+                "remoteAddress": "Adresa pristupa:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

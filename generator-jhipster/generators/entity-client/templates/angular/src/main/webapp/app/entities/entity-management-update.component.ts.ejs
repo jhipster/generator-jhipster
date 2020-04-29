@@ -1,0 +1,345 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const query = generateEntityQueries(relationships, entityInstance, dto);
+const queries = query.queries;
+const variables = query.variables;
+const rxjsMapIsUsed = query.rxjsMapIsUsed;
+const selectableEntities = query.selectableEntities;
+const selectableManyToManyEntities = query.selectableManyToManyEntities;
+_%>
+import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+<%_ if ( rxjsMapIsUsed ) { _%>
+import { map } from 'rxjs/operators';
+<%_ } _%>
+<%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+import * as moment from 'moment';
+import { DATE_TIME_FORMAT } from 'app/shared/constants/input.constants';
+<%_ } _%>
+<%_ if (fieldsContainBlob) { _%>
+import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } from 'ng-jhipster';
+<%_ } _%>
+
+import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+<%_ if (fieldsContainBlob) { _%>
+import { AlertError } from 'app/shared/alert/alert-error.model';
+<%_ } _%>
+<%_
+Object.keys(differentRelationships).forEach(key => {
+    if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
+        const uniqueRel = differentRelationships[key][0];
+        if (uniqueRel.otherEntityAngularName !== entityAngularName) {
+            if (uniqueRel.otherEntityAngularName === 'User') {
+_%>
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
+<%_
+            } else {
+_%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= uniqueRel.otherEntityModelName %>.model';
+import { <%= uniqueRel.otherEntityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.service';
+<%_
+            }
+        }
+    }
+});
+let selectableEntitiesType = '';
+if (selectableEntities.length === 1) {
+    selectableEntitiesType = selectableEntities[0];
+} else if (selectableEntities.length > 1) {
+    selectableEntitiesType = 'SelectableEntity';
+_%>
+
+type SelectableEntity = <%= selectableEntities.join(' | ') %>;
+<%_
+}
+let selectableManyToManyEntitiesType = '';
+if (selectableEntities.length === selectableManyToManyEntities.length && selectableEntities.every(value => selectableManyToManyEntities.includes(value))) {
+    selectableManyToManyEntitiesType = selectableEntitiesType;
+} else {
+    if (selectableManyToManyEntities.length === 1) {
+        selectableManyToManyEntitiesType = selectableManyToManyEntities[0];
+    } else if (selectableManyToManyEntities.length > 1) {
+        selectableManyToManyEntitiesType = 'SelectableManyToManyEntity';
+_%>
+
+type SelectableManyToManyEntity = <%= selectableManyToManyEntities.join(' | ') %>;
+<%_
+    }
+}
+_%>
+
+@Component({
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
+    templateUrl: './<%= entityFileName %>-update.component.html'
+})
+export class <%= entityAngularName %>UpdateComponent implements OnInit {
+    isSaving = false;
+    <%_ for (const idx in variables) { _%>
+    <%- variables[idx] %>
+    <%_ } _%>
+<%_ for (idx in fields) {
+    const fieldName = fields[idx].fieldName;
+    const fieldType = fields[idx].fieldType;
+_%>
+    <%_ if ( fieldType === 'LocalDate' ) { _%>
+    <%= fieldName %>Dp: any;
+    <%_ } _%>
+<%_ } _%>
+
+    editForm = this.fb.group({
+        id: [],
+    <%_ for (idx in fields) {
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+    _%>
+        <%= fieldName %>: [<% if (fields[idx].fieldValidate === true) { %>null,[<% if (fields[idx].fieldValidateRules.includes('required')) { %>Validators.required,<% } %><% if (fields[idx].fieldValidateRules.includes('minlength')) { %>Validators.minLength(<%= fields[idx].fieldValidateRulesMinlength %>),<% } %><% if (fields[idx].fieldValidateRules.includes('maxlength')) { %>Validators.maxLength(<%= fields[idx].fieldValidateRulesMaxlength %>),<% } %><% if (fields[idx].fieldValidateRules.includes('min')) { %>Validators.min(<%= fields[idx].fieldValidateRulesMin %>),<% } %><% if (fields[idx].fieldValidateRules.includes('max')) { %>Validators.max(<%= fields[idx].fieldValidateRulesMax %>),<% } %><% if (fields[idx].fieldValidateRules.includes('pattern')) { %>Validators.pattern('<%= fields[idx].fieldValidateRulesPattern.replace(/\\/g, '\\\\') %>'),<% } %>]<% } %>],
+        <%_ if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
+        <%= fieldName %>ContentType: [],
+        <%_ } _%>
+    <%_ } _%>
+<%_ for (idx in relationships) {
+    const relationshipType = relationships[idx].relationshipType;
+    const ownerSide = relationships[idx].ownerSide;
+    const relationshipName = relationships[idx].relationshipName;
+    const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    const relationshipRequired = relationships[idx].relationshipRequired;
+_%>
+    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+        <%_ if (dto === 'no') { _%>
+        <%= relationshipName %>: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
+        <%_ } else { _%>
+        <%= relationshipName %>Id: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
+        <%_ } _%>
+    <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
+        <%= relationshipFieldNamePlural %>: [<% if (relationshipRequired) { %>null,Validators.required<% } %>],
+    <%_ } _%>
+<%_ } _%>
+    });
+
+    constructor(
+        <%_ if (fieldsContainBlob) { _%>
+        protected dataUtils: JhiDataUtils,
+        protected eventManager: JhiEventManager,
+        <%_ } _%>
+        protected <%= entityInstance %>Service: <%= entityAngularName %>Service,
+<%_
+Object.keys(differentRelationships).forEach(key => {
+    if (differentRelationships[key].some(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide === true || rel.relationshipType === 'many-to-many' && rel.ownerSide === true)) {
+        const uniqueRel = differentRelationships[key][0];
+        if (uniqueRel.otherEntityAngularName !== entityAngularName) {
+_%>
+        protected <%= uniqueRel.otherEntityName %>Service: <%= uniqueRel.otherEntityAngularName %>Service,
+<%_
+        }
+    }
+});
+_%>
+        <%_ if (fieldsContainImageBlob) { _%>
+        protected elementRef: ElementRef,
+        <%_ } _%>
+        protected activatedRoute: ActivatedRoute,
+        private fb: FormBuilder
+    ) {}
+
+    ngOnInit(): void {
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
+            <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+            if (!<%= entityInstance %>.id) {
+                const today = moment().startOf('day');
+            <%_ } _%>
+            <%_ for (idx in fields) {
+                const fieldName = fields[idx].fieldName;
+                const fieldType = fields[idx].fieldType;
+            _%>
+                <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+                <%= entityInstance %>.<%= fieldName %> = today;
+                <%_ } _%>
+            <%_ } _%>
+            <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
+            }
+            <%_ } _%>
+
+            this.updateForm(<%= entityInstance %>);
+
+            <%_ for (idx in queries) { _%>
+            <%- queries[idx] %>
+            <%_ } _%>
+        });
+    }
+
+    updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
+        this.editForm.patchValue({
+            id: <%= entityInstance %>.id,
+    <%_ for (idx in fields) {
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+    _%>
+        <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %> ? <%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : null,
+        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
+            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %>,
+            <%= fieldName %>ContentType: <%= entityInstance %>.<%= fieldName %>ContentType,
+        <%_ } else { _%>
+            <%= fieldName %>: <%= entityInstance %>.<%= fieldName %>,
+        <%_ } _%>
+    <%_ } _%>
+    <%_ for (idx in relationships) {
+        const relationshipType = relationships[idx].relationshipType;
+        const ownerSide = relationships[idx].ownerSide;
+        const relationshipName = relationships[idx].relationshipName;
+        const relationshipFieldName = relationships[idx].relationshipFieldName;
+        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    _%>
+        <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+            <%_ if (dto === 'no') { _%>
+            <%= relationshipName %>: <%= entityInstance %>.<%= relationshipFieldName %>,
+            <%_ } else { _%>
+            <%= relationshipName %>Id: <%= entityInstance %>.<%= relationshipFieldName %>Id,
+            <%_ } _%>
+        <%_ } else if (relationshipType === 'many-to-many' && ownerSide === true) { _%>
+            <%= relationshipFieldNamePlural %>: <%= entityInstance %>.<%= relationshipFieldNamePlural %>,
+        <%_ } _%>
+    <%_ } _%>
+        });
+    }
+
+<%_ if (fieldsContainBlob) { _%>
+    byteSize(base64String: string): string {
+        return this.dataUtils.byteSize(base64String);
+    }
+
+    openFile(contentType: string, base64String: string): void {
+        this.dataUtils.openFile(contentType, base64String);
+    }
+
+    setFileData(event: Event, field: string, isImage: boolean): void {
+        this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe(null, (err: JhiFileLoadError) => {
+            this.eventManager.broadcast(
+                new JhiEventWithContent<AlertError>('<%= angularAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
+            );
+        });
+    }
+
+    <%_ if (fieldsContainImageBlob) { _%>
+    clearInputImage(field: string, fieldContentType: string, idInput: string): void {
+        this.editForm.patchValue({
+            [field]: null,
+            [fieldContentType]: null
+        });
+        if (this.elementRef && idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
+            this.elementRef.nativeElement.querySelector('#' + idInput).value = null;
+        }
+    }
+    <%_ } _%>
+<%_ } _%>
+
+    previousState(): void {
+        window.history.back();
+    }
+
+    save(): void {
+        this.isSaving = true;
+        const <%= entityInstance %> = this.createFromForm();
+        if (<%= entityInstance %>.id !== undefined) {
+            this.subscribeToSaveResponse(
+                this.<%= entityInstance %>Service.update(<%= entityInstance %>));
+        } else {
+            this.subscribeToSaveResponse(
+                this.<%= entityInstance %>Service.create(<%= entityInstance %>));
+        }
+    }
+
+    private createFromForm(): I<%= entityAngularName %> {
+        return {
+            ...new <%= entityAngularName %>(),
+            id: this.editForm.get(['id'])!.value,
+    <%_ for (idx in fields) {
+        const fieldName = fields[idx].fieldName;
+        const fieldType = fields[idx].fieldType;
+        const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+    _%>
+        <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+            <%= fieldName %>: this.editForm.get(['<%= fieldName %>'])!.value ? moment(this.editForm.get(['<%= fieldName %>'])!.value, DATE_TIME_FORMAT) : undefined,
+        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') { _%>
+            <%= fieldName %>ContentType: this.editForm.get(['<%= fieldName %>ContentType'])!.value,
+            <%= fieldName %>: this.editForm.get(['<%= fieldName %>'])!.value,
+        <%_ } else { _%>
+            <%= fieldName %>: this.editForm.get(['<%= fieldName %>'])!.value,
+        <%_ } _%>
+    <%_ } _%>
+    <%_ for (idx in relationships) {
+        const relationshipType = relationships[idx].relationshipType;
+        const ownerSide = relationships[idx].ownerSide;
+        const relationshipName = relationships[idx].relationshipName;
+        const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
+    _%>
+        <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+            <%_ if (dto === 'no') { _%>
+            <%= relationshipName %>: this.editForm.get(['<%= relationshipName %>'])!.value,
+            <%_ } else { _%>
+            <%= relationshipName %>Id: this.editForm.get(['<%= relationshipName %>Id'])!.value,
+            <%_ } _%>
+        <%_ } else if (relationshipType === 'many-to-many' && relationships[idx].ownerSide === true) { _%>
+            <%= relationshipFieldNamePlural %>: this.editForm.get(['<%= relationshipFieldNamePlural %>'])!.value,
+        <%_ } _%>
+    <%_ } _%>
+        };
+    }
+
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
+        result.subscribe(() => this.onSaveSuccess(), () => this.onSaveError());
+    }
+
+    protected onSaveSuccess(): void {
+        this.isSaving = false;
+        this.previousState();
+    }
+
+    protected onSaveError(): void {
+        this.isSaving = false;
+    }
+
+    <%_ if (selectableEntitiesType) { _%>
+    trackById(index: number, item: <%= selectableEntitiesType %>): any {
+        return item.id;
+    }
+    <%_ } _%>
+
+    <%_ if (selectableManyToManyEntitiesType) { _%>
+    getSelected(selectedVals: <%= selectableManyToManyEntitiesType %>[], option: <%= selectableManyToManyEntitiesType %>): <%= selectableManyToManyEntitiesType %> {
+        if (selectedVals) {
+            for (let i = 0; i < selectedVals.length; i++) {
+                if (option.id === selectedVals[i].id) {
+                    return selectedVals[i];
+                }
+            }
+        }
+        return option;
+    }
+    <%_ } _%>
+}

@@ -1,0 +1,76 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+
+import { cleanEntity, mapIdList } from 'app/shared/util/entity-utils';
+
+describe('Entity utils', () => {
+  describe('cleanEntity', () => {
+    it('should not remove fields with an id', () => {
+      const entityA = {
+        a: {
+          id: 5
+        }
+      };
+      const entityB = {
+        a: {
+          id: '5'
+        }
+      };
+
+      expect(cleanEntity({ ...entityA })).toEqual(entityA);
+      expect(cleanEntity({ ...entityB })).toEqual(entityB);
+    });
+
+    it('should remove fields with an empty id', () => {
+      const entity = {
+        a: {
+          id: ''
+        }
+      };
+
+      expect(cleanEntity({ ...entity })).toEqual({});
+    });
+
+    it('should not remove fields that are not objects', () => {
+      const entity = {
+        a: '',
+        b: 5,
+        c: [],
+        d: '5'
+      };
+
+      expect(cleanEntity({ ...entity })).toEqual(entity);
+    });
+  });
+
+  describe('mapIdList', () => {
+    it('should map ids no matter the element\'s type', () => {
+      const ids = ['jhipster', '', 1, { key: 'value'}];
+
+      expect(mapIdList(ids)).toEqual([{ id: 'jhipster' }, { id: 1 }, { id: { key: 'value' } }]);
+    });
+
+    it('should return an empty array', () => {
+      const ids = [];
+
+      expect(mapIdList(ids)).toEqual([]);
+    });
+  });
+});

@@ -1,0 +1,65 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+apiVersion: <%= KUBERNETES_BATCH_API_VERSION %>
+kind: Job
+metadata:
+  name: jhipster-import-dashboards
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    job: jhipster-import-dashboards
+spec:
+  template:
+    metadata:
+      labels:
+        job: jhipster-import-dashboards
+      annotations:
+        "helm.sh/hook": post-install
+     <%_ if (istio) { _%>
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
+    spec:
+      initContainers:
+        - name: init-dependent-service-check
+          image: busybox:latest
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+                until nc -z -w 1 jhipster-elasticsearch 9200
+                do
+                  echo Waiting for elasticsearch cluster to get initialized
+                  sleep 5
+                done
+                until nc -z -w 1 jhipster-console 5601
+                do
+                  echo Waiting for kibana to get initialized
+                  sleep 5
+                done
+      containers:
+      - name: jhipster-import-dashboards
+        image: <%= DOCKER_JHIPSTER_IMPORT_DASHBOARDS %>
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+      restartPolicy: OnFailure

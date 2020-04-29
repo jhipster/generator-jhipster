@@ -1,0 +1,449 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import io.github.jhipster.config.JHipsterConstants;
+<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import io.github.jhipster.config.h2.H2ConfigurationHelper;
+<%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import io.r2dbc.spi.ConnectionFactory;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+import com.github.mongobee.Mongobee;
+import com.mongodb.MongoClient;
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+
+import com.couchbase.client.java.Bucket;
+import com.github.couchmove.Couchmove;
+import <%= packageName %>.repository.Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+import <%= packageName %>.repository.<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository;
+    <%_ } _%>
+import org.apache.commons.codec.binary.Base64;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+import io.github.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
+import io.github.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
+<%_ } _%>
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+<%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+    <%_ if (reactive) { _%>
+import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
+    <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
+<%_ } _%>
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+import org.springframework.context.annotation.Import;
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch' && ['mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.FilterType;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import org.springframework.context.annotation.Profile;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || (databaseType === 'sql' && reactive)) { _%>
+import org.springframework.core.convert.converter.Converter;
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (!reactive) { _%>
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+    <%_ } _%>
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
+import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
+    <%_ } _%>
+import org.springframework.data.mongodb.repository.config.Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories;
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.couchbase.config.BeanNames;
+import org.springframework.data.couchbase.core.convert.CouchbaseCustomConversions;
+import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbaseEventListener;
+    <%_ if (!reactive) { _%>
+import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
+    <%_ } _%>
+import org.springframework.data.couchbase.repository.config.Enable<%_ if (reactive) { _%>Reactive<% } %>CouchbaseRepositories;
+import org.springframework.util.StringUtils;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %>
+<%_ if (databaseType === 'sql') { _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import org.springframework.core.env.Environment;
+    <%_ } _%>
+    <%_ if (reactive) { _%>
+import org.springframework.data.convert.CustomConversions;
+import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
+import org.springframework.data.r2dbc.dialect.DialectResolver;
+import org.springframework.data.r2dbc.dialect.R2dbcDialect;
+import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+    <%_ } else { _%>
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+    <%_ } _%>
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+<%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+import java.sql.SQLException;
+<%_ } } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+import java.util.ArrayList;
+import java.util.List;
+<%_ } else if (databaseType === 'couchbase') { _%>
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+<%_ } _%>
+
+@Configuration
+<%_ if (databaseType === 'sql') { _%>
+    <%_ if (reactive) { _%>
+@EnableR2dbcRepositories("<%= packageName %>.repository")
+    <%_ } else { _%>
+@EnableJpaRepositories("<%= packageName %>.repository")
+@EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
+@EnableTransactionManagement
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
+    <%_ } else { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%= packageName %>.repository")
+    <%_ } _%>
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>MongoRepository.class))
+    <%_ } else { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
+    <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+@Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+    <%_ if (reactive) { _%>
+@Import(value = {MongoAutoConfiguration.class, MongoReactiveAutoConfiguration.class})
+    <%_ } else { _%>
+@Import(value = MongoAutoConfiguration.class)
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(repositoryBaseClass = Custom<% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class, basePackages = "<%= packageName %>.repository"<%_ if (searchEngine === 'elasticsearch') { %>,
+    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>N1qlCouchbaseRepository.class)<%_ } _%>)
+    <%_ if (!reactive) { _%>
+@EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware")
+    <%_ } _%>
+@Import(value = CouchbaseAutoConfiguration.class)
+<%_ } _%>
+public class DatabaseConfiguration {
+
+    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+<%_ if (databaseType === 'sql') { _%>
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+
+    private final Environment env;
+
+    public DatabaseConfiguration(Environment env) {
+        this.env = env;
+    }
+
+    /**
+     * Open the TCP port for the H2 database, so it is available remotely.
+     *
+     * @return the H2 database TCP server.
+     * @throws SQLException if the server failed to start.
+     */
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    @Profile(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
+    public Object h2TCPServer() throws SQLException {
+        String port = getValidPortForH2();
+        log.debug("H2 database is available on port {}", port);
+        return H2ConfigurationHelper.createServer(port);
+    }
+
+    private String getValidPortForH2() {
+        int port = Integer.parseInt(env.getProperty("server.port"));
+        if (port < 10000) {
+            port = 10000 + port;
+        } else {
+            if (port < 63536) {
+                port = port + 2000;
+            } else {
+                port = port - 2000;
+            }
+        }
+        return String.valueOf(port);
+    }
+    <%_ } _%>
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+
+    @Bean
+    public ValidatingMongoEventListener validatingMongoEventListener() {
+        return new ValidatingMongoEventListener(validator());
+    }<% } %><% if (databaseType === 'couchbase') { %>
+
+    @Bean
+    public ValidatingCouchbaseEventListener validatingCouchbaseEventListener() {
+        return new ValidatingCouchbaseEventListener(validator());
+    }<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
+
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        return new LocalValidatorFactoryBean();
+    }<% } if (databaseType === 'mongodb') { %>
+
+    @Bean
+    public MongoCustomConversions customConversions() {
+        List<Converter<?, ?>> converters = new ArrayList<>();
+        converters.add(DateToZonedDateTimeConverter.INSTANCE);
+        converters.add(ZonedDateTimeToDateConverter.INSTANCE);
+        return new MongoCustomConversions(converters);
+    }
+
+    @Bean
+    public Mongobee mongobee(MongoClient mongoClient, MongoTemplate mongoTemplate, MongoProperties mongoProperties) {
+        log.debug("Configuring Mongobee");
+        Mongobee mongobee = new Mongobee(mongoClient);
+        mongobee.setDbName(mongoProperties.getMongoClientDatabase());
+        mongobee.setMongoTemplate(mongoTemplate);
+        // package to scan for migrations
+        mongobee.setChangeLogsScanPackage("<%= packageName %>.config.dbmigrations");
+        mongobee.setEnabled(true);
+        return mongobee;
+    }<% } %><% if (databaseType === 'couchbase') { %>
+
+    @Bean(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)
+    public CouchbaseCustomConversions customConversions() {
+        List<Converter<?, ?>> converters = new ArrayList<>();
+        converters.add(ZonedDateTimeToLongConverter.INSTANCE);
+        converters.add(NumberToLocalDateTimeConverter.INSTANCE);
+        converters.add(BigIntegerToStringConverter.INSTANCE);
+        converters.add(StringToBigIntegerConverter.INSTANCE);
+        converters.add(BigDecimalToStringConverter.INSTANCE);
+        converters.add(StringToBigDecimalConverter.INSTANCE);
+        converters.add(StringToByteConverter.INSTANCE);
+        converters.add(UUIDToStringConverter.INSTANCE);
+        converters.add(StringToUUIDConverter.INSTANCE);
+        return new CouchbaseCustomConversions(converters);
+    }
+
+    @Bean
+    public Couchmove couchmove(Bucket couchbaseBucket, CouchbaseProperties properties) {
+        log.debug("Configuring Couchmove");
+        Couchmove couchmove = new Couchmove(couchbaseBucket, properties.getBucket().getName(), properties.getBucket().getPassword(), "config/couchmove/changelog");
+        couchmove.migrate();
+        return couchmove;
+    }
+
+    /**
+     * Simple singleton to convert {@link ZonedDateTime}s to their {@link Long} representation.
+     */
+    @WritingConverter
+    public enum ZonedDateTimeToLongConverter implements Converter<ZonedDateTime, Long> {
+
+        INSTANCE;
+
+        @Override
+        public Long convert(ZonedDateTime source) {
+            return source == null ? null : Date.from(source.toInstant()).getTime();
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link Number} {@link BigDecimal} representation.
+     */
+    @ReadingConverter
+    public enum NumberToLocalDateTimeConverter implements Converter<Number, ZonedDateTime> {
+
+        INSTANCE;
+
+        @Override
+        public ZonedDateTime convert(Number source) {
+            return source == null ? null : ZonedDateTime.ofInstant(new Date(source.longValue()).toInstant(), ZoneId.systemDefault());
+        }
+
+    }
+
+    /**
+     * Simple singleton to convert {@link BigDecimal}s to their {@link String} representation.
+     */
+    @WritingConverter
+    public enum BigDecimalToStringConverter implements Converter<BigDecimal, String> {
+        INSTANCE;
+
+        public String convert(BigDecimal source) {
+            return source == null ? null : source.toString();
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link String} {@link BigDecimal} representation.
+     */
+    @ReadingConverter
+    public enum StringToBigDecimalConverter implements Converter<String, BigDecimal> {
+        INSTANCE;
+
+        public BigDecimal convert(String source) {
+            return StringUtils.hasText(source) ? new BigDecimal(source) : null;
+        }
+    }
+
+    /**
+     * Simple singleton to convert {@link BigInteger}s to their {@link String} representation.
+     */
+    @WritingConverter
+    public enum BigIntegerToStringConverter implements Converter<BigInteger, String> {
+        INSTANCE;
+
+        public String convert(BigInteger source) {
+            return source == null ? null : source.toString();
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link String} {@link BigInteger} representation.
+     */
+    @ReadingConverter
+    public enum StringToBigIntegerConverter implements Converter<String, BigInteger> {
+        INSTANCE;
+
+        public BigInteger convert(String source) {
+            return StringUtils.hasText(source) ? new BigInteger(source) : null;
+        }
+    }
+
+    /**
+     * Simple singleton to convert from {@link String} {@code byte[]} representation.
+     */
+    @ReadingConverter
+    public enum StringToByteConverter implements Converter<String, byte[]> {
+        INSTANCE;
+
+        @Override
+        public byte[] convert(String source) {
+            return Base64.decodeBase64(source);
+        }
+    }
+
+    /**
+    * Simple singleton to convert {@link UUID}s to their {@link String} representation.
+    */
+    @WritingConverter
+    public enum UUIDToStringConverter implements Converter<UUID, String> {
+
+        INSTANCE;
+
+        @Override
+        public String convert(UUID source) {
+            return source == null ? null : source.toString();
+        }
+    }
+
+    /**
+    * Simple singleton to convert from {@link String} {@link UUID} representation.
+    */
+    @ReadingConverter
+    public enum StringToUUIDConverter implements Converter<String, UUID> {
+
+        INSTANCE;
+
+        @Override
+        public UUID convert(String source) {
+            return source == null ? null : UUID.fromString(source);
+        }
+
+    }
+<%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+    // LocalDateTime seems to be the only type that is supported across all drivers atm
+    // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
+    @Bean
+    public R2dbcCustomConversions r2dbcCustomConversions(ConnectionFactory connectionFactory) {
+        R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
+        List<Object> converters = new ArrayList<>(dialect.getConverters());
+        converters.add(new InstantWriteConverter());
+        converters.add(new InstantReadConverter());
+        converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
+        return new R2dbcCustomConversions(
+            CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
+            Collections.emptyList());
+    }
+
+    @WritingConverter
+    public static class InstantWriteConverter implements Converter<Instant, LocalDateTime> {
+
+        public LocalDateTime convert(Instant source) {
+            return LocalDateTime.ofInstant(source, ZoneOffset.UTC);
+        }
+    }
+
+    @ReadingConverter
+    public static class InstantReadConverter implements Converter<LocalDateTime, Instant> {
+
+        @Override
+        public Instant convert(LocalDateTime localDateTime) {
+            return localDateTime.toInstant(ZoneOffset.UTC);
+        }
+    }
+<%_ } _%>
+}

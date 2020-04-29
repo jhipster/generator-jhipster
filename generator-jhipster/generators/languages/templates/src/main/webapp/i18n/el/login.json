@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Σύνδεση",
+        "form": {
+            "password": "Κωδικός",
+            "password.placeholder": "Ο κωδικός σας",
+            "rememberme": "Θυμηθείτε με;",
+            "button": "Σύνδεση"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Σφάλμα σύνδεσης</strong> Παρακαλούμε ελέγχτε τα στοιχεία σύνδεσής και προσπαθήστε ξανά."
+            }
+        },
+        "password": {
+            "forgot": "Ξεχάσατε τον κωδικό σας;"
+        }
+    }
+}

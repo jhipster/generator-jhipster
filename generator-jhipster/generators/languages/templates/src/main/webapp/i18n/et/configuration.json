@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Konfiguratsioon",
+        "filter": "Filter (prefiksi alusel)",
+        "table": {
+            "prefix": "Prefiks",
+            "properties": "Omadused"
+        }
+    }
+}

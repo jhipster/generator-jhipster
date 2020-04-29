@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Aktivitet e përdoruesit në kohë reale",
+        "table": {
+            "userlogin": "Përdoruesi",
+            "ipaddress": "Adresa e IP",
+            "userAgent": "User agent",
+            "page": "Falja aktuale",
+            "time": "Koha"
+        }
+    }
+}

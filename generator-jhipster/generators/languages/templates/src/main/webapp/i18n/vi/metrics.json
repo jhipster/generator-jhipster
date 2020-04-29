@@ -1,0 +1,94 @@
+{
+    "metrics": {
+        "title": "Các số liệu của chương trình",
+        "refresh.button": "Làm mới",
+        "updating": "Đang cập nhật...",
+        "jvm": {
+            "title": "Số liệu của máy ảo Java",
+            "memory": {
+                "title": "Bộ nhớ",
+                "total": "Tổng bộ nhớ",
+                "heap": "Bộ nhớ heap",
+                "nonheap": "Bộ nhớ không nằm trong heap"
+            },
+            "threads": {
+                "title": "Các luồng",
+                "all": "Tất cả",
+                "runnable": "Đang chạy",
+                "timedwaiting": "Đang chờ (đã lên lịch)",
+                "waiting": "Đang chờ",
+                "blocked": "Đã khóa",
+                "dump": {
+                    "title": "Bản ghi các luồng",
+                    "id": "Định danh: ",
+                    "blockedtime": "Thời gian khóa",
+                    "blockedcount": "Số lượng khóa",
+                    "waitedtime": "Thời gian đợi",
+                    "waitedcount": "Số lượng đợi",
+                    "lockname": "Tên khóa",
+                    "stacktrace": "Chi tiết",
+                    "show": "Hiển thị chi tiết",
+                    "hide": "Ẩn chi tiết"
+                }
+            },
+            "gc": {
+                "title": "Tự động dọn dẹp",
+                "marksweepcount": "Số lần kiểm tra",
+                "marksweeptime": "Thời gian kiểm tra",
+                "scavengecount": "Số lần dọn dẹp",
+                "scavengetime": "Thời gian dọn dẹp"
+            },
+            "http": {
+                "title": "Số lượng yêu cầu HTTP (số sự kiện trên giây)",
+                "active": "Số yêu cầu đang thực thi:",
+                "total": "Tổng số yêu cầu:",
+                "table": {
+                    "code": "Mã",
+                    "count": "Số lượng",
+                    "mean": "Bình quân",
+                    "average": "Trung bình"
+                },
+                "code": {
+                    "ok": "Thành công",
+                    "notfound": "Không tìm thấy",
+                    "servererror": "Lỗi máy chủ"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Thống kê các dịch vụ (thời gian tính theo mili giây)",
+            "table": {
+                "name": "Tên dịch vụ",
+                "count": "Số lượng",
+                "mean": "Bình quân",
+                "min": "Tối thiểu",
+                "max": "Tối đa",
+                "p50": "50%",
+                "p75": "75%",
+                "p95": "95%",
+                "p99": "99%"
+            }
+        },
+        "ehcache": {
+            "title": "Thống kê Ehcache",
+            "cachename": "Tên cache",
+            "objects": "Các đối tượng",
+            "hits": "Tìm thấy",
+            "misses": "Không tìm thấy",
+            "evictioncount": "Xóa khỏi cache"
+        },
+        "datasource": {
+            "usage": "Sử dụng",
+            "title": "Thống kê truy cập cơ sở dữ liệu (thời gian tính theo mili giây)",
+            "name": "Sử dụng vùng chứa",
+            "count": "Số lượng",
+            "mean": "Bình quân",
+            "min": "Tối thiểu",
+            "max": "Tối đa",
+            "p50": "50%",
+            "p75": "75%",
+            "p95": "95%",
+            "p99": "99%"
+        }
+    }
+}

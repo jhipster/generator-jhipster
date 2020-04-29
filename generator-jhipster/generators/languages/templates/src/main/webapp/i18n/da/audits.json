@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Revisioner",
+        "filter": {
+            "title": "Filtrer på dato",
+            "from": "fra",
+            "to": "til",
+            "button": {
+                "weeks": "uger",
+                "today": "idag",
+                "clear": "ryd",
+                "close": "luk"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Bruger",
+                "date": "Dato",
+                "status": "Tilstand",
+                "data": "Ekstra data"
+            },
+            "data": {
+                "remoteAddress": "Remote Address:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

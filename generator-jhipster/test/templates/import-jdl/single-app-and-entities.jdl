@@ -1,0 +1,10 @@
+application {
+  config {
+    baseName jhipsterApp,
+    packageName com.jhipster.myapp
+  }
+  entities A, B
+}
+
+entity A
+entity B

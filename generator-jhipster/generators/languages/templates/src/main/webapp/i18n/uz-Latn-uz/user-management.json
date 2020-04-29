@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Foydalanuvchi",
+            "createLabel": "Yangi foydalanuvchi qo'shish",
+            "createOrEditLabel": "Foydalanuvchini tahrirlash"
+        },
+        "created": "Yangi foydalanuvchi {{ param }} bilan qo`shildi",
+        "updated": "{{ param }} - foydalanuvchi saqlandi",
+        "deleted": "{{ param }} - foydalanuvchi o'chirildi",
+        "delete": {
+            "question": "Foydalanuvchi {{ login }} o'chirishni hoxlaysizmi?"
+        },
+        "detail": {
+            "title": "Foydalanuvchi"
+        },
+        "login": "Login",
+        "firstName": "Ismi",
+        "lastName": "Familiyasi",
+        "email": "Email",
+        "activated": "Faol",
+        "deactivated": "Faol emas",
+        "profiles": "Profili",
+        "langKey": "Tili",
+        "createdBy": "Qo'shgan",
+        "createdDate": "Qo'shilgan vaqti",
+        "lastModifiedBy": "O'zgartirgan",
+        "lastModifiedDate": "O'zgartirilgan sanasi"
+    }
+}

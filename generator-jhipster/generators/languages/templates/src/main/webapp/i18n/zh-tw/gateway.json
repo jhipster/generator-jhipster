@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "閘道",
+        "routes": {
+            "title": "目前路由",
+            "url": "URL",
+            "service": "服務",
+            "servers": "可用伺服器",
+            "error": "警告: 沒有可用的伺服器!"
+        },
+        "refresh": {
+            "button": "重新整理"
+        }
+    }
+}

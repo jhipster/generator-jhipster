@@ -1,0 +1,16 @@
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+    <%= baseName.toLowerCase() %>-couchbase:
+        build:
+            context: .
+            dockerfile: couchbase/Couchbase.Dockerfile
+        ports:
+            - 8091:8091
+            - 8092:8092
+            - 8093:8093
+            - 8094:8094
+            - 11210:11210
+        environment:
+            - BUCKET=<%= baseName %>
+        # volumes:
+        #     - ~/volumes/jhipster/<%= baseName.toLowerCase() %>/couchbase/:/opt/couchbase/var

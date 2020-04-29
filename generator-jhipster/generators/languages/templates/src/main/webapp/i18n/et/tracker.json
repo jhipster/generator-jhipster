@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Kasutajate tegevused reaalajas",
+        "table": {
+            "userlogin": "Kasutaja",
+            "ipaddress": "IP aadress",
+            "userAgent": "Veebilehitseja",
+            "page": "Praegune leht",
+            "time": "Aeg"
+        }
+    }
+}

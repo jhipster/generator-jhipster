@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Đăng ký",
+        "form": {
+            "button": "Đăng ký"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Bạn phải nhập tên tài khoản.",
+                    "minlength": "Tên tài khoản phải có ít nhất 1 ký tự.",
+                    "maxlength": "Tên tài khoản không được vượt quá 50 ký tự.",
+                    "pattern": "Your username is invalid."
+                }
+            },
+            "success": "<strong>Đăng ký thành công!</strong> Bạn vui lòng kiểm tra hộp thư để xác nhận tài khoản.",
+            "error": {
+                "fail": "<strong>Đăng ký thất bại!</strong> Vui lòng thử lại sau.",
+                "userexists": "<strong>Tên tài khoản này đã được sử dụng!</strong> Bạn vui lòng chọn tên tài khoản khác.",
+                "emailexists": "<strong>Email này đã được sử dụng!</strong> Bạn vui lòng nhập email khác."
+            }
+        }
+    }
+}

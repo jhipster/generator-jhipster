@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Έλεγχοι",
+        "filter": {
+            "title": "Φιλτράρισμα κατά ημερομηνία",
+            "from": "από",
+            "to": "προς",
+            "button": {
+                "weeks": "Ημερες",
+                "today": "σήμερα",
+                "clear": "καθαρισμός",
+                "close": "κλείσιμο"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Χρηστης",
+                "date": "Ημερομηνία",
+                "status": "Kατάσταση",
+                "data": "Επιπλέον πληροφορίες"
+            },
+            "data": {
+                "remoteAddress": "Απομακρυσμένη Διεύθυνση:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

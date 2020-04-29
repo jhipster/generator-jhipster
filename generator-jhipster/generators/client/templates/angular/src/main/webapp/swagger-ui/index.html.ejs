@@ -1,0 +1,103 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= baseName %> - Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css">
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16"/>
+</head>
+
+<body>
+<div id="swagger-ui"></div>
+
+<script src="./swagger-ui-bundle.js"></script>
+<script src="./swagger-ui-standalone-preset.js"></script>
+<script src="./axios.min.js"></script>
+
+
+<script type="text/javascript">
+    window.onload = function () {
+
+        <%_ if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
+        function getCSRF() {
+            var name = "XSRF-TOKEN=";
+            var ca = document.cookie.split(';');
+            for(var i=0; i<ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1);
+                if (c.indexOf(name) !== -1) return c.substring(name.length,c.length);
+            }
+            return "";
+        }
+        <%_ } _%>
+
+        var urls = [];
+        axios.get("/swagger-resources").then(function (response) {
+            response.data.forEach(function (resource) {
+                urls.push({"name": resource.name, "url": resource.location});
+            });
+
+            urls.sort(function (a, b) {
+                var x = a.name.toLowerCase(), y = b.name.toLowerCase();
+                return x < y ? -1 : x > y ? 1 : 0;
+            });
+
+            // Build a system
+            var ui = SwaggerUIBundle({
+                urls: urls,
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                filter: true,
+                layout: "StandaloneLayout",
+                withCredentials: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                <%_ if (authenticationType === 'session' || authenticationType === 'oauth2' || authenticationType === 'uaa') { _%>
+                requestInterceptor: function(req) {
+                    req.headers['X-XSRF-TOKEN'] = getCSRF();
+                    return req;
+                }
+                <%_ } _%>
+                <%_ if (authenticationType === 'jwt') { _%>
+                requestInterceptor: function (req) {
+                    var authToken = JSON.parse(localStorage.getItem("<%= jhiPrefixDashed %>-authenticationtoken")
+                        || sessionStorage.getItem("<%= jhiPrefixDashed %>-authenticationtoken"));
+                    if (authToken) {
+                        req.headers['Authorization'] = "Bearer " + authToken;
+                    }
+                    return req;
+                }
+                <%_ } _%>
+            });
+
+            window.ui = ui
+        });
+
+    };
+</script>
+</body>
+</html>

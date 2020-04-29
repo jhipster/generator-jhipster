@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "नोंदणी ",
+        "form": {
+            "button": "नोंदणी "
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "आपले वापरकर्ता नाव आवश्यक आहे.",
+                    "minlength": "आपले वापरकर्ता नाव कमीत कमी 1 वर्ण असणे आवश्यक आहे.",
+                    "maxlength": "आपले वापरकर्ता नाव 50 वर्ण असू शकत नाही.",
+                    "pattern": "Your username is invalid."
+                }
+            },
+            "success": "<strong>नोंदणी जतन!</strong> आपला ईमेल तपासा.",
+            "error": {
+                "fail": "<strong>नोंदणी अयशस्वी!</strong> कृपया नंतर पुन्हा प्रयत्न करा.",
+                "userexists": "<strong>लॉगिन नाव आधीच नोंदणीकृत!</strong> कृपया दुसरे नाव निवडा.",
+                "emailexists": "<strong>ई-मेल आधीच वापरात आहे!</strong> कृपया दुसरे नाव निवडा."
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Сардэчна запрашаем, Java Hipster!",
+        "subtitle": "Гэта ваша дамашняя старонка",
+        "logged": {
+            "message": "Вы ўвайшлі як карыстальнік \"{{username}}\"."
+        },
+        "question": "Калі ў Вас з'явіліся пытанні па JHipster:",
+        "link": {
+            "homepage": "JHipster дамашняя старонка",
+            "stackoverflow": "JHipster на Stack Overflow",
+            "bugtracker": "JHipster баг трекер",
+            "chat": "JHipster public chat room",
+            "follow": "карыстальнік @jhipster в Twitter"
+        },
+        "like": "Калі вам падабаецца JHipster, не забудзьце даць нам зорачку на",
+        "github": "GitHub"
+    }
+}

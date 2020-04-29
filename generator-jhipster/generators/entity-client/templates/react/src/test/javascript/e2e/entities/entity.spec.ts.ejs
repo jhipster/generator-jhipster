@@ -1,0 +1,208 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { browser, element, by<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %> } from 'protractor';
+
+import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
+import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
+import <%= entityClass %>ComponentsPage<%_ if (!readOnly) { _%>, { <%= entityClass %>DeleteDialog }<%_ } %> from './<%= entityFileName %>.page-object';
+<%_ if (!readOnly) { _%>
+import <%= entityClass %>UpdatePage from './<%= entityFileName %>-update.page-object';
+<%_ } _%>
+import { waitUntilDisplayed, waitUntilAnyDisplayed, click, getRecordsCount, waitUntilHidden, waitUntilCount, isVisible } from '../../<%= entityParentPathAddition %>util/utils';
+<%_ if (fieldsContainBlobOrImage && !readOnly) { _%>
+import path from 'path';
+<%_ } _%>
+<%_
+let elementGetter = `getText()`;
+let openBlockComment = ``;
+let closeBlockComment = ``;
+if (enableTranslation) {
+    elementGetter = `getAttribute('jhiTranslate')`;
+}
+for (let relationship of relationships) {
+    if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
+        openBlockComment = `/* `;
+        closeBlockComment = ` */`;
+        break;
+    }
+} _%>
+
+const expect = chai.expect;
+
+describe('<%= entityClass %> e2e test', () => {
+    let navBarPage: NavBarPage;
+    let signInPage: SignInPage;
+    let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
+<%_ if (!readOnly) { _%>
+    let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
+    <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
+    <%_ if (fieldsContainBlobOrImage) { _%>
+    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/logo-jhipster.png';
+    const absolutePath = path.resolve(__dirname, fileToUpload);
+    <%_ } _%>
+<%_ } _%>
+    let beforeRecordsCount = 0;
+
+    before(async () => {
+        await browser.get('/');
+        navBarPage = new NavBarPage();
+        signInPage = await navBarPage.getSignInPage();
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        await signInPage.waitUntilDisplayed();
+
+        await signInPage.username.sendKeys('admin');
+        await signInPage.password.sendKeys('admin');
+        await signInPage.loginButton.click();
+        await signInPage.waitUntilHidden();
+        <%_ } else { _%>
+        await signInPage.loginWithOAuth('admin', 'admin');
+        <%_ } _%>
+        await waitUntilDisplayed(navBarPage.entityMenu);
+        await waitUntilDisplayed(navBarPage.adminMenu);
+        await waitUntilDisplayed(navBarPage.accountMenu);
+    });
+
+    it('should load <%= entityClassPlural %>', async () => {
+        await navBarPage.getEntityPage('<%= entityStateName %>');
+        <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
+        expect(await <%= entityInstance %>ComponentsPage.title.getText())
+            .to.match(/<%= entityClassPluralHumanized %>/);
+
+        <%_ if (!readOnly) { _%>
+        expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
+        <%_ } _%>
+        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
+        <%= entityInstance %>ComponentsPage.table]);
+
+        beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
+    });
+
+<%_ if (!readOnly) { _%>
+    it('should load create <%= entityClass %> page', async () => {
+        await <%= entityInstance %>ComponentsPage.createButton.click();
+        <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
+        <%_ if (enableTranslation) { _%>
+        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
+            .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
+        <%_ } else { _%>
+        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
+            .to.match(/Create or edit a <%= entityClass %>/);
+        <%_ } _%>
+        await <%= entityInstance %>UpdatePage.cancel();
+    });
+
+   <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
+        await <%= entityInstance %>ComponentsPage.createButton.click();
+        <%_ fields.forEach((field) => {
+            const fieldName = field.fieldName;
+            const fieldNameCapitalized = field.fieldNameCapitalized;
+            const fieldType = field.fieldType;
+            const fieldTypeBlobContent = field.fieldTypeBlobContent;
+            const fieldIsEnum = field.fieldIsEnum;
+            const fieldValidateSampleString = field.fieldValidateSampleString;
+        _%>
+        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5');
+        <%_ } else if (fieldType === 'LocalDate') { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01-01-2001');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('2001-01-01');
+        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('01/01/2001' + protractor.Key.TAB + '02:30AM');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('2001-01-01T02:30');
+        <%_ } else if (fieldType === 'Duration') { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('PT12S');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.contain('12');
+        <%_ } else if (fieldType === 'Boolean') { _%>
+        const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected();
+        if (selected<%= fieldNameCapitalized %>) {
+            await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.false;
+        } else {
+            await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().click();
+            expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input().isSelected()).to.be.true;
+        }
+        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
+        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input(absolutePath);
+        <%_ } else if (fieldIsEnum) { _%>
+        await <%= entityInstance %>UpdatePage.<%= fieldName %>SelectLastOption();
+        <%_ } else if (fieldType === 'UUID') { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('64c99148-3908-465d-8c4a-e510e3ade974');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/64c99148-3908-465d-8c4a-e510e3ade974/);
+        <%_ } else if (fieldType === 'String' && fieldValidateSampleString) { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldValidateSampleString %>');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldValidateSampleString %>/);
+        <%_ } else { _%>
+        await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('<%= fieldName %>');
+        expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.match(/<%= fieldName %>/);
+        <%_ } _%>
+        <%_ }); _%>
+        <%_ relationships.forEach((relationship) => {
+            const relationshipType = relationship.relationshipType;
+            const ownerSide = relationship.ownerSide;
+            const relationshipName = relationship.relationshipName;
+            const relationshipFieldName = relationship.relationshipFieldName; _%>
+        <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+        await <%= entityInstance %>UpdatePage.<%= relationshipName %>SelectLastOption();
+        <%_ } else if ((relationshipType === 'many-to-many' && ownerSide === true)) { _%>
+        // <%= entityInstance %>UpdatePage.<%= relationshipName %>SelectLastOption();
+        <%_ } _%>
+        <%_ }); _%>
+        await waitUntilDisplayed(<%= entityInstance %>UpdatePage.saveButton);
+        await <%= entityInstance %>UpdatePage.save();
+        await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
+        expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
+
+        expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
+
+        await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
+
+        await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
+        expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
+    });<%= closeBlockComment %>
+
+    <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
+
+        const deleteButton = <%= entityInstance %>ComponentsPage.getDeleteButton(<%= entityInstance %>ComponentsPage.records.last());
+        await click(deleteButton);
+
+        <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
+        await waitUntilDisplayed(<%= entityInstance %>DeleteDialog.deleteModal);
+        expect(await <%= entityInstance %>DeleteDialog.getDialogTitle().getAttribute('id')).to.match(/<%= i18nKeyPrefix %>.delete.question/);
+        await <%= entityInstance %>DeleteDialog.clickOnConfirmButton();
+
+        await waitUntilHidden(<%= entityInstance %>DeleteDialog.deleteModal);
+
+        expect(await isVisible(<%= entityInstance %>DeleteDialog.deleteModal)).to.be.false;
+
+        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
+        <%= entityInstance %>ComponentsPage.table]);
+    
+        const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
+        expect(afterCount).to.eq(beforeRecordsCount);
+    });<%= closeBlockComment %>
+<%_ } _%>
+
+    after(async () => {
+        await navBarPage.autoSignOut();
+    });
+});

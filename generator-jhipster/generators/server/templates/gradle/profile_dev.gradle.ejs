@@ -1,0 +1,104 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
+dependencies {
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
+    implementation "com.h2database:h2"
+    <%_ } _%>
+}
+
+def profiles = "dev"
+if (project.hasProperty("no-liquibase")) {
+    profiles += ",no-liquibase"
+}
+if (project.hasProperty("tls")) {
+    profiles += ",tls"
+}
+
+springBoot {
+    buildInfo {
+        properties {
+            time = null
+        }
+    }
+}
+
+bootRun {
+    args = []
+<%_ if (cacheProvider === 'infinispan') { _%>
+    jvmArgs = ["-Djgroups.tcp.address=NON_LOOPBACK", "-Djava.net.preferIPv4Stack=true"]
+<%_ } _%>
+}
+
+<%_ if (!skipClient) { _%>
+task webpack(type: <%= _.upperFirst(clientPackageManager) %>Task) {
+    <%_ if (clientPackageManager==='npm') { _%>
+    inputs.files("package-lock.json")
+    <%_ } else { _%>
+    inputs.files("yarn.lock")
+    <%_ } _%>
+    inputs.files("build.gradle")
+    inputs.dir("<%= CLIENT_MAIN_SRC_DIR %>")
+
+    def webpackDevFiles = fileTree("<%= CLIENT_WEBPACK_DIR %>/")
+    webpackDevFiles.exclude("webpack.prod.js")
+    inputs.files(webpackDevFiles)
+
+    outputs.dir("<%= CLIENT_DIST_DIR %>")
+
+    dependsOn <%= clientPackageManager %><%_ if (clientPackageManager === 'npm') { _%>Install<%_ } _%>
+
+    args = ["run", "webpack:build"]
+    environment = [APP_VERSION: project.version]
+}
+<%_ } _%>
+
+processResources {
+    inputs.property('version', version)
+    inputs.property('springProfiles', profiles)
+    filesMatching("**/application.yml") {
+        filter {
+            it.replace("#project.version#", version)
+        }
+        <%_ if (!serviceDiscoveryType) { _%>
+        filter {
+            it.replace("#spring.profiles.active#", profiles)
+        }
+        <%_ } _%>
+    }
+    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
+    filesMatching("**/bootstrap.yml") {
+        filter {
+            it.replace("#spring.profiles.active#", profiles)
+        }
+    }
+    <%_ } _%>
+}
+
+<%_ if (!skipClient) { _%>
+processResources.dependsOn webpack
+bootJar.dependsOn processResources
+<%_ } _%>

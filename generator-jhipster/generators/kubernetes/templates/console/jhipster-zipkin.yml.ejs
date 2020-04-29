@@ -1,0 +1,74 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+kind: Deployment
+metadata:
+  name: jhipster-zipkin
+  namespace: <%= kubernetesNamespace %>
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jhipster-zipkin
+  template:
+    metadata:
+      labels:
+        app: jhipster-zipkin
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
+    spec:
+      containers:
+      - name: jhipster-zipkin
+        image: <%= DOCKER_JHIPSTER_ZIPKIN %>
+        ports:
+        - containerPort: 9411
+          name: http
+          protocol: TCP
+        env:
+        - name: ES_HOSTS
+          value: http://jhipster-elasticsearch:9200
+        # TODO - better to update to an Ingress endpoint
+        - name: ZIPKIN_UI_LOGS_URL
+          value: "http://localhost:5601/app/kibana#/discover/d0682f20-e0e9-11e7-9c68-0b9a0f0c183c?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-30d,mode:quick,to:now))&_a=(columns:!(X-B3-TraceId,app_name,level,message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logs-*',key:X-B3-TraceId,negate:!f,params:(query:'trace',type:phrase),type:phrase,value:'trace'),query:(match:(X-B3-TraceId:(query:'{traceId}',type:phrase))))),index:'logs-*',interval:auto,query:(language:lucene,query:''),sort:!('@timestamp',desc))"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+      restartPolicy: Always
+---
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: Service
+metadata:
+  name: jhipster-zipkin
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: jhipster-zipkin
+spec:
+  ports:
+  - name: http
+    port: 9411
+    protocol: TCP
+    targetPort: 9411
+  selector:
+    app: jhipster-zipkin

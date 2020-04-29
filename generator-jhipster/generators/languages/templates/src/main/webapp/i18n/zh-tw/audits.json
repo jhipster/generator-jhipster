@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "稽核",
+        "filter": {
+            "title": "依據日期篩選",
+            "from": "從",
+            "to": "至",
+            "button": {
+                "weeks": "週",
+                "today": "今天",
+                "clear": "清除",
+                "close": "關閉"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "主體",
+                "date": "日期",
+                "status": "狀態",
+                "data": "資料"
+            },
+            "data": {
+                "remoteAddress": "遠端位址:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

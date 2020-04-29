@@ -1,0 +1,11 @@
+Description:
+    Initializes a Heroku app and generates a JAR file that is ready to push to Heroku.
+    Adds the spring-cloud-heroku-connector dependency to Maven / Gradle as appropriate.
+
+Example:
+    jhipster heroku
+
+    This will create:
+        Procfile
+        src/main/java/your_package_name/config/HerokuDatabaseConfiguration.java
+        gradle/heroku.gradle

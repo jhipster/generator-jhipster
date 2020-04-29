@@ -1,0 +1,108 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ if (kubernetesUseDynamicStorage) { _%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+kind: PersistentVolumeClaim
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-postgresql-pvc
+  namespace: <%= kubernetesNamespace %>
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  <%_ if (kubernetesStorageClassName) { _%>
+  storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+---
+<%_ } _%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: Secret
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-postgresql
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>-postgresql
+type: Opaque
+data:
+  postgresql-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
+---
+apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+kind: Deployment
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-postgresql
+  namespace: <%= kubernetesNamespace %>
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-postgresql
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-postgresql
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
+    spec:
+      volumes:
+      - name: data
+        <%_ if (kubernetesUseDynamicStorage) { _%>
+        persistentVolumeClaim:
+          claimName: <%= app.baseName.toLowerCase() %>-postgresql-pvc
+        <%_ } else { _%>
+        emptyDir: {}
+        <%_ } _%>
+      containers:
+      - name: postgres
+        image: <%= DOCKER_POSTGRESQL %>
+        env:
+        - name: POSTGRES_USER
+          value: <%= app.baseName %>
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: <%= app.baseName.toLowerCase() %>-postgresql
+              key: postgresql-password
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+---
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-postgresql
+  namespace: <%= kubernetesNamespace %>
+spec:
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-postgresql
+  ports:
+  - port: 5432

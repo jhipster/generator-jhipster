@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Налады",
+        "filter": "Фільтр (па прэфіксе)",
+        "table": {
+            "prefix": "Прэфікс",
+            "properties": "Уласьцівасьці"
+        }
+    }
+}

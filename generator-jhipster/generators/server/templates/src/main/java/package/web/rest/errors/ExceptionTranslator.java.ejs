@@ -1,0 +1,190 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.web.rest.errors;
+
+import io.github.jhipster.web.util.HeaderUtil;
+
+import org.springframework.beans.factory.annotation.Value;
+<%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+import org.springframework.dao.ConcurrencyFailureException;
+<%_ } _%>
+import org.springframework.http.ResponseEntity;
+<%_ if (reactive && databaseType === 'sql') { _%>
+import org.springframework.stereotype.Component;
+<%_ } _%>
+import org.springframework.validation.BindingResult;
+<%_ if (!reactive) { _%>
+import org.springframework.web.bind.MethodArgumentNotValidException;
+<%_ } _%>
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+<%_ if (reactive) { _%>
+import org.springframework.web.bind.support.WebExchangeBindException;
+import org.springframework.web.server.ServerWebExchange;
+<%_ } _%>
+<%_ if (!reactive) { _%>
+import org.springframework.web.context.request.NativeWebRequest;
+<%_ } _%>
+import org.zalando.problem.DefaultProblem;
+import org.zalando.problem.Problem;
+import org.zalando.problem.ProblemBuilder;
+import org.zalando.problem.Status;
+import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.ProblemHandling;
+import org.zalando.problem.spring.web<% if (reactive) { %>flux<% } %>.advice.security.SecurityAdviceTrait;
+import org.zalando.problem.violations.ConstraintViolationProblem;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Mono;
+<%_ } _%>
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+<%_ if (!reactive) { _%>
+import javax.servlet.http.HttpServletRequest;
+<%_ } _%>
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Controller advice to translate the server side exceptions to client-friendly json structures.
+ * The error response follows RFC7807 - Problem Details for HTTP APIs (https://tools.ietf.org/html/rfc7807).
+ */
+@ControllerAdvice
+<%_ if (databaseType === 'sql' && reactive) { _%>
+@Component("jhiExceptionTranslator")
+<%_ } _%>
+public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait {
+
+<%_
+let returnType;
+let requestClass;
+if (reactive) {
+    returnType = 'Mono<ResponseEntity<Problem>>';
+    requestClass = 'ServerWebExchange';
+} else {
+    returnType = 'ResponseEntity<Problem>';
+    requestClass = 'NativeWebRequest';
+}
+_%>
+    private static final String FIELD_ERRORS_KEY = "fieldErrors";
+    private static final String MESSAGE_KEY = "message";
+    private static final String PATH_KEY = "path";
+    private static final String VIOLATIONS_KEY = "violations";
+
+    @Value("${jhipster.clientApp.name}")
+    private String applicationName;
+
+    /**
+     * Post-process the Problem payload to add the message key for the front-end if needed.
+     */
+    @Override
+    public <%- returnType %> process(@Nullable ResponseEntity<Problem> entity, <%= requestClass %> request) {
+        if (entity == null) {
+            <%_ if (!reactive) { _%>
+            return entity;
+            <%_ } else { _%>
+            return Mono.empty();
+            <%_ } _%>
+        }
+        Problem problem = entity.getBody();
+        if (!(problem instanceof ConstraintViolationProblem || problem instanceof DefaultProblem)) {
+            <%_ if (!reactive) { _%>
+            return entity;
+            <%_ } else { _%>
+            return Mono.just(entity);
+            <%_ } _%>
+        }
+        ProblemBuilder builder = Problem.builder()
+            .withType(Problem.DEFAULT_TYPE.equals(problem.getType()) ? ErrorConstants.DEFAULT_TYPE : problem.getType())
+            .withStatus(problem.getStatus())
+            .withTitle(problem.getTitle())
+            <%_ if (!reactive) { _%>
+            .with(PATH_KEY, request.getNativeRequest(HttpServletRequest.class).getRequestURI());
+            <%_ } else { _%>
+            .with(PATH_KEY, request.getRequest().getPath().value());
+            <%_ } _%>
+
+        if (problem instanceof ConstraintViolationProblem) {
+            builder
+                .with(VIOLATIONS_KEY, ((ConstraintViolationProblem) problem).getViolations())
+                .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION);
+        } else {
+            builder
+                .withCause(((DefaultProblem) problem).getCause())
+                .withDetail(problem.getDetail())
+                .withInstance(problem.getInstance());
+            problem.getParameters().forEach(builder::with);
+            if (!problem.getParameters().containsKey(MESSAGE_KEY) && problem.getStatus() != null) {
+                builder.with(MESSAGE_KEY, "error.http." + problem.getStatus().getStatusCode());
+            }
+        }
+        return <% if (reactive) { %>Mono.just(<% } %>new ResponseEntity<>(builder.build(), entity.getHeaders(), entity.getStatusCode())<% if (reactive) { %>)<% } %>;
+    }
+
+    @Override
+    public <%- returnType %> handle<%_ if (!reactive) { _%>MethodArgumentNotValid(MethodArgumentNotValidException<% } else { %>BindingResult(WebExchangeBindException<% } %> ex, @Nonnull <%= requestClass %> request) {
+        BindingResult result = ex.getBindingResult();
+        List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
+            .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""), f.getField(), f.getCode()))
+            .collect(Collectors.toList());
+
+        Problem problem = Problem.builder()
+            .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
+            .withTitle("<%_ if (!reactive) { _%>Method argument not valid<% } else { %>Data binding and validation failure<% } %>")
+            .withStatus(<% if (!reactive) { %>defaultConstraintViolationStatus()<% } else { %>Status.BAD_REQUEST<% } %>)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_VALIDATION)
+            .with(FIELD_ERRORS_KEY, fieldErrors)
+            .build();
+        return create(ex, problem, request);
+    }
+    <%_ if (!skipUserManagement) { _%>
+
+    @ExceptionHandler
+    public <%- returnType %> handleEmailAlreadyUsedException(<%= packageName %>.service.EmailAlreadyUsedException ex, <%= requestClass %> request) {
+        EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    }
+
+    @ExceptionHandler
+    public <%- returnType %> handleUsernameAlreadyUsedException(<%= packageName %>.service.UsernameAlreadyUsedException ex, <%= requestClass %> request) {
+        LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
+        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  <%= enableTranslation %>, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+    }
+
+    @ExceptionHandler
+    public <%- returnType %> handleInvalidPasswordException(<%= packageName %>.service.InvalidPasswordException ex, <%= requestClass %> request) {
+        return create(new InvalidPasswordException(), request);
+    }
+    <%_ } _%>
+
+    @ExceptionHandler
+    public <%- returnType %> handleBadRequestAlertException(BadRequestAlertException ex, <%= requestClass %> request) {
+        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, <%= enableTranslation %>, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+    }
+    <%_ if (databaseType !== 'no' && databaseType !== 'cassandra') { _%>
+
+    @ExceptionHandler
+    public <%- returnType %> handleConcurrencyFailure(ConcurrencyFailureException ex, <%= requestClass %> request) {
+        Problem problem = Problem.builder()
+            .withStatus(Status.CONFLICT)
+            .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
+            .build();
+        return create(ex, problem, request);
+    }
+    <%_ } _%>
+}

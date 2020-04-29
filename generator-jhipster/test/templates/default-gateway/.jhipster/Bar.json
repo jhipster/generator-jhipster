@@ -1,0 +1,20 @@
+{
+    "name": "Bar",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20180905045309",
+    "entityTableName": "bar",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "clientRootFolder": "sampleMicroservice",
+    "applications": "*",
+    "microserviceName": "sampleMicroservice"
+}

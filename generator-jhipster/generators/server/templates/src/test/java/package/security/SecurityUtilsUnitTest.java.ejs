@@ -1,0 +1,208 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.security;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+<%_ if (reactive) { _%>
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import reactor.util.context.Context;
+<%_ } else { _%>
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+    <%_ if (authenticationType === 'oauth2') { _%>
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+    <%_ } _%>
+<%_ } _%>
+
+<%_ if (authenticationType === 'oauth2') { _%>
+import java.time.Instant;
+import java.util.*;
+<%_ } else { _%>
+import java.util.ArrayList;
+import java.util.Collection;
+<%_ if (!reactive) { _%>
+import java.util.Optional;
+<%_ } _%>
+<%_ } _%>
+
+import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (authenticationType === 'oauth2') { _%>
+import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
+<%_ } _%>
+
+/**
+ * Test class for the {@link SecurityUtils} utility class.
+ */
+public class SecurityUtilsUnitTest {
+
+<%_ if (!reactive) { _%>
+    @Test
+    public void testGetCurrentUserLogin() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
+        Optional<String> login = SecurityUtils.getCurrentUserLogin();
+        assertThat(login).contains("admin");
+    }
+    <%_ if (authenticationType === 'oauth2') { _%>
+
+    @Test
+    public void testGetCurrentUserLoginForOAuth2() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("groups", "ROLE_USER");
+        claims.put("sub", 123);
+        claims.put("preferred_username", "admin");
+        OidcIdToken idToken = new OidcIdToken(ID_TOKEN, Instant.now(),
+            Instant.now().plusSeconds(60), claims);
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        OidcUser user = new DefaultOidcUser(authorities, idToken);
+        OAuth2AuthenticationToken bla = new OAuth2AuthenticationToken(user, authorities, "oidc");
+        securityContext.setAuthentication(bla);
+        SecurityContextHolder.setContext(securityContext);
+
+        Optional<String> login = SecurityUtils.getCurrentUserLogin();
+
+        assertThat(login).contains("admin");
+    }
+    <%_ } _%>
+    <%_ if (authenticationType === 'jwt') { _%>
+
+    @Test
+    public void testgetCurrentUserJWT() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "token"));
+        SecurityContextHolder.setContext(securityContext);
+        Optional<String> jwt = SecurityUtils.getCurrentUserJWT();
+        assertThat(jwt).contains("token");
+    }
+    <%_ } _%>
+
+    @Test
+    public void testIsAuthenticated() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin"));
+        SecurityContextHolder.setContext(securityContext);
+        boolean isAuthenticated = SecurityUtils.isAuthenticated();
+        assertThat(isAuthenticated).isTrue();
+    }
+
+    @Test
+    public void testAnonymousIsNotAuthenticated() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("anonymous", "anonymous", authorities));
+        SecurityContextHolder.setContext(securityContext);
+        boolean isAuthenticated = SecurityUtils.isAuthenticated();
+        assertThat(isAuthenticated).isFalse();
+    }
+
+    @Test
+    public void testIsCurrentUserInRole() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("user", "user", authorities));
+        SecurityContextHolder.setContext(securityContext);
+
+        assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)).isTrue();
+        assertThat(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)).isFalse();
+    }
+<%_ } _%>
+<%_ if (reactive) { _%>
+    @Test
+    public void testgetCurrentUserLogin() {
+        String login = SecurityUtils.getCurrentUserLogin()
+            .subscriberContext(
+                ReactiveSecurityContextHolder.withAuthentication(
+                    new UsernamePasswordAuthenticationToken("admin", "admin")
+                )
+            )
+            .block();
+        assertThat(login).isEqualTo("admin");
+    }
+    <%_ if (authenticationType === 'jwt') { _%>
+
+    @Test
+    public void testgetCurrentUserJWT() {
+        String jwt = SecurityUtils.getCurrentUserJWT()
+            .subscriberContext(
+                ReactiveSecurityContextHolder.withAuthentication(
+                    new UsernamePasswordAuthenticationToken("admin", "token")
+                )
+            )
+            .block();
+        assertThat(jwt).isEqualTo("token");
+    }
+    <%_ } _%>
+
+    @Test
+    public void testIsAuthenticated() {
+        Boolean isAuthenticated = SecurityUtils.isAuthenticated()
+            .subscriberContext(
+                ReactiveSecurityContextHolder.withAuthentication(
+                    new UsernamePasswordAuthenticationToken("admin", "admin")
+                )
+            )
+            .block();
+        assertThat(isAuthenticated).isTrue();
+    }
+
+    @Test
+    public void testAnonymousIsNotAuthenticated() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        Boolean isAuthenticated = SecurityUtils.isAuthenticated()
+            .subscriberContext(
+                ReactiveSecurityContextHolder.withAuthentication(
+                    new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
+                )
+            )
+            .block();
+        assertThat(isAuthenticated).isFalse();
+    }
+
+    @Test
+    public void testIsCurrentUserInRole() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.USER));
+        Context context = ReactiveSecurityContextHolder.withAuthentication(
+            new UsernamePasswordAuthenticationToken("admin", "admin", authorities)
+        );
+        Boolean isCurrentUserInRole = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.USER)
+            .subscriberContext(context)
+            .block();
+        assertThat(isCurrentUserInRole).isTrue();
+
+        isCurrentUserInRole = SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)
+            .subscriberContext(context)
+            .block();
+        assertThat(isCurrentUserInRole).isFalse();
+    }
+<%_ } _%>
+
+}

@@ -1,0 +1,35 @@
+# All text files should have the "lf" (Unix) line endings
+* text eol=lf
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.java text
+*.js text
+*.css text
+*.html text
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.jar binary
+*.pdf binary
+*.eot binary
+*.ttf binary
+*.gzip binary
+*.gz binary
+*.ai binary
+*.eps binary
+*.ico binary
+
+# Used by GitHub to determine which language is used
+# See https://github.com/github/linguist
+*.ts.ejs linguist-language=TypeScript
+*.tsx.ejs linguist-language=TypeScript
+*.js.ejs linguist-language=JavaScript
+*.java.ejs linguist-language=Java
+*.css.ejs linguist-language=CSS
+*.scss.ejs linguist-language=SCSS
+*.yaml.ejs linguist-language=YAML
+*.yml.ejs linguist-language=YAML
+*.json.ejs linguist-language=JSON
+*.xml.ejs linguist-language=XML

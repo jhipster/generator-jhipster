@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Aktiva sessioner för [<strong>{{username}}</strong>]",
+        "table": {
+            "ipaddress": "IP-adress",
+            "useragent": "User Agent",
+            "date": "Datum",
+            "button": "Logga ut"
+        },
+        "messages": {
+            "success": "<strong>Sessionen utloggad!</strong>",
+            "error": "<strong>Det blev fel!</strong> Sessionen kunde inte loggas ut."
+        }
+    }
+}

@@ -1,0 +1,59 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+<%_ if (fieldsContainBlob) { _%>
+import { JhiDataUtils } from 'ng-jhipster';
+<%_ } _%>
+
+import { I<%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+
+@Component({
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
+    templateUrl: './<%= entityFileName %>-detail.component.html'
+})
+export class <%= entityAngularName %>DetailComponent implements OnInit {
+    <%= entityInstance %>: I<%= entityAngularName %> | null = null;
+
+    constructor(
+        <%_ if (fieldsContainBlob) { _%>
+        protected dataUtils: JhiDataUtils,
+        <%_ } _%>
+        protected activatedRoute: ActivatedRoute
+    ) {}
+
+    ngOnInit(): void {
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => this.<%= entityInstance %> = <%= entityInstance %>);
+    }
+
+    <%_ if (fieldsContainBlob) { _%>
+    byteSize(base64String: string): string {
+        return this.dataUtils.byteSize(base64String);
+    }
+
+    openFile(contentType: string, base64String: string): void {
+        this.dataUtils.openFile(contentType, base64String);
+    }
+    <%_ } _%>
+
+    previousState(): void {
+        window.history.back();
+    }
+
+}

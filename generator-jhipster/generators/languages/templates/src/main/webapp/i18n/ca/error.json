@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "Pàgina d'error!",
+        "http": {
+            "400": "Bad request.",
+            "403": "No té autorització per accedir a la pàgina.",
+            "404": "La pàgina no existeix.",
+            "405": "The HTTP verb you used is not supported for this URL.",
+            "500": "Internal server error."
+        },
+        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+        "validation": "Validation error on the server."
+    }
+}

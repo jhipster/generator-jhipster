@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Přihlášení",
+        "form": {
+            "password": "Heslo",
+            "password.placeholder": "Vaše heslo",
+            "rememberme": "Zapamatovat",
+            "button": "Přihlásit se"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Přihlášení selhalo!</strong> Prosím zkontrolujte vaše přihlašovací údaje a zkuste to znovu."
+            }
+        },
+        "password": {
+            "forgot": "Zapoměli jste heslo?"
+        }
+    }
+}

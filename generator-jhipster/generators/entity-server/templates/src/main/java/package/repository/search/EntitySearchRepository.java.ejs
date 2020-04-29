@@ -1,0 +1,70 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.repository.search;
+
+import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+<%_ if (reactive) { _%>
+    <%_ if (pagination !== 'no') { _%>
+import org.springframework.data.domain.Pageable;
+    <%_ } _%>
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+<%_ } _%>
+import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+<%_ } _%>
+<%_ if (primaryKeyType === 'UUID') { _%>
+
+import java.util.UUID;
+<% } %>
+<%_ if (reactive) { _%>
+
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+<%_ } _%>
+
+/**
+ * Spring Data Elasticsearch repository for the {@link <%= asEntity(entityClass) %>} entity.
+ */
+public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% if (reactive) {%>, <%= entityClass %>SearchRepositoryInternal<% } %> {
+}
+<%_ if (reactive) { _%>
+
+interface <%= entityClass %>SearchRepositoryInternal {
+    Flux<<%= entityClass %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>);
+}
+
+class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass %>SearchRepositoryInternal {
+
+    private final ReactiveElasticsearchTemplate reactiveElasticsearchTemplate;
+
+    <%= entityClass %>SearchRepositoryInternalImpl(ReactiveElasticsearchTemplate reactiveElasticsearchTemplate) {
+        this.reactiveElasticsearchTemplate = reactiveElasticsearchTemplate;
+    }
+
+    @Override
+    public Flux<<%= entityClass %>> search(String query<% if (pagination !== 'no') { %>, Pageable pageable<% } %>) {
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQuery(queryStringQuery(query));
+        <%_ if (pagination !== 'no') { _%>
+        nativeSearchQuery.setPageable(pageable);
+        <%_ } _%>
+        return reactiveElasticsearchTemplate.find(nativeSearchQuery, <%= entityClass %>.class);
+    }
+}
+<%_ } _%>

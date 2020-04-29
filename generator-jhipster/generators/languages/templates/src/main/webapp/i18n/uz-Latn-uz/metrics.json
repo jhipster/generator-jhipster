@@ -1,0 +1,93 @@
+{
+    "metrics": {
+        "title": "Ilova o'lchovlari",
+        "refresh.button": "Yangilash",
+        "updating": "Yangilanmoqda...",
+        "jvm": {
+            "title": "JVM o'lchovlari",
+            "memory": {
+                "title": "Xotira",
+                "total": "Jami xotira",
+                "heap": "Heap",
+                "nonheap": "Heap emas"
+            },
+            "threads": {
+                "title": "Oqimlar",
+                "all": "Hammasi",
+                "runnable": "Faollari",
+                "timedwaiting": "Vaqtinchalik kutish",
+                "waiting": "Kutish",
+                "blocked": "Bloklangan",
+                "dump": {
+                    "title": "Oqimlarni to'liqligi",
+                    "id": "Id: ",
+                    "blockedtime": "Bloklanganlar vaqti",
+                    "blockedcount": "Bloklanganlar soni",
+                    "waitedtime": "Kutish vaqti",
+                    "waitedcount": "Kutish soni",
+                    "lockname": "Blok nomi",
+                    "stacktrace": "Stacktrace",
+                    "show": "Ko'rsat",
+                    "hide": "Yop"
+                }
+            },
+            "gc": {
+                "title": "Axlat yig'uvchi",
+                "marksweepcount": "Mark Sweep soni",
+                "marksweeptime": "Mark Sweep vaqti",
+                "scavengecount": "Axlat yig'ish soni",
+                "scavengetime": "Axlat yig'ish vaqti"
+            },
+            "http": {
+                "title": "HTTP so'rovlar (soniyada sodir bo'lgan voqealar)",
+                "active": "Faol so'rovlar:",
+                "total": "Jami so'rovlar:",
+                "table": {
+                    "code": "Kod",
+                    "count": "Soni",
+                    "mean": "O'rtacha",
+                    "average": "O'rtacha"
+                },
+                "code": {
+                    "ok": "OK",
+                    "notfound": "Topilmadi",
+                    "servererror": "Server xatoligi"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Servis statistikasi (1/1000 soniyada sodir bo'lgan voqealar)",
+            "table": {
+                "name": "Servis nomi",
+                "count": "Soni",
+                "mean": "O'rtacha",
+                "min": "Min",
+                "max": "Maks",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Statistika",
+            "cachename": "Kesh nomi",
+            "hits": "Mos keldi",
+            "misses": "Mos kelmadi",
+            "evictions": "Tozalanganlar soni"
+        },
+        "datasource": {
+            "usage": "Foydalanish",
+            "title": "Malumotlar bazasi (1/1000 soniyada sodir bo'lgan voqealar)",
+            "name": "Puldan foydalanish",
+            "count": "Soni",
+            "mean": "O'rtacha",
+            "min": "Min",
+            "max": "Maks",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

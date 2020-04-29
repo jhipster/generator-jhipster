@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Фойдаланувчи",
+            "createLabel": "Янги фойдаланувчи қўшиш",
+            "createOrEditLabel": "Фойдаланувчини таҳрирлаш"
+        },
+        "created": "Янги фойдаланувчи {{ param }} ID билан қўшилди.",
+        "updated": "{{ param }} - фойдаланувчи сақланди",
+        "deleted": "{ param }} - фойдаланувчи ўчирилди",
+        "delete": {
+            "question": "{{ login }} фойдаланувчини ўчиришни ҳохлайсизми?"
+        },
+        "detail": {
+            "title": "Фойдаланувчи"
+        },
+        "login": "Логин",
+        "firstName": "Исми",
+        "lastName": "Фамилияси",
+        "email": "Email",
+        "activated": "Фаол",
+        "deactivated": "Фаол эмас",
+        "profiles": "Профили",
+        "langKey": "Тили",
+        "createdBy": "Ким томонидан қўшилган",
+        "createdDate": "Қўшилган вақти",
+        "lastModifiedBy": "Ким томонидан ўзгартирилган",
+        "lastModifiedDate": "Ўзгартирилган вақти"
+    }
+}

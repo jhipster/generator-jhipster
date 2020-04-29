@@ -1,0 +1,177 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.repository;
+
+import <%= packageName %>.domain.PersistentAuditEvent;
+<%_ if (!reactive) { _%>
+import org.springframework.data.domain.Page;
+<%_ } _%>
+import org.springframework.data.domain.Pageable;
+<%_ if (databaseType === 'sql' && !reactive) { _%>
+import org.springframework.data.jpa.repository.JpaRepository;
+<%_ } _%>
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.data.r2dbc.query.Criteria;
+import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.data.util.Pair;
+import org.springframework.stereotype.Repository;
+<%_ } _%>
+<%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<%_ } _%>
+<%_ if (reactive) { _%>
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+<%_ } _%>
+
+import java.time.Instant;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Map;
+<%_ } _%>
+<%_ if (!reactive) { _%>
+import java.util.List;
+<%_ } _%>
+
+/**
+ * Spring Data <% if (databaseType === 'sql' && !reactive) { %>JPA<% } else if (databaseType === 'sql' && reactive) { %>R2DBC<% } else if (databaseType === 'mongodb') { %>MongoDB<% } else if (databaseType === 'couchbase') { %>Couchbase<% } else if (databaseType === 'neo4j') { %>Neo4j<% } %> repository for the {@link PersistentAuditEvent} entity.
+ */
+<%_ if (databaseType === 'sql' && reactive) { _%>
+@Repository
+public interface PersistenceAuditEventRepository extends R2dbcRepository<PersistentAuditEvent, Long>, PersistenceAuditEventRepositoryInternal {
+
+    @Query("INSERT INTO <%= jhiTablePrefix %>_persistent_audit_evt_data VALUES(:eventId, :name, :value)")
+    Mono<Void> savePersistenceAuditEventData(Long eventId, String name, String value);
+}
+
+interface PersistenceAuditEventRepositoryInternal {
+<%_ } else { _%>
+public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') {
+ %><PersistentAuditEvent, String><% } %> {
+<%_ } _%>
+
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByPrincipal(String principal);
+
+    <%_ if (!reactive) { _%>
+    List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfterAndAuditEventType(String principal, Instant after, String type);
+
+    <%_ } _%>
+    <% if (reactive) { %>Flux<% } else { %>Page<% } %><PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable);
+
+    <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByAuditEventDateBefore(Instant before);
+    <%_ if (reactive) { _%>
+
+    Flux<PersistentAuditEvent> findAllBy(Pageable pageable);
+
+    Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate);
+    <%_ } _%>
+}
+<%_ if (databaseType === 'sql' && reactive) { _%>
+
+class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEventRepositoryInternal {
+
+    private final DatabaseClient databaseClient;
+
+    public PersistenceAuditEventRepositoryInternalImpl(DatabaseClient databaseClient) {
+        this.databaseClient = databaseClient;
+    }
+
+    @Override
+    public Flux<PersistentAuditEvent> findByPrincipal(String principal) {
+        return findAllByCriteria(Criteria.where("principal").is(principal));
+    }
+
+    @Override
+    public Flux<PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable) {
+        // LocalDateTime seems to be the only type that is supported across all drivers atm
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
+        LocalDateTime fromDateLocal = LocalDateTime.ofInstant(fromDate, ZoneOffset.UTC);
+        LocalDateTime toDateLocal = LocalDateTime.ofInstant(toDate, ZoneOffset.UTC);
+        Criteria criteria = Criteria
+            .where("event_date").greaterThan(fromDateLocal)
+            .and("event_date").lessThan(toDateLocal);
+        return findAllFromSpec(select().matching(criteria).page(pageable));
+    }
+
+    @Override
+    public Flux<PersistentAuditEvent> findByAuditEventDateBefore(Instant before) {
+        // LocalDateTime seems to be the only type that is supported across all drivers atm
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
+        LocalDateTime beforeLocal = LocalDateTime.ofInstant(before, ZoneOffset.UTC);
+        return findAllByCriteria(Criteria.where("event_date").lessThan(beforeLocal));
+    }
+
+    @Override
+    public Flux<PersistentAuditEvent> findAllBy(Pageable pageable) {
+        return findAllFromSpec(select().page(pageable));
+    }
+
+    @Override
+    public Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate) {
+        // LocalDateTime seems to be the only type that is supported across all drivers atm
+        // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
+        LocalDateTime fromDateLocal = LocalDateTime.ofInstant(fromDate, ZoneOffset.UTC);
+        LocalDateTime toDateLocal = LocalDateTime.ofInstant(toDate, ZoneOffset.UTC);
+        return databaseClient.execute("SELECT COUNT(DISTINCT event_id) FROM <%= jhiTablePrefix %>_persistent_audit_event " +
+            "WHERE event_date > :fromDate AND event_date < :toDate")
+            .bind("fromDate", fromDateLocal)
+            .bind("toDate", toDateLocal)
+            .as(Long.class)
+            .fetch()
+            .one();
+    }
+
+    private Flux<PersistentAuditEvent> findAllByCriteria(Criteria criteria) {
+        return findAllFromSpec(select().matching(criteria));
+    }
+
+    private DatabaseClient.TypedSelectSpec<PersistentAuditEvent> select() {
+        return databaseClient.select().from(PersistentAuditEvent.class);
+    }
+
+    private Flux<PersistentAuditEvent> findAllFromSpec(DatabaseClient.TypedSelectSpec<PersistentAuditEvent> spec) {
+        return spec.as(PersistentAuditEvent.class).all()
+            .flatMap(event -> findAllEventData(event.getId())
+                .map(data -> {
+                    event.setData(data);
+                    return event;
+                })
+            );
+    }
+
+    private Mono<Map<String, String>> findAllEventData(Long id) {
+        return databaseClient.select().from("<%= jhiTablePrefix %>_persistent_audit_evt_data")
+            .project("name", "value")
+            .matching(Criteria.where("event_id").is(id))
+            .map(row -> {
+                String name = row.get("name", String.class);
+                String value = row.get("value", String.class);
+                return Pair.of(name == null ? "" : name, value == null ? "" : value);
+            })
+            .all()
+            .collectMap(Pair::getFirst, Pair::getSecond);
+    }
+}
+<%_ } _%>

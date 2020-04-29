@@ -1,0 +1,185 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { HttpResponse, <%_ if (prodDatabaseType !== 'cassandra') { _%> HttpHeaders <%_ } _%>} from '@angular/common/http';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+<%_ if (prodDatabaseType !== 'cassandra') { _%>
+import { flatMap } from 'rxjs/operators';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { JhiEventManager } from 'ng-jhipster';
+
+import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+<%_ } else { _%>
+import { JhiEventManager } from 'ng-jhipster';
+
+<%_ } _%>
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/user/account.model';
+import { UserService } from 'app/core/user/user.service';
+import { User } from 'app/core/user/user.model';
+import { UserManagementDeleteDialogComponent } from './user-management-delete-dialog.component';
+
+@Component({
+    selector: '<%= jhiPrefixDashed %>-user-mgmt',
+    templateUrl: './user-management.component.html'
+})
+export class UserManagementComponent implements OnInit, OnDestroy {
+    currentAccount: Account | null = null;
+    users: User[] | null = null;
+    userListSubscription?: Subscription;
+    <%_ if (databaseType !== 'cassandra') { _%>
+    firstCall = true;
+    totalItems = 0;
+    itemsPerPage = ITEMS_PER_PAGE;
+    page!: number;
+    predicate!: string;
+    previousPage!: number;
+    ascending!: boolean;
+    <%_ } _%>
+
+    constructor(
+        private userService: UserService,
+        private accountService: AccountService,
+        <%_ if (prodDatabaseType !== 'cassandra') { _%>
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
+        <%_ } _%>
+        private eventManager: JhiEventManager,
+        private modalService: NgbModal,
+    ) {}
+
+    ngOnInit(): void {
+        <%_ if (databaseType === 'cassandra') { _%>
+        this.accountService.identity().subscribe((account) => {
+            this.currentAccount = account;
+            this.loadAll();
+            this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
+        });
+        <%_ } else { _%>
+        this.activatedRoute.data
+            .pipe(
+                flatMap(
+                    () => this.accountService.identity(),
+                    (data, account) => {
+                        this.page = data.pagingParams.page;
+                        this.previousPage = data.pagingParams.page;
+                        this.ascending = data.pagingParams.ascending;
+                        this.predicate = data.pagingParams.predicate;
+                        this.currentAccount = account;
+                        this.loadAll();
+                        this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
+                    }
+                )
+            )
+            .subscribe();
+        this.handleBackNavigation();
+        <%_ } _%>
+    }
+
+    ngOnDestroy(): void {
+        if (this.userListSubscription) {
+            this.eventManager.destroy(this.userListSubscription);
+        }
+    }
+
+    setActive(user: User, isActivated: boolean): void {
+        this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
+    }
+
+    trackIdentity(index: number, item: User): any {
+        return item.id;
+    }
+
+    <%_ if (databaseType !== 'cassandra') { _%>
+    loadPage(page: number): void {
+        this.firstCall = false;
+        this.previousPage = page;
+        this.transition();
+    }
+
+    handleBackNavigation(): void {
+        this.activatedRoute.queryParamMap.subscribe((params: ParamMap) => {
+            if (!this.firstCall) {
+                let prevPage = params.get('page');
+                if (prevPage === null) {
+                    prevPage = '1'; // because there are no params in the URL the first time /admin/user-management
+                }
+                const prevSort = params.get('sort');
+                const prevSortSplit = prevSort?.split(',');
+                if (prevSortSplit) {
+                    this.predicate = prevSortSplit[0];
+                    this.ascending = prevSortSplit[1] === 'asc';
+                } else {
+                    this.predicate = 'id';
+                    this.ascending = true;
+                }
+                if (+prevPage !== this.page) {
+                    this.page = +prevPage;
+                }
+                this.loadPage(this.page);
+            }
+        });
+    }
+
+    transition(): void {
+        this.firstCall = false;
+        this.router.navigate(['./'], {
+            relativeTo: this.activatedRoute.parent,
+            queryParams: {
+                page: this.page,
+                sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
+            }
+        });
+        this.loadAll();
+    }
+    <%_ } _%>
+
+    deleteUser(user: User): void {
+        const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.user = user;
+    }
+
+    private loadAll(): void {
+        this.userService.query(<% if (databaseType !== 'cassandra') { %>{
+            page: this.page - 1,
+            size: this.itemsPerPage,
+            sort: this.sort()
+        }<% } %>).subscribe(
+            (res: HttpResponse<User[]>) => this.onSuccess(res.body<% if (databaseType !== 'cassandra') { %>, res.headers<% } %>)
+        );
+    }
+
+    <%_ if (databaseType !== 'cassandra') { _%>
+    private sort(): string[] {
+        const result = [this.predicate + ',' + (this.ascending ? 'asc' : 'desc')];
+        if (this.predicate !== 'id') {
+            result.push('id');
+        }
+        return result;
+    }
+    <%_ } _%>
+
+    private onSuccess(users: User[] | null<% if (databaseType !== 'cassandra') { %>, headers: HttpHeaders<% } %>): void {
+        <%_ if (databaseType !== 'cassandra') { _%>
+        this.totalItems = Number(headers.get('X-Total-Count'));
+        <%_ } _%>
+        this.users = users;
+    }
+}

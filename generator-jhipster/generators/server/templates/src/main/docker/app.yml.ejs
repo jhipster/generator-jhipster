@@ -1,0 +1,218 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+    <%= baseName.toLowerCase() %>-app:
+        image: <%= baseName.toLowerCase() %>
+        environment:
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+            <%_ if (serviceDiscoveryType === 'consul') { _%>
+            - SPRING_CLOUD_CONSUL_HOST=consul
+            - SPRING_CLOUD_CONSUL_PORT=8500
+            <%_ } _%>
+            <%_ if (serviceDiscoveryType === 'eureka') { _%>
+            - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
+            - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+            <%_ } _%>
+            <%_ if (prodDatabaseType === 'mysql') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
+            <%_ } _%>
+            <%_ if (prodDatabaseType === 'mariadb') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:mariadb://<%= baseName.toLowerCase() %>-mariadb:3306/<%= baseName.toLowerCase() %>
+            <%_ } _%>
+            <%_ if (prodDatabaseType === 'postgresql') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://<%= baseName.toLowerCase() %>-postgresql:5432/<%= baseName %>
+            <%_ } _%>
+            <%_ if (prodDatabaseType === 'mssql') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:sqlserver://<%= baseName.toLowerCase() %>-mssql:1433;database=<%= baseName %>
+            <%_ } _%>
+            <%_ if (prodDatabaseType === 'oracle') { _%>
+            - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@<%= baseName.toLowerCase() %>-oracle:1521:<%= baseName %>
+            <%_ } _%>
+            <%_ if (prodDatabaseType === 'mongodb') { _%>
+            - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
+            - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
+            <%_ } _%>
+            <%_ if (prodDatabaseType === 'couchbase') { _%>
+            - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=<%= baseName.toLowerCase() %>-couchbase
+            - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
+            <%_ } _%>
+            <%_ if (cacheProvider === 'memcached') { _%>
+            - JHIPSTER_CACHE_MEMCACHED_SERVERS=<%= baseName.toLowerCase() %>-memcached:11211
+            <%_ } _%>
+            <%_ if (cacheProvider === 'redis') { _%>
+            - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+            - JHIPSTER_CACHE_REDIS_CLUSTER=false
+            # - JHIPSTER_CACHE_REDIS_SERVER=redis://<%= baseName.toLowerCase() %>-redis:6379
+            # - JHIPSTER_CACHE_REDIS_CLUSTER=true
+            <%_ } _%>
+            <%_ if (authenticationType === 'oauth2') { _%>
+            - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+            <%_ if (applicationType === 'gateway' || applicationType === 'monolith') { _%>
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+            <%_ } _%>
+            <%_ if (applicationType === 'microservice') { _%>
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
+            - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+            <%_ } _%>
+            <%_ } _%>
+            <%_ if (prodDatabaseType === 'cassandra') { _%>
+            - SPRING_DATA_CASSANDRA_CONTACTPOINTS=<%= baseName.toLowerCase() %>-cassandra
+                <%_ if (authenticationType === 'uaa') { _%>
+            - JHIPSTER_SLEEP=80 # gives time for uaa and the Cassandra cluster to start and execute the migration scripts
+                <%_ } else { _%>
+            - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+                <%_ } _%>
+            <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+            - JHIPSTER_SLEEP=120 # gives time for mariadb server to start
+            <%_ } else { _%>
+            - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+            <%_ } _%>
+            <%_ if (searchEngine === 'elasticsearch') { _%>
+            - SPRING_DATA_JEST_URI=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
+            - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
+            <%_ } _%>
+            <%_ if (messageBroker === 'kafka') { _%>
+            - KAFKA_BOOTSTRAPSERVERS=kafka:9092
+            <%_ } _%>
+            <%_ if (cacheProvider === 'infinispan') { _%>
+            - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
+            <%_ } _%>
+        <%_ if (applicationType === 'monolith' || applicationType === 'gateway') { _%>
+        ports:
+            - <%= serverPort %>:<%= serverPort %>
+        <%_ } _%>
+    <%_ if (prodDatabaseType === 'mysql') { _%>
+    <%= baseName.toLowerCase() %>-mysql:
+        extends:
+            file: mysql.yml
+            service: <%= baseName.toLowerCase() %>-mysql
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mariadb') { _%>
+    <%= baseName.toLowerCase() %>-mariadb:
+        extends:
+            file: mariadb.yml
+            service: <%= baseName.toLowerCase() %>-mariadb
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'postgresql') { _%>
+    <%= baseName.toLowerCase() %>-postgresql:
+        extends:
+            file: postgresql.yml
+            service: <%= baseName.toLowerCase() %>-postgresql
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mongodb') { _%>
+    <%= baseName.toLowerCase() %>-mongodb:
+        extends:
+            file: mongodb.yml
+            service: <%= baseName.toLowerCase() %>-mongodb
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'couchbase') { _%>
+    <%= baseName.toLowerCase() %>-couchbase:
+        extends:
+            file: couchbase.yml
+            service: <%= baseName.toLowerCase() %>-couchbase
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mssql') { _%>
+    <%= baseName.toLowerCase() %>-mssql:
+        extends:
+            file: mssql.yml
+            service: <%= baseName.toLowerCase() %>-mssql
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'neo4j') { _%>
+    <%= baseName.toLowerCase() %>-neo4j:
+        extends:
+            file: neo4j.yml
+            service: <%= baseName.toLowerCase() %>-neo4j
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'cassandra') { _%>
+    <%= baseName.toLowerCase() %>-cassandra:
+        extends:
+            file: cassandra-cluster.yml
+            service: <%= baseName.toLowerCase() %>-cassandra
+    <%= baseName.toLowerCase() %>-cassandra-node:
+        image: <%= DOCKER_CASSANDRA %>
+        environment:
+            - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
+    <%= baseName.toLowerCase() %>-cassandra-migration:
+        extends:
+            file: cassandra-migration.yml
+            service: <%= baseName.toLowerCase() %>-cassandra-migration
+        environment:
+            - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql
+    <%_ } _%>
+    <%_ if (cacheProvider === 'memcached') { _%>
+    <%= baseName.toLowerCase() %>-memcached:
+        extends:
+            file: memcached.yml
+            service: <%= baseName.toLowerCase() %>-memcached
+    <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { _%>
+    <%= baseName.toLowerCase() %>-redis:
+        extends:
+            file: redis.yml
+            service: <%= baseName.toLowerCase() %>-redis
+    <%_ } _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%= baseName.toLowerCase() %>-elasticsearch:
+        extends:
+            file: elasticsearch.yml
+            service: <%= baseName.toLowerCase() %>-elasticsearch
+    <%_ } _%>
+    <%_ if (messageBroker === 'kafka') { _%>
+    kafka:
+        extends:
+            file: kafka.yml
+            service: kafka
+        environment:
+            - KAFKA_ADVERTISED_HOST_NAME=kafka
+            - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+    zookeeper:
+        extends:
+            file: kafka.yml
+            service: zookeeper
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'eureka') { _%>
+    jhipster-registry:
+        extends:
+            file: jhipster-registry.yml
+            service: jhipster-registry
+        environment:
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
+            - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config/docker-config/
+    <%_ } _%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    consul:
+        extends:
+            file: consul.yml
+            service: consul
+
+    consul-config-loader:
+        extends:
+            file: consul.yml
+            service: consul-config-loader
+    <%_ } _%>
+    <%_ if (authenticationType === 'oauth2' && applicationType !== 'microservice') { _%>
+    keycloak:
+        extends:
+            file: keycloak.yml
+            service: keycloak
+    <%_ } _%>

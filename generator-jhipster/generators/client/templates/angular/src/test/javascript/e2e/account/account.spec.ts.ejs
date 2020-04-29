@@ -1,0 +1,210 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { browser, element, by, ExpectedConditions as ec } from 'protractor';
+
+import { NavBarPage, SignInPage<%_ if (!skipUserManagement) { _%>, PasswordPage, SettingsPage<%_ } _%> } from '../page-objects/jhi-page-objects';
+<%_
+let elementGetter = `getText()`;
+if (enableTranslation) {
+    elementGetter = `getAttribute('jhiTranslate')`;
+}
+_%>
+
+const expect = chai.expect;
+
+describe('account', () => {
+    let navBarPage: NavBarPage;
+    let signInPage: SignInPage;
+    const username = process.env.E2E_USERNAME || 'admin';
+    const password = process.env.E2E_PASSWORD || 'admin';
+    <%_ if (!skipUserManagement) { _%>
+    let passwordPage: PasswordPage;
+    let settingsPage: SettingsPage;
+    <%_ } _%>
+
+    before(async () => {
+        await browser.get('/');
+        navBarPage = new NavBarPage(true);
+    });
+
+    it('should fail to login with bad password', async () => {
+        <%_ if (enableTranslation) { _%>
+        const expect1 = 'home.title';
+        <%_ } else { _%>
+        const expect1 = 'Welcome, Java Hipster!';
+        <%_ } _%>
+        const value1 = await element(by.css('h1')).<%- elementGetter %>;
+        expect(value1).to.eq(expect1);
+    <%_ if (authenticationType !== 'oauth2') { _%>
+        signInPage = await navBarPage.getSignInPage();
+        await signInPage.autoSignInUsing(username, 'foo');
+
+        <%_ if (enableTranslation) { _%>
+        const expect2 = 'login.messages.error.authentication';
+        <%_ } else { _%>
+        const expect2 = 'Failed to sign in! Please check your credentials and try again.';
+        <%_ } _%>
+        const value2 = await element(by.css('.alert-danger')).<%- elementGetter %>;
+        expect(value2).to.eq(expect2);
+    <%_ } else { _%>
+        signInPage = await navBarPage.getSignInPage();
+        await signInPage.loginWithOAuth(username, 'foo');
+
+        // Keycloak
+        const alert = element(by.css('.alert-error'));
+        if (await alert.isPresent()) {
+            expect(await alert.getText()).to.eq('Invalid username or password.');
+        } else {
+            // Okta
+            const error = element(by.css('.infobox-error'));
+            expect(await error.getText()).to.eq('Sign in failed!');
+        }
+    <%_ } _%>
+    });
+
+    it('should login successfully with admin account', async () => {
+    <%_ if (authenticationType !== 'oauth2') { _%>
+        await browser.get('/');
+        signInPage = await navBarPage.getSignInPage();
+
+        <%_ if (enableTranslation) { _%>
+        const expect1 = 'global.form.username.label';
+        <%_ } else { _%>
+        const expect1 = 'Login';
+        <%_ } _%>
+        const value1 = await element(by.className('username-label')).<%- elementGetter %>;
+        expect(value1).to.eq(expect1);
+        await signInPage.autoSignInUsing(username, password);
+    <%_ } else { _%>
+        await signInPage.loginWithOAuth('', password);
+    <%_ } _%>
+
+        <%_ if (enableTranslation) { _%>
+        const expect2 = 'home.logged.message';
+        <%_ } else { _%>
+        const expect2 = 'You are logged in as user "admin".';
+        <%_ } _%>
+        await browser.wait(ec.visibilityOf(element(by.id('home-logged-message'))));
+        const value2 = await element(by.id('home-logged-message')).<%- elementGetter %>;
+        expect(value2).to.eq(expect2);
+    });
+
+<%_ if (!skipUserManagement) { _%>
+    it('should be able to update settings', async () => {
+        settingsPage = await navBarPage.getSettingsPage();
+
+        <%_ if (enableTranslation) { _%>
+        const expect1 = 'settings.title';
+        <%_ } else { _%>
+        const expect1 = `User settings for [${username}]`;
+        <%_ } _%>
+        const value1 = await settingsPage.getTitle();
+        expect(value1).to.eq(expect1);
+        await settingsPage.save();
+
+        <%_ if (enableTranslation) { _%>
+        const expect2 = 'settings.messages.success';
+        <%_ } else { _%>
+        const expect2 = 'Settings saved!';
+        <%_ } _%>
+        const alert = element(by.css('.alert-success'));
+        const value2 = await alert.<%- elementGetter %>;
+        expect(value2).to.eq(expect2);
+    });
+
+    it('should fail to update password when using incorrect current password', async () => {
+        passwordPage = await navBarPage.getPasswordPage();
+
+        <%_ if (enableTranslation) { _%>
+        expect(await passwordPage.getTitle()).to.eq('password.title');
+        <%_ } else { _%>
+        expect(await passwordPage.getTitle()).to.eq(`Password for [${username}]`);
+        <%_ } _%>
+
+        await passwordPage.setCurrentPassword('wrong_current_password');
+        await passwordPage.setPassword('new_password');
+        await passwordPage.setConfirmPassword('new_password');
+        await passwordPage.save();
+
+        <%_ if (enableTranslation) { _%>
+        const expect2 = 'password.messages.error';
+        <%_ } else { _%>
+        const expect2 = 'An error has occurred! The password could not be changed.';
+        <%_ } _%>
+        const alert = element(by.css('.alert-danger'));
+        const value2 = await alert.<%- elementGetter %>;
+        expect(value2).to.eq(expect2);
+        settingsPage = await navBarPage.getSettingsPage();
+    });
+
+    it('should be able to update password', async () => {
+        passwordPage = await navBarPage.getPasswordPage();
+
+        <%_ if (enableTranslation) { _%>
+        expect(await passwordPage.getTitle()).to.eq('password.title');
+        <%_ } else { _%>
+        expect(await passwordPage.getTitle()).to.eq(`Password for [${username}]`);
+        <%_ } _%>
+
+        await passwordPage.setCurrentPassword(password);
+        await passwordPage.setPassword('newpassword');
+        await passwordPage.setConfirmPassword('newpassword');
+        await passwordPage.save();
+
+        <%_ if (enableTranslation) { _%>
+        const successMsg = 'password.messages.success';
+        <%_ } else { _%>
+        const successMsg = 'Password changed!';
+        <%_ } _%>
+        const alert = element(by.css('.alert-success'));
+        const alertValue = await alert.<%- elementGetter %>;
+        expect(alertValue).to.eq(successMsg);
+        await navBarPage.autoSignOut();
+        await navBarPage.goToSignInPage();
+        await signInPage.autoSignInUsing(username, 'newpassword');
+
+        // change back to default
+        await navBarPage.goToPasswordMenu();
+        await passwordPage.setCurrentPassword('newpassword');
+        await passwordPage.setPassword(password);
+        await passwordPage.setConfirmPassword(password);
+        await passwordPage.save();
+
+        // wait for success message
+        const alertValue2 = await alert.<%- elementGetter %>;
+        expect(alertValue2).to.eq(successMsg);
+    });
+<%_ } _%>
+
+    it('should navigate to 404 not found error page on non existing route and show user own navbar if valid authentication exists', async () => {
+        // don't sign out and refresh page with non existing route
+        await browser.get('/this-is-link-to-non-existing-page');
+
+        // should navigate to 404 not found page
+        const url = await browser.getCurrentUrl();
+        expect(url).to.endWith('404');
+
+        // as user is admin then should show admin menu to user
+        await navBarPage.clickOnAdminMenu();
+    });
+
+    after(async () => {
+        await navBarPage.autoSignOut();
+    });
+});

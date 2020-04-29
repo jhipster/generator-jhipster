@@ -1,0 +1,74 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+    jhipster-elasticsearch:
+        image: <%= DOCKER_JHIPSTER_ELASTICSEARCH %>
+        # Uncomment this as well as the volume section down below
+        # to have elasticsearch data persisted to a volume
+        # you will need to create a named volume with `docker volume create log-data`
+        #volumes:
+        #   - log-data:/usr/share/elasticsearch/data
+    jhipster-logstash:
+        image: <%= DOCKER_JHIPSTER_LOGSTASH %>
+        environment:
+            - INPUT_TCP_PORT=5000
+            - INPUT_UDP_PORT=5000
+            - ELASTICSEARCH_HOST=jhipster-elasticsearch
+            - ELASTICSEARCH_PORT=9200
+            - LOGSTASH_DEBUG=false
+        ports:
+            - 5000:5000
+            - 5000:5000/udp
+        # Uncomment this section and add a logstash.conf file in log-conf/
+        # to have logstash config loaded from a volume
+        #volumes:
+        #    - ./log-conf/:/usr/share/logstash/pipeline/
+    jhipster-console:
+        image: <%= DOCKER_JHIPSTER_CONSOLE %>
+        environment:
+            - ELASTICSEARCH_URL=http://jhipster-elasticsearch:9200
+        ports:
+            - 5601:5601
+    jhipster-import-dashboards:
+        image: <%= DOCKER_JHIPSTER_IMPORT_DASHBOARDS %>
+        environment:
+            - ELASTICSEARCH_URL=http://jhipster-elasticsearch:9200
+    <%_ if (consoleOptions.includes('curator')) { _%>
+    jhipster-curator:
+        image: <%= DOCKER_JHIPSTER_CURATOR %>
+        environment:
+            - ES_HOST=jhipster-elasticsearch
+            - UNIT_COUNT=7
+            - UNIT=days
+    <%_ } _%>
+    <%_ if (consoleOptions.includes('zipkin')) { _%>
+    jhipster-zipkin:
+        image: <%= DOCKER_JHIPSTER_ZIPKIN %>
+        ports:
+            - 9411:9411
+        environment:
+            - ES_HOSTS=http://jhipster-elasticsearch:9200
+            - ZIPKIN_UI_LOGS_URL=http://localhost:5601/app/kibana#/discover/d0682f20-e0e9-11e7-9c68-0b9a0f0c183c?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-30d,mode:quick,to:now))&_a=(columns:!(X-B3-TraceId,app_name,level,message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'logs-*',key:X-B3-TraceId,negate:!f,params:(query:'trace',type:phrase),type:phrase,value:'trace'),query:(match:(X-B3-TraceId:(query:'{traceId}',type:phrase))))),index:'logs-*',interval:auto,query:(language:lucene,query:''),sort:!('@timestamp',desc))
+    <%_ } _%>
+
+# Uncomment to use the log-data volume
+# volumes:
+#     log-data:
+#         driver: local

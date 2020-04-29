@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Audit loki",
+        "filter": {
+            "title": "Suodata pvm mukaan",
+            "from": "alkaen",
+            "to": "päättyen",
+            "button": {
+                "weeks": "viikkoja",
+                "today": "tänään",
+                "clear": "putsaa",
+                "close": "sulje"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Käyttäjä",
+                "date": "Pvm",
+                "status": "Tila",
+                "data": "Lisätiedot"
+            },
+            "data": {
+                "remoteAddress": "Kutsujan osoite:"
+            }
+        }
+    }
+}

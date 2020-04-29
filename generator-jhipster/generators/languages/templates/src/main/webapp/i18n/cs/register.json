@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Registrace",
+        "form": {
+            "button": "Registrovat"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Uživatelské jméno již existuje.",
+                    "minlength": "Uživatelské jméno musí mít alespoň 1 znak.",
+                    "maxlength": "Uživatelské jméno nesmí být delší než 50 znaků.",
+                    "pattern": "Your username is invalid."
+                }
+            },
+            "success": "<strong>Registrace uložená!</strong> Pro potvrzení registrace si prosím zkontrolujte vaši emailovú schránku.",
+            "error": {
+                "fail": "<strong>Registrace selhala!</strong> Prosím zkuste to znovu později.",
+                "userexists": "<strong>Uživatelské jméno již existuje!</strong> Prosím, zvolte jiné jméno.",
+                "emailexists": "<strong>Email se již používá!</strong> Prosím, zvolte jiný email."
+            }
+        }
+    }
+}

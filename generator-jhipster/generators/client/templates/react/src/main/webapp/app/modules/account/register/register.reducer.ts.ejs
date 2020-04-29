@@ -1,0 +1,77 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import axios from 'axios';
+import { translate } from 'react-jhipster';
+
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+
+export const ACTION_TYPES = {
+  CREATE_ACCOUNT: 'register/CREATE_ACCOUNT',
+  RESET: 'register/RESET'
+};
+
+const initialState = {
+  loading: false,
+  registrationSuccess: false,
+  registrationFailure: false,
+  errorMessage: null
+};
+
+export type RegisterState =  Readonly<typeof initialState>;
+
+// Reducer
+export default (state: RegisterState = initialState, action): RegisterState => {
+  switch (action.type) {
+    case REQUEST(ACTION_TYPES.CREATE_ACCOUNT):
+      return {
+        ...state,
+        loading: true
+      };
+    case FAILURE(ACTION_TYPES.CREATE_ACCOUNT):
+      return {
+        ...initialState,
+        registrationFailure: true,
+        errorMessage: action.payload.response.data.errorKey
+      };
+    case SUCCESS(ACTION_TYPES.CREATE_ACCOUNT):
+      return {
+        ...initialState,
+        registrationSuccess: true
+      };
+    case ACTION_TYPES.RESET:
+      return {
+        ...initialState
+      };
+    default:
+      return state;
+  }
+};
+
+// Actions
+export const handleRegister = (login, email, password, langKey = 'en') => ({
+  type: ACTION_TYPES.CREATE_ACCOUNT,
+  payload: axios.post('<%= apiUaaPath %>api/register', { login, email, password, langKey }),
+  meta : {
+    successMessage: translate('register.messages.success')
+  }
+});
+
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
+});

@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Созламалар",
+        "filter": "Филтр (префикс бўйича)",
+        "table": {
+            "prefix": "Префикс",
+            "properties": "Хоссалар"
+        }
+    }
+}

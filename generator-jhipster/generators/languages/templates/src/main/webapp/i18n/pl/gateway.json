@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Brama",
+        "routes": {
+            "title": "Aktualne ścieżki",
+            "url": "URL",
+            "service": "serwis",
+            "servers": "Dostępne serwery",
+            "error": "Uwaga: brak dostępnych serwerów!"
+        },
+        "refresh": {
+            "button": "Odśwież"
+        }
+    }
+}

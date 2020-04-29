@@ -1,0 +1,30 @@
+{
+    "generator-jhipster": {
+        "jhipsterVersion": "3.10.0",
+        "baseName": "sampleKafka",
+        "packageName": "com.mycompany.myapp",
+        "packageFolder": "com/mycompany/myapp",
+        "serverPort": "8080",
+        "authenticationType": "session",
+        "cacheProvider": "ehcache",
+        "enableHibernateCache": true,
+        "websocket": false,
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "prodDatabaseType": "mysql",
+        "searchEngine": false,
+        "messageBroker": "kafka",
+        "buildTool": "maven",
+        "rememberMeKey": "92b92094c42ee1d918471b00f1543c604888f041",
+                "applicationType": "monolith",
+        "testFrameworks": [
+            "gatling"
+        ],
+        "jhiPrefix": "jhi",
+        "enableTranslation": true,
+        "nativeLanguage": "en",
+        "languages": [
+            "en"
+        ]
+    }
+}

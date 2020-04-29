@@ -1,0 +1,76 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import axios from 'axios';
+import { ICrudGetAllAction } from 'react-jhipster';
+
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import { IUser } from 'app/shared/model/user.model';
+
+export const ACTION_TYPES = {
+  FETCH_USERS: 'userManagement/FETCH_USERS',
+  RESET: 'userManagement/RESET'
+};
+
+const initialState = {
+  errorMessage: null,
+  users: [] as ReadonlyArray<IUser>,
+};
+
+export type UserManagementState =  Readonly<typeof initialState>;
+
+// Reducer
+export default (state: UserManagementState = initialState, action): UserManagementState => {
+  switch (action.type) {
+    case REQUEST(ACTION_TYPES.FETCH_USERS):
+      return {
+        ...state,
+      };
+    case FAILURE(ACTION_TYPES.FETCH_USERS):
+      return {
+        ...state,
+        errorMessage: action.payload
+      };
+    case SUCCESS(ACTION_TYPES.FETCH_USERS):
+      return {
+        ...state,
+        users: action.payload.data,
+      };
+    case ACTION_TYPES.RESET:
+      return {
+        ...state,
+        users: []
+      };
+    default:
+      return state;
+  }
+};
+
+const apiUrl = '<%= apiUaaPath %>api/users';
+// Actions
+export const getUsers: ICrudGetAllAction<IUser> = (page, size, sort) => {
+  const requestUrl = `${apiUrl}${sort ? `?page=${page}&size=${size}&sort=${sort}` : ''}`;
+  return {
+    type: ACTION_TYPES.FETCH_USERS,
+    payload: axios.get<IUser>(requestUrl)
+  };
+};
+
+export const reset = () => ({
+  type: ACTION_TYPES.RESET
+});

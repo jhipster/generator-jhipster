@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Активні сесії для [<strong>{{username}}</strong>]",
+        "table": {
+            "ipaddress": "IP адреса",
+            "useragent": "User Agent",
+            "date": "Дата",
+            "button": "Завершити"
+        },
+        "messages": {
+            "success": "<strong>Сесія минула!</strong>",
+            "error": "<strong>Сталася помилка!</strong> Сесія не може бути завершена."
+        }
+    }
+}

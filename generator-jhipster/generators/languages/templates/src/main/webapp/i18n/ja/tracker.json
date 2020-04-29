@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "リアルタイムユーザーアクティビティ",
+        "table": {
+            "userlogin": "ユーザー名",
+            "ipaddress": "IPアドレス",
+            "userAgent": "User Agent",
+            "page": "現在のページ",
+            "time": "日時"
+        }
+    }
+}

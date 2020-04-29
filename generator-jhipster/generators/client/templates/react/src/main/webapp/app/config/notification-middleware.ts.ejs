@@ -1,0 +1,143 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+import { isPromise<% if (enableTranslation) { %>, translate<% } %> } from 'react-jhipster';
+import { toast } from 'react-toastify';
+
+const addErrorAlert = (message, key?, data?) => {
+  <%_ if (enableTranslation) { _%>
+  key = key ? key : message;
+  toast.error(translate(key, data));
+  <%_ } else { _%>
+  toast.error(message);
+  <%_ } _%>
+};
+export default () => next => action => {
+  // If not a promise, continue on
+  if (!isPromise(action.payload)) {
+    return next(action);
+  }
+
+  /**
+   *
+   * The notification middleware serves to dispatch the initial pending promise to
+   * the promise middleware, but adds a `then` and `catch.
+   */
+  return next(action)
+    .then(response => {
+      if (action.meta && action.meta.successMessage) {
+        toast.success(action.meta.successMessage);
+      } else if (response && response.action && response.action.payload && response.action.payload.headers) {
+        const headers = response.action.payload.headers;
+        let alert: string | null = null;
+        <%_ if (enableTranslation) { _%>
+        let alertParams: string | null = null;
+        <%_ } _%>
+        Object.entries<string>(headers).forEach(([k, v]) => {
+          if (k.toLowerCase().endsWith('app-alert')) {
+            alert = v;
+          }<% if (enableTranslation) { %> else if (k.toLowerCase().endsWith('app-params')) {
+            alertParams = decodeURIComponent(v.replace(/\+/g, ' '));
+          }<% } %>
+        });
+        if (alert) {
+          <%_ if (enableTranslation) { _%>
+          const alertParam = alertParams;
+          toast.success(translate(alert, { param: alertParam }));
+          <%_ } else { _%>
+          toast.success(alert);
+          <%_ } _%>
+        }
+      }
+      return Promise.resolve(response);
+    })
+    .catch(error => {
+      if (action.meta && action.meta.errorMessage) {
+        toast.error(action.meta.errorMessage);
+      } else if (error && error.response) {
+        const response = error.response;
+        const data = response.data;
+        if (!(response.status === 401 && (error.message === '' || (data && data.path && data.path.includes('/api/account'))))) {
+          let i;
+          switch (response.status) {
+            // connection refused, server not reachable
+            case 0:
+              addErrorAlert('Server not reachable', 'error.server.not.reachable');
+              break;
+
+            case 400: {
+              const headers = Object.entries<string>(response.headers);
+              let errorHeader: string | null = null;
+              let entityKey: string | null = null;
+              headers.forEach(([k, v]: [string, string]) => {
+                if (k.toLowerCase().endsWith('app-error')) {
+                  errorHeader = v;
+                } else if (k.toLowerCase().endsWith('app-params')) {
+                  entityKey = v;
+                }
+              });
+              if (errorHeader) {
+                const entityName = <% if (enableTranslation) { %>translate(
+                  'global.menu.entities.' + entityKey
+                )<% } else { %>entityKey<% } %>;
+                addErrorAlert(errorHeader, errorHeader, { entityName });
+              } else if (data !== '' && data.fieldErrors) {
+                const fieldErrors = data.fieldErrors;
+                for (i = 0; i < fieldErrors.length; i++) {
+                  const fieldError = fieldErrors[i];
+                  if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
+                      fieldError.message = 'Size';
+                  }
+                  // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+                  const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
+                  const fieldName = <% if (enableTranslation) { %>translate(
+                    `<%= angularAppName %>.${fieldError.objectName}.${convertedField}`
+                  )<% } else { %>convertedField.charAt(0).toUpperCase() + convertedField.slice(1)<% } %>;
+                  addErrorAlert(`Error on field "${fieldName}"`, `error.${fieldError.message}`, { fieldName });
+                }
+              } else if (data !== '' && data.message) {
+                addErrorAlert(data.message, data.message, data.params);
+              } else {
+                addErrorAlert(data);
+              }
+              break;
+            }
+            case 404:
+              addErrorAlert('Not found', 'error.url.not.found');
+              break;
+
+            default:
+              if (data !== '' && data.message) {
+                addErrorAlert(data.message);
+              } else {
+                addErrorAlert(data);
+              }
+          }
+        }
+      } else if (error && error.config && error.config.url === 'api/account' && error.config.method === 'get') {
+        /* eslint-disable no-console */
+        console.log('Authentication Error: Trying to access url api/account with GET.');
+      } else if (error && error.message) {
+        toast.error(error.message);
+      } else {
+        toast.error('Unknown error!');
+      }
+      return Promise.reject(error);
+    });
+};

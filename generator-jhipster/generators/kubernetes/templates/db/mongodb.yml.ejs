@@ -1,0 +1,353 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: ConfigMap
+metadata:
+  namespace: <%= kubernetesNamespace %>
+  name: <%= app.baseName.toLowerCase() %>-mongodb-config
+data:
+  mongod.conf: |
+    net:
+      port: 27017
+    replication:
+      replSetName: rs0
+    storage:
+      dbPath: /data/db
+---
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: ConfigMap
+metadata:
+  namespace: <%= kubernetesNamespace %>
+  name: <%= app.baseName.toLowerCase() %>-mongodb-init
+data:
+  on-start.sh: |
+    script_name=${0##*/}
+
+    log() {
+        local msg="$1"
+        local timestamp
+        timestamp=$(date --iso-8601=ns)
+        echo "[$timestamp] [$script_name] $msg" >> /work-dir/log.txt
+    }
+
+    shutdown_mongo() {
+        if [[ $# -eq 1 ]]; then
+            args="timeoutSecs: $1"
+        else
+            args='force: true'
+        fi
+        log "Shutting down MongoDB ($args)..."
+        mongo admin "${admin_creds[@]}" "${ssl_args[@]}" --eval "db.shutdownServer({$args})"
+    }
+
+    my_hostname=$(hostname)
+    log "Bootstrapping MongoDB replica set member: $my_hostname"
+
+    log "Reading standard input..."
+    while read -ra line; do
+        if [[ "${line}" == *"${my_hostname}"* ]]; then
+            service_name="$line"
+            continue
+        fi
+        peers=("${peers[@]}" "$line")
+    done
+
+    # Generate the ca cert
+    ca_crt=/data/configdb/tls.crt
+    if [ -f "$ca_crt"  ]; then
+        log "Generating certificate"
+        ca_key=/data/configdb/tls.key
+        pem=/work-dir/mongo.pem
+        ssl_args=(--ssl --sslCAFile "$ca_crt" --sslPEMKeyFile "$pem")
+
+    # Move into /work-dir
+    pushd /work-dir
+
+    cat >openssl.cnf <<EOL
+    [req]
+    req_extensions = v3_req
+    distinguished_name = req_distinguished_name
+    [req_distinguished_name]
+    [ v3_req ]
+    basicConstraints = CA:FALSE
+    keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+    subjectAltName = @alt_names
+    [alt_names]
+    DNS.1 = $(echo -n "$my_hostname" | sed s/-[0-9]*$//)
+    DNS.2 = $my_hostname
+    DNS.3 = $service_name
+    DNS.4 = localhost
+    DNS.5 = 127.0.0.1
+    EOL
+
+        # Generate the certs
+        openssl genrsa -out mongo.key 2048
+        openssl req -new -key mongo.key -out mongo.csr -subj "/CN=$my_hostname" -config openssl.cnf
+        openssl x509 -req -in mongo.csr \
+            -CA "$ca_crt" -CAkey "$ca_key" -CAcreateserial \
+            -out mongo.crt -days 3650 -extensions v3_req -extfile openssl.cnf
+
+        rm mongo.csr
+        cat mongo.crt mongo.key > $pem
+        rm mongo.key mongo.crt
+    fi
+
+
+    log "Peers: ${peers[*]}"
+
+    log "Starting a MongoDB instance..."
+    mongod --config /data/configdb/mongod.conf --dbpath="$DATA_PATH" --replSet="$REPLICA_SET" --port=$PORT "${auth_args[@]}" --bind_ip=0.0.0.0 >> /work-dir/log.txt 2>&1 &
+
+    log "Waiting for MongoDB to be ready..."
+    until mongo "${ssl_args[@]}" --eval "db.adminCommand('ping')"; do
+        log "Retrying..."
+        sleep 2
+    done
+
+    log "Initialized."
+
+    # try to find a master and add yourself to its replica set.
+    for peer in "${peers[@]}"; do
+        if mongo admin --host "$peer" "${admin_creds[@]}" "${ssl_args[@]}" --eval "rs.isMaster()" | grep '"ismaster" : true'; then
+            log "Found master: $peer"
+            log "Adding myself ($service_name) to replica set..."
+            if mongo admin --host "$peer" "${admin_creds[@]}" "${ssl_args[@]}" --eval "rs.add('$service_name')" | grep 'Quorum check failed'; then
+                log 'Quorum check failed, unable to join replicaset. Exiting prematurely.'
+                shutdown_mongo
+                exit 1
+            fi
+
+            sleep 3
+
+            log 'Waiting for replica to reach SECONDARY state...'
+            until printf '.' && [[ $(mongo admin "${admin_creds[@]}" "${ssl_args[@]}" --quiet --eval "rs.status().myState") == '2' ]]; do
+                sleep 1
+            done
+
+            log '✓ Replica reached SECONDARY state.'
+
+            shutdown_mongo "60"
+            log "Good bye."
+            exit 0
+        fi
+    done
+
+    # else initiate a replica set with yourself.
+    if mongo "${ssl_args[@]}" --eval "rs.status()" | grep "no replset config has been received"; then
+        log "Initiating a new replica set with myself ($service_name)..."
+        mongo "${ssl_args[@]}" --eval "rs.initiate({'_id': '$REPLICA_SET', 'members': [{'_id': 0, 'host': '$service_name'}]})"
+
+        sleep 3
+
+        log 'Waiting for replica to reach PRIMARY state...'
+        until printf '.' && [[ $(mongo "${ssl_args[@]}" --quiet --eval "rs.status().myState") == '1' ]]; do
+            sleep 1
+        done
+
+        log '✓ Replica reached PRIMARY state.'
+
+        log "Done."
+    fi
+
+    shutdown_mongo
+    log "Good bye."
+---
+apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
+kind: StatefulSet
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-mongodb
+  namespace: <%= kubernetesNamespace %>
+spec:
+  serviceName: <%= app.baseName.toLowerCase() %>-mongodb
+  replicas: <%= app.dbPeerCount %>
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>-mongodb
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>-mongodb
+     <%_ if (istio) { _%>
+      annotations:
+        sidecar.istio.io/inject: "false"
+     <%_ } _%>
+    spec:
+      initContainers:
+        - name: config
+          image: busybox
+          command:
+            - "sh"
+          args:
+            - "-c"
+            - |
+              set -e
+              set -x
+              cp /configdb-readonly/mongod.conf /data/configdb/mongod.conf
+          volumeMounts:
+            - name: workdir
+              mountPath: /work-dir
+            - name: config
+              mountPath: /configdb-readonly
+            - name: configdir
+              mountPath: /data/configdb
+        - name: install
+          image: "k8s.gcr.io/mongodb-install:0.6"
+          args:
+            - --work-dir=/work-dir
+          imagePullPolicy: "IfNotPresent"
+          volumeMounts:
+            - name: workdir
+              mountPath: /work-dir
+        - name: boot
+          image: <%= DOCKER_MONGODB %>
+          command:
+            - /work-dir/peer-finder
+          args:
+            - -on-start=/init/on-start.sh
+            - "-service=<%= app.baseName.toLowerCase() %>-mongodb"
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+                  fieldPath: metadata.namespace
+            - name: REPLICA_SET
+              value: rs0
+            - name: DATA_PATH
+              value: /data/db
+            - name: PORT
+              value: "27017"
+          volumeMounts:
+            - name: workdir
+              mountPath: /work-dir
+            - name: init
+              mountPath: /init
+            - name: configdir
+              mountPath: /data/configdb
+            - name: datadir
+              mountPath: /data/db
+      containers:
+        - name: mongodb
+          image: <%= DOCKER_MONGODB %>
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+                  fieldPath: metadata.namespace
+            - name: REPLICA_SET
+              value: rs0
+            - name: DATA_PATH
+              value: /data/db
+            - name: PORT
+              value: "27017"
+          ports:
+            - name: peer
+              containerPort: 27017
+          command:
+            - mongod
+          args:
+            - --config=/data/configdb/mongod.conf
+            - --dbpath=$(DATA_PATH)
+            - --replSet=$(REPLICA_SET)
+            - --port=$(PORT)
+            - --bind_ip=0.0.0.0
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+          readinessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+          volumeMounts:
+            - name: datadir
+              mountPath: /data/db
+            - name: configdir
+              mountPath: /data/configdb
+            - name: workdir
+              mountPath: /work-dir
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      volumes:
+        - name: config
+          configMap:
+            name: <%= app.baseName.toLowerCase() %>-mongodb-config
+        - name: workdir
+          emptyDir: {}
+        - name: init
+          configMap:
+            defaultMode: 0755
+            name: <%= app.baseName.toLowerCase() %>-mongodb-init
+        - name: configdir
+          emptyDir: {}
+<%_ if (!kubernetesUseDynamicStorage) { _%>
+        - name: datadir
+          emptyDir: {}
+<%_ } else { _%>
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: "1Gi"
+  <%_ if (kubernetesStorageClassName) { _%>
+        storageClassName: <%= kubernetesStorageClassName %>
+  <%_ } _%>
+<%_ } _%>
+---
+# Headless service for DNS record
+apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+  name: <%= app.baseName.toLowerCase() %>-mongodb
+  namespace: <%= kubernetesNamespace %>
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: peer
+      port: 27017
+  selector:
+    app: <%= app.baseName.toLowerCase() %>-mongodb

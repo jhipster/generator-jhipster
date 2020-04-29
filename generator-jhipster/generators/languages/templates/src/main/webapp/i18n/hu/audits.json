@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Biztonsági ellenörzés",
+        "filter": {
+            "title": "Dátum szerinti szűrés",
+            "from": "Kezdet",
+            "to": "Vég",
+            "button": {
+                "weeks": "hetek",
+                "today": "ma",
+                "clear": "törlés",
+                "close": "bezárás"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Felhasználó",
+                "date": "Dátum",
+                "status": "Állapot",
+                "data": "Extra információ"
+            },
+            "data": {
+                "remoteAddress": "IP cím:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

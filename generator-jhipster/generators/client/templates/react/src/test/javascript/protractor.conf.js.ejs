@@ -1,0 +1,78 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+exports.config = {
+  allScriptsTimeout: 60000,
+
+  specs: [
+    './e2e/modules/account/*.spec.ts',
+    './e2e/modules/administration/*.spec.ts',
+    './e2e/entities/**/*.spec.ts'
+    /* jhipster-needle-add-protractor-tests - JHipster will add protractors tests here */
+  ],
+
+  capabilities: {
+    browserName: 'chrome',
+    chromeOptions: {
+        args: process.env.JHI_E2E_HEADLESS
+          ? [ '--headless', '--disable-gpu', '--window-size=800,600' ]
+          : [ '--disable-gpu', '--window-size=800,600' ]
+    }
+  },
+
+  directConnect: true,
+
+  baseUrl: 'http://localhost:<%= serverPort %>/',
+
+  framework: 'mocha',
+
+  SELENIUM_PROMISE_MANAGER: false,
+
+  mochaOpts: {
+    reporter: 'spec',
+    slow: 6000,
+    ui: 'bdd',
+    timeout: 60000
+  },
+
+  beforeLaunch () {
+    require('ts-node').register({
+      project: './tsconfig.e2e.json'
+    });
+  },
+
+  onPrepare () {
+    // @ts-ignore
+    browser.driver.manage().window().setSize(1280, 1024);
+    // @ts-ignore
+    browser.ignoreSynchronization = true;
+    // Disable animations
+    // @ts-ignore
+    browser.executeScript('document.body.className += " notransition";');
+    const chai = require('chai');
+    const chaiAsPromised = require('chai-as-promised');
+    chai.use(chaiAsPromised);
+    // @ts-ignore
+    global.chai = chai;
+  },
+  params: {
+    waitTimeoutInMillis: 10000,
+    logWaitErrors: false
+  }
+};

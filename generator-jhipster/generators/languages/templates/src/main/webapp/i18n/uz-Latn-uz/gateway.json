@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Shlyuz",
+        "routes": {
+            "title": "Quyidagi yo`nalishlar",
+            "url": "URL",
+            "service": "servis",
+            "servers": "Mavjud serverlar",
+            "error": "Diqqat: server mavjud emas!"
+        },
+        "refresh": {
+            "button": "Yangilash"
+        }
+    }
+}

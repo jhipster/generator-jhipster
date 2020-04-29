@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "[<strong>{{username}}</strong>] के लिए User सेटिंग्स",
+        "form": {
+            "firstname": "प्रथम नाम",
+            "firstname.placeholder": "प्रथम नाम",
+            "lastname": "अंतिम नाम",
+            "lastname.placeholder": "अंतिम नाम",
+            "language": "भाषा ",
+            "button": "सहेजें "
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>कोई त्रुटि उत्पन्न हुई!</strong> सेटिंग्स को सहेजा नहीं जा सका.",
+                "emailexists": "<strong>ई-मेल उपयोग में पहले से ही है!</strong> कृपया कोई अन्य नाम चुनें. "
+            },
+            "success": "<strong>सहेजी गई सेटिंग्स!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "अपने प्रथम नाम आवश्यक है.",
+                    "minlength": "आपका पहला नाम कम से कम 1 character हो के लिए आवश्यक है",
+                    "maxlength": "आपका पहला नाम 50 characters से अधिक नहीं हो सकता"
+                },
+                "lastname": {
+                    "required": "अपने अंतिम नाम आवश्यक है.",
+                    "minlength": "आपका अंतिम नाम कम से कम 1 character हो के लिए आवश्यक है",
+                    "maxlength": "आपका अंतिम नाम 50 characters से अधिक नहीं हो सकता"
+                }
+            }
+        }
+    }
+}

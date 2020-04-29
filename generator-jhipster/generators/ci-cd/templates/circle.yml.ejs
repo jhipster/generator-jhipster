@@ -1,0 +1,154 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+version: 2.1
+jobs:
+    build:
+        machine:
+            image: circleci/classic:201808-01
+        steps:
+            - checkout
+
+            # Download and cache dependencies
+            - restore_cache:
+                keys:
+                    <%_ if (buildTool === 'maven' && clientPackageManager === 'npm') { _%>
+                    - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
+                    <%_ } else if (buildTool === 'maven' && clientPackageManager === 'yarn') { _%>
+                    - v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "yarn.lock" }}
+                    <%_ } else if (buildTool === 'gradle' && clientPackageManager === 'npm') { _%>
+                    - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
+                    <%_ } else if (buildTool === 'gradle' && clientPackageManager === 'yarn') { _%>
+                    - v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "yarn.lock" }}
+                    <%_ } _%>
+                    # Perform a Partial Cache Restore (https://circleci.com/docs/2.0/caching/#restoring-cache)
+                    - v1-dependencies-
+            - run:
+                name: Install OpenJDK 11
+                command: |
+                    sudo rm /var/lib/apt/lists/lock
+                    sudo rm /var/cache/apt/archives/lock
+                    sudo rm /var/lib/dpkg/lock
+                    sudo apt install openjdk-11-jdk
+                    echo 'export PATH="/usr/lib/jvm/java-11-openjdk-amd64/bin:$PATH"' >> $BASH_ENV
+            - run:
+                name: Setup NVM
+                command: |
+                    echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+                    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+            - run:
+                name: Install Node <%= NODE_VERSION %>
+                command: |
+                    nvm install <%= NODE_VERSION %>
+                    nvm alias default <%= NODE_VERSION %>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+            - run:
+                name: Set URL for Yarn
+                command: 'curl -o- -L https://yarnpkg.com/install.sh | bash'
+            - run:
+                name: Set PATH
+                command: echo 'export PATH="$HOME/.yarn/bin:$PATH"' >> $BASH_ENV
+            <%_ } _%>
+            - run:
+                name: Print Java Version
+                command: 'java -version'
+            - run:
+                name: Print Node Version
+                command: 'node -v'
+            <%_ if (clientPackageManager === 'npm') { _%>
+            - run:
+                name: Print NPM Version
+                command: 'npm -v'
+            <%_ } _%>
+            - run:
+                name: Install Node Modules
+                <%_ if (clientPackageManager === 'npm') { _%>
+                command: 'npm install'
+                <%_ } else if (clientPackageManager === 'yarn') { _%>
+                command: 'yarn install'
+                <%_ } _%>
+
+            - save_cache:
+                paths:
+                    - node
+                    - node_modules
+                    <%_ if (buildTool === 'maven') { _%>
+                    - ~/.m2
+                    <%_ } else if (buildTool === 'gradle') { _%>
+                    - ~/.gradle
+                    <%_ } _%>
+                <%_ if (clientPackageManager === 'npm') { _%>
+                    <%_ if (buildTool === 'maven') { _%>
+                key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
+                    <%_ } else if (buildTool === 'gradle') { _%>
+                key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
+                    <%_ } _%>
+                <%_ } else if (clientPackageManager === 'yarn') { _%>
+                    - $HOME/.yarn-cache
+                    <%_ if (buildTool === 'maven') { _%>
+                key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "yarn.lock" }}
+                    <%_ } else if (buildTool === 'gradle') { _%>
+                key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "yarn.lock" }}
+                    <%_ } _%>
+                <%_ } _%>
+
+            <%_ if (buildTool === 'maven') { _%>
+            - run:
+                name: Give Executable Power
+                command: 'chmod +x mvnw'
+            - run:
+                name: Run Style Checks
+                command: './mvnw -ntp checkstyle:check'
+            - run:
+                name: Clean and Verify
+                command: './mvnw -ntp clean verify'
+            <%_ } else if (buildTool === 'gradle') { _%>
+            - run:
+                name: Give Executable Power
+                command: 'chmod +x gradlew'
+            - run:
+                name: Run Style Checks
+                command: './gradlew checkstyleNohttp --no-daemon'
+            - run:
+                name: Clean and Verify
+                command: './gradlew clean test integrationTest --no-daemon'
+            <%_ } _%>
+            <%_ if (!skipClient) { _%>
+            - run:
+                name: Run Front End Tests
+                command: <%= clientPackageManager %> run <%= frontTestCommand %>
+            <%_ } _%>
+            <%_ if (buildTool === 'maven') { _%>
+            - run:
+                name: Verify with Prod Profile
+                command: './mvnw -ntp verify -Pprod -DskipTests'
+                <%_ if (cicdIntegrations.includes('heroku')) { _%>
+            - run:
+                name: Deploy to Heroku
+                command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>'
+                <%_ } _%>
+            <%_ } else if (buildTool === 'gradle') { _%>
+            - run:
+                name: Verify with Prod Profile
+                command: './gradlew bootJar -Pprod -x test --no-daemon'
+                <%_ if (cicdIntegrations.includes('heroku')) { _%>
+            -run:
+                name: Deploy to Heroku
+                command: './gradlew deployHeroku --no-daemon'
+                <%_ } _%>
+            <%_ } _%>

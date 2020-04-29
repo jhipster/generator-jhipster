@@ -1,0 +1,154 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
+import thunk from 'redux-thunk';
+import axios from 'axios';
+import sinon from 'sinon';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
+
+import account, { ACTION_TYPES, saveAccountSettings, reset } from 'app/modules/account/settings/settings.reducer';
+import { ACTION_TYPES as authActionTypes } from 'app/shared/reducers/authentication';
+<% if (enableTranslation) { %>import { ACTION_TYPES as localeActionTypes } from 'app/shared/reducers/locale';<% } %>
+
+describe('Settings reducer tests', () => {
+  <%_ if (enableTranslation) { _%>
+  beforeAll(() => {
+    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+  });
+
+  <%_ } _%>
+  describe('Common tests', () => {
+    it('should return the initial state', () => {
+      const toTest = account(undefined, {});
+      expect(toTest).toMatchObject({
+        loading: false,
+        errorMessage: null,
+        updateSuccess: false,
+        updateFailure: false
+      });
+    });
+  });
+
+  describe('Settings update', () => {
+    it('should detect a request', () => {
+      const toTest = account(undefined, { type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT) });
+      expect(toTest).toMatchObject({
+        updateSuccess: false,
+        updateFailure: false,
+        loading: true
+      });
+    });
+    it('should detect a success', () => {
+      const toTest = account(undefined, { type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT) });
+      expect(toTest).toMatchObject({
+        updateSuccess: true,
+        updateFailure: false,
+        loading: false
+      });
+    });
+    it('should detect a failure', () => {
+      const toTest = account(undefined, { type: FAILURE(ACTION_TYPES.UPDATE_ACCOUNT) });
+      expect(toTest).toMatchObject({
+        updateSuccess: false,
+        updateFailure: true,
+        loading: false
+      });
+    });
+
+    it('should reset the state', () => {
+      const initialState = {
+        loading: false,
+        errorMessage: null,
+        updateSuccess: false,
+        updateFailure: false
+      };
+      expect(
+        account({ ...initialState, loading: true }, {
+          type: ACTION_TYPES.RESET
+        })
+        ).toEqual({
+          ...initialState
+      });
+    });
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware]);
+      <%_ if (enableTranslation) { _%>
+      store = mockStore({ authentication: { account: { langKey: '<%= nativeLanguage %>' } } });
+      <%_ } else { _%>
+      store = mockStore({});
+      <%_ } _%>
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {
+      const meta = {
+        <%_ if (enableTranslation) { _%>
+        successMessage: 'translation-not-found[settings.messages.success]'
+        <%_ } else { _%>
+        successMessage: '<strong>Settings saved!</strong>'
+        <%_ } _%>
+      };
+
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.UPDATE_ACCOUNT),
+          meta
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.UPDATE_ACCOUNT),
+          payload: resolvedObject,
+          meta
+        },
+        {
+          type: REQUEST(authActionTypes.GET_SESSION)
+        },
+        {
+          type: SUCCESS(authActionTypes.GET_SESSION),
+          payload: resolvedObject
+        }<% if (enableTranslation) { %>,
+        {
+          type: localeActionTypes.SET_LOCALE,
+          locale: '<%= nativeLanguage %>'
+        }<% } %>
+      ];
+      await store.dispatch(saveAccountSettings({})).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
+        }
+      ];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});

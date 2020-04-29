@@ -1,0 +1,41 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { TranslatorContext, Storage } from 'react-jhipster';
+
+import { setLocale } from 'app/shared/reducers/locale';
+
+TranslatorContext.setDefaultLocale('<%= nativeLanguage %>');
+TranslatorContext.setRenderInnerTextForMissingKeys(false);
+
+export const languages: any = {
+  <%_ getAllSupportedLanguageOptions().filter(lang => languages.includes(lang.value)).forEach((ln, i) => { _%>
+  '<%= ln.value %>': { name: '<%= ln.dispName %>', rtl: <%= ln.rtl || false %> }<%= i !== languages.length - 1 ? ',' : '' %>
+  <%_ }); _%>
+  // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
+};
+
+export const locales = Object.keys(languages).sort();
+
+<%_ if (enableI18nRTL) { _%>
+export const isRTL = (lang: string): boolean => languages[lang] && languages[lang].rtl;
+<%_ } _%>
+
+export const registerLocale = store => {
+  store.dispatch(setLocale(Storage.session.get('locale', '<%= nativeLanguage %>')));
+};

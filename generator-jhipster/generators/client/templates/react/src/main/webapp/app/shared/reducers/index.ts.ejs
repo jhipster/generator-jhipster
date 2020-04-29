@@ -1,0 +1,94 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { combineReducers } from 'redux';
+import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
+
+<%_ if (enableTranslation) { _%>
+import locale, { LocaleState } from './locale';
+<%_ } _%>
+import authentication, { AuthenticationState } from './authentication';
+import applicationProfile, { ApplicationProfileState } from './application-profile';
+
+import administration, { AdministrationState } from 'app/modules/administration/administration.reducer';
+<%_ if (!skipUserManagement) { _%>
+import userManagement, { UserManagementState } from 'app/modules/administration/user-management/user-management.reducer';
+<%_ } else if (authenticationType === 'oauth2') { _%>
+import userManagement, { UserManagementState } from './user-management';
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+import register, { RegisterState } from 'app/modules/account/register/register.reducer';
+import activate, { ActivateState } from 'app/modules/account/activate/activate.reducer';
+import password, { PasswordState } from 'app/modules/account/password/password.reducer';
+import settings, { SettingsState } from 'app/modules/account/settings/settings.reducer';
+import passwordReset, { PasswordResetState } from 'app/modules/account/password-reset/password-reset.reducer';
+  <%_ if (authenticationType === 'session') { _%>
+import sessions, { SessionsState } from 'app/modules/account/sessions/sessions.reducer';
+  <%_ } _%>
+<%_ } _%>
+/* jhipster-needle-add-reducer-import - JHipster will add reducer here */
+
+export interface IRootState {
+  readonly authentication: AuthenticationState;
+  <%_ if (enableTranslation) { _%>
+  readonly locale: LocaleState;
+  <%_ } _%>
+  readonly applicationProfile: ApplicationProfileState;
+  readonly administration: AdministrationState;
+  <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+  readonly userManagement: UserManagementState;
+  <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
+  readonly register: RegisterState;
+  readonly activate: ActivateState;
+  readonly passwordReset: PasswordResetState;
+  readonly password: PasswordState;
+  readonly settings: SettingsState;
+    <%_ if (authenticationType === 'session') { _%>
+  readonly sessions: SessionsState;
+    <%_ } _%>
+  <%_ } _%>
+  /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
+  readonly loadingBar: any;
+}
+
+const rootReducer = combineReducers<IRootState>({
+  authentication,
+  <%_ if (enableTranslation) { _%>
+  locale,
+  <%_ } _%>
+  applicationProfile,
+  administration,
+  <%_ if (!skipUserManagement || authenticationType === 'oauth2') { _%>
+  userManagement,
+  <%_ } _%>
+  <%_ if (!skipUserManagement) { _%>
+  register,
+  activate,
+  passwordReset,
+  password,
+  settings,
+    <%_ if (authenticationType === 'session') { _%>
+  sessions,
+    <%_ } _%>
+  <%_ } _%>
+  /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
+  loadingBar
+});
+
+export default rootReducer;

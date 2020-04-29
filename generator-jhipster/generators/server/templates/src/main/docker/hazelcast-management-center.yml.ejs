@@ -1,0 +1,6 @@
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+    <%= baseName.toLowerCase() %>-hazelcast-management-center:
+        image: <%= DOCKER_HAZELCAST_MANAGEMENT_CENTER %>
+        ports:
+            - 8180:8080

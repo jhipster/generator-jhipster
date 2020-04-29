@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Pendaftaran",
+        "form": {
+            "button": "Daftar"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Username anda diperlukan.",
+                    "minlength": "Username anda diperlukan minimal 1 karakter.",
+                    "maxlength": "Username anda tidak boleh lebih dari 50 karakter.",
+                    "pattern": "Your username is invalid."
+                }
+            },
+            "success": "<strong>Pendaftaran berhasil!</strong> Silakan cek email untuk melakukan aktivasi akun.",
+            "error": {
+                "fail": "<strong>Pendaftaran gagal!</strong> Silakan coba lagi.",
+                "userexists": "<strong>Nama untuk pengguna sudah terdaftar!</strong> Silakan pilih yang lain.",
+                "emailexists": "<strong>Email sudah digunakan!</strong> Silakan pilih yang lain."
+            }
+        }
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "testManyToOne",
+            "otherEntityName": "testManyToOne",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "testServiceImpl"
+        },
+        {
+            "relationshipName": "testManyToMany",
+            "otherEntityName": "testManyToMany",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "testServiceImpl"
+        },
+        {
+            "relationshipName": "testOneToOne",
+            "otherEntityName": "testOneToOne",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "testServiceImpl"
+        },
+        {
+            "relationshipName": "userOneToMany",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipName": "userManyToMany",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "userOneToOne",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "parent"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210109",
+    "dto": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "pagination": "no"
+}

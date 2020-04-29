@@ -1,0 +1,54 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "firstRelationship",
+            "otherEntityName": "testEntity",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "firstTestTwoRelationshipsSameEntity"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "secondRelationship",
+            "otherEntityName": "testEntity",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "secondTestTwoRelationshipsSameEntity"
+        },
+        {
+            "relationshipName": "userOne",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "userTwo",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "firstUniqueRequiredRelation",
+            "relationshipValidateRules": "required",
+            "otherEntityName": "division",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "firstTestTwoRelationshipsSameEntity"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "secondUniqueRequiredRelation",
+            "relationshipValidateRules": "required",
+            "otherEntityName": "division",
+            "otherEntityField": "id",
+            "otherEntityRelationshipName": "secondTestTwoRelationshipsSameEntity"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210109",
+    "entityTableName": "test_multiple_rel",
+    "dto": "no",
+    "service": "no",
+    "angularJSSuffix": "mySuffix",
+    "pagination": "no"
+}

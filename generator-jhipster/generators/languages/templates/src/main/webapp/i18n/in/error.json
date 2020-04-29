@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "Kesalahan halaman!",
+        "http": {
+            "400": "Permintaan buruk.",
+            "403": "Anda tidak memiliki izin untuk mengakses halaman ini.",
+            "404": "Halaman tidak ada.",
+            "405": "Metode permintaan tidak didukung untuk URL ini.",
+            "500": "Kesalahan internal server."
+        },
+        "concurrencyFailure": "Pengguna lain melakukan modifikasi data ini disaat bersamaan. Perubahan anda ditolak.",
+        "validation": "Kesalahan validasi pada server."
+    }
+}

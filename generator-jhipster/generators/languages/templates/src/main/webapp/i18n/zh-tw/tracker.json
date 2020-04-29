@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "使用者追蹤",
+        "table": {
+            "userlogin": "使用者",
+            "ipaddress": "IP 位置",
+            "userAgent": "使用者代理",
+            "page": "目前頁面",
+            "time": "時間"
+        }
+    }
+}

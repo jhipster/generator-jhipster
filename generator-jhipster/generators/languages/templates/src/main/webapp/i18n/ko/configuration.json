@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "설정",
+        "filter": "필터 (prefix 기준)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
+        }
+    }
+}

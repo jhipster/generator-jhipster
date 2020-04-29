@@ -1,0 +1,101 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.security.jwt;
+
+<%_ if (reactive) { _%>
+import org.springframework.http.server.reactive.ServerHttpRequest;
+<%_ } _%>
+import org.springframework.security.core.Authentication;
+<%_ if (reactive) { _%>
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+<%_ } else { _%>
+import org.springframework.security.core.context.SecurityContextHolder;
+<%_ } _%>
+import org.springframework.util.StringUtils;
+<%_ if (reactive) { _%>
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+<%_ } else { _%>
+import org.springframework.web.filter.GenericFilterBean;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+<%_ } _%>
+
+/**
+ * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
+ * found.
+ */
+public class JWTFilter <% if (!reactive) { %>extends GenericFilterBean<% } else { %>implements WebFilter<% } %> {
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    <%_ if (websocket === 'spring-websocket') { _%>
+
+    public static final String AUTHORIZATION_TOKEN = "access_token";
+    <%_ } _%>
+
+    private final TokenProvider tokenProvider;
+
+    public JWTFilter(TokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
+    @Override
+    <%_ if (!reactive) { _%>
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+        throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        String jwt = resolveToken(httpServletRequest);
+    <%_ } else { _%>
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String jwt = resolveToken(exchange.getRequest());
+    <%_ } _%>
+        if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
+            Authentication authentication = this.tokenProvider.getAuthentication(jwt);
+        <%_ if (reactive) { _%>
+            return chain.filter(exchange).subscriberContext(ReactiveSecurityContextHolder.withAuthentication(authentication));
+        }
+        return chain.filter(exchange);
+        <%_ } else { _%>
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
+        filterChain.doFilter(servletRequest, servletResponse);
+        <%_ } _%>
+    }
+
+    private String resolveToken(<% if (!reactive) { %>HttpServletRequest<% } else { %>ServerHttpRequest<% } %> request) {
+        String bearerToken = request.<% if (!reactive) { %>getHeader<% } else { %>getHeaders().getFirst<% } %>(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        <%_ if (websocket === 'spring-websocket') { _%>
+        String jwt = request.getParameter(AUTHORIZATION_TOKEN);
+        if (StringUtils.hasText(jwt)) {
+            return jwt;
+        }
+        <%_ } _%>
+        return null;
+    }
+}

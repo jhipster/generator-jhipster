@@ -1,0 +1,143 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Injectable } from '@angular/core';
+import { Location } from '@angular/common';
+import { Router, NavigationEnd, Event } from '@angular/router';
+import { Subscription, ReplaySubject, Subject } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import * as SockJS from 'sockjs-client';
+import * as Stomp from 'webstomp-client';
+
+<%_ if (authenticationType === 'session') { _%>
+import { CSRFService } from 'app/core/auth/csrf.service';
+<%_ } _%>
+<%_ if (authenticationType === 'jwt') { _%>
+import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
+<%_ } _%>
+import { TrackerActivity } from './tracker-activity.model';
+
+@Injectable({ providedIn: 'root' })
+export class TrackerService {
+    private stompClient: Stomp.Client | null = null;
+    private routerSubscription: Subscription | null = null;
+    private connectionSubject: ReplaySubject<void> = new ReplaySubject(1);
+    private connectionSubscription: Subscription | null = null;
+    private stompSubscription: Stomp.Subscription | null = null;
+    private listenerSubject: Subject<TrackerActivity> = new Subject();
+
+    constructor(
+        private router: Router,
+        <%_ if (authenticationType === 'session') { _%>
+        private csrfService: CSRFService,
+        <%_ } _%>
+        <%_ if (authenticationType === 'jwt') { _%>
+        private authServerProvider: AuthServerProvider,
+        <%_ } _%>
+        private location: Location
+    ) {}
+
+    connect(): void {
+        if (this.stompClient && this.stompClient.connected) {
+            return;
+        }
+
+        // building absolute path so that websocket doesn't fail when deploying with a context path
+        let url = '/websocket/tracker';
+        url = this.location.prepareExternalUrl(url);
+        <%_ if (authenticationType === 'jwt') { _%>
+        const authToken = this.authServerProvider.getToken();
+        if (authToken) {
+            url += '?access_token=' + authToken;
+        }
+        <%_ } _%>
+        const socket: WebSocket = new SockJS(url);
+        this.stompClient = Stomp.over(socket);
+        const headers: Stomp.ConnectionHeaders = {};
+        <%_ if (authenticationType === 'session') { _%>
+        headers['X-XSRF-TOKEN'] = this.csrfService.getCSRF('XSRF-TOKEN');
+        <%_ } _%>
+        this.stompClient.connect(headers, () => {
+            this.connectionSubject.next();
+
+            this.sendActivity();
+
+            this.routerSubscription = this.router.events
+                .pipe(filter((event: Event) => event instanceof NavigationEnd))
+                .subscribe(() => this.sendActivity());
+        });
+    }
+
+    disconnect(): void {
+        this.unsubscribe();
+
+        this.connectionSubject = new ReplaySubject(1);
+
+        if (this.routerSubscription) {
+            this.routerSubscription.unsubscribe();
+            this.routerSubscription = null;
+        }
+
+        if (this.stompClient) {
+            if (this.stompClient.connected) {
+                this.stompClient.disconnect();
+            }
+            this.stompClient = null;
+        }
+    }
+
+    receive(): Subject<TrackerActivity> {
+        return this.listenerSubject;
+    }
+
+    subscribe(): void {
+        if (this.connectionSubscription) {
+            return;
+        }
+
+        this.connectionSubscription = this.connectionSubject.subscribe(() => {
+            if (this.stompClient) {
+                this.stompSubscription = this.stompClient.subscribe('/topic/tracker', (data: Stomp.Message) => {
+                    this.listenerSubject.next(JSON.parse(data.body));
+                });
+            }
+        });
+    }
+
+    unsubscribe(): void {
+        if (this.stompSubscription) {
+            this.stompSubscription.unsubscribe();
+            this.stompSubscription = null;
+        }
+
+        if (this.connectionSubscription) {
+            this.connectionSubscription.unsubscribe();
+            this.connectionSubscription = null;
+        }
+    }
+
+    private sendActivity(): void {
+        if (this.stompClient && this.stompClient.connected) {
+            this.stompClient.send(
+                '/topic/activity', // destination
+                JSON.stringify({ page: this.router.routerState.snapshot.url }), // body
+                {} // header
+            );
+        }
+    }
+}

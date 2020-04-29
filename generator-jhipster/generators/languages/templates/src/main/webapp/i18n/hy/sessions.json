@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Ակտիվ  միացումներ [<strong>{{username}}</strong>] համար",
+        "table": {
+            "ipaddress": "IP հասցե",
+            "useragent": "User Agent",
+            "date": "Ամսաթիվ",
+            "button": "Անվավեր ճանաչել"
+        },
+        "messages": {
+            "success": "<strong>Միացումը անվավեր է ճանաչված!</strong>",
+            "error": "<strong>Տեղի է ունեցել սխալ!</strong> Միացումը չի կարող անվավեր է ճանաչվել:"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Điều hướng",
+        "routes": {
+            "title": "Các điều hướng hiện tại",
+            "url": "Địa chỉ",
+            "service": "dịch vụ",
+            "servers": "Các máy chủ khả dụng",
+            "error": "Cảnh báo: không có máy chủ nào khả dụng!"
+        },
+        "refresh": {
+            "button": "Làm mới"
+        }
+    }
+}

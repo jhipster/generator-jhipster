@@ -1,0 +1,187 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+#!/usr/bin/env groovy
+
+node {
+    stage('checkout') {
+        checkout scm
+    }
+
+<%_ if (sendBuildToGitlab) { _%>
+    gitlabCommitStatus('build') {
+<%_ } _%>
+<%_ if (insideDocker) { _%>
+<%= gitLabIndent %>    docker.image('jhipster/jhipster:v<%= jhipsterVersion %>').inside('-u jhipster<% if (buildTool === 'maven') { %> -e MAVEN_OPTS="-Duser.home=./"<% } else if (buildTool === 'gradle') { %> -e GRADLE_USER_HOME=.gradle<% } %>') {
+<%_ } _%>
+<%= indent %>    stage('check java') {
+<%= indent %>        sh "java -version"
+<%= indent %>    }
+
+<%_ if (buildTool === 'maven') { _%>
+<%= indent %>    stage('clean') {
+<%= indent %>        sh "chmod +x mvnw"
+<%= indent %>        sh "./mvnw -ntp clean -P-webpack"
+<%= indent %>    }
+<%= indent %>    stage('nohttp') {
+<%= indent %>        sh "./mvnw -ntp checkstyle:check"
+<%= indent %>    }
+
+    <%_ if (!skipClient) { _%>
+        <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>    stage('install tools') {
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-yarn -DnodeVersion=v<%= NODE_VERSION %> -DyarnVersion=v<%= YARN_VERSION %>"
+<%= indent %>    }
+
+<%= indent %>    stage('yarn install') {
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:yarn"
+<%= indent %>    }
+
+        <%_ } else if (clientPackageManager === 'npm') { _%>
+<%= indent %>    stage('install tools') {
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v<%= NODE_VERSION %> -DnpmVersion=<%= NPM_VERSION %>"
+<%= indent %>    }
+
+<%= indent %>    stage('npm install') {
+<%= indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
+<%= indent %>    }
+
+        <%_ } _%>
+    <%_ } _%>
+<%= indent %>    stage('backend tests') {
+<%= indent %>        try {
+<%= indent %>            sh "./mvnw -ntp verify -P-webpack"
+<%= indent %>        } catch(err) {
+<%= indent %>            throw err
+<%= indent %>        } finally {
+<%= indent %>            junit '**/target/test-results/**/TEST-*.xml'
+<%= indent %>        }
+<%= indent %>    }
+
+    <%_ if (!skipClient) { _%>
+<%= indent %>    stage('frontend tests') {
+<%= indent %>        try {
+        <%_ if (insideDocker) { _%>
+            <%_ if (clientPackageManager === 'yarn') { _%>
+<%= indent %>           yarn install
+<%= indent %>           yarn test
+            <%_ } else if (clientPackageManager === 'npm') { _%>                         
+<%= indent %>           npm install
+<%= indent %>           npm test
+            <%_ } _%>
+        <%_ } else { _%>
+<%= indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%= clientPackageManager %> -Dfrontend.<%= clientPackageManager %>.arguments='run <%= frontTestCommand %>'"
+        <%_ } _%>
+<%= indent %>        } catch(err) {
+<%= indent %>            throw err
+<%= indent %>        } finally {
+<%= indent %>            junit '**/target/test-results/**/TEST-*.xml'
+<%= indent %>        }
+<%= indent %>    }
+
+    <%_ } _%>
+    <%_ if (cicdIntegrations.includes('heroku')) { _%>
+<%= indent %>    stage('package and deploy') {
+<%= indent %>        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:2.0.5:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>"
+    <%_ } else { _%>
+<%= indent %>    stage('packaging') {
+<%= indent %>        sh "./mvnw -ntp verify -P-webpack <% if (cicdIntegrations.includes('deploy')) { %>deploy <% } %>-Pprod -DskipTests"
+    <%_ } _%>
+<%= indent %>        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+<%= indent %>    }
+<%_ } else if (buildTool === 'gradle') { _%>
+<%= indent %>    stage('clean') {
+<%= indent %>        sh "chmod +x gradlew"
+<%= indent %>        sh "./gradlew clean --no-daemon"
+<%= indent %>    }
+<%= indent %>    stage('nohttp') {
+<%= indent %>        sh "./gradlew checkstyleNohttp --no-daemon"
+<%= indent %>    }
+
+    <%_ if (!skipClient) { _%>
+<%= indent %>    stage('npm install') {
+<%= indent %>        sh "./gradlew <%= clientPackageManager %>_install -PnodeInstall --no-daemon"
+<%= indent %>    }
+    <%_ } _%>
+
+<%= indent %>    stage('backend tests') {
+<%= indent %>        try {
+<%= indent %>            sh "./gradlew test integrationTest -PnodeInstall --no-daemon"
+<%= indent %>        } catch(err) {
+<%= indent %>            throw err
+<%= indent %>        } finally {
+<%= indent %>            junit '**/build/**/TEST-*.xml'
+<%= indent %>        }
+<%= indent %>    }
+
+    <%_ if (!skipClient) { _%>
+<%= indent %>    stage('frontend tests') {
+<%= indent %>        try {
+<%= indent %>            sh "./gradlew <%= clientPackageManager %>_run_<%= frontTestCommand %> -PnodeInstall --no-daemon"
+<%= indent %>        } catch(err) {
+<%= indent %>            throw err
+<%= indent %>        } finally {
+<%= indent %>            junit '**/build/test-results/TESTS-*.xml'
+<%= indent %>        }
+<%= indent %>    }
+
+    <%_ } _%>
+<%= indent %>    stage('packaging') {
+<%= indent %>        sh "./gradlew bootJar -x test -Pprod -PnodeInstall --no-daemon"
+<%= indent %>        archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
+<%= indent %>    }
+
+    <%_ if (cicdIntegrations.includes('heroku')) { _%>
+<%= indent %>    stage('deployment') {
+<%= indent %>        sh "./gradlew deployHeroku --no-daemon"
+<%= indent %>    }
+
+     <%_ } _%>
+<%_ } _%>
+<%_ if (cicdIntegrations.includes('sonar')) { _%>
+<%= indent %>    stage('quality analysis') {
+<%= indent %>        withSonarQubeEnv('<%= sonarName %>') {
+    <%_ if (buildTool === 'maven') { _%>
+<%= indent %>            sh "./mvnw -ntp initialize sonar:sonar"
+    <%_ } else if (buildTool === 'gradle' ) { _%>
+<%= indent %>            sh "./gradlew sonarqube --no-daemon"
+    <%_ } _%>
+<%= indent %>        }
+<%= indent %>    }
+<%_ } _%>
+<%_ if (insideDocker) { _%>
+<%= gitLabIndent %>    }
+<%_ } _%>
+<%_ if (cicdIntegrations.includes('publishDocker')) { _%>
+
+<%= gitLabIndent %>    def dockerImage
+<%= gitLabIndent %>    stage('publish docker') {
+<%= gitLabIndent %>        // A pre-requisite to this step is to setup authentication to the docker registry
+    <%_ if (buildTool === 'maven') { _%>
+<%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
+<%= gitLabIndent %>        sh "./mvnw -ntp jib:build"
+    <%_ } else if (buildTool === 'gradle' ) { _%>
+<%= gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods
+<%= gitLabIndent %>        sh "./gradlew jib"
+    <%_ } _%>
+<%= gitLabIndent %>    }
+<%_ } _%>
+<%_ if (sendBuildToGitlab) { _%>
+    }
+<%_ } _%>
+}

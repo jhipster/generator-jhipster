@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "साइन इन करा",
+        "form": {
+            "password": "संकेतशब्द",
+            "password.placeholder": "आपला संकेतशब्द",
+            "rememberme": "मला लक्षात ठेवा",
+            "button": "साइन इन"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>साइन इन करण्यात अयशस्वी!</strong> कृपया आपला श्रेय तपासा आणि पुन्हा प्रयत्न करा."
+            }
+        },
+        "password": {
+            "forgot": "आपण आपला संकेतशब्द विसरलात का?"
+        }
+    }
+}

@@ -1,0 +1,169 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+const path = require('path');
+const webpack = require('webpack');
+const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+<%_ if (enableTranslation) { _%>
+const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+<%_ } if (buildTool === undefined) { _%>
+
+const packageJson = require('./../package.json');
+<%_ } _%>
+const utils = require('./utils.js');
+
+const getTsLoaderRule = env => {
+  const rules = [
+    {
+      loader: 'cache-loader',
+      options: {
+        cacheDirectory: path.resolve('<%= BUILD_DIR %>cache-loader')
+      }
+    },
+    {
+      loader: 'thread-loader',
+      options: {
+        // There should be 1 cpu for the fork-ts-checker-webpack-plugin.
+        // The value may need to be adjusted (e.g. to 1) in some CI environments,
+        // as cpus() may report more cores than what are available to the build.
+        workers: require('os').cpus().length - 1
+      }
+    },
+    {
+      loader: 'ts-loader',
+      options: {
+        transpileOnly: true,
+        happyPackMode: true
+      }
+    }
+  ];
+  if (env === 'development') {
+    rules.unshift({
+      loader: 'react-hot-loader/webpack'
+    });
+  }
+  return rules;
+};
+
+module.exports = options => ({
+  cache: options.env !== 'production',
+  resolve: {
+    extensions: [
+      '.js', '.jsx', '.ts', '.tsx', '.json'
+    ],
+    modules: ['node_modules'],
+    alias: utils.mapTypescriptAliasToWebpackAlias()
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: getTsLoaderRule(options.env),
+        include: [utils.root('./<%= CLIENT_MAIN_SRC_DIR %>app')],
+        exclude: [utils.root('node_modules')]
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg|woff2?|ttf|eot)$/i,
+        loader: 'file-loader',
+        options: {
+          digest: 'hex',
+          hash: 'sha512',
+          name: 'content/[hash].[ext]'
+        }
+      },
+      {
+        enforce: 'pre',
+        test: /\.jsx?$/,
+        loader: 'source-map-loader'
+      },
+      {
+        test: /\.(j|t)sx?$/,
+        enforce: 'pre',
+        loader: 'eslint-loader',
+        exclude: [utils.root('node_modules')]
+      }
+    ]
+  },
+  stats: {
+    children: false
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: `'${options.env}'`,
+        <%_ if (enableTranslation) { _%>
+        BUILD_TIMESTAMP: `'${new Date().getTime()}'`,
+        <%_ } _%>
+<%_ if (buildTool === undefined) { _%>
+        VERSION: `'${packageJson.version}'`,
+<%_ } else { _%>
+        // APP_VERSION is passed as an environment variable from the Gradle / Maven build tasks.
+        VERSION: `'${process.env.hasOwnProperty('APP_VERSION') ? process.env.APP_VERSION : 'DEV'}'`,
+<%_ } _%>
+        DEBUG_INFO_ENABLED: options.env === 'development',
+        // The root URL for API calls, ending with a '/' - for example: `"https://www.jhipster.tech:8081/myservice/"`.
+        // If this URL is left empty (""), then it will be relative to the current context.
+        // If you use an API server, in `prod` mode, you will need to enable CORS
+        // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
+        SERVER_API_URL: `''`
+      }
+    }),
+    new ForkTsCheckerWebpackPlugin({ eslint: true }),
+    new CopyWebpackPlugin([
+      <%_ if (!reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
+      { from: './node_modules/swagger-ui-dist/*.{js,css,html,png}', to: 'swagger-ui', flatten: true, ignore: ['index.html']},
+      { from: './node_modules/axios/dist/axios.min.js', to: 'swagger-ui'},
+      { from: './<%= MAIN_SRC_DIR %>/swagger-ui/', to: 'swagger-ui' },
+      <%_ } _%>
+      { from: './<%= MAIN_SRC_DIR %>content/', to: 'content' },
+      { from: './<%= MAIN_SRC_DIR %>favicon.ico', to: 'favicon.ico' },
+      { from: './<%= MAIN_SRC_DIR %>manifest.webapp', to: 'manifest.webapp' },
+      // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
+      { from: './<%= MAIN_SRC_DIR %>robots.txt', to: 'robots.txt' }
+    ]),
+    new HtmlWebpackPlugin({
+      template: './<%= CLIENT_MAIN_SRC_DIR %>index.html',
+      chunksSortMode: 'dependency',
+      inject: 'body'
+    }),
+    new BaseHrefWebpackPlugin({ baseHref: '/' }),
+    <%_ if (enableTranslation) { _%>
+    new MergeJsonWebpackPlugin({
+      output: {
+        groupBy: [
+          // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array
+        ]
+      }
+    }),
+    <%_ } _%>
+  ]
+});

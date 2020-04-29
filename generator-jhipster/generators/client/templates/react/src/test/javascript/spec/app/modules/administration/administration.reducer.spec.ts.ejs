@@ -1,0 +1,411 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
+import axios from 'axios';
+import thunk from 'redux-thunk';
+import sinon from 'sinon';
+
+import { REQUEST, FAILURE, SUCCESS } from 'app/shared/reducers/action-type.util';
+import administration, {
+  ACTION_TYPES,
+  <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+  gatewayRoutes,
+  <%_ } _%>
+  systemHealth,
+  systemMetrics,
+  systemThreadDump,
+  getLoggers,
+  changeLogLevel,
+  getConfigurations,
+  getEnv<% if (!['no', 'cassandra'].includes(databaseType)) { %>,
+  getAudits<% } %>
+} from 'app/modules/administration/administration.reducer';
+
+describe('Administration reducer tests', () => {
+  const username = process.env.E2E_USERNAME || 'admin';
+
+  function isEmpty(element): boolean {
+    if (element instanceof Array) {
+      return element.length === 0;
+    } else {
+      return Object.keys(element).length === 0;
+    }
+  }
+
+  function testInitialState(state) {
+    expect(state).toMatchObject({
+      loading: false,
+      errorMessage: null,
+      totalItems: 0
+    });
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+    expect(isEmpty(state.gateway.routes));
+    <%_ } _%>
+    expect(isEmpty(state.logs.loggers));
+    expect(isEmpty(state.threadDump));
+    <%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
+    expect(isEmpty(state.audits));
+    <%_ } _%>
+    <%_ if (websocket === 'spring-websocket') { _%>
+    expect(isEmpty(state.tracker.activities));
+    <%_ } _%>
+  }
+
+  function testMultipleTypes(types, payload, testFunction) {
+    types.forEach(e => {
+      testFunction(administration(undefined, { type: e, payload }));
+    });
+  }
+
+  describe('Common', () => {
+    it('should return the initial state', () => {
+      testInitialState(administration(undefined, {}));
+    });
+  });
+
+  describe('Requests', () => {
+    it('should set state to loading', () => {
+      testMultipleTypes(
+        [
+          <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+          REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          <%_ } _%>
+          REQUEST(ACTION_TYPES.FETCH_LOGS),
+          REQUEST(ACTION_TYPES.FETCH_HEALTH),
+          REQUEST(ACTION_TYPES.FETCH_METRICS),
+          REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP),
+          REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS),
+          REQUEST(ACTION_TYPES.FETCH_ENV)<% if (!['no', 'cassandra'].includes(databaseType)) { %>,
+          REQUEST(ACTION_TYPES.FETCH_AUDITS)<% } %>
+        ],
+        {},
+        state => {
+          expect(state).toMatchObject({
+            errorMessage: null,
+            loading: true
+          });
+        }
+      );
+    });
+  });
+
+  describe('Failures', () => {
+    it('should set state to failed and put an error message in errorMessage', () => {
+      testMultipleTypes(
+        [
+          <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+          FAILURE(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          <%_ } _%>
+          FAILURE(ACTION_TYPES.FETCH_LOGS),
+          FAILURE(ACTION_TYPES.FETCH_HEALTH),
+          FAILURE(ACTION_TYPES.FETCH_METRICS),
+          FAILURE(ACTION_TYPES.FETCH_THREAD_DUMP),
+          FAILURE(ACTION_TYPES.FETCH_CONFIGURATIONS),
+          FAILURE(ACTION_TYPES.FETCH_ENV)<% if (!['no', 'cassandra'].includes(databaseType)) { %>,
+          FAILURE(ACTION_TYPES.FETCH_AUDITS)<% } %>
+        ],
+        'something happened',
+        state => {
+          expect(state).toMatchObject({
+            loading: false,
+            errorMessage: 'something happened'
+          });
+        }
+      );
+    });
+  });
+
+  describe('Success', () => {
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+    it('should update state according to a successful fetch gateway routes request', () => {
+      const payload = { data: [] };
+      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE), payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        gateway: { routes: payload.data }
+      });
+    });
+    <%_ } _%>
+    it('should update state according to a successful fetch logs request', () => {
+      const payload = { data: {
+          loggers: {
+            main: {
+              effectiveLevel: 'WARN'
+            }
+          }
+        }
+      };
+      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_LOGS), payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        logs: payload.data
+      });
+    });
+
+    it('should update state according to a successful fetch health request', () => {
+      const payload = { data: { status: 'UP' } };
+      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_HEALTH), payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        health: payload.data
+      });
+    });
+
+    it('should update state according to a successful fetch metrics request', () => {
+      const payload = { data: { version: '3.1.3', gauges: {} } };
+      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_METRICS), payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        metrics: payload.data
+      });
+    });
+
+    it('should update state according to a successful fetch thread dump request', () => {
+      const payload = { data: [{ threadName: 'hz.gateway.cached.thread-6', threadId: 9266 }] };
+      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_THREAD_DUMP), payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        threadDump: payload.data
+      });
+    });
+
+    it('should update state according to a successful fetch configurations request', () => {
+      const payload = { data: { contexts: { jhipster: { beans: {} } } } };
+      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_CONFIGURATIONS), payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        configuration: {
+          configProps: payload.data,
+          env: {}
+        }
+      });
+    });
+
+    it('should update state according to a successful fetch env request', () => {
+      const payload = { data: { activeProfiles: ['swagger', 'dev'] } };
+      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_ENV), payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        configuration: {
+          configProps: {},
+          env: payload.data
+        }
+      });
+    });
+
+<%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
+    it('should update state according to a successful fetch audits request', () => {
+      const headers = { ['x-total-count']: 1 };
+      const payload = { data: [{ id: 1, userLogin: username }], headers };
+      const toTest = administration(undefined, { type: SUCCESS(ACTION_TYPES.FETCH_AUDITS), payload });
+
+      expect(toTest).toMatchObject({
+        loading: false,
+        audits: payload.data,
+        totalItems: headers['x-total-count']
+      });
+    });
+<%_ } _%>
+  });
+<%_ if (websocket === 'spring-websocket') { _%>
+  describe('Websocket Message Handling', () => {
+    it('should update state according to a successful websocket message receipt', () => {
+      const payload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
+      const toTest = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload });
+
+      expect(toTest).toMatchObject({
+        tracker: { activities: [payload] }
+      });
+    });
+
+    it('should update state according to a successful websocket message receipt - only one activity per session', () => {
+      const firstPayload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
+      const secondPayload = { id: 1, userLogin: username, page: 'user-management', sessionId: 'abc123' };
+      const firstState = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: firstPayload });
+      const secondState = administration(firstState, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: secondPayload });
+
+      expect(secondState).toMatchObject({
+        tracker: { activities: [secondPayload] }
+      });
+    });
+
+    it('should update state according to a successful websocket message receipt - remove logged out sessions', () => {
+      const firstPayload = { id: 1, userLogin: username, page: 'home', sessionId: 'abc123' };
+      const secondPayload = { id: 1, userLogin: username, page: 'logout', sessionId: 'abc123' };
+      const firstState = administration(undefined, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: firstPayload });
+      const secondState = administration(firstState, { type: ACTION_TYPES.WEBSOCKET_ACTIVITY_MESSAGE, payload: secondPayload });
+
+      expect(secondState).toMatchObject({
+        tracker: { activities: [] }
+      });
+    });
+  });
+<%_ } _%>
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware]);
+      store = mockStore({});
+      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
+    it('dispatches FETCH_GATEWAY_ROUTE_PENDING and FETCH_GATEWAY_ROUTE_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_GATEWAY_ROUTE)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_GATEWAY_ROUTE),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(gatewayRoutes()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    <%_ } _%>
+    it('dispatches FETCH_HEALTH_PENDING and FETCH_HEALTH_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_HEALTH)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_HEALTH),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(systemHealth()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches FETCH_METRICS_PENDING and FETCH_METRICS_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_METRICS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_METRICS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(systemMetrics()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches FETCH_THREAD_DUMP_PENDING and FETCH_THREAD_DUMP_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_THREAD_DUMP)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_THREAD_DUMP),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(systemThreadDump()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches FETCH_LOGS_PENDING and FETCH_LOGS_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_LOGS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_LOGS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getLoggers()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches FETCH_LOGS_CHANGE_LEVEL_PENDING and FETCH_LOGS_CHANGE_LEVEL_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_LOGS_CHANGE_LEVEL),
+          payload: resolvedObject
+        },
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_LOGS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_LOGS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(changeLogLevel('ROOT', 'DEBUG')).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches FETCH_CONFIGURATIONS_PENDING and FETCH_CONFIGURATIONS_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_CONFIGURATIONS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_CONFIGURATIONS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getConfigurations()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches FETCH_ENV_PENDING and FETCH_ENV_FULFILLED actions', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_ENV)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_ENV),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getEnv()).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    <%_ if (!['no', 'cassandra'].includes(databaseType)) { _%>
+    it('dispatches FETCH_AUDITS_PENDING and FETCH_AUDITS_FULFILLED actions with pagination variables - no sort', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_AUDITS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_AUDITS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getAudits(1, 10, null, Date.now(), Date.now())).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches FETCH_AUDITS_PENDING and FETCH_AUDITS_FULFILLED actions with pagination variables - no dates', async () => {
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_AUDITS)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_AUDITS),
+          payload: resolvedObject
+        }
+      ];
+      await store.dispatch(getAudits(1, 10, 'id,desc', null, null)).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    <%_ } _%>
+  });
+});

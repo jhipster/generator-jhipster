@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "Página de erro!",
+        "http": {
+            "400": "Requisição Inválida.",
+            "403": "Não tem autorização para aceder a esta página.",
+            "404": "A página não existe.",
+            "405": "O verbo HTTP que você usou não é suportado para este URL.",
+            "500": "Erro interno do servidor"
+        },
+        "concurrencyFailure": "Outro utilizador modificou esses dados ao mesmo tempo que você. Suas alterações foram rejeitadas.",
+        "validation": "Erro de validação no servidor."
+    }
+}

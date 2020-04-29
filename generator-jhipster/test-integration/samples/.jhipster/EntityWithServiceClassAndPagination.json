@@ -1,0 +1,15 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "enzo",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160806123739",
+    "entityTableName": "entity_with_service_class_and_pagination",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceClass"
+}

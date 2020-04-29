@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Մուտք գործել",
+        "form": {
+            "password": "Գաղտնաբառ ",
+            "password.placeholder": "Ձեր գաղտնաբառը",
+            "rememberme": "Հիշել ինձ",
+            "button": "Մուտք գործել"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Անհնար է մուտք գործել!</strong> Խնդրում ենք ստուգել Ձեր հավատարմագրերը և փորձել կրկին:"
+            }
+        },
+        "password": {
+            "forgot": "Դուք մոռացել ե՞ք Ձեր գաղտնաբառը"
+        }
+    }
+}

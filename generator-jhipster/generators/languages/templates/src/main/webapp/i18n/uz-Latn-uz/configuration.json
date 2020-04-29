@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Sozlamalar",
+        "filter": "Filtr (prefiks buyicha)",
+        "table": {
+            "prefix": "Prefiks",
+            "properties": "Xossalar"
+        }
+    }
+}

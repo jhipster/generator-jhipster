@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Aktivne sesije za [<strong>{{username}}</strong>]",
+        "table": {
+            "ipaddress": "IP adresa",
+            "useragent": "Pretraživač",
+            "date": "Datum",
+            "button": "Prekini"
+        },
+        "messages": {
+            "success": "<strong>Sesija prekinuta!</strong>",
+            "error": "<strong>Došlo je do greške!</strong> Sesija ne može biti prekinuta."
+        }
+    }
+}

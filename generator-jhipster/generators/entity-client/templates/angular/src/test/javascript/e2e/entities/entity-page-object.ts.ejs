@@ -1,0 +1,196 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { element, by<% if (!readOnly) { %>, ElementFinder<% } %> } from 'protractor';
+
+<%_
+let elementGetter = `getText()`;
+if (enableTranslation) {
+    elementGetter = `getAttribute('jhiTranslate')`;
+}
+_%>
+export class <%= entityClass %>ComponentsPage {
+    <%_ if (!readOnly) { _%>
+    createButton = element(by.id('jh-create-entity'));
+    deleteButtons = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div table .btn-danger'));
+    <%_ } _%>
+    title = element.all(by.css('<%= jhiPrefixDashed %>-<%= entityFileName %> div h2#page-heading span')).first();
+    noResult = element(by.id('no-result'));
+    entities = element(by.id('entities'));
+
+    <%_ if (!readOnly) { _%>
+    async clickOnCreateButton(): Promise<void> {
+        await this.createButton.click();
+    }
+
+    async clickOnLastDeleteButton(): Promise<void> {
+        await this.deleteButtons.last().click();
+    }
+
+    async countDeleteButtons(): Promise<number> {
+        return this.deleteButtons.count();
+    }
+    <%_ } _%>
+
+    async getTitle(): Promise<string> {
+        return this.title.<%- elementGetter %>;
+    }
+}
+
+<%_ if (!readOnly) { _%>
+
+export class <%= entityClass %>UpdatePage {
+    pageTitle = element(by.id('<%= jhiPrefixDashed %>-<%= entityFileName %>-heading'));
+    saveButton = element(by.id('save-entity'));
+    cancelButton = element(by.id('cancel-save'));
+
+<%_ fields.forEach((field) => {
+    const fieldName = field.fieldName;
+    const fieldType = field.fieldType;
+    const fieldIsEnum = field.fieldIsEnum;
+    const fieldTypeBlobContent = field.fieldTypeBlobContent;
+_%>
+    <%_ if (fieldIsEnum) { _%>
+    <%= fieldName %>Select = element(by.id('field_<%= fieldName %>'));
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    <%= fieldName %>Input = element(by.id('field_<%= fieldName %>'));
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+    <%= fieldName %>Input = element(by.id('file_<%= fieldName %>'));
+    <%_ } else { _%>
+    <%= fieldName %>Input = element(by.id('field_<%= fieldName %>'));
+    <%_ } _%>
+<%_ }); _%>
+
+<%_ relationships.forEach((relationship) => {
+    const relationshipType = relationship.relationshipType;
+    const ownerSide = relationship.ownerSide;
+    const relationshipName = relationship.relationshipName;
+    const relationshipFieldName = relationship.relationshipFieldName;
+_%>
+    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    <%= relationshipName %>Select = element(by.id('field_<%= relationshipName %>'));
+    <%_ } _%>
+<%_ }); _%>
+
+    async getPageTitle(): Promise<string> {
+        return this.pageTitle.<%- elementGetter %>;
+    }
+
+<%_ fields.forEach((field) => {
+    const fieldName = field.fieldName;
+    const fieldNameCapitalized = field.fieldNameCapitalized;
+    const fieldNameHumanized = field.fieldNameHumanized;
+    const fieldType = field.fieldType;
+    const fieldTypeBlobContent = field.fieldTypeBlobContent;
+    const fieldIsEnum = field.fieldIsEnum;
+    let fieldInputType = 'text';
+    let ngModelOption = '';
+_%>
+    <%_ if (fieldType === 'Boolean') { _%>
+    get<%= fieldNameCapitalized %>Input(): ElementFinder {
+        return this.<%= fieldName %>Input;
+    }
+
+    <%_ } else if (fieldIsEnum) { _%>
+    async set<%= fieldNameCapitalized %>Select(<%= fieldName %>: string): Promise<void> {
+        await this.<%= fieldName %>Select.sendKeys(<%= fieldName %>);
+    }
+
+    async get<%= fieldNameCapitalized %>Select(): Promise<string> {
+        return await this.<%= fieldName %>Select.element(by.css('option:checked')).getText();
+    }
+
+    async <%= fieldName %>SelectLastOption(): Promise<void> {
+        await this.<%= fieldName %>Select.all(by.tagName('option')).last().click();
+    }
+
+    <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>: string): Promise<void> {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    }
+
+    async get<%= fieldNameCapitalized %>Input(): Promise<string> {
+        return await this.<%= fieldName %>Input.getAttribute('value');
+    }
+
+    <%_ } else { _%>
+    async set<%= fieldNameCapitalized %>Input(<%= fieldName %>: string): Promise<void> {
+        await this.<%= fieldName %>Input.sendKeys(<%= fieldName %>);
+    }
+
+    async get<%= fieldNameCapitalized %>Input(): Promise<string> {
+        return await this.<%= fieldName %>Input.getAttribute('value');
+    }
+
+    <%_ } _%>
+<%_ }); _%>
+
+<%_ relationships.forEach((relationship) => {
+    const relationshipType = relationship.relationshipType;
+    const ownerSide = relationship.ownerSide;
+    const relationshipName = relationship.relationshipName;
+    const relationshipFieldName = relationship.relationshipFieldName;
+    const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
+_%>
+    <%_ if (relationshipType === 'many-to-one' || (relationshipType === 'many-to-many' && ownerSide === true) || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
+    async <%= relationshipName %>SelectLastOption(): Promise<void> {
+        await this.<%= relationshipName %>Select.all(by.tagName('option')).last().click();
+    }
+
+    async <%= relationshipName %>SelectOption(option: string): Promise<void> {
+        await this.<%= relationshipName %>Select.sendKeys(option);
+    }
+
+    get<%= relationshipNameCapitalized %>Select(): ElementFinder {
+        return this.<%= relationshipName %>Select;
+    }
+
+    async get<%= relationshipNameCapitalized %>SelectedOption(): Promise<string> {
+        return await this.<%= relationshipName %>Select.element(by.css('option:checked')).getText();
+    }
+
+    <%_ } _%>
+<%_ }); _%>
+
+    async save(): Promise<void> {
+        await this.saveButton.click();
+    }
+
+    async cancel(): Promise<void> {
+        await this.cancelButton.click();
+    }
+
+    getSaveButton(): ElementFinder {
+        return this.saveButton;
+    }
+}
+
+export class <%= entityClass %>DeleteDialog {
+    private dialogTitle = element(by.id('<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading'));
+    private confirmButton = element(by.id('<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>'));
+
+    async getDialogTitle(): Promise<string> {
+        return this.dialogTitle.<%- elementGetter %>;
+    }
+
+    async clickOnConfirmButton(): Promise<void> {
+        await this.confirmButton.click();
+    }
+}
+
+<%_ } _%>

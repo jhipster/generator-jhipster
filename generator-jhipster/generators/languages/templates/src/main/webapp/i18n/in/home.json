@@ -1,0 +1,19 @@
+{
+    "home": {
+        "title": "Selamat Datang, Java Hipster!",
+        "subtitle": "Ini adalah halaman utama anda",
+        "logged": {
+            "message": "Anda masuk sebagai \"{{username}}\"."
+        },
+        "question": "Jika anda punya pertanyaan tentang JHipster:",
+        "link": {
+            "homepage": "JHipster homepage",
+            "stackoverflow": "JHipster di Stack Overflow",
+            "bugtracker": "JHipster bug tracker",
+            "chat": "JHipster chat publik",
+            "follow": "ikuti @jhipster di Twitter"
+        },
+        "like": "Jika anda menyukai JHipster, jangan lupa beri kami bintang di",
+        "github": "GitHub"
+    }
+}

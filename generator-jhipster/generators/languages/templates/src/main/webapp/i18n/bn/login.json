@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "সাইন ইন",
+        "form": {
+            "password": "পাসওয়ার্ড",
+            "password.placeholder": "আপনার পাসওয়ার্ড",
+            "rememberme": "মনে রাখুন",
+            "button": "সাইন ইন"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>সাইন ইন কাজ করেনি!</strong> ইউজারনেম আর পাসওয়ার্ড ঠিক আছে কিনা দেখুন।"
+            }
+        },
+        "password": {
+            "forgot": "পাসওয়ার্ড ভুলে গেছেন?"
+        }
+    }
+}

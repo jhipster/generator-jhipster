@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "ইউজার",
+            "createLabel": "নতুন ইউজার তৈরি",
+            "createOrEditLabel": "ইউজার তৈরি ওঠবার পরিবর্তন"
+        },
+        "created": "নতুন ইউজার তৈরি হয়েছ এই আইডি দিয়েঃ {{ param }}",
+        "updated": "এই আইডির ইউজারটি পরিবর্তিত হয়েছেঃ {{ param }}",
+        "deleted": "এই আইডির ইউজারকে মুছে ফেলা হয়েছেঃ {{ param }}",
+        "delete": {
+            "question": "আপনি কি নিশ্চিত যে আপনি এই ইউজারকে মুছে ফেলতে চান {{ login }}?"
+        },
+        "detail": {
+            "title": "ইউজার"
+        },
+        "login": "লগিন",
+        "firstName": "নামের প্রথম অংশ",
+        "lastName": "নামের শেষ অংশ",
+        "email": "ই মেইল",
+        "activated": "সক্রিয়",
+        "deactivated": "নিষ্ক্রিয়",
+        "profiles": "প্রোফাইল",
+        "langKey": "ভাষা",
+        "createdBy": "তৈরি করেছেন",
+        "createdDate": "তৈরির দিন-তারিখ",
+        "lastModifiedBy": "পরিবর্তন করেছেন",
+        "lastModifiedDate": "পরিবর্তনের দিন-তারিখ"
+    }
+}

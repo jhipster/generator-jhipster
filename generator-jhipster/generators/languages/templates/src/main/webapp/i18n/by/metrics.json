@@ -1,0 +1,93 @@
+{
+    "metrics": {
+        "title": "Метрыкі праграмы",
+        "refresh.button": "Абнавіць",
+        "updating": "Абнаўленне...",
+        "jvm": {
+            "title": "JVM Метрыкі",
+            "memory": {
+                "title": "Памяць",
+                "total": "Усяго памяци",
+                "heap": "Куча",
+                "nonheap": "Не куча"
+            },
+            "threads": {
+                "title": "Аатокі",
+                "all": "Усе",
+                "runnable": "Актыўныя",
+                "timedwaiting": "Часовае чаканне",
+                "waiting": "Чаканне",
+                "blocked": "Заблакіраваныя",
+                "dump": {
+                    "title": "Дамп патокаў",
+                    "id": "Id: ",
+                    "blockedtime": "Заблакіраваныя Час",
+                    "blockedcount": "Заблакіраваныя Колькасць",
+                    "waitedtime": "Чакаючыя Час",
+                    "waitedcount": "Чакаючыя Колькасць",
+                    "lockname": "Назва блоку",
+                    "stacktrace": "Stacktrace",
+                    "show": "Паказаць",
+                    "hide": "Схаваць"
+                }
+            },
+            "gc": {
+                "title": "Зборшчыкі смецця",
+                "marksweepcount": "Mark Sweep колькасць",
+                "marksweeptime": "Mark Sweep час",
+                "scavengecount": "Зборшчыкі смецця колькасць",
+                "scavengetime": "Зборшчыкі смецця час"
+            },
+            "http": {
+                "title": "HTTP запыты (падзей секунду)",
+                "active": "Актыўныя запыты:",
+                "total": "Усяго запытаў:",
+                "table": {
+                    "code": "Код",
+                    "count": "Колькасць",
+                    "mean": "Сярэдняе",
+                    "average": "Сярэдняе"
+                },
+                "code": {
+                    "ok": "Ок",
+                    "notfound": "Не знойдзена",
+                    "servererror": "Памылка сервера"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Статыстыка сэрвісаў (час у мілісекундах)",
+            "table": {
+                "name": "Назва сэрвісу",
+                "count": "Колькасць",
+                "mean": "Сярэдняе",
+                "min": "Мін",
+                "max": "Макс",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Статыстыка",
+            "cachename": "Назва кеша",
+            "hits": "Трапленняў",
+            "misses": "Промахаў",
+            "evictions": "Колькасць ачыстак"
+        },
+        "datasource": {
+            "usage": "Выкарыстанне",
+            "title": "Статыстыка DataSource (час у мілісекундах)",
+            "name": "Pool usage",
+            "count": "Лік",
+            "mean": "Среднее",
+            "min": "Мін",
+            "max": "Макс",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

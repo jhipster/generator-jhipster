@@ -1,0 +1,22 @@
+dependencies:
+<%_ if (app.prodDatabaseType === 'mysql') { _%>
+  - name: mysql
+    version: <%= HELM_MYSQL %>
+    repository: https://kubernetes-charts.storage.googleapis.com
+    condition: mysql.enabled
+<%_ } else if (app.prodDatabaseType === 'postgresql') { _%>
+  - name: postgresql
+    version: <%= HELM_POSTGRESQL %>
+    repository: https://kubernetes-charts.storage.googleapis.com
+    condition: postgresql.enabled
+<%_ } else if (app.prodDatabaseType === 'mariadb') { _%>
+  - name: mariadb
+    version: <%= HELM_MARIADB %>
+    repository: https://kubernetes-charts.storage.googleapis.com
+    condition: mariadb.enabled
+<%_ } else if (app.prodDatabaseType === 'mongodb') { _%>
+  - name: mongodb-replicaset
+    version: <%= HELM_MOGODB_REPLICASET %>
+    repository: https://kubernetes-charts.storage.googleapis.com
+    condition: mongodb.enabled
+<%_ } _%>

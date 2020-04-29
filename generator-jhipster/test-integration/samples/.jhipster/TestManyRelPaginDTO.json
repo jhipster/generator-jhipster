@@ -1,0 +1,20 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "testMapstruct",
+            "otherEntityName": "testMapstruct",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testManyRelPaginDTO"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210534",
+    "dto": "mapstruct",
+    "service": "serviceImpl",
+    "angularJSSuffix": "mySuffix",
+    "entityTableName": "test_many_many_pagination_dto",
+    "pagination": "pagination"
+}

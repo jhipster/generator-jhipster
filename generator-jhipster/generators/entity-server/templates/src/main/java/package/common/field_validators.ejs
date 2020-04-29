@@ -1,0 +1,74 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%# Returns a string of all validator annotations for the entity field. -%>
+<%
+const field = fields[idx];
+let result = '';
+
+if (field.fieldValidate === true) {
+    const rules = field.fieldValidateRules;
+    const validators = [];
+    const MAX_VALUE = 2147483647;
+    const isBlob = field.fieldType === 'byte[]';
+
+    if (rules.includes('required') && !isBlob) {
+        validators.push('@NotNull');
+    }
+    if (rules.includes('minlength') && !rules.includes('maxlength')) {
+        validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ')');
+    }
+    if (rules.includes('maxlength') && !rules.includes('minlength')) {
+        validators.push('@Size(max = ' + field.fieldValidateRulesMaxlength + ')');
+    }
+    if (rules.includes('minlength') && rules.includes('maxlength')) {
+        validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ', max = ' + field.fieldValidateRulesMaxlength + ')');
+    }
+    // Not supported anymore because the server can't check the size of the blob before downloading it completely.
+    // if (rules.includes('minbytes') && !rules.includes('maxbytes')) {
+    //     validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
+    // }
+    // if (rules.includes('maxbytes') && !rules.includes('minbytes')) {
+    //     validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
+    // }
+    // if (rules.includes('minbytes') && rules.includes('maxbytes')) {
+    //     validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
+    // }
+    if (rules.includes('min')) {
+        if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
+            validators.push('@DecimalMin(value = "' + field.fieldValidateRulesMin + '")');
+        } else {
+            const isLong = (field.fieldValidateRulesMin > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
+            validators.push('@Min(value = ' + field.fieldValidateRulesMin + isLong + ')');
+        }
+    }
+    if (rules.includes('max')) {
+        if (field.fieldType === 'Float' || field.fieldType === 'Double' || field.fieldType === 'BigDecimal') {
+            validators.push('@DecimalMax(value = "' + field.fieldValidateRulesMax + '")');
+        } else {
+            const isLong = (field.fieldValidateRulesMax > MAX_VALUE || field.fieldType == 'Long') ? 'L' : '';
+            validators.push('@Max(value = ' + field.fieldValidateRulesMax + isLong + ')');
+        }
+    }
+    if (rules.includes('pattern')) {
+        validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPatternJava  + '")');
+    }
+    result =  validators.join('\n    ');
+    result += '\n';
+} -%>
+<%- result -%>

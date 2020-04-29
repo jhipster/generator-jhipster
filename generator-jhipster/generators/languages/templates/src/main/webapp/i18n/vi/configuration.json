@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Cấu hình",
+        "filter": "Lọc (bắt đầu với)",
+        "table": {
+            "prefix": "Bắt đầu với",
+            "properties": "Các thuộc tính"
+        }
+    }
+}

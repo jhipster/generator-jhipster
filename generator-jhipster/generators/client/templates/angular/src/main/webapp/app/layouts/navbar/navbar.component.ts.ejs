@@ -1,0 +1,112 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+<%_ if (enableTranslation) { _%>
+import { JhiLanguageService } from 'ng-jhipster';
+import { SessionStorageService } from 'ngx-webstorage';
+<%_ } _%>
+
+import { VERSION } from 'app/app.constants';
+<%_ if (enableTranslation) { _%>
+import { LANGUAGES } from 'app/core/language/language.constants';
+<%_ } _%>
+import { AccountService } from 'app/core/auth/account.service';
+<%_ if (authenticationType !== 'oauth2') { _%>
+import { LoginModalService } from 'app/core/login/login-modal.service';
+<%_ } _%>
+import { LoginService } from 'app/core/login/login.service';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
+
+@Component({
+    selector: '<%= jhiPrefixDashed %>-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: [
+        'navbar.scss'
+    ]
+})
+export class NavbarComponent implements OnInit {
+    inProduction?: boolean;
+    isNavbarCollapsed = true;
+    <%_ if (enableTranslation) { _%>
+    languages = LANGUAGES;
+    <%_ } _%>
+    swaggerEnabled?: boolean;
+    version: string;
+
+    constructor(
+        private loginService: LoginService,
+        <%_ if (enableTranslation) { _%>
+        private languageService: JhiLanguageService,
+        private sessionStorage: SessionStorageService,
+        <%_ } _%>
+        private accountService: AccountService,
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        private loginModalService: LoginModalService,
+        <%_ } _%>
+        private profileService: ProfileService,
+        private router: Router
+    ) {
+        this.version = VERSION ? (VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION) : '';
+    }
+
+    ngOnInit(): void {
+        this.profileService.getProfileInfo().subscribe((profileInfo) => {
+            this.inProduction = profileInfo.inProduction;
+            this.swaggerEnabled = profileInfo.swaggerEnabled;
+        });
+    }
+
+    <%_ if (enableTranslation) { _%>
+    changeLanguage(languageKey: string): void {
+        this.sessionStorage.store('locale', languageKey);
+        this.languageService.changeLanguage(languageKey);
+    }
+    <%_ } _%>
+
+    collapseNavbar(): void {
+        this.isNavbarCollapsed = true;
+    }
+
+    isAuthenticated(): boolean {
+        return this.accountService.isAuthenticated();
+    }
+
+    login(): void {
+        <%_ if (authenticationType !== 'oauth2') { _%>
+        this.loginModalService.open();
+        <%_ } else { _%>
+        this.loginService.login();
+        <%_ } _%>
+    }
+
+    logout(): void {
+        this.collapseNavbar();
+        this.loginService.logout();
+        this.router.navigate(['']);
+    }
+
+    toggleNavbar(): void {
+        this.isNavbarCollapsed = !this.isNavbarCollapsed;
+    }
+
+    getImageUrl(): string {
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : '';
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Користувачі",
+            "createLabel": "Створити нового користувача",
+            "createOrEditLabel": "Створити чи редагувати користувача"
+        },
+        "created": "Новий користувач буде створений з ідентифікатором {{ param }}",
+        "updated": "Користувач з ідентифікатором {{ param }} оновлений",
+        "deleted": "Користувач з ідентифікатором {{ param }} видалений",
+        "delete": {
+            "question": "Ви впевнені, що хочете видалити користувача {{ login }}?"
+        },
+        "detail": {
+            "title": "Користувач"
+        },
+        "login": "Логін",
+        "firstName": "Ім'я",
+        "lastName": "Прізвище",
+        "email": "Електронна пошта",
+        "activated": "Активований",
+        "deactivated": "Деактивований",
+        "profiles": "Профілі",
+        "langKey": "Мова",
+        "createdBy": "Створив",
+        "createdDate": "Дата створення",
+        "lastModifiedBy": "Змінено",
+        "lastModifiedDate": "Дата зміни"
+    }
+}

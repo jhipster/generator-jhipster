@@ -1,0 +1,110 @@
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import { <% if (enableTranslation) { %>HttpClient, <% } %>HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Title } from '@angular/platform-browser';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { CookieService } from 'ngx-cookie-service';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule, TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core';
+<%_ } _%>
+import { NgxWebstorageModule } from 'ngx-webstorage';
+import { NgJhipsterModule<% if (enableTranslation) { %>, translatePartialLoader, missingTranslationHandler, JhiConfigService, JhiLanguageService<% } %> } from 'ng-jhipster';
+<%_ const localeId = getLocaleId(nativeLanguage); _%>
+import locale from '@angular/common/locales/<%= localeId %>';
+
+import * as moment from 'moment';
+<%_ if (enableI18nRTL) { _%>
+import {
+    FindLanguageFromKeyPipe
+} from 'app/shared/language/find-language-from-key.pipe';
+<%_ } _%>
+import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateMomentAdapter } from 'app/shared/util/datepicker-adapter';
+
+<%_ if (authenticationType === 'jwt') { _%>
+import { AuthInterceptor } from 'app/blocks/interceptor/auth.interceptor';
+<%_ } _%>
+import { AuthExpiredInterceptor } from 'app/blocks/interceptor/auth-expired.interceptor';
+import { ErrorHandlerInterceptor } from 'app/blocks/interceptor/errorhandler.interceptor';
+import { NotificationInterceptor } from 'app/blocks/interceptor/notification.interceptor';
+
+import { fontAwesomeIcons } from './icons/font-awesome-icons';
+
+@NgModule({
+    imports: [
+        HttpClientModule,
+        NgxWebstorageModule.forRoot({ prefix: '<%= jhiPrefixDashed %>', separator: '-' }),
+        NgJhipsterModule.forRoot({
+            // set below to true to make alerts look like toast
+            alertAsToast: false,
+            alertTimeout: 5000,
+            <%_ if (enableTranslation) { _%>
+            i18nEnabled: true,
+            defaultI18nLang: '<%= nativeLanguage %>'
+            <%_ } _%>
+        }),
+        <%_ if (enableTranslation) { _%>
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: translatePartialLoader,
+                deps: [HttpClient]
+            },
+            missingTranslationHandler: {
+                provide: MissingTranslationHandler,
+                useFactory: missingTranslationHandler,
+                deps: [JhiConfigService]
+            }
+        })
+        <%_ } _%>
+    ],
+    providers: [
+        Title,
+        CookieService,
+        {
+            provide: LOCALE_ID,
+            <%_ if (skipLanguageForLocale(nativeLanguage)) { _%>
+            useValue: 'en'
+            <%_ } else { _%>
+            useValue: '<%= localeId %>'
+            <%_ } _%>
+        },
+        { provide: NgbDateAdapter, useClass: NgbDateMomentAdapter },
+        <%_ if (enableI18nRTL) { _%>
+        FindLanguageFromKeyPipe,
+        <%_ } _%>
+        DatePipe,
+        <%_ if (authenticationType === 'jwt') { _%>
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        <%_ } _%>
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthExpiredInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorHandlerInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: NotificationInterceptor,
+            multi: true
+        }
+    ]
+})
+export class <%= angularXAppName %>CoreModule {
+    constructor(iconLibrary: FaIconLibrary, dpConfig: NgbDatepickerConfig<% if (enableTranslation) { %>, languageService: JhiLanguageService<% } %>) {
+        registerLocaleData(locale);
+        iconLibrary.addIcons(...fontAwesomeIcons);
+        dpConfig.minDate = { year: moment().year() - 100, month: 1, day: 1 };
+        <%_ if (enableTranslation) { _%>
+        languageService.init();
+        <%_ } _%>
+    }
+}

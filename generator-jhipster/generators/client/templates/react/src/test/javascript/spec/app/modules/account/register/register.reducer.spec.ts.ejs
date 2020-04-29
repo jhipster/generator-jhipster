@@ -1,0 +1,136 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+import thunk from 'redux-thunk';
+import axios from 'axios';
+import sinon from 'sinon';
+import configureStore from 'redux-mock-store';
+import promiseMiddleware from 'redux-promise-middleware';
+<%_ if (enableTranslation) { _%>
+import { TranslatorContext } from 'react-jhipster';
+<%_ } _%>
+
+import { FAILURE, REQUEST, SUCCESS } from 'app/shared/reducers/action-type.util';
+import register, { ACTION_TYPES, handleRegister, reset } from 'app/modules/account/register/register.reducer';
+
+describe('Creating account tests', () => {
+  const initialState = {
+    loading: false,
+    registrationSuccess: false,
+    registrationFailure: false,
+    errorMessage: null
+  };
+
+  <%_ if (enableTranslation) { _%>
+  beforeAll(() => {
+    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+  });
+
+  <%_ } _%>
+  it('should return the initial state', () => {
+    expect(register(undefined, {})).toEqual({
+      ...initialState
+    });
+  });
+
+  it('should detect a request', () => {
+    expect(register(undefined, { type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT) })).toEqual({
+      ...initialState,
+      loading: true
+    });
+  });
+
+  it('should handle RESET', () => {
+    expect(
+      register({ loading: true, registrationSuccess: true, registrationFailure: true, errorMessage: '' }, { type: ACTION_TYPES.RESET })
+    ).toEqual({
+      ...initialState
+    });
+  });
+
+  it('should handle CREATE_ACCOUNT success', () => {
+    expect(
+      register(undefined, {
+        type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
+        payload: 'fake payload'
+      })
+    ).toEqual({
+      ...initialState,
+      registrationSuccess: true
+    });
+  });
+
+  it('should handle CREATE_ACCOUNT failure', () => {
+    const payload = { response: { data: { errorKey: 'fake error' } } };
+    expect(
+      register(undefined, {
+        type: FAILURE(ACTION_TYPES.CREATE_ACCOUNT),
+        payload
+      })
+    ).toEqual({
+      ...initialState,
+      registrationFailure: true,
+      errorMessage: payload.response.data.errorKey
+    });
+  });
+
+  describe('Actions', () => {
+    let store;
+
+    const resolvedObject = { value: 'whatever' };
+    beforeEach(() => {
+      const mockStore = configureStore([thunk, promiseMiddleware]);
+      store = mockStore({});
+      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+    });
+
+    it('dispatches CREATE_ACCOUNT_PENDING and CREATE_ACCOUNT_FULFILLED actions', async () => {
+      const meta = {
+        <%_ if (enableTranslation) { _%>
+        successMessage: 'translation-not-found[register.messages.success]'
+        <%_ } else { _%>
+        successMessage: '<strong>Registration saved!</strong> Please check your email for confirmation.'
+        <%_ } _%>
+      };
+
+      const expectedActions = [
+        {
+          type: REQUEST(ACTION_TYPES.CREATE_ACCOUNT),
+          meta
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.CREATE_ACCOUNT),
+          payload: resolvedObject,
+          meta
+        }
+      ];
+      await store.dispatch(handleRegister('', '', '')).then(() => expect(store.getActions()).toEqual(expectedActions));
+    });
+    it('dispatches ACTION_TYPES.RESET actions', async () => {
+      const expectedActions = [
+        {
+          type: ACTION_TYPES.RESET
+        }
+      ];
+      await store.dispatch(reset());
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+
+  });
+});

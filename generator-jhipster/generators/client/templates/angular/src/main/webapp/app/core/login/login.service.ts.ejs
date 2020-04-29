@@ -1,0 +1,94 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Injectable } from '@angular/core';
+<%_ if (authenticationType === 'oauth2') { _%>
+import { Location } from '@angular/common';
+
+<%_ } else { _%>
+import { Observable } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+
+import { Account } from 'app/core/user/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+<%_ } _%>
+<%_ if (authenticationType === 'jwt' || authenticationType === 'uaa') { _%>
+import { AuthServerProvider<% if (authenticationType === 'uaa') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-jwt.service';
+<%_ } else if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
+import { AuthServerProvider<% if (authenticationType === 'session') { %>, LOGOUT_URL<% } %> } from 'app/core/auth/auth-session.service';
+<%_ } _%>
+<%_ if (authenticationType === 'oauth2') { _%>
+import { Logout } from './logout.model';
+<%_ } else { _%>
+import { Login } from './login.model';
+<%_ } _%>
+
+@Injectable({ providedIn: 'root' })
+export class LoginService {
+    constructor(
+        <%_ if (authenticationType === 'oauth2') { _%>
+        private location: Location,
+        <%_ } else { _%>
+        private accountService: AccountService,
+        <%_ } _%>
+        private authServerProvider: AuthServerProvider
+    ) {}
+
+    <%_ if (authenticationType === 'oauth2') { _%>
+    login(): void {
+        // If you have configured multiple OIDC providers, then, you can update this URL to /login.
+        // It will show a Spring Security generated login page with links to configured OIDC providers.
+        location.href = `${location.origin}${this.location.prepareExternalUrl('oauth2/authorization/oidc')}`;
+    }
+    <%_ } else { _%>
+    login(credentials: Login): Observable<Account | null> {
+        return this.authServerProvider.login(credentials).pipe(flatMap(() => this.accountService.identity(true)));
+    }
+    <%_ } _%>
+
+    <%_ if (authenticationType === 'uaa' || authenticationType === 'session') { _%>
+    logoutUrl(): string {
+        return LOGOUT_URL;
+    }
+
+    logoutInClient(): void {
+        this.accountService.authenticate(null);
+    }
+    <%_ } _%>
+
+    logout(): void {
+        <%_ if (authenticationType === 'oauth2') { _%>
+        this.authServerProvider.logout().subscribe((logout: Logout) => {
+            let logoutUrl = logout.logoutUrl;
+            const redirectUri = `${location.origin}${this.location.prepareExternalUrl('/')}`;
+
+            // if Keycloak, uri has protocol/openid-connect/token
+            if (logoutUrl.includes('/protocol')) {
+                logoutUrl = logoutUrl + '?redirect_uri=' + redirectUri;
+            } else {
+                // Okta
+                logoutUrl = logoutUrl + '?id_token_hint=' +
+                    logout.idToken + '&post_logout_redirect_uri=' + redirectUri;
+            }
+            window.location.href = logoutUrl;
+        });
+        <%_ } else { _%>
+        this.authServerProvider.logout().subscribe(null, null, () => this.accountService.authenticate(null));
+        <%_ } _%>
+    }
+}

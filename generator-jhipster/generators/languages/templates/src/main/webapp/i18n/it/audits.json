@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Cambiamenti",
+        "filter": {
+            "title": "Filtra per data",
+            "from": "da",
+            "to": "a",
+            "button": {
+                "weeks": "Settimane",
+                "today": "oggi",
+                "clear": "cancella",
+                "close": "chiudi"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Utente",
+                "date": "Data",
+                "status": "Stato",
+                "data": "Altre informazioni"
+            },
+            "data": {
+                "remoteAddress": "Indirizzo remoto:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Naplók",
+        "nbloggers": "{{ total }} naplózó található.",
+        "filter": "Szűrő",
+        "table": {
+            "name": "Név",
+            "level": "Szint"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<strong>{{username}}</strong>]のアクティブセッション",
+        "table": {
+            "ipaddress": "IPアドレス",
+            "useragent": "User Agent",
+            "date": "日時",
+            "button": "無効にする"
+        },
+        "messages": {
+            "success": "<strong>セッションが無効になりました!</strong>",
+            "error": "<strong>エラーが発生しました!</strong> セッションを無効化できませんでした。"
+        }
+    }
+}

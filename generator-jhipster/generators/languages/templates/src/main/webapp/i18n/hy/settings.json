@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Օգտվողի կարգավորումներ [<strong>{{username}}</strong>]",
+        "form": {
+            "firstname": "Անուն",
+            "firstname.placeholder": "Ձեր անունը",
+            "lastname": "Ազգանունը",
+            "lastname.placeholder": "Ձեր ազգանունը",
+            "language": "Լեզու",
+            "button": "Պահպանել"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Տեղի է ունեցել սխալ!</strong> Կարգավորումները չէն կարող  պահպանվել:",
+                "emailexists": "<strong>Email արդեն օգտագործվում է!</strong> Խնդրում ենք փորձել մեկ այլ:"
+            },
+            "success": "<strong>Կարգավորումները պահպանված են!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Անունը պարտադիր դաշտ է:",
+                    "minlength": "Անվան երկարությունը պետք է լինի առնվազն 1 նիշ",
+                    "maxlength": "Անունը չի կարող լինել երկար, քան 50 նիշ"
+                },
+                "lastname": {
+                    "required": "Ազգանունը պարտադիր դաշտ է:",
+                    "minlength": "Ազգանունի երկարությունը պետք է լինի առնվազն 1 նիշ",
+                    "maxlength": "Ազգանունը չի կարող լինել երկար, քան 50 նիշ"
+                }
+            }
+        }
+    }
+}

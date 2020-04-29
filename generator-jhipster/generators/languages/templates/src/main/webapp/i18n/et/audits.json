@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Audit",
+        "filter": {
+            "title": "Kuupäeva filter",
+            "from": "alates",
+            "to": "kuni",
+            "button": {
+                "weeks": "Nädalad",
+                "today": "täna",
+                "clear": "tühjenda",
+                "close": "sule"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Kasutaja",
+                "date": "Kuupäev",
+                "status": "Olek",
+                "data": "Lisaandmed"
+            },
+            "data": {
+                "remoteAddress": "IP aadress:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

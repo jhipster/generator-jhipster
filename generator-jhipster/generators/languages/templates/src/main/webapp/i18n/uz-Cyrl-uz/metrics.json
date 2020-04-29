@@ -1,0 +1,102 @@
+{
+    "metrics": {
+        "title": "Илова ўлчовлари",
+        "refresh.button": "Янгилаш",
+        "updating": "Янгиланмоқда...",
+        "jvm": {
+            "title": "JVM ўлчовлари",
+            "memory": {
+                "title": "Хотира",
+                "total": "Жами хотира",
+                "heap": "Heap хотира",
+                "nonheap": "Non-Heap хотира"
+            },
+            "threads": {
+                "title": "Оқимлар",
+                "all": "Ҳаммаси",
+                "runnable": "Фаоллари",
+                "timedwaiting": "Вақтинчалик кутиш",
+                "waiting": "Кутиш",
+                "blocked": "Блокланган",
+                "dump": {
+                    "title": "Оқимларни тўлиқлиги",
+                    "id": "Id: ",
+                    "blockedtime": "Блокланган вақт",
+                    "blockedcount": "Блокланганлар сони",
+                    "waitedtime": "Кутиш вақти",
+                    "waitedcount": "Кутиш сони",
+                    "lockname": "Блок номи",
+                    "stacktrace": "Стектрейс",
+                    "show": "Стектрейсни кўрсат",
+                    "hide": "Стектрейсни яшириш"
+                }
+            },
+            "gc": {
+                "title": "Тозалаш",
+                "marksweepcount": "Mark Sweep сони",
+                "marksweeptime": "Mark Sweep вақти",
+                "scavengecount": "Тозалаш сони",
+                "scavengetime": "Тозалаш вақти"
+            },
+            "http": {
+                "title": "HTTP сўровлар (милисекунд бирлигида)",
+                "active": "Фаол сўровлар:",
+                "total": "Жами сўровлар:",
+                "table": {
+                    "code": "Код",
+                    "count": "Сони",
+                    "mean": "Ўртача",
+                    "average": "Ўртача",
+                    "max": "Макс"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Топилмади",
+                    "servererror": "Сервер хатолиги"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Сервис статистикаси (милисекунд бирлигида)",
+            "table": {
+                "name": "Сервис номи",
+                "count": "Сони",
+                "mean": "Ўртача",
+                "min": "Мин",
+                "max": "Макс",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Кеш статистика",
+            "cachename": "Кеш номи",
+            "hits": "Мос келди",
+            "misses": "Мос келмади",
+            "gets": "Кеш олишлар",
+            "puts": "Кеш қўшишлар",
+            "removals": "Кеш ўчиришлар",
+            "evictions": "Тозаланганлар сони",
+            "hitPercent": "Мос келди %",
+            "missPercent": "Мос келмади %",
+            "averageGetTime": "Ўртача олиш вақти (µs)",
+            "averagePutTime": "Ўртача қўшиш вақти (µs)",
+            "averageRemoveTime": "Ўртача ўчириш вақти (µs)"
+        },
+        "datasource": {
+            "usage": "Фойдаланиш",
+            "title": "Малумотлар базаси статистика (милисекунд бирлигида)",
+            "name": "Pool фойдаланиш",
+            "count": "Сони",
+            "mean": "Ўртача",
+            "min": "Мин",
+            "max": "Макс",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

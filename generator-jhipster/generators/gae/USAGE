@@ -1,0 +1,6 @@
+Description:
+    Initializes a Google App Engine app and generates a JAR file that is ready to push to Google App Engine.
+    Adds plugins and dependency to Maven / Gradle as appropriate.
+
+Example:
+    jhipster gae

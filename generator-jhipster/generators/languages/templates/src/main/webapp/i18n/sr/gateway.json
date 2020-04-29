@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Gateway",
+        "routes": {
+            "title": "Trenutne rute",
+            "url": "URL",
+            "service": "servis",
+            "servers": "Dostupni serveri",
+            "error": "Pažnja: nema dostupnih servera!"
+        },
+        "refresh": {
+            "button": "Osveži"
+        }
+    }
+}

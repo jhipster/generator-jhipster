@@ -1,0 +1,15 @@
+{
+    "gateway": {
+        "title": "Gateway",
+        "routes": {
+            "title": "Ընթացիկ routes",
+            "url": "URL",
+            "service": "ծառայություններ",
+            "servers": "Հասանելի server-ներ",
+            "error": "Զգուշացում: no server available!"
+        },
+        "refresh": {
+            "button": "Թարմացնել"
+        }
+    }
+}

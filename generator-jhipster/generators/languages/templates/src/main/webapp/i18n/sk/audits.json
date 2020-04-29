@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "Audity",
+        "filter": {
+            "title": "Filtrovať podľa dátumu",
+            "from": "od",
+            "to": "do",
+            "button": {
+                "weeks": "Týždne",
+                "today": "dnes",
+                "clear": "vymazať",
+                "close": "zatvoriť"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Používateľ",
+                "date": "Dátum",
+                "status": "Stav",
+                "data": "Doplňujúce informácie"
+            },
+            "data": {
+                "remoteAddress": "Vzdialená adresa:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

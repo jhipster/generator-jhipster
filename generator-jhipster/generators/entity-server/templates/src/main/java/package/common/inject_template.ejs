@@ -1,0 +1,55 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ const beans = [];
+    if (viaService) {
+        beans.push({class: `${entityClass}Service`, instance: `${entityInstance}Service`});
+        if (queryService) {
+            beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
+        }
+        if (isUsingMapsId === true && isController === false) {
+            const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+            const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+            const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+            beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
+        }
+    } else {
+        beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
+        if (dto === 'mapstruct') {
+            beans.push({class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper`});
+        }
+        if (searchEngine === 'elasticsearch') {
+            beans.push({class: `${entityClass}SearchRepository`, instance: `${entityInstance}SearchRepository`});
+        }
+        if (isUsingMapsId === true) {
+            const mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+            const mapsIdEntityInstance = mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+            const mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+            beans.push({class: `${mapsIdEntity}Repository`, instance: mapsIdRepoInstance});
+        }
+    }
+    if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
+        beans.push({class: 'UserRepository', instance: 'userRepository'});
+    }
+_%>
+
+    <%= beans.map(bean => `private final ${bean.class} ${bean.instance};`).join('\n\n    ') %>
+
+    public <%= constructorName %>(<%= beans.map(bean => `${bean.class} ${bean.instance}`).join(', ') %>) {
+        <%= beans.map(bean => `this.${bean.instance} = ${bean.instance};`).join('\n        ') %>
+    }

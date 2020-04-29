@@ -1,0 +1,76 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import React from 'react';
+import { Switch } from 'react-router-dom';
+import Loadable from 'react-loadable';
+
+<%_ if (authenticationType !== 'oauth2') { _%>
+import Login from 'app/modules/login/login';
+<%_ } _%>
+<%_ if (!skipUserManagement) { _%>
+import Register from 'app/modules/account/register/register';
+import Activate from 'app/modules/account/activate/activate';
+import PasswordResetInit from 'app/modules/account/password-reset/init/password-reset-init';
+import PasswordResetFinish from 'app/modules/account/password-reset/finish/password-reset-finish';
+<%_ } _%>
+import Logout from 'app/modules/login/logout';
+import Home from 'app/modules/home/home';
+import Entities from 'app/entities';
+import PrivateRoute from 'app/shared/auth/private-route';
+import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
+import PageNotFound from 'app/shared/error/page-not-found';
+import { AUTHORITIES } from 'app/config/constants';
+
+<%_ if (!skipUserManagement) { _%>
+const Account = Loadable({
+  loader: () => import(/* webpackChunkName: "account" */ 'app/modules/account'),
+  loading: () => <div>loading ...</div>
+});
+<%_ } _%>
+
+const Admin = Loadable({
+  loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
+  loading: () => <div>loading ...</div>
+});
+
+const Routes = () => (
+  <div className="view-routes">
+    <Switch>
+    <%_ if (authenticationType !== 'oauth2') { _%>
+      <ErrorBoundaryRoute path="/login" component={Login} />
+    <%_ } _%>
+      <ErrorBoundaryRoute path="/logout" component={Logout} />
+    <%_ if (!skipUserManagement) { _%>
+      <ErrorBoundaryRoute path="/account/register" component={Register} />
+      <ErrorBoundaryRoute path="/account/activate/:key?" component={Activate} />
+      <ErrorBoundaryRoute path="/account/reset/request" component={PasswordResetInit} />
+      <ErrorBoundaryRoute path="/account/reset/finish/:key?" component={PasswordResetFinish} />
+    <%_ } _%>
+      <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]}/>
+    <%_ if (!skipUserManagement) { _%>
+      <PrivateRoute path="/account" component={Account} hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}/>
+    <%_ } _%>
+      <ErrorBoundaryRoute path="/" exact component={Home}/>
+      <PrivateRoute path="/" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]}/>
+      <ErrorBoundaryRoute component={PageNotFound} />
+    </Switch>
+  </div>
+);
+
+export default Routes;

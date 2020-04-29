@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Gebruikers",
+            "createLabel": "Creëer een nieuwe gebruiker",
+            "createOrEditLabel": "Creëer of editeer een gebruiker"
+        },
+        "created": "Een nieuwe gebruiker is aangemaakt met id {{ param }}",
+        "updated": "Een gebruiker is geüpdatet met id {{ param }}",
+        "deleted": "Een gebruiker is verwijderd met id {{ param }}",
+        "delete": {
+            "question": "Bent u zeker dat u gebruiker {{ login }} wil verwijderen?"
+        },
+        "detail": {
+            "title": "Gebruiker"
+        },
+        "login": "Login",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "email": "Email",
+        "activated": "Geactiveerd",
+        "deactivated": "Gedeactiveerd",
+        "profiles": "Profielen",
+        "langKey": "Taal",
+        "createdBy": "Aangemaakt door",
+        "createdDate": "Aanmaak datum",
+        "lastModifiedBy": "Laatst aangepast door",
+        "lastModifiedDate": "Laatst aangepast datum"
+    }
+}

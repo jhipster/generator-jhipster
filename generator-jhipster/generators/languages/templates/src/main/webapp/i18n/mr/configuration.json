@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "संरचना",
+        "filter": "फिल्टर (उपसर्ग द्वारे)",
+        "table": {
+            "prefix": "पूर्वपद",
+            "properties": "गुणधर्म"
+        }
+    }
+}

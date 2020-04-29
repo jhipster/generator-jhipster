@@ -1,0 +1,93 @@
+{
+    "metrics": {
+        "title": "अनुप्रयोग मेट्रिक्स",
+        "refresh.button": "ताज़ा करें",
+        "updating": "अद्यतन कर रहा है...",
+        "jvm": {
+            "title": "JVM मेट्रिक्स",
+            "memory": {
+                "title": "स्मृति",
+                "total": "कुल स्मृति",
+                "heap": "हीप स्मृति",
+                "nonheap": "Non-हीप स्मृति"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "सभी",
+                "runnable": "Runnable",
+                "timedwaiting": "टाइम्ड प्रतीक्षा",
+                "waiting": "प्रतीक्षा",
+                "blocked": "ब्लॉक किया गया",
+                "dump": {
+                    "title": "Threads डंप",
+                    "id": "Id: ",
+                    "blockedtime": "ब्लॉक समय",
+                    "blockedcount": "ब्लॉक गिनती",
+                    "waitedtime": "प्रतीक्षा समय",
+                    "waitedcount": "प्रतीक्षा गिनती",
+                    "lockname": "Lock नाम",
+                    "stacktrace": "Stacktrace",
+                    "show": "Stacktrace दिखाएँ",
+                    "hide": "Stacktrace छुपाएँ "
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP अनुरोध (घटनाएँ प्रति सेकंड)",
+                "active": "सक्रिय अनुरोध:",
+                "total": "कुल अनुरोध:",
+                "table": {
+                    "code": "Code",
+                    "count": "गिनती",
+                    "mean": "Mean",
+                    "average": "औसत"
+                },
+                "code": {
+                    "ok": "ठीक है",
+                    "notfound": "नहीं मिला",
+                    "servererror": "सर्वर त्रुटि"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "सेवाओं के आँकड़े (मिलीसेकंड में समय)",
+            "table": {
+                "name": "सेवा का नाम",
+                "count": "गिनती",
+                "mean": "Mean",
+                "min": "न्यूनतम",
+                "max": "अधिकतम",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Cache सांख्यिकी",
+            "cachename": "Cache का नाम",
+            "hits": "हिट्स कूल",
+            "misses": "मिस",
+            "evictions": "बेदखली गणना"
+        },
+        "datasource": {
+            "usage": "उपयोग",
+            "title": "डेटास्रोत सांख्यिकी (मिलीसेकंड में समय)",
+            "name": "पूल उपयोग",
+            "count": "गिनती",
+            "mean": "Mean",
+            "min": "न्यूनतम",
+            "max": "अधिकतम",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

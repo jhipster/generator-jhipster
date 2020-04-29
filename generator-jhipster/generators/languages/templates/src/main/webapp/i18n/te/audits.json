@@ -1,0 +1,28 @@
+{
+    "audits": {
+        "title": "తనిఖీలు",
+        "filter": {
+            "title": "తేదీ ప్రకారం వడియగట్టు",
+            "from": "నుండి",
+            "to": "వరకు",
+            "button": {
+                "weeks": "వారాలు",
+                "today": "ఈ రోజు",
+                "clear": "తొలగించు",
+                "close": "మూసివేత"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "ఉపయోక్త",
+                "date": "తేదీ",
+                "status": "స్థితి",
+                "data": "అధిక సమాచారం"
+            },
+            "data": {
+                "remoteAddress": "రిమోట్ అడ్రస్:"
+            }
+        },
+        "notFound": "No audit found"
+    }
+}

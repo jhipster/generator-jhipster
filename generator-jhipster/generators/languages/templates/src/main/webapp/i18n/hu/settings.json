@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Felhasználói beállítások [<strong>{{username}}</strong>]-nak",
+        "form": {
+            "firstname": "Keresztnév",
+            "firstname.placeholder": "Az Ön keresztneve",
+            "lastname": "Családnév",
+            "lastname.placeholder": "Az Ön családneve",
+            "language": "Nyelvek",
+            "button": "Mentés"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Hiba történt!</strong> A beállításokat nem sikerült elmenteni.",
+                "emailexists": "<strong>Az email cím már használva van!</strong> Kérjük, válasszon másikat."
+            },
+            "success": "<strong>Beállítások elmentésre kerültek!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "A keresztnév kötelező.",
+                    "minlength": "A keresztnév legalább 1 betűböl kell, hogy álljon",
+                    "maxlength": "A keresztnév nem lehet több, mint 50 betü"
+                },
+                "lastname": {
+                    "required": "A családnév kötelező.",
+                    "minlength": "A családnév legalább 1 betűböl kell, hogy álljon",
+                    "maxlength": "A családnév nem lehet több, mint 50 betü"
+                }
+            }
+        }
+    }
+}

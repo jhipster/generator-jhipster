@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Theo dõi hành vi của người dùng theo thời gian thực",
+        "table": {
+            "userlogin": "Người dùng",
+            "ipaddress": "Địa chỉ IP",
+            "userAgent": "Trình duyệt",
+            "page": "Trang hiện tại",
+            "time": "Thời gian"
+        }
+    }
+}

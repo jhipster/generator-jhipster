@@ -1,0 +1,14 @@
+{
+    "error": {
+        "title": "त्रुटी पृष्ठ!",
+        "http": {
+            "400": "Bad request.",
+            "403": "आपण पृष्ठ प्रवेश करण्यास अधिकृत नाही.",
+            "404": "पान अस्तित्वात नाही.",
+            "405": "The HTTP verb you used is not supported for this URL.",
+            "500": "Internal server error."
+        },
+        "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+        "validation": "Validation error on the server."
+    }
+}

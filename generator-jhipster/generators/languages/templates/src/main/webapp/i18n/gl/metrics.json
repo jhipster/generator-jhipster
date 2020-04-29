@@ -1,0 +1,93 @@
+{
+    "metrics": {
+        "title": "Métricas de aplicación",
+        "refresh.button": "Refrescar",
+        "updating": "Actualizando...",
+        "jvm": {
+            "title": "Métricas de JVM",
+            "memory": {
+                "title": "Memoria",
+                "total": "Memoria total",
+                "heap": "Memoria do Heap",
+                "nonheap": "Memoria non Heap"
+            },
+            "threads": {
+                "title": "Fíos",
+                "all": "Todo",
+                "runnable": "Executables",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Esperando",
+                "blocked": "Bloqueados",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Tempo bloqueado",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Tempo en espera",
+                    "waitedcount": "Contador esperando",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Amosar",
+                    "hide": "Agochar"
+                }
+            },
+            "gc": {
+                "title": "Colectas de lixo",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "Peticións HTTP (eventos por segundo)",
+                "active": "Peticións activas:",
+                "total": "Peticións totais:",
+                "table": {
+                    "code": "Código",
+                    "count": "Reconto",
+                    "mean": "Mean",
+                    "average": "Average"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Non atopado",
+                    "servererror": "Erro de servidor"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Estadísticas de servizos (tempo en milisegundos)",
+            "table": {
+                "name": "Nome do servizo",
+                "count": "Reconto",
+                "mean": "Mean",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "cache": {
+            "title": "Estadísticas de cache",
+            "cachename": "Nome cache",
+            "hits": "Accesos",
+            "misses": "Fallos",
+            "evictions": "Reconto desaloxo"
+        },
+        "datasource": {
+            "usage": "Uso",
+            "title": "Estadísticas da fonte de datos (tempo en milisegundos)",
+            "name": "Uso do pool",
+            "count": "Reconto",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}
