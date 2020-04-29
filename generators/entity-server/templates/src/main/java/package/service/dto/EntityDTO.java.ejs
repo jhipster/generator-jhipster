@@ -19,13 +19,8 @@
 package <%= packageName %>.service.dto;
 
 <%_
-let importApiModelProperty = false;
-let importJsonIgnore = false;
-let importJsonIgnoreProperties = false;
-let importSet = false;
-const uniqueEnums = {};
+let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = processJavaEntityImports();
 _%>
-<%- include('../../domain/imports'); -%>
 <%_ if (typeof javadoc != 'undefined') { _%>
 import io.swagger.annotations.ApiModel;
 <%_ } if (importApiModelProperty === true) { _%>

@@ -1572,4 +1572,34 @@ module.exports = class extends Generator {
             );
         }
     }
+
+    processJavaEntityImports(fields, relationships) {
+        let importJsonIgnore = false;
+        let importJsonIgnoreProperties = false;
+        let importSet = false;
+        const uniqueEnums = {};
+
+        let importApiModelProperty = Object.values(relationships).filter(v => typeof v.javadoc != 'undefined').length > 0;
+        if (!importApiModelProperty) {
+            importApiModelProperty = Object.values(fields).filter(v => typeof v.javadoc != 'undefined').length > 0;
+        }
+
+        Object.values(relationships).forEach(v => {
+            if (v.ownerSide === false && ['one-to-many', 'one-to-one', 'many-to-many'].includes(v.relationshipType)) {
+                importJsonIgnore = true;
+            } else if (v.relationshipType === 'many-to-one') {
+                importJsonIgnoreProperties = true;
+            }
+            if (v.relationshipType === 'one-to-many' || v.relationshipType === 'many-to-many') {
+                importSet = true;
+            }
+        });
+
+        Object.values(fields).forEach(v => {
+            if (v.fieldIsEnum && (!uniqueEnums[v.fieldType] || (uniqueEnums[v.fieldType] && v.fieldValues.length !== 0))) {
+                uniqueEnums[v.fieldType] = v.fieldType;
+            }
+        });
+        return { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums };
+    }
 };
