@@ -89,6 +89,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.LINT_STAGED_VERSION = constants.LINT_STAGED_VERSION;
                 this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
                 this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
+                this.NODE_VERSION = constants.NODE_VERSION;
 
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;

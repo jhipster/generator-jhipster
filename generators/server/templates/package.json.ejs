@@ -41,7 +41,7 @@
     "@openapitools/openapi-generator-cli": "1.0.12-4.3.0"
   },
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=<%= NODE_VERSION %>"
   },
   "scripts": {
     "prettier:format": "prettier --write \"{,src/**/}*.{md,json,yml<%= prettierJava ? ',java' : '' %>}\""
