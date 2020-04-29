@@ -56,11 +56,6 @@
                 urls.push({"name": resource.name, "url": resource.location});
             });
 
-            urls.sort(function (a, b) {
-                var x = a.name.toLowerCase(), y = b.name.toLowerCase();
-                return x < y ? -1 : x > y ? 1 : 0;
-            });
-
             // Build a system
             var ui = SwaggerUIBundle({
                 urls: urls,
