@@ -38,6 +38,7 @@ import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.data.r2dbc.query.Criteria;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
@@ -96,5 +97,6 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 <%_ if (databaseType === 'sql') { _%>
 interface <%= entityClass %>RepositoryInternal {
     Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
+    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria);
 }
 <%_ } _%>

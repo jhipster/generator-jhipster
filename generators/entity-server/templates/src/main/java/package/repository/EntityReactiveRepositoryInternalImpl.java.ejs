@@ -48,4 +48,14 @@ public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass
                 .as(<%= asEntity(entityClass) %>.class)
                 .all();
     }
+
+    @Override
+    public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria) {
+        return db.select().from(<%= asEntity(entityClass) %>.class)
+                .matching(criteria)
+                .page(pageable)
+                .as(<%= asEntity(entityClass) %>.class)
+                .all();
+    }
+
 }
