@@ -39,7 +39,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const customPhaseSteps = {
             addDummyProperty() {
                 this.addNpmDependency('dummy-blueprint-property', '2.0');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -68,7 +68,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                         db: 'mysql',
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
                     .withPrompts({
@@ -76,7 +76,7 @@ describe('JHipster client generator with blueprint with path customizer', () => 
                         clientFramework: 'angularX',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['fr']
+                        languages: ['fr'],
                     })
                     .on('end', done);
             });

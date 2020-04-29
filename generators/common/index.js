@@ -33,7 +33,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.setupServerOptions(this);
@@ -61,7 +61,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make documentation URL available in templates
                 this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
                 this.DOCUMENTATION_ARCHIVE_PATH = constants.JHIPSTER_DOCUMENTATION_ARCHIVE_PATH;
-            }
+            },
         };
     }
 
@@ -85,7 +85,7 @@ module.exports = class extends BaseBlueprintGenerator {
             writePrettierConfig() {
                 // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
                 this.writeFilesToDisk(prettierConfigFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
-            }
+            },
         };
     }
 

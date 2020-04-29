@@ -27,7 +27,7 @@ const expectedFiles = {
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-detail.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo-update.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.component.spec.ts`,
-            `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.service.spec.ts`
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo/foo.service.spec.ts`,
         ],
         clientNg2WithSuffix: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/foo-management/foo-management.component.html`,
@@ -45,7 +45,7 @@ const expectedFiles = {
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management-detail.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management-update.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management.component.spec.ts`,
-            `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management.service.spec.ts`
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/foo-management/foo-management.service.spec.ts`,
         ],
         clientNg2WithRootFolder: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo/foo.component.html`,
@@ -63,7 +63,7 @@ const expectedFiles = {
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo-detail.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo-update.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo.component.spec.ts`,
-            `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo.service.spec.ts`
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo/foo.service.spec.ts`,
         ],
         clientNg2WithRootFolderAndSuffix: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/test-root/foo-management/foo-management.component.html`,
@@ -81,7 +81,7 @@ const expectedFiles = {
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management-detail.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management-update.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.component.spec.ts`,
-            `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.service.spec.ts`
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/test-root/foo-management/foo-management.service.spec.ts`,
         ],
         clientNg2GatewayMicroserviceEntity: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/bar/bar.component.html`,
@@ -99,7 +99,7 @@ const expectedFiles = {
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar-detail.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar-update.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar.component.spec.ts`,
-            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar.service.spec.ts`
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/bar/bar.service.spec.ts`,
         ],
         clientBazGatewayMicroserviceEntity: [
             `${CLIENT_MAIN_SRC_DIR}app/entities/sampleMicroservice/baz/baz.component.html`,
@@ -117,7 +117,7 @@ const expectedFiles = {
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz-detail.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz-update.component.spec.ts`,
             `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz.component.spec.ts`,
-            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz.service.spec.ts`
+            `${CLIENT_TEST_SRC_DIR}spec/app/entities/sampleMicroservice/baz/baz.service.spec.ts`,
         ],
         server: [
             '.jhipster/Foo.json',
@@ -125,11 +125,11 @@ const expectedFiles = {
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
             `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
             // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`
+            `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
         ],
         fakeData: [`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/foo.csv`],
         serverLiquibase: [`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160120000100_added_entity_Foo.xml`],
-        gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`]
+        gatling: [`${TEST_DIR}gatling/user-files/simulations/FooGatlingTest.scala`],
     },
 
     gradle: [
@@ -144,7 +144,7 @@ const expectedFiles = {
         'gradle/sonar.gradle',
         'gradle/wrapper/gradle-wrapper.jar',
         'gradle/wrapper/gradle-wrapper.properties',
-        'checkstyle.xml'
+        'checkstyle.xml',
     ],
 
     maven: ['pom.xml', 'mvnw', 'mvnw.cmd', '.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.properties', 'checkstyle.xml'],
@@ -157,7 +157,7 @@ const expectedFiles = {
         '.gitattributes',
         '.editorconfig',
         '.huskyrc',
-        '.lintstagedrc.js'
+        '.lintstagedrc.js',
     ],
 
     server: [
@@ -211,7 +211,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/errors/ExceptionTranslatorIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java`,
         `${SERVER_TEST_RES_DIR}config/application.yml`,
-        `${SERVER_TEST_RES_DIR}logback.xml`
+        `${SERVER_TEST_RES_DIR}logback.xml`,
     ],
 
     userManagementServer: [
@@ -251,7 +251,7 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/MailServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/AuditEventServiceIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/service/mapper/UserMapperTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomAuditEventRepositoryIT.java`,
     ],
 
     infinispan: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/CacheFactoryConfiguration.java`],
@@ -264,7 +264,7 @@ const expectedFiles = {
         `${DOCKER_DIR}redis-cluster.yml`,
         `${DOCKER_DIR}redis/connectRedisCluster.sh`,
         `${DOCKER_DIR}redis/Redis-Cluster.Dockerfile`,
-        `${SERVER_TEST_SRC_DIR}/com/mycompany/myapp/RedisTestContainerExtension.java`
+        `${SERVER_TEST_SRC_DIR}/com/mycompany/myapp/RedisTestContainerExtension.java`,
     ],
 
     gatling: [`${TEST_DIR}gatling/conf/gatling.conf`],
@@ -301,7 +301,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/sessions.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/settings.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/reset.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/fr/user-management.json`
+        `${CLIENT_MAIN_SRC_DIR}i18n/fr/user-management.json`,
     ],
 
     i18nDeJson: [
@@ -320,7 +320,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/de/sessions.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/de/settings.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/de/reset.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/de/user-management.json`
+        `${CLIENT_MAIN_SRC_DIR}i18n/de/user-management.json`,
     ],
 
     userManagementClient: [
@@ -374,7 +374,7 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-detail.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management-update.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/user-management/user-management.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`
+        `${CLIENT_TEST_SRC_DIR}spec/app/core/user/user.service.spec.ts`,
     ],
 
     client: [
@@ -550,7 +550,7 @@ const expectedFiles = {
         'webpack/utils.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
-        'webpack/webpack.prod.js'
+        'webpack/webpack.prod.js',
     ],
 
     i18n: [
@@ -559,7 +559,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
     ],
 
     i18nRtl: [
@@ -569,7 +569,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/ar-ly/global.json`,
         `${CLIENT_MAIN_SRC_DIR}app/core/language/language.constants.ts`,
         `${CLIENT_MAIN_SRC_DIR}content/scss/rtl.scss`,
-        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`
+        `${CLIENT_MAIN_SRC_DIR}app/shared/language/find-language-from-key.pipe.ts`,
     ],
 
     session: [
@@ -581,7 +581,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/account/sessions/sessions.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-session.service.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.component.spec.ts`
+        `${CLIENT_TEST_SRC_DIR}spec/app/account/sessions/sessions.component.spec.ts`,
     ],
 
     jwtServer: [
@@ -589,12 +589,12 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilter.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProvider.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/JWTFilterTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/jwt/TokenProviderTest.java`,
     ],
 
     jwtClient: [
         `${CLIENT_MAIN_SRC_DIR}app/blocks/interceptor/auth.interceptor.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`
+        `${CLIENT_MAIN_SRC_DIR}app/core/auth/auth-jwt.service.ts`,
     ],
 
     oauth2: [
@@ -604,7 +604,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuthIdpTokenResponseDTO.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/User.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/AccountResource.java`,
-        `${DOCKER_DIR}keycloak.yml`
+        `${DOCKER_DIR}keycloak.yml`,
     ],
 
     oauth2Client: [`${CLIENT_MAIN_SRC_DIR}app/core/login/logout.model.ts`],
@@ -613,7 +613,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/KafkaProperties.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResource.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/JhipsterKafkaResourceIT.java`,
-        `${DOCKER_DIR}kafka.yml`
+        `${DOCKER_DIR}kafka.yml`,
     ],
 
     swaggerCodegen: [`${SERVER_MAIN_RES_DIR}swagger/api.yml`, `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/OpenApiConfiguration.java`],
@@ -627,7 +627,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/security/IatTokenEnhancer.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/OAuth2TestConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/SecurityBeanOverrideConfiguration.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/OAuth2TokenMockUtil.java`,
     ],
 
     gateway: [
@@ -645,7 +645,7 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.route.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.module.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`
+        `${CLIENT_MAIN_SRC_DIR}app/admin/gateway/gateway-routes.service.ts`,
     ],
 
     rateLimitingFilesForGateways: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java`],
@@ -670,12 +670,12 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2CookieHelperTest.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/OAuth2AuthenticationServiceTest.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieTokenExtractorTest.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieCollectionTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/security/oauth2/CookieCollectionTest.java`,
     ],
 
     feignConfig: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/FeignConfiguration.java`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/client/UserFeignClientInterceptor.java`
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/client/UserFeignClientInterceptor.java`,
     ],
 
     microservice: [
@@ -683,7 +683,7 @@ const expectedFiles = {
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/SecurityConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/FeignConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/client/UserFeignClientInterceptor.java`,
-        'package.json'
+        'package.json',
     ],
 
     microserviceGradle: ['gradle/docker.gradle'],
@@ -693,7 +693,7 @@ const expectedFiles = {
     hibernateTimeZoneConfig: [
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/timezone/HibernateTimeZoneIT.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapper.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java`,
     ],
 
     mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
@@ -707,7 +707,7 @@ const expectedFiles = {
     liquibase: [
         `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/00000000000000_initial_schema.xml`,
-        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
     ],
 
     hazelcast: [`${DOCKER_DIR}hazelcast-management-center.yml`],
@@ -718,7 +718,7 @@ const expectedFiles = {
         `${DOCKER_DIR}mongodb.yml`,
         `${DOCKER_DIR}mongodb-cluster.yml`,
         `${DOCKER_DIR}mongodb/MongoDB.Dockerfile`,
-        `${DOCKER_DIR}mongodb/scripts/init_replicaset.js`
+        `${DOCKER_DIR}mongodb/scripts/init_replicaset.js`,
     ],
 
     couchbase: [
@@ -735,7 +735,7 @@ const expectedFiles = {
         `${DOCKER_DIR}couchbase.yml`,
         `${DOCKER_DIR}couchbase-cluster.yml`,
         `${DOCKER_DIR}couchbase/Couchbase.Dockerfile`,
-        `${DOCKER_DIR}couchbase/scripts/configure-node.sh`
+        `${DOCKER_DIR}couchbase/scripts/configure-node.sh`,
     ],
 
     neo4j: [
@@ -744,12 +744,12 @@ const expectedFiles = {
         `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__system.json`,
         `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__user.json`,
         `${SERVER_MAIN_RES_DIR}config/neo4j/migrations/user__anonymoususer.json`,
-        `${DOCKER_DIR}neo4j.yml`
+        `${DOCKER_DIR}neo4j.yml`,
     ],
 
     couchbaseSearch: [
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/SearchCouchbaseRepository.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepositoryTest.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/CustomN1qlCouchbaseRepositoryTest.java`,
     ],
 
     cassandra: [
@@ -763,14 +763,14 @@ const expectedFiles = {
         `${DOCKER_DIR}cassandra/scripts/execute-cql.sh`,
         `${DOCKER_DIR}cassandra-cluster.yml`,
         `${DOCKER_DIR}cassandra-migration.yml`,
-        `${DOCKER_DIR}cassandra.yml`
+        `${DOCKER_DIR}cassandra.yml`,
     ],
 
     elasticsearch: [
         `${DOCKER_DIR}elasticsearch.yml`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/config/ElasticsearchTestConfiguration.java`,
         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepository.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/search/UserSearchRepositoryMockConfiguration.java`,
     ],
 
     cucumber: [
@@ -779,16 +779,16 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberContextConfiguration.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/UserStepDefs.java`,
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/stepdefs/StepDefs.java`,
-        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberIT.java`
+        `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/cucumber/CucumberIT.java`,
     ],
 
     eureka: [
         `${DOCKER_DIR}central-server-config/localhost-config/application.yml`,
         `${DOCKER_DIR}central-server-config/docker-config/application.yml`,
-        `${DOCKER_DIR}jhipster-registry.yml`
+        `${DOCKER_DIR}jhipster-registry.yml`,
     ],
 
-    consul: [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`]
+    consul: [`${DOCKER_DIR}central-server-config/application.yml`, `${DOCKER_DIR}consul.yml`, `${DOCKER_DIR}config/git2consul.json`],
 };
 
 module.exports = expectedFiles;

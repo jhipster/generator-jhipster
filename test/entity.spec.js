@@ -26,7 +26,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -54,7 +54,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -80,7 +80,7 @@ describe('JHipster generator for entity', () => {
                             fieldAdd: false,
                             relationshipAdd: false,
                             dto: 'mapstruct',
-                            service: 'serviceImpl'
+                            service: 'serviceImpl',
                         })
                         .on('end', done);
                 });
@@ -93,7 +93,7 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
 
                     assert.fileContent(
@@ -125,7 +125,7 @@ describe('JHipster generator for entity', () => {
                             fieldAdd: false,
                             relationshipAdd: false,
                             dto: 'no',
-                            service: 'serviceImpl'
+                            service: 'serviceImpl',
                         })
                         .on('end', done);
                 });
@@ -136,12 +136,12 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
 
                     assert.noFile([
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
                     ]);
 
                     assert.fileContent(
@@ -171,7 +171,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -197,7 +197,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'pagination'
+                            pagination: 'pagination',
                         })
                         .on('end', done);
                 });
@@ -222,7 +222,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -247,7 +247,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'serviceImpl',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -258,7 +258,7 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.gatling);
                     assert.file([
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`,
                     ]);
                 });
             });
@@ -276,7 +276,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'mapstruct',
                             service: 'serviceClass',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -288,7 +288,7 @@ describe('JHipster generator for entity', () => {
                     assert.file([
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
                 });
             });
@@ -307,7 +307,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -334,7 +334,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -362,7 +362,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -390,7 +390,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -415,7 +415,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -443,7 +443,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -469,7 +469,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -498,7 +498,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -523,7 +523,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'pagination'
+                            pagination: 'pagination',
                         })
                         .on('end', done);
                 });
@@ -551,7 +551,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'pagination'
+                            pagination: 'pagination',
                         })
                         .on('end', done);
                 });
@@ -572,7 +572,7 @@ describe('JHipster generator for entity', () => {
                         })
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../'
+                            microservicePath: '../',
                         })
                         .withArguments(['bar'])
                         .on('end', done);
@@ -604,7 +604,7 @@ describe('JHipster generator for entity', () => {
                         .withArguments(['foo'])
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../'
+                            microservicePath: '../',
                         })
                         .on('end', done);
                 });
@@ -630,7 +630,7 @@ describe('JHipster generator for entity', () => {
                         .withArguments(['baz'])
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../'
+                            microservicePath: '../',
                         })
                         .on('end', done);
                 });
@@ -661,7 +661,7 @@ describe('JHipster generator for entity', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'pagination'
+                        pagination: 'pagination',
                     })
                     .on('end', done);
             });
@@ -688,7 +688,7 @@ describe('JHipster generator for entity', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'pagination'
+                        pagination: 'pagination',
                     })
                     .on('end', done);
             });
@@ -715,7 +715,7 @@ describe('JHipster generator for entity', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'pagination'
+                        pagination: 'pagination',
                     })
                     .on('end', done);
             });
@@ -783,7 +783,7 @@ describe('JHipster generator for entity', () => {
                 it("doesn't creates database changelogs", () => {
                     assert.noFile([
                         `${constants.SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_Foo.xml`,
-                        `${constants.SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_constraints_Foo.xml`
+                        `${constants.SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_constraints_Foo.xml`,
                     ]);
                 });
             });
@@ -837,7 +837,7 @@ describe('JHipster generator for entity', () => {
                     assert.file([
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
                 });
                 it('generates swagger annotations on DTO', () => {

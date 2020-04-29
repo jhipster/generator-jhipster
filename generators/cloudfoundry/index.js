@@ -81,7 +81,7 @@ module.exports = class extends BaseGenerator {
                     }
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -143,7 +143,7 @@ module.exports = class extends BaseGenerator {
                 child.stdout.on('data', data => {
                     this.log(data.toString());
                 });
-            }
+            },
         };
     }
 
@@ -188,7 +188,7 @@ module.exports = class extends BaseGenerator {
                 exec(`cf restart ${this.cloudfoundryDeployedName}`, (err, stdout, stderr) => {
                     this.log(chalk.green('\nYour app should now be live'));
                 });
-            }
+            },
         };
     }
 };

@@ -56,11 +56,11 @@ describe('JHipster languages generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:languages']])
                     .withPrompts({
-                        languages: ['de']
+                        languages: ['de'],
                     })
                     .on('end', done);
             });

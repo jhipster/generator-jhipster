@@ -9,12 +9,12 @@ const yoRc = {
     'generator-jhipster-myblueprint': {
         applicationType: 'monolith',
         languages: ['fr'],
-        baseName: 'myblueprint'
+        baseName: 'myblueprint',
     },
     'generator-jhipster-myblueprint2': {
         applicationType: 'monolith',
         languages: ['en'],
-        baseName: 'myblueprint2'
+        baseName: 'myblueprint2',
     },
     'generator-jhipster': {
         applicationType: 'monolith',
@@ -23,14 +23,14 @@ const yoRc = {
         blueprints: [
             {
                 name: 'generator-jhipster-myblueprint',
-                version: '0.0.1'
+                version: '0.0.1',
             },
             {
                 name: 'generator-jhipster-myblueprint2',
-                version: '0.0.1'
-            }
-        ]
-    }
+                version: '0.0.1',
+            },
+        ],
+    },
 };
 
 describe('JHipster blueprint config migration with conflicts', () => {
@@ -50,12 +50,12 @@ describe('JHipster blueprint config migration with conflicts', () => {
                     .withOptions({
                         'from-cli': true,
                         skipChecks: true,
-                        unifyConfigOnly: true
+                        unifyConfigOnly: true,
                     })
                     .withPrompts({
                         // '#applicationType': 'monolith',
                         '#languages': ['en'],
-                        '#baseName': 'myblueprint'
+                        '#baseName': 'myblueprint',
                     })
                     .on('end', done);
             });
@@ -71,10 +71,10 @@ describe('JHipster blueprint config migration with conflicts', () => {
                         blueprints: [
                             {
                                 name: 'generator-jhipster-myblueprint',
-                                version: '0.0.1'
-                            }
-                        ]
-                    }
+                                version: '0.0.1',
+                            },
+                        ],
+                    },
                 });
             });
         });

@@ -276,7 +276,7 @@ describe('Generator Base', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
@@ -293,7 +293,7 @@ describe('Generator Base', () => {
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
                     skipUserManagement: true,
-                    testFrameworks: []
+                    testFrameworks: [],
                 };
                 let filesToAssert = expectedFiles.client;
                 filesToAssert = filesToAssert.concat(expectedFiles.jwtClient);
@@ -323,7 +323,7 @@ describe('Generator Base', () => {
                 expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
                     { name: 'FRANCE', value: 'FRANCE' },
                     { name: 'ENGLAND', value: 'ENGLAND' },
-                    { name: 'ICELAND', value: 'ICELAND' }
+                    { name: 'ICELAND', value: 'ICELAND' },
                 ]);
             });
         });
@@ -332,7 +332,7 @@ describe('Generator Base', () => {
                 expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
                     { name: 'FRANCE', value: 'france' },
                     { name: 'ENGLAND', value: 'ENGLAND' },
-                    { name: 'ICELAND', value: 'viking_country' }
+                    { name: 'ICELAND', value: 'viking_country' },
                 ]);
             });
         });
@@ -341,7 +341,7 @@ describe('Generator Base', () => {
                 expect(BaseGenerator.getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).to.deep.equal([
                     { name: 'FRANCE', value: 'france' },
                     { name: 'ENGLAND', value: 'england' },
-                    { name: 'ICELAND', value: 'iceland' }
+                    { name: 'ICELAND', value: 'iceland' },
                 ]);
             });
         });

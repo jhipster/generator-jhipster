@@ -25,7 +25,7 @@ module.exports = {
     askForModuleName,
     askFori18n,
     askForTestOpts,
-    askForMoreModules
+    askForMoreModules,
 };
 
 function askForInsightOptIn() {
@@ -36,7 +36,7 @@ function askForInsightOptIn() {
         type: 'confirm',
         name: 'insight',
         message: `May ${chalk.cyan('JHipster')} anonymously report usage statistics to improve the tool over time?`,
-        default: true
+        default: true,
     }).then(prompt => {
         if (prompt.insight !== undefined) {
             statistics.setOptoutStatus(!prompt.insight);
@@ -53,20 +53,20 @@ function askForApplicationType(meta) {
     const applicationTypeChoices = [
         {
             value: DEFAULT_APPTYPE,
-            name: 'Monolithic application (recommended for simple projects)'
+            name: 'Monolithic application (recommended for simple projects)',
         },
         {
             value: 'microservice',
-            name: 'Microservice application'
+            name: 'Microservice application',
         },
         {
             value: 'gateway',
-            name: 'Microservice gateway'
+            name: 'Microservice gateway',
         },
         {
             value: 'uaa',
-            name: 'JHipster UAA server'
-        }
+            name: 'JHipster UAA server',
+        },
     ];
 
     const PROMPT = {
@@ -74,7 +74,7 @@ function askForApplicationType(meta) {
         name: 'applicationType',
         message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
         choices: applicationTypeChoices,
-        default: DEFAULT_APPTYPE
+        default: DEFAULT_APPTYPE,
     };
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
@@ -90,7 +90,7 @@ function askForApplicationType(meta) {
             type: 'confirm',
             name: 'reactive',
             message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
-            default: false
+            default: false,
         };
 
         this.prompt(REACTIVE_PROMPT).then(reactivePrompt => {
@@ -128,7 +128,7 @@ function askForTestOpts(meta) {
         name: 'testFrameworks',
         message: 'Besides JUnit and Jest, which testing frameworks would you like to use?',
         choices,
-        default: defaultChoice
+        default: defaultChoice,
     };
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
@@ -151,7 +151,7 @@ function askForMoreModules() {
         type: 'confirm',
         name: 'installModules',
         message: 'Would you like to install other generators from the JHipster Marketplace?',
-        default: false
+        default: false,
     }).then(prompt => {
         if (prompt.installModules) {
             askModulesToBeInstalled(done, this);
@@ -171,7 +171,7 @@ function askModulesToBeInstalled(done, generator) {
                 moduleResponse.results.forEach(modDef => {
                     choices.push({
                         value: { name: modDef.package.name, version: modDef.package.version },
-                        name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description}`
+                        name: `(${modDef.package.name}-${modDef.package.version}) ${modDef.package.description}`,
                     });
                 });
                 if (choices.length > 0) {
@@ -181,7 +181,7 @@ function askModulesToBeInstalled(done, generator) {
                             name: 'otherModules',
                             message: 'Which other modules would you like to use?',
                             choices,
-                            default: []
+                            default: [],
                         })
                         .then(prompt => {
                             // [ {name: [moduleName], version:[version]}, ...]

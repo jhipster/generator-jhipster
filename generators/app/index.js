@@ -37,145 +37,145 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side application generation',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-git` flag
         this.option('skip-git', {
             desc: 'Skip the git initialization',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-commit-hook` flag
         this.option('skip-commit-hook', {
             desc: 'Skip adding husky commit hooks',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-user-management` flag
         this.option('skip-user-management', {
             desc: 'Skip the user management module during app generation',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-check-length-of-identifier` flag
         this.option('skip-check-length-of-identifier', {
             desc: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-fake-data` flag
         this.option('skip-fake-data', {
             desc: 'Skip generation of fake data for development',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--with-entities` flag
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Check the status of the required tools',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--jhi-prefix` flag
         this.option('jhi-prefix', {
             desc: 'Add prefix before services, controllers and states name',
             type: String,
-            defaults: 'jhi'
+            defaults: 'jhi',
         });
 
         // This adds support for a `--entity-suffix` flag
         this.option('entity-suffix', {
             desc: 'Add suffix after entities name',
             type: String,
-            defaults: ''
+            defaults: '',
         });
 
         // This adds support for a `--dto-suffix` flag
         this.option('dto-suffix', {
             desc: 'Add suffix after dtos name',
             type: String,
-            defaults: 'DTO'
+            defaults: 'DTO',
         });
 
         // This adds support for a `--yarn` flag
         this.option('yarn', {
             desc: 'Use yarn instead of npm',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--auth` flag
         this.option('auth', {
             desc: 'Provide authentication type for the application when skipping server side generation',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--db` flag
         this.option('db', {
             desc: 'Provide DB name for the application when skipping server side generation',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--uaa-base-name` flag
         this.option('uaa-base-name', {
             desc: 'Provide the name of UAA server, when using --auth uaa and skipping server side generation',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--build` flag
         this.option('build', {
             desc: 'Provide build tool for the application when skipping server side generation',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--websocket` flag
         this.option('websocket', {
             desc: 'Provide websocket option for the application when skipping server side generation',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--search-engine` flag
         this.option('search-engine', {
             desc: 'Provide search engine for the application when skipping server side generation',
-            type: String
+            type: String,
         });
 
         // NOTE: Deprecated!!! Use --blueprints instead
         this.option('blueprint', {
             desc: 'DEPRECATED: Specify a generator blueprint to use for the sub generators',
-            type: String
+            type: String,
         });
         // This adds support for a `--blueprints` flag which can be used to specify one or more blueprints to use for generation
         this.option('blueprints', {
             desc:
                 'A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
@@ -183,20 +183,20 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--creation-timestamp` flag which can be used create reproducible builds
         this.option('creation-timestamp', {
             desc: 'Project creation timestamp (used for reproducible builds)',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--prettier-java` flag
         this.option('prettier-java', {
             desc: 'Launch prettier-java pre-formatting at generation',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
@@ -344,7 +344,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (!this.embeddableLaunchScript) {
                     this.embeddableLaunchScript = true;
                 }
-            }
+            },
         };
     }
 
@@ -359,7 +359,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             askForInsightOptIn: prompts.askForInsightOptIn,
             askForApplicationType: prompts.askForApplicationType,
-            askForModuleName: prompts.askForModuleName
+            askForModuleName: prompts.askForModuleName,
         };
     }
 
@@ -417,7 +417,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     ...options,
                     configOptions,
                     'client-hook': !this.skipClient,
-                    debug: this.isDebugEnabled
+                    debug: this.isDebugEnabled,
                 });
             },
 
@@ -430,7 +430,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.composeWith(require.resolve('../client'), {
                     ...options,
                     configOptions,
-                    debug: this.isDebugEnabled
+                    debug: this.isDebugEnabled,
                 });
             },
 
@@ -444,11 +444,11 @@ module.exports = class extends BaseBlueprintGenerator {
                     ...options,
                     'client-hook': !this.skipClient,
                     configOptions,
-                    debug: this.isDebugEnabled
+                    debug: this.isDebugEnabled,
                 });
             },
 
-            askFori18n: prompts.askFori18n
+            askFori18n: prompts.askFori18n,
         };
     }
 
@@ -492,7 +492,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     skipCheckLengthOfIdentifier: this.skipCheckLengthOfIdentifier,
                     otherModules: this.otherModules,
                     enableTranslation: this.enableTranslation,
-                    clientPackageManager: this.clientPackageManager
+                    clientPackageManager: this.clientPackageManager,
                 };
                 if (this.enableTranslation) {
                     config.nativeLanguage = this.nativeLanguage;
@@ -517,12 +517,12 @@ module.exports = class extends BaseBlueprintGenerator {
                         'jwtSecretKey',
                         'packageName',
                         'packagefolder',
-                        'rememberMeKey'
-                    ])
+                        'rememberMeKey',
+                    ]),
                 };
                 yorc.applicationType = this.applicationType;
                 statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
-            }
+            },
         };
     }
 
@@ -550,7 +550,7 @@ module.exports = class extends BaseBlueprintGenerator {
                             regenerate: true,
                             'skip-install': true,
                             debug: this.isDebugEnabled,
-                            arguments: [entity.name]
+                            arguments: [entity.name],
                         });
                     });
                 }
@@ -573,7 +573,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.warning('Git repository could not be initialized, as Git is not installed on your system');
                     }
                 }
-            }
+            },
         };
     }
 
@@ -653,7 +653,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         // run through all post app creation module hooks
                         this.callHooks('app', 'post', {
                             appConfig: this.configOptions,
-                            force: this.options.force
+                            force: this.options.force,
                         });
                     }
                 } catch (err) {
@@ -667,7 +667,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         )}`
                     )
                 );
-            }
+            },
         };
     }
 

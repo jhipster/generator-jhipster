@@ -60,7 +60,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
                     REACT,
                     'microServiceNam'
                 );
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -77,7 +77,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
@@ -85,7 +85,7 @@ describe('needle API React: JHipster client generator with blueprint', () => {
                 clientFramework: REACT,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['en', 'fr']
+                languages: ['en', 'fr'],
             })
             .on('end', done);
     });

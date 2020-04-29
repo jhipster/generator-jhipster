@@ -25,7 +25,7 @@ const mockBlueprintSubGen = class extends Generator {
         return {
             addDummyProperty() {
                 this.jhipsterContext.addNpmDependency('dummy-blueprint-property', '2.0');
-            }
+            },
         };
     }
 };
@@ -41,7 +41,7 @@ describe('JHipster client generator with sbs blueprint', () => {
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
@@ -49,7 +49,7 @@ describe('JHipster client generator with sbs blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['fr']
+                languages: ['fr'],
             })
             .on('end', done);
     });

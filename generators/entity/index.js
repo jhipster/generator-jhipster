@@ -41,40 +41,40 @@ class EntityGenerator extends BaseBlueprintGenerator {
         this.argument('name', {
             type: String,
             required: true,
-            description: 'Entity name'
+            description: 'Entity name',
         });
 
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
             desc: 'Regenerate the entity without presenting an option to update it',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.option('table-name', {
             desc: 'Specify table name that will be used by the entity',
-            type: String
+            type: String,
         });
 
         // This method adds support for a `--[no-]fluent-methods` flag
         this.option('fluent-methods', {
             desc: 'Generate fluent methods in entity beans to allow chained object construction',
             type: Boolean,
-            defaults: true
+            defaults: true,
         });
 
         // This adds support for a `--angular-suffix` flag
         this.option('angular-suffix', {
             desc: 'Use a suffix to generate Angular routes and files, to avoid name clashes',
             type: String,
-            defaults: ''
+            defaults: '',
         });
 
         // This adds support for a `--client-root-folder` flag
@@ -82,41 +82,41 @@ class EntityGenerator extends BaseBlueprintGenerator {
             desc:
                 'Use a root folder name for entities on client side. By default its empty for monoliths and name of the microservice for gateways',
             type: String,
-            defaults: ''
+            defaults: '',
         });
 
         // This adds support for a `--skip-ui-grouping` flag
         this.option('skip-ui-grouping', {
             desc: 'Disables the UI grouping behaviour for entity client side code',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side code generation',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side code generation',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-db-changelog` flag
         this.option('skip-db-changelog', {
             desc: 'Skip the generation of database changelog (liquibase for sql databases)',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--db` flag
         this.option('db', {
             desc: 'Provide DB option for the application when using skip-server flag',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
@@ -124,7 +124,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.context = {};
@@ -340,7 +340,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         `The table name is long for Oracle, long table names can cause issues when used to create constraint names and join table names.\n${instructions}`
                     );
                 }
-            }
+            },
         };
     }
 
@@ -365,7 +365,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
             askForDTO: prompts.askForDTO,
             askForFiltering: prompts.askForFiltering,
             askForReadOnly: prompts.askForReadOnly,
-            askForPagination: prompts.askForPagination
+            askForPagination: prompts.askForPagination,
         };
     }
 
@@ -767,7 +767,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         'UUID',
                         'Boolean',
                         'byte[]',
-                        'ByteBuffer'
+                        'ByteBuffer',
                     ].includes(fieldType);
 
                     if (field.fieldIsEnum === true) {
@@ -1038,8 +1038,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                     if (_.isUndefined(relationship.otherEntityModuleName)) {
                         if (relationship.otherEntityNameCapitalized !== 'User') {
-                            relationship.otherEntityModuleName = `${context.angularXAppName +
-                                relationship.otherEntityNameCapitalized}Module`;
+                            relationship.otherEntityModuleName = `${
+                                context.angularXAppName + relationship.otherEntityNameCapitalized
+                            }Module`;
                             relationship.otherEntityFileName = _.kebabCase(relationship.otherEntityAngularName);
                             if (relationship.otherEntityFolderName === undefined) {
                                 relationship.otherEntityFolderName = _.kebabCase(relationship.otherEntityAngularName);
@@ -1141,7 +1142,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.service,
                     context.fluentMethods
                 );
-            }
+            },
         };
     }
 
@@ -1173,7 +1174,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context,
                     configOptions,
                     force: context.options.force,
-                    debug: context.isDebugEnabled
+                    debug: context.isDebugEnabled,
                 });
             },
 
@@ -1187,7 +1188,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     configOptions,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
-                    debug: context.isDebugEnabled
+                    debug: context.isDebugEnabled,
                 });
             },
 
@@ -1200,9 +1201,9 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     configOptions,
                     'skip-install': context.options['skip-install'],
                     force: context.options.force,
-                    debug: context.isDebugEnabled
+                    debug: context.isDebugEnabled,
                 });
-            }
+            },
         };
     }
 
@@ -1232,7 +1233,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             'post',
                             {
                                 entityConfig: context,
-                                force: context.options.force
+                                force: context.options.force,
                             },
                             done
                         );
@@ -1244,7 +1245,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     this.debug('Error:', err);
                     done();
                 }
-            }
+            },
         };
     }
 

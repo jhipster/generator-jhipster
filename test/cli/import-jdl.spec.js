@@ -10,7 +10,7 @@ const { testInTempDir, revertTempDir } = require('../utils/utils');
 let subGenCallParams = {
     count: 0,
     commands: [],
-    options: []
+    options: [],
 };
 
 const env = {
@@ -19,7 +19,7 @@ const env = {
         subGenCallParams.commands.push(command);
         subGenCallParams.options.push(options);
         done();
-    }
+    },
 };
 
 const mockFork = (done, tries) => (runYeomanProcess, argv, opts) => {
@@ -32,7 +32,7 @@ const mockFork = (done, tries) => (runYeomanProcess, argv, opts) => {
         on(code, cb) {
             cb(0);
             if (done && subGenCallParams.count === tries) done();
-        }
+        },
     };
 };
 
@@ -43,7 +43,7 @@ function testDocumentsRelationships() {
             '.jhipster/CustomerOrder.json',
             '.jhipster/OrderedItem.json',
             '.jhipster/PaymentDetails.json',
-            '.jhipster/ShippingDetails.json'
+            '.jhipster/ShippingDetails.json',
         ]);
     });
     it('calls entity subgenerator', () => {
@@ -53,7 +53,7 @@ function testDocumentsRelationships() {
             'jhipster:entity CustomerOrder',
             'jhipster:entity OrderedItem',
             'jhipster:entity PaymentDetails',
-            'jhipster:entity ShippingDetails'
+            'jhipster:entity ShippingDetails',
         ]);
         expect(subGenCallParams.options[0]).to.eql({
             regenerate: true,
@@ -66,7 +66,7 @@ function testDocumentsRelationships() {
             'skip-server': undefined,
             'skip-ui-grouping': undefined,
             'skip-db-changelog': undefined,
-            'skip-user-management': undefined
+            'skip-user-management': undefined,
         });
     });
 }
@@ -76,7 +76,7 @@ describe('JHipster generator import jdl', () => {
         subGenCallParams = {
             count: 0,
             commands: [],
-            options: []
+            options: [],
         };
     });
     // this test for some reason works only when put at the beginning.
@@ -100,14 +100,14 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:app',
                 'jhipster:app',
                 'jhipster:docker-compose',
-                'jhipster:kubernetes'
+                'jhipster:kubernetes',
             ]);
             expect(subGenCallParams.options[0]).to.eql([
                 '--skip-install',
                 '--no-insight',
                 '--interactive',
                 '--with-entities',
-                '--from-cli'
+                '--from-cli',
             ]);
             expect(subGenCallParams.options[3]).to.eql(['--skip-prompts', '--skip-install', '--no-insight', '--interactive', '--from-cli']);
         });
@@ -131,7 +131,7 @@ describe('JHipster generator import jdl', () => {
                 '.jhipster/Location.json',
                 '.jhipster/Task.json',
                 '.jhipster/Country.json',
-                '.jhipster/Region.json'
+                '.jhipster/Region.json',
             ]);
         });
         it('does not call entity sub generator', () => {
@@ -159,7 +159,7 @@ describe('JHipster generator import jdl', () => {
                 '.jhipster/Location.json',
                 '.jhipster/Task.json',
                 '.jhipster/Country.json',
-                '.jhipster/Region.json'
+                '.jhipster/Region.json',
             ]);
         });
         it('calls entity subgenerator', () => {
@@ -172,7 +172,7 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity Task',
                 'jhipster:entity Employee',
                 'jhipster:entity Job',
-                'jhipster:entity JobHistory'
+                'jhipster:entity JobHistory',
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 regenerate: true,
@@ -186,7 +186,7 @@ describe('JHipster generator import jdl', () => {
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
                 'skip-db-changelog': true,
-                'skip-user-management': undefined
+                'skip-user-management': undefined,
             });
         });
     });
@@ -211,7 +211,7 @@ describe('JHipster generator import jdl', () => {
                 '.jhipster/Location.json',
                 '.jhipster/Task.json',
                 '.jhipster/Country.json',
-                '.jhipster/Region.json'
+                '.jhipster/Region.json',
             ]);
         });
         it('calls entity subgenerator', () => {
@@ -224,7 +224,7 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity Task',
                 'jhipster:entity Employee',
                 'jhipster:entity Job',
-                'jhipster:entity JobHistory'
+                'jhipster:entity JobHistory',
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 regenerate: true,
@@ -238,7 +238,7 @@ describe('JHipster generator import jdl', () => {
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
                 'skip-db-changelog': undefined,
-                'skip-user-management': undefined
+                'skip-user-management': undefined,
             });
         });
     });
@@ -268,7 +268,7 @@ describe('JHipster generator import jdl', () => {
                 '.jhipster/JobHistoryAlt.json',
                 '.jhipster/Listing.json',
                 '.jhipster/Profile.json',
-                '.jhipster/WishList.json'
+                '.jhipster/WishList.json',
             ]);
         });
         it('calls entity subgenerator', () => {
@@ -286,7 +286,7 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity JobHistoryAlt',
                 'jhipster:entity WishList',
                 'jhipster:entity Profile',
-                'jhipster:entity Listing'
+                'jhipster:entity Listing',
             ]);
             expect(subGenCallParams.options[0]).to.eql({
                 regenerate: true,
@@ -300,7 +300,7 @@ describe('JHipster generator import jdl', () => {
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
                 'skip-db-changelog': undefined,
-                'skip-user-management': undefined
+                'skip-user-management': undefined,
             });
         });
     });
@@ -335,7 +335,7 @@ describe('JHipster generator import jdl', () => {
                 'skip-server': undefined,
                 'skip-ui-grouping': undefined,
                 'skip-db-changelog': undefined,
-                'skip-user-management': undefined
+                'skip-user-management': undefined,
             });
         });
     });
@@ -357,17 +357,17 @@ describe('JHipster generator import jdl', () => {
         it('creates the application', () => {
             assert.file(['.yo-rc.json']);
             assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { baseName: 'jhipsterApp' }
+                'generator-jhipster': { baseName: 'jhipsterApp' },
             });
             assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { creationTimestamp: 1546300800000 }
+                'generator-jhipster': { creationTimestamp: 1546300800000 },
             });
         });
         it('creates the entities', () => {
             const aFile = path.join('.jhipster', 'A.json');
             assert.file([aFile, path.join('.jhipster', 'B.json')]);
             assert.JSONFileContent(aFile, {
-                changelogDate: '20190101000100'
+                changelogDate: '20190101000100',
             });
         });
         it('calls application generator', () => {
@@ -381,7 +381,7 @@ describe('JHipster generator import jdl', () => {
                 '2019-01-01',
                 '--with-entities',
                 '--force',
-                '--from-cli'
+                '--from-cli',
             ]);
         });
     });
@@ -395,7 +395,7 @@ describe('JHipster generator import jdl', () => {
                         skipInstall: true,
                         noInsight: true,
                         'skip-git': false,
-                        inline: 'application { config { baseName jhapp } entities * } entity Customer'
+                        inline: 'application { config { baseName jhapp } entities * } entity Customer',
                     },
                     env,
                     mockFork(done, 1)
@@ -429,7 +429,7 @@ describe('JHipster generator import jdl', () => {
                 'Customer',
                 '--with-entities',
                 '--force',
-                '--from-cli'
+                '--from-cli',
             ]);
         });
     });
@@ -460,7 +460,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-interactive',
                 '--no-skip-git',
                 '--force',
-                '--from-cli'
+                '--from-cli',
             ]);
         });
     });
@@ -483,7 +483,7 @@ describe('JHipster generator import jdl', () => {
             assert.file([
                 path.join('myFirstApp', '.yo-rc.json'),
                 path.join('mySecondApp', '.yo-rc.json'),
-                path.join('myThirdApp', '.yo-rc.json')
+                path.join('myThirdApp', '.yo-rc.json'),
             ]);
         });
         it('creates the entities', () => {
@@ -493,7 +493,7 @@ describe('JHipster generator import jdl', () => {
                 path.join('myFirstApp', '.jhipster', 'E.json'),
                 path.join('myFirstApp', '.jhipster', 'F.json'),
                 path.join('mySecondApp', '.jhipster', 'E.json'),
-                path.join('myThirdApp', '.jhipster', 'F.json')
+                path.join('myThirdApp', '.jhipster', 'F.json'),
             ]);
         });
         it('calls application generator', () => {
@@ -506,7 +506,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--with-entities',
                 '--force',
-                '--from-cli'
+                '--from-cli',
             ]);
         });
     });
@@ -532,7 +532,7 @@ describe('JHipster generator import jdl', () => {
             assert.file([
                 path.join('myFirstApp', '.yo-rc.json'),
                 path.join('mySecondApp', '.yo-rc.json'),
-                path.join('myThirdApp', '.yo-rc.json')
+                path.join('myThirdApp', '.yo-rc.json'),
             ]);
         });
         it('creates the entities', () => {
@@ -542,7 +542,7 @@ describe('JHipster generator import jdl', () => {
                 path.join('myFirstApp', '.jhipster', 'E.json'),
                 path.join('myFirstApp', '.jhipster', 'F.json'),
                 path.join('mySecondApp', '.jhipster', 'E.json'),
-                path.join('myThirdApp', '.jhipster', 'F.json')
+                path.join('myThirdApp', '.jhipster', 'F.json'),
             ]);
         });
         it('does not call application generator', () => {
@@ -553,7 +553,7 @@ describe('JHipster generator import jdl', () => {
                 'jhipster:entity E',
                 'jhipster:entity E',
                 'jhipster:entity F',
-                'jhipster:entity F'
+                'jhipster:entity F',
             ]);
             expect(subGenCallParams.options[0]).to.eql([
                 '--skip-install',
@@ -562,7 +562,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--regenerate',
                 '--from-cli',
-                '--force'
+                '--force',
             ]);
         });
     });
@@ -582,7 +582,7 @@ describe('JHipster generator import jdl', () => {
             assert.file([
                 path.join('docker-compose', '.yo-rc.json'),
                 path.join('kubernetes', '.yo-rc.json'),
-                path.join('openshift', '.yo-rc.json')
+                path.join('openshift', '.yo-rc.json'),
             ]);
         });
         it('calls deployment generator', () => {
@@ -595,7 +595,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-interactive',
                 '--no-skip-git',
                 '--force',
-                '--from-cli'
+                '--from-cli',
             ]);
         });
     });
@@ -621,7 +621,7 @@ describe('JHipster generator import jdl', () => {
                     'jhipster:app',
                     'jhipster:app',
                     'jhipster:docker-compose',
-                    'jhipster:kubernetes'
+                    'jhipster:kubernetes',
                 ]);
                 expect(subGenCallParams.options[0]).to.eql([
                     '--skip-install',
@@ -630,7 +630,7 @@ describe('JHipster generator import jdl', () => {
                     '--no-skip-git',
                     '--with-entities',
                     '--force',
-                    '--from-cli'
+                    '--from-cli',
                 ]);
                 expect(subGenCallParams.options[3]).to.eql([
                     '--skip-prompts',
@@ -639,7 +639,7 @@ describe('JHipster generator import jdl', () => {
                     '--no-interactive',
                     '--no-skip-git',
                     '--force',
-                    '--from-cli'
+                    '--from-cli',
                 ]);
             });
         });
@@ -656,7 +656,7 @@ describe('JHipster generator import jdl', () => {
                 assert.file([
                     path.join('myFirstApp', '.yo-rc.json'),
                     path.join('mySecondApp', '.yo-rc.json'),
-                    path.join('myThirdApp', '.yo-rc.json')
+                    path.join('myThirdApp', '.yo-rc.json'),
                 ]);
             });
             it('creates the entities', () => {
@@ -666,7 +666,7 @@ describe('JHipster generator import jdl', () => {
                     path.join('myFirstApp', '.jhipster', 'E.json'),
                     path.join('myFirstApp', '.jhipster', 'F.json'),
                     path.join('mySecondApp', '.jhipster', 'E.json'),
-                    path.join('myThirdApp', '.jhipster', 'F.json')
+                    path.join('myThirdApp', '.jhipster', 'F.json'),
                 ]);
             });
             it('creates the deployments', () => {
@@ -699,7 +699,7 @@ describe('JHipster generator import jdl', () => {
                 '--no-skip-git',
                 '--with-entities',
                 '--force',
-                '--from-cli'
+                '--from-cli',
             ]);
         });
     });

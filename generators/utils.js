@@ -73,7 +73,7 @@ module.exports = {
     stringHashCode,
     RandexpWithFaker,
     gitExec,
-    isGitInstalled
+    isGitInstalled,
 };
 
 /**
@@ -470,7 +470,7 @@ function getEnumInfo(field, clientRootFolder) {
         enums,
         ...customValuesState,
         enumValues: getEnums(enums, customValuesState),
-        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
     };
 }
 
@@ -495,7 +495,7 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enumsWithCustomValue,
         angularAppName,
         packageName,
-        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
     };
 }
 
@@ -522,7 +522,7 @@ function getEnumsWithCustomValue(enums) {
 function getCustomValuesState(enumValues) {
     const state = {
         withoutCustomValue: 0,
-        withCustomValue: 0
+        withCustomValue: 0,
     };
     enumValues.forEach(enumValue => {
         if (doesTheEnumValueHaveACustomValue(enumValue)) {
@@ -534,7 +534,7 @@ function getCustomValuesState(enumValues) {
     return {
         withoutCustomValues: state.withCustomValue === 0,
         withSomeCustomValues: state.withCustomValue !== 0 && state.withoutCustomValue !== 0,
-        withCustomValues: state.withoutCustomValue === 0
+        withCustomValues: state.withoutCustomValue === 0,
     };
 }
 
@@ -550,7 +550,7 @@ function getEnums(enums, customValuesState) {
         const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
         return {
             name: matched[1],
-            value: matched[2]
+            value: matched[2],
         };
     });
 }
@@ -611,7 +611,7 @@ function getAllJhipsterConfig(generator, force, basePath = '') {
             get: key => configuration[key],
             set: (key, value) => {
                 configuration[key] = value;
-            }
+            },
         };
     }
     return configuration;
@@ -720,7 +720,7 @@ function parseBlueprintInfo(blueprint) {
     }
     return {
         name: bpName,
-        version
+        version,
     };
 }
 

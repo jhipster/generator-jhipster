@@ -147,7 +147,7 @@ module.exports = class extends BaseGenerator {
                     }
                     done();
                 });
-            }
+            },
         };
     }
 };

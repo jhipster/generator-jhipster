@@ -142,7 +142,7 @@ describe('jhipster cli utils test', () => {
                     force: true,
                     'skip-install': true,
                     skipInstall: true,
-                    'from-cli': true
+                    'from-cli': true,
                 });
             });
         });
@@ -154,7 +154,7 @@ describe('jhipster cli utils test', () => {
                     'skip-install': true,
                     skipInstall: true,
                     foo: 'bar',
-                    'from-cli': true
+                    'from-cli': true,
                 });
             });
         });
@@ -166,7 +166,7 @@ describe('jhipster cli utils test', () => {
                     'skip-install': true,
                     skipInstall: true,
                     foo: 'bar,who',
-                    'from-cli': true
+                    'from-cli': true,
                 });
             });
         });

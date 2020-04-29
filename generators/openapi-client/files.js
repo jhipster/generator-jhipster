@@ -23,7 +23,7 @@ const chalk = require('chalk');
 const constants = require('../generator-constants');
 
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 function writeFiles() {
@@ -172,6 +172,6 @@ function writeFiles() {
                 '   @ComponentScan.Filter(type = FilterType.REGEX, ' +
                 `pattern = "${this.packageName}.client.*.ClientConfiguration")\n})`;
             this.rewriteFile(mainClassFile, '@SpringBootApplication', componentScan);
-        }
+        },
     };
 }

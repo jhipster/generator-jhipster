@@ -19,7 +19,7 @@ module.exports = {
     revertTempDir,
     copyBlueprint,
     copyFakeBlueprint,
-    lnYeoman
+    lnYeoman,
 };
 
 function getFilesForOptions(files, options, prefix, excludeFiles) {

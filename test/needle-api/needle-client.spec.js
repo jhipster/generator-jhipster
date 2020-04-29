@@ -43,7 +43,7 @@ const mockBlueprintSubGen = class extends ClientGenerator {
         const customPhaseSteps = {
             addExternalResourcesToRootStep() {
                 this.addExternalResourcesToRoot('<link rel="stylesheet" href="content/css/my.css">', 'Comment added by JHipster API');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -60,7 +60,7 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
                 db: 'mysql',
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:client']])
             .withPrompts({
@@ -68,7 +68,7 @@ describe('needle API Client: JHipster client generator with blueprint', () => {
                 clientFramework: ANGULAR,
                 enableTranslation: true,
                 nativeLanguage: 'en',
-                languages: ['en', 'fr']
+                languages: ['en', 'fr'],
             })
             .on('end', done);
     });

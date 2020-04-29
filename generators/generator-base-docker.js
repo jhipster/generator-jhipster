@@ -30,19 +30,19 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Check the status of the required tools',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This adds support for a `--skip-prompts` flag
         this.option('skip-prompts', {
             desc: 'Generate pre-existing configuration',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.regenerate = this.options['skip-prompts'];
         this.skipChecks = this.options['skip-checks'];
@@ -95,7 +95,7 @@ module.exports = class extends BaseGenerator {
 
             loadConfig() {
                 loadFromYoRc.call(this);
-            }
+            },
         };
     }
 
@@ -109,7 +109,7 @@ module.exports = class extends BaseGenerator {
             askForMonitoring: prompts.askForMonitoring,
             askForConsoleOptions: prompts.askForConsoleOptions,
             askForServiceDiscovery: prompts.askForServiceDiscovery,
-            askForAdminPassword: prompts.askForAdminPassword
+            askForAdminPassword: prompts.askForAdminPassword,
         };
     }
 
@@ -121,7 +121,7 @@ module.exports = class extends BaseGenerator {
 
             checkImages,
             generateJwtSecret,
-            setAppsFolderPaths
+            setAppsFolderPaths,
         };
     }
 };

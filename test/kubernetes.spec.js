@@ -14,14 +14,14 @@ const expectedFiles = {
         './console/jhipster-elasticsearch.yml',
         './console/jhipster-logstash.yml',
         './console/jhipster-dashboard-console.yml',
-        './console/jhipster-zipkin.yml'
+        './console/jhipster-zipkin.yml',
     ],
     msmysql: ['./msmysql/msmysql-deployment.yml', './msmysql/msmysql-mysql.yml', './msmysql/msmysql-service.yml'],
     mspsql: [
         './mspsql/mspsql-deployment.yml',
         './mspsql/mspsql-postgresql.yml',
         './mspsql/mspsql-service.yml',
-        './mspsql/mspsql-elasticsearch.yml'
+        './mspsql/mspsql-elasticsearch.yml',
     ],
     msmongodb: ['./msmongodb/msmongodb-deployment.yml', './msmongodb/msmongodb-mongodb.yml', './msmongodb/msmongodb-service.yml'],
     msmariadb: ['./msmariadb/msmariadb-deployment.yml', './msmariadb/msmariadb-mariadb.yml', './msmariadb/msmariadb-service.yml'],
@@ -30,22 +30,22 @@ const expectedFiles = {
         './samplemysql/samplemysql-deployment.yml',
         './samplemysql/samplemysql-mysql.yml',
         './samplemysql/samplemysql-service.yml',
-        './samplemysql/samplemysql-elasticsearch.yml'
+        './samplemysql/samplemysql-elasticsearch.yml',
     ],
     kafka: [
         './samplekafka/samplekafka-deployment.yml',
         './samplekafka/samplekafka-mysql.yml',
         './samplekafka/samplekafka-service.yml',
-        './messagebroker/kafka.yml'
+        './messagebroker/kafka.yml',
     ],
     prometheusmonit: [
         './monitoring/jhipster-prometheus-crd.yml',
         './monitoring/jhipster-prometheus-cr.yml',
         './monitoring/jhipster-grafana.yml',
-        './monitoring/jhipster-grafana-dashboard.yml'
+        './monitoring/jhipster-grafana-dashboard.yml',
     ],
     jhgategateway: ['./jhgate/jhgate-gateway.yml', './jhgate/jhgate-destination-rule.yml', './jhgate/jhgate-virtual-service.yml'],
-    applyScript: ['./kubectl-apply.sh']
+    applyScript: ['./kubectl-apply.sh'],
 };
 
 describe('JHipster Kubernetes Sub Generator', () => {
@@ -69,7 +69,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -106,7 +106,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -144,7 +144,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -184,7 +184,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     ingressDomain: 'example.com',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -218,7 +218,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -258,7 +258,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -307,7 +307,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -341,7 +341,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -374,7 +374,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     monitoring: 'prometheus',
                     kubernetesServiceType: 'LoadBalancer',
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -414,7 +414,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     clusteredDbApps: [],
                     istio: true,
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });
@@ -451,7 +451,7 @@ describe('JHipster Kubernetes Sub Generator', () => {
                     kubernetesServiceType: 'LoadBalancer',
                     clusteredDbApps: [],
                     kubernetesUseDynamicStorage: true,
-                    kubernetesStorageClassName: ''
+                    kubernetesStorageClassName: '',
                 })
                 .on('end', done);
         });

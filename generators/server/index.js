@@ -39,13 +39,13 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
             desc: 'Enable Webpack hook from maven/gradle build',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
@@ -53,7 +53,7 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
@@ -308,7 +308,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                     this.existingProject = true;
                 }
-            }
+            },
         };
     }
 
@@ -348,7 +348,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
                 this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
-            }
+            },
         };
     }
 
@@ -374,8 +374,8 @@ module.exports = class extends BaseBlueprintGenerator {
                         messageBroker: this.messageBroker,
                         serviceDiscoveryType: this.serviceDiscoveryType,
                         buildTool: this.buildTool,
-                        enableSwaggerCodegen: this.enableSwaggerCodegen
-                    }
+                        enableSwaggerCodegen: this.enableSwaggerCodegen,
+                    },
                 });
             },
 
@@ -424,14 +424,14 @@ module.exports = class extends BaseBlueprintGenerator {
                     jwtSecretKey: this.jwtSecretKey,
                     rememberMeKey: this.rememberMeKey,
                     enableTranslation: this.enableTranslation,
-                    embeddableLaunchScript: this.embeddableLaunchScript
+                    embeddableLaunchScript: this.embeddableLaunchScript,
                 };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     config.nativeLanguage = this.nativeLanguage;
                     config.languages = this.languages;
                 }
                 this.config.set(config);
-            }
+            },
         };
     }
 
@@ -474,7 +474,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.skipI18nQuestion) return;
 
                 this.composeLanguagesSub(this, this.configOptions, 'server');
-            }
+            },
         };
     }
 
@@ -507,7 +507,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         }
                     }
                 }
-            }
+            },
         };
     }
 
@@ -531,7 +531,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
                 }
                 this.log(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
-            }
+            },
         };
     }
 

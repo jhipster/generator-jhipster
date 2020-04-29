@@ -40,7 +40,7 @@ module.exports = class ECR {
     getEcrRepositoryURI(respositoryName) {
         return this.ecr
             .describeRepositories({
-                repositoryNames: [respositoryName]
+                repositoryNames: [respositoryName],
             })
             .promise()
             .then(result => _(result.repositories).first().repositoryUri);

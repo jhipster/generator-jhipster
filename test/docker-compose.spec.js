@@ -7,7 +7,7 @@ const expectedFiles = {
     dockercompose: ['docker-compose.yml', 'jhipster-registry.yml', 'central-server-config/application.yml'],
     elk: ['jhipster-console.yml', 'log-conf/logstash.conf'],
     prometheus: ['prometheus.yml', 'prometheus-conf/alert_rules.yml', 'prometheus-conf/prometheus.yml', 'alertmanager-conf/config.yml'],
-    monolith: ['docker-compose.yml']
+    monolith: ['docker-compose.yml'],
 };
 
 describe('JHipster Docker Compose Sub Generator', () => {
@@ -24,7 +24,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway'],
                     clusteredDbApps: [],
-                    monitoring: 'no'
+                    monitoring: 'no',
                 })
                 .on('end', done);
         });
@@ -54,7 +54,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['02-mysql'],
                     clusteredDbApps: [],
-                    monitoring: 'no'
+                    monitoring: 'no',
                 })
                 .on('end', done);
         });
@@ -84,7 +84,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: '.',
                     chosenApps: ['02-mysql'],
                     clusteredDbApps: [],
-                    monitoring: 'no'
+                    monitoring: 'no',
                 })
                 .on('end', done);
         });
@@ -109,7 +109,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
-                    monitoring: 'no'
+                    monitoring: 'no',
                 })
                 .on('end', done);
         });
@@ -139,7 +139,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -180,7 +180,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
                     monitoring: 'elk',
-                    consoleOptions: ['zipkin']
+                    consoleOptions: ['zipkin'],
                 })
                 .on('end', done);
         });
@@ -221,7 +221,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
                     monitoring: 'elk',
-                    consoleOptions: ['curator']
+                    consoleOptions: ['curator'],
                 })
                 .on('end', done);
         });
@@ -262,7 +262,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
                     monitoring: 'elk',
-                    consoleOptions: ['curator', 'zipkin']
+                    consoleOptions: ['curator', 'zipkin'],
                 })
                 .on('end', done);
         });
@@ -302,7 +302,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql'],
                     clusteredDbApps: [],
-                    monitoring: 'prometheus'
+                    monitoring: 'prometheus',
                 })
                 .on('end', done);
         });
@@ -336,7 +336,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '06-uaa'],
                     clusteredDbApps: [],
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -369,7 +369,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo', '07-mariadb'],
                     clusteredDbApps: [],
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -402,7 +402,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '04-mongo'],
                     clusteredDbApps: ['04-mongo'],
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -435,7 +435,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '05-cassandra'],
                     clusteredDbApps: [],
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -468,7 +468,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['08-monolith'],
                     clusteredDbApps: [],
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -495,7 +495,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '02-mysql', '03-psql', '10-couchbase', '07-mariadb'],
                     clusteredDbApps: [],
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -528,7 +528,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['01-gateway', '10-couchbase'],
                     clusteredDbApps: ['10-couchbase'],
-                    monitoring: 'elk'
+                    monitoring: 'elk',
                 })
                 .on('end', done);
         });
@@ -561,7 +561,7 @@ describe('JHipster Docker Compose Sub Generator', () => {
                     directoryPath: './',
                     chosenApps: ['12-oracle'],
                     clusteredDbApps: [],
-                    monitoring: 'no'
+                    monitoring: 'no',
                 })
                 .on('end', done);
         });

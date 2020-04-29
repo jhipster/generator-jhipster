@@ -56,7 +56,7 @@ module.exports = {
     saveCredentialsInAWS,
     initAwsStuff,
     sanitizeBucketName,
-    uploadTemplate
+    uploadTemplate,
 };
 
 /**
@@ -134,13 +134,13 @@ function listSubnets(vpcId) {
         Filters: [
             {
                 Name: 'vpc-id',
-                Values: [vpcId]
+                Values: [vpcId],
             },
             {
                 Name: 'state',
-                Values: ['available']
-            }
-        ]
+                Values: ['available'],
+            },
+        ],
     };
     return spinner(
         ec2
@@ -186,7 +186,7 @@ function getDockerLogin() {
                         resolve({
                             username: splitResult[0],
                             password: splitResult[1],
-                            accountId: data.Account
+                            accountId: data.Account,
                         });
                     })
                     .catch(() => reject(new Error("Couldn't retrieve the user informations")))
@@ -226,13 +226,13 @@ function _getAuthorizationToken() {
  */
 function createS3Bucket(bucketName, region = DEFAULT_REGION) {
     const createBuckerParams = {
-        Bucket: bucketName
+        Bucket: bucketName,
     };
     return spinner(
         new Promise((resolve, reject) =>
             s3
                 .headBucket({
-                    Bucket: bucketName
+                    Bucket: bucketName,
                 })
                 .promise()
                 .catch(error => {
@@ -283,11 +283,11 @@ function uploadTemplate(bucketName, filename, path) {
                     {
                         Bucket: bucketName,
                         Key: filename,
-                        Body: fs.createReadStream(path)
+                        Body: fs.createReadStream(path),
                     },
                     {
                         partSize: Math.max(stats.size, S3_MIN_PART_SIZE),
-                        queueSize: 1
+                        queueSize: 1,
                     }
                 );
                 let bar;
@@ -299,17 +299,14 @@ function uploadTemplate(bucketName, filename, path) {
                             incomplete: ' ',
                             width: 20,
                             total,
-                            clear: true
+                            clear: true,
                         });
                     }
 
                     const curr = evt.loaded / 1000000;
                     bar.tick(curr - bar.curr);
                 });
-                return upload
-                    .promise()
-                    .then(resolve)
-                    .catch(reject);
+                return upload.promise().then(resolve).catch(reject);
             })
         )
     );

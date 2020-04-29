@@ -47,38 +47,38 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This adds support for a `--target-version` flag
         this.option('target-version', {
             desc: 'Upgrade to a specific version instead of the latest',
-            type: String
+            type: String,
         });
         // This adds support for a `--target-blueprint-versions` flag
         this.option('target-blueprint-versions', {
             desc: 'Upgrade to specific blueprint versions instead of the latest, e.g. --target-blueprint-versions foo@0.0.1,bar@1.0.2',
-            type: String
+            type: String,
         });
 
         // This adds support for a `--skip-install` flag
         this.option('skip-install', {
             desc: 'Skips installing dependencies during the upgrade process',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--silent` flag
         this.option('silent', {
             desc: 'Hides output of the generation process',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-checks` flag
         this.option('skip-checks', {
             desc: 'Disable checks during project regeneration',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.targetJhipsterVersion = this.options['target-version'];
@@ -118,7 +118,7 @@ module.exports = class extends BaseGenerator {
             loadConfig() {
                 this.currentJhipsterVersion = this.config.get('jhipsterVersion');
                 this.clientPackageManager = this.config.get('clientPackageManager');
-            }
+            },
         };
     }
 
@@ -186,7 +186,7 @@ module.exports = class extends BaseGenerator {
         if (gitAdd.code !== 0) this.error(`Unable to add resources in git:\n${gitAdd.stderr}`);
 
         const gitCommit = this.gitExec(['commit', '-q', '-m', `"${commitMsg}"`, '-a', '--allow-empty', '--no-verify'], {
-            silent: this.silent
+            silent: this.silent,
         });
         if (gitCommit.code !== 0) this.error(`Unable to commit in git:\n${gitCommit.stderr}`);
         this.success(`Committed with message "${commitMsg}"`);
@@ -345,9 +345,9 @@ module.exports = class extends BaseGenerator {
                 return this.prompt({
                     type: 'confirm',
                     name: 'upgradeConfig',
-                    message: 'Unify blueprints configurations?'
+                    message: 'Unify blueprints configurations?',
                 }).then(
-                    function(answer) {
+                    function (answer) {
                         if (answer.upgradeConfig) {
                             this.composeWith(require.resolve('../upgrade-config'), this.options);
                         }
@@ -431,7 +431,7 @@ module.exports = class extends BaseGenerator {
                     // Register reference for merging
                     recordCodeHasBeenGenerated();
                 }
-            }
+            },
         };
     }
 
@@ -507,7 +507,7 @@ module.exports = class extends BaseGenerator {
                     this.warning(`There are conflicts in package.json, please fix them and then run ${installCommand}`);
                     this.skipInstall = true;
                 }
-            }
+            },
         };
     }
 

@@ -20,7 +20,7 @@ const k8sPrompts = require('../kubernetes/prompts');
 
 module.exports = {
     askForGeneratorType,
-    ...k8sPrompts
+    ...k8sPrompts,
 };
 
 function askForGeneratorType() {
@@ -35,15 +35,15 @@ function askForGeneratorType() {
             choices: [
                 {
                     value: 'k8s',
-                    name: 'Kubernetes generator'
+                    name: 'Kubernetes generator',
                 },
                 {
                     value: 'helm',
-                    name: 'Helm Kubernetes generator'
-                }
+                    name: 'Helm Kubernetes generator',
+                },
             ],
-            default: this.generatorType ? this.generatorType : 'k8s'
-        }
+            default: this.generatorType ? this.generatorType : 'k8s',
+        },
     ];
 
     this.prompt(prompts).then(props => {

@@ -17,7 +17,7 @@ describe('JHipster generator spring-controller', () => {
                 })
                 .withArguments(['foo'])
                 .withPrompts({
-                    actionAdd: false
+                    actionAdd: false,
                 })
                 .on('end', done);
         });

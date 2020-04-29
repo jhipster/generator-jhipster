@@ -107,7 +107,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                     'annotationProcessorVersion'
                 );
                 this.addMavenProfile('profileId', '            <other>other</other>');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -121,7 +121,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 'from-cli': true,
                 skipInstall: true,
                 blueprint: 'myblueprint',
-                skipChecks: true
+                skipChecks: true,
             })
             .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
             .withPrompts({
@@ -140,7 +140,7 @@ describe('needle API server maven: JHipster server generator with blueprint', ()
                 languages: ['fr'],
                 buildTool: 'maven',
                 rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                serverSideOptions: []
+                serverSideOptions: [],
             })
             .on('end', done);
     });

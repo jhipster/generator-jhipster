@@ -18,7 +18,7 @@
  */
 
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 function writeFiles() {
@@ -163,6 +163,6 @@ function writeFiles() {
                 this.template('helm-apply.sh.ejs', 'helm-knative-apply.sh');
                 this.template('helm-upgrade.sh.ejs', 'helm-knative-upgrade.sh');
             }
-        }
+        },
     };
 }

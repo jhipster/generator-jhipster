@@ -37,7 +37,7 @@ const mockBlueprintSubGen = class extends ServerGenerator {
         const customPhaseSteps = {
             addDummyMavenProperty() {
                 this.addMavenProperty('dummy-blueprint-property', 'foo');
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -63,7 +63,7 @@ describe('JHipster server generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:server']])
                     .withPrompts({
@@ -82,7 +82,7 @@ describe('JHipster server generator with blueprint', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -109,7 +109,7 @@ describe('JHipster server generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:server']])
                 .withPrompts({
@@ -128,7 +128,7 @@ describe('JHipster server generator with blueprint', () => {
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: []
+                    serverSideOptions: [],
                 })
                 .on('end', done);
         });

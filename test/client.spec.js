@@ -22,7 +22,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: REACT
+                    clientFramework: REACT,
                 })
                 .on('end', done);
         });
@@ -33,7 +33,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });
@@ -53,7 +53,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: ANGULAR
+                    clientFramework: ANGULAR,
                 })
                 .on('end', done);
         });
@@ -68,7 +68,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });
@@ -91,7 +91,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    clientFramework: ANGULAR
+                    clientFramework: ANGULAR,
                 })
                 .on('end', done);
         });
@@ -106,7 +106,7 @@ describe('JHipster client generator', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });

@@ -22,7 +22,7 @@ describe('JHipster OpenAPI Client Sub Generator', () => {
                     action: 'new',
                     specOrigin: 'custom-endpoint',
                     customEndpoint: 'petstore-openapi-3.yml',
-                    cliName: 'petstore'
+                    cliName: 'petstore',
                 })
                 .on('end', done);
         });

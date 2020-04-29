@@ -27,7 +27,7 @@ describe('JHipster server generator', () => {
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: []
+                    serverSideOptions: [],
                 })
                 .on('end', done);
         });
@@ -47,7 +47,7 @@ describe('JHipster server generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     },
                     null,
                     ['package.json']
@@ -77,7 +77,7 @@ describe('JHipster server generator', () => {
                     languages: ['fr'],
                     buildTool: 'maven',
                     rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                    serverSideOptions: []
+                    serverSideOptions: [],
                 })
                 .on('end', done);
         });
@@ -97,7 +97,7 @@ describe('JHipster server generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     },
                     null,
                     ['package.json']

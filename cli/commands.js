@@ -20,42 +20,42 @@
 const defaultCommands = {
     app: {
         default: true,
-        desc: '[Default] Create a new JHipster application based on the selected options'
+        desc: '[Default] Create a new JHipster application based on the selected options',
     },
     aws: {
-        desc: 'Deploy the current application to Amazon Web Services'
+        desc: 'Deploy the current application to Amazon Web Services',
     },
     'aws-containers': {
-        desc: 'Deploy the current application to Amazon Web Services using ECS'
+        desc: 'Deploy the current application to Amazon Web Services using ECS',
     },
     'azure-app-service': {
-        desc: 'Deploy the current application to Azure App Service'
+        desc: 'Deploy the current application to Azure App Service',
     },
     'azure-spring-cloud': {
-        desc: 'Deploy the current application to Azure Spring Cloud'
+        desc: 'Deploy the current application to Azure Spring Cloud',
     },
     'ci-cd': {
-        desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools'
+        desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools',
     },
     cloudfoundry: {
-        desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry'
+        desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry',
     },
     'docker-compose': {
-        desc: 'Create all required Docker deployment configuration for the selected applications'
+        desc: 'Create all required Docker deployment configuration for the selected applications',
     },
     entity: {
         argument: ['name'],
-        desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components'
+        desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
     },
     'export-jdl': {
         argument: ['jdlFile'],
-        desc: 'Create a JDL file from the existing entities'
+        desc: 'Create a JDL file from the existing entities',
     },
     gae: {
-        desc: 'Deploy the current application to Google App Engine'
+        desc: 'Deploy the current application to Google App Engine',
     },
     heroku: {
-        desc: 'Deploy the current application to Heroku'
+        desc: 'Deploy the current application to Heroku',
     },
     'import-jdl': {
         argument: ['jdlFiles...'],
@@ -88,48 +88,48 @@ Example:
                 testFrameworks [protractor]
             }
         }"
-        `
+        `,
     },
     info: {
-        desc: 'Display information about your current project and system'
+        desc: 'Display information about your current project and system',
     },
     kubernetes: {
         alias: 'k8s',
-        desc: 'Deploy the current application to Kubernetes'
+        desc: 'Deploy the current application to Kubernetes',
     },
     'kubernetes-helm': {
         alias: 'k8s-helm',
-        desc: 'Deploy the current application to Kubernetes using Helm package manager'
+        desc: 'Deploy the current application to Kubernetes using Helm package manager',
     },
     'kubernetes-knative': {
         alias: 'knative',
-        desc: 'Deploy the current application to Kubernetes using knative constructs'
+        desc: 'Deploy the current application to Kubernetes using knative constructs',
     },
     languages: {
         argument: ['languages...'],
-        desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder'
+        desc: 'Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder',
     },
     openshift: {
-        desc: 'Deploy the current application to OpenShift'
+        desc: 'Deploy the current application to OpenShift',
     },
     'spring-service': {
         alias: 'service',
         argument: ['name'],
-        desc: 'Create a new Spring service bean'
+        desc: 'Create a new Spring service bean',
     },
     'spring-controller': {
         argument: ['name'],
-        desc: 'Create a new Spring controller'
+        desc: 'Create a new Spring controller',
     },
     'openapi-client': {
-        desc: 'Generates java client code from an OpenAPI/Swagger definition'
+        desc: 'Generates java client code from an OpenAPI/Swagger definition',
     },
     upgrade: {
-        desc: 'Upgrade the JHipster version, and upgrade the generated application'
+        desc: 'Upgrade the JHipster version, and upgrade the generated application',
     },
     'upgrade-config': {
-        desc: 'Upgrade the JHipster configuration'
-    }
+        desc: 'Upgrade the JHipster configuration',
+    },
 };
 
 module.exports = defaultCommands;

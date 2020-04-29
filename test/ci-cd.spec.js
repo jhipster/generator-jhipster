@@ -10,7 +10,7 @@ const expectedFiles = {
     circle: ['.circleci/config.yml'],
     azure: ['azure-pipelines.yml'],
     github: ['.github/workflows/github-ci.yml'],
-    dockerRegistry: ['src/main/docker/docker-registry.yml']
+    dockerRegistry: ['src/main/docker/docker-registry.yml'],
 };
 
 describe('JHipster CI-CD Sub Generator', () => {
@@ -28,7 +28,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -53,7 +53,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -78,7 +78,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -103,7 +103,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withPrompts({
                     pipeline: 'jenkins',
                     insideDocker: false,
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -133,7 +133,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarName: 'sonarName'
+                    sonarName: 'sonarName',
                 })
                 .on('end', done);
         });
@@ -166,7 +166,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarName: 'sonarName'
+                    sonarName: 'sonarName',
                 })
                 .on('end', done);
         });
@@ -195,7 +195,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withPrompts({
                     pipeline: 'gitlab',
                     insideDocker: false,
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -220,7 +220,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withPrompts({
                     pipeline: 'gitlab',
                     insideDocker: false,
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -244,7 +244,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'gitlab',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -268,7 +268,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'gitlab',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -298,7 +298,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarUrl: 'http://localhost:9000'
+                    sonarUrl: 'http://localhost:9000',
                 })
                 .on('end', done);
         });
@@ -331,7 +331,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarUrl: 'http://localhost:9000'
+                    sonarUrl: 'http://localhost:9000',
                 })
                 .on('end', done);
         });
@@ -379,7 +379,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withPrompts({
                     pipeline: 'gitlab',
                     insideDocker: true,
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -404,7 +404,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -427,7 +427,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -450,7 +450,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -473,7 +473,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'travis',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -501,7 +501,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarUrl: 'http://localhost:9000'
+                    sonarUrl: 'http://localhost:9000',
                 })
                 .on('end', done);
         });
@@ -530,7 +530,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'azure',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -549,7 +549,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'azure',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -568,7 +568,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'azure',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -587,7 +587,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'azure',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -626,7 +626,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     pipeline: 'github',
                     cicdIntegrations: [],
                     dockerImage: 'jhipster-publish-docker',
-                    sonarUrl: 'http://sonar.com:9000'
+                    sonarUrl: 'http://sonar.com:9000',
                 })
                 .on('end', done);
         });
@@ -653,7 +653,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'github',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -674,7 +674,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     pipeline: 'github',
                     cicdIntegrations: [],
                     dockerImage: 'jhipster-publish-docker',
-                    sonarUrl: 'http://sonar.com:9000'
+                    sonarUrl: 'http://sonar.com:9000',
                 })
                 .on('end', done);
         });
@@ -698,7 +698,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'github',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
@@ -723,7 +723,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     artifactorySnapshotsUrl: 'http://artifactory:8081/artifactory/libs-snapshot',
                     artifactoryReleasesId: 'releases',
                     artifactoryReleasesUrl: 'http://artifactory:8081/artifactory/libs-release',
-                    sonarUrl: 'http://sonar.com:9000'
+                    sonarUrl: 'http://sonar.com:9000',
                 })
                 .on('end', done);
         });
@@ -752,7 +752,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                     pipeline: 'github',
                     cicdIntegrations: ['sonar', 'publishDocker', 'heroku'],
                     dockerImage: 'jhipster-publish-docker',
-                    sonarUrl: 'http://sonar.com:9000'
+                    sonarUrl: 'http://sonar.com:9000',
                 })
                 .on('end', done);
         });
@@ -791,7 +791,7 @@ describe('JHipster CI-CD Sub Generator', () => {
                 .withOptions({ skipChecks: true })
                 .withPrompts({
                     pipeline: 'circle',
-                    cicdIntegrations: []
+                    cicdIntegrations: [],
                 })
                 .on('end', done);
         });
