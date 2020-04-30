@@ -151,7 +151,7 @@ import org.springframework.util.Base64Utils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
-<%_ if (databaseType === 'sql') { _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
 import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
 import java.nio.ByteBuffer;<% } %><% if (reactiveRepositories || fieldsContainDuration === true) { %>
@@ -446,7 +446,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Autowired
     private <%= entityClass %>QueryService <%= entityInstance %>QueryService;
     <%_ } _%>
-    <%_ if (databaseType === 'sql') { _%>
+    <%_ if (databaseType === 'sql' && !reactive) { _%>
 
     @Autowired
     private EntityManager em;
@@ -470,7 +470,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%= asEntity(entityClass) %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
+    public static <%= asEntity(entityClass) %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql' && !reactive) { %>EntityManager em<% } %>) {
         <%_ if (fluentMethods) { _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = new <%= asEntity(entityClass) %>()<% for (idx in fields) { %>
             .<%= fields[idx].fieldName %>(<%= fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
@@ -498,8 +498,8 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Add required entity
             <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
     <%_ if (otherEntityName === 'user') { // TODO or other entity has no unique fields _%>
-        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
-                <%_ if (databaseType === 'sql') { _%>
+        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseType === 'sql' && !reactive) { %>em<% } %>);
+                <%_ if (databaseType === 'sql' && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
                 <%_ } _%>
@@ -508,7 +508,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
                 <%_ } _%>
     <%_ } else { _%>
         <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>;
-        <%_ if (databaseType === 'sql') { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
         if (TestUtil.findAll(em, <%= otherEntityNameCapitalized %>.class).isEmpty()) {
             <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(em);
             em.persist(<%= otherEntityName %>);
@@ -517,7 +517,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%= otherEntityName %> = TestUtil.findAll(em, <%= otherEntityNameCapitalized %>.class).get(0);
         }
         <%_ } else { _%>
-        <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>);
+        <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && !reactive) { %>em<% } %>);
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
         <%= otherEntityName %>.setId("fixed-id-for-tests");
@@ -544,10 +544,10 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     <%_ } _%>
     @BeforeEach
     public void initTest() {
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j' ) { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j' || (databaseType === 'sql' && reactive)) { _%>
         <%= entityInstance %>Repository.deleteAll()<%= callBlock %>;
         <%_ } _%>
-        <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
+        <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql' && !reactive) { %>em<% } %>);
     }
 <%_ if (!readOnly) { _%>
 
@@ -668,7 +668,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } break; } _%>
 
         // Load the <%= entityInstance %>
-        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId()).get();<% if (databaseType === 'sql') { %>
+        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId()).get();<% if (databaseType === 'sql' && !reactive) { %>
         // Disconnect from session so that the updates on updated<%= asEntity(entityClass) %> are not directly saved in db
         em.detach(updated<%= asEntity(entityClass) %>);<% } %>
 
@@ -1212,7 +1212,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
 
         // Update the <%= entityInstance %>
         <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId())<%= reactive ? '.block()' : '.get()' %>;
-        <%_ if (databaseType === 'sql') { _%>
+        <%_ if (databaseType === 'sql' && !reactive) { _%>
         // Disconnect from session so that the updates on updated<%= asEntity(entityClass) %> are not directly saved in db
         em.detach(updated<%= asEntity(entityClass) %>);
         <%_ } _%>
