@@ -1511,11 +1511,13 @@ module.exports = class extends Generator {
             if (!options.localDirectory) {
                 throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
             }
-            jdbcUrl = `jdbc:h2:file:./${options.localDirectory}/${options.databaseName}`;
+            jdbcUrl = `jdbc:h2:file:${options.localDirectory}/${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1';
         } else if (databaseType === 'h2Memory') {
             jdbcUrl = `jdbc:h2:mem:${options.databaseName}`;
             extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
+        } else {
+            throw new Error(`${databaseType} databaseType is not supported`);
         }
 
         if (!options.skipExtraOptions && extraOptions) {
