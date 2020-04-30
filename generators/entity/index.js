@@ -652,7 +652,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 storageData.databaseType = context.databaseType;
                 storageData.readOnly = context.readOnly;
                 this.copyFilteringFlag(context, storageData, context);
-                if (['sql', 'mongodb', 'couchbase'].includes(context.databaseType)) {
+                if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(context.databaseType)) {
                     storageData.pagination = context.pagination;
                 } else {
                     storageData.pagination = 'no';
@@ -711,7 +711,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     context.clientRootFolder ? `${context.clientRootFolder}-${context.entityStateName}` : context.entityStateName
                 );
                 context.jhiTablePrefix = this.getTableName(context.jhiPrefix);
-                context.reactiveRepositories = context.reactive && ['mongodb', 'cassandra', 'couchbase'].includes(context.databaseType);
+                context.reactiveRepositories =
+                    context.reactive && ['mongodb', 'cassandra', 'couchbase', 'neo4j'].includes(context.databaseType);
 
                 context.fieldsContainDate = false;
                 context.fieldsContainInstant = false;

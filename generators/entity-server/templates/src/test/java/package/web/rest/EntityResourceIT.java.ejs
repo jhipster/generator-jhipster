@@ -36,6 +36,12 @@ for (idx in relationships) {
         break;
     }
 }
+let callBlock = '';
+let callListBlock = '';
+if (reactive) {
+    callBlock = ".block()";
+    callListBlock = ".collectList().block()";
+}
 _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
@@ -521,7 +527,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @BeforeEach
     public void initTest() {
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j' ) { _%>
-        <%= entityInstance %>Repository.deleteAll()<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Repository.deleteAll()<%= callBlock %>;
         <%_ } _%>
         <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
     }
@@ -530,8 +536,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void create<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>.size();
+        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
     <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
         // Configure the mock search repository
         when(mock<%= entityClass %>SearchRepository.save(any()))
@@ -558,8 +563,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'couchbase') { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>;
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate + 1);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
@@ -587,8 +591,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void create<%= entityClass %>WithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>.size();
+        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         // Create the <%= entityClass %> with an existing ID
         <%= asEntity(entityInstance) %>.setId(<% if (databaseType === 'sql' && hasOauthUser === true) { %>UUID.randomUUID().toString()<% } else if (databaseType === 'sql') { %>1L<% } else if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>"existing_id"<% } else if (databaseType === 'cassandra') { %>UUID.randomUUID()<% } %>);
@@ -614,8 +617,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'couchbase') { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>;
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeCreate);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -701,8 +703,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void check<%= fields[idx].fieldInJavaBeanMethod %>IsRequired() throws Exception {
-        int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>.size();
+        int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
         // set the field null
         <%= asEntity(entityInstance) %>.set<%= fields[idx].fieldInJavaBeanMethod %>(null);
 
@@ -726,8 +727,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'couchbase') { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>;
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeTest);
     }
 <%_ } } } _%>
@@ -740,7 +740,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
-        <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>).block();
+        <%= entityInstance %>Repository.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         List<<%= entityClass %>> <%= entityInstance %>List = webTestClient.get().uri("/api/<%= entityApiUrl %>")
             .accept(MediaType.APPLICATION_STREAM_JSON)
@@ -779,7 +779,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get all the <%= entityInstance %>List
         <%_ if (!reactive) { _%>
@@ -865,7 +865,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 
         // Get the <%= entityInstance %>
         <%_ if (!reactive) { _%>
@@ -1176,13 +1176,12 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 <%_ } else { _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 <%_ } _%>
 
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>.size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         // Update the <%= entityInstance %>
         <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId())<%= reactive ? '.block()' : '.get()' %>;
@@ -1223,8 +1222,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'couchbase') { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>;
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%= asEntity(entityClass) %> test<%= entityClass %> = <%= entityInstance %>List.get(<%= entityInstance %>List.size() - 1);
         <%_ for (idx in fields) { if (fields[idx].fieldType === 'ZonedDateTime') { _%>
@@ -1247,8 +1245,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @Test<% if (databaseType === 'sql') { %>
     @Transactional<% } %>
     public void updateNonExisting<%= entityClass %>() throws Exception {
-        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>.size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         <%_ if (dto === 'mapstruct') { _%>
         // Create the <%= entityClass %>
@@ -1273,8 +1270,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'couchbase') { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>;
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeUpdate);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -1299,13 +1295,12 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 <%_ } else { _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 <%_ } _%>
 
-        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>.size();
+        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         // Delete the <%= entityInstance %>
         <%_ if (!reactive) { _%>
@@ -1323,8 +1318,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (databaseType === 'couchbase') { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
         <%_ } _%>
-        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<% if (reactive) { %>
-            .collectList().block()<% } %>;
+        List<<%= asEntity(entityClass) %>> <%= entityInstance %>List = <%= entityInstance %>Repository.findAll()<%= callListBlock %>;
         assertThat(<%= entityInstance %>List).hasSize(databaseSizeBeforeDelete - 1);
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
@@ -1353,9 +1347,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
         <%_ } _%>
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Service.save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 <%_ } else { _%>
-        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<% if (reactive) { %>.block()<% } %>;
+        <%= entityInstance %>Repository.save<% if (databaseType === 'sql') { %>AndFlush<% } %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
     <%_ if (reactive) { _%>
