@@ -32,20 +32,10 @@ services:
             - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
             - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
             <%_ } _%>
-            <%_ if (prodDatabaseType === 'mysql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:mysql://<%= baseName.toLowerCase() %>-mysql:3306/<%= baseName.toLowerCase() %>?useUnicode=true&characterEncoding=utf8&useSSL=false&createDatabaseIfNotExist=true
-            <%_ } _%>
-            <%_ if (prodDatabaseType === 'mariadb') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:mariadb://<%= baseName.toLowerCase() %>-mariadb:3306/<%= baseName.toLowerCase() %>
-            <%_ } _%>
-            <%_ if (prodDatabaseType === 'postgresql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://<%= baseName.toLowerCase() %>-postgresql:5432/<%= baseName %>
-            <%_ } _%>
-            <%_ if (prodDatabaseType === 'mssql') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:sqlserver://<%= baseName.toLowerCase() %>-mssql:1433;database=<%= baseName %>
-            <%_ } _%>
-            <%_ if (prodDatabaseType === 'oracle') { _%>
-            - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@<%= baseName.toLowerCase() %>-oracle:1521:<%= baseName %>
+            <%_ if (databaseType === 'sql') {
+                const databaseName = ['mysql', 'mariadb'].includes(prodDatabaseType) ? baseName.toLowerCase() : baseName;
+            _%>
+            - SPRING_DATASOURCE_URL=<%- getJDBCUrl(prodDatabaseType, { hostname: `${baseName.toLowerCase()}-${prodDatabaseType}`, databaseName: databaseName }) %>
             <%_ } _%>
             <%_ if (prodDatabaseType === 'mongodb') { _%>
             - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
