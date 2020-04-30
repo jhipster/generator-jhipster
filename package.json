@@ -48,8 +48,8 @@
         "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
         "test:unit": "mocha --timeout 30000 --slow 0 --reporter spec",
         "jsdoc": "jsdoc --configure jsdoc-conf.json",
-        "jdl:bundle": "node jdl/scripts/bundle.js && webpack",
-        "jdl:diagrams": "node jdl/scripts/serialize-grammar.js && eslint jdl/generated"
+        "jdl:bundle": "node jdl/bundling/scripts/bundle.js && webpack --config jdl/bundling/webpack.config.js",
+        "jdl:diagrams": "node jdl/bundling/scripts/serialize-grammar.js && eslint jdl/parsing/generated"
     },
     "dependencies": {
         "aws-sdk": "2.533.0",
@@ -101,7 +101,6 @@
         "eslint-plugin-import": "2.20.2",
         "eslint-plugin-mocha": "6.3.0",
         "eslint-plugin-prettier": "3.1.3",
-        "fs-extra": "7.0.1",
         "jsdoc": "3.6.3",
         "mocha": "6.1.4",
         "sinon": "7.2.5",
