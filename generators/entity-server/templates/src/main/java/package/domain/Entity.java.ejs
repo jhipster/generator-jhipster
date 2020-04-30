@@ -20,7 +20,7 @@ package <%= packageName %>.domain;
 
 <%_
 
-let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = processJavaEntityImports(fields, relationships);
+let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
 
 let hasDto = dto === 'mapstruct';
 let isUsingMapsId = false;
