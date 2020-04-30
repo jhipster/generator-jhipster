@@ -18,7 +18,14 @@ limitations under the License.
 -%>
 package <%= packageName %>.config;
 
+<%
+  let springFox3 = false;
+  if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) {
+    springFox3 = true;
+  } else { _%>
 import com.google.common.base.Predicates;
+<% } _%>
+
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.config.apidoc.customizer.SwaggerCustomizer;
@@ -47,7 +54,11 @@ public class OpenApiConfiguration {
     @Bean
     public SwaggerCustomizer noApiFirstCustomizer() {
         return docket -> docket.select()
+<% if (springFox3) { %>
+            .apis(RequestHandlerSelectors.basePackage("<%= packageName %>.web.api").negate());
+<% } else { %>
             .apis(Predicates.not(RequestHandlerSelectors.basePackage("<%= packageName %>.web.api")));
+<% } %>
     }
 
     @Bean
