@@ -17,18 +17,22 @@
  * limitations under the License.
  */
 
-/**
- * This file defines the exported JDL DSL related APIs
- * This file will be used as webpack entry point to produce a UMD bundle.
- */
-const { tokens, JDLLexer } = require('./lexer/lexer');
-const { parse, getSyntacticAutoCompleteSuggestions } = require('./api');
-const JDLParser = require('./jdl_parser');
+const { Lexer } = require('chevrotain');
+const { createTokenFromConfig } = require('./token-creator');
+
+const relationshipTypeCategoryToken = createTokenFromConfig({ name: 'RELATIONSHIP_TYPE', pattern: Lexer.NA });
+
+const relationshipTypeTokens = [
+    { name: 'ONE_TO_ONE', pattern: 'OneToOne' },
+    { name: 'ONE_TO_MANY', pattern: 'OneToMany' },
+    { name: 'MANY_TO_ONE', pattern: 'ManyToOne' },
+    { name: 'MANY_TO_MANY', pattern: 'ManyToMany' },
+].map(tokenConfig => {
+    tokenConfig.categories = [relationshipTypeCategoryToken];
+    return createTokenFromConfig(tokenConfig);
+});
 
 module.exports = {
-  tokens,
-  JDLLexer,
-  JDLParser,
-  parse,
-  getSyntacticAutoCompleteSuggestions
+    categoryToken: relationshipTypeCategoryToken,
+    tokens: [relationshipTypeCategoryToken, ...relationshipTypeTokens],
 };

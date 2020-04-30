@@ -1,5 +1,4 @@
-/**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+/** Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -17,15 +16,6 @@
  * limitations under the License.
  */
 
-const { createTokenFromConfig } = require('./token_creator');
-const MinMaxTokens = require('./minmax_tokens');
+const fse = require('fs-extra');
 
-const validationTokens = [
-  { name: 'REQUIRED', pattern: 'required' },
-  { name: 'UNIQUE', pattern: 'unique' },
-  { name: 'PATTERN', pattern: 'pattern' }
-].map(createTokenFromConfig);
-
-module.exports = {
-  tokens: [...validationTokens, ...MinMaxTokens.tokens]
-};
+fse.remove('dist');

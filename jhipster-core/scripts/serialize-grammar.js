@@ -18,7 +18,7 @@
 
 /**
  * Run this file to generate serialized grammar to be rendered as diagrams
- * It will serialize to ../gen/generated_serialized_grammar.js
+ * It will serialize to ../gen/generated-serialized-grammar.js
  * The diagrams can be viewed in ../grammar.html
  */
 const path = require('path');
@@ -52,8 +52,8 @@ const copyright = `/** Copyright 2013-2020 the original author or authors from t
 
 // generated a JavaScript file which exports the serialized grammar on the global scope (Window)
 fs.writeFileSync(
-  path.join(__dirname, '..', 'lib', 'dsl', 'gen', 'generated_serialized_grammar.js'),
-  `${copyright}
+    path.join(__dirname, '..', 'lib', 'dsl', 'gen', 'generated-serialized-grammar.js'),
+    `${copyright}
 /* eslint-disable no-unused-vars */
 const serializedGrammar = ${serializedGrammarText}`
 );

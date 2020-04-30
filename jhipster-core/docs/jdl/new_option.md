@@ -15,7 +15,7 @@ no value and is a unary option._
 
 ## Parsing system additions
 
-First of all, we have to add a new token to the option file, in the `lib/dsl/lexer/option_tokens.js`:
+First of all, we have to add a new token to the option file, in the `lib/dsl/lexer/option-tokens.js`:
 ```
 { name: 'MY_NEW_OPTION', pattern: 'myNewOption', type: 'binary' }
 ```
@@ -24,7 +24,7 @@ Here we can see that:
   - `myNewOption` is how to use it in the JDL,
   - `binary` simply means that it's a binary option. 
 
-Once it's done, the next file to change is the `lib/dsl/ast_builder.js` file.
+Once it's done, the next file to change is the `lib/dsl/ast-builder.js` file.
 Because it's an option, we add a new entry to the options in the `prog` method.
 ```
 myNewOption: {}

@@ -17,22 +17,15 @@
  * limitations under the License.
  */
 
-const { Lexer } = require('chevrotain');
-const { createTokenFromConfig } = require('./token_creator');
+const { createTokenFromConfig } = require('./token-creator');
+const MinMaxTokens = require('./minmax-tokens');
 
-const relationshipTypeCategoryToken = createTokenFromConfig({ name: 'RELATIONSHIP_TYPE', pattern: Lexer.NA });
-
-const relationshipTypeTokens = [
-  { name: 'ONE_TO_ONE', pattern: 'OneToOne' },
-  { name: 'ONE_TO_MANY', pattern: 'OneToMany' },
-  { name: 'MANY_TO_ONE', pattern: 'ManyToOne' },
-  { name: 'MANY_TO_MANY', pattern: 'ManyToMany' }
-].map(tokenConfig => {
-  tokenConfig.categories = [relationshipTypeCategoryToken];
-  return createTokenFromConfig(tokenConfig);
-});
+const validationTokens = [
+    { name: 'REQUIRED', pattern: 'required' },
+    { name: 'UNIQUE', pattern: 'unique' },
+    { name: 'PATTERN', pattern: 'pattern' },
+].map(createTokenFromConfig);
 
 module.exports = {
-  categoryToken: relationshipTypeCategoryToken,
-  tokens: [relationshipTypeCategoryToken, ...relationshipTypeTokens]
+    tokens: [...validationTokens, ...MinMaxTokens.tokens],
 };

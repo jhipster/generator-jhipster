@@ -6,23 +6,23 @@ When cloning the project and installing its dependencies you should see the foll
 > lib
   > dsl
     > gen
-      * generated_serialized_grammar.js
+      * generated-serialized-grammar.js
       * grammar.html
     > lexer
-      * application_tokens.js
-      * deployment_tokens.js
+      * application-tokens.js
+      * deployment-tokens.js
       * lexer_tokens.js
-      * minmax_tokens.js
-      * relationship_type_tokens.js
-      * shared_tokens.js
-      * token_creator.js
+      * minmax-tokens.js
+      * relationship-type-tokens.js
+      * shared-tokens.js
+      * token-creator.js
     > self_checks
-      * parsing_system_checker.js
-      * token_collector_visitor.js
+      * parsing-system-checker.js
+      * token-collector-visitor.js
     * api.js
-    * ast_builder.js
+    * ast-builder.js
     * exports.js
-    * jdl_parser.js
+    * jdl-parser.js
     * validator.js
 ```
 
@@ -43,7 +43,7 @@ This folder contains the JDL grammar visualization.
 Open the `grammar.html` file in your favorite browser and you'll see a visual representation of the JDL's grammar.
 ![A sample of the JDL grammar](images/jdl_grammar_diag.png)
 
-The `generated_serialized_grammar.js` file is always generated:
+The `generated-serialized-grammar.js` file is always generated:
   - installing the project
   - before making a release
 
@@ -118,7 +118,7 @@ For instance, this is how an enumeration is described:
 Here, we say that to parse an enumeration the parsing system will encounter:
   - the `ENUM` token, which is `enum`
   - a `NAME` token (the enum's name), which matches the following regex `/[a-zA-Z_][a-zA-Z_\-\d]*/`
-    - one can find the regex in the `lexer/shared_tokens.js` file
+    - one can find the regex in the `lexer/shared-tokens.js` file
   - a `LCURLY` token: `{`
   - here there's the subrule `enumPropList` which is basically a way of telling the parsing system that the enum props
     are defined in an other rule

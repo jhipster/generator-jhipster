@@ -17,25 +17,18 @@
  * limitations under the License.
  */
 
-const { Lexer } = require('chevrotain');
-const { KEYWORD } = require('./shared_tokens');
-const { createTokenFromConfig } = require('./token_creator');
-
-const mixMaxCategoryToken = createTokenFromConfig({ name: 'MIN_MAX_KEYWORD', pattern: Lexer.NA, categories: KEYWORD });
-
-const minMaxTokens = [
-  { name: 'MINLENGTH', pattern: 'minlength' },
-  { name: 'MAXLENGTH', pattern: 'maxlength' },
-  { name: 'MINBYTES', pattern: 'minbytes' },
-  { name: 'MAXBYTES', pattern: 'maxbytes' },
-  { name: 'MIN', pattern: 'min' },
-  { name: 'MAX', pattern: 'max' }
-].map(tokenConfig => {
-  tokenConfig.categories = [mixMaxCategoryToken];
-  return createTokenFromConfig(tokenConfig);
-});
+/**
+ * This file defines the exported JDL DSL related APIs
+ * This file will be used as webpack entry point to produce a UMD bundle.
+ */
+const { tokens, JDLLexer } = require('./lexer/lexer');
+const { parse, getSyntacticAutoCompleteSuggestions } = require('./api');
+const JDLParser = require('./jdl-parser');
 
 module.exports = {
-  categoryToken: mixMaxCategoryToken,
-  tokens: [mixMaxCategoryToken, ...minMaxTokens]
+    tokens,
+    JDLLexer,
+    JDLParser,
+    parse,
+    getSyntacticAutoCompleteSuggestions,
 };
