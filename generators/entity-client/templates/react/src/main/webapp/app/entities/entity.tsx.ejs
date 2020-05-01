@@ -232,12 +232,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <div>
       <h2 id="<%= entityFileName %>-heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
+        <%_ if (!readOnly) { _%>
         <Link to={`${match.url}/new`} className="btn btn-primary float-right jh-create-entity" id="jh-create-entity">
           <FontAwesomeIcon icon="plus" />&nbsp;
           <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
             Create new <%= entityClassHumanized %>
           </Translate>
         </Link>
+        <%_ } _%>
       </h2>
       <%_ if (searchEngine !== false) { _%>
       <Row>
@@ -400,12 +402,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                           <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="info" size="sm">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
+                          <%_ if (!readOnly) { _%>
                           <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
                           <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
+                          <%_ } _%>
                         </div>
                       </td>
                     </tr>
