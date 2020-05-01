@@ -20,10 +20,10 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { convertServerOptionsToJDL } = require('../../../lib/converters/json_to_jdl_option_converter');
-const ValidatedJDLObject = require('../../../lib/domain/validated_jdl_object');
-const JDLUnaryOption = require('../../../lib/domain/jdl_unary_option');
-const { SKIP_USER_MANAGEMENT, SKIP_CLIENT } = require('../../../lib/domain/jhipster/unary_options');
+const { convertServerOptionsToJDL } = require('../../../../jdl/converters/json-to-jdl-option-converter');
+const JDLObject = require('../../../../jdl/domain/jdl-object');
+const JDLUnaryOption = require('../../../../jdl/domain/jdl-unary-option');
+const { SKIP_USER_MANAGEMENT, SKIP_CLIENT } = require('../../../../jdl/domain/jhipster/unary-options');
 
 describe('JSONToJDLOptionConverter', () => {
     describe('convertToServerOptions', () => {
@@ -53,7 +53,7 @@ describe('JSONToJDLOptionConverter', () => {
             let jdlObject;
 
             before(() => {
-                const previousJDLObject = new ValidatedJDLObject();
+                const previousJDLObject = new JDLObject();
                 previousJDLObject.addOption(
                     new JDLUnaryOption({
                         name: SKIP_CLIENT,

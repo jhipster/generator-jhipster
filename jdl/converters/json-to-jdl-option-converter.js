@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-const JDLObject = require('../domain/jdl_object');
-const JDLUnaryOption = require('../domain/jdl_unary_option');
+const JDLObject = require('../domain/jdl-object');
+const JDLUnaryOption = require('../domain/jdl-unary-option');
 const { SKIP_CLIENT, SKIP_SERVER, SKIP_USER_MANAGEMENT } = require('../domain/jhipster/unary-options');
 
 module.exports = {

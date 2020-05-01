@@ -18,10 +18,10 @@
  */
 
 const { expect } = require('chai');
-const { createJDLApplication } = require('../../../lib/domain/jdl_application_factory');
-const { convertApplicationsToJDL } = require('../../../lib/converters/json_to_jdl_application_converter');
-const ValidatedJDLObject = require('../../../lib/domain/validated_jdl_object');
-const { MONOLITH } = require('../../../lib/domain/jhipster/application_types');
+const { createJDLApplication } = require('../../../../jdl/domain/jdl-application-factory');
+const { convertApplicationsToJDL } = require('../../../../jdl/converters/json-to-jdl-application-converter');
+const JDLObject = require('../../../../jdl/domain/jdl-object');
+const { MONOLITH } = require('../../../../jdl/domain/jhipster/application-types');
 
 describe('JSONToJDLApplicationConverter', () => {
     describe('convert', () => {
@@ -53,7 +53,7 @@ describe('JSONToJDLApplicationConverter', () => {
             let jdlObject;
 
             before(() => {
-                const previousJDLObject = new ValidatedJDLObject();
+                const previousJDLObject = new JDLObject();
                 previousJDLObject.addApplication(createJDLApplication({ baseName: 'tata', applicationType: MONOLITH }));
                 jdlObject = convertApplicationsToJDL({
                     applications: [{ 'generator-jhipster': { baseName: 'toto', applicationType: MONOLITH } }],

@@ -22,9 +22,9 @@ const { expect } = require('chai');
 
 const fs = require('fs');
 const path = require('path');
-const { convertEntitiesToJDL } = require('../../../lib/converters/json_to_jdl_entity_converter');
-const UnaryOptions = require('../../../lib/domain/jhipster/unary_options');
-const { JPA_DERIVED_IDENTIFIER } = require('../../../lib/domain/jhipster/relationship_options');
+const { convertEntitiesToJDL } = require('../../../../jdl/converters/json-to-jdl-entity-converter');
+const UnaryOptions = require('../../../../jdl/domain/jhipster/unary-options');
+const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/domain/jhipster/relationship-options');
 const {
     Options: { DTO, SEARCH, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
     Values: {
@@ -33,7 +33,7 @@ const {
         service: { SERVICE_CLASS },
         search: { ELASTIC_SEARCH },
     },
-} = require('../../../lib/domain/jhipster/binary_options');
+} = require('../../../../jdl/domain/jhipster/binary-options');
 
 describe('JSONToJDLEntityConverter', () => {
     describe('convertEntitiesToJDL', () => {
@@ -56,13 +56,6 @@ describe('JSONToJDLEntityConverter', () => {
                     ['Job', readJsonEntity('Job')],
                     ['Task', readJsonEntity('Task')],
                 ]);
-                // const employeeRelationshipToDepartment = entities
-                //   .get('Employee')
-                //   .relationships.filter(r => r.relationshipName === 'department')[0];
-                // employeeRelationshipToDepartment.javadoc = undefined
-                // const employee = entities.get('Employee');
-                // employee.relationships = employeeRelationships;
-                // entities.set('Employee', employee);
                 jdlObject = convertEntitiesToJDL({ entities });
             });
 
@@ -303,7 +296,15 @@ describe('JSONToJDLEntityConverter', () => {
                         JSON.parse(
                             fs
                                 .readFileSync(
-                                    path.join('test', 'test_files', 'json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'),
+                                    path.join(
+                                        'test',
+                                        'jdl',
+                                        'test_files',
+                                        'json_to_jdl_converter',
+                                        'with_user',
+                                        '.jhipster',
+                                        'TestEntity.json'
+                                    ),
                                     'utf-8'
                                 )
                                 .toString()
@@ -328,6 +329,7 @@ describe('JSONToJDLEntityConverter', () => {
                                 .readFileSync(
                                     path.join(
                                         'test',
+                                        'jdl',
                                         'test_files',
                                         'json_to_jdl_converter',
                                         'with_authority',
@@ -351,6 +353,6 @@ describe('JSONToJDLEntityConverter', () => {
 
 function readJsonEntity(entityName) {
     return JSON.parse(
-        fs.readFileSync(path.join('test', 'test_files', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString()
+        fs.readFileSync(path.join('test', 'jdl', 'test_files', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString()
     );
 }

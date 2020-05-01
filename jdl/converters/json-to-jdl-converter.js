@@ -19,10 +19,10 @@
 
 const path = require('path');
 const fs = require('fs');
-const JDLObject = require('../domain/jdl_object');
-const { mergeJDLObjects } = require('../domain/jdl_object_merger');
+const JDLObject = require('../domain/jdl-object');
+const { mergeJDLObjects } = require('../domain/jdl-object-merger');
 const { doesFileExist, doesDirectoryExist } = require('../utils/file-utils');
-const { readJSONFile } = require('../readers/json_file_reader');
+const { readJSONFile } = require('../readers/json-file-reader');
 const { convertApplicationToJDL } = require('./json-to-jdl-application-converter');
 const { convertEntitiesToJDL } = require('./json-to-jdl-entity-converter');
 const { exportToJDL: exportJDLObject } = require('../exporters/jdl-exporter');

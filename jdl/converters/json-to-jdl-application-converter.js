@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-const JDLObject = require('../domain/jdl_object');
-const { createJDLApplication } = require('../domain/jdl_application_factory');
+const JDLObject = require('../domain/jdl-object');
+const { createJDLApplication } = require('../domain/jdl-application-factory');
 
 const GENERATOR_NAME = 'generator-jhipster';
 

@@ -20,7 +20,7 @@
 const fs = require('fs');
 const path = require('path');
 const ApplicationTypes = require('../domain/jhipster/application-types');
-const { toFilePath, readJSONFile } = require('../readers/json_file_reader');
+const { toFilePath, readJSONFile } = require('../readers/json-file-reader');
 const FileUtils = require('../utils/file-utils');
 const areJHipsterEntitiesEqual = require('../utils/object-utils').areEntitiesEqual;
 

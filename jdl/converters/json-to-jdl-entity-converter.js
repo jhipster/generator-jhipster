@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-const JDLObject = require('../domain/jdl_object');
-const JDLEntity = require('../domain/jdl_entity');
-const JDLField = require('../domain/jdl_field');
-const JDLValidation = require('../domain/jdl_validation');
-const JDLEnum = require('../domain/jdl_enum');
-const JDLRelationship = require('../domain/jdl_relationship');
-const JDLUnaryOption = require('../domain/jdl_unary_option');
-const JDLBinaryOption = require('../domain/jdl_binary_option');
+const JDLObject = require('../domain/jdl-object');
+const JDLEntity = require('../domain/jdl-entity');
+const JDLField = require('../domain/jdl-field');
+const JDLValidation = require('../domain/jdl-validation');
+const JDLEnum = require('../domain/jdl-enum');
+const JDLRelationship = require('../domain/jdl-relationship');
+const JDLUnaryOption = require('../domain/jdl-unary-option');
+const JDLBinaryOption = require('../domain/jdl-binary-option');
 const { CommonDBTypes } = require('../domain/jhipster/field-types');
 const { OptionNames } = require('../domain/jhipster/application-options');
 const { ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY } = require('../domain/jhipster/relationship-types');

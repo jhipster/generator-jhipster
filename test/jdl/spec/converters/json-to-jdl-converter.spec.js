@@ -21,7 +21,7 @@
 const fs = require('fs');
 const path = require('path');
 const { expect } = require('chai');
-const { convertToJDL } = require('../../../lib/converters/json_to_jdl_converter');
+const { convertToJDL } = require('../../../../jdl/converters/json-to-jdl-converter');
 
 describe('JSONToJDLConverter', () => {
     describe('convertToJDL', () => {
@@ -32,7 +32,7 @@ describe('JSONToJDLConverter', () => {
 
             context('without entities', () => {
                 before(() => {
-                    dir = path.join('test', 'test_files', 'json_to_jdl_converter', 'only_app');
+                    dir = path.join('test', 'jdl', 'test_files', 'json_to_jdl_converter', 'only_app');
                     jdlFilename = 'app.jdl';
                     convertToJDL(dir);
                     jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
@@ -81,7 +81,7 @@ describe('JSONToJDLConverter', () => {
             });
             context('with entities', () => {
                 before(() => {
-                    dir = path.join('test', 'test_files', 'json_to_jdl_converter', 'app_with_entities');
+                    dir = path.join('test', 'jdl', 'test_files', 'json_to_jdl_converter', 'app_with_entities');
                     jdlFilename = 'app.jdl';
                     convertToJDL(dir);
                     jdlFileContent = fs.readFileSync(path.join(dir, jdlFilename), 'utf-8');
@@ -193,7 +193,7 @@ paginate Country with pager
                 let dir;
 
                 before(() => {
-                    dir = path.join('test', 'test_files', 'json_to_jdl_converter', 'empty_dir');
+                    dir = path.join('test', 'jdl', 'test_files', 'json_to_jdl_converter', 'empty_dir');
                     fs.mkdirSync(dir);
                 });
                 after(() => {
@@ -210,7 +210,7 @@ paginate Country with pager
                 let jdlFileContent;
 
                 beforeEach(() => {
-                    rootDir = path.join('test', 'test_files', 'json_to_jdl_converter', 'multi_apps');
+                    rootDir = path.join('test', 'jdl', 'test_files', 'json_to_jdl_converter', 'multi_apps');
                     jdlFilename = 'app.jdl';
                     convertToJDL(rootDir);
                     jdlFileContent = fs.readFileSync(path.join(rootDir, jdlFilename), 'utf-8');
@@ -347,7 +347,7 @@ noFluentMethod Region, Country, Location
             let output;
 
             before(() => {
-                dir = path.join('test', 'test_files', 'json_to_jdl_converter', 'only_app');
+                dir = path.join('test', 'jdl', 'test_files', 'json_to_jdl_converter', 'only_app');
                 output = 'exported.jdl';
                 convertToJDL(dir, output);
             });

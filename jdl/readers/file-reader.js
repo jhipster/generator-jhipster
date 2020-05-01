@@ -18,7 +18,7 @@
  */
 
 const fs = require('fs');
-const FileUtils = require('../utils/file_utils');
+const FileUtils = require('../utils/file-utils');
 
 module.exports = {
     readFile,

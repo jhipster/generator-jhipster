@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-const { readFile } = require('../readers/file_reader');
-const JDLReader = require('../readers/jdl_reader');
+const { readFile } = require('../readers/file-reader');
+const JDLReader = require('../readers/jdl-reader');
 const Issues = require('./issues/issues');
 const { checkEntities } = require('./entity-linter');
 const { checkFields } = require('./field-linter');

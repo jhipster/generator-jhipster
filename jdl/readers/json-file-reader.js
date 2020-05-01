@@ -18,8 +18,8 @@
  */
 
 const path = require('path');
-const FileReader = require('./file_reader');
-const { upperFirst } = require('../utils/string_utils');
+const FileReader = require('./file-reader');
+const { upperFirst } = require('../utils/string-utils');
 
 module.exports = {
     readJSONFile,
