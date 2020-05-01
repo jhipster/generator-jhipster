@@ -41,11 +41,11 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
         <%_ if (prodDatabaseType === 'mysql') { _%>
-        url: jdbc:tc:mysql:<%= containerVersion %>:///<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw
+        url: jdbc:tc:mysql:<%= containerVersion %>:///<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'mariadb') { _%>
-        url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?TC_MY_CNF=testcontainers/mariadb&useLegacyDatetimeCode=false&serverTimezone=UTC&TC_TMPFS=/testtmpfs:rw
+        url: jdbc:tc:mariadb:<%= containerVersion %>:///<%= baseName %>?TC_MY_CNF=testcontainers/mariadb&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
         username: root
         password:
         <%_ } else if (prodDatabaseType === 'postgresql') { _%>
