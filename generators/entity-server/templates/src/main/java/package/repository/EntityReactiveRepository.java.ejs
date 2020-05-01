@@ -93,18 +93,37 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
         <%_ }
     }
-    if (databaseType === 'sql') { _%>
+    if (databaseType === 'sql') {
+        let joins = [];
+        for (idx in relationships) {
+            let rel = relationships[idx];
+            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
+                joins.push(" LEFT JOIN " + rel.otherEntityTableName + " " + rel.relationshipName + " ON entity." + getColumnName(rel.relationshipName) + "_id = " + rel.relationshipName + ".id");
+            }
+        } _%>
 
     @Query("SELECT * FROM <%= entityTableName %> entity "
-<%_     for (idx in relationships) {
-            let rel = relationships[idx];
-            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') { _%>
-                + " LEFT JOIN <%= rel.otherEntityTableName %> <%= rel.relationshipName %> ON entity.<%= getColumnName(rel.relationshipName) %>_id = <%= rel.relationshipName %>.id"
-        <%_ }
-        } _%>
+<%_     for (idx in joins) { _%>
+                + "<%= joins[idx] %>"
+<%_     } _%>
                 + " WHERE entity.id = :id")
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
-            <%_ for (idx in relationships) { 
+
+    @Query("SELECT * FROM <%= entityTableName %> entity "
+<%_     for (idx in joins) { _%>
+                + "<%= joins[idx] %>"
+<%_     } _%>
+                )
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+
+    @Query("SELECT * FROM <%= entityTableName %> entity "
+<%_     for (idx in joins) { _%>
+                + "<%= joins[idx] %>"
+<%_     } _%>
+                )
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
+
+    <%_ for (idx in relationships) { 
                   let relationshipType = relationships[idx].relationshipType;
                   let relationshipName = relationships[idx].relationshipName;
                   if (relationshipType === 'many-to-one' || relationshipType === 'one-to-one') { _%>
