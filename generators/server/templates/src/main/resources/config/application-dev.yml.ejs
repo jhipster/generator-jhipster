@@ -174,10 +174,9 @@ spring:
             local-datacenter: datacenter1
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-        elasticsearch:
-            properties:
-                path:
-                    home: <%= BUILD_DIR %>elasticsearch
+    elasticsearch:
+        rest:
+            uris: http://localhost:9200
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
