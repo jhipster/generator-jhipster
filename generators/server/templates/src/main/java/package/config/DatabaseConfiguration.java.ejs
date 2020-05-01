@@ -26,8 +26,8 @@ import io.github.jhipster.config.h2.H2ConfigurationHelper;
 import io.r2dbc.spi.ConnectionFactory;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
-import com.github.mongobee.Mongobee;
-import com.mongodb.MongoClient;
+import com.github.cloudyrock.mongock.SpringBootMongock;
+import com.github.cloudyrock.mongock.SpringBootMongockBuilder;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 
@@ -47,7 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+import org.springframework.context.ApplicationContext;
     <%_ if (reactive) { _%>
 import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfiguration;
     <%_ } _%>
@@ -261,15 +261,12 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public Mongobee mongobee(MongoClient mongoClient, MongoTemplate mongoTemplate, MongoProperties mongoProperties) {
-        log.debug("Configuring Mongobee");
-        Mongobee mongobee = new Mongobee(mongoClient);
-        mongobee.setDbName(mongoProperties.getMongoClientDatabase());
-        mongobee.setMongoTemplate(mongoTemplate);
-        // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("<%= packageName %>.config.dbmigrations");
-        mongobee.setEnabled(true);
-        return mongobee;
+    public SpringBootMongock mongock(MongoTemplate mongoTemplate, ApplicationContext springContext) {
+        log.debug("Configuring Mongock");
+        return new SpringBootMongockBuilder(mongoTemplate, "<%= packageName %>.config.dbmigrations")
+            .setApplicationContext(springContext)
+            .setLockQuickConfig()
+            .build();
     }<% } %><% if (databaseType === 'couchbase') { %>
 
     @Bean(name = BeanNames.COUCHBASE_CUSTOM_CONVERSIONS)
