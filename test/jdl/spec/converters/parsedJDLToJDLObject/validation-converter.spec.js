@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const JDLValidation = require('../../../../lib/domain/jdl_validation');
-const { convertValidations } = require('../../../../lib/converters/parsed-jdl-to-jdl-object/validation_converter');
+const JDLValidation = require('../../../../../jdl/domain/jdl-validation');
+const { convertValidations } = require('../../../../../jdl/converters/parsed-jdl-to-jdl-object/validation-converter');
 
 describe('ValidationConverter', () => {
     describe('convertValidations', () => {

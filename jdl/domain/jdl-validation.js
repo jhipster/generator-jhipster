@@ -20,7 +20,7 @@
 const merge = require('../utils/object-utils').merge;
 const Validations = require('./jhipster/validations');
 
-class JDLValidation {
+module.exports = class JDLValidation {
     constructor(args) {
         const merged = merge(defaults(), args);
         this.name = merged.name;
@@ -34,9 +34,7 @@ class JDLValidation {
         }
         return string;
     }
-}
-
-module.exports = JDLValidation;
+};
 
 function defaults() {
     return {

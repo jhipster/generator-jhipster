@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const JDLValidation = require('../../domain/jdl_validation');
+const JDLValidation = require('../../domain/jdl-validation');
 const { PATTERN } = require('../../domain/jhipster/validations');
 
 module.exports = { convertValidations };

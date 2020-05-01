@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const JDLField = require('../../../../lib/domain/jdl_field');
-const { convertField } = require('../../../../lib/converters/parsed-jdl-to-jdl-object/field_converter');
+const JDLField = require('../../../../../jdl/domain/jdl-field');
+const { convertField } = require('../../../../../jdl/converters/parsed-jdl-to-jdl-object/field-converter');
 
 describe('FieldConverter', () => {
     describe('convertField', () => {

@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const JDLRelationship = require('../../../../lib/domain/jdl_relationship');
-const { convertRelationships } = require('../../../../lib/converters/parsed-jdl-to-jdl-object/relationship_converter');
+const JDLRelationship = require('../../../../../jdl/domain/jdl-relationship');
+const { convertRelationships } = require('../../../../../jdl/converters/parsed-jdl-to-jdl-object/relationship-converter');
 
 describe('RelationshipConverter', () => {
     describe('convertRelationships', () => {

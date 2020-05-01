@@ -18,7 +18,7 @@
  */
 
 const _ = require('lodash');
-const JDLRelationship = require('../../domain/jdl_relationship');
+const JDLRelationship = require('../../domain/jdl-relationship');
 const { lowerFirst, upperFirst } = require('../../utils/string-utils');
 const { formatComment } = require('../../utils/format-utils');
 

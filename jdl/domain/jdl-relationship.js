@@ -21,7 +21,7 @@ const merge = require('../utils/object-utils').merge;
 const RelationshipTypes = require('./jhipster/relationship-types');
 const { lowerFirst } = require('../utils/string-utils');
 
-class JDLRelationship {
+module.exports = class JDLRelationship {
     constructor(args) {
         const merged = merge(defaults(), args);
         if (!merged.from || !merged.to) {
@@ -111,9 +111,7 @@ class JDLRelationship {
         string += '\n}';
         return string;
     }
-}
-
-module.exports = JDLRelationship;
+};
 
 function defaults() {
     return {

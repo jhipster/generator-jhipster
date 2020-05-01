@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const JDLField = require('../../domain/jdl_field');
+const JDLField = require('../../domain/jdl-field');
 const { formatComment } = require('../../utils/format-utils');
 const { lowerFirst } = require('../../utils/string-utils');
 

@@ -18,11 +18,11 @@
  */
 
 const { expect } = require('chai');
-const JDLUnaryOption = require('../../../../lib/domain/jdl_unary_option');
-const JDLBinaryOption = require('../../../../lib/domain/jdl_binary_option');
-const UnaryOptions = require('../../../../lib/domain/jhipster/unary_options');
-const BinaryOptions = require('../../../../lib/domain/jhipster/binary_options');
-const { convertOptions } = require('../../../../lib/converters/parsed-jdl-to-jdl-object/option_converter');
+const JDLUnaryOption = require('../../../../../jdl/domain/jdl-unary-option');
+const JDLBinaryOption = require('../../../../../jdl/domain/jdl-binary-option');
+const UnaryOptions = require('../../../../../jdl/domain/jhipster/unary-options');
+const BinaryOptions = require('../../../../../jdl/domain/jhipster/binary-options');
+const { convertOptions } = require('../../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter');
 
 describe('OptionConverter', () => {
     describe('convertOptions', () => {
