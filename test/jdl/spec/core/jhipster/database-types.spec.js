@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-unused-expressions */
 
+/* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 const {
     isSql,
@@ -31,7 +31,7 @@ const {
     ORACLE,
     POSTGRESQL,
     SQL,
-} = require('../../../../lib/domain/jhipster/database_types');
+} = require('../../../../../jdl/domain/jhipster/database-types');
 
 describe('DatabaseTypes', () => {
     describe('isSql', () => {

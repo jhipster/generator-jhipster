@@ -17,7 +17,7 @@
  */
 
 const { expect } = require('chai');
-const { createFromEntityName, getTableNameFromEntityName } = require('../../../../lib/domain/jhipster/entity_table_name_creator');
+const { createFromEntityName, getTableNameFromEntityName } = require('../../../../../jdl/domain/jhipster/entity-table-name-creator');
 
 describe('EntityTableNameCreator', () => {
     describe('createFromEntityName', () => {

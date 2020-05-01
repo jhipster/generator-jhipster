@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const Validations = require('../../../../lib/domain/jhipster/validations');
+const Validations = require('../../../../../jdl/domain/jhipster/validations');
 
 describe('Validations', () => {
     describe('exists', () => {

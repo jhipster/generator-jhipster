@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const UnaryOptions = require('../../../../lib/domain/jhipster/unary_options');
+const UnaryOptions = require('../../../../../jdl/domain/jhipster/unary-options');
 
 describe('UnaryOptions', () => {
     describe('exists', () => {

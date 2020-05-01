@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new,no-unused-expressions */
 const { expect } = require('chai');
-const JSONEntity = require('../../../../lib/domain/jhipster/json_entity');
+const JSONEntity = require('../../../../../jdl/domain/jhipster/json-entity');
 
 describe('JSONEntity', () => {
     describe('new', () => {

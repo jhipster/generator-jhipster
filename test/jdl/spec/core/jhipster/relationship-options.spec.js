@@ -17,27 +17,21 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new */
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const ApplicationTypes = require('../../../../lib/domain/jhipster/application_types');
+const { JPA_DERIVED_IDENTIFIER, exists } = require('../../../../../jdl/domain/jhipster/relationship-options');
 
-describe('ApplicationTypes', () => {
+describe('RelationshipOptions', () => {
     describe('exists', () => {
-        context('when passing a nil arg', () => {
+        describe('when the option does not exist', () => {
             it('should return false', () => {
-                expect(ApplicationTypes.exists()).to.be.false;
+                expect(exists('toto')).to.be.false;
             });
         });
-        context('when passing an invalid type', () => {
-            it('should return false', () => {
-                expect(ApplicationTypes.exists('NotAType')).to.be.false;
-            });
-        });
-        context('when passing a valid type', () => {
+        describe('when the option exists', () => {
             it('should return true', () => {
-                expect(ApplicationTypes.exists(ApplicationTypes.UAA)).to.be.true;
+                expect(exists(JPA_DERIVED_IDENTIFIER)).to.be.true;
             });
         });
     });

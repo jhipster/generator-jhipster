@@ -24,7 +24,7 @@ const {
     doesOptionExist,
     getTypeForOption,
     shouldTheValueBeQuoted,
-} = require('../../../../lib/domain/jhipster/application_options');
+} = require('../../../../../jdl/domain/jhipster/application-options');
 
 describe('ApplicationOptions', () => {
     describe('doesOptionExist', () => {

@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const RelationshipTypes = require('../../../../lib/domain/jhipster/relationship_types');
+const RelationshipTypes = require('../../../../../jdl/domain/jhipster/relationship-types');
 
 describe('RelationshipTypes', () => {
     describe('exists', () => {
