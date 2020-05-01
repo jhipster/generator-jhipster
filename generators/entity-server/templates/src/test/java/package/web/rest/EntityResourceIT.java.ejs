@@ -47,9 +47,9 @@ if (!reactive && databaseType === 'sql') {
     saveMethod = 'saveAndFlush';
 }
 let idValue = `${asEntity(entityInstance)}.getId()`;
-if (databaseType === 'sql' && hasOauthUser !== true) {
+if (primaryKeyType === 'Long') {
     idValue = idValue + '.intValue()';
-} else if (databaseType === 'cassandra') {
+} else if (primaryKeyType === 'UUID') {
     idValue = idValue + '.toString()';
 }
 let transactionalAnnotation = '';
