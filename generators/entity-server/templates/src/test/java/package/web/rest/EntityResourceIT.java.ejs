@@ -640,8 +640,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     }
 
     <%_ if (databaseType === 'sql' && isUsingMapsId === true) { _%>
-    @Test
-    <%= transactionalAnnotation %>
+    @Test<%= transactionalAnnotation %>
     public void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
 <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
