@@ -231,7 +231,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'sql' && reactive) {
         if (fields[idx].fieldIsEnum) { _%>
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
         <%_ } _%>
     @Column("<%- fieldNameAsDatabaseColumn %>")
     <%_ } _%>
@@ -322,7 +322,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ } _%>
     <%_ }
         if (relationshipType === 'one-to-many') {
-            if (databaseType === 'sql') {
+            if (databaseType === 'sql' && !reactive) {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
             <%_ if (enableHibernateCache) { _%>
@@ -344,7 +344,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else if (relationshipType === 'many-to-one') {
-            if (databaseType === 'sql') {
+            if (databaseType === 'sql' && !reactive) {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
@@ -369,7 +369,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType === 'many-to-many') {
-        if (databaseType === 'sql') { _%>
+        if (databaseType === 'sql' && !reactive) { _%>
     @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")<% } %>
         <%_ if (enableHibernateCache) {_%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -397,7 +397,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     private Set<<%= asEntity(otherEntityNameCapitalized) %>> <%= relationshipFieldNamePlural %> = new HashSet<>();
 
     <%_ } else {
-        if (databaseType === 'sql') {
+        if (databaseType === 'sql' && !reactive) {
             if (ownerSide) { _%>
     @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
             <%_ if (relationshipValidate) { _%>
