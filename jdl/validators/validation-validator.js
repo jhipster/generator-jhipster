@@ -17,7 +17,7 @@
  */
 
 const Validator = require('./validator');
-const { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES } = require('../core/jhipster/validations');
+const { exists, needsValue, MINLENGTH, MAXLENGTH, MAXBYTES, MINBYTES } = require('../domain/jhipster/validations');
 
 class ValidationValidator extends Validator {
     constructor() {

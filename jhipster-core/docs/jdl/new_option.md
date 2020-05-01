@@ -36,7 +36,7 @@ That's all there is to the parsing system, we'll know see what needs doing in th
 
 ## Other code additions
    
-First, we the new option to its file: `lib/core/jhipster/binary_options.js`.
+First, we the new option to its file: `lib/core/jhipster/binary-options.js`.
 We have to set:
   - the option,
   - its value(s) if applicable.
@@ -46,7 +46,7 @@ For that, first go to the `Lib/parsers/entity_parser.js` file and add the option
 
 The `myNewOption` option is a binary option and JHipster has a way to deal with them.
 Each option is referenced in every entity file (in the `.jhipster` folder of any generated app).
-So, we have to modify the `lib/core/jhipster/json_entity.js` file which represents an actual entity file.
+So, we have to modify the `lib/core/jhipster/json-entity.js` file which represents an actual entity file.
 
 ---
 
@@ -59,7 +59,7 @@ To test that the option is added to the JDL, simply add the new option at the to
 file and the tests will fail or succeed depending on what has been coded.
 
 Next, we should edit the `test/test_files/annotations_and_options.jdl` sample file and add our new option: both as an annotation and as
-a regular option (they're the same thing). This implies adding tests in the `lib/parsers/document_parser.js` file too.
+a regular option (they're the same thing). This implies adding tests in the `lib/parsers/parsed-jdl-to-jdl-object-converter.js` file too.
 This file's role is to convert what has been parsed by the parsing system to a JDLObject.
 
 We should also update the tests for the `entity_parser` file which has been changed.

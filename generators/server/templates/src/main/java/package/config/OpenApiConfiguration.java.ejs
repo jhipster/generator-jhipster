@@ -18,6 +18,7 @@ limitations under the License.
 -%>
 package <%= packageName %>.config;
 
+import com.google.common.base.Predicates;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import io.github.jhipster.config.apidoc.customizer.SwaggerCustomizer;
@@ -46,7 +47,7 @@ public class OpenApiConfiguration {
     @Bean
     public SwaggerCustomizer noApiFirstCustomizer() {
         return docket -> docket.select()
-            .apis(RequestHandlerSelectors.basePackage("<%= packageName %>.web.api").negate());
+            .apis(Predicates.not(RequestHandlerSelectors.basePackage("<%= packageName %>.web.api")));
     }
 
     @Bean

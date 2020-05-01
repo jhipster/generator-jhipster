@@ -145,7 +145,7 @@ function writeFiles() {
             if (this.applicationType !== 'microservice' || !['uaa', 'jwt'].includes(this.authenticationType)) {
                 this.rewriteFile(
                     mainClassFile,
-                    'import org.springframework.core.env.Environment;',
+                    'import org.springframework.domain.env.Environment;',
                     'import org.springframework.cloud.openfeign.EnableFeignClients;'
                 );
                 this.rewriteFile(mainClassFile, '@SpringBootApplication', '@EnableFeignClients');
@@ -162,7 +162,7 @@ function writeFiles() {
 
             this.rewriteFile(
                 mainClassFile,
-                'import org.springframework.core.env.Environment;',
+                'import org.springframework.domain.env.Environment;',
                 'import org.springframework.context.annotation.ComponentScan;\n' +
                     'import org.springframework.context.annotation.FilterType;'
             );

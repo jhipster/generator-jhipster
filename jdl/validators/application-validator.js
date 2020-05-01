@@ -25,10 +25,21 @@ const {
     getTypeForOption,
     doesOptionExist,
     doesOptionValueExist,
-} = require('../core/jhipster/application_options');
-const { UAA, MICROSERVICE } = require('../core/jhipster/application_types');
-const { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../core/jhipster/database_types');
-const { Options } = require('../core/jhipster/binary_options');
+} = require('../domain/jhipster/application-options');
+const { UAA, MICROSERVICE } = require('../domain/jhipster/application-types');
+const {
+    COUCHBASE,
+    NEO4J,
+    CASSANDRA,
+    MONGODB,
+    MARIADB,
+    MSSQL,
+    MYSQL,
+    ORACLE,
+    POSTGRESQL,
+    SQL,
+} = require('../domain/jhipster/database-types');
+const { Options } = require('../domain/jhipster/binary-options');
 
 class ApplicationValidator extends Validator {
     constructor() {

@@ -3,10 +3,10 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     mode: 'production',
-    entry: './jdl/parsing/exports.js',
+    entry: path.resolve(__dirname, './jdl/parsing/exports.js'),
     output: {
-        path: path.resolve(__dirname, './dist/'),
-        filename: 'jdl-core.min.js',
+        path: path.resolve(__dirname, './jdl/bundling/dist/'),
+        filename: 'jdl-domain.min.js',
         library: 'jdlCore',
         libraryTarget: 'umd',
         // https://github.com/webpack/webpack/issues/6784

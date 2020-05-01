@@ -105,31 +105,31 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         <%_ if (devDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (devDatabaseType === 'mariadb') { _%>
-        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: root
         password:
         <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        url: jdbc:postgresql://localhost:5432/<%= baseName %>
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType === 'oracle') { _%>
-        url: jdbc:oracle:thin:@localhost:1521:xe
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
         username: system
         password: oracle
         <%_ } else if (devDatabaseType === 'mssql') { _%>
-        url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
         username: SA
         password: yourStrong(!)Password
         <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: jdbc:h2:file:./<%= BUILD_DIR %>h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `./${BUILD_DIR}h2db/db` }) %>
         username: <%= baseName %>
         password:
         <%_ } else if (devDatabaseType === 'h2Memory') { _%>
-        url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
         username: <%= baseName %>
         password:
         <%_ } _%>
@@ -194,20 +194,14 @@ spring:
         contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
         <%_ } _%>
         <%_ if (reactive) { _%>
-            <%_ if (devDatabaseType === 'mysql') { _%>
-        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-            <%_ } else if (devDatabaseType === 'mariadb') { _%>
-        url: jdbc:mariadb://localhost:3306/<%= baseName %>?useLegacyDatetimeCode=false&serverTimezone=UTC
-            <%_ } else if (devDatabaseType === 'postgresql') { _%>
-        url: jdbc:postgresql://localhost:5432/<%= baseName %>
+            <%_ if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { _%>
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: baseName, hostname: 'localhost' }) %>
             <%_ } else if (devDatabaseType === 'oracle') { _%>
-        url: jdbc:oracle:thin:@localhost:1521:xe
-            <%_ } else if (devDatabaseType === 'mssql') { _%>
-        url: jdbc:sqlserver://localhost:1433;database=<%= baseName %>
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: 'xe', hostname: 'localhost' }) %>
             <%_ } else if (devDatabaseType === 'h2Disk') { _%>
-        url: jdbc:h2:file:./<%= BUILD_DIR %>h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, localDirectory: `${BUILD_DIR}h2db/db` }) %>
             <%_ } else if (devDatabaseType === 'h2Memory') { _%>
-        url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+        url: <%- getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName }) %>
             <%_ } _%>
         <%_ } _%>
     mail:

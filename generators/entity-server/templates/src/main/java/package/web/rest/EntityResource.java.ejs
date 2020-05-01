@@ -333,7 +333,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
 <%- include('../../common/delete_template', {viaService: viaService, fromResource: true}); -%>
     <%_ if (!reactive) { _%>
-    return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build();
     <%_ } else { _%>
         <%_ if (databaseType === 'couchbase') { _%>
             .then(Mono.just(ResponseEntity.noContent()

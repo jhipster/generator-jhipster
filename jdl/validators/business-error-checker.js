@@ -27,12 +27,12 @@ const FieldValidator = require('./field-validator');
 const ValidationValidator = require('./validation-validator');
 const EnumValidator = require('./enum-validator');
 const RelationshipValidator = require('./relationship-validator');
-const { OptionNames } = require('../core/jhipster/application_options');
-const { GATEWAY } = require('../core/jhipster/application_types');
-const FieldTypes = require('../core/jhipster/field_types');
-const { Options } = require('../core/jhipster/binary_options');
-const { CASSANDRA } = require('../core/jhipster/database_types');
-const { isReservedFieldName, isReservedTableName } = require('../core/jhipster/reserved_keywords');
+const { OptionNames } = require('../domain/jhipster/application-options');
+const { GATEWAY } = require('../domain/jhipster/application-types');
+const FieldTypes = require('../domain/jhipster/field-types');
+const { Options } = require('../domain/jhipster/binary-options');
+const { CASSANDRA } = require('../domain/jhipster/database-types');
+const { isReservedFieldName, isReservedTableName } = require('../domain/jhipster/reserved-keywords');
 
 /**
  * The BusinessErrorChecker class checks a passed JDL object doesn't break any business rule.

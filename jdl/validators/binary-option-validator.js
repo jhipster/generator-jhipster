@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const BinaryOptions = require('../core/jhipster/binary_options');
+const BinaryOptions = require('../domain/jhipster/binary-options');
 const OptionValidator = require('./option-validator');
 
 class BinaryOptionValidator extends OptionValidator {

@@ -24,8 +24,8 @@
 
 <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
 <!--
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+    <appender name="FILE" class="ch.qos.logback.domain.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.domain.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>90</maxHistory>
         </rollingPolicy>

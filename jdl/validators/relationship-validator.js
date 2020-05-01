@@ -18,10 +18,10 @@
  */
 
 const Validator = require('./validator');
-const { exists } = require('../core/jhipster/relationship_types');
+const { exists } = require('../domain/jhipster/relationship-types');
 
-const { JPA_DERIVED_IDENTIFIER } = require('../core/jhipster/relationship_options');
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../core/jhipster/relationship_types');
+const { JPA_DERIVED_IDENTIFIER } = require('../domain/jhipster/relationship-options');
+const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../domain/jhipster/relationship-types');
 
 class RelationshipValidator extends Validator {
     constructor() {
@@ -74,7 +74,7 @@ function checkForInvalidUseOfTheUserEntity(jdlRelationship, skippedUserManagemen
     const userIsTheSourceAndTheDestination = isUserManagementEntity(jdlRelationship.from) && isUserManagementEntity(jdlRelationship.to);
     if (userIsTheSourceAndTheDestination && !skippedUserManagementOption) {
         throw new Error(
-            `Having the source and the destination entities being user management entities (User, Authority) is forbidden unless the ` +
+            'Having the source and the destination entities being user management entities (User, Authority) is forbidden unless the ' +
                 "entity is not managed by JHipster (use the 'skipUserManagement' option)."
         );
     }

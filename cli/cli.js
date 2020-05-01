@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const program = require('commander');
+const commander = require('commander');
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
@@ -40,6 +40,7 @@ const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
 
+const program = new commander.Command();
 const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
 
@@ -117,7 +118,7 @@ initAutoCompletion(program, CLI_NAME);
 program.parse(process.argv);
 
 /* Run default when no commands are specified */
-if (program.args.length < 1) {
+if (program.rawArgs.length < 3 || program.rawArgs[2].startsWith('--')) {
     logger.debug('No command specified. Running default');
     logger.info(chalk.yellow('Running default command'));
     const options = getCommandOptions(packageJson, process.argv.slice(2));

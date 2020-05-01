@@ -122,7 +122,7 @@ module.exports = class extends BaseGenerator {
             return this.gcpProjectId;
         }
         try {
-            const projectId = shelljs.exec('gcloud config get-value core/project --quiet', { silent: true }).stdout;
+            const projectId = shelljs.exec('gcloud config get-value domain/project --quiet', { silent: true }).stdout;
             return projectId.trim();
         } catch (ex) {
             this.log.error('Unable to determine the default Google Cloud Project ID');

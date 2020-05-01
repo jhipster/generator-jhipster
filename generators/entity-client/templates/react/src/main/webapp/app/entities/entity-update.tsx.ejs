@@ -261,7 +261,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               name="<%= fieldName %>"
               placeholder={"YYYY-MM-DD HH:mm"}
               value={isNew ? displayDefaultDateTime() : convertDateTimeFromServer(props.<%= entityInstance %>Entity.<%= fieldName %>)}
-              <%- include react_validators %>
+              <%- include('react_validators'); %>
             />
           <%_ } else if (fieldType === 'LocalDate') { _%>
             <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -274,7 +274,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               type="date"
               className="form-control"
               name="<%= fieldName %>"
-              <%- include react_validators %>
+              <%- include('react_validators'); %>
             />
           <%_
             } else if (fields[idx].fieldIsEnum) {
@@ -311,7 +311,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
-            <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include react_validators %> />
+            <AvField id="<%= entityFileName %>-<%= fieldName %>" type="string" className="form-control" name="<%= fieldName %>" <%- include('react_validators'); %> />
           <%_
           } else if (['byte[]', 'ByteBuffer'].includes(fieldType)) {
 
@@ -352,7 +352,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               </div>
             ) : null}
             <input id="file_<%= fieldName %>" type="file" onChange={onBlobChange(<%= isAnImage %>, '<%= fieldName %>')} <% if (isAnImage) { %>accept="image/*"<% } %> />
-            <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include react_validators %>/>
+            <AvInput type="hidden" name="<%= fieldName %>" value={<%= fieldName %>} <%- include('react_validators'); %>/>
           </AvGroup>
 
           <%_ } else { _%>
@@ -361,7 +361,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                 <%= fieldNameHumanized %>
               </Translate>
             </Label>
-            <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include react_validators %>/>
+            <AvInput id="<%= entityFileName %>-<%= fieldName %>" type="textarea" name="<%= fieldName %>" <%- include('react_validators'); %>/>
             <%_ } _%>
           <%_ } else { _%>
           <Label id="<%= fieldName %>Label" for="<%= entityFileName %>-<%= fieldName %>">
@@ -369,7 +369,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               <%= fieldNameHumanized %>
             </Translate>
           </Label>
-          <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include react_validators %>/>
+          <AvField id="<%= entityFileName %>-<%= fieldName %>" type="text" name="<%= fieldName %>" <%- include('react_validators'); %>/>
         <%_ } _%>
           <%_ if (fields[idx].javadoc) { _%>
           <UncontrolledTooltip target="<%= fieldName %>Label">

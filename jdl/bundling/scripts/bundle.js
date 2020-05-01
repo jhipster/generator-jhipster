@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+const path = require('path');
 const fse = require('fs-extra');
 
-fse.remove('dist');
+fse.remove(path.join('jdl', 'bundling', 'dist'));

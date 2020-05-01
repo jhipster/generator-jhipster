@@ -18,7 +18,7 @@
 
 const _ = require('lodash');
 const JDLParser = require('./jdl-parser');
-const { deduplicate } = require('../utils/array_utils');
+const { deduplicate } = require('../utils/array-utils');
 
 module.exports = {
     buildAst,
