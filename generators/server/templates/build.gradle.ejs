@@ -520,7 +520,7 @@ dependencies {
     <% if (databaseType === 'sql') { %>implementation<% } else { %>runtimeOnly<% } %> "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
-    implementation "com.github.mongobee:mongobee"
+    implementation "com.github.cloudyrock.mongock:mongock-spring"
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     implementation "com.github.differentway:couchmove"

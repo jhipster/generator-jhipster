@@ -19,7 +19,8 @@
 package <%= packageName %>.config;
 <%_ if (databaseType === 'mongodb') { _%>
 
-import com.github.mongobee.Mongobee;
+import com.github.cloudyrock.mongock.SpringBootMongock;
+import com.github.cloudyrock.mongock.SpringBootMongockBuilder;
 
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.*;
@@ -46,6 +47,7 @@ import org.springframework.cloud.service.common.MongoServiceInfo;
 <%_ } _%>
 import org.springframework.context.annotation.*;
 <%_ if (databaseType === 'mongodb') { _%>
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -114,22 +116,11 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     }
 
     @Bean
-    public Mongobee mongobee(MongoDbFactory mongoDbFactory, MongoTemplate mongoTemplate, Cloud cloud) {
-        log.debug("Configuring Cloud Mongobee");
-        List<ServiceInfo> matchingServiceInfos = cloud.getServiceInfos(MongoDbFactory.class);
-
-        if (matchingServiceInfos.size() != 1) {
-            throw new CloudException("No unique service matching MongoDbFactory found. Expected 1, found "
-                + matchingServiceInfos.size());
-        }
-        MongoServiceInfo info = (MongoServiceInfo) matchingServiceInfos.get(0);
-        Mongobee mongobee = new Mongobee(info.getUri());
-        mongobee.setDbName(mongoDbFactory.getDb().getName());
-        mongobee.setMongoTemplate(mongoTemplate);
-        // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("<%= packageName %>.config.dbmigrations");
-        mongobee.setEnabled(true);
-        return mongobee;
+    public SpringBootMongock mongock(MongoTemplate mongoTemplate, ApplicationContext springContext) {
+        return new SpringBootMongockBuilder(mongoTemplate, "<%= packageName %>.config.dbmigrations")
+            .setApplicationContext(springContext)
+            .setLockQuickConfig()
+            .build();
     }
     <%_ } _%>
 }
