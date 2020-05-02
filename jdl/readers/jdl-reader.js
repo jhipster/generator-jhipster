@@ -20,7 +20,7 @@
 const logger = require('../utils/objects/logger');
 
 const FileReader = require('./file-reader');
-const parser = require('../dsl/api');
+const parser = require('../parsing/api');
 
 module.exports = {
     parseFromFiles,
