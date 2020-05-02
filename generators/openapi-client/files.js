@@ -55,25 +55,34 @@ function writeFiles() {
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
 
                 let openApiCmd;
-                if (generatorName === 'spring') {
-                    this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
-                    openApiCmd =
-                        'openapi-generator generate ' +
-                        '-g spring ' +
-                        `-i ${inputSpec} ` +
-                        '-p library=spring-cloud ' +
-                        '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
-                        `-p apiPackage=${cliPackage}.api ` +
-                        `-p modelPackage=${cliPackage}.model ` +
-                        `-p basePackage=${this.packageName}.client ` +
-                        `-p configPackage=${cliPackage} ` +
-                        `-p title=${_.camelCase(cliName)} ` +
-                        `-p artifactId=${_.camelCase(cliName)} ` +
-                        '--skip-validate-spec';
+                let openApiGeneratorName;
+                let openApiGeneratorLibrary;
 
-                    if (this.clientsToGenerate[cliName].useServiceDiscovery) {
-                        openApiCmd += ' --additional-properties ribbon=true';
-                    }
+                if (generatorName === 'spring') {
+                    openApiGeneratorName = 'spring';
+                    openApiGeneratorLibrary = 'spring-cloud';
+                } else if (generatorName === 'webclient') {
+                    openApiGeneratorName = 'java';
+                    openApiGeneratorLibrary = 'webclient';
+                }
+                this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
+
+                openApiCmd =
+                    'openapi-generator generate ' +
+                    `-g ${openApiGeneratorName} ` +
+                    `-i ${inputSpec} ` +
+                    `-p library=${openApiGeneratorLibrary} ` +
+                    '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
+                    `-p apiPackage=${cliPackage}.api ` +
+                    `-p modelPackage=${cliPackage}.model ` +
+                    `-p basePackage=${this.packageName}.client ` +
+                    `-p configPackage=${cliPackage} ` +
+                    `-p title=${_.camelCase(cliName)} ` +
+                    `-p artifactId=${_.camelCase(cliName)} ` +
+                    '--skip-validate-spec';
+
+                if (this.clientsToGenerate[cliName].useServiceDiscovery) {
+                    openApiCmd += ' --additional-properties ribbon=true';
                 }
                 this.addNpmScript(`openapi-client:${cliName}`, `${openApiCmd}`);
             });
@@ -111,12 +120,14 @@ function writeFiles() {
                 }
                 this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-starter-oauth2');
             }
+        },
 
+        /* This is a hack to avoid non compiling generated code from openapi generator when the
+         * enableSwaggerCodegen option is not selected (otherwise the jackson-databind-nullable dependency is already added).
+         * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
+         */
+        addJacksonDataBindNullable() {
             if (!this.enableSwaggerCodegen) {
-                /* This is a hack to avoid non compiling generated code from openapi generator when the
-                 * enableSwaggerCodegen option is not selected (otherwise the jackson-databind-nullable dependency is already added).
-                 * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
-                 */
                 if (this.buildTool === 'maven') {
                     this.addMavenProperty('jackson-databind-nullable.version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
                     // eslint-disable-next-line no-template-curly-in-string
