@@ -19,7 +19,7 @@
 /* eslint-disable no-useless-escape */
 
 const { expect } = require('chai');
-const parse = require('../../../lib/parsing/api').parse;
+const { parse } = require('../../../../jdl/parsing/api');
 
 describe('JDLSyntaxValidatorVisitor', () => {
     context('when declaring an application', () => {

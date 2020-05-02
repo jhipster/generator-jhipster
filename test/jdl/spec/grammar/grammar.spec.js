@@ -20,8 +20,8 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { parseFromContent } = require('../../../lib/readers/jdl_reader');
-const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../lib/domain/jhipster/relationship_types');
+const { parseFromContent } = require('../../../../jdl/readers/jdl-reader');
+const { ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY, ONE_TO_ONE } = require('../../../../jdl/domain/jhipster/relationship-types');
 const {
     MAX,
     MAXBYTES,
@@ -32,10 +32,17 @@ const {
     PATTERN,
     REQUIRED,
     UNIQUE,
-} = require('../../../lib/domain/jhipster/validations');
-const { READ_ONLY, NO_FLUENT_METHOD, FILTER, SKIP_SERVER, SKIP_CLIENT, EMBEDDED } = require('../../../lib/domain/jhipster/unary_options');
+} = require('../../../../jdl/domain/jhipster/validations');
+const {
+    READ_ONLY,
+    NO_FLUENT_METHOD,
+    FILTER,
+    SKIP_SERVER,
+    SKIP_CLIENT,
+    EMBEDDED,
+} = require('../../../../jdl/domain/jhipster/unary-options');
 
-const { Options, Values } = require('../../../lib/domain/jhipster/binary_options');
+const { Options, Values } = require('../../../../jdl/domain/jhipster/binary-options');
 
 const { SEARCH, SERVICE, PAGINATION, DTO, ANGULAR_SUFFIX, MICROSERVICE } = Options;
 
