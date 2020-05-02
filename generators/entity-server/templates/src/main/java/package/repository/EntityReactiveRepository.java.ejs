@@ -33,7 +33,7 @@ import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRep
 import org.neo4j.springframework.data.repository.ReactiveNeo4jRepository;
 import org.neo4j.springframework.data.repository.query.Query;
 <%_ } _%>
-<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
+<%_ if (pagination !== 'no' || fieldsContainOwnerManyToMany === true || databaseType ==='sql') { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
 <%_ if (databaseType === 'sql') { _%>
