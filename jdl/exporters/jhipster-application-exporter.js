@@ -18,7 +18,7 @@
  */
 
 const path = require('path');
-const ApplicationValidator = require('../validators/application_validator');
+const ApplicationValidator = require('../validators/application-validator');
 const { createFolderIfItDoesNotExist, doesFileExist } = require('../utils/file-utils');
 const { GENERATOR_NAME, writeConfigFile } = require('./export-utils');
 

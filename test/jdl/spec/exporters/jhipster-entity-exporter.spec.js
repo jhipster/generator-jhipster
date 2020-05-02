@@ -22,9 +22,9 @@ const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 
-const ApplicationTypes = require('../../../lib/domain/jhipster/application_types');
-const JHipsterEntityExporter = require('../../../lib/exporters/jhipster_entity_exporter');
-const FileUtils = require('../../../lib/utils/file_utils');
+const ApplicationTypes = require('../../../../jdl/domain/jhipster/application-types');
+const JHipsterEntityExporter = require('../../../../jdl/exporters/jhipster-entity-exporter');
+const FileUtils = require('../../../../jdl/utils/file-utils');
 
 describe('JHipsterEntityExporter', () => {
     describe('exportEntities', () => {

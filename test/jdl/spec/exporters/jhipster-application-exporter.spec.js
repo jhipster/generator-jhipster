@@ -22,9 +22,9 @@
 const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const { exportApplication, exportApplications } = require('../../../lib/exporters/jhipster_application_exporter');
-const { MONOLITH } = require('../../../lib/domain/jhipster/application_types');
-const { createJDLApplication } = require('../../../lib/domain/jdl_application_factory');
+const { exportApplication, exportApplications } = require('../../../../jdl/exporters/jhipster-application-exporter');
+const { MONOLITH } = require('../../../../jdl/domain/jhipster/application-types');
+const { createJDLApplication } = require('../../../../jdl/domain/jdl-application-factory');
 
 describe('JHipsterApplicationExporter', () => {
     describe('exportApplication', () => {

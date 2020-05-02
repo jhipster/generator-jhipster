@@ -18,9 +18,9 @@
  */
 /* eslint-disable no-unused-expressions */
 
-const { readFileSync, unlinkSync, writeFileSync } = require('fs');
 const { expect } = require('chai');
-const { writeConfigFile } = require('../../../lib/exporters/export_utils');
+const { readFileSync, unlinkSync, writeFileSync } = require('fs');
+const { writeConfigFile } = require('../../../../jdl/exporters/export-utils');
 
 describe('ExportUtils', () => {
     describe('writeConfigFile', () => {

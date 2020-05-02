@@ -19,7 +19,7 @@
 
 const path = require('path');
 const { createFolderIfItDoesNotExist, doesFileExist } = require('../utils/file-utils');
-const DeploymentValidator = require('../validators/deployment_validator');
+const DeploymentValidator = require('../validators/deployment-validator');
 const { GENERATOR_NAME, writeConfigFile } = require('./export-utils');
 
 module.exports = {
