@@ -1403,7 +1403,7 @@ const serverFiles = {
         },
         {
             path: SERVER_TEST_RES_DIR,
-            templates: ['config/application.yml', 'logback.xml']
+            templates: ['config/application.yml', 'logback.xml'],
         },
         {
             condition: generator => generator.databaseType === 'sql' && !generator.reactive,
@@ -1413,7 +1413,7 @@ const serverFiles = {
         {
             condition: generator => generator.prodDatabaseType === 'mariadb' && !generator.reactive,
             path: SERVER_TEST_RES_DIR,
-            templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }]
+            templates: [{ file: 'testcontainers/mariadb/my.cnf', method: 'copy', noEjs: true }],
         },
         {
             // TODO : add these tests to reactive
