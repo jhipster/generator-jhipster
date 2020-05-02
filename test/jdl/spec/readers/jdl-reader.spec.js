@@ -20,7 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 const fs = require('fs');
-const JDLReader = require('../../../lib/readers/jdl_reader');
+const path = require('path');
+const JDLReader = require('../../../../jdl/readers/jdl-reader');
 
 describe('JDLReader', () => {
     describe('parseFromFiles', () => {
@@ -68,31 +69,31 @@ describe('JDLReader', () => {
         context('when passing valid arguments', () => {
             context('when passing an empty file', () => {
                 before(() => {
-                    fs.writeFileSync('./test/test_files/test_file.jdl', '');
+                    fs.writeFileSync(path.join('test', 'jdl', 'test_files', 'test_file.jdl'), '');
                 });
 
                 after(() => {
-                    fs.unlinkSync('./test/test_files/test_file.jdl');
+                    fs.unlinkSync(path.join('test', 'jdl', 'test_files', 'test_file.jdl'));
                 });
 
                 it('should fail', () => {
                     expect(() => {
-                        JDLReader.parseFromFiles(['./test/test_files/test_file.jdl']);
+                        JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'test_file.jdl')]);
                     }).to.throw(/^File content must be passed, it is currently empty\.$/);
                 });
             });
             context('when passing a JDL file with a syntax error', () => {
                 before(() => {
-                    fs.writeFileSync('./test/test_files/test_file.jdl', 'enity A');
+                    fs.writeFileSync(path.join('test', 'jdl', 'test_files', 'test_file.jdl'), 'enity A');
                 });
 
                 after(() => {
-                    fs.unlinkSync('./test/test_files/test_file.jdl');
+                    fs.unlinkSync(path.join('test', 'jdl', 'test_files', 'test_file.jdl'));
                 });
 
                 it('should fail', () => {
                     expect(() => {
-                        JDLReader.parseFromFiles(['./test/test_files/test_file.jdl']);
+                        JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'test_file.jdl')]);
                     }).to.throw(/but found: 'enity'/);
                 });
             });
@@ -100,7 +101,7 @@ describe('JDLReader', () => {
                 let content;
 
                 before(() => {
-                    content = JDLReader.parseFromFiles(['./test/test_files/valid_jdl.jdl']);
+                    content = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'valid_jdl.jdl')]);
                 });
 
                 it('should read it', () => {
@@ -111,7 +112,10 @@ describe('JDLReader', () => {
                 let content;
 
                 before(() => {
-                    content = JDLReader.parseFromFiles(['./test/test_files/valid_jdl.jdl', './test/test_files/valid_jdl2.jdl']);
+                    content = JDLReader.parseFromFiles([
+                        path.join('test', 'jdl', 'test_files', 'valid_jdl.jdl'),
+                        path.join('test', 'jdl', 'test_files', 'valid_jdl2.jdl'),
+                    ]);
                 });
 
                 it('should read them', () => {
@@ -122,7 +126,7 @@ describe('JDLReader', () => {
                 let content;
 
                 before(() => {
-                    content = JDLReader.parseFromFiles(['./test/test_files/complex_jdl.jdl']);
+                    content = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'complex_jdl.jdl')]);
                 });
 
                 it('should read them', () => {
@@ -132,7 +136,7 @@ describe('JDLReader', () => {
             context('when having multiple internal JDL comments', () => {
                 it('should ignore them and does not fail', () => {
                     expect(() => {
-                        JDLReader.parseFromFiles(['./test/test_files/multiple_jdl_comments.jdl']);
+                        JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'multiple_jdl_comments.jdl')]);
                     }).not.to.throw();
                 });
             });

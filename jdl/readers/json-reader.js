@@ -18,12 +18,12 @@
  */
 
 const fs = require('fs');
-const FileUtils = require('../utils/file_utils');
-const { convertEntitiesToJDL } = require('../converters/json_to_jdl_entity_converter');
-const { convertServerOptionsToJDL } = require('../converters/json_to_jdl_option_converter');
+const FileUtils = require('../utils/file-utils');
+const { convertEntitiesToJDL } = require('../converters/json-to-jdl-entity-converter');
+const { convertServerOptionsToJDL } = require('../converters/json-to-jdl-option-converter');
 const JSONFileReader = require('./json-file-reader');
-const { SKIP_USER_MANAGEMENT } = require('../domain/jhipster/unary_options');
-const { mergeJDLObjects } = require('../domain/jdl_object_merger');
+const { SKIP_USER_MANAGEMENT } = require('../domain/jhipster/unary-options');
+const { mergeJDLObjects } = require('../domain/jdl-object-merger');
 
 module.exports = {
     parseFromDir,

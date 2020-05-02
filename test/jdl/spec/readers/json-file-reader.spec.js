@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 const path = require('path');
 
-const JSONFileReader = require('../../../lib/readers/json_file_reader');
+const JSONFileReader = require('../../../../jdl/readers/json-file-reader');
 
 describe('JSONFileReader', () => {
     describe('readEntityJSON', () => {
@@ -61,7 +61,7 @@ describe('JSONFileReader', () => {
             let content;
 
             before(() => {
-                content = JSONFileReader.readEntityJSON('test/test_files/MyEntity.json');
+                content = JSONFileReader.readEntityJSON(path.join('test', 'jdl', 'test_files', 'MyEntity.json'));
             });
 
             it('should read the file', () => {

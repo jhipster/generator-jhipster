@@ -22,8 +22,8 @@ const { renameSync } = require('fs');
 const { join } = require('path');
 const { expect } = require('chai');
 
-const JSONReader = require('../../../lib/readers/json_reader');
-const { SKIP_CLIENT, SKIP_SERVER } = require('../../../lib/domain/jhipster/unary_options');
+const JSONReader = require('../../../../jdl/readers/json-reader');
+const { SKIP_CLIENT, SKIP_SERVER } = require('../../../../jdl/domain/jhipster/unary-options');
 
 describe('JSONReader', () => {
     describe('parseFromDir', () => {
@@ -60,15 +60,15 @@ describe('JSONReader', () => {
 
                 before(() => {
                     renameSync(
-                        join('test', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
-                        join('test', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
+                        join('test', 'jdl', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
+                        join('test', 'jdl', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
                     );
-                    content = JSONReader.parseFromDir('./test/test_files/jhipster_app');
+                    content = JSONReader.parseFromDir(join('test', 'jdl', 'test_files', 'jhipster_app'));
                 });
                 after(() => {
                     renameSync(
-                        join('test', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
-                        join('test', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json')
+                        join('test', 'jdl', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
+                        join('test', 'jdl', 'test_files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json')
                     );
                 });
 
