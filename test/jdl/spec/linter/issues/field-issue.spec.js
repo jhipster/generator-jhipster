@@ -24,30 +24,24 @@ describe('FieldIssue', () => {
     describe('new', () => {
         context('when not passing any arg', () => {
             it('should fail', () => {
-                expect(() => {
-                    new FieldIssue();
-                }).to.throw(/^An issue must at least have a rule name\.$/);
+                expect(() => new FieldIssue()).to.throw(/^An issue must at least have a rule name\.$/);
             });
         });
         context('when not passing a rule name', () => {
             it('should fail', () => {
-                expect(() => {
-                    new FieldIssue({});
-                }).to.throw(/^An issue must at least have a rule name\.$/);
+                expect(() => new FieldIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
             });
         });
         context('when not passing an entity name', () => {
             it('should fail', () => {
-                expect(() => {
-                    new FieldIssue({ ruleName: 'Toto' });
-                }).to.throw(/^A field name and its entity's name must be passed\.$/);
+                expect(() => new FieldIssue({ ruleName: 'Toto' })).to.throw(/^A field name and its entity's name must be passed\.$/);
             });
         });
         context('when not passing a field name', () => {
             it('should fail', () => {
-                expect(() => {
-                    new FieldIssue({ ruleName: 'Toto', entityName: 'A' });
-                }).to.throw(/^A field name and its entity's name must be passed\.$/);
+                expect(() => new FieldIssue({ ruleName: 'Toto', entityName: 'A' })).to.throw(
+                    /^A field name and its entity's name must be passed\.$/
+                );
             });
         });
     });

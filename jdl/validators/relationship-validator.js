@@ -23,7 +23,7 @@ const { exists } = require('../domain/jhipster/relationship-types');
 const { JPA_DERIVED_IDENTIFIER } = require('../domain/jhipster/relationship-options');
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../domain/jhipster/relationship-types');
 
-class RelationshipValidator extends Validator {
+module.exports = class RelationshipValidator extends Validator {
     constructor() {
         super('relationship', ['from', 'to', 'type']);
     }
@@ -37,9 +37,7 @@ class RelationshipValidator extends Validator {
         checkForInvalidUseOfTheUserEntity(jdlRelationship, skippedUserManagementOption);
         checkRelationshipType(jdlRelationship, skippedUserManagementOption);
     }
-}
-
-module.exports = RelationshipValidator;
+};
 
 function checkType(jdlRelationship) {
     if (!exists(jdlRelationship.type)) {
@@ -65,7 +63,7 @@ function checkForRequiredReflexiveRelationship(jdlRelationship) {
         (jdlRelationship.isInjectedFieldInFromRequired || jdlRelationship.isInjectedFieldInToRequired)
     ) {
         throw new Error(
-            'Required relationships to the same entity are not supported, for relationship from and to ' + `'${jdlRelationship.from}'.`
+            `Required relationships to the same entity are not supported, for relationship from and to '${jdlRelationship.from}'.`
         );
     }
 }

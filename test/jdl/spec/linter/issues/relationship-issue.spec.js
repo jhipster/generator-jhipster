@@ -24,38 +24,34 @@ describe('RelationshipIssue', () => {
     describe('new', () => {
         context('when not passing any arg', () => {
             it('should fail', () => {
-                expect(() => {
-                    new RelationshipIssue();
-                }).to.throw(/^An issue must at least have a rule name\.$/);
+                expect(() => new RelationshipIssue()).to.throw(/^An issue must at least have a rule name\.$/);
             });
         });
         context('when not passing a rule name', () => {
             it('should fail', () => {
-                expect(() => {
-                    new RelationshipIssue({});
-                }).to.throw(/^An issue must at least have a rule name\.$/);
+                expect(() => new RelationshipIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
             });
         });
         context('when not passing a source', () => {
             it('should fail', () => {
-                expect(() => {
-                    new RelationshipIssue({ ruleName: 'Toto', to: 'to', type: 'type' });
-                }).to.throw(/^A relationship's source, destination & type must be passed\.$/);
+                expect(() => new RelationshipIssue({ ruleName: 'Toto', to: 'to', type: 'type' })).to.throw(
+                    /^A relationship's source, destination & type must be passed\.$/
+                );
             });
         });
         context('when not passing a destination', () => {
             it('should fail', () => {
-                expect(() => {
-                    new RelationshipIssue({ ruleName: 'Toto', source: 'source', type: 'type' });
-                }).to.throw(/^A relationship's source, destination & type must be passed\.$/);
+                expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', type: 'type' })).to.throw(
+                    /^A relationship's source, destination & type must be passed\.$/
+                );
             });
         });
     });
     context('when not passing a type', () => {
         it('should fail', () => {
-            expect(() => {
-                new RelationshipIssue({ ruleName: 'Toto', source: 'source', to: 'to' });
-            }).to.throw(/^A relationship's source, destination & type must be passed\.$/);
+            expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', to: 'to' })).to.throw(
+                /^A relationship's source, destination & type must be passed\.$/
+            );
         });
     });
 });

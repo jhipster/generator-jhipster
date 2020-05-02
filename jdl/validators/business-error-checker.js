@@ -232,9 +232,7 @@ function getTypeCheckingFunction(entityName, applicationSettings, applicationsPe
         } else {
             const newIsType = FieldTypes.getIsType(databaseType);
             if (newIsType !== typeCheckingFunction) {
-                logger.warn(
-                    `Multiple applications are declared to have entity '${entityName}', check field type to ensure` + ' compatibility.'
-                );
+                logger.warn(`Multiple applications are declared to have entity '${entityName}', check field type to ensure compatibility.`);
             }
             typeCheckingFunction = newIsType;
         }

@@ -24,7 +24,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const JDLParser = require('../jdl-parser');
+const JDLParser = require('../../parsing/jdl-parser');
 
 const parser = JDLParser.getParser();
 parser.parse();

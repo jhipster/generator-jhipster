@@ -25,16 +25,12 @@ describe('Rule', () => {
     describe('new', () => {
         context('when not passing any arg', () => {
             it('should fail', () => {
-                expect(() => {
-                    new Rule();
-                }).to.throw(/^A rule must at least have a name\.$/);
+                expect(() => new Rule()).to.throw(/^A rule must at least have a name\.$/);
             });
         });
         context('when not passing any name', () => {
             it('should fail', () => {
-                expect(() => {
-                    new Rule({});
-                }).to.throw(/^A rule must at least have a name\.$/);
+                expect(() => new Rule({})).to.throw(/^A rule must at least have a name\.$/);
             });
         });
         context('when not passing a level', () => {
