@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const { createJDLApplication } = require('../../../lib/domain/jdl_application_factory');
-const { MONOLITH, MICROSERVICE, GATEWAY, UAA } = require('../../../lib/domain/jhipster/application_types');
+const { createJDLApplication } = require('../../../../jdl/domain/jdl-application-factory');
+const { MONOLITH, MICROSERVICE, GATEWAY, UAA } = require('../../../../jdl/domain/jhipster/application-types');
 
 describe('JDLApplicationFactory', () => {
     describe('createJDLApplication', () => {

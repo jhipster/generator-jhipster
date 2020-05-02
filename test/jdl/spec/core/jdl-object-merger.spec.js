@@ -18,19 +18,19 @@
  */
 
 const { expect } = require('chai');
-const { OptionNames } = require('../../../lib/domain/jhipster/application_options');
-const ApplicationTypes = require('../../../lib/domain/jhipster/application_types');
-const FieldTypes = require('../../../lib/domain/jhipster/field_types');
-const UnaryOptions = require('../../../lib/domain/jhipster/unary_options');
-const RelationshipTypes = require('../../../lib/domain/jhipster/relationship_types');
-const JDLObject = require('../../../lib/domain/jdl_object');
-const { createJDLApplication } = require('../../../lib/domain/jdl_application_factory');
-const JDLEntity = require('../../../lib/domain/jdl_entity');
-const JDLField = require('../../../lib/domain/jdl_field');
-const JDLEnum = require('../../../lib/domain/jdl_enum');
-const JDLRelationship = require('../../../lib/domain/jdl_relationship');
-const JDLUnaryOption = require('../../../lib/domain/jdl_unary_option');
-const { mergeJDLObjects } = require('../../../lib/domain/jdl_object_merger');
+const { OptionNames } = require('../../../../jdl/domain/jhipster/application-options');
+const ApplicationTypes = require('../../../../jdl/domain/jhipster/application-types');
+const FieldTypes = require('../../../../jdl/domain/jhipster/field-types');
+const UnaryOptions = require('../../../../jdl/domain/jhipster/unary-options');
+const RelationshipTypes = require('../../../../jdl/domain/jhipster/relationship-types');
+const JDLObject = require('../../../../jdl/domain/jdl-object');
+const { createJDLApplication } = require('../../../../jdl/domain/jdl-application-factory');
+const JDLEntity = require('../../../../jdl/domain/jdl-entity');
+const JDLField = require('../../../../jdl/domain/jdl-field');
+const JDLEnum = require('../../../../jdl/domain/jdl-enum');
+const JDLRelationship = require('../../../../jdl/domain/jdl-relationship');
+const JDLUnaryOption = require('../../../../jdl/domain/jdl-unary-option');
+const { mergeJDLObjects } = require('../../../../jdl/domain/jdl-object-merger');
 
 describe('JDLObjectMerger', () => {
     describe('mergeJDLObjects', () => {

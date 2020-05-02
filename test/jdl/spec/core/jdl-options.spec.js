@@ -20,11 +20,11 @@
 /* eslint-disable no-unused-expressions */
 const { expect } = require('chai');
 
-const JDLOptions = require('../../../lib/domain/jdl_options');
-const JDLUnaryOption = require('../../../lib/domain/jdl_unary_option');
-const JDLBinaryOption = require('../../../lib/domain/jdl_binary_option');
-const UnaryOptions = require('../../../lib/domain/jhipster/unary_options');
-const BinaryOptions = require('../../../lib/domain/jhipster/binary_options');
+const JDLOptions = require('../../../../jdl/domain/jdl-options');
+const JDLUnaryOption = require('../../../../jdl/domain/jdl-unary-option');
+const JDLBinaryOption = require('../../../../jdl/domain/jdl-binary-option');
+const UnaryOptions = require('../../../../jdl/domain/jhipster/unary-options');
+const BinaryOptions = require('../../../../jdl/domain/jhipster/binary-options');
 
 describe('JDLOptions', () => {
     describe('addOption', () => {

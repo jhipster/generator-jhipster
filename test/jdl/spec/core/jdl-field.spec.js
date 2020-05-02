@@ -21,9 +21,9 @@
 const { expect } = require('chai');
 
 const { matchField } = require('../../matchers/field-matcher');
-const JDLField = require('../../../lib/domain/jdl_field');
-const JDLValidation = require('../../../lib/domain/jdl_validation');
-const Validations = require('../../../lib/domain/jhipster/validations');
+const JDLField = require('../../../../jdl/domain/jdl-field');
+const JDLValidation = require('../../../../jdl/domain/jdl-validation');
+const Validations = require('../../../../jdl/domain/jhipster/validations');
 
 describe('JDLField', () => {
     describe('new', () => {
@@ -90,14 +90,7 @@ describe('JDLField', () => {
                 it('should fail', () => {
                     expect(() => {
                         field.addValidation(null);
-                    }).to.throw(/^Can't add invalid validation\. Error: No validation\.$/);
-                });
-            });
-            context('because there is no value where it should', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        field.addValidation({ name: Validations.MIN });
-                    }).to.throw(/^Can't add invalid validation\. Error: The validation min requires a value\.$/);
+                    }).to.throw(/^Can't add a nil JDL validation to the JDL field\.$/);
                 });
             });
         });

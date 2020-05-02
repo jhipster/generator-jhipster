@@ -37,6 +37,9 @@ module.exports = class JDLField {
     }
 
     addValidation(validation) {
+        if (!validation) {
+            throw new Error("Can't add a nil JDL validation to the JDL field.");
+        }
         this.validations[validation.name] = validation;
     }
 

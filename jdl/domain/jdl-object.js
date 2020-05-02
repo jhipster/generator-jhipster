@@ -25,7 +25,7 @@ const BinaryOptions = require('./jhipster/binary-options');
 /**
  * The JDL object class, containing applications, entities etc.
  */
-class JDLObject {
+module.exports = class JDLObject {
     constructor() {
         this.applications = {};
         this.deployments = {};
@@ -263,9 +263,7 @@ class JDLObject {
         }
         return string;
     }
-}
-
-module.exports = JDLObject;
+};
 
 function applicationsToString(applications) {
     let string = '';

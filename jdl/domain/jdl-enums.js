@@ -23,6 +23,9 @@ module.exports = class JDLEnums {
     }
 
     add(jdlEnum) {
+        if (!jdlEnum) {
+            throw new Error("Can't add a nil JDL enum to the JDL enums.");
+        }
         this.enums.set(jdlEnum.name, jdlEnum);
     }
 

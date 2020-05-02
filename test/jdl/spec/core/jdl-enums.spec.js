@@ -19,8 +19,8 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const JDLEnums = require('../../../lib/domain/jdl_enums');
-const JDLEnum = require('../../../lib/domain/jdl_enum');
+const JDLEnums = require('../../../../jdl/domain/jdl-enums');
+const JDLEnum = require('../../../../jdl/domain/jdl-enum');
 
 describe('JDLEnums', () => {
     describe('add', () => {
@@ -41,7 +41,7 @@ describe('JDLEnums', () => {
             it('should fail', () => {
                 expect(() => {
                     jdlEnums.add();
-                }).to.throw('The enum must be valid in order to be added to the enums.\nError: No enum.');
+                }).to.throw(/^Can't add a nil JDL enum to the JDL enums\.$/);
             });
         });
         context('when adding a valid enum', () => {

@@ -22,7 +22,8 @@ const mergeObjects = require('../utils/object-utils').merge;
 const { join } = require('../utils/set-utils');
 
 const arrayTypes = ['appsFolders', 'clusteredDbApps', 'consoleOptions'];
-class JDLDeployment {
+
+module.exports = class JDLDeployment {
     constructor(args) {
         if (!args || !args.deploymentType) {
             throw new Error('The deploymentType is mandatory to create a deployment.');
@@ -42,7 +43,7 @@ class JDLDeployment {
     toString() {
         return stringifyConfig(this);
     }
-}
+};
 
 function stringifyConfig(applicationConfig) {
     let config = 'deployment {';
@@ -70,5 +71,3 @@ function stringifyOptionValue(name, value) {
 function defaults(deploymentType) {
     return DeploymentOptions.Options.defaults(deploymentType);
 }
-
-module.exports = JDLDeployment;

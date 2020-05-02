@@ -20,8 +20,8 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const JDLUnaryOption = require('../../../lib/domain/jdl_unary_option');
-const UnaryOptions = require('../../../lib/domain/jhipster/unary_options');
+const JDLUnaryOption = require('../../../../jdl/domain/jdl-unary-option');
+const UnaryOptions = require('../../../../jdl/domain/jhipster/unary-options');
 
 describe('JDLUnaryOption', () => {
     describe('new', () => {

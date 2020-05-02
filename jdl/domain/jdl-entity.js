@@ -41,6 +41,9 @@ module.exports = class JDLEntity {
     }
 
     addField(field) {
+        if (!field) {
+            throw new Error("Can't add nil field to the JDL entity.");
+        }
         this.fields[field.name] = field;
     }
 

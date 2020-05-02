@@ -19,9 +19,9 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const JDLEntity = require('../../../lib/domain/jdl_entity');
-const JDLField = require('../../../lib/domain/jdl_field');
-const JDLValidation = require('../../../lib/domain/jdl_validation');
+const JDLEntity = require('../../../../jdl/domain/jdl-entity');
+const JDLField = require('../../../../jdl/domain/jdl-field');
+const JDLValidation = require('../../../../jdl/domain/jdl-validation');
 
 describe('JDLEntity', () => {
     describe('new', () => {
@@ -94,14 +94,7 @@ describe('JDLEntity', () => {
                 it('should fail', () => {
                     expect(() => {
                         entity.addField(null);
-                    }).to.throw(/^Can't add invalid field\. Error: No field\.$/);
-                });
-            });
-            context('because it does not have a type', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        entity.addField({ name: 'myField' });
-                    }).to.throw(/^Can't add invalid field\. Error: The field attribute type was not found\.$/);
+                    }).to.throw(/^Can't add nil field to the JDL entity\.$/);
                 });
             });
         });

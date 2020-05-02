@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const JDLDeployment = require('../../../lib/domain/jdl_deployment');
+const JDLDeployment = require('../../../../jdl/domain/jdl-deployment');
 
 describe('JDLDeployment', () => {
     describe('new', () => {

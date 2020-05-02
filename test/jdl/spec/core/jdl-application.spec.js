@@ -19,11 +19,11 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { OptionNames } = require('../../../lib/domain/jhipster/application_options');
-const BinaryOptions = require('../../../lib/domain/jhipster/binary_options');
-const StringJDLApplicationConfigurationOption = require('../../../lib/domain/string_jdl_application_configuration_option');
-const JDLApplication = require('../../../lib/domain/jdl_application');
-const JDLBinaryOption = require('../../../lib/domain/jdl_binary_option');
+const { OptionNames } = require('../../../../jdl/domain/jhipster/application-options');
+const BinaryOptions = require('../../../../jdl/domain/jhipster/binary-options');
+const StringJDLApplicationConfigurationOption = require('../../../../jdl/domain/string-jdl-application-configuration-option');
+const JDLApplication = require('../../../../jdl/domain/jdl-application');
+const JDLBinaryOption = require('../../../../jdl/domain/jdl-binary-option');
 
 describe('JDLApplication', () => {
     describe('hasConfigurationOption', () => {

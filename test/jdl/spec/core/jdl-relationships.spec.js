@@ -20,9 +20,9 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const JDLRelationship = require('../../../lib/domain/jdl_relationship');
-const RelationshipTypes = require('../../../lib/domain/jhipster/relationship_types');
-const JDLRelationships = require('../../../lib/domain/jdl_relationships');
+const JDLRelationship = require('../../../../jdl/domain/jdl-relationship');
+const RelationshipTypes = require('../../../../jdl/domain/jhipster/relationship-types');
+const JDLRelationships = require('../../../../jdl/domain/jdl-relationships');
 
 describe('JDLRelationships', () => {
     describe('add', () => {

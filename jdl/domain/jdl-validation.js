@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const merge = require('../utils/object-utils').merge;
+const { merge } = require('../utils/object-utils');
 const Validations = require('./jhipster/validations');
 
 module.exports = class JDLValidation {
