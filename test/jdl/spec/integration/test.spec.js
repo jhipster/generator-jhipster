@@ -22,10 +22,10 @@ const fs = require('fs');
 const path = require('path');
 const { expect } = require('chai');
 
-const ApplicationTypes = require('../../../lib/domain/jhipster/application_types');
-const JDLReader = require('../../../lib/readers/jdl_reader');
-const DocumentParser = require('../../../lib/parsers/parsed-jdl-to-jdl-object-converter');
-const JDLExporter = require('../../../lib/exporters/jdl_exporter');
+const ApplicationTypes = require('../../../../jdl/domain/jhipster/application-types');
+const JDLReader = require('../../../../jdl/readers/jdl-reader');
+const DocumentParser = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
+const JDLExporter = require('../../../../jdl/exporters/jdl-exporter');
 
 describe('integration tests', () => {
     context('when parsing and exporting a JDL', () => {
@@ -34,7 +34,7 @@ describe('integration tests', () => {
 
         before(() => {
             originalContent = DocumentParser.parseFromConfigurationObject({
-                parsedContent: JDLReader.parseFromFiles([path.join('test', 'test_files', 'big_sample.jdl')]),
+                parsedContent: JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'big_sample.jdl')]),
                 applicationType: ApplicationTypes.MONOLITH,
             });
             JDLExporter.exportToJDL(originalContent, 'exported.jdl');

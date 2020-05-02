@@ -19,31 +19,31 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
+const path = require('path');
+const { matchEntity } = require('../../../matchers/entity-matcher');
+const JDLReader = require('../../../../../jdl/readers/jdl-reader');
+const ParsedJDLToJDLObjectConverter = require('../../../../../jdl/converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
+const { createJDLApplication } = require('../../../../../jdl/domain/jdl-application-factory');
+const JDLEntity = require('../../../../../jdl/domain/jdl-entity');
+const JDLEnum = require('../../../../../jdl/domain/jdl-enum');
+const JDLField = require('../../../../../jdl/domain/jdl-field');
+const JDLValidation = require('../../../../../jdl/domain/jdl-validation');
+const JDLUnaryOption = require('../../../../../jdl/domain/jdl-unary-option');
+const JDLBinaryOption = require('../../../../../jdl/domain/jdl-binary-option');
+const ApplicationTypes = require('../../../../../jdl/domain/jhipster/application-types');
+const FieldTypes = require('../../../../../jdl/domain/jhipster/field-types').CommonDBTypes;
+const Validations = require('../../../../../jdl/domain/jhipster/validations');
+const UnaryOptions = require('../../../../../jdl/domain/jhipster/unary-options');
+const BinaryOptions = require('../../../../../jdl/domain/jhipster/binary-options').Options;
+const BinaryOptionValues = require('../../../../../jdl/domain/jhipster/binary-options').Values;
 
-const { matchEntity } = require('../../matchers/entity-matcher');
-const JDLReader = require('../../../lib/readers/jdl_reader');
-const DocumentParser = require('../../../lib/parsers/parsed-jdl-to-jdl-object-converter');
-const { createJDLApplication } = require('../../../lib/domain/jdl_application_factory');
-const JDLEntity = require('../../../lib/domain/jdl_entity');
-const JDLEnum = require('../../../lib/domain/jdl_enum');
-const JDLField = require('../../../lib/domain/jdl_field');
-const JDLValidation = require('../../../lib/domain/jdl_validation');
-const JDLUnaryOption = require('../../../lib/domain/jdl_unary_option');
-const JDLBinaryOption = require('../../../lib/domain/jdl_binary_option');
-const ApplicationTypes = require('../../../lib/domain/jhipster/application_types');
-const FieldTypes = require('../../../lib/domain/jhipster/field_types').CommonDBTypes;
-const Validations = require('../../../lib/domain/jhipster/validations');
-const UnaryOptions = require('../../../lib/domain/jhipster/unary_options');
-const BinaryOptions = require('../../../lib/domain/jhipster/binary_options').Options;
-const BinaryOptionValues = require('../../../lib/domain/jhipster/binary_options').Values;
-
-describe('DocumentParser', () => {
+describe('ParsedJDLToJDLObjectConverter', () => {
     describe('parse', () => {
         context('when passing invalid args', () => {
             context('because there is no parsedContent', () => {
                 it('should fail', () => {
                     expect(() => {
-                        DocumentParser.parseFromConfigurationObject({});
+                        ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({});
                     }).to.throw(/^The parsed JDL content must be passed\.$/);
                 });
             });
@@ -53,8 +53,8 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/complex_jdl.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'complex_jdl.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
@@ -193,11 +193,11 @@ describe('DocumentParser', () => {
                 let input;
 
                 before(() => {
-                    input = JDLReader.parseFromFiles(['./test/test_files/invalid_field_type.jdl']);
+                    input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'invalid_field_type.jdl')]);
                 });
 
                 it('should not check for field types', () => {
-                    DocumentParser.parseFromConfigurationObject({
+                    ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                         applicationType: ApplicationTypes.GATEWAY,
                     });
@@ -208,8 +208,8 @@ describe('DocumentParser', () => {
                 let relationship;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/required_relationships.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'required_relationships.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                     relationship = jdlObject.relationships.getOneToOne('OneToOne_A{b}_B{a}');
@@ -224,8 +224,8 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/id_field.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'id_field.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
@@ -246,13 +246,13 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/user_entity_to_relationship.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'user_entity_to_relationship.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
 
-                it('is processed', () => {
+                it('should be processed', () => {
                     expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User').to).to.equal('User');
                     expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User').to).to.equal('User');
                 });
@@ -261,8 +261,10 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/authority_entity_to_relationship.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([
+                        path.join('test', 'jdl', 'test_files', 'authority_entity_to_relationship.jdl'),
+                    ]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
@@ -276,11 +278,11 @@ describe('DocumentParser', () => {
                 let input;
 
                 before(() => {
-                    input = JDLReader.parseFromFiles(['./test/test_files/invalid_option.jdl']);
+                    input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'invalid_option.jdl')]);
                 });
 
                 it('should not fail', () => {
-                    DocumentParser.parseFromConfigurationObject({
+                    ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
@@ -290,8 +292,8 @@ describe('DocumentParser', () => {
                 let enumField;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/enum.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'enum.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                     enumField = new JDLField({
@@ -320,8 +322,8 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    input = JDLReader.parseFromFiles(['./test/test_files/fluent_methods.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'fluent_methods.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
@@ -339,8 +341,8 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/following_comments.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'following_comments.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
@@ -367,8 +369,8 @@ describe('DocumentParser', () => {
                 let options;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/complex_jdl_2.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'complex_jdl_2.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                     options = jdlObject.getOptions();
@@ -403,8 +405,8 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/field_comments.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'field_comments.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
@@ -420,8 +422,8 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/constants.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'constants.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                 });
@@ -463,12 +465,12 @@ describe('DocumentParser', () => {
                 let input;
 
                 before(() => {
-                    input = JDLReader.parseFromFiles(['./test/test_files/cassandra_jdl.jdl']);
+                    input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'cassandra_jdl.jdl')]);
                 });
 
                 it('should fail', () => {
                     try {
-                        DocumentParser.parseFromConfigurationObject({
+                        ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                             parsedContent: input,
                         });
                     } catch (error) {
@@ -481,8 +483,8 @@ describe('DocumentParser', () => {
                 let expectedConfig;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/application.jdl']);
-                    const jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'application.jdl')]);
+                    const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                     parsedConfig = jdlObject.applications.toto;
@@ -526,8 +528,8 @@ describe('DocumentParser', () => {
                 let deployment;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/deployments.jdl']);
-                    const jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'deployments.jdl')]);
+                    const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                     deployment = jdlObject.deployments['docker-compose'];
@@ -555,8 +557,8 @@ describe('DocumentParser', () => {
                 let filterOption;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/filtering_without_service.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'filtering_without_service.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                     filterOption = jdlObject.getOptionsForName(UnaryOptions.FILTER)[0];
@@ -573,8 +575,8 @@ describe('DocumentParser', () => {
                     let clientRootFolderOption;
 
                     before(() => {
-                        const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
-                        jdlObject = DocumentParser.parseFromConfigurationObject({
+                        const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'simple_microservice_setup.jdl')]);
+                        jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                             parsedContent: input,
                             applicationType: ApplicationTypes.MICROSERVICE,
                             applicationName: 'ms',
@@ -591,8 +593,8 @@ describe('DocumentParser', () => {
                     let clientRootFolderOption;
 
                     before(() => {
-                        const input = JDLReader.parseFromFiles(['./test/test_files/client_root_folder.jdl']);
-                        jdlObject = DocumentParser.parseFromConfigurationObject({
+                        const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'client_root_folder.jdl')]);
+                        jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                             parsedContent: input,
                             applicationType: ApplicationTypes.MONOLITH,
                         });
@@ -612,8 +614,8 @@ describe('DocumentParser', () => {
                     let microserviceOption;
 
                     before(() => {
-                        const input = JDLReader.parseFromFiles(['./test/test_files/no_microservice.jdl']);
-                        jdlObject = DocumentParser.parseFromConfigurationObject({
+                        const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'no_microservice.jdl')]);
+                        jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                             parsedContent: input,
                             applicationType: ApplicationTypes.MICROSERVICE,
                             applicationName: 'toto',
@@ -631,8 +633,8 @@ describe('DocumentParser', () => {
                     let microserviceOption;
 
                     before(() => {
-                        const input = JDLReader.parseFromFiles(['./test/test_files/simple_microservice_setup.jdl']);
-                        jdlObject = DocumentParser.parseFromConfigurationObject({
+                        const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'simple_microservice_setup.jdl')]);
+                        jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                             parsedContent: input,
                             applicationType: ApplicationTypes.MICROSERVICE,
                             applicationName: 'toto',
@@ -650,8 +652,8 @@ describe('DocumentParser', () => {
                 let entityNames;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/application_with_entities.jdl']);
-                    const jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'application_with_entities.jdl')]);
+                    const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                     });
                     entityNames = jdlObject.applications.MyApp.getEntityNames();
@@ -668,8 +670,8 @@ describe('DocumentParser', () => {
                 let relationshipManyToMany;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/no_injected_field.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'no_injected_field.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                         applicationType: ApplicationTypes.MONOLITH,
                     });
@@ -700,8 +702,8 @@ describe('DocumentParser', () => {
                 let relationshipAnnotation;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/annotations.jdl']);
-                    const jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'annotations.jdl')]);
+                    const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                         applicationType: ApplicationTypes.MONOLITH,
                     });
@@ -743,8 +745,8 @@ describe('DocumentParser', () => {
                 let embeddedOptions;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/annotations_and_options.jdl']);
-                    const jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'annotations_and_options.jdl')]);
+                    const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                         applicationType: ApplicationTypes.MONOLITH,
                     });
@@ -789,8 +791,8 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/pattern_validation_with_quote.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'pattern_validation_with_quote.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                         applicationType: ApplicationTypes.MONOLITH,
                     });
@@ -804,8 +806,8 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/unique.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test_files', 'unique.jdl')]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                         applicationType: ApplicationTypes.MONOLITH,
                     });
@@ -820,8 +822,10 @@ describe('DocumentParser', () => {
                 let jdlObject;
 
                 before(() => {
-                    const input = JDLReader.parseFromFiles(['./test/test_files/relationship_jpa_derived_identifier.jdl']);
-                    jdlObject = DocumentParser.parseFromConfigurationObject({
+                    const input = JDLReader.parseFromFiles([
+                        path.join('test', 'jdl', 'test_files', 'relationship_jpa_derived_identifier.jdl'),
+                    ]);
+                    jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                         parsedContent: input,
                         applicationType: ApplicationTypes.MONOLITH,
                     });
@@ -851,7 +855,7 @@ entity B
 
                     it('should fail', () => {
                         expect(() =>
-                            DocumentParser.parseFromConfigurationObject({
+                            ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                                 parsedContent,
                             })
                         ).to.throw(/^The entity B in the readOnly option isn't declared in testApp1's entity list.$/);
@@ -887,7 +891,7 @@ entity D
 
 skipClient D
 `);
-                        const jdlObject = DocumentParser.parseFromConfigurationObject({
+                        const jdlObject = ParsedJDLToJDLObjectConverter.parseFromConfigurationObject({
                             parsedContent: input,
                         });
                         optionsForFirstApplication = jdlObject.applications.testApp1.options;

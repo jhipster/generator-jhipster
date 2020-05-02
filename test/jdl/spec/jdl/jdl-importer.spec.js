@@ -22,10 +22,10 @@ const fse = require('fs-extra');
 const path = require('path');
 const { expect } = require('chai');
 
-const ApplicationTypes = require('../../../lib/domain/jhipster/application_types');
-const DatabaseTypes = require('../../../lib/domain/jhipster/database_types');
-const { createImporterFromFiles, createImporterFromContent } = require('../../../lib/jdl/jdl_importer');
-const { formatDateForLiquibase } = require('../../../lib/utils/format_utils');
+const ApplicationTypes = require('../../../../jdl/domain/jhipster/application-types');
+const DatabaseTypes = require('../../../../jdl/domain/jhipster/database-types');
+const { createImporterFromFiles, createImporterFromContent } = require('../../../../jdl/jdl-importer');
+const { formatDateForLiquibase } = require('../../../../jdl/utils/format-utils');
 
 describe('JDLImporter', () => {
     describe('createImporterFromFiles', () => {
@@ -471,7 +471,7 @@ describe('JDLImporter', () => {
             };
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'big_sample.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'big_sample.jdl')], {
                     applicationName: 'MyApp',
                     applicationType: ApplicationTypes.MONOLITH,
                     databaseType: DatabaseTypes.SQL,
@@ -539,7 +539,9 @@ relationship OneToOne {
 }
 `,
                     {
-                        application: JSON.parse(fse.readFileSync(path.join('test', 'test_files', 'jhipster_app', '.yo-rc.json'), 'utf-8')),
+                        application: JSON.parse(
+                            fse.readFileSync(path.join('test', 'jdl', 'test_files', 'jhipster_app', '.yo-rc.json'), 'utf-8')
+                        ),
                     }
                 );
             });
@@ -552,7 +554,7 @@ relationship OneToOne {
             let returned;
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'application_with_entities.jdl')]);
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'application_with_entities.jdl')]);
                 returned = importer.import();
             });
 
@@ -619,7 +621,9 @@ relationship OneToOne {
             let content;
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'application_with_entity_dto_suffixes.jdl')]);
+                const importer = createImporterFromFiles([
+                    path.join('test', 'jdl', 'test_files', 'application_with_entity_dto_suffixes.jdl'),
+                ]);
                 returned = importer.import();
 
                 content = JSON.parse(fse.readFileSync('.yo-rc.json', 'utf-8'));
@@ -786,7 +790,7 @@ relationship OneToOne {
             const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'applications2.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'applications2.jdl')], {
                     creationTimestamp: '2019-01-01',
                 });
                 importer.import();
@@ -981,8 +985,8 @@ relationship OneToOne {
             before(() => {
                 const importer = createImporterFromFiles(
                     [
-                        path.join('test', 'test_files', 'integration', 'file1.jdl'),
-                        path.join('test', 'test_files', 'integration', 'file2.jdl'),
+                        path.join('test', 'jdl', 'test_files', 'integration', 'file1.jdl'),
+                        path.join('test', 'jdl', 'test_files', 'integration', 'file2.jdl'),
                     ],
                     {
                         creationTimestamp: '2019-01-01',
@@ -1049,7 +1053,7 @@ relationship OneToOne {
             let importer;
 
             before("importing a JDL file with the 'no' database type", () => {
-                importer = createImporterFromFiles([path.join('test', 'test_files', 'simple.jdl')], {
+                importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'simple.jdl')], {
                     applicationName: 'MyApp',
                     applicationType: ApplicationTypes.MONOLITH,
                     databaseType: DatabaseTypes.NO,
@@ -1068,7 +1072,7 @@ relationship OneToOne {
             let returned;
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'annotations.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'annotations.jdl')], {
                     applicationName: 'toto',
                     databaseType: DatabaseTypes.SQL,
                 });
@@ -1101,7 +1105,7 @@ relationship OneToOne {
             let entityContent;
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'regex_validation.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'regex_validation.jdl')], {
                     applicationName: 'MyApp',
                     applicationType: ApplicationTypes.MONOLITH,
                     databaseType: DatabaseTypes.SQL,
@@ -1125,7 +1129,7 @@ relationship OneToOne {
             let returned;
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'pattern_validation_with_quote.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'pattern_validation_with_quote.jdl')], {
                     applicationName: 'MyApp',
                     applicationType: ApplicationTypes.MONOLITH,
                     databaseType: DatabaseTypes.SQL,
@@ -1301,7 +1305,7 @@ relationship OneToOne {
             const APPLICATION_NAMES = ['tata', 'titi', 'toto', 'tutu'];
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'applications3.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'applications3.jdl')], {
                     creationTimestamp: '2019-01-01',
                 });
                 importer.import();
@@ -1387,7 +1391,7 @@ relationship OneToOne {
             const DEPLOYMENT_NAMES = ['docker-compose', 'kubernetes', 'openshift'];
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'deployments.jdl')]);
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'deployments.jdl')]);
                 importer.import();
                 DEPLOYMENT_NAMES.forEach(name => {
                     contents.push(JSON.parse(fse.readFileSync(path.join(name, '.yo-rc.json'), 'utf-8')));
@@ -1587,7 +1591,7 @@ relationship OneToOne {
             const FOLDER_NAMES = ['store', 'product', 'invoice', 'notification', 'docker-compose', 'kubernetes'];
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'realistic_sample.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'realistic_sample.jdl')], {
                     creationTimestamp: '2019-01-01',
                 });
                 importer.import();
@@ -1616,7 +1620,7 @@ relationship OneToOne {
             let exported;
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'enum_with_values.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'enum_with_values.jdl')], {
                     applicationName: 'toto',
                     applicationType: 'monolith',
                     databaseType: 'sql',
@@ -1835,7 +1839,7 @@ paginate * with infinite-scroll
         });
         context('when not exporting entities but only applications', () => {
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'application.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'application.jdl')], {
                     creationTimestamp: '2019-01-01',
                 });
                 importer.import();
@@ -1854,7 +1858,7 @@ paginate * with infinite-scroll
             let importState;
 
             before(() => {
-                const importer = createImporterFromFiles([path.join('test', 'test_files', 'application_with_blueprints.jdl')], {
+                const importer = createImporterFromFiles([path.join('test', 'jdl', 'test_files', 'application_with_blueprints.jdl')], {
                     creationTimestamp: '2019-01-01',
                 });
                 importState = importer.import();

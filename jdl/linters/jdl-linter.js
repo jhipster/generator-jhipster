@@ -37,7 +37,7 @@ module.exports = {
  */
 function createJDLLinterFromContent(jdlString) {
     if (!jdlString) {
-        throw new Error('A JDL content must be passed to create a new JDL linters.');
+        throw new Error('A JDL content must be passed to create a new JDL linter.');
     }
     return makeJDLLinter(jdlString);
 }
@@ -50,7 +50,7 @@ function createJDLLinterFromContent(jdlString) {
  */
 function createJDLLinterFromFile(file) {
     if (!file) {
-        throw new Error('A JDL file must be passed to create a new JDL linters.');
+        throw new Error('A JDL file must be passed to create a new JDL linter.');
     }
     const jdlString = readFile(file);
     return makeJDLLinter(jdlString);

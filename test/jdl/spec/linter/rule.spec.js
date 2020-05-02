@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const Rule = require('../../../lib/linters/rule');
-const { INFO, ERROR } = require('../../../lib/linters/rule_levels');
+const Rule = require('../../../../jdl/linters/rule');
+const { INFO, ERROR } = require('../../../../jdl/linters/rule-levels');
 
 describe('Rule', () => {
     describe('new', () => {

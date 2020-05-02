@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const RelationshipIssue = require('../../../../lib/linters/issues/relationship_issue');
+const RelationshipIssue = require('../../../../../jdl/linters/issues/relationship-issue');
 
 describe('RelationshipIssue', () => {
     describe('new', () => {

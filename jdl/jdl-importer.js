@@ -16,14 +16,14 @@
  * limitations under the License.
  */
 const { uniqBy } = require('lodash');
-const JDLReader = require('../readers/jdl_reader');
-const DocumentParser = require('../parsers/document_parser');
-const JDLWithoutApplicationToJSONConverter = require('../converters/jdl-to-json/jdl_without_application_to_json_converter');
-const JDLWithApplicationsToJSONConverter = require('../converters/jdl-to-json/jdl_with_applications_to_json_converter');
-const JHipsterApplicationExporter = require('../exporters/jhipster_application_exporter');
-const JHipsterDeploymentExporter = require('../exporters/jhipster_deployment_exporter');
-const JHipsterEntityExporter = require('../exporters/jhipster_entity_exporter');
-const BusinessErrorChecker = require('../validators/business_error_checker');
+const JDLReader = require('./readers/jdl-reader');
+const DocumentParser = require('./converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter');
+const JDLWithoutApplicationToJSONConverter = require('./converters/jdl-to-json/jdl-without-application-to-json-converter');
+const JDLWithApplicationsToJSONConverter = require('./converters/jdl-to-json/jdl-with-applications-to-json-converter');
+const JHipsterApplicationExporter = require('./exporters/jhipster-application-exporter');
+const JHipsterDeploymentExporter = require('./exporters/jhipster-deployment-exporter');
+const JHipsterEntityExporter = require('./exporters/jhipster-entity-exporter');
+const BusinessErrorChecker = require('./validators/business-error-checker');
 
 module.exports = {
     createImporterFromContent,
