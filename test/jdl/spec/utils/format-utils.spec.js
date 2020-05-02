@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const { formatDateForLiquibase, formatComment, dateFormatForLiquibase } = require('../../../lib/utils/format_utils');
+const { formatDateForLiquibase, formatComment, dateFormatForLiquibase } = require('../../../../jdl/utils/format-utils');
 
 describe('FormatUtils', () => {
     describe('formatComment', () => {

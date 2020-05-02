@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const ApplicationTypes = require('../lib/domain/jhipster/application_types');
+const ApplicationTypes = require('../../jdl/domain/jhipster/application_types');
 const BinaryOptions = require('../lib/domain/jhipster/binary_options');
 const UnaryOptions = require('../lib/domain/jhipster/unary_options');
 const RelationshipTypes = require('../lib/domain/jhipster/relationship_types');

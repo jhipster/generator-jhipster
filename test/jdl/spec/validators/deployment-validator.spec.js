@@ -17,7 +17,7 @@
  */
 
 const { expect } = require('chai');
-const DeploymentValidator = require('../../../lib/validators/deployment_validator');
+const DeploymentValidator = require('../../../../jdl/validators/deployment-validator');
 
 describe('DeploymentValidator', () => {
     let validator;

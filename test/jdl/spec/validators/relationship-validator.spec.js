@@ -18,11 +18,11 @@
  */
 
 const { expect } = require('chai');
-const JDLRelationship = require('../../../lib/domain/jdl_relationship');
-const RelationshipValidator = require('../../../lib/validators/relationship_validator');
+const JDLRelationship = require('../../../../jdl/domain/jdl-relationship');
+const RelationshipValidator = require('../../../../jdl/validators/relationship-validator');
 
-const { JPA_DERIVED_IDENTIFIER } = require('../../../lib/domain/jhipster/relationship_options');
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../lib/domain/jhipster/relationship_types');
+const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/domain/jhipster/relationship-options');
+const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../../jdl/domain/jhipster/relationship-types');
 
 describe('RelationshipValidator', () => {
     let validator;

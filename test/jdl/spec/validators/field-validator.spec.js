@@ -1,4 +1,5 @@
-/** Copyright 2013-2020 the original author or authors from the JHipster project.
+/**
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see http://www.jhipster.tech/
  * for more information.
@@ -17,46 +18,40 @@
  */
 
 const { expect } = require('chai');
-const JDLEnum = require('../../../lib/domain/jdl_enum');
-const EnumValidator = require('../../../lib/validators/enum_validator');
+const JDLField = require('../../../../jdl/domain/jdl-field');
+const FieldValidator = require('../../../../jdl/validators/field-validator');
 
-describe('EnumValidator', () => {
+describe('FieldValidator', () => {
     let validator;
 
     before(() => {
-        validator = new EnumValidator();
+        validator = new FieldValidator();
     });
 
     describe('validate', () => {
         context('when not passing anything', () => {
             it('should fail', () => {
-                expect(() => validator.validate()).to.throw(/^No enum\.$/);
+                expect(() => validator.validate()).to.throw(/^No field\.$/);
             });
         });
-        context('when passing an enum', () => {
+        context('when passing a field', () => {
             context('with all its required attributes', () => {
-                let jdlEnum;
+                let field;
 
                 before(() => {
-                    jdlEnum = new JDLEnum({
+                    field = new JDLField({
                         name: 'a',
+                        type: 'String',
                     });
                 });
 
                 it('should not fail', () => {
-                    expect(() => validator.validate(jdlEnum)).not.to.throw();
+                    expect(() => validator.validate(field)).not.to.throw();
                 });
             });
             context('when not passing any attribute', () => {
                 it('should fail', () => {
-                    expect(() => validator.validate({})).to.throw(/^The enum attribute name was not found\.$/);
-                });
-            });
-            context('with a reserved class name as name', () => {
-                it('should fail', () => {
-                    expect(() => {
-                        validator.validate(new JDLEnum({ name: 'Catch' }));
-                    }).to.throw(/^The enum name 'Catch' is reserved keyword and can not be used as enum class name\.$/);
+                    expect(() => validator.validate({})).to.throw(/^The field attributes name, type were not found\.$/);
                 });
             });
         });

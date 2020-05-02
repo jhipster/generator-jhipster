@@ -18,32 +18,38 @@
  */
 
 const { expect } = require('chai');
-const JDLUnaryOption = require('../../../lib/domain/jdl_unary_option');
-const UnaryOptionValidator = require('../../../lib/validators/unary_option_validator');
+const JDLBinaryOption = require('../../../../jdl/domain/jdl-binary-option');
+const BinaryOptionValidator = require('../../../../jdl/validators/binary-option-validator');
 
-describe('UnaryOptionValidator', () => {
+describe('BinaryOptionValidator', () => {
     let validator;
 
     before(() => {
-        validator = new UnaryOptionValidator();
+        validator = new BinaryOptionValidator();
     });
 
     describe('validate', () => {
         context('when not passing anything', () => {
             it('should fail', () => {
-                expect(() => validator.validate()).to.throw(/^No unary option\.$/);
+                expect(() => validator.validate()).to.throw(/^No binary option\.$/);
             });
         });
-        context('when passing an unary option', () => {
+        it('should fail', () => {
+            expect(() => validator.validate({})).to.throw(
+                /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/
+            );
+        });
+        context('when passing a binary option', () => {
             context('with all its required attributes', () => {
                 it('should not fail', () => {
-                    expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.to.throw();
+                    expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
                 });
             });
-            context('without any of its required attributes', () => {
+            context('without any of its required attributes', () => {});
+            context('with an invalid value', () => {
                 it('should fail', () => {
-                    expect(() => validator.validate({})).to.throw(
-                        /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/
+                    expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
+                        /^The 'dto' option is not valid for value 'toto'\.$/
                     );
                 });
             });

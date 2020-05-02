@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const { addAll, join } = require('../../../lib/utils/set_utils');
+const { addAll, join } = require('../../../../jdl/utils/set-utils');
 
 describe('SetUtils', () => {
     describe('addAll', () => {

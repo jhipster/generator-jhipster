@@ -19,10 +19,10 @@
 
 /* eslint-disable no-unused-expressions */
 
+const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
-const { expect } = require('chai');
-const { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } = require('../../../lib/utils/file_utils');
+const { createFolderIfItDoesNotExist, doesFileExist, doesDirectoryExist } = require('../../../../jdl/utils/file-utils');
 
 describe('FileUtils', () => {
     describe('doesFileExist', () => {
@@ -39,7 +39,7 @@ describe('FileUtils', () => {
             });
             context('with a valid file path', () => {
                 it('should return true', () => {
-                    expect(doesFileExist('./test/test_files/MyEntity.json')).to.be.true;
+                    expect(doesFileExist(path.join('test', 'jdl', 'test_files', 'MyEntity.json'))).to.be.true;
                 });
             });
         });
@@ -53,12 +53,12 @@ describe('FileUtils', () => {
             });
             context('with an invalid directory path', () => {
                 it('should return false', () => {
-                    expect(doesDirectoryExist('./someInvalidPath')).to.be.false;
+                    expect(doesDirectoryExist('someInvalidPath')).to.be.false;
                 });
             });
             context('with a valid directory path', () => {
                 it('should return true', () => {
-                    expect(doesDirectoryExist('./test/test_files/')).to.be.true;
+                    expect(doesDirectoryExist(path.join('test', 'jdl'))).to.be.true;
                 });
             });
         });

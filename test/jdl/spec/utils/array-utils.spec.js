@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const { deduplicate } = require('../../../lib/utils/array_utils');
+const { deduplicate } = require('../../../../jdl/utils/array-utils');
 
 describe('ArrayUtils', () => {
     describe('deduplicate', () => {
