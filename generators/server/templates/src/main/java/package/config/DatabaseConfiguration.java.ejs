@@ -431,6 +431,8 @@ public class DatabaseConfiguration {
         converters.add(new InstantWriteConverter());
         converters.add(new InstantReadConverter());
         converters.add(BitSetReadConverter.INSTANCE);
+        converters.add(new DurationWriteConverter());
+        converters.add(new DurationReadConverter());
         converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
         return new R2dbcCustomConversions(
             CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
@@ -461,6 +463,24 @@ public class DatabaseConfiguration {
         @Override
         public Boolean convert(BitSet bitSet) {
             return bitSet.get(0);
+        }
+    }
+
+    @WritingConverter
+    public static class DurationWriteConverter implements Converter<Duration, Long> {
+
+        @Override
+        public Long convert(Duration source) {
+            return source != null ? source.toMillis() : null;
+        }
+    }
+
+    @ReadingConverter
+    public static class DurationReadConverter implements Converter<Long, Duration> {
+
+        @Override
+        public Duration convert(Long source) {
+            return source != null ? Duration.ofMillis(source) : null;
         }
     }
 
