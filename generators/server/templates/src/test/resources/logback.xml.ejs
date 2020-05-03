@@ -57,6 +57,10 @@
     <%_ if (databaseType === 'sql' && reactive) { _%>
     <logger name="io.r2dbc" level="WARN"/>
     <%_ } _%>
+    <%_ if (databaseType === 'sql') { _%>
+    <logger name="com.github.dockerjava" level="WARN"/>
+    <logger name="org.testcontainers" level="WARN"/>
+    <%_ } _%>
     <%_ if (!reactive) { _%>
     <logger name="io.undertow" level="WARN"/>
     <logger name="io.undertow.websockets.jsr" level="ERROR"/>

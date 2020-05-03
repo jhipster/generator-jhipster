@@ -696,13 +696,30 @@ const expectedFiles = {
         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/repository/timezone/DateTimeWrapperRepository.java`,
     ],
 
-    mysql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mysql.yml`],
+    mysql: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+        `${DOCKER_DIR}mysql.yml`,
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`,
+    ],
 
-    mariadb: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mariadb.yml`],
+    mariadb: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+        `${DOCKER_DIR}mariadb.yml`,
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`,
+        `${SERVER_TEST_RES_DIR}/testcontainers/mariadb/my.cnf`,
+    ],
 
-    mssql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}mssql.yml`],
+    mssql: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+        `${DOCKER_DIR}mssql.yml`,
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`,
+    ],
 
-    postgresql: [`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`, `${DOCKER_DIR}postgresql.yml`],
+    postgresql: [
+        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/config/LiquibaseConfiguration.java`,
+        `${DOCKER_DIR}postgresql.yml`,
+        `${SERVER_TEST_RES_DIR}/config/application-testcontainers.yml`,
+    ],
 
     liquibase: [
         `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
