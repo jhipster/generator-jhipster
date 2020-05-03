@@ -103,6 +103,7 @@ describe('Register Component', () => {
     await register.$nextTick();
 
     expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'});
+    await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.doNotMatch).toBe(null);
     expect(register.error).toBe(null);
@@ -119,6 +120,7 @@ describe('Register Component', () => {
     await register.$nextTick();
 
     expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'});
+    await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.doNotMatch).toBe(null);
     expect(register.error).toBe(null);
@@ -135,6 +137,7 @@ describe('Register Component', () => {
     await register.$nextTick();
 
     expect(mockedAxios.post).toHaveBeenCalledWith('api/register', {'email': 'jhi@pster.net', 'langKey': '<%= nativeLanguage %>', 'login': 'jhi', 'password': 'jhipster'});
+    await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.doNotMatch).toBe(null);
     expect(register.errorEmailExists).toBe(null);

@@ -4,8 +4,10 @@ import Vue2Filters from 'vue2-filters';
 import UserManagementService from './user-management.service';
 import AlertMixin from '@/shared/alert/alert.mixin';
 
-@Component
-export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(Vue2Filters.mixin, AlertMixin) {
+@Component({
+  mixins: [Vue2Filters.mixin]
+})
+export default class <%=jhiPrefixCapitalized%>UserManagementComponent extends mixins(AlertMixin) {
   @Inject('userService') private userManagementService: () => UserManagementService;
   public error = '';
   public success = '';

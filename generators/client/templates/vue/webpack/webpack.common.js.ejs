@@ -7,7 +7,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { BaseHrefWebpackPlugin } = require('base-href-webpack-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir);
@@ -105,8 +104,7 @@ module.exports = {
       chunks: ['vendors', 'main', 'global'],
       chunksSortMode: 'manual',
       inject: true
-    }),
-    new BaseHrefWebpackPlugin({ baseHref: '/' })<% if (enableTranslation) { %>,
+    })<% if (enableTranslation) { %>,
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [

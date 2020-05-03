@@ -1,6 +1,6 @@
 import { mixins } from 'vue-class-component';
 
-import { Component, Inject } from 'vue-property-decorator';
+import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
 import AlertMixin from '@/shared/alert/alert.mixin';
@@ -9,8 +9,10 @@ import JhiDataUtils from '@/shared/data/data-utils.service';
 <% } %>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 
-@Component
-export default class <%= entityAngularName %> extends <% if (fieldsContainBlob || pagination === 'infinite-scroll') { %>mixins(JhiDataUtils, Vue2Filters.mixin, AlertMixin)<% } else { %> mixins(Vue2Filters.mixin, AlertMixin)<% } %> {
+@Component({
+  mixins: [Vue2Filters.mixin]
+})
+export default class <%= entityAngularName %> extends <% if (fieldsContainBlob || pagination === 'infinite-scroll') { %>mixins(JhiDataUtils, AlertMixin)<% } else { %> mixins(AlertMixin)<% } %> {
   @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public currentSearch = '';

@@ -68,7 +68,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       template: './<%= MAIN_SRC_DIR %>index.html',
       chunks: ['vendors', 'main', 'global'],
-      chunksSortMode: 'manual',
+      chunksSortMode: 'auto',
       inject: true,
       minify: {
         removeComments: true,
@@ -77,8 +77,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin()
