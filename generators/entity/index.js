@@ -1075,7 +1075,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                             }
                         } else {
                             relationship.otherEntityModuleName = `${context.angularXAppName}SharedModule`;
-                            relationship.otherEntityModulePath = 'app/domain';
+                            relationship.otherEntityModulePath = 'app/core';
                         }
                     }
                     if (otherEntityData) {

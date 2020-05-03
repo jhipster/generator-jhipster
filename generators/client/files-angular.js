@@ -278,8 +278,8 @@ const files = {
                 { file: 'admin/tracker/tracker.module.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.ts', method: 'processJs' },
                 { file: 'admin/tracker/tracker.component.html', method: 'processHtml' },
-                'domain/tracker/tracker-activity.model.ts',
-                'domain/tracker/tracker.service.ts',
+                'core/tracker/tracker-activity.model.ts',
+                'core/tracker/tracker.service.ts',
             ],
         },
         {
@@ -315,13 +315,13 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'domain/domain.module.ts',
+                'core/core.module.ts',
                 // login
-                'domain/login/login.service.ts',
-                'domain/user/account.model.ts',
+                'core/login/login.service.ts',
+                'core/user/account.model.ts',
 
                 // icons
-                'domain/icons/font-awesome-icons.ts',
+                'core/icons/font-awesome-icons.ts',
             ],
         },
         {
@@ -329,24 +329,24 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             templates: [
                 // login
-                'domain/login/login.model.ts',
-                'domain/login/login-modal.service.ts',
+                'core/login/login.model.ts',
+                'core/login/login-modal.service.ts',
             ],
         },
         {
             path: ANGULAR_DIR,
             condition: generator => generator.authenticationType === 'oauth2',
-            templates: ['domain/login/logout.model.ts'],
+            templates: ['core/login/logout.model.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
-            templates: ['domain/user/user.service.ts', 'domain/user/user.model.ts'],
+            templates: ['core/user/user.service.ts', 'core/user/user.model.ts'],
         },
         {
             condition: generator => generator.enableTranslation,
             path: ANGULAR_DIR,
-            templates: ['domain/language/language.constants.ts'],
+            templates: ['core/language/language.constants.ts'],
         },
     ],
     angularShared: [
@@ -388,22 +388,22 @@ const files = {
         {
             path: ANGULAR_DIR,
             templates: [
-                'domain/auth/csrf.service.ts',
-                'domain/auth/state-storage.service.ts',
+                'core/auth/csrf.service.ts',
+                'core/auth/state-storage.service.ts',
                 'shared/auth/has-any-authority.directive.ts',
-                'domain/auth/account.service.ts',
-                'domain/auth/user-route-access-service.ts',
+                'core/auth/account.service.ts',
+                'core/auth/user-route-access-service.ts',
             ],
         },
         {
             condition: generator => generator.authenticationType === 'jwt' || generator.authenticationType === 'uaa',
             path: ANGULAR_DIR,
-            templates: ['domain/auth/auth-jwt.service.ts'],
+            templates: ['core/auth/auth-jwt.service.ts'],
         },
         {
             condition: generator => generator.authenticationType === 'session' || generator.authenticationType === 'oauth2',
             path: ANGULAR_DIR,
-            templates: ['domain/auth/auth-session.service.ts'],
+            templates: ['core/auth/auth-session.service.ts'],
         },
     ],
     clientTestFw: [
@@ -421,7 +421,7 @@ const files = {
                 'spec/app/admin/logs/logs.service.spec.ts',
                 'spec/app/admin/metrics/metrics.component.spec.ts',
                 'spec/app/admin/metrics/metrics.service.spec.ts',
-                'spec/app/domain/user/account.service.spec.ts',
+                'spec/app/core/user/account.service.spec.ts',
                 'spec/app/home/home.component.spec.ts',
                 'spec/app/layouts/main/main.component.spec.ts',
                 'spec/app/layouts/navbar/navbar.component.spec.ts',
@@ -456,7 +456,7 @@ const files = {
                 'spec/app/shared/login/login.component.spec.ts',
                 'spec/app/shared/alert/alert.component.spec.ts',
                 'spec/app/shared/alert/alert-error.component.spec.ts',
-                'spec/app/domain/login/login-modal.service.spec.ts',
+                'spec/app/core/login/login-modal.service.spec.ts',
             ],
         },
         {
@@ -474,7 +474,7 @@ const files = {
                 'spec/app/admin/user-management/user-management-update.component.spec.ts',
                 'spec/app/admin/user-management/user-management-delete-dialog.component.spec.ts',
                 // user service tests
-                'spec/app/domain/user/user.service.spec.ts',
+                'spec/app/core/user/user.service.spec.ts',
             ],
         },
         {
