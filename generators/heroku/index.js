@@ -75,6 +75,7 @@ module.exports = class extends BaseGenerator {
         this.angularAppName = this.getAngularAppName();
         this.buildTool = configuration.get('buildTool');
         this.applicationType = configuration.get('applicationType');
+        this.reactive = configuration.get('reactive') || false;
         this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
         this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
@@ -369,6 +370,15 @@ module.exports = class extends BaseGenerator {
                     );
                 }
 
+                if (this.prodDatabaseType === 'neo4j' && this.reactive) {
+                    this.log(
+                        chalk.red(
+                            'The reactive Neo4j driver requires Neo4j >= 4. The Graphene addon does not support this database version (yet).'
+                        )
+                    );
+                    done();
+                }
+
                 let dbAddOn = '';
                 if (this.prodDatabaseType === 'postgresql') {
                     dbAddOn = 'heroku-postgresql --as DATABASE';
@@ -378,6 +388,8 @@ module.exports = class extends BaseGenerator {
                     dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
                 } else if (this.prodDatabaseType === 'mongodb') {
                     dbAddOn = 'mongolab:sandbox --as MONGODB';
+                } else if (this.prodDatabaseType === 'neo4j') {
+                    dbAddOn = 'graphenedb:dev-free --as GRAPHENEDB';
                 } else {
                     done();
                     return;

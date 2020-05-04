@@ -41,6 +41,18 @@ eureka:
             defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 <%_ } _%>
 
+<%_ if (prodDatabaseType === 'neo4j') { _%> 
+org:
+    neo4j:
+      driver:
+        uri: ${GRAPHENEDB_BOLT_URL}
+        authentication:
+            username: ${GRAPHENEDB_BOLT_USER}
+            password: ${GRAPHENEDB_BOLT_PASSWORD}
+        config:
+            encrypted: true
+<%_ } _%>
+
 spring:
 <%_ if (prodDatabaseType === 'postgresql' || prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     datasource:
