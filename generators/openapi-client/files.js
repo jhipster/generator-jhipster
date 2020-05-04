@@ -57,18 +57,18 @@ function writeFiles() {
                 const openApiCmd = ['openapi-generator generate'];
                 let openApiGeneratorName;
                 let openApiGeneratorLibrary;
-                const additionalOptions = [];
+                const additionalParameters = [];
 
                 if (generatorName === 'spring') {
                     openApiGeneratorName = 'spring';
                     openApiGeneratorLibrary = 'spring-cloud';
 
-                    additionalOptions.push('-p supportingFiles=ApiKeyRequestInterceptor.java');
+                    additionalParameters.push('-p supportingFiles=ApiKeyRequestInterceptor.java');
                 } else if (generatorName === 'webclient') {
                     openApiGeneratorName = 'java';
                     openApiGeneratorLibrary = 'webclient';
 
-                    additionalOptions.push('-p dateLibrary=java8');
+                    additionalParameters.push('-p dateLibrary=java8');
                 }
                 this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
 
@@ -84,7 +84,7 @@ function writeFiles() {
                     `-p artifactId=${_.camelCase(cliName)}`
                 );
 
-                openApiCmd.push(additionalOptions.join(','));
+                openApiCmd.push(additionalParameters.join(','));
                 openApiCmd.push('--skip-validate-spec');
                 if (this.clientsToGenerate[cliName].useServiceDiscovery) {
                     openApiCmd.push('--additional-properties ribbon=true');
