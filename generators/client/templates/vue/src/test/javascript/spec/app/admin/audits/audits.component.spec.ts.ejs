@@ -90,7 +90,15 @@ describe('Audits Component', () => {
   describe('OnInit', () => {
     it('Should call load all on init', async () => {
       // GIVEN
-      mockedAxios.get.mockReturnValue(Promise.resolve({ headers: {}, data: ['test'] }));
+      mockedAxios.get.mockReturnValue(Promise.resolve({ headers: {}, data: 
+        [
+          {
+            'timestamp' : '2020-05-03T18:20:15.590684Z', 
+            'principal' : 'admin',
+            'type' : 'AUTHENTICATION_SUCCESS'
+          }
+        ] 
+      }));
       const today = getDate();
       const fromDate = getDate(false);
       // WHEN

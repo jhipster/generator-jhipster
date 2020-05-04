@@ -1,9 +1,10 @@
-import { Component, Prop } from 'vue-property-decorator';
-import { mixins } from 'vue-class-component';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 
-@Component
-export default class <%=jhiPrefixCapitalized%>MetricsModal extends mixins(Vue2Filters.mixin) {
+@Component({
+  mixins: [Vue2Filters.mixin]
+})
+export default class <%=jhiPrefixCapitalized%>MetricsModal extends Vue {
   @Prop()
   threadDump!: any
 

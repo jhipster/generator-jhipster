@@ -79,7 +79,7 @@ describe('LoginForm Component', () => {
       password: 'pwd',
       rememberMe: true
     });
-
+    await loginForm.$nextTick();
     expect(loginForm.authenticationError).toBeTruthy();
   });
 
@@ -144,7 +144,7 @@ describe('LoginForm Component', () => {
     expect(mockedAxios.post).toHaveBeenCalledWith('api/authentication',
       'username=login&password=pwd&remember-me=true&submit=Login',
       { "headers": { "Content-Type": "application/x-www-form-urlencoded" } });
-
+    await loginForm.$nextTick();
     expect(loginForm.authenticationError).toBeTruthy();
   });
 

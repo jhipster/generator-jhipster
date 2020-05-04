@@ -86,6 +86,7 @@ describe('Health Component', () => {
 
       // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith('management/health');
+      await health.$nextTick();
       expect(health.updatingHealth).toEqual(false);
     });
     it('should handle a 503 on refreshing health data', async () => {
@@ -98,6 +99,7 @@ describe('Health Component', () => {
 
       // THEN
       expect(mockedAxios.get).toHaveBeenCalledWith('management/health');
+      await health.$nextTick();
       expect(health.updatingHealth).toEqual(false);
     });
   });
