@@ -54,9 +54,10 @@ function writeFiles() {
                 const inputSpec = this.clientsToGenerate[cliName].spec;
                 const generatorName = this.clientsToGenerate[cliName].generatorName;
 
-                let openApiCmd;
+                const openApiCmd = ['openapi-generator generate'];
                 let openApiGeneratorName;
                 let openApiGeneratorLibrary;
+                const additionalOptions = [];
 
                 if (generatorName === 'spring') {
                     openApiGeneratorName = 'spring';
@@ -64,27 +65,30 @@ function writeFiles() {
                 } else if (generatorName === 'webclient') {
                     openApiGeneratorName = 'java';
                     openApiGeneratorLibrary = 'webclient';
+
+                    additionalOptions.push('-p dateLibrary=java8');
                 }
                 this.log(chalk.green(`\n\nGenerating npm script for generating client code ${cliName} (${inputSpec})`));
 
-                openApiCmd =
-                    'openapi-generator generate ' +
-                    `-g ${openApiGeneratorName} ` +
-                    `-i ${inputSpec} ` +
-                    `-p library=${openApiGeneratorLibrary} ` +
-                    '-p supportingFiles=ApiKeyRequestInterceptor.java ' +
-                    `-p apiPackage=${cliPackage}.api ` +
-                    `-p modelPackage=${cliPackage}.model ` +
-                    `-p basePackage=${this.packageName}.client ` +
-                    `-p configPackage=${cliPackage} ` +
-                    `-p title=${_.camelCase(cliName)} ` +
-                    `-p artifactId=${_.camelCase(cliName)} ` +
-                    '--skip-validate-spec';
+                openApiCmd.push(
+                    `-g ${openApiGeneratorName}`,
+                    `-i ${inputSpec}`,
+                    `-p library=${openApiGeneratorLibrary}`,
+                    '-p supportingFiles=ApiKeyRequestInterceptor.java',
+                    `-p apiPackage=${cliPackage}.api`,
+                    `-p modelPackage=${cliPackage}.model`,
+                    `-p basePackage=${this.packageName}.client`,
+                    `-p configPackage=${cliPackage}`,
+                    `-p title=${_.camelCase(cliName)}`,
+                    `-p artifactId=${_.camelCase(cliName)}`
+                );
 
+                openApiCmd.push(additionalOptions.join(','));
+                openApiCmd.push('--skip-validate-spec');
                 if (this.clientsToGenerate[cliName].useServiceDiscovery) {
-                    openApiCmd += ' --additional-properties ribbon=true';
+                    openApiCmd.push('--additional-properties ribbon=true');
                 }
-                this.addNpmScript(`openapi-client:${cliName}`, `${openApiCmd}`);
+                this.addNpmScript(`openapi-client:${cliName}`, `${openApiCmd.join(' ')}`);
             });
         },
 
