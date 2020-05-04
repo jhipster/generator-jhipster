@@ -7,5 +7,5 @@ Example:
 
     This will create:
         Procfile
-        src/main/java/your_package_name/config/HerokuDatabaseConfiguration.java
+        application-heroku.yml
         gradle/heroku.gradle
