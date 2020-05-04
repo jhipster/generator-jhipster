@@ -23,6 +23,7 @@
  */
 const path = require('path');
 const fs = require('fs');
+const { createFolderIfItDoesNotExist } = require('../../utils/file-utils');
 
 const JDLParser = require('../../parsing/jdl-parser');
 
@@ -51,6 +52,7 @@ const copyright = `/** Copyright 2013-2020 the original author or authors from t
  `;
 
 // generated a JavaScript file which exports the serialized grammar on the global scope (Window)
+createFolderIfItDoesNotExist(path.join(__dirname, '..', 'generated'));
 fs.writeFileSync(
     path.join(__dirname, '..', 'generated', 'generated-serialized-grammar.js'),
     `${copyright}
