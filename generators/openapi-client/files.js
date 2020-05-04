@@ -64,7 +64,7 @@ function writeFiles() {
                     openApiGeneratorLibrary = 'spring-cloud';
 
                     additionalParameters.push('-p supportingFiles=ApiKeyRequestInterceptor.java');
-                } else if (generatorName === 'webclient') {
+                } else if (generatorName === 'java') {
                     openApiGeneratorName = 'java';
                     openApiGeneratorLibrary = 'webclient';
 
