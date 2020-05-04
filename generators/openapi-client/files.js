@@ -29,7 +29,8 @@ module.exports = {
 function writeFiles() {
     return {
         addOpenAPIIgnoreFile() {
-            this.copy('.openapi-generator-ignore', '.openapi-generator-ignore');
+            const basePath = this.config.get('reactive') ? 'java' : 'spring';
+            this.copy(`${basePath}/.openapi-generator-ignore`, '.openapi-generator-ignore');
         },
 
         callOpenApiGenerator() {
