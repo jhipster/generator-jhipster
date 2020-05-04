@@ -19,6 +19,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
+const path = require('path');
 const { readFileSync, unlinkSync, writeFileSync } = require('fs');
 const { writeConfigFile } = require('../../../jdl/exporters/export-utils');
 
@@ -34,12 +35,12 @@ describe('ExportUtils', () => {
                         jhipsterVersion: '7.0.0',
                     },
                 };
-                writeConfigFile(config);
-                exportedConfig = JSON.parse(readFileSync('.yo-rc.json', { encoding: 'utf-8' }));
+                writeConfigFile(config, path.join(__dirname, '.yo-rc.json'));
+                exportedConfig = JSON.parse(readFileSync(path.join(__dirname, '.yo-rc.json'), { encoding: 'utf-8' }));
                 expectedConfig = config;
             });
             after(() => {
-                unlinkSync('.yo-rc.json');
+                unlinkSync(path.join(__dirname, '.yo-rc.json'));
             });
 
             it('should export the config', () => {

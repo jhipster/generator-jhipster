@@ -297,8 +297,8 @@ describe('JSONToJDLEntityConverter', () => {
                             fs
                                 .readFileSync(
                                     path.join(
-                                        'test',
-                                        'jdl',
+                                        __dirname,
+                                        '..',
                                         'test-files',
                                         'json_to_jdl_converter',
                                         'with_user',
@@ -328,8 +328,8 @@ describe('JSONToJDLEntityConverter', () => {
                             fs
                                 .readFileSync(
                                     path.join(
-                                        'test',
-                                        'jdl',
+                                        __dirname,
+                                        '..',
                                         'test-files',
                                         'json_to_jdl_converter',
                                         'with_authority',
@@ -353,6 +353,6 @@ describe('JSONToJDLEntityConverter', () => {
 
 function readJsonEntity(entityName) {
     return JSON.parse(
-        fs.readFileSync(path.join('test', 'jdl', 'test-files', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString()
+        fs.readFileSync(path.join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString()
     );
 }

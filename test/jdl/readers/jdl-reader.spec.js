@@ -69,31 +69,31 @@ describe('JDLReader', () => {
         context('when passing valid arguments', () => {
             context('when passing an empty file', () => {
                 before(() => {
-                    fs.writeFileSync(path.join('test', 'jdl', 'test-files', 'test_file.jdl'), '');
+                    fs.writeFileSync(path.join(__dirname, '..', 'test-files', 'test_file.jdl'), '');
                 });
 
                 after(() => {
-                    fs.unlinkSync(path.join('test', 'jdl', 'test-files', 'test_file.jdl'));
+                    fs.unlinkSync(path.join(__dirname, '..', 'test-files', 'test_file.jdl'));
                 });
 
                 it('should fail', () => {
                     expect(() => {
-                        JDLReader.parseFromFiles([path.join('test', 'jdl', 'test-files', 'test_file.jdl')]);
+                        JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'test_file.jdl')]);
                     }).to.throw(/^File content must be passed, it is currently empty\.$/);
                 });
             });
             context('when passing a JDL file with a syntax error', () => {
                 before(() => {
-                    fs.writeFileSync(path.join('test', 'jdl', 'test-files', 'test_file.jdl'), 'enity A');
+                    fs.writeFileSync(path.join(__dirname, '..', 'test-files', 'test_file.jdl'), 'enity A');
                 });
 
                 after(() => {
-                    fs.unlinkSync(path.join('test', 'jdl', 'test-files', 'test_file.jdl'));
+                    fs.unlinkSync(path.join(__dirname, '..', 'test-files', 'test_file.jdl'));
                 });
 
                 it('should fail', () => {
                     expect(() => {
-                        JDLReader.parseFromFiles([path.join('test', 'jdl', 'test-files', 'test_file.jdl')]);
+                        JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'test_file.jdl')]);
                     }).to.throw(/but found: 'enity'/);
                 });
             });
@@ -101,7 +101,7 @@ describe('JDLReader', () => {
                 let content;
 
                 before(() => {
-                    content = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test-files', 'valid_jdl.jdl')]);
+                    content = JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'valid_jdl.jdl')]);
                 });
 
                 it('should read it', () => {
@@ -113,8 +113,8 @@ describe('JDLReader', () => {
 
                 before(() => {
                     content = JDLReader.parseFromFiles([
-                        path.join('test', 'jdl', 'test-files', 'valid_jdl.jdl'),
-                        path.join('test', 'jdl', 'test-files', 'valid_jdl2.jdl'),
+                        path.join(__dirname, '..', 'test-files', 'valid_jdl.jdl'),
+                        path.join(__dirname, '..', 'test-files', 'valid_jdl2.jdl'),
                     ]);
                 });
 
@@ -126,7 +126,7 @@ describe('JDLReader', () => {
                 let content;
 
                 before(() => {
-                    content = JDLReader.parseFromFiles([path.join('test', 'jdl', 'test-files', 'complex_jdl.jdl')]);
+                    content = JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'complex_jdl.jdl')]);
                 });
 
                 it('should read them', () => {
@@ -136,7 +136,7 @@ describe('JDLReader', () => {
             context('when having multiple internal JDL comments', () => {
                 it('should ignore them and does not fail', () => {
                     expect(() => {
-                        JDLReader.parseFromFiles([path.join('test', 'jdl', 'test-files', 'multiple_jdl_comments.jdl')]);
+                        JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'multiple_jdl_comments.jdl')]);
                     }).not.to.throw();
                 });
             });

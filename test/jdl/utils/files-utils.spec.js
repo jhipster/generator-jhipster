@@ -39,7 +39,7 @@ describe('FileUtils', () => {
             });
             context('with a valid file path', () => {
                 it('should return true', () => {
-                    expect(doesFileExist(path.join('test', 'jdl', 'test-files', 'MyEntity.json'))).to.be.true;
+                    expect(doesFileExist(path.join(__dirname, '..', 'test-files', 'MyEntity.json'))).to.be.true;
                 });
             });
         });
@@ -53,12 +53,12 @@ describe('FileUtils', () => {
             });
             context('with an invalid directory path', () => {
                 it('should return false', () => {
-                    expect(doesDirectoryExist('someInvalidPath')).to.be.false;
+                    expect(doesDirectoryExist(path.join(__dirname, 'invalid-folder'))).to.be.false;
                 });
             });
             context('with a valid directory path', () => {
                 it('should return true', () => {
-                    expect(doesDirectoryExist(path.join('test', 'jdl'))).to.be.true;
+                    expect(doesDirectoryExist(__dirname)).to.be.true;
                 });
             });
         });
@@ -87,8 +87,8 @@ describe('FileUtils', () => {
         context('when passing a file that exists', () => {
             it('should fail', () => {
                 expect(() => {
-                    createFolderIfItDoesNotExist('./package.json');
-                }).to.throw(/^The directory to create '\.\/package.json' is a file\.$/);
+                    createFolderIfItDoesNotExist(path.join(__dirname, '..', '..', '..', 'package.json'));
+                }).to.throw(/^The directory to create '.*?package\.json' is a file\.$/);
             });
         });
         context('when passing a directory that exists', () => {

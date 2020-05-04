@@ -60,15 +60,15 @@ describe('JSONReader', () => {
 
                 before(() => {
                     renameSync(
-                        join('test', 'jdl', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
-                        join('test', 'jdl', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
+                        join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json'),
+                        join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt')
                     );
-                    content = JSONReader.parseFromDir(join('test', 'jdl', 'test-files', 'jhipster_app'));
+                    content = JSONReader.parseFromDir(join(__dirname, '..', 'test-files', 'jhipster_app'));
                 });
                 after(() => {
                     renameSync(
-                        join('test', 'jdl', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
-                        join('test', 'jdl', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json')
+                        join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.txt'),
+                        join(__dirname, '..', 'test-files', 'jhipster_app', '.jhipster', 'InvalidBlobType.json')
                     );
                 });
 

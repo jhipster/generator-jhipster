@@ -34,7 +34,7 @@ describe('integration tests', () => {
 
         before(() => {
             originalContent = DocumentParser.parseFromConfigurationObject({
-                parsedContent: JDLReader.parseFromFiles([path.join('test', 'jdl', 'test-files', 'big_sample.jdl')]),
+                parsedContent: JDLReader.parseFromFiles([path.join(__dirname, '..', 'test-files', 'big_sample.jdl')]),
                 applicationType: ApplicationTypes.MONOLITH,
             });
             JDLExporter.exportToJDL(originalContent, 'exported.jdl');

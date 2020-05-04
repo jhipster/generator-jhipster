@@ -43,17 +43,15 @@ describe('JSONFileReader', () => {
             context('because the file does not exist', () => {
                 it('should fail', () => {
                     expect(() => {
-                        JSONFileReader.readEntityJSON('test/test-files/WrongFile.json');
-                    }).to.throw(
-                        new RegExp("The passed file 'test/test-files/WrongFile.json' must exist and must not be a directory to be read.")
-                    );
+                        JSONFileReader.readEntityJSON(path.join(__dirname, '..', 'test-files', 'WrongFile.json'));
+                    }).to.throw(new RegExp("The passed file '.*?WrongFile.json' must exist and must not be a directory to be read."));
                 });
             });
             context('because the file is a folder', () => {
                 it('should fail', () => {
                     expect(() => {
-                        JSONFileReader.readEntityJSON('test/test-files/');
-                    }).to.throw(new RegExp("The passed file 'test/test-files/' must exist and must not be a directory to be read."));
+                        JSONFileReader.readEntityJSON(__dirname);
+                    }).to.throw(/^The passed file '.*?' must exist and must not be a directory to be read.$/);
                 });
             });
         });
@@ -61,7 +59,7 @@ describe('JSONFileReader', () => {
             let content;
 
             before(() => {
-                content = JSONFileReader.readEntityJSON(path.join('test', 'jdl', 'test-files', 'MyEntity.json'));
+                content = JSONFileReader.readEntityJSON(path.join(__dirname, '..', 'test-files', 'MyEntity.json'));
             });
 
             it('should read the file', () => {

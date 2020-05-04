@@ -66,7 +66,7 @@ describe('JDLLinter', () => {
             let reportedIssues;
 
             before(() => {
-                linter = createJDLLinterFromFile(path.join('test', 'jdl', 'test-files', 'lint', 'useless_entity_curly_braces.jdl'));
+                linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'useless_entity_curly_braces.jdl'));
                 reportedIssues = linter.check();
                 const issues = reportedIssues.getIssues();
                 issue = issues.entities[0];
@@ -85,7 +85,7 @@ describe('JDLLinter', () => {
             let reportedIssues;
 
             before(() => {
-                linter = createJDLLinterFromFile(path.join('test', 'jdl', 'test-files', 'lint', 'useless_table_names.jdl'));
+                linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'useless_table_names.jdl'));
                 reportedIssues = linter.check();
                 const issues = reportedIssues.getIssues();
                 issueForB = issues.entities[0];
@@ -108,7 +108,7 @@ describe('JDLLinter', () => {
                 let issueForB;
 
                 before(() => {
-                    linter = createJDLLinterFromFile(path.join('test', 'jdl', 'test-files', 'lint', 'duplicate_entities.jdl'));
+                    linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_entities.jdl'));
                     reportedIssues = linter.check();
                     const issues = reportedIssues.getIssues();
                     issueForA = issues.entities[0];
@@ -128,7 +128,7 @@ describe('JDLLinter', () => {
                 let issueForBb;
 
                 before(() => {
-                    linter = createJDLLinterFromFile(path.join('test', 'jdl', 'test-files', 'lint', 'duplicate_fields.jdl'));
+                    linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_fields.jdl'));
                     reportedIssues = linter.check();
                     const issues = reportedIssues.getIssues();
                     issueForAa = issues.fields[0];
@@ -147,7 +147,7 @@ describe('JDLLinter', () => {
                 let issueForA;
 
                 before(() => {
-                    linter = createJDLLinterFromFile(path.join('test', 'jdl', 'test-files', 'lint', 'duplicate_enums.jdl'));
+                    linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'duplicate_enums.jdl'));
                     reportedIssues = linter.check();
                     const issues = reportedIssues.getIssues();
                     issueForA = issues.enums[0];
@@ -166,7 +166,7 @@ describe('JDLLinter', () => {
             let issueFor3;
 
             before(() => {
-                linter = createJDLLinterFromFile(path.join('test', 'jdl', 'test-files', 'lint', 'unused_enums.jdl'));
+                linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'unused_enums.jdl'));
                 reportedIssues = linter.check();
                 const issues = reportedIssues.getIssues();
                 issueFor2 = issues.enums[0];
@@ -187,7 +187,7 @@ describe('JDLLinter', () => {
             let issueForAToC;
 
             before(() => {
-                linter = createJDLLinterFromFile(path.join('test', 'jdl', 'test-files', 'lint', 'ungrouped_relationships.jdl'));
+                linter = createJDLLinterFromFile(path.join(__dirname, '..', 'test-files', 'lint', 'ungrouped_relationships.jdl'));
                 reportedIssues = linter.check();
                 const issues = reportedIssues.getIssues();
                 issueForAToB = issues.relationships[0];
