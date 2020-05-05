@@ -104,7 +104,7 @@ module.exports = class extends BaseGenerator {
                     // Verify if the blueprints has been registered.
                     const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
                     if (missing && missing.length > 0) {
-                        this.env.error(`Some blueprints were not found ${missing}, you should install them manually`);
+                        this.error(`Some blueprints were not found ${missing}, you should install them manually`);
                     }
                 }
 
