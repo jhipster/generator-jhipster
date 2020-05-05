@@ -81,10 +81,12 @@ module.exports = class extends BaseGenerator {
         this.applicationType = configuration.get('applicationType');
         this.reactive = configuration.get('reactive') || false;
         this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
+        this.authenticationType = configuration.get('authenticationType');
         this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
         this.herokuDeployType = configuration.get('herokuDeployType');
         this.herokuJavaVersion = configuration.get('herokuJavaVersion');
+        this.useOkta = configuration.get('useOkta');
     }
 
     get prompting() {
@@ -212,6 +214,35 @@ module.exports = class extends BaseGenerator {
                     done();
                 });
             },
+            askForOkta() {
+                if (this.abort) return;
+                if (this.authenticationType !== 'oauth2') return;
+                if (this.useOkta) return;
+                const done = this.async();
+                const prompts = [
+                    {
+                        type: 'list',
+                        name: 'useOkta',
+                        message: 'You are using oauth2. Do you want to use Okta as IAM or configure e.g. keycloak yourself?',
+                        choices: [
+                            {
+                                value: true,
+                                name: 'Yes, provision the Okta addon',
+                            },
+                            {
+                                value: false,
+                                name: 'No, I want to configure the IAM manually',
+                            },
+                        ],
+                        default: 1,
+                    },
+                ];
+
+                this.prompt(prompts).then(props => {
+                    this.useOkta = props.useOkta;
+                    done();
+                });
+            },
         };
     }
 
@@ -297,9 +328,12 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
-
+                let buildPackParams = ' --buildpack heroku/jvm';
+                if (this.buildTool === 'gradle') {
+                    buildPackParams = ' --buildpack heroku/gradle';
+                }
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-                const child = ChildProcess.exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
+                const child = exec(`heroku create ${this.herokuAppName}${regionParams}${buildPackParams}`, (err, stdout, stderr) => {
                     if (err) {
                         if (stderr.includes('is already taken')) {
                             const prompts = [
@@ -338,7 +372,7 @@ module.exports = class extends BaseGenerator {
                                         done();
                                     });
                                 } else {
-                                    ChildProcess.exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
+                                    exec(`heroku create ${regionParams}${buildPackParams}`, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -423,6 +457,12 @@ module.exports = class extends BaseGenerator {
                         )
                     );
                     done();
+                }
+
+                if (this.useOkta) {
+                    exec(`heroku addons:create okta --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                        addonCreateCallback('Okta', err, stdout, stderr);
+                    });
                 }
 
                 let dbAddOn = '';
