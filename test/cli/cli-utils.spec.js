@@ -1,6 +1,10 @@
+const assert = require('assert');
 const expect = require('chai').expect;
+const fs = require('fs');
 const cliUtil = require('../../cli/utils');
 const packageJson = require('../../package.json');
+
+const { revertTempDir, testInTempDir } = require('../utils/utils');
 
 describe('jhipster cli utils test', () => {
     describe('toString', () => {
@@ -167,6 +171,139 @@ describe('jhipster cli utils test', () => {
                     skipInstall: true,
                     foo: 'bar,who',
                     'from-cli': true,
+                });
+            });
+        });
+    });
+    describe('loadAllBlueprintsWithVersion', () => {
+        describe('when there is no .yo-rc.json', () => {
+            let oldCwd;
+
+            before(() => {
+                assert(!fs.existsSync('.yo-rc.json'));
+                oldCwd = testInTempDir(() => {}, true);
+            });
+            after(() => {
+                revertTempDir(oldCwd);
+            });
+
+            it('returns an empty object', () => {
+                expect(cliUtil.loadAllBlueprintsWithVersion()).to.deep.equal({});
+            });
+        });
+
+        describe('when blueprints was passed by command', () => {
+            let oldCwd;
+            let oldArgv;
+            let returned;
+
+            before(() => {
+                oldArgv = process.argv;
+                process.argv = ['--blueprints', 'vuejs,dotnet'];
+                assert(!fs.existsSync('.yo-rc.json'));
+                oldCwd = testInTempDir(() => {}, true);
+                returned = cliUtil.loadAllBlueprintsWithVersion();
+            });
+            after(() => {
+                process.argv = oldArgv;
+                revertTempDir(oldCwd);
+            });
+
+            it('returns an empty object', () => {
+                expect(returned).to.deep.equal({
+                    'generator-jhipster-vuejs': undefined,
+                    'generator-jhipster-dotnet': undefined,
+                });
+            });
+        });
+
+        describe('when there are no blueprints on .yo-rc.json', () => {
+            let oldCwd;
+            let returned;
+
+            before(() => {
+                oldCwd = testInTempDir(() => {}, true);
+                const yoRcContent = {
+                    'generator-jhipster': {
+                        blueprints: [],
+                    },
+                };
+                fs.writeFileSync('.yo-rc.json', JSON.stringify(yoRcContent));
+                returned = cliUtil.loadAllBlueprintsWithVersion();
+            });
+            after(() => {
+                fs.unlinkSync('.yo-rc.json');
+                revertTempDir(oldCwd);
+            });
+
+            it('returns an empty object', () => {
+                expect(returned).to.deep.equal({});
+            });
+        });
+
+        describe('when there are blueprints on .yo-rc.json', () => {
+            let returned;
+            let oldCwd;
+
+            before(() => {
+                oldCwd = testInTempDir(() => {}, true);
+                const yoRcContent = {
+                    'generator-jhipster': {
+                        blueprints: [
+                            { name: 'generator-jhipster-beeblebrox', version: 'latest' },
+                            { name: 'generator-jhipster-h2g2-answer', version: '42' },
+                        ],
+                    },
+                };
+                fs.writeFileSync('.yo-rc.json', JSON.stringify(yoRcContent));
+                returned = cliUtil.loadAllBlueprintsWithVersion();
+            });
+            after(() => {
+                fs.unlinkSync('.yo-rc.json');
+                revertTempDir(oldCwd);
+            });
+
+            it('returns the blueprints names & versions', () => {
+                expect(returned).to.deep.equal({
+                    'generator-jhipster-beeblebrox': 'latest',
+                    'generator-jhipster-h2g2-answer': '42',
+                });
+            });
+        });
+
+        describe('when blueprints are defined in both command and .yo-rc.json', () => {
+            let oldCwd;
+            let oldArgv;
+            let returned;
+
+            before(() => {
+                oldArgv = process.argv;
+                process.argv = ['--blueprints', 'vuejs,dotnet'];
+                assert(!fs.existsSync('.yo-rc.json'));
+                oldCwd = testInTempDir(() => {}, true);
+
+                const yoRcContent = {
+                    'generator-jhipster': {
+                        blueprints: [
+                            { name: 'generator-jhipster-vuejs', version: 'latest' },
+                            { name: 'generator-jhipster-h2g2-answer', version: '42' },
+                        ],
+                    },
+                };
+                fs.writeFileSync('.yo-rc.json', JSON.stringify(yoRcContent));
+                returned = cliUtil.loadAllBlueprintsWithVersion();
+            });
+            after(() => {
+                fs.unlinkSync('.yo-rc.json');
+                process.argv = oldArgv;
+                revertTempDir(oldCwd);
+            });
+
+            it('returns the blueprints names & versions, .yo-rc taking precedence', () => {
+                expect(returned).to.deep.equal({
+                    'generator-jhipster-vuejs': 'latest',
+                    'generator-jhipster-dotnet': undefined,
+                    'generator-jhipster-h2g2-answer': '42',
                 });
             });
         });
