@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const Config = require('conf');
 const osLocale = require('os-locale');
 const axios = require('axios');

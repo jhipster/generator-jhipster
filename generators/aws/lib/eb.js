@@ -22,7 +22,8 @@ let uuidV4;
 const Eb = (module.exports = function Eb(Aws, generator) {
     aws = Aws;
     try {
-        uuidV4 = require('uuid/v4'); // eslint-disable-line
+        const { v4 } = require('uuid'); // eslint-disable-line
+        uuidV4 = v4;
     } catch (e) {
         generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }
