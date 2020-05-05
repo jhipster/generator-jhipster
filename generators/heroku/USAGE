@@ -7,5 +7,6 @@ Example:
 
     This will create:
         Procfile
+        system.properties
         application-heroku.yml
         gradle/heroku.gradle
