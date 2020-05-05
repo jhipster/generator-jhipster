@@ -209,7 +209,7 @@ describe('jhipster cli utils test', () => {
                 revertTempDir(oldCwd);
             });
 
-            it('returns an empty object', () => {
+            it('returns blueprints with no version', () => {
                 expect(returned).to.deep.equal({
                     'generator-jhipster-vuejs': undefined,
                     'generator-jhipster-dotnet': undefined,
