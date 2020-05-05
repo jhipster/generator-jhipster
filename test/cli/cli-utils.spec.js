@@ -180,8 +180,8 @@ describe('jhipster cli utils test', () => {
             let oldCwd;
 
             before(() => {
-                assert(!fs.existsSync('.yo-rc.json'));
                 oldCwd = testInTempDir(() => {}, true);
+                assert(!fs.existsSync('.yo-rc.json'));
             });
             after(() => {
                 revertTempDir(oldCwd);
@@ -198,10 +198,10 @@ describe('jhipster cli utils test', () => {
             let returned;
 
             before(() => {
+                oldCwd = testInTempDir(() => {}, true);
                 oldArgv = process.argv;
                 process.argv = ['--blueprints', 'vuejs,dotnet'];
                 assert(!fs.existsSync('.yo-rc.json'));
-                oldCwd = testInTempDir(() => {}, true);
                 returned = cliUtil.loadAllBlueprintsWithVersion();
             });
             after(() => {
@@ -277,11 +277,11 @@ describe('jhipster cli utils test', () => {
             let returned;
 
             before(() => {
-                oldArgv = process.argv;
-                process.argv = ['--blueprints', 'vuejs,dotnet'];
-                assert(!fs.existsSync('.yo-rc.json'));
                 oldCwd = testInTempDir(() => {}, true);
+                oldArgv = process.argv;
 
+                assert(!fs.existsSync('.yo-rc.json'));
+                process.argv = ['--blueprints', 'vuejs,dotnet'];
                 const yoRcContent = {
                     'generator-jhipster': {
                         blueprints: [
