@@ -594,7 +594,12 @@ function getAllJhipsterConfig(generator, force, basePath = '') {
     let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
     const filePath = path.join(basePath || '', '.yo-rc.json');
     if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
-        const yoRc = loadYoRc(filePath);
+        let yoRc;
+        if (generator && generator.fs) {
+            yoRc = generator.fs.readJSON(filePath);
+        } else {
+            yoRc = loadYoRc(filePath);
+        }
         configuration = yoRc['generator-jhipster'];
         // merge the blueprint configs if available
         configuration.blueprints = loadBlueprintsFromConfiguration(configuration);
