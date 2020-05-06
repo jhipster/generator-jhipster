@@ -265,6 +265,8 @@ module.exports = class extends BaseGenerator {
                 this.config.set({
                     herokuAppName: this.herokuAppName,
                     herokuDeployType: this.herokuDeployType,
+                    herokuJavaVersion: this.herokuJavaVersion,
+                    useOkta: this.useOkta,
                 });
             },
         };
@@ -328,12 +330,9 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
-                let buildPackParams = ' --buildpack heroku/jvm';
-                if (this.buildTool === 'gradle') {
-                    buildPackParams = ' --buildpack heroku/gradle';
-                }
+
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-                const child = exec(`heroku create ${this.herokuAppName}${regionParams}${buildPackParams}`, (err, stdout, stderr) => {
+                const child = exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
                     if (err) {
                         if (stderr.includes('is already taken')) {
                             const prompts = [
@@ -372,7 +371,7 @@ module.exports = class extends BaseGenerator {
                                         done();
                                     });
                                 } else {
-                                    exec(`heroku create ${regionParams}${buildPackParams}`, (err, stdout, stderr) => {
+                                    exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -561,8 +560,8 @@ module.exports = class extends BaseGenerator {
                     this.addMavenDependency('org.springframework.cloud', 'spring-cloud-localconfig-connector');
                     this.addMavenDependency('org.springframework.cloud', 'spring-cloud-heroku-connector');
                 } else if (this.buildTool === 'gradle') {
-                    this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-localconfig-connector');
-                    this.addGradleDependency('compile', 'org.springframework.cloud', 'spring-cloud-heroku-connector');
+                    this.addGradleDependency('implementation', 'org.springframework.cloud', 'spring-cloud-localconfig-connector');
+                    this.addGradleDependency('implementation', 'org.springframework.cloud', 'spring-cloud-heroku-connector');
                 }
             },
 
@@ -644,74 +643,53 @@ module.exports = class extends BaseGenerator {
                                     let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
                                     if (this.buildTool === 'gradle') {
                                         buildpack = 'heroku/gradle';
-                                        configVars = 'GRADLE_TASK="stage -Pprod" ';
+                                        configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
                                     }
                                     this.log(chalk.bold('\nConfiguring Heroku'));
-                                    ChildProcess.exec(
-                                        `heroku config:set NPM_CONFIG_PRODUCTION="false" ${configVars}--app ${this.herokuAppName}`,
-                                        (err, stdout, stderr) => {
+                                    exec(`heroku config:set ${configVars}--app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                                        if (err) {
+                                            this.log(stderr);
+                                        }
+
+                                        exec(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                                             if (err) {
-                                                this.log(stderr);
+                                                const line = stderr.toString().trimRight();
+                                                if (line.trim().length !== 0 && line.indexOf('is already set') < 0) this.log(line);
                                             }
-                                            ChildProcess.exec(
-                                                `heroku buildpacks:add -i 1 heroku/nodejs --app ${this.herokuAppName}`,
-                                                (err, stdout, stderr) => {
-                                                    if (err) {
-                                                        const line = stderr.toString().trimRight();
-                                                        if (line.trim().length !== 0 && line.indexOf('is already set') < 0) this.log(line);
-                                                    }
-                                                    ChildProcess.exec(
-                                                        `heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`,
-                                                        (err, stdout, stderr) => {
-                                                            if (err) {
-                                                                const line = stderr.toString().trimRight();
-                                                                if (line.trim().length !== 0 && line.indexOf('is already set') < 0)
-                                                                    this.log(line);
-                                                            }
-                                                            this.log(chalk.bold('\nDeploying application'));
-                                                            const child = ChildProcess.exec(
-                                                                'git push heroku HEAD:master',
-                                                                { maxBuffer: 1024 * 10000 },
-                                                                err => {
-                                                                    if (err) {
-                                                                        this.abort = true;
-                                                                        this.log.error(err);
-                                                                    } else {
-                                                                        this.log(
-                                                                            chalk.green(
-                                                                                `\nYour app should now be live. To view it run\n\t${chalk.bold(
-                                                                                    'heroku open'
-                                                                                )}`
-                                                                            )
-                                                                        );
-                                                                        this.log(
-                                                                            chalk.yellow(
-                                                                                `And you can view the logs with this command\n\t${chalk.bold(
-                                                                                    'heroku logs --tail'
-                                                                                )}`
-                                                                            )
-                                                                        );
-                                                                        this.log(
-                                                                            chalk.yellow(
-                                                                                `After application modification, redeploy it with\n\t${chalk.bold(
-                                                                                    'jhipster heroku'
-                                                                                )}`
-                                                                            )
-                                                                        );
-                                                                    }
-                                                                    done();
-                                                                }
-                                                            );
-                                                            child.stderr.on('data', data => {
-                                                                const line = data.toString().trimRight();
-                                                                if (line.trim().length !== 0) this.log(line);
-                                                            });
-                                                        }
+                                            this.log(chalk.bold('\nDeploying application'));
+                                            const child = exec('git push heroku HEAD:master', { maxBuffer: 1024 * 10000 }, err => {
+                                                if (err) {
+                                                    this.abort = true;
+                                                    this.log.error(err);
+                                                } else {
+                                                    this.log(
+                                                        chalk.green(
+                                                            `\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`
+                                                        )
+                                                    );
+                                                    this.log(
+                                                        chalk.yellow(
+                                                            `And you can view the logs with this command\n\t${chalk.bold(
+                                                                'heroku logs --tail'
+                                                            )}`
+                                                        )
+                                                    );
+                                                    this.log(
+                                                        chalk.yellow(
+                                                            `After application modification, redeploy it with\n\t${chalk.bold(
+                                                                'jhipster heroku'
+                                                            )}`
+                                                        )
                                                     );
                                                 }
-                                            );
-                                        }
-                                    );
+                                                done();
+                                            });
+                                            child.stderr.on('data', data => {
+                                                const line = data.toString().trimRight();
+                                                if (line.trim().length !== 0) this.log(line);
+                                            });
+                                        });
+                                    });
                                 }
                             });
                         }
@@ -726,6 +704,7 @@ module.exports = class extends BaseGenerator {
                     const files = glob.sync(jarFileWildcard, {});
                     const jarFile = files[0];
                     const herokuDeployCommand = `heroku deploy:jar ${jarFile} --app ${this.herokuAppName}`;
+                    const herokuSetBuildpackCommand = 'heroku buildpacks:set heroku/jvm';
 
                     this.log(
                         chalk.bold(
@@ -734,20 +713,23 @@ module.exports = class extends BaseGenerator {
                             )} depending on your connection speed...`
                         )
                     );
-                    const child = ChildProcess.exec(herokuDeployCommand, (err, stdout) => {
-                        if (err) {
-                            this.abort = true;
-                            this.log.error(err);
-                        }
-                        this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
-                        this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
-                        this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-                        done();
-                    });
 
-                    child.stdout.on('data', data => {
-                        const line = data.toString().trimRight();
-                        if (line.trim().length !== 0) this.log(line);
+                    exec(herokuSetBuildpackCommand, (err, stdout) => {
+                        const child = exec(herokuDeployCommand, (err, stdout) => {
+                            if (err) {
+                                this.abort = true;
+                                this.log.error(err);
+                            }
+                            this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
+                            this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
+                            this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
+                            done();
+                        });
+
+                        child.stdout.on('data', data => {
+                            const line = data.toString().trimRight();
+                            if (line.trim().length !== 0) this.log(line);
+                        });
                     });
                 }
             },
