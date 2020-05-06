@@ -615,6 +615,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
         <%_ } _%>
     }
+        <%_ if (databaseType === 'sql' && reactive) { _%>
+    public void set<%= relationshipNameCapitalized %>Id(Long <%= otherEntityName %>) {
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %>;
+    }
+        <%_ } _%>
     <%_ } _%>
 <%_ } _%>
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

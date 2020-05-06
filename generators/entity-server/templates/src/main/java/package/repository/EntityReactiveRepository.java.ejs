@@ -94,13 +94,8 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
         <%_ }
     }
     if (databaseType === 'sql') {
-        let joins = [];
-        for (idx in relationships) {
-            let rel = relationships[idx];
-            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
-                joins.push(" LEFT JOIN " + rel.otherEntityTableName + " " + rel.relationshipName + " ON entity." + getColumnName(rel.relationshipName) + "_id = " + rel.relationshipName + ".id");
-            }
-        } _%>
+        let joins = generateTableJoins(relationships);
+    _%>
 
     @Query("SELECT * FROM <%= entityTableName %> entity "
 <%_     for (idx in joins) { _%>
@@ -143,6 +138,9 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 }
 <%_ if (databaseType === 'sql') { _%>
 interface <%= entityClass %>RepositoryInternal {
+    Flux<<%= asEntity(entityClass) %>> findAllEager();
+    Flux<<%= asEntity(entityClass) %>> findOneEager(<%= primaryKeyType %> id);
+
   <%_ if (pagination !== 'no') { _%>
     Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
     Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria);

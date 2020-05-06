@@ -18,14 +18,39 @@
 -%>
 package <%= packageName %>.repository;
 
+<%_
+    let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
+_%>
+import java.util.function.BiFunction;
+<%_ if (fieldsContainBigDecimal === true) { _%>
+import java.math.BigDecimal;
+<%_} if (fieldsContainInstant === true) { _%>
+import java.time.Instant;
+<%_ } if (fieldsContainLocalDate === true) { _%>
+import java.time.LocalDate;
+<%_ } if (fieldsContainZonedDateTime === true) { _%>
+import java.time.ZonedDateTime;
+<%_ } if (fieldsContainDuration === true) { _%>
+import java.time.Duration;
+<%_ } if (fieldsContainUUID === true) { _%>
+import java.util.UUID;
+<%_ } _%>
+
 import org.springframework.data.domain.Pageable;
 <%_ if (databaseType === 'sql') { _%>
+import io.r2dbc.spi.Row;
+import io.r2dbc.spi.RowMetadata;
+
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.query.Criteria;
 <%_ } _%>
 
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
+<%_ Object.keys(uniqueEnums).forEach(function(element) { _%>
+
+import <%= packageName %>.domain.enumeration.<%= element %>;
+<%_ }); _%>
 
 import reactor.core.publisher.Flux;
 
@@ -36,11 +61,38 @@ import reactor.core.publisher.Flux;
 public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>RepositoryInternal {
     private final DatabaseClient db;
     private final ReactiveDataAccessStrategy dataAccessStrategy;
+
+    private final <%= entityClass %>Reader entityReader = new <%= entityClass %>Reader("ent");
+
+<%_ for (idx in relationships) {
+      let rel = relationships[idx];
+      if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
+      _%>
+    private final <%= rel.otherEntityNameCapitalized %>Reader <%= rel.relationshipName %> = new <%= rel.otherEntityNameCapitalized %>Reader("<%= rel.relationshipName %>");
+<%_   }
+    } 
+  let joins = generateTableJoins(relationships);
+_%>
+    private final static String SELECT = "SELECT "
+            + <%= entityClass %>SqlHelper.getColumnNames("ent", "entity")
+        <%_ for (idx in relationships) {
+            let rel = relationships[idx];
+            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
+          _%>
+           + ", " + <%= rel.otherEntityNameCapitalized %>SqlHelper.getColumnNames("<%= rel.relationshipName %>", "<%= rel.relationshipName %>")
+      <%_   }
+          }_%>
+            + " FROM <%= entityTableName %> entity "
+<%_     for (idx in joins) { _%>
+            + "<%= joins[idx] %>"
+<%_     } _%>;
+
     public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy) {
         this.db = db;
         this.dataAccessStrategy = dataAccessStrategy;
     }
 
+<%_ if (pagination !== 'no') { _%>
     @Override
     public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable) {
         return db.select().from(<%= asEntity(entityClass) %>.class)
@@ -56,6 +108,72 @@ public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass
                 .page(pageable)
                 .as(<%= asEntity(entityClass) %>.class)
                 .all();
+    }
+
+<%_ } _%>
+    @Override
+    public Flux<<%= asEntity(entityClass) %>> findAllEager() {
+        return db.execute(SELECT)
+                .map(this::process)
+                .all();
+    }
+
+    @Override
+    public Flux<<%= asEntity(entityClass) %>> findOneEager(<%= primaryKeyType %> id) {
+        return db.execute(SELECT + " WHERE entity.id = :id")
+                .bind("id", id)
+                .map(this::process)
+                .all();
+    }
+
+    private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {
+        <%= asEntity(entityClass) %> entity = entityReader.apply(row, metadata);
+        
+        return entity;
+    }
+}
+
+class <%= entityClass %>SqlHelper {
+    static String getColumnNames(String tableAlias, String columnPrefix) {
+<%_ 
+  let columns = "%1$s.id as %2$s_id";
+   for (idx in fields) {
+      let field = fields[idx];
+      columns = columns + ",%1$s." + field.fieldNameAsDatabaseColumn + " as %2$s_" + field.fieldNameAsDatabaseColumn;
+   }
+   for (idx in relationships) {
+     let rel = relationships[idx];
+     if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
+         columns = columns + ",%1$s." + getColumnName(rel.relationshipName) +"_id as %2$s_" + getColumnName(rel.relationshipName)+ "_id";
+     }
+   }
+_%>
+        return String.format("<%= columns %>", tableAlias, columnPrefix);
+    }
+}
+
+class <%= entityClass %>Reader implements BiFunction<Row, RowMetadata, <%= asEntity(entityClass) %>> {
+    private final String prefix;
+    public <%= entityClass %>Reader(String prefix) {
+        this.prefix = prefix;
+    }
+    @Override
+    public <%= asEntity(entityClass) %> apply(Row row, RowMetadata metadata) {
+        <%= asEntity(entityClass) %> entity = new <%= asEntity(entityClass) %>();
+        entity.setId(row.get(prefix + "_id", Long.class));
+        <%_ for (idx in fields) { 
+            let field = fields[idx];
+            _%>
+        entity.set<%= field.fieldInJavaBeanMethod %>(row.get(prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= field.fieldType %>.class));
+        <%_ } _%>
+        <%_ for (idx in relationships) { 
+            let rel = relationships[idx];
+            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
+            _%>
+        entity.set<%= rel.relationshipNameCapitalized %>Id(row.get(prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
+        <%_ }
+        } _%>
+        return entity;
     }
 
 }
