@@ -20,6 +20,9 @@ package <%= packageName %>.repository;
 
 <%_
     let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
+    let eagerRelations = relationships.filter(function(rel) {
+        return rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one';
+    });
 _%>
 import java.util.function.BiFunction;
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -64,24 +67,21 @@ public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass
 
     private final <%= entityClass %>Reader entityReader = new <%= entityClass %>Reader("ent");
 
-<%_ for (idx in relationships) {
-      let rel = relationships[idx];
-      if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
+<%_ for (idx in eagerRelations) {
+      let rel = eagerRelations[idx];
       _%>
-    private final <%= rel.otherEntityNameCapitalized %>Reader <%= rel.relationshipName %> = new <%= rel.otherEntityNameCapitalized %>Reader("<%= rel.relationshipName %>");
-<%_   }
+    private final <%= rel.otherEntityNameCapitalized %>Reader <%= rel.relationshipName %>Reader = new <%= rel.otherEntityNameCapitalized %>Reader("<%= rel.relationshipName %>");
+<%_
     } 
   let joins = generateTableJoins(relationships);
 _%>
     private final static String SELECT = "SELECT "
             + <%= entityClass %>SqlHelper.getColumnNames("ent", "entity")
-        <%_ for (idx in relationships) {
-            let rel = relationships[idx];
-            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
+        <%_ for (idx in eagerRelations) {
+            let rel = eagerRelations[idx];
           _%>
            + ", " + <%= rel.otherEntityNameCapitalized %>SqlHelper.getColumnNames("<%= rel.relationshipName %>", "<%= rel.relationshipName %>")
-      <%_   }
-          }_%>
+        <%_ } _%>
             + " FROM <%= entityTableName %> entity "
 <%_     for (idx in joins) { _%>
             + "<%= joins[idx] %>"
@@ -128,7 +128,9 @@ _%>
 
     private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {
         <%= asEntity(entityClass) %> entity = entityReader.apply(row, metadata);
-        
+        <%_ eagerRelations.forEach(function(rel) { _%>
+        entity.set<%= rel.relationshipNameCapitalized %>(<%= rel.relationshipName %>Reader.apply(row, metadata));
+        <%_ }); _%>
         return entity;
     }
 }
@@ -137,16 +139,12 @@ class <%= entityClass %>SqlHelper {
     static String getColumnNames(String tableAlias, String columnPrefix) {
 <%_ 
   let columns = "%1$s.id as %2$s_id";
-   for (idx in fields) {
-      let field = fields[idx];
+  fields.forEach(function(field) {
       columns = columns + ",%1$s." + field.fieldNameAsDatabaseColumn + " as %2$s_" + field.fieldNameAsDatabaseColumn;
-   }
-   for (idx in relationships) {
-     let rel = relationships[idx];
-     if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
-         columns = columns + ",%1$s." + getColumnName(rel.relationshipName) +"_id as %2$s_" + getColumnName(rel.relationshipName)+ "_id";
-     }
-   }
+  });
+  eagerRelations.forEach(function(rel) {
+      columns = columns + ",%1$s." + getColumnName(rel.relationshipName) +"_id as %2$s_" + getColumnName(rel.relationshipName)+ "_id";
+  });
 _%>
         return String.format("<%= columns %>", tableAlias, columnPrefix);
     }
@@ -163,16 +161,16 @@ class <%= entityClass %>Reader implements BiFunction<Row, RowMetadata, <%= asEnt
         entity.setId(row.get(prefix + "_id", Long.class));
         <%_ for (idx in fields) { 
             let field = fields[idx];
+            let fieldType = field.fieldType;
+            if (field.fieldTypeBlobContent === 'text') {
+                fieldType = 'String';
+            }
             _%>
-        entity.set<%= field.fieldInJavaBeanMethod %>(row.get(prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= field.fieldType %>.class));
+        entity.set<%= field.fieldInJavaBeanMethod %>(row.get(prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
         <%_ } _%>
-        <%_ for (idx in relationships) { 
-            let rel = relationships[idx];
-            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
-            _%>
+        <%_ eagerRelations.forEach(function(rel) { _%>
         entity.set<%= rel.relationshipNameCapitalized %>Id(row.get(prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
-        <%_ }
-        } _%>
+        <%_ }); _%> 
         return entity;
     }
 
