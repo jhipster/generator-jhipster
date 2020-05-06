@@ -43,6 +43,15 @@
             <url>https://repo.spring.io/milestone</url>
         </repository>
         <%_ } _%>
+        <%_ if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
+        <repository>
+            <id>ossrh-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <%_ } _%>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
 
@@ -82,10 +91,10 @@
         <profile.tls />
 
         <!-- Dependency versions -->
-        <jhipster-dependencies.version>3.7.0-SNAPSHOT</jhipster-dependencies.version>
+        <jhipster-dependencies.version><%= JHIPSTER_DEPENDENCIES_VERSION %></jhipster-dependencies.version>
         <!-- The spring-boot version should match the one managed by
         https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/${jhipster-dependencies.version} -->
-        <spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+        <spring-boot.version><%= SPRING_BOOT_VERSION %></spring-boot.version>
 <%_ if (databaseType === 'sql') { _%>
         <!-- The hibernate version should match the one managed by
         https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
@@ -123,7 +132,7 @@
 <%_ } _%>
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version>1.0.3.RELEASE</blockhound-junit-platform.version>
-        <netty-common.version>4.1.48.Final</netty-common.version>
+        <netty-common.version>4.1.49.Final</netty-common.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
@@ -137,7 +146,7 @@
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-        <caffeine.version>2.8.1</caffeine.version>
+        <caffeine.version>2.8.2</caffeine.version>
         <typesafe.version>1.4.0</typesafe.version>
 <%_ } _%>
 <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
@@ -155,10 +164,10 @@
         <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
         <maven-checkstyle.version>3.1.1</maven-checkstyle.version>
-        <checkstyle.version>8.31</checkstyle.version>
+        <checkstyle.version>8.32</checkstyle.version>
         <spring-nohttp-checkstyle.version>0.0.4.RELEASE</spring-nohttp-checkstyle.version>
 <%_ if (!skipClient) { _%>
-        <frontend-maven-plugin.version>1.9.1</frontend-maven-plugin.version>
+        <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
 <%_ } _%>
         <git-commit-id-plugin.version>4.0.0</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version><%= JACOCO_VERSION %></jacoco-maven-plugin.version>
@@ -360,7 +369,7 @@
             <artifactId>HikariCP</artifactId>
         </dependency>
 <%_ } _%>
-<%_ if (databaseType === 'cassandra') { _%>
+<%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
@@ -425,6 +434,23 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+<%_ } _%>
+<%_ if (databaseType === 'sql' && !reactive) { _%>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+    <%_ if (prodDatabaseType === 'mysql') { _%>
+            <artifactId>mysql</artifactId>
+    <%_ } else if (prodDatabaseType === 'mariadb') { _%>
+            <artifactId>mariadb</artifactId>
+    <%_ } else if (prodDatabaseType === 'postgresql') { _%>
+            <artifactId>postgresql</artifactId>
+    <%_ } else if (prodDatabaseType === 'mssql') { _%>
+            <artifactId>mssqlserver</artifactId>
+    <%_ } else if (prodDatabaseType === 'oracle') { _%>
+            <artifactId>oracle-xe</artifactId>
+    <%_ } _%>
             <scope>test</scope>
         </dependency>
 <%_ } _%>
@@ -708,12 +734,14 @@
             <scope>test</scope>
         </dependency>
 <%_ if (reactive) { _%>
+        <!-- # Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
         <dependency>
             <groupId>io.projectreactor.tools</groupId>
             <artifactId>blockhound-junit-platform</artifactId>
             <version>${blockhound-junit-platform.version}</version>
             <scope>test</scope>
         </dependency>
+        -->
         <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
         <dependency>
             <groupId>io.netty</groupId>
@@ -1273,7 +1301,7 @@
                         <changeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
                         <diffChangeLogFile>${project.basedir}/<%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                         <driver><% if (devDatabaseType === 'mysql') { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %></driver>
-                        <url><% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:${project.build.directory}/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %></url>
+                        <url><% if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'h2Disk') { %><%- getJDBCUrl(devDatabaseType, { localDirectory: '${project.build.directory}/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'oracle') { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %></url>
                         <defaultSchemaName><% if (devDatabaseType === 'mysql') { %><%= baseName %><% } else if (devDatabaseType === 'postgresql') { %><% } %></defaultSchemaName>
                         <username><% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %></username>
                         <password><% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %></password>

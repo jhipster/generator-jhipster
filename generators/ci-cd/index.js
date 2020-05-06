@@ -33,41 +33,41 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // Automatically configure Travis
         this.argument('autoconfigure-travis', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Travis'
+            description: 'Automatically configure Travis',
         });
 
         // Automatically configure Jenkins
         this.argument('autoconfigure-jenkins', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Jenkins'
+            description: 'Automatically configure Jenkins',
         });
 
         // Automatically configure Gitlab
         this.argument('autoconfigure-gitlab', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Gitlab'
+            description: 'Automatically configure Gitlab',
         });
 
         // Automatically configure Azure
         this.argument('autoconfigure-azure', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure Azure'
+            description: 'Automatically configure Azure',
         });
 
         // Automatically configure GitHub Actions
         this.argument('autoconfigure-github', {
             type: Boolean,
             defaults: false,
-            description: 'Automatically configure GitHub Actions'
+            description: 'Automatically configure GitHub Actions',
         });
 
         this.registerPrettierTransform();
@@ -117,14 +117,14 @@ module.exports = class extends BaseGenerator {
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.DOCKER_JENKINS = constants.DOCKER_JENKINS;
                 this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-            }
+            },
         };
     }
 
     get prompting() {
         return {
             askPipeline: prompts.askPipeline,
-            askIntegrations: prompts.askIntegrations
+            askIntegrations: prompts.askIntegrations,
         };
     }
 
@@ -147,7 +147,7 @@ module.exports = class extends BaseGenerator {
                 } else {
                     this.frontTestCommand = 'test';
                 }
-            }
+            },
         };
     }
 

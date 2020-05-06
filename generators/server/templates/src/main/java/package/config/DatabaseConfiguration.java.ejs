@@ -54,13 +54,14 @@ import org.springframework.boot.autoconfigure.mongo.MongoReactiveAutoConfigurati
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseAutoConfiguration;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
 import org.springframework.context.annotation.Import;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch' && ['mongodb', 'couchbase'].includes(databaseType)) { _%>
+<%_ if (searchEngine === 'elasticsearch' && ['mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
@@ -72,6 +73,12 @@ import org.springframework.core.convert.converter.Converter;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import org.neo4j.springframework.data.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
+<%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
     <%_ if (!reactive) { _%>
@@ -150,6 +157,13 @@ import java.util.UUID;
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
     <%_ } _%>
 @EnableTransactionManagement
+<%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+    <%_ if (searchEngine === 'elasticsearch') { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
+    <%_ } else { _%>
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%= packageName %>.repository")
+    <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
@@ -274,11 +288,11 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public Couchmove couchmove(Bucket couchbaseBucket) {
+    public Couchmove couchmove(Bucket couchbaseBucket, CouchbaseProperties properties) {
         log.debug("Configuring Couchmove");
-        Couchmove couchMove = new Couchmove(couchbaseBucket, "config/couchmove/changelog");
-        couchMove.migrate();
-        return couchMove;
+        Couchmove couchmove = new Couchmove(couchbaseBucket, properties.getBucket().getName(), properties.getBucket().getPassword(), "config/couchmove/changelog");
+        couchmove.migrate();
+        return couchmove;
     }
 
     /**

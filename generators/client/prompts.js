@@ -27,7 +27,7 @@ module.exports = {
     askForClient,
     askFori18n,
     askForClientTheme,
-    askForClientThemeVariant
+    askForClientThemeVariant,
 };
 
 function askForModuleName() {
@@ -44,16 +44,16 @@ function askForClient(meta) {
     const choices = [
         {
             value: ANGULAR,
-            name: 'Angular'
+            name: 'Angular',
         },
         {
             value: REACT,
-            name: 'React'
+            name: 'React',
         },
         {
             value: 'no',
-            name: 'No client'
-        }
+            name: 'No client',
+        },
     ];
 
     const PROMPT = {
@@ -62,7 +62,7 @@ function askForClient(meta) {
         when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
-        default: ANGULAR
+        default: ANGULAR,
     };
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return
@@ -94,7 +94,7 @@ function askForClientTheme(meta) {
     const defaultChoices = [
         {
             value: 'none',
-            name: 'Default JHipster'
+            name: 'Default JHipster',
         },
         { value: 'cerulean', name: 'Cerulean' },
         { value: 'cosmo', name: 'Cosmo' },
@@ -116,7 +116,7 @@ function askForClientTheme(meta) {
         { value: 'spacelab', name: 'Spacelab' },
         { value: 'superhero', name: 'Superhero' },
         { value: 'united', name: 'United' },
-        { value: 'yeti', name: 'Yeti' }
+        { value: 'yeti', name: 'Yeti' },
     ];
 
     const PROMPT = {
@@ -125,7 +125,7 @@ function askForClientTheme(meta) {
         when: () => !skipClient,
         message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
         choices: defaultChoices,
-        default: 'none'
+        default: 'none',
     };
 
     this.httpsGet(
@@ -138,12 +138,12 @@ function askForClientTheme(meta) {
                 PROMPT.choices = [
                     {
                         value: 'none',
-                        name: 'Default JHipster'
+                        name: 'Default JHipster',
                     },
                     ...themes.map(theme => ({
                         value: theme.name.toLowerCase(),
-                        name: theme.name
-                    }))
+                        name: theme.name,
+                    })),
                 ];
 
                 if (meta) return PROMPT;
@@ -181,7 +181,7 @@ function askForClientThemeVariant(meta) {
     const choices = [
         { value: 'primary', name: 'Primary' },
         { value: 'dark', name: 'Dark' },
-        { value: 'light', name: 'Light' }
+        { value: 'light', name: 'Light' },
     ];
 
     const PROMPT = {
@@ -190,7 +190,7 @@ function askForClientThemeVariant(meta) {
         when: () => !skipClient,
         message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',
         choices,
-        default: 'primary'
+        default: 'primary',
     };
 
     if (meta) return PROMPT; // eslint-disable-line consistent-return

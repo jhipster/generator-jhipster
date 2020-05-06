@@ -36,20 +36,20 @@ const mockBlueprintSubGen = class extends EntityGenerator {
                 // Override with new value
                 // @deprecate remove for jhipster 7
                 this.storageData = {
-                    customBlueprintConfigKey: 'customBlueprintConfigValue'
+                    customBlueprintConfigKey: 'customBlueprintConfigValue',
                 };
-            }
+            },
         };
         const customPostPhaseSteps = {
             changeProperty() {
                 this.context.angularAppName = 'awesomeAngularAppName';
                 this.entityConfig.set('entityConfigPostConfigKey', 'entityConfigPostConfigValue');
-            }
+            },
         };
         return {
             ...customPrePhaseSteps,
             ...phaseFromJHipster,
-            ...customPostPhaseSteps
+            ...customPostPhaseSteps,
         };
     }
 
@@ -100,7 +100,7 @@ describe('JHipster entity generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:entity']])
                     .withPrompts({
@@ -108,7 +108,7 @@ describe('JHipster entity generator with blueprint', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'no'
+                        pagination: 'no',
                     })
                     .on('end', done);
             });
@@ -147,7 +147,7 @@ describe('JHipster entity generator with blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     blueprint: 'myblueprint',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([[helpers.createDummyGenerator(), 'jhipster-myblueprint:entity']])
                 .withArguments(['foo'])
@@ -156,7 +156,7 @@ describe('JHipster entity generator with blueprint', () => {
                     relationshipAdd: false,
                     dto: 'no',
                     service: 'no',
-                    pagination: 'no'
+                    pagination: 'no',
                 })
                 .on('end', done);
         });

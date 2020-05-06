@@ -19,17 +19,14 @@
 package <%= packageName %>.domain;
 
 <%_
-let importApiModelProperty = false;
-let importJsonIgnore = false;
-let importJsonIgnoreProperties = false;
-let importSet = false;
+
+let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
+
 let hasDto = dto === 'mapstruct';
 let isUsingMapsId = false;
 let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
-const uniqueEnums = {};
 _%>
-<%- include imports -%>
 <%_
 for (idx in relationships) {
     isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
@@ -104,7 +101,6 @@ import javax.validation.constraints.*;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 <%_ } _%>
 import java.io.Serializable;
-import java.util.Objects;
 <%_ if (fieldsContainBigDecimal === true) { _%>
 import java.math.BigDecimal;
 <%_ } if (fieldsContainBlob && databaseType === 'cassandra') { _%>
@@ -220,7 +216,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (fieldValidateRules.includes('unique')) {
             unique = true;
         } _%>
-    <%- include ../common/field_validators -%>
+    <%- include('../common/field_validators'); -%>
     <%_ } _%>
     <%_ if (!hasDto && typeof fields[idx].javadoc != 'undefined') { _%>
     @ApiModelProperty(value = "<%- formatAsApiDescription(fields[idx].javadoc) %>"<% if (required) { %>, required = true<% } %>)
@@ -330,7 +326,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     _%>
     @ManyToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
         <%_ if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
         <%_ }
     } else if ((databaseType === 'mongodb' || databaseType === 'couchbase') && !otherEntityIsEmbedded) {
         if (databaseType === 'mongodb') { _%>
@@ -361,7 +357,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             <%_ }
         } if (ownerSide === true) {
             if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
         <%_ } _%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name = "<%= getColumnName(name) %>_id", referencedColumnName = "id"),
@@ -387,7 +383,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             if (ownerSide) { _%>
     @OneToOne<% if (relationshipRequired) { %>(optional = false)<% } %>
             <%_ if (relationshipValidate) { _%>
-    <%- include relationship_validators -%>
+    <%- include('relationship_validators'); -%>
             <%_ } _%>
             <%_ if (isUsingMapsId === true) { %>
     @MapsId
@@ -417,7 +413,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     <%_ }
     } _%>
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     <%_ if (!embedded) { _%>
     public <% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'neo4j') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> getId() {
         return id;
@@ -569,7 +565,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     }
     <%_ } _%>
 <%_ } _%>
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {

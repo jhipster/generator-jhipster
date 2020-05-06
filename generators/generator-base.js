@@ -295,9 +295,9 @@ module.exports = class extends PrivateBase {
             );
         } catch (e) {
             this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}(key: ${key}, value:${value})${chalk.yellow(' not added to global translations.\n')}`
+                `${
+                    chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
+                }(key: ${key}, value:${value})${chalk.yellow(' not added to global translations.\n')}`
             );
             this.debug('Error:', e);
         }
@@ -414,9 +414,9 @@ module.exports = class extends PrivateBase {
             );
         } catch (e) {
             this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
+                `${
+                    chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
+                }npm dependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
             );
             this.debug('Error:', e);
         }
@@ -443,9 +443,9 @@ module.exports = class extends PrivateBase {
             );
         } catch (e) {
             this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
+                `${
+                    chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
+                }npm devDependency (name: ${name}, version:${version})${chalk.yellow(' not added.\n')}`
             );
             this.debug('Error:', e);
         }
@@ -472,9 +472,9 @@ module.exports = class extends PrivateBase {
             );
         } catch (e) {
             this.log(
-                `${chalk.yellow('\nUnable to find ') +
-                    fullPath +
-                    chalk.yellow('. Reference to ')}npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`
+                `${
+                    chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ')
+                }npm script (name: ${name}, data:${data})${chalk.yellow(' not added.\n')}`
             );
             this.debug('Error:', e);
         }
@@ -962,7 +962,7 @@ module.exports = class extends PrivateBase {
                         /([\s\n\r]+(data-t|jhiT)ranslate="([a-zA-Z0-9 +{}'_](\.)?)+")/, // data-translate or jhiTranslate
                         /([\s\n\r]+\[translate(-v|V)alues\]="\{([a-zA-Z]|\d|:|\{|\}|\[|\]|-|'|\s|\.|_)*?\}")/, // translate-values or translateValues
                         /([\s\n\r]+translate-compile)/, // translate-compile
-                        /([\s\n\r]+translate-value-max="[0-9{}()|]*")/ // translate-value-max
+                        /([\s\n\r]+translate-value-max="[0-9{}()|]*")/, // translate-value-max
                     ]
                         .map(r => r.source)
                         .join('|'),
@@ -977,7 +977,7 @@ module.exports = class extends PrivateBase {
                         /(,[\s]*(resolve):[\s]*[{][\s]*(translatePartialLoader)['a-zA-Z0-9$,(){.<%=\->;\s:[\]]*(;[\s]*\}\][\s]*\}))/, // ng1 resolve block
                         /([\s]import\s\{\s?JhiLanguageService\s?\}\sfrom\s["|']ng-jhipster["|'];)/, // ng2 import jhiLanguageService
                         /(,?\s?JhiLanguageService,?\s?)/, // ng2 import jhiLanguageService
-                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/ // ng2 jhiLanguageService constructor argument
+                        /(private\s[a-zA-Z0-9]*(L|l)anguageService\s?:\s?JhiLanguageService\s?,*[\s]*)/, // ng2 jhiLanguageService constructor argument
                     ]
                         .map(r => r.source)
                         .join('|'),
@@ -993,7 +993,7 @@ module.exports = class extends PrivateBase {
                         /(import { ?translate, ?Translate ?} from 'react-jhipster';?)/, // translate imports
                         /( Translate,|, ?Translate|import { ?Translate ?} from 'react-jhipster';?)/, // Translate import
                         /( translate,|, ?translate|import { ?translate ?} from 'react-jhipster';?)/, // translate import
-                        /<Translate(\s*)?((component="[a-z]+")(\s*)|(contentKey=("[a-zA-Z0-9.\-_]+"|\{.*\}))(\s*)|(interpolate=\{.*\})(\s*))*(\s*)\/?>|<\/Translate>/ // Translate component tag
+                        /<Translate(\s*)?((component="[a-z]+")(\s*)|(contentKey=("[a-zA-Z0-9.\-_]+"|\{.*\}))(\s*)|(interpolate=\{.*\})(\s*))*(\s*)\/?>|<\/Translate>/, // Translate component tag
                     ]
                         .map(r => r.source)
                         .join('|'),
@@ -1078,7 +1078,7 @@ module.exports = class extends PrivateBase {
                     file: filePath,
                     pattern,
                     content,
-                    regex
+                    regex,
                 },
                 this
             );
@@ -1114,7 +1114,7 @@ module.exports = class extends PrivateBase {
                 description: description || `A JHipster module to generate ${moduleName}`,
                 hookFor,
                 hookType,
-                generatorCallback
+                generatorCallback,
             };
             try {
                 // if file is not present, we got an empty list, no exception
@@ -1212,6 +1212,9 @@ module.exports = class extends PrivateBase {
     composeExternalModule(npmPackageName, subGen, options) {
         const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
         const generatorCallback = `${generatorName}:${subGen}`;
+        if (!this.env.get(generatorCallback)) {
+            throw new Error(`Generator ${generatorCallback} isn't registered.`);
+        }
         return this.composeWith(generatorCallback, options, true);
     }
 
@@ -1275,7 +1278,7 @@ module.exports = class extends PrivateBase {
         context.relationships.forEach(rel => {
             context.relNameChoices.push({
                 name: `${rel.relationshipName}:${rel.relationshipType}`,
-                value: `${rel.relationshipName}:${rel.relationshipType}`
+                value: `${rel.relationshipName}:${rel.relationshipType}`,
             });
         });
         if (context.fileData.angularJSSuffix !== undefined) {
@@ -1558,8 +1561,7 @@ module.exports = class extends PrivateBase {
         if (this._debug && this._debug.enabled) {
             this._debug(`${chalk.red.bold('ERROR!')} ${msg}`);
         }
-        // Terminate current environment.
-        this.env.error(`${msg}`);
+        throw new Error(`${msg}`);
     }
 
     /**
@@ -1706,10 +1708,12 @@ module.exports = class extends PrivateBase {
                 (code, stdout, stderr) => {
                     if (!stderr && semver.lt(packagejs.version, stdout)) {
                         this.log(
-                            `${chalk.yellow(' ______________________________________________________________________________\n\n') +
+                            `${
+                                chalk.yellow(' ______________________________________________________________________________\n\n') +
                                 chalk.yellow('  JHipster update available: ') +
                                 chalk.green.bold(stdout.replace('\n', '')) +
-                                chalk.gray(` (current: ${packagejs.version})`)}\n`
+                                chalk.gray(` (current: ${packagejs.version})`)
+                            }\n`
                         );
                         if (this.useNpm) {
                             this.log(chalk.yellow(`  Run ${chalk.magenta(`npm install -g ${GENERATOR_JHIPSTER}`)} to update.\n`));
@@ -1813,7 +1817,7 @@ module.exports = class extends PrivateBase {
                     return true;
                 },
                 message: 'What is the base name of your application?',
-                default: defaultAppBaseName
+                default: defaultAppBaseName,
             })
             .then(prompt => {
                 generator.baseName = prompt.baseName;
@@ -1835,7 +1839,7 @@ module.exports = class extends PrivateBase {
                 type: 'confirm',
                 name: 'enableTranslation',
                 message: 'Would you like to enable internationalization support?',
-                default: true
+                default: true,
             },
             {
                 when: response => response.enableTranslation === true,
@@ -1844,15 +1848,15 @@ module.exports = class extends PrivateBase {
                 message: 'Please choose the native language of the application',
                 choices: languageOptions,
                 default: 'en',
-                store: true
+                store: true,
             },
             {
                 when: response => response.enableTranslation === true,
                 type: 'checkbox',
                 name: 'languages',
                 message: 'Please choose additional languages to install',
-                choices: response => _.filter(languageOptions, o => o.value !== response.nativeLanguage)
-            }
+                choices: response => _.filter(languageOptions, o => o.value !== response.nativeLanguage),
+            },
         ];
 
         generator.prompt(prompts).then(prompt => {
@@ -1885,7 +1889,7 @@ module.exports = class extends PrivateBase {
                 skipChecks: generator.options.skipChecks,
                 languages: generator.languages,
                 force: generator.options.force,
-                debug: generator.options.debug
+                debug: generator.options.debug,
             });
         }
     }
@@ -1920,7 +1924,7 @@ module.exports = class extends PrivateBase {
         buildCmd += ` -P${profile}`;
         return {
             stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
-            buildCmd
+            buildCmd,
         };
     }
 
@@ -1947,7 +1951,7 @@ module.exports = class extends PrivateBase {
         this.log(`Running command: '${chalk.bold(buildCmd)}'`);
         return {
             stdout: exec(buildCmd, { maxBuffer: 1024 * 10000 }, cb).stdout,
-            buildCmd
+            buildCmd,
         };
     }
 
@@ -2035,6 +2039,7 @@ module.exports = class extends PrivateBase {
         dest.skipServer = context.configOptions.skipServer || context.config.get('skipServer');
         dest.skipUserManagement =
             context.configOptions.skipUserManagement || context.options['skip-user-management'] || context.config.get('skipUserManagement');
+        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.otherModules = context.configOptions.otherModules || [];
         dest.baseName = context.configOptions.baseName;
         dest.logo = context.configOptions.logo;
@@ -2048,6 +2053,7 @@ module.exports = class extends PrivateBase {
             generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
         }
         dest.uaaBaseName = uaaBaseName;
+        dest.prettierJava = context.options['prettier-java'] || context.config.get('prettierJava');
     }
 
     /**
@@ -2061,7 +2067,6 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
         dest.authenticationType =
             context.options.auth || context.configOptions.authenticationType || context.config.get('authenticationType');
         dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
@@ -2187,5 +2192,27 @@ module.exports = class extends PrivateBase {
             this._needleApi = new NeedleApi(this);
         }
         return this._needleApi;
+    }
+
+    /**
+     * From an enum's values (with or without custom values), returns the enum's values without custom values.
+     * @param {String} enumValues - an enum's values.
+     * @return {Array<String>} the formatted enum's values.
+     */
+    getEnumValuesWithCustomValues(enumValues) {
+        if (!enumValues || enumValues === '') {
+            throw new Error('Enumeration values must be passed to get the formatted values.');
+        }
+        return enumValues.split(',').map(enumValue => {
+            if (!enumValue.includes('(')) {
+                return { name: enumValue.trim(), value: enumValue.trim() };
+            }
+            // eslint-disable-next-line no-unused-vars
+            const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
+            return {
+                name: matched[1],
+                value: matched[2],
+            };
+        });
     }
 };

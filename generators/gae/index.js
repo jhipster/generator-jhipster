@@ -112,7 +112,7 @@ module.exports = class extends BaseGenerator {
                 this.skipClient = this.config.get('skipClient');
                 this.clientPackageManager = this.config.get('clientPackageManager');
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
-            }
+            },
         };
     }
 
@@ -162,8 +162,8 @@ module.exports = class extends BaseGenerator {
                                 return `Project ID "${chalk.cyan(input.trim())}" does not exist, please create one first!`;
                             }
                             return true;
-                        }
-                    }
+                        },
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -197,10 +197,10 @@ module.exports = class extends BaseGenerator {
                                         { value: 'europe-west3', name: 'europe-west3 - Frankfurt' },
                                         { value: 'asia-northeast1', name: 'asia-northeast1 - Tokyo' },
                                         { value: 'asia-south1', name: 'asia-south1 - Mumbai' },
-                                        { value: 'australia-southeast1', name: 'australia-southeast1 - Sydney' }
+                                        { value: 'australia-southeast1', name: 'australia-southeast1 - Sydney' },
                                     ],
-                                    default: this.gaeLocation ? this.gaeLocation : 0
-                                }
+                                    default: this.gaeLocation ? this.gaeLocation : 0,
+                                },
                             ];
 
                             this.prompt(prompts).then(props => {
@@ -237,8 +237,8 @@ module.exports = class extends BaseGenerator {
                         name: 'gaeServiceName',
                         message: 'Google App Engine Service Name',
                         choices: this.defaultServiceNameChoices(this.defaultServiceExists),
-                        default: this.gaeServiceName ? this.gaeServiceName : 0
-                    }
+                        default: this.gaeServiceName ? this.gaeServiceName : 0,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -265,10 +265,10 @@ module.exports = class extends BaseGenerator {
                             { value: 'B2', name: 'B2 - 1.2GHz, 512MB, Basic or Manual Scaling' },
                             { value: 'B4', name: 'B4 - 2.4GHz, 1GB, Basic or Manual Scaling' },
                             { value: 'B4_1G', name: 'B4_1G - 2.4GHz, 2GB, Basic or Manual Scaling' },
-                            { value: 'B8', name: 'B8 - 4.8GHz, 2GB, Basic or Manual Scaling' }
+                            { value: 'B8', name: 'B8 - 4.8GHz, 2GB, Basic or Manual Scaling' },
                         ],
-                        default: this.gaeInstanceClass ? this.gaeInstanceClass : 0
-                    }
+                        default: this.gaeInstanceClass ? this.gaeInstanceClass : 0,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -296,8 +296,8 @@ module.exports = class extends BaseGenerator {
                             name: 'gaeScalingType',
                             message: 'Basic or Manual Scaling',
                             choices: ['basic', 'manual'],
-                            default: this.gaeScalingType ? this.gaeScalingType : 0
-                        }
+                            default: this.gaeScalingType ? this.gaeScalingType : 0,
+                        },
                     ];
 
                     this.prompt(prompts).then(props => {
@@ -328,7 +328,7 @@ module.exports = class extends BaseGenerator {
                                 return 'Please enter an integer greater than 0';
                             }
                             return true;
-                        }
+                        },
                     });
                 }
                 if (this.gaeScalingType === 'automatic') {
@@ -346,7 +346,7 @@ module.exports = class extends BaseGenerator {
                                 return 'Please enter an integer >= 0';
                             }
                             return true;
-                        }
+                        },
                     });
                 }
                 if (this.gaeScalingType === 'automatic' || this.gaeScalingType === 'basic') {
@@ -364,7 +364,7 @@ module.exports = class extends BaseGenerator {
                                 return 'Please enter an integer >= 0';
                             }
                             return true;
-                        }
+                        },
                     });
                 }
 
@@ -391,7 +391,7 @@ module.exports = class extends BaseGenerator {
                             return 'Input should be Y or N';
                         }
                         return true;
-                    }
+                    },
                 });
 
                 this.prompt(prompts).then(props => {
@@ -427,8 +427,8 @@ module.exports = class extends BaseGenerator {
                                 name: 'gcpCloudSqlInstanceName',
                                 message: 'Google Cloud SQL Instance Name',
                                 choices: cloudSqlInstances,
-                                default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : 0
-                            }
+                                default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : 0,
+                            },
                         ];
 
                         this.prompt(prompts).then(props => {
@@ -452,8 +452,8 @@ module.exports = class extends BaseGenerator {
                         type: 'input',
                         name: 'gcpCloudSqlInstanceName',
                         message: 'Google Cloud SQL Instance Name',
-                        default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : this.baseName
-                    }
+                        default: this.gcpCloudSqlInstanceName ? this.gcpCloudSqlInstanceName : this.baseName,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -480,14 +480,14 @@ module.exports = class extends BaseGenerator {
                                 return 'User Name cannot empty';
                             }
                             return true;
-                        }
+                        },
                     },
                     {
                         type: 'password',
                         name: 'gcpCloudSqlPassword',
                         message: 'Google Cloud SQL Password',
-                        default: this.gcpCloudSqlPassword ? this.gcpCloudSqlPassword : ''
-                    }
+                        default: this.gcpCloudSqlPassword ? this.gcpCloudSqlPassword : '',
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -525,8 +525,8 @@ module.exports = class extends BaseGenerator {
                                 name: 'gcpCloudSqlDatabaseName',
                                 message: 'Google Cloud SQL Database Name',
                                 choices: cloudSqlDatabases,
-                                default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : 0
-                            }
+                                default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : 0,
+                            },
                         ];
 
                         this.prompt(prompts).then(props => {
@@ -550,8 +550,8 @@ module.exports = class extends BaseGenerator {
                         type: 'input',
                         name: 'gcpCloudSqlDatabaseName',
                         message: 'Google Cloud SQL Database Name',
-                        default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : this.baseName
-                    }
+                        default: this.gcpCloudSqlDatabaseName ? this.gcpCloudSqlDatabaseName : this.baseName,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
@@ -559,7 +559,7 @@ module.exports = class extends BaseGenerator {
                     this.gcpCloudSqlDatabaseNameExists = false;
                     done();
                 });
-            }
+            },
         };
     }
 
@@ -693,9 +693,9 @@ module.exports = class extends BaseGenerator {
                     gaeInstances: this.gaeInstances,
                     gaeMinInstances: this.gaeMinInstances,
                     gaeMaxInstances: this.gaeMaxInstances,
-                    gaeCloudSQLInstanceNeeded: this.gaeCloudSQLInstanceNeeded
+                    gaeCloudSQLInstanceNeeded: this.gaeCloudSQLInstanceNeeded,
                 });
-            }
+            },
         };
     }
 
@@ -762,7 +762,7 @@ module.exports = class extends BaseGenerator {
                         this.addMavenProfile('gae', `            ${rendered.trim()}`);
                     });
                 }
-            }
+            },
         };
     }
 
@@ -801,7 +801,7 @@ module.exports = class extends BaseGenerator {
                     process.stdout.write(data.toString());
                 });
 */
-            }
+            },
         };
     }
 };

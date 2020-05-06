@@ -18,7 +18,7 @@
  */
 
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 function writeFiles() {
@@ -130,6 +130,6 @@ function writeFiles() {
 
         writeSkaffold() {
             this.template('skaffold/skaffold.yml.ejs', 'skaffold.yml');
-        }
+        },
     };
 }

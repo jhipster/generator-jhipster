@@ -14,7 +14,7 @@ describe('JHipster generator common', () => {
             .withOptions({
                 'from-cli': true,
                 skipInstall: true,
-                skipChecks: true
+                skipChecks: true,
             })
             .on('end', done);
     });

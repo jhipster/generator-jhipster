@@ -51,9 +51,7 @@ import com.hazelcast.core.Hazelcast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-    <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-import org.springframework.beans.factory.annotation.Autowired;
-    <%_ } _%>
+
 <%_ } _%>
 <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'caffeine') { _%>
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
@@ -67,6 +65,7 @@ import org.springframework.boot.autoconfigure.web.ServerProperties;
     <%_ } _%>
 
 import org.springframework.cache.CacheManager;
+
 <%_ } _%>
 <%_ if (cacheProvider === 'memcached') { _%>
     <%_ if (!skipUserManagement || (authenticationType === 'oauth2' && databaseType !== 'no')) { _%>
@@ -78,6 +77,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
+<%_ } _%>
+<%_ if (cacheProvider !== 'no') { _%>
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.info.GitProperties;
+import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import io.github.jhipster.config.cache.PrefixedKeyGenerator;
 <%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
 <%_ if (cacheProvider !== 'memcached') { _%>
@@ -101,6 +107,7 @@ import javax.annotation.PreDestroy;
 import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
+import org.infinispan.jboss.marshalling.core.JBossUserMarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.github.jhipster.config.JHipsterProperties;
@@ -114,7 +121,6 @@ import org.infinispan.transaction.TransactionMode;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import java.util.stream.Stream;
     <%_ if (serviceDiscoveryType === 'eureka' || serviceDiscoveryType === 'consul') { _%>
-import org.springframework.beans.factory.annotation.Autowired;
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
 import org.jgroups.Channel;
 import org.jgroups.JChannel;
@@ -166,8 +172,11 @@ import io.github.jhipster.config.JHipsterProperties;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
+    <%_ if (cacheProvider !== 'no') { _%>
+    private GitProperties gitProperties;
+    private BuildProperties buildProperties;
+    <%_ } _%>
     <%_ if (cacheProvider === 'ehcache' || cacheProvider === 'caffeine') { _%>
-
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
@@ -437,6 +446,7 @@ public class CacheConfiguration {
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%= baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .serialization().marshaller(new JBossUserMarshaller())
                     .build();
             } else if (discoveryClient.getInstances(registration.getServiceId()).size() == 0) {
                 return () -> GlobalConfigurationBuilder
@@ -444,6 +454,7 @@ public class CacheConfiguration {
                     .transport(new JGroupsTransport())
                     .clusterName("infinispan-<%= baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .serialization().marshaller(new JBossUserMarshaller())
                     .build();
             } else {
                 return () -> GlobalConfigurationBuilder
@@ -451,6 +462,7 @@ public class CacheConfiguration {
                     .transport(new JGroupsTransport(getTransportChannel()))
                     .clusterName("infinispan-<%= baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .serialization().marshaller(new JBossUserMarshaller())
                     .build();
             }
         <%_ } else { _%>
@@ -459,6 +471,7 @@ public class CacheConfiguration {
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%= baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
+                    .serialization().marshaller(new JBossUserMarshaller())
                     .build();
         <%_ } _%>
     }
@@ -758,5 +771,21 @@ public class CacheConfiguration {
         }
     }
 
+    <%_ } _%>
+    <%_ if (cacheProvider !== 'no') { _%>
+    @Autowired(required = false)
+    public void setGitProperties(GitProperties gitProperties) {
+        this.gitProperties = gitProperties;
+    }
+
+    @Autowired(required = false)
+    public void setBuildProperties(BuildProperties buildProperties) {
+        this.buildProperties = buildProperties;
+    }
+
+    @Bean
+    public KeyGenerator keyGenerator() {
+        return new PrefixedKeyGenerator(this.gitProperties, this.buildProperties);
+    }
     <%_ } _%>
 }

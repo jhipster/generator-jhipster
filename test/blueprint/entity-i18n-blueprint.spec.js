@@ -22,7 +22,7 @@ const mockBlueprintSubGen = class extends EntityI18NGenerator {
             customPhase() {
                 this.name = 'JHipster';
                 this.template(path.join(process.cwd(), 'custom-i18n.json.ejs'), `${CLIENT_MAIN_SRC_DIR}i18n/custom-i18n.json`);
-            }
+            },
         };
     }
 };
@@ -43,7 +43,7 @@ describe('JHipster entity server generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:entity-i18n']])
                     .withPrompts({
@@ -51,7 +51,7 @@ describe('JHipster entity server generator with blueprint', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'no'
+                        pagination: 'no',
                     })
                     .on('end', done);
             });
@@ -67,7 +67,7 @@ describe('JHipster entity server generator with blueprint', () => {
 
             it('contains the specific change added by the blueprint', () => {
                 assert.JSONFileContent(`${CLIENT_MAIN_SRC_DIR}i18n/custom-i18n.json`, {
-                    myblueprintApp: { name: 'JHipster' }
+                    myblueprintApp: { name: 'JHipster' },
                 });
             });
         });

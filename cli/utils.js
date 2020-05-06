@@ -31,21 +31,21 @@ const GENERATOR_NAME = 'generator-jhipster';
 
 const SUCCESS_MESSAGE = 'Congratulations, JHipster execution is complete!';
 
-const debug = function(msg) {
+const debug = function (msg) {
     if (this.debugEnabled) {
         console.log(`${chalk.blue('DEBUG!')}  ${msg}`);
     }
 };
 
-const info = function(msg) {
+const info = function (msg) {
     console.info(`${chalk.green.bold('INFO!')} ${msg}`);
 };
 
-const log = function(msg) {
+const log = function (msg) {
     console.log(msg);
 };
 
-const error = function(msg, trace) {
+const error = function (msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
@@ -58,7 +58,7 @@ const error = function(msg, trace) {
  *  process.exit is not recommended by Node.js.
  *  Refer to https://nodejs.org/api/process.html#process_process_exit_code.
  */
-const fatal = function(msg, trace) {
+const fatal = function (msg, trace) {
     console.error(`${chalk.red(msg)}`);
     if (trace) {
         console.log(trace);
@@ -66,7 +66,7 @@ const fatal = function(msg, trace) {
     process.exit(1);
 };
 
-const init = function(program) {
+const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
     const argv = program.normalize(process.argv);
@@ -83,7 +83,7 @@ const logger = {
     info,
     log,
     error,
-    fatal
+    fatal,
 };
 
 const toString = item => {
@@ -199,9 +199,11 @@ const getCommandOptions = (pkg, argv) => {
 };
 
 const doneFactory = successMsg => {
-    return errorMsg => {
-        if (errorMsg) {
-            logger.error(`ERROR! ${errorMsg}`);
+    return errorOrMsg => {
+        if (errorOrMsg instanceof Error) {
+            logger.error(`ERROR! ${errorOrMsg.message}`, errorOrMsg);
+        } else if (errorOrMsg) {
+            logger.error(`ERROR! ${errorOrMsg}`);
         } else if (successMsg) {
             logger.info(chalk.green.bold(successMsg));
         }
@@ -220,7 +222,7 @@ const createYeomanEnv = packagePatterns => {
     const env = yeoman.createEnv();
     // Register jhipster generators.
     env.lookup({ packagePaths: [path.join(__dirname, '..')] });
-    if (packagePatterns) {
+    if (packagePatterns && packagePatterns.length > 0) {
         // Lookup for blueprints.
         env.lookup({ filterPaths: true, packagePatterns });
     }
@@ -251,11 +253,45 @@ const loadBlueprintsFromYoRc = () => {
     return loadBlueprintsFromConfiguration(yoRc['generator-jhipster']);
 };
 
+/**
+ * Creates a 'blueprintName: blueprintVersion' object.
+ */
+const loadAllBlueprintsWithVersion = () => {
+    const blueprintsWithVersion = loadBlueprints().reduce((acc, blueprint) => {
+        acc[blueprint] = undefined;
+        return acc;
+    }, {});
+
+    loadBlueprintsFromYoRc().reduce((acc, blueprint) => {
+        acc[blueprint.name] = blueprint.version;
+        return acc;
+    }, blueprintsWithVersion);
+    return blueprintsWithVersion;
+};
+
 const getBlueprintPackagePaths = (env, blueprints) => {
     if (!blueprints) {
         return undefined;
     }
-    return blueprints.map(blueprint => {
+
+    const blueprintsToInstall = Object.entries(blueprints)
+        .filter(([blueprint, _version]) => {
+            const namespace = packageNameToNamespace(blueprint);
+            if (!env.getPackagePath(namespace)) {
+                env.lookupLocalPackages(blueprint);
+            }
+            return !env.getPackagePath(namespace);
+        })
+        .reduce((acc, [blueprint, version]) => {
+            acc[blueprint] = version;
+            return acc;
+        }, {});
+
+    if (Object.keys(blueprintsToInstall).length > 0) {
+        env.installLocalGenerators(blueprintsToInstall);
+    }
+
+    return Object.entries(blueprints).map(([blueprint, _version]) => {
         const namespace = packageNameToNamespace(blueprint);
         const packagePath = env.getPackagePath(namespace);
         if (!packagePath) {
@@ -355,8 +391,9 @@ module.exports = {
     createYeomanEnv,
     loadBlueprints,
     loadBlueprintsFromYoRc,
+    loadAllBlueprintsWithVersion,
     getBlueprintPackagePaths,
     loadBlueprintCommands,
     loadSharedOptions,
-    getOptionAsArgs
+    getOptionAsArgs,
 };

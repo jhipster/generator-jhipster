@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const program = require('commander');
+const commander = require('commander');
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
@@ -30,25 +30,25 @@ const {
     getCommandOptions,
     getArgs,
     done,
-    loadBlueprints,
-    loadBlueprintsFromYoRc,
+    loadAllBlueprintsWithVersion,
     getBlueprintPackagePaths,
     loadBlueprintCommands,
-    loadSharedOptions
+    loadSharedOptions,
 } = require('./utils');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
 
+const program = new commander.Command();
 const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
 
-const argBlueprints = loadBlueprints();
-const configBlueprints = loadBlueprintsFromYoRc().map(bp => bp.name);
-const allBlueprints = [...new Set([...argBlueprints, ...configBlueprints])];
+const blueprintsWithVersion = loadAllBlueprintsWithVersion();
+const allBlueprints = Object.keys(blueprintsWithVersion);
 
 const env = createYeomanEnv(allBlueprints);
-const sharedOptions = loadSharedOptions(getBlueprintPackagePaths(env, allBlueprints)) || {};
+const blueprintsPackagePath = getBlueprintPackagePaths(env, blueprintsWithVersion);
+const sharedOptions = loadSharedOptions(blueprintsPackagePath) || {};
 // Env will forward sharedOptions to every generator
 Object.assign(env.sharedOptions, sharedOptions);
 
@@ -72,12 +72,9 @@ const runYoCommand = (cmd, args, options, opts) => {
     }
 };
 
-program
-    .version(version)
-    .usage('[command] [options]')
-    .allowUnknownOption();
+program.version(version).usage('[command] [options]').allowUnknownOption();
 
-const blueprintCommands = loadBlueprintCommands(getBlueprintPackagePaths(env, argBlueprints));
+const blueprintCommands = loadBlueprintCommands(blueprintsPackagePath);
 const allCommands = { ...SUB_GENERATORS, ...blueprintCommands };
 
 /* create commands */
@@ -120,7 +117,7 @@ initAutoCompletion(program, CLI_NAME);
 program.parse(process.argv);
 
 /* Run default when no commands are specified */
-if (program.args.length < 1) {
+if (program.rawArgs.length < 3 || program.rawArgs[2].startsWith('--')) {
     logger.debug('No command specified. Running default');
     logger.info(chalk.yellow('Running default command'));
     const options = getCommandOptions(packageJson, process.argv.slice(2));

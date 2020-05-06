@@ -39,12 +39,12 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.option('default', {
             type: Boolean,
             default: false,
-            description: 'default option'
+            description: 'default option',
         });
         this.defaultOption = this.options.default;
 
@@ -76,7 +76,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.reactive = configuration.get('reactive');
                 this.reactiveController = this.reactive;
                 this.controllerActions = [];
-            }
+            },
         };
     }
 
@@ -88,7 +88,7 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
-            askForControllerActions: prompts.askForControllerActions
+            askForControllerActions: prompts.askForControllerActions,
         };
     }
 
@@ -102,7 +102,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'spring-controller');
-            }
+            },
         };
     }
 
@@ -123,7 +123,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.log(chalk.green('No controller actions found, adding a default action'));
                     this.controllerActions.push({
                         actionName: 'defaultAction',
-                        actionMethod: 'Get'
+                        actionMethod: 'Get',
                     });
                 }
 
@@ -165,7 +165,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     )}/${SERVER_TEST_SRC_DIR}package/web/rest/ResourceIT.java.ejs`,
                     `${SERVER_TEST_SRC_DIR}${this.packageFolder}/web/rest/${this.controllerClass}IT.java`
                 );
-            }
+            },
         };
     }
 

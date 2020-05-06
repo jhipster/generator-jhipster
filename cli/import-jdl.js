@@ -49,7 +49,7 @@ function importJDL(jdlImporter) {
     let importState = {
         exportedEntities: [],
         exportedApplications: [],
-        exportedDeployments: []
+        exportedDeployments: [],
     };
     try {
         importState = jdlImporter.import();
@@ -109,7 +109,7 @@ const generateDeploymentFiles = ({ generator, deployment, inFolder }, forkProces
         runYeomanProcess,
         [command, '--skip-prompts', ...getOptionAsArgs(generator.options, false, !generator.options.interactive)],
         {
-            cwd
+            cwd,
         }
     );
     return new Promise(resolve => {
@@ -142,7 +142,7 @@ const generateApplicationFiles = ({ generator, application, withEntities, inFold
         runYeomanProcess,
         [command, ...getOptionAsArgs(generator.options, withEntities, !generator.options.interactive)],
         {
-            cwd
+            cwd,
         }
     );
     return new Promise(resolve => {
@@ -177,7 +177,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         'no-fluent-methods': entity.noFluentMethod,
         'skip-user-management': entity.skipUserManagement,
         'skip-db-changelog': generator.options['skip-db-changelog'],
-        'skip-ui-grouping': generator.options['skip-ui-grouping']
+        'skip-ui-grouping': generator.options['skip-ui-grouping'],
     };
     const command = `${CLI_NAME}:entity ${entity.name}`;
     if (inFolder) {
@@ -212,7 +212,7 @@ const generateEntityFiles = (generator, entity, inFolder, env, shouldTriggerInst
         {
             ...options,
             force: options.force || !options.interactive,
-            'skip-install': !shouldTriggerInstall
+            'skip-install': !shouldTriggerInstall,
         },
         /* Create done with empty success message */
         doneFactory()
@@ -276,7 +276,7 @@ class JDLProcessor {
             applicationName: this.baseName,
             generatorVersion: packagejs.version,
             forceNoFiltering: this.options.force,
-            creationTimestamp: this.options.creationTimestamp
+            creationTimestamp: this.options.creationTimestamp,
         };
 
         const JDLImporter = jhiCore.JDLImporter;
@@ -309,7 +309,7 @@ class JDLProcessor {
                         generator: this,
                         application,
                         withEntities: this.importState.exportedEntities.length !== 0,
-                        inFolder: this.importState.exportedApplications.length > 1
+                        inFolder: this.importState.exportedApplications.length > 1,
                     },
                     forkProcess
                 );
@@ -343,7 +343,7 @@ class JDLProcessor {
                         {
                             generator: this,
                             deployment,
-                            inFolder: true
+                            inFolder: true,
                         },
                         forkProcess
                     );

@@ -22,7 +22,8 @@ let uuidV4;
 const Eb = (module.exports = function Eb(Aws, generator) {
     aws = Aws;
     try {
-        uuidV4 = require('uuid/v4'); // eslint-disable-line
+        const { v4 } = require('uuid'); // eslint-disable-line
+        uuidV4 = v4;
     } catch (e) {
         generator.error(`Something went wrong while running jhipster:aws:\n${e}`);
     }
@@ -43,7 +44,7 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
         applicationName,
         versionLabel,
         bucketName,
-        warKey
+        warKey,
     };
 
     createApplicationVersion(applicationParams, err => {
@@ -57,7 +58,7 @@ Eb.prototype.createApplication = function createApplication(params, callback) {
                 dbUrl,
                 dbUsername,
                 dbPassword,
-                instanceType
+                instanceType,
             };
 
             checkEnvironment(environmentParams, (err, data) => {
@@ -99,8 +100,8 @@ function createApplicationVersion(params, callback) {
         AutoCreateApplication: true,
         SourceBundle: {
             S3Bucket: bucketName,
-            S3Key: warKey
-        }
+            S3Key: warKey,
+        },
     };
 
     elasticbeanstalk.createApplicationVersion(applicationParams, err => {
@@ -120,7 +121,7 @@ function checkEnvironment(params, callback) {
 
     const environmentParams = {
         ApplicationName: applicationName,
-        EnvironmentNames: [environmentName]
+        EnvironmentNames: [environmentName],
     };
 
     elasticbeanstalk.describeEnvironments(environmentParams, (err, data) => {
@@ -156,40 +157,40 @@ function createEnvironment(params, callback) {
                 {
                     Namespace: 'aws:elasticbeanstalk:application:environment',
                     OptionName: 'spring.profiles.active',
-                    Value: 'prod'
+                    Value: 'prod',
                 },
                 {
                     Namespace: 'aws:elasticbeanstalk:application:environment',
                     OptionName: 'spring.datasource.url',
-                    Value: dbUrl
+                    Value: dbUrl,
                 },
                 {
                     Namespace: 'aws:elasticbeanstalk:application:environment',
                     OptionName: 'spring.datasource.username',
-                    Value: dbUsername
+                    Value: dbUsername,
                 },
                 {
                     Namespace: 'aws:elasticbeanstalk:application:environment',
                     OptionName: 'spring.datasource.password',
-                    Value: dbPassword
+                    Value: dbPassword,
                 },
                 {
                     Namespace: 'aws:autoscaling:launchconfiguration',
                     OptionName: 'InstanceType',
-                    Value: instanceType
+                    Value: instanceType,
                 },
                 {
                     Namespace: 'aws:autoscaling:launchconfiguration',
                     OptionName: 'IamInstanceProfile',
-                    Value: 'aws-elasticbeanstalk-ec2-role'
-                }
+                    Value: 'aws-elasticbeanstalk-ec2-role',
+                },
             ],
             SolutionStackName: solutionStackName,
             VersionLabel: versionLabel,
             Tier: {
                 Name: 'WebServer',
-                Type: 'Standard'
-            }
+                Type: 'Standard',
+            },
         };
 
         elasticbeanstalk.createEnvironment(environmentParams, err => {
@@ -230,10 +231,10 @@ function updateEnvironment(params, callback) {
             {
                 Namespace: 'aws:autoscaling:launchconfiguration',
                 OptionName: 'InstanceType',
-                Value: instanceType
-            }
+                Value: instanceType,
+            },
         ],
-        VersionLabel: versionLabel
+        VersionLabel: versionLabel,
     };
 
     elasticbeanstalk.updateEnvironment(environmentParams, err => {

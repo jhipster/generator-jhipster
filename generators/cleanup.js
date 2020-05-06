@@ -29,7 +29,7 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 module.exports = {
     cleanupOldFiles,
     cleanupOldServerFiles,
-    upgradeFiles
+    upgradeFiles,
 };
 
 /**
@@ -254,7 +254,7 @@ function upgradeFiles(generator) {
     if (generator.isJhipsterVersionLessThan('6.1.0')) {
         const languages = generator.config.get('languages');
         if (languages) {
-            const langNameDiffer = function(lang) {
+            const langNameDiffer = function (lang) {
                 const langProp = lang.replace(/-/g, '_');
                 // Target file : change xx_yyyy_zz to xx_yyyy_ZZ to match java locales
                 const langJavaProp = langProp.replace(/_[a-z]+$/g, lang => lang.toUpperCase());

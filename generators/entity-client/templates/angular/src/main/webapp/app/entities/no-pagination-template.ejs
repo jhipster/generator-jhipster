@@ -18,7 +18,7 @@
 -%>
     <%= entityInstancePlural %>?: I<%= entityAngularName %>[];
     eventSubscriber?: Subscription;
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     currentSearch: string;
     <%_ } _%>
 
@@ -31,18 +31,18 @@
         <%_ if (!readOnly) { _%>
         protected modalService: NgbModal,
         <%_ } _%>
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         protected activatedRoute: ActivatedRoute,
         <%_ } _%>
     ) {
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         this.currentSearch = this.activatedRoute.snapshot && this.activatedRoute.snapshot.queryParams['search'] ?
             this.activatedRoute.snapshot.queryParams['search'] : '';
         <%_ } _%>
     }
 
     loadAll(): void {
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         if (this.currentSearch) {
             this.<%= entityInstance %>Service.search({
                 query: this.currentSearch,
@@ -58,7 +58,7 @@
         );
     }
 
-    <%_ if (searchEngine === 'elasticsearch') { _%>
+    <%_ if (searchEngine !== false) { _%>
     search(query: string): void {
         this.currentSearch = query;
         this.loadAll();

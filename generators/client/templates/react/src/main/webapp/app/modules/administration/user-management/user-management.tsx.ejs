@@ -153,9 +153,15 @@ export const UserManagement = (props: IUserManagementProps) => {
                 }
               </td>
               <%_ if (databaseType !== 'cassandra') { _%>
-              <td><TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /></td>
+              <td>
+                {user.createdDate ? <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /> : null}
+              </td>
               <td>{user.lastModifiedBy}</td>
-              <td><TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /></td>
+              <td>
+                {user.lastModifiedDate ? (
+                  <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
+                ) : null}
+              </td>
               <%_ } _%>
               <td className="text-right">
                 <div className="btn-group flex-btn-group-container">

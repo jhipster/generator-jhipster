@@ -23,7 +23,7 @@ const mockBlueprintSubGen = class extends EntityClientGenerator {
             customPhase() {
                 this.name = 'JHipster';
                 this.template(path.join(process.cwd(), 'HelloVue.html.ejs'), `${ANGULAR_DIR}HelloVue.html`);
-            }
+            },
         };
     }
 };
@@ -44,7 +44,7 @@ describe('JHipster entity client generator with blueprint', () => {
                         'from-cli': true,
                         skipInstall: true,
                         blueprint: blueprintName,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withGenerators([[mockBlueprintSubGen, 'jhipster-myblueprint:entity-client']])
                     .withPrompts({
@@ -52,7 +52,7 @@ describe('JHipster entity client generator with blueprint', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'no'
+                        pagination: 'no',
                     })
                     .on('end', done);
             });

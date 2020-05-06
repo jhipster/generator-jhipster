@@ -56,6 +56,7 @@ module.exports = {
     deepFind,
     getJavadoc,
     buildEnumInfo,
+    getEnumInfo,
     copyObjectProps,
     decodeBase64,
     getAllJhipsterConfig,
@@ -72,7 +73,7 @@ module.exports = {
     stringHashCode,
     RandexpWithFaker,
     gitExec,
-    isGitInstalled
+    isGitInstalled,
 };
 
 /**
@@ -453,6 +454,29 @@ function getJavadoc(text, indentSize) {
 
 /**
  * Build an enum object
+ * @param {Object} field - entity field
+ * @param {String} clientRootFolder - the client's root folder
+ * @return {Object} the enum info.
+ */
+function getEnumInfo(field, clientRootFolder) {
+    const fieldType = field.fieldType;
+    // Todo: check if the next line does a side-effect and refactor it.
+    field.enumInstance = _.lowerFirst(fieldType);
+    const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+    const customValuesState = getCustomValuesState(enums);
+    return {
+        enumName: fieldType,
+        enumInstance: field.enumInstance,
+        enums,
+        ...customValuesState,
+        enumValues: getEnums(enums, customValuesState),
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
+    };
+}
+
+/**
+ * @Deprecated
+ * Build an enum object, deprecated use getEnumInfoInstead
  * @param {any} field : entity field
  * @param {string} angularAppName
  * @param {string} packageName
@@ -471,10 +495,16 @@ function buildEnumInfo(field, angularAppName, packageName, clientRootFolder) {
         enumsWithCustomValue,
         angularAppName,
         packageName,
-        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : ''
+        clientRootFolder: clientRootFolder ? `${clientRootFolder}-` : '',
     };
 }
 
+/**
+ * @deprecated
+ * private function to remove for jhipster v7
+ * @param enums
+ * @return {*}
+ */
 function getEnumsWithCustomValue(enums) {
     return enums.reduce((enumsWithCustomValueArray, currentEnumValue) => {
         if (doesTheEnumValueHaveACustomValue(currentEnumValue)) {
@@ -487,6 +517,42 @@ function getEnumsWithCustomValue(enums) {
         }
         return enumsWithCustomValueArray;
     }, []);
+}
+
+function getCustomValuesState(enumValues) {
+    const state = {
+        withoutCustomValue: 0,
+        withCustomValue: 0,
+    };
+    enumValues.forEach(enumValue => {
+        if (doesTheEnumValueHaveACustomValue(enumValue)) {
+            state.withCustomValue++;
+        } else {
+            state.withoutCustomValue++;
+        }
+    });
+    return {
+        withoutCustomValues: state.withCustomValue === 0,
+        withSomeCustomValues: state.withCustomValue !== 0 && state.withoutCustomValue !== 0,
+        withCustomValues: state.withoutCustomValue === 0,
+    };
+}
+
+function getEnums(enums, customValuesState) {
+    if (customValuesState.withoutCustomValues) {
+        return enums.map(enumValue => ({ name: enumValue, value: enumValue }));
+    }
+    return enums.map(enumValue => {
+        if (!doesTheEnumValueHaveACustomValue(enumValue)) {
+            return { name: enumValue.trim(), value: enumValue.trim() };
+        }
+        // eslint-disable-next-line no-unused-vars
+        const matched = /\s*(.+?)\s*\((.+?)\)/.exec(enumValue);
+        return {
+            name: matched[1],
+            value: matched[2],
+        };
+    });
 }
 
 function doesTheEnumValueHaveACustomValue(enumValue) {
@@ -545,7 +611,7 @@ function getAllJhipsterConfig(generator, force, basePath = '') {
             get: key => configuration[key],
             set: (key, value) => {
                 configuration[key] = value;
-            }
+            },
         };
     }
     return configuration;
@@ -654,7 +720,7 @@ function parseBlueprintInfo(blueprint) {
     }
     return {
         name: bpName,
-        version
+        version,
     };
 }
 

@@ -19,7 +19,7 @@
 const _ = require('lodash');
 
 module.exports = {
-    prompting
+    prompting,
 };
 
 function prompting() {
@@ -34,19 +34,19 @@ function prompting() {
             type: 'input',
             name: 'applicationName',
             message: 'Application name:',
-            default: this.baseName
+            default: this.baseName,
         },
         {
             type: 'input',
             name: 'environmentName',
             message: 'Environment name:',
-            default: `${this.baseName}-env`
+            default: `${this.baseName}-env`,
         },
         {
             type: 'input',
             name: 'bucketName',
             message: 'Name of S3 bucket:',
-            default: this.baseName
+            default: this.baseName,
         },
         {
             type: 'input',
@@ -58,7 +58,7 @@ function prompting() {
                 return true;
             },
             message: 'Database name:',
-            default: this.baseName
+            default: this.baseName,
         },
         {
             type: 'input',
@@ -67,7 +67,7 @@ function prompting() {
             validate: input => {
                 if (input === '') return 'Please provide a username';
                 return true;
-            }
+            },
         },
         {
             type: 'password',
@@ -77,7 +77,7 @@ function prompting() {
                 if (input === '') return 'Please provide a password';
                 if (input.length < 8) return 'Password must contain minimum 8 chars';
                 return true;
-            }
+            },
         },
         {
             type: 'list',
@@ -102,9 +102,9 @@ function prompting() {
                 'i3.8xlarge',
                 'r5.large',
                 'r5.xlarge',
-                'r5.2xlarge'
+                'r5.2xlarge',
             ],
-            default: 0
+            default: 0,
         },
         {
             type: 'list',
@@ -122,9 +122,9 @@ function prompting() {
                 'db.r3.8xlarge',
                 'db.t2.micro',
                 'db.t2.small',
-                'db.t2.medium'
+                'db.t2.medium',
             ],
-            default: 9
+            default: 9,
         },
         {
             type: 'list',
@@ -146,10 +146,10 @@ function prompting() {
                 'us-east-1',
                 'us-east-2',
                 'us-west-1',
-                'us-west-2'
+                'us-west-2',
             ],
-            default: 6
-        }
+            default: 6,
+        },
     ];
 
     this.prompt(prompts).then(props => {

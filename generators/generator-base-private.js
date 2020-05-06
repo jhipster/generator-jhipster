@@ -21,6 +21,7 @@ const path = require('path');
 const _ = require('lodash');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
+const fs = require('fs');
 const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
@@ -199,7 +200,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -236,7 +237,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -270,7 +271,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /private.*static.*String.*languages.*\{([^}]*jhipster-needle-i18n-language-constant[^}]*)\};/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -307,7 +308,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -345,7 +346,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -381,7 +382,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -416,7 +417,7 @@ module.exports = class extends Generator {
                 {
                     file: fullPath,
                     pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -833,7 +834,7 @@ module.exports = class extends Generator {
             try {
                 const finalOptions = {
                     ...options,
-                    jhipsterContext: this
+                    jhipsterContext: this,
                 };
                 this.useBlueprint = true;
                 const blueprintGenerator = this.composeExternalModule(blueprint, subGen, finalOptions);
@@ -865,8 +866,7 @@ module.exports = class extends Generator {
             this.warning(msg);
             return undefined;
         }
-        // eslint-disable-next-line global-require,import/no-dynamic-require
-        return require(path.join(blueprintPackagePath, 'package.json'));
+        return JSON.parse(fs.readFileSync(path.join(blueprintPackagePath, 'package.json')));
     }
 
     /**
@@ -1103,7 +1103,7 @@ module.exports = class extends Generator {
             variables,
             rxjsMapIsUsed,
             selectableEntities,
-            selectableManyToManyEntities
+            selectableManyToManyEntities,
         };
     }
 
@@ -1480,6 +1480,53 @@ module.exports = class extends Generator {
     }
 
     /**
+     * Returns the JDBC URL for a databaseType
+     *
+     * @param {string} databaseType
+     * @param {*} options
+     */
+    getJDBCUrl(databaseType, options = {}) {
+        if (!options.databaseName) {
+            throw new Error("option 'databaseName' is required");
+        }
+        if (['mysql', 'mariadb', 'postgresql', 'oracle', 'mssql'].includes(databaseType) && !options.hostname) {
+            throw new Error(`option 'hostname' is required for ${databaseType} databaseType`);
+        }
+        let jdbcUrl;
+        let extraOptions;
+        if (databaseType === 'mysql') {
+            jdbcUrl = `jdbc:mysql://${options.hostname}:3306/${options.databaseName}`;
+            extraOptions =
+                '?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true';
+        } else if (databaseType === 'mariadb') {
+            jdbcUrl = `jdbc:mariadb://${options.hostname}:3306/${options.databaseName}`;
+            extraOptions = '?useLegacyDatetimeCode=false&serverTimezone=UTC';
+        } else if (databaseType === 'postgresql') {
+            jdbcUrl = `jdbc:postgresql://${options.hostname}:5432/${options.databaseName}`;
+        } else if (databaseType === 'oracle') {
+            jdbcUrl = `jdbc:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
+        } else if (databaseType === 'mssql') {
+            jdbcUrl = `jdbc:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+        } else if (databaseType === 'h2Disk') {
+            if (!options.localDirectory) {
+                throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
+            }
+            jdbcUrl = `jdbc:h2:file:${options.localDirectory}/${options.databaseName}`;
+            extraOptions = ';DB_CLOSE_DELAY=-1';
+        } else if (databaseType === 'h2Memory') {
+            jdbcUrl = `jdbc:h2:mem:${options.databaseName}`;
+            extraOptions = ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE';
+        } else {
+            throw new Error(`${databaseType} databaseType is not supported`);
+        }
+
+        if (!options.skipExtraOptions && extraOptions) {
+            jdbcUrl += extraOptions;
+        }
+        return jdbcUrl;
+    }
+
+    /**
      * Returns the primary key value based on the primary key type, DB and default value
      *
      * @param {string} primaryKeyType - the primary key type
@@ -1552,7 +1599,7 @@ module.exports = class extends Generator {
     registerPrettierTransform(generator = this) {
         // Prettier is clever, it uses correct rules and correct parser according to file extension.
         let filterPatternForPrettier = '{,**/,.jhipster/**/}*.{md,json,ts,tsx,scss,css,yml}';
-        if (this.prettierJava) {
+        if (!this.skipServer && this.prettierJava) {
             filterPatternForPrettier = '{,**/,.jhipster/**/}*.{md,json,ts,tsx,scss,css,yml,java}';
         }
         const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });

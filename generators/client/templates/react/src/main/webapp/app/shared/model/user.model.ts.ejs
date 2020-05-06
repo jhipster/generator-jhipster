@@ -27,9 +27,9 @@ export interface IUser {
   langKey?: string;
   authorities?: any[];
   createdBy?: string;
-  createdDate?: Date;
+  createdDate?: Date | null;
   lastModifiedBy?: string;
-  lastModifiedDate?: Date;
+  lastModifiedDate?: Date | null;
   password?: string;
 }
 

@@ -26,13 +26,41 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
 
                 it('does creates search files', () => {
                     assert.file(`${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/search/FooSearchRepository.java`);
+                    assert.file(expectedFiles.server);
+                    assert.file(expectedFiles.gatling);
+                });
+            });
+        });
+
+        context('monolith with couchbase FTS', () => {
+            describe('Couchbase search, no dto, no service, no pagination', () => {
+                before(done => {
+                    helpers
+                        .run(require.resolve('../generators/entity'))
+                        .inTmpDir(dir => {
+                            fse.copySync(path.join(__dirname, '../test/templates/default-couchbase-search'), dir);
+                        })
+                        .withOptions({ creationTimestamp: '2016-01-20', withEntities: true })
+                        .withArguments(['foo'])
+                        .withPrompts({
+                            fieldAdd: false,
+                            relationshipAdd: false,
+                            dto: 'no',
+                            service: 'no',
+                            pagination: 'no',
+                        })
+                        .on('end', done);
+                });
+
+                it('does creates search files', () => {
+                    assert.file(`${SERVER_MAIN_RES_DIR}config/couchmove/changelog/V20160120000100__foo.fts`);
                     assert.file(expectedFiles.server);
                     assert.file(expectedFiles.gatling);
                 });
@@ -52,7 +80,7 @@ describe('JHipster generator for entity', () => {
                             fieldAdd: false,
                             relationshipAdd: false,
                             dto: 'mapstruct',
-                            service: 'serviceImpl'
+                            service: 'serviceImpl',
                         })
                         .on('end', done);
                 });
@@ -65,7 +93,7 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
 
                     assert.fileContent(
@@ -97,7 +125,7 @@ describe('JHipster generator for entity', () => {
                             fieldAdd: false,
                             relationshipAdd: false,
                             dto: 'no',
-                            service: 'serviceImpl'
+                            service: 'serviceImpl',
                         })
                         .on('end', done);
                 });
@@ -108,12 +136,12 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/FooXXX.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/repository/FooRepository.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/web/rest/FooResource.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
 
                     assert.noFile([
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooYYY.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
                     ]);
 
                     assert.fileContent(
@@ -143,7 +171,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -169,7 +197,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'pagination'
+                            pagination: 'pagination',
                         })
                         .on('end', done);
                 });
@@ -194,7 +222,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -219,7 +247,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'serviceImpl',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -230,7 +258,7 @@ describe('JHipster generator for entity', () => {
                     assert.file(expectedFiles.gatling);
                     assert.file([
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/impl/FooServiceImpl.java`,
                     ]);
                 });
             });
@@ -248,7 +276,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'mapstruct',
                             service: 'serviceClass',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -260,7 +288,7 @@ describe('JHipster generator for entity', () => {
                     assert.file([
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
                 });
             });
@@ -279,7 +307,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -306,7 +334,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -334,7 +362,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -362,7 +390,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -387,7 +415,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -415,7 +443,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -441,7 +469,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'no',
                             service: 'no',
-                            pagination: 'no'
+                            pagination: 'no',
                         })
                         .on('end', done);
                 });
@@ -470,7 +498,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'infinite-scroll'
+                            pagination: 'infinite-scroll',
                         })
                         .on('end', done);
                 });
@@ -495,7 +523,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'pagination'
+                            pagination: 'pagination',
                         })
                         .on('end', done);
                 });
@@ -523,7 +551,7 @@ describe('JHipster generator for entity', () => {
                             relationshipAdd: false,
                             dto: 'yes',
                             service: 'serviceImpl',
-                            pagination: 'pagination'
+                            pagination: 'pagination',
                         })
                         .on('end', done);
                 });
@@ -544,7 +572,7 @@ describe('JHipster generator for entity', () => {
                         })
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../'
+                            microservicePath: '../',
                         })
                         .withArguments(['bar'])
                         .on('end', done);
@@ -576,7 +604,7 @@ describe('JHipster generator for entity', () => {
                         .withArguments(['foo'])
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../'
+                            microservicePath: '../',
                         })
                         .on('end', done);
                 });
@@ -602,7 +630,7 @@ describe('JHipster generator for entity', () => {
                         .withArguments(['baz'])
                         .withPrompts({
                             useMicroserviceJson: true,
-                            microservicePath: '../'
+                            microservicePath: '../',
                         })
                         .on('end', done);
                 });
@@ -633,7 +661,7 @@ describe('JHipster generator for entity', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'pagination'
+                        pagination: 'pagination',
                     })
                     .on('end', done);
             });
@@ -660,7 +688,7 @@ describe('JHipster generator for entity', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'pagination'
+                        pagination: 'pagination',
                     })
                     .on('end', done);
             });
@@ -687,7 +715,7 @@ describe('JHipster generator for entity', () => {
                         relationshipAdd: false,
                         dto: 'no',
                         service: 'no',
-                        pagination: 'pagination'
+                        pagination: 'pagination',
                     })
                     .on('end', done);
             });
@@ -755,7 +783,7 @@ describe('JHipster generator for entity', () => {
                 it("doesn't creates database changelogs", () => {
                     assert.noFile([
                         `${constants.SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_Foo.xml`,
-                        `${constants.SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_constraints_Foo.xml`
+                        `${constants.SERVER_MAIN_RES_DIR}config/liquibase/changelog/20160926101210_added_entity_constraints_Foo.xml`,
                     ]);
                 });
             });
@@ -809,7 +837,7 @@ describe('JHipster generator for entity', () => {
                     assert.file([
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/dto/FooDTO.java`,
                         `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/mapper/FooMapper.java`,
-                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`
+                        `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/service/FooService.java`,
                     ]);
                 });
                 it('generates swagger annotations on DTO', () => {
@@ -847,6 +875,77 @@ describe('JHipster generator for entity', () => {
                         `${SERVER_TEST_SRC_DIR}com/mycompany/myapp/web/rest/FooResourceIT.java`,
                         /UPDATED_NUMBER_PATTERN_REQUIRED = "468439"/
                     );
+                });
+            });
+        });
+
+        context('when generating enums', () => {
+            let enumWithoutCustomValuesPath;
+            let enumWithSomeCustomValuesPath;
+            let enumWithOnlyCustomValuesPath;
+
+            before(done => {
+                enumWithoutCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumA.java`;
+                enumWithSomeCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumB.java`;
+                enumWithOnlyCustomValuesPath = `${SERVER_MAIN_SRC_DIR}com/mycompany/myapp/domain/enumeration/MyEnumC.java`;
+                helpers
+                    .run(require.resolve('../generators/entity'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/enums'), dir);
+                    })
+                    .withArguments(['A'])
+                    .on('end', done);
+            });
+
+            context('for enum content without custom values', () => {
+                it('generates the java enum content', () => {
+                    assert.fileContent(enumWithoutCustomValuesPath, /AAA,\s+BBB/);
+                });
+                it('does not generate a private field', () => {
+                    assert.noFileContent(enumWithoutCustomValuesPath, /private final String value;/);
+                });
+                it('does not generate an empty constructor', () => {
+                    assert.noFileContent(enumWithoutCustomValuesPath, /MyEnumA\(\)/);
+                });
+                it('does not generate a non-empty constructor', () => {
+                    assert.noFileContent(enumWithoutCustomValuesPath, /MyEnumA\(String value\)/);
+                });
+                it('does not generate a getter for the value', () => {
+                    assert.noFileContent(enumWithoutCustomValuesPath, /public String getValue\(\)/);
+                });
+            });
+            context('for enum content with some custom values', () => {
+                it('generates the java enum content', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /AAA\("aaa_aaa"\),\s+BBB;/);
+                });
+                it('generates a non-final private field', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /private String value;/);
+                });
+                it('generates an empty constructor', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /MyEnumB\(\)/);
+                });
+                it('generates a non-empty constructor', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /MyEnumB\(String value\)/);
+                });
+                it('generates a getter for the value', () => {
+                    assert.fileContent(enumWithSomeCustomValuesPath, /public String getValue\(\)/);
+                });
+            });
+            context('for enum content with only custom values', () => {
+                it('generates the java enum content', () => {
+                    assert.fileContent(enumWithOnlyCustomValuesPath, /AAA\("aaa_aaa"\),\s+BBB\("bbb"\);/);
+                });
+                it('generates a final private field', () => {
+                    assert.fileContent(enumWithOnlyCustomValuesPath, /private final String value;/);
+                });
+                it('does not generate an empty constructor', () => {
+                    assert.noFileContent(enumWithOnlyCustomValuesPath, /MyEnumC\(\)/);
+                });
+                it('generates a non-empty constructor', () => {
+                    assert.fileContent(enumWithOnlyCustomValuesPath, /MyEnumC\(String value\)/);
+                });
+                it('generates a getter for the value', () => {
+                    assert.fileContent(enumWithOnlyCustomValuesPath, /public String getValue\(\)/);
                 });
             });
         });

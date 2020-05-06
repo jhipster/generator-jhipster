@@ -10,7 +10,7 @@ const constants = require('../generators/generator-constants');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 
-describe('JHipster upgrade generator', function() {
+describe('JHipster upgrade generator', function () {
     this.timeout(400000);
     describe('default application', () => {
         const cwd = process.cwd();
@@ -45,7 +45,7 @@ describe('JHipster upgrade generator', function() {
                     skipClient: false,
                     skipUserManagement: false,
                     serverSideOptions: [],
-                    upgradeConfig: false
+                    upgradeConfig: false,
                 })
                 .on('end', () => {
                     helpers
@@ -54,7 +54,7 @@ describe('JHipster upgrade generator', function() {
                             'from-cli': true,
                             force: true,
                             silent: false,
-                            'target-version': packageJson.version
+                            'target-version': packageJson.version,
                         })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
@@ -104,7 +104,7 @@ describe('JHipster upgrade generator', function() {
                     // Fake the presence of the blueprint in node_modules: we don't install it, but we need its version
                     const packagejs = {
                         name: blueprintName,
-                        version: blueprintVersion
+                        version: blueprintVersion,
                     };
                     const fakeBlueprintModuleDir = path.join(dir, `node_modules/${blueprintName}`);
                     fse.ensureDirSync(path.join(fakeBlueprintModuleDir, 'generators', 'fake'));
@@ -132,7 +132,7 @@ describe('JHipster upgrade generator', function() {
                     skipClient: false,
                     skipUserManagement: false,
                     serverSideOptions: [],
-                    upgradeConfig: false
+                    upgradeConfig: false,
                 })
                 .on('end', () => {
                     helpers
@@ -142,7 +142,7 @@ describe('JHipster upgrade generator', function() {
                             force: true,
                             silent: false,
                             'skip-checks': true,
-                            'target-version': packageJson.version
+                            'target-version': packageJson.version,
                         })
                         .inTmpDir(() => {
                             /* eslint-disable-next-line no-console */
@@ -173,7 +173,7 @@ describe('JHipster upgrade generator', function() {
 
         it('still contains blueprint information', () => {
             assert.JSONFileContent('.yo-rc.json', {
-                'generator-jhipster': { blueprints: [{ name: blueprintName, version: blueprintVersion }] }
+                'generator-jhipster': { blueprints: [{ name: blueprintName, version: blueprintVersion }] },
             });
             assert.fileContent('package.json', new RegExp(`"${blueprintName}": "${blueprintVersion}"`));
         });

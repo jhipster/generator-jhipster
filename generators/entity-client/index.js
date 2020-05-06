@@ -41,7 +41,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             setup() {
                 this.tsKeyType = this.getTypescriptKeyType(this.primaryKeyType);
-            }
+            },
         };
     }
 
@@ -68,7 +68,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.rebuildClient();
                 }
                 this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
-            }
+            },
         };
     }
 

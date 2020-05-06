@@ -19,7 +19,7 @@
 const jhiCore = require('jhipster-core');
 
 module.exports = {
-    askForControllerActions
+    askForControllerActions,
 };
 
 function askForControllerActions() {
@@ -29,7 +29,7 @@ function askForControllerActions() {
                 type: 'confirm',
                 name: 'actionAdd',
                 message: 'Do you want to add an action to your controller?',
-                default: true
+                default: true,
             },
             {
                 when: response => response.actionAdd === true,
@@ -51,7 +51,7 @@ function askForControllerActions() {
 
                     return true;
                 },
-                message: 'What is the name of your action?'
+                message: 'What is the name of your action?',
             },
             {
                 when: response => response.actionAdd === true,
@@ -61,23 +61,23 @@ function askForControllerActions() {
                 choices: [
                     {
                         name: 'POST',
-                        value: 'Post'
+                        value: 'Post',
                     },
                     {
                         name: 'GET',
-                        value: 'Get'
+                        value: 'Get',
                     },
                     {
                         name: 'PUT',
-                        value: 'Put'
+                        value: 'Put',
                     },
                     {
                         name: 'DELETE',
-                        value: 'Delete'
-                    }
+                        value: 'Delete',
+                    },
                 ],
-                default: 1
-            }
+                default: 1,
+            },
         ];
 
         if (!this.defaultOption) {
@@ -85,7 +85,7 @@ function askForControllerActions() {
                 if (props.actionAdd) {
                     const controllerAction = {
                         actionName: props.actionName,
-                        actionMethod: props.actionMethod
+                        actionMethod: props.actionMethod,
                     };
 
                     this.controllerActions.push(controllerAction);

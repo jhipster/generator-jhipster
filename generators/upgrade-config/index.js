@@ -52,7 +52,7 @@ module.exports = class extends BaseGenerator {
 
             async unifyConfig() {
                 this._migrateAllBlueprints();
-            }
+            },
         };
     }
 
@@ -113,7 +113,7 @@ module.exports = class extends BaseGenerator {
      * Resolve configuration conflicts.
      */
     _askConfigConflict(key, blueprintConfigs) {
-        const toChoice = function(config) {
+        const toChoice = function (config) {
             const value = config.get(key);
             return { name: `${config.name}: ${JSON.stringify(value)}`, value };
         };
@@ -140,9 +140,9 @@ module.exports = class extends BaseGenerator {
             type: 'rawlist',
             name: `#${key}`,
             choices: otherChoices,
-            message: `What is the config value for ${key}?`
+            message: `What is the config value for ${key}?`,
         }).then(
-            function(answer) {
+            function (answer) {
                 const value = answer[`#${key}`];
                 if (this._debug && this._debug.enabled) {
                     this._debug('answer: %o', answer);

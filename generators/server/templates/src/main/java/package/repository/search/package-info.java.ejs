@@ -17,6 +17,10 @@
  limitations under the License.
 -%>
 /**
+<%_ if (searchEngine === 'elasticsearch') { _%>
  * Spring Data Elasticsearch repositories.
+<%_ } else if (searchEngine === 'couchbase') { _%>
+ * Couchbase Full Text Search repositories.
+<%_ } _%>
  */
 package <%= packageName %>.repository.search;

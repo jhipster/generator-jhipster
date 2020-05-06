@@ -109,11 +109,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://papersowl.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://www.banksecrets.eu/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
         </a>
@@ -123,16 +118,21 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://www.minitool.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://unscramblex.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/unscramblex.png">
+        </a>
+      </td>
+      <td align="center" valign="middle">
+        <a href="https://manwoman.co/pl" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/manwoman.png">
         </a>
       </td>
     </tr>
@@ -147,27 +147,27 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hipster-labs/jhipster-daily-builds)
 
-| Pipeline Status                                                                |
-| :------------------------------------------------------------------------------|
-| [![Angular Maven][github-angular-maven]][github-actions]                       |
-| [![Angular Maven NoSQL][github-angular-maven-nosql]][github-actions]           |
-| [![Angular Gradle][github-angular-gradle]][github-actions]                     |
-| [![Angular Gradle NoSQL][github-angular-gradle-nosql]][github-actions]         |
-| [![React Maven][github-react-maven]][github-actions]                           |
-| [![React Maven NoSQL][github-react-maven-nosql]][github-actions]               |
-| [![React Gradle][github-react-gradle]][github-actions]                         |
-| [![React Gradle NoSQL][github-react-gradle-nosql]][github-actions]             |
-| [![Elasticsearch][github-elasticsearch]][github-actions]                       |
-| [![Monolith OAuth2][github-monolith-oauth2]][github-actions]                   |
-| [![Yarn][github-yarn]][github-actions]                                         |
-| [![No Database][github-no-database]][github-actions]                           |
-| [![Microservices JWT][github-ms-jwt]][github-actions]                          |
-| [![Microservices OAuth2][github-ms-oauth2]][github-actions]                    |
-| [![Microservices UAA][github-ms-uaa]][github-actions]                          |
-| [![Docker Image][github-docker-image]][github-actions]                         |
-| [![Neo4j][github-neo4j]][github-actions]                                       |
-| [![Couchbase][github-couchbase]][github-actions]                               |
-| [![Official Windows][github-official-windows]][github-actions]                 |
+| Pipeline Status                                                        |
+| :--------------------------------------------------------------------- |
+| [![Angular Maven][github-angular-maven]][github-actions]               |
+| [![Angular Maven NoSQL][github-angular-maven-nosql]][github-actions]   |
+| [![Angular Gradle][github-angular-gradle]][github-actions]             |
+| [![Angular Gradle NoSQL][github-angular-gradle-nosql]][github-actions] |
+| [![React Maven][github-react-maven]][github-actions]                   |
+| [![React Maven NoSQL][github-react-maven-nosql]][github-actions]       |
+| [![React Gradle][github-react-gradle]][github-actions]                 |
+| [![React Gradle NoSQL][github-react-gradle-nosql]][github-actions]     |
+| [![Elasticsearch][github-elasticsearch]][github-actions]               |
+| [![Monolith OAuth2][github-monolith-oauth2]][github-actions]           |
+| [![Yarn][github-yarn]][github-actions]                                 |
+| [![No Database][github-no-database]][github-actions]                   |
+| [![Microservices JWT][github-ms-jwt]][github-actions]                  |
+| [![Microservices OAuth2][github-ms-oauth2]][github-actions]            |
+| [![Microservices UAA][github-ms-uaa]][github-actions]                  |
+| [![Docker Image][github-docker-image]][github-actions]                 |
+| [![Neo4j][github-neo4j]][github-actions]                               |
+| [![Couchbase][github-couchbase]][github-actions]                       |
+| [![Official Windows][github-official-windows]][github-actions]         |
 
 ## Analysis of the sample JHipster project
 

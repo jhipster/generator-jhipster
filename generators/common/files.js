@@ -24,9 +24,9 @@
 const prettierConfigFiles = {
     global: [
         {
-            templates: ['.prettierrc', '.prettierignore']
-        }
-    ]
+            templates: ['.prettierrc', '.prettierignore'],
+        },
+    ],
 };
 
 const commonFiles = {
@@ -36,37 +36,43 @@ const commonFiles = {
                 'README.md',
                 {
                     file: 'gitignore',
-                    renameTo: () => '.gitignore'
+                    renameTo: () => '.gitignore',
                 },
                 {
                     file: 'gitattributes',
                     renameTo: () => '.gitattributes',
-                    method: 'copy'
+                    method: 'copy',
                 },
                 {
                     file: 'editorconfig',
                     renameTo: () => '.editorconfig',
-                    method: 'copy'
+                    method: 'copy',
                 },
                 {
                     file: 'sonar-project.properties',
-                    renameTo: () => 'sonar-project.properties'
-                }
-            ]
-        }
-    ]
+                    renameTo: () => 'sonar-project.properties',
+                },
+            ],
+        },
+    ],
+    commitHooks: [
+        {
+            condition: generator => !generator.skipCommitHook,
+            templates: ['.huskyrc', '.lintstagedrc.js'],
+        },
+    ],
 };
 
 function writeFiles() {
     return {
         writeFiles() {
             this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
-        }
+        },
     };
 }
 
 module.exports = {
     writeFiles,
     prettierConfigFiles,
-    commonFiles
+    commonFiles,
 };

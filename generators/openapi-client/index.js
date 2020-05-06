@@ -29,7 +29,7 @@ module.exports = class extends BaseGenerator {
         this.option('regen', {
             desc: 'Regenerates all saved clients',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.registerPrettierTransform();
     }
@@ -45,7 +45,7 @@ module.exports = class extends BaseGenerator {
             },
             getConfig() {
                 this.openApiClients = this.config.get('openApiClients') || {};
-            }
+            },
         };
     }
 
@@ -53,7 +53,7 @@ module.exports = class extends BaseGenerator {
         return {
             askActionType: prompts.askActionType,
             askExistingAvailableDocs: prompts.askExistingAvailableDocs,
-            askGenerationInfos: prompts.askGenerationInfos
+            askGenerationInfos: prompts.askGenerationInfos,
         };
     }
 
@@ -67,7 +67,7 @@ module.exports = class extends BaseGenerator {
                     this.clientsToGenerate[this.props.cliName] = {
                         spec: this.props.inputSpec,
                         useServiceDiscovery: this.props.useServiceDiscovery,
-                        generatorName: this.props.generatorName
+                        generatorName: this.props.generatorName,
                     };
                 } else if (this.props.action === 'select') {
                     this.props.selected.forEach(selection => {
@@ -81,7 +81,7 @@ module.exports = class extends BaseGenerator {
                     this.openApiClients[this.props.cliName] = this.clientsToGenerate[this.props.cliName];
                     this.config.set('openApiClients', this.openApiClients);
                 }
-            }
+            },
         };
     }
 

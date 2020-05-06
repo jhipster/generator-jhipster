@@ -20,7 +20,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination') { _%>
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-<%_ } else if (searchEngine === 'elasticsearch') { _%>
+<%_ } else if (searchEngine !== false) { _%>
 import { ActivatedRoute } from '@angular/router';
 <%_ } _%>
 import { Subscription } from 'rxjs';
@@ -106,14 +106,14 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
     protected onSuccess(data: I<%= entityAngularName %>[] | null, headers: HttpHeaders, page: number): void {
         this.totalItems = Number(headers.get('X-Total-Count'));
         this.page = page;
-        <%_ if (searchEngine === 'elasticsearch') { _%>
+        <%_ if (searchEngine !== false) { _%>
         this.ngbPaginationPage = this.page;
         <%_ } _%>
         this.router.navigate(['/<%= entityUrl %>'], {
             queryParams: {
                 page: this.page,
                 size: this.itemsPerPage,
-                <%_ if (searchEngine === 'elasticsearch') { _%>
+                <%_ if (searchEngine !== false) { _%>
                 search: this.currentSearch,
                 <%_ } _%>
                 sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')

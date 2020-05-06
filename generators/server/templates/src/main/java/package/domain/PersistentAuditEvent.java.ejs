@@ -29,6 +29,7 @@ import org.neo4j.springframework.data.core.schema.Node;
 import org.neo4j.springframework.data.core.schema.Property;
 import org.neo4j.springframework.data.core.schema.Relationship;
 import org.neo4j.springframework.data.core.support.UUIDStringGenerator;
+import org.springframework.data.annotation.Transient;
 <%_ } else if (databaseType === 'couchbase') { _%>
 import org.springframework.data.annotation.Id;
 import com.couchbase.client.java.repository.annotation.Field;
@@ -122,6 +123,8 @@ public class PersistentAuditEvent implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("event_date")
+    <%_ } else if (databaseType === 'neo4j') { _%>
+    @Property("event_date")
     <%_ } _%>
     private Instant auditEventDate;
 
@@ -130,6 +133,8 @@ public class PersistentAuditEvent implements Serializable {
     <%_ } _%>
     <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
     @Field("event_type")
+    <%_ } else if (databaseType === 'neo4j') { _%>
+    @Property("event_type")
     <%_ } _%>
     private String auditEventType;
 
@@ -142,6 +147,9 @@ public class PersistentAuditEvent implements Serializable {
         <%_ } else { _%>
     @Transient
         <%_ } _%>
+    <%_ } _%>
+    <%_ if (databaseType === 'neo4j') { _%>
+    @Transient
     <%_ } _%>
     private Map<String, String> data = new HashMap<>();
 

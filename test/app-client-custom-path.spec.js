@@ -26,7 +26,7 @@ describe('JHipster generator', () => {
                         'from-cli': true,
                         skipInstall: true,
                         skipChecks: true,
-                        jhiPrefix: 'test'
+                        jhiPrefix: 'test',
                     })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -47,7 +47,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -67,7 +67,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -104,7 +104,7 @@ describe('JHipster generator', () => {
                         skipInstall: true,
                         skipChecks: true,
                         jhiPrefix: 'test',
-                        experimental: true
+                        experimental: true,
                     })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -125,7 +125,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -145,7 +145,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });

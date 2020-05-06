@@ -42,7 +42,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -61,7 +61,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -98,7 +98,7 @@ describe('JHipster generator', () => {
                         skipInstall: true,
                         skipChecks: true,
                         jhiPrefix: 'test',
-                        experimental: true
+                        experimental: true,
                     })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -119,7 +119,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -138,7 +138,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -176,7 +176,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -195,7 +195,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -229,7 +229,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'gradle',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -248,7 +248,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -280,7 +280,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -299,7 +299,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -330,7 +330,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -369,7 +369,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -408,7 +408,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -447,7 +447,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -488,7 +488,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -525,7 +525,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -561,7 +561,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: ['searchEngine:elasticsearch']
+                        serverSideOptions: ['searchEngine:elasticsearch'],
                     })
                     .on('end', done);
             });
@@ -572,6 +572,42 @@ describe('JHipster generator', () => {
                 assert.file(expectedFiles.hibernateTimeZoneConfig);
             });
             shouldBeV3DockerfileCompatible('postgresql');
+        });
+
+        describe('couchbase FTS', () => {
+            before(done => {
+                helpers
+                    .run(path.join(__dirname, '../generators/app'))
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true })
+                    .withPrompts({
+                        baseName: 'jhipster',
+                        packageName: 'com.mycompany.myapp',
+                        packageFolder: 'com/mycompany/myapp',
+                        clientFramework: 'angularX',
+                        serviceDiscoveryType: false,
+                        authenticationType: 'jwt',
+                        cacheProvider: 'no',
+                        enableHibernateCache: false,
+                        databaseType: 'couchbase',
+                        devDatabaseType: 'couchbase',
+                        prodDatabaseType: 'couchbase',
+                        enableTranslation: true,
+                        nativeLanguage: 'en',
+                        languages: ['fr'],
+                        buildTool: 'maven',
+                        rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
+                        skipClient: false,
+                        skipUserManagement: false,
+                        serverSideOptions: ['searchEngine:couchbase'],
+                    })
+                    .on('end', done);
+            });
+
+            it('creates expected files with "Couchbbase FTS"', () => {
+                assert.file(expectedFiles.couchbase);
+                assert.file(expectedFiles.couchbaseSearch);
+            });
+            shouldBeV3DockerfileCompatible('couchbase');
         });
 
         describe('no database', () => {
@@ -596,7 +632,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -638,7 +674,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -676,7 +712,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: ['searchEngine:elasticsearch']
+                        serverSideOptions: ['searchEngine:elasticsearch'],
                     })
                     .on('end', done);
             });
@@ -712,7 +748,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -746,7 +782,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -782,7 +818,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -819,7 +855,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -857,7 +893,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -894,7 +930,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -937,7 +973,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en'],
-                        serverSideOptions: ['messageBroker:kafka']
+                        serverSideOptions: ['messageBroker:kafka'],
                     })
                     .on('end', done);
             });
@@ -982,7 +1018,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en'],
-                        serverSideOptions: ['enableSwaggerCodegen:true']
+                        serverSideOptions: ['enableSwaggerCodegen:true'],
                     })
                     .on('end', done);
             });
@@ -1030,7 +1066,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         nativeLanguage: 'en',
                         languages: ['en'],
-                        serverSideOptions: ['enableSwaggerCodegen:true']
+                        serverSideOptions: ['enableSwaggerCodegen:true'],
                     })
                     .on('end', done);
             });
@@ -1073,7 +1109,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1107,7 +1143,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1115,7 +1151,7 @@ describe('JHipster generator', () => {
             it('creates expected files with default application name', () => {
                 assert.file([
                     `${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`,
-                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/ApplicationWebXml.java`
+                    `${SERVER_MAIN_SRC_DIR}com/otherpackage/ApplicationWebXml.java`,
                 ]);
                 assert.fileContent(`${SERVER_MAIN_SRC_DIR}com/otherpackage/Application.java`, /public class Application/);
             });
@@ -1143,7 +1179,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1176,7 +1212,7 @@ describe('JHipster generator', () => {
                         enableTranslation: false,
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1211,7 +1247,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         skipClient: false,
                         skipUserManagement: false,
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1223,7 +1259,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -1256,7 +1292,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1268,7 +1304,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -1296,7 +1332,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1308,7 +1344,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'session',
-                        testFrameworks: []
+                        testFrameworks: [],
                     })
                 );
             });
@@ -1343,7 +1379,7 @@ describe('JHipster generator', () => {
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['en']
+                        languages: ['en'],
                     })
                     .on('end', done);
             });
@@ -1359,7 +1395,7 @@ describe('JHipster generator', () => {
                         enableTranslation: true,
                         serviceDiscoveryType: false,
                         authenticationType: 'jwt',
-                        testFrameworks: ['protractor']
+                        testFrameworks: ['protractor'],
                     })
                 );
                 assert.noFile([`${TEST_DIR}gatling/conf/gatling.conf`, `${TEST_DIR}gatling/conf/logback.xml`]);
@@ -1393,7 +1429,7 @@ describe('JHipster generator', () => {
                         jhiPrefix: 'jhi',
                         enableTranslation: true,
                         nativeLanguage: 'en',
-                        languages: ['en']
+                        languages: ['en'],
                     })
                     .on('end', done);
             });
@@ -1425,7 +1461,7 @@ describe('JHipster generator', () => {
                     enableTranslation: true,
                     nativeLanguage: 'en',
                     languages: ['fr'],
-                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277'
+                    rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                 })
                 .on('end', done);
         });
@@ -1442,7 +1478,7 @@ describe('JHipster generator', () => {
                     enableTranslation: true,
                     serviceDiscoveryType: false,
                     authenticationType: 'jwt',
-                    testFrameworks: []
+                    testFrameworks: [],
                 })
             );
         });
@@ -1473,7 +1509,7 @@ describe('JHipster generator', () => {
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1492,7 +1528,7 @@ describe('JHipster generator', () => {
                             enableTranslation: true,
                             serviceDiscoveryType: false,
                             authenticationType: 'session',
-                            testFrameworks: []
+                            testFrameworks: [],
                         },
                         '',
                         ['package.json']
@@ -1530,7 +1566,7 @@ describe('JHipster generator', () => {
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1549,7 +1585,7 @@ describe('JHipster generator', () => {
                             enableTranslation: true,
                             serviceDiscoveryType: false,
                             authenticationType: 'jwt',
-                            testFrameworks: []
+                            testFrameworks: [],
                         },
                         '',
                         ['package.json']
@@ -1572,7 +1608,7 @@ describe('JHipster generator', () => {
                         skipInstall: true,
                         skipClient: true,
                         skipUserManagement: true,
-                        skipChecks: true
+                        skipChecks: true,
                     })
                     .withPrompts({
                         baseName: 'jhipster',
@@ -1591,7 +1627,7 @@ describe('JHipster generator', () => {
                         nativeLanguage: 'en',
                         languages: ['fr'],
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1630,7 +1666,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1668,7 +1704,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1705,7 +1741,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1742,7 +1778,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: ['serviceDiscoveryType:eureka']
+                        serverSideOptions: ['serviceDiscoveryType:eureka'],
                     })
                     .on('end', done);
             });
@@ -1783,7 +1819,7 @@ describe('JHipster generator', () => {
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         serverSideOptions: [],
                         skipClient: true,
-                        skipUserManagement: true
+                        skipUserManagement: true,
                     })
                     .on('end', done);
             });
@@ -1822,7 +1858,7 @@ describe('JHipster generator', () => {
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         serverSideOptions: [],
-                        serviceDiscoveryType: 'eureka'
+                        serviceDiscoveryType: 'eureka',
                     })
                     .on('end', done);
             });
@@ -1861,7 +1897,7 @@ describe('JHipster generator', () => {
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
                         serverSideOptions: [],
-                        serviceDiscoveryType: 'eureka'
+                        serviceDiscoveryType: 'eureka',
                     })
                     .on('end', done);
             });
@@ -1901,7 +1937,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1938,7 +1974,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -1974,7 +2010,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -2013,7 +2049,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -2051,7 +2087,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });
@@ -2087,7 +2123,7 @@ describe('JHipster generator', () => {
                         languages: ['fr'],
                         buildTool: 'maven',
                         rememberMeKey: '5c37379956bd1242f5636c8cb322c2966ad81277',
-                        serverSideOptions: []
+                        serverSideOptions: [],
                     })
                     .on('end', done);
             });

@@ -33,18 +33,18 @@ module.exports = class extends BaseGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         this.option('skip-build', {
             desc: 'Skips building the application',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.option('skip-deploy', {
             desc: 'Skips deployment to Heroku',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.herokuSkipBuild = this.options['skip-build'];
@@ -75,10 +75,12 @@ module.exports = class extends BaseGenerator {
         this.angularAppName = this.getAngularAppName();
         this.buildTool = configuration.get('buildTool');
         this.applicationType = configuration.get('applicationType');
+        this.reactive = configuration.get('reactive') || false;
         this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
         this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
         this.herokuDeployType = configuration.get('herokuDeployType');
+        this.herokuJavaVersion = configuration.get('herokuJavaVersion');
     }
 
     get prompting() {
@@ -91,7 +93,7 @@ module.exports = class extends BaseGenerator {
                         if (err) {
                             this.config.set({
                                 herokuAppName: null,
-                                herokuDeployType: this.herokuDeployType
+                                herokuDeployType: this.herokuDeployType,
                             });
                             this.abort = true;
                             this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
@@ -106,7 +108,7 @@ module.exports = class extends BaseGenerator {
                             this.herokuAppExists = true;
                             this.config.set({
                                 herokuAppName: this.herokuAppName,
-                                herokuDeployType: this.herokuDeployType
+                                herokuDeployType: this.herokuDeployType,
                             });
                         }
                         done();
@@ -117,15 +119,15 @@ module.exports = class extends BaseGenerator {
                             type: 'input',
                             name: 'herokuAppName',
                             message: 'Name to deploy as:',
-                            default: this.baseName
+                            default: this.baseName,
                         },
                         {
                             type: 'list',
                             name: 'herokuRegion',
                             message: 'On which region do you want to deploy ?',
                             choices: ['us', 'eu'],
-                            default: 0
-                        }
+                            default: 0,
+                        },
                     ];
 
                     this.prompt(prompts).then(props => {
@@ -149,22 +151,63 @@ module.exports = class extends BaseGenerator {
                         choices: [
                             {
                                 value: 'git',
-                                name: 'Git (compile on Heroku)'
+                                name: 'Git (compile on Heroku)',
                             },
                             {
                                 value: 'jar',
-                                name: 'JAR (compile locally)'
-                            }
+                                name: 'JAR (compile locally)',
+                            },
                         ],
-                        default: 0
-                    }
+                        default: 0,
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
                     this.herokuDeployType = props.herokuDeployType;
                     done();
                 });
-            }
+            },
+
+            askForHerokuJavaVersion() {
+                if (this.abort) return;
+                if (this.herokuJavaVersion) return;
+                const done = this.async();
+                const prompts = [
+                    {
+                        type: 'list',
+                        name: 'herokuJavaVersion',
+                        message: 'Which Java version would you like to use to build and run your app ?',
+                        choices: [
+                            {
+                                value: '1.8',
+                                name: '1.8',
+                            },
+                            {
+                                value: '11',
+                                name: '11',
+                            },
+                            {
+                                value: '12',
+                                name: '12',
+                            },
+                            {
+                                value: '13',
+                                name: '13',
+                            },
+                            {
+                                value: '14',
+                                name: '14',
+                            },
+                        ],
+                        default: 1,
+                    },
+                ];
+
+                this.prompt(prompts).then(props => {
+                    this.herokuJavaVersion = props.herokuJavaVersion;
+                    done();
+                });
+            },
         };
     }
 
@@ -186,9 +229,9 @@ module.exports = class extends BaseGenerator {
             saveConfig() {
                 this.config.set({
                     herokuAppName: this.herokuAppName,
-                    herokuDeployType: this.herokuDeployType
+                    herokuDeployType: this.herokuDeployType,
                 });
-            }
+            },
         };
     }
 
@@ -263,15 +306,15 @@ module.exports = class extends BaseGenerator {
                                     choices: [
                                         {
                                             value: 'Yes',
-                                            name: 'Yes, I have access to it'
+                                            name: 'Yes, I have access to it',
                                         },
                                         {
                                             value: 'No',
-                                            name: 'No, generate a random name'
-                                        }
+                                            name: 'No, generate a random name',
+                                        },
                                     ],
-                                    default: 0
-                                }
+                                    default: 0,
+                                },
                             ];
 
                             this.log('');
@@ -285,7 +328,7 @@ module.exports = class extends BaseGenerator {
                                             this.log(stdout.trim());
                                             this.config.set({
                                                 herokuAppName: this.herokuAppName,
-                                                herokuDeployType: this.herokuDeployType
+                                                herokuDeployType: this.herokuDeployType,
                                             });
                                         }
                                         done();
@@ -311,7 +354,7 @@ module.exports = class extends BaseGenerator {
                                                 } else {
                                                     this.config.set({
                                                         herokuAppName: this.herokuAppName,
-                                                        herokuDeployType: this.herokuDeployType
+                                                        herokuDeployType: this.herokuDeployType,
                                                     });
                                                 }
                                                 done();
@@ -369,6 +412,15 @@ module.exports = class extends BaseGenerator {
                     );
                 }
 
+                if (this.prodDatabaseType === 'neo4j' && this.reactive) {
+                    this.log(
+                        chalk.red(
+                            'The reactive Neo4j driver requires Neo4j >= 4. The Graphene addon does not support this database version (yet).'
+                        )
+                    );
+                    done();
+                }
+
                 let dbAddOn = '';
                 if (this.prodDatabaseType === 'postgresql') {
                     dbAddOn = 'heroku-postgresql --as DATABASE';
@@ -378,6 +430,8 @@ module.exports = class extends BaseGenerator {
                     dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
                 } else if (this.prodDatabaseType === 'mongodb') {
                     dbAddOn = 'mongolab:sandbox --as MONGODB';
+                } else if (this.prodDatabaseType === 'neo4j') {
+                    dbAddOn = 'graphenedb:dev-free --as GRAPHENEDB';
                 } else {
                     done();
                     return;
@@ -398,19 +452,19 @@ module.exports = class extends BaseGenerator {
                         {
                             type: 'input',
                             name: 'herokuJHipsterRegistryApp',
-                            message: 'What is the name of your JHipster Registry Heroku application?'
+                            message: 'What is the name of your JHipster Registry Heroku application?',
                         },
                         {
                             type: 'input',
                             name: 'herokuJHipsterRegistryUsername',
                             message: 'What is your JHipster Registry username?',
-                            default: 'admin'
+                            default: 'admin',
                         },
                         {
                             type: 'input',
                             name: 'herokuJHipsterRegistryPassword',
-                            message: 'What is your JHipster Registry password?'
-                        }
+                            message: 'What is your JHipster Registry password?',
+                        },
                     ];
 
                     this.log('');
@@ -448,6 +502,7 @@ module.exports = class extends BaseGenerator {
                 this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
                 this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
                 this.template('Procfile.ejs', 'Procfile');
+                this.template('system.properties.ejs', 'system.properties');
                 if (this.buildTool === 'gradle') {
                     this.template('heroku.gradle.ejs', 'gradle/heroku.gradle');
                 }
@@ -479,7 +534,7 @@ module.exports = class extends BaseGenerator {
                         this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
                     });
                 }
-            }
+            },
         };
     }
 
@@ -651,7 +706,7 @@ module.exports = class extends BaseGenerator {
                         if (line.trim().length !== 0) this.log(line);
                     });
                 }
-            }
+            },
         };
     }
 };

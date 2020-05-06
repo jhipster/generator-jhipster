@@ -39,13 +39,13 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
             desc: 'Enable Webpack hook from maven/gradle build',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
@@ -53,7 +53,7 @@ module.exports = class extends BaseBlueprintGenerator {
             desc:
                 'Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
@@ -87,6 +87,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
                 this.SERVER_TEST_RES_DIR = constants.SERVER_TEST_RES_DIR;
+
+                this.HUSKY_VERSION = constants.HUSKY_VERSION;
+                this.LINT_STAGED_VERSION = constants.LINT_STAGED_VERSION;
+                this.PRETTIER_VERSION = constants.PRETTIER_VERSION;
+                this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
 
                 this.DOCKER_JHIPSTER_REGISTRY = constants.DOCKER_JHIPSTER_REGISTRY;
                 this.DOCKER_JAVA_JRE = constants.DOCKER_JAVA_JRE;
@@ -125,6 +130,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.GRADLE_VERSION = constants.GRADLE_VERSION;
 
                 this.JIB_VERSION = constants.JIB_VERSION;
+                this.JHIPSTER_DEPENDENCIES_VERSION = constants.JHIPSTER_DEPENDENCIES_VERSION;
+                this.SPRING_BOOT_VERSION = constants.SPRING_BOOT_VERSION;
                 this.LIQUIBASE_VERSION = constants.LIQUIBASE_VERSION;
                 this.LIQUIBASE_DTD_VERSION = constants.LIQUIBASE_DTD_VERSION;
                 this.JACOCO_VERSION = constants.JACOCO_VERSION;
@@ -195,6 +202,30 @@ module.exports = class extends BaseBlueprintGenerator {
                     // sql
                     this.devDatabaseType = configuration.get('devDatabaseType');
                     this.prodDatabaseType = configuration.get('prodDatabaseType');
+
+                    let dbContainer;
+                    switch (this.prodDatabaseType) {
+                        case 'mysql':
+                            dbContainer = this.DOCKER_MYSQL;
+                            break;
+                        case 'mariadb':
+                            dbContainer = this.DOCKER_MARIADB;
+                            break;
+                        case 'postgresql':
+                            dbContainer = this.DOCKER_POSTGRESQL;
+                            break;
+                        case 'mssql':
+                            dbContainer = this.DOCKER_MSSQL;
+                            break;
+                        case 'oracle':
+                        default:
+                            dbContainer = null;
+                    }
+                    if (dbContainer != null && dbContainer.includes(':')) {
+                        this.containerVersion = dbContainer.split(':')[1];
+                    } else {
+                        this.containerVersion = 'latest';
+                    }
                 }
                 this.skipFakeData = configuration.get('skipFakeData') || this.configOptions.skipFakeData;
 
@@ -301,7 +332,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                     this.existingProject = true;
                 }
-            }
+            },
         };
     }
 
@@ -341,7 +372,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
                 this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
-            }
+            },
         };
     }
 
@@ -367,8 +398,8 @@ module.exports = class extends BaseBlueprintGenerator {
                         messageBroker: this.messageBroker,
                         serviceDiscoveryType: this.serviceDiscoveryType,
                         buildTool: this.buildTool,
-                        enableSwaggerCodegen: this.enableSwaggerCodegen
-                    }
+                        enableSwaggerCodegen: this.enableSwaggerCodegen,
+                    },
                 });
             },
 
@@ -417,14 +448,14 @@ module.exports = class extends BaseBlueprintGenerator {
                     jwtSecretKey: this.jwtSecretKey,
                     rememberMeKey: this.rememberMeKey,
                     enableTranslation: this.enableTranslation,
-                    embeddableLaunchScript: this.embeddableLaunchScript
+                    embeddableLaunchScript: this.embeddableLaunchScript,
                 };
                 if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
                     config.nativeLanguage = this.nativeLanguage;
                     config.languages = this.languages;
                 }
                 this.config.set(config);
-            }
+            },
         };
     }
 
@@ -467,7 +498,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.skipI18nQuestion) return;
 
                 this.composeLanguagesSub(this, this.configOptions, 'server');
-            }
+            },
         };
     }
 
@@ -500,7 +531,7 @@ module.exports = class extends BaseBlueprintGenerator {
                         }
                     }
                 }
-            }
+            },
         };
     }
 
@@ -524,7 +555,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     logMsgComment = ` (${chalk.yellow.bold(executable)} if using Windows Command Prompt)`;
                 }
                 this.log(chalk.green(`Run your Spring Boot application:\n${chalk.yellow.bold(`./${executable}`)}${logMsgComment}`));
-            }
+            },
         };
     }
 

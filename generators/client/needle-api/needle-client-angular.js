@@ -80,12 +80,9 @@ module.exports = class extends needleClientBase {
         importNeedle,
         moduleNeedle
     ) {
-        const errorMessage = `${chalk.yellow('Reference to ') +
-            angularName +
-            folderName +
-            fileName +
-            enableTranslation +
-            clientFramework} ${chalk.yellow(`not added to ${modulePath}.\n`)}`;
+        const errorMessage = `${
+            chalk.yellow('Reference to ') + angularName + folderName + fileName + enableTranslation + clientFramework
+        } ${chalk.yellow(`not added to ${modulePath}.\n`)}`;
 
         const importRewriteFileModel = this._generateRewriteFileModelWithImportStatement(
             appName,
@@ -132,7 +129,7 @@ module.exports = class extends needleClientBase {
                     {
                         file: iconsPath,
                         pattern: /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
-                        content: `,\n  ${iconImport}\n  // jhipster-needle-add-icon-import`
+                        content: `,\n  ${iconImport}\n  // jhipster-needle-add-icon-import`,
                     },
                     this.generator
                 );

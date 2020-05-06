@@ -41,13 +41,10 @@ function spinner(promise, text = 'loading', spinnerIcon = 'monkey') {
 }
 
 function formatRDSUsername(username) {
-    return _.chain(username)
-        .replace('_', '')
-        .truncate({ length: 16, omission: '' })
-        .value();
+    return _.chain(username).replace('_', '').truncate({ length: 16, omission: '' }).value();
 }
 
 module.exports = {
     spinner,
-    formatRDSUsername
+    formatRDSUsername,
 };

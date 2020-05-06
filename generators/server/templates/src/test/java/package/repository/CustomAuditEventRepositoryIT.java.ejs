@@ -133,8 +133,10 @@ public class CustomAuditEventRepositoryIT {
         PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
         assertThat(persistentAuditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
         assertThat(persistentAuditEvent.getAuditEventType()).isEqualTo(event.getType());
+        <%_ if (databaseType !== 'neo4j') { _%>
         assertThat(persistentAuditEvent.getData()).containsKey("test-key");
         assertThat(persistentAuditEvent.getData().get("test-key")).isEqualTo("test-value");
+        <%_ } _%>
         assertThat(persistentAuditEvent.getAuditEventDate().truncatedTo(ChronoUnit.MILLIS))
             .isEqualTo(event.getTimestamp().truncatedTo(ChronoUnit.MILLIS));
     }
@@ -154,10 +156,12 @@ public class CustomAuditEventRepositoryIT {
         PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
         assertThat(persistentAuditEvent.getPrincipal()).isEqualTo(event.getPrincipal());
         assertThat(persistentAuditEvent.getAuditEventType()).isEqualTo(event.getType());
+        <%_ if (databaseType !== 'neo4j') { _%>
         assertThat(persistentAuditEvent.getData()).containsKey("test-key");
         String actualData = persistentAuditEvent.getData().get("test-key");
         assertThat(actualData.length()).isEqualTo(EVENT_DATA_COLUMN_MAX_LENGTH);
         assertThat(actualData).isSubstringOf(largeData);
+        <%_ } _%>
         assertThat(persistentAuditEvent.getAuditEventDate().truncatedTo(ChronoUnit.MILLIS))
             .isEqualTo(event.getTimestamp().truncatedTo(ChronoUnit.MILLIS));
     }
@@ -176,9 +180,11 @@ public class CustomAuditEventRepositoryIT {
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);
+        <%_ if (databaseType !== 'neo4j') { _%>
         PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
         assertThat(persistentAuditEvent.getData().get("remoteAddress")).isEqualTo("1.2.3.4");
         assertThat(persistentAuditEvent.getData().get("sessionId")).isEqualTo("test-session-id");
+        <%_ } _%>
     }
     <%_ } _%>
 
@@ -190,8 +196,10 @@ public class CustomAuditEventRepositoryIT {
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(1);
+        <%_ if (databaseType !== 'neo4j') { _%>
         PersistentAuditEvent persistentAuditEvent = persistentAuditEvents.get(0);
         assertThat(persistentAuditEvent.getData().get("test-key")).isEqualTo("null");
+        <%_ } _%>
     }
 
     @Test

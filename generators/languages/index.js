@@ -38,27 +38,27 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
         // This makes it possible to pass `languages` by argument
         this.argument('languages', {
             type: Array,
             required: false,
-            description: 'Languages'
+            description: 'Languages',
         });
 
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip installing client files',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip installing server files',
             type: Boolean,
-            defaults: false
+            defaults: false,
         });
 
         this.authenticationType = this.config.get('authenticationType');
@@ -124,7 +124,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(configuration.get('buildTool'));
                 this.skipUserManagement = configuration.get('skipUserManagement');
-            }
+            },
         };
     }
 
@@ -136,7 +136,7 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _prompting() {
         return {
-            askForLanguages: prompts.askForLanguages
+            askForLanguages: prompts.askForLanguages,
         };
     }
 
@@ -153,7 +153,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.languages = _.union(this.currentLanguages, this.languagesToApply);
                     this.config.set('languages', this.languages);
                 }
-            }
+            },
         };
     }
 
@@ -202,7 +202,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-            }
+            },
         };
     }
 
@@ -240,7 +240,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (!this.skipUserManagement) {
                     this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
                 }
-            }
+            },
         };
     }
 

@@ -145,6 +145,13 @@ task integrationTest(type: Test) {
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
+
+<%_ if (databaseType === 'sql' && !reactive) { _%>
+    if (project.hasProperty('testcontainers')) {
+        environment 'spring.profiles.active', 'testcontainers'
+    }
+<%_ } _%>
+
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
@@ -195,7 +202,7 @@ liquibase {
     activities {
         main {
             driver "<% if (devDatabaseType === 'mysql') { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>"
-            url "<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./build/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>"
+            url "<% if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'h2Disk') { %><%- getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'oracle') { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
             username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
             password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
             changeLogFile "<%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml"
@@ -205,7 +212,7 @@ liquibase {
         }
         diffLog {
             driver "<% if (devDatabaseType === 'mysql') { %>com.mysql.cj.jdbc.Driver<% } else if (devDatabaseType === 'mariadb') { %>org.mariadb.jdbc.Driver<% } else if (devDatabaseType === 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType === 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType === 'oracle') { %>oracle.jdbc.OracleDriver<% } %>"
-            url "<% if (devDatabaseType === 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'mariadb') { %>jdbc:mariadb://localhost:3306/<%= baseName %><% } else if (devDatabaseType === 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType === 'h2Disk') { %>jdbc:h2:file:./build/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType === 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else if (devDatabaseType === 'mssql') { %>jdbc:sqlserver://localhost:1433;database=<%= baseName %><% } %>"
+            url "<% if (['mysql', 'mariadb', 'postgresql', 'mssql'].includes(devDatabaseType)) { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: baseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'h2Disk') { %><%- getJDBCUrl(devDatabaseType, { localDirectory: './build/h2db/db', databaseName: lowercaseBaseName, skipExtraOptions: true }) %><% } else if (devDatabaseType === 'oracle') { %><%- getJDBCUrl(devDatabaseType, { hostname: 'localhost', databaseName: 'xe', skipExtraOptions: true}) %><% } %>"
             username "<% if (devDatabaseType === 'mysql') { %>root<% } else if (devDatabaseType === 'postgresql' || devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { %><%= baseName %><% } else if (devDatabaseType === 'mssql') { %>SA<% } %>"
             password "<% if (devDatabaseType === 'mssql') { %>yourStrong(!)Password<% } %>"
             changeLogFile project.ext.diffChangelogFile
@@ -261,7 +268,7 @@ repositories {
         }
     }
     <%_ } _%>
-    <%_ if (reactive && databaseType === 'sql') { _%>
+    <%_ if (reactive && databaseType === 'sql' || JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT')) { _%>
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
         mavenContent {
@@ -337,7 +344,7 @@ dependencies {
     implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
     <%_ } _%>
-    <%_ if (databaseType === 'cassandra' || applicationType === 'gateway') { _%>
+    <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase' || applicationType === 'gateway') { _%>
     implementation "commons-codec:commons-codec"
     <%_ } _%>
     <%_ if (enableSwaggerCodegen) { _%>
@@ -407,6 +414,21 @@ dependencies {
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
     testImplementation "org.testcontainers:neo4j"
     testImplementation 'org.testcontainers:junit-jupiter'
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mysql' && !reactive) { _%>
+    testImplementation "org.testcontainers:mysql"
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mariadb' && !reactive) { _%>
+    testImplementation "org.testcontainers:mariadb"
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'postgresql' && !reactive) { _%>
+    testImplementation "org.testcontainers:postgresql"
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'mssql' && !reactive) { _%>
+    testImplementation "org.testcontainers:mssqlserver"
+    <%_ } _%>
+    <%_ if (prodDatabaseType === 'oracle' && !reactive) { _%>
+    testImplementation "org.testcontainers:oracle-xe"
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
         <%_ if (!reactive) { _%>
@@ -563,8 +585,9 @@ dependencies {
     testImplementation "org.springframework.security:spring-security-test"
     testImplementation "org.springframework.boot:spring-boot-test"
     <%_ if (reactive) { _%>
-    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
+    // Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
+    // testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhound_junit_platform_version}"
+    // testRuntimeOnly 'org.junit.platform:junit-platform-launcher:${junit_platform_launcher_version}'
     // See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up
     implementation 'io.netty:netty-common:${netty_common_version}'
     <%_ } _%>
@@ -595,6 +618,9 @@ dependencies {
     <%_ } _%>
     <%_ if (messageBroker === 'kafka') { _%>
     testImplementation "org.testcontainers:kafka"
+    <%_ } _%>
+    <%_ if (cacheProvider === 'redis') { %>
+    testImplementation "org.testcontainers:testcontainers"
     <%_ } _%>
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
