@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.service.dto;
 
-import <%= packageName %>.config.Constants;
+import <%= packageName %>.validation.constraints.ValidLogin;
 <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
 import <%= packageName %>.domain.Authority;<% } %>
 <%_ if (databaseType !== 'no') { _%>
@@ -42,7 +42,7 @@ public class <%= asDto('User') %> {
     private <% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase' || databaseType === 'cassandra' || authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %> id;
 
     @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @ValidLogin
     @Size(min = 1, max = 50)
     private String login;
 

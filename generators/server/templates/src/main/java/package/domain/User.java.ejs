@@ -18,7 +18,7 @@
 -%>
 package <%= packageName %>.domain;
 
-import <%= packageName %>.config.Constants;
+import <%= packageName %>.validation.constraints.ValidLogin;
 
 <%_ if (databaseType === 'couchbase') { _%>
 import com.couchbase.client.java.repository.annotation.Field;
@@ -73,7 +73,6 @@ import javax.persistence.*;
 <%_ } _%>
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 <%_ if (authenticationType !== 'oauth2') { _%>
@@ -167,7 +166,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 <%_ } _%>
 
     @NotNull
-    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @ValidLogin
     @Size(min = 1, max = 50)
     <%_ if (databaseType === 'sql' && !reactive) { _%>
     @Column(length = 50, unique = true, nullable = false)

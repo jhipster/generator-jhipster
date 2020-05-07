@@ -1,0 +1,79 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.validation.constraints;
+
+import org.awaitility.Awaitility;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ValidLoginValidatorTest {
+
+    @ParameterizedTest
+    @ValueSource(strings = { "admin", "aaaaaaaa", "aaaaaaaa@1", "foo+bar", "admin@localhost", "for.bar@foo.bar", "foo@bar.org" })
+    public void commonValidLogins(String login) {
+
+        ValidLoginValidator validLoginValidator = new ValidLoginValidator();
+        validLoginValidator.initialize(null);
+
+        assertThat(validLoginValidator.isValid(login, null)).isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "", " ", " a", "aaaaaaaa@", "aaaaaaaa?" })
+    public void invalidLogins(String login) {
+
+        ValidLoginValidator validLoginValidator = new ValidLoginValidator();
+        validLoginValidator.initialize(null);
+
+        assertThat(validLoginValidator.isValid(login, null)).isFalse();
+    }
+
+    @Test
+    public void longCriticalLogins() {
+
+        ValidLoginValidator validLoginValidator = new ValidLoginValidator();
+        validLoginValidator.initialize(null);
+
+        // Works just fine
+        StringBuilder sb1 = new StringBuilder();
+        IntStream.range(0, 50000)
+            .forEach(it -> sb1.append("a"));
+
+        sb1.append("@1");
+
+        assertThat(validLoginValidator.isValid(sb1.toString(), null)).isTrue();
+
+        // If just matching against Constants.LOGIN_REGEX this will result in catastrophic backtracking
+        // If this happens for what ever reason again (e.g. changing the regex) this test will fail!
+        StringBuilder sb = new StringBuilder();
+        IntStream.range(0, 50000)
+            .forEach(it -> sb.append("a"));
+
+        sb.append("@");
+
+        Awaitility.await().atMost(1, TimeUnit.SECONDS)
+            .untilAsserted(() -> assertThat(validLoginValidator.isValid(sb.toString(), null)).isFalse());
+    }
+}
