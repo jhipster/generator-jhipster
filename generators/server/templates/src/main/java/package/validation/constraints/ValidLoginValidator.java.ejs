@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 package <%= packageName %>.validation.contraints;
-
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.ConstraintValidator;
@@ -41,19 +40,15 @@ public class ValidLoginValidator implements ConstraintValidator<ValidLogin, Stri
             return false;
         }
 
+        if (StringUtils.endsWith(login, "@")) {
+            return false;
+        }
+
         // Try to split it at '@'
         String[] split = login.split("@");
 
-        if (split.length == 2) {
+        if ( split.length == 1 || split.length == 2) {
             // the input is assumed save for catastrophic backtracking
-            return pattern.matcher(login).matches();
-        } else if (split.length == 1) {
-            // This is either 'aaaaaa' or 'aaaaaaa@'
-            // while the first is valid, the second is not valid and results in catastrophic backtracking.
-            if (StringUtils.endsWith(login, "@")) {
-                return false;
-            }
-            // on this case we just need to match against the part before the @ or the whole as it won't backtrack.
             return pattern.matcher(login).matches();
         } else {
             // more than one '@'
