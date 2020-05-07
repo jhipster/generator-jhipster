@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const JDLEnum = require('../../domain/jdl-enum');
+const JDLEnum = require('../../models/jdl-enum');
 const { formatComment } = require('../../utils/format-utils');
 
 module.exports = { convertEnums };

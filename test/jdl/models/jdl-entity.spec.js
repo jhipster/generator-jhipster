@@ -19,9 +19,9 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const JDLEntity = require('../../../jdl/domain/jdl-entity');
-const JDLField = require('../../../jdl/domain/jdl-field');
-const JDLValidation = require('../../../jdl/domain/jdl-validation');
+const JDLEntity = require('../../../jdl/models/jdl-entity');
+const JDLField = require('../../../jdl/models/jdl-field');
+const JDLValidation = require('../../../jdl/models/jdl-validation');
 
 describe('JDLEntity', () => {
     describe('new', () => {

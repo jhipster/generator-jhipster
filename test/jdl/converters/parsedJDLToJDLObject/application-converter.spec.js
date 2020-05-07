@@ -19,7 +19,7 @@
 
 const { expect } = require('chai');
 const { MONOLITH } = require('../../../../jdl/jhipster/application-types');
-const { createJDLApplication } = require('../../../../jdl/domain/jdl-application-factory');
+const { createJDLApplication } = require('../../../../jdl/models/jdl-application-factory');
 const { convertApplications } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/application-converter');
 
 describe('ApplicationConverter', () => {

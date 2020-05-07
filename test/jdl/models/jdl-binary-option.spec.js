@@ -19,42 +19,54 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
+const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
+const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
-const JDLUnaryOption = require('../../../jdl/domain/jdl-unary-option');
-const UnaryOptions = require('../../../jdl/jhipster/unary-options');
-
-describe('JDLUnaryOption', () => {
+describe('JDLBinaryOption', () => {
     describe('new', () => {
         context('when passing no argument', () => {
             it('should fail', () => {
                 expect(() => {
-                    new JDLUnaryOption();
+                    new JDLBinaryOption();
                 }).to.throw("The option's name must be passed to create an option.");
             });
         });
-        context('when passing a name at least', () => {
+        context('when passing a name but no value', () => {
+            it('should fail', () => {
+                expect(() => {
+                    new JDLBinaryOption({ name: BinaryOptions.Options.DTO });
+                }).to.throw(/^A binary option must have a value\.$/);
+            });
+        });
+        context('when passing a name and a value', () => {
             let option;
 
             before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+                option = new JDLBinaryOption({
+                    name: BinaryOptions.Options.DTO,
+                    value: BinaryOptions.Values.dto.MAPSTRUCT,
+                });
             });
 
-            it('should create an option', () => {
-                expect(option.name).to.equal(UnaryOptions.SKIP_CLIENT);
+            it('creates the option', () => {
+                expect(option).not.to.be.null;
+                expect(option.name).to.equal(BinaryOptions.Options.DTO);
+                expect(option.value).to.equal(BinaryOptions.Values.dto.MAPSTRUCT);
             });
         });
         context('when passing a list of entity names and excluded names with some of them being repeated', () => {
             let option;
 
             before(() => {
-                option = new JDLUnaryOption({
-                    name: UnaryOptions.SKIP_CLIENT,
+                option = new JDLBinaryOption({
+                    name: BinaryOptions.Options.DTO,
+                    value: BinaryOptions.Values.dto.MAPSTRUCT,
                     entityNames: ['A', 'B', 'C', 'A'],
                     excludedNames: ['E', 'E', 'D'],
                 });
             });
 
-            it('should removes the dupes', () => {
+            it('removes the dupes', () => {
                 expect(option.entityNames.size).to.equal(3);
                 expect(option.entityNames.has('A')).to.be.true;
                 expect(option.entityNames.has('B')).to.be.true;
@@ -69,14 +81,15 @@ describe('JDLUnaryOption', () => {
         let option;
 
         before(() => {
-            option = new JDLUnaryOption({
-                name: UnaryOptions.SKIP_CLIENT,
+            option = new JDLBinaryOption({
+                name: BinaryOptions.Options.DTO,
+                value: BinaryOptions.Values.dto.MAPSTRUCT,
                 entityNames: ['A', 'B', 'C'],
             });
             option.setEntityNames(['A']);
         });
 
-        it('should set the entity names', () => {
+        it('sets the entity names', () => {
             expect(option.entityNames.size).to.equal(1);
             expect(option.entityNames.has('A')).to.be.true;
         });
@@ -86,7 +99,7 @@ describe('JDLUnaryOption', () => {
             let option;
 
             before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+                option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
             });
 
             it('should fail', () => {
@@ -99,7 +112,7 @@ describe('JDLUnaryOption', () => {
             let option;
 
             before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+                option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
                 option.addEntityName('A');
             });
 
@@ -111,7 +124,7 @@ describe('JDLUnaryOption', () => {
             let option;
 
             before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+                option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
                 option.addEntityName('A');
                 option.addEntityName('A');
             });
@@ -124,7 +137,7 @@ describe('JDLUnaryOption', () => {
             let option;
 
             before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
+                option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
                 option.addEntityName('A');
                 option.excludeEntityName('A');
             });
@@ -135,15 +148,65 @@ describe('JDLUnaryOption', () => {
             });
         });
     });
-    describe('addEntitiesFromAnotherOption', () => {
-        let option;
+    describe('excludeEntityName', () => {
+        context('when passing a nil name', () => {
+            let option;
 
-        before(() => {
-            option = new JDLUnaryOption({
-                name: UnaryOptions.SKIP_SERVER,
-                entityNames: ['B', 'C'],
-                excludedNames: ['Z'],
+            before(() => {
+                option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
             });
+
+            it('should fail', () => {
+                expect(() => {
+                    option.excludeEntityName(null);
+                }).to.throw('An entity name has to be passed so as to be excluded from the option.');
+            });
+        });
+        context("when passing a name that hasn't been excluded yet", () => {
+            let option;
+
+            before(() => {
+                option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+                option.excludeEntityName('A');
+            });
+
+            it('should change the set', () => {
+                expect(option.excludedNames.size).to.equal(1);
+            });
+        });
+        context('when passing a name that has already been excluded', () => {
+            let option;
+
+            before(() => {
+                option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+                option.excludeEntityName('A');
+                option.excludeEntityName('A');
+            });
+
+            it('should not change the size', () => {
+                expect(option.excludedNames.size).to.equal(1);
+            });
+        });
+        context('when passing an added name', () => {
+            let option;
+
+            before(() => {
+                option = new JDLBinaryOption({ name: BinaryOptions.Options.DTO, value: BinaryOptions.Values.dto.MAPSTRUCT });
+                option.excludeEntityName('A');
+                option.addEntityName('A');
+            });
+
+            it('should not change the size', () => {
+                expect(option.entityNames.size).to.equal(1);
+            });
+        });
+    });
+    describe('addEntitiesFromAnotherOption', () => {
+        const option = new JDLBinaryOption({
+            name: BinaryOptions.Options.DTO,
+            value: BinaryOptions.Values.dto.MAPSTRUCT,
+            entityNames: ['B', 'C'],
+            excludedNames: ['Z'],
         });
 
         context('when passing an invalid option', () => {
@@ -155,8 +218,9 @@ describe('JDLUnaryOption', () => {
             let returned;
 
             before(() => {
-                const option2 = new JDLUnaryOption({
-                    name: UnaryOptions.SKIP_SERVER,
+                const option2 = new JDLBinaryOption({
+                    name: BinaryOptions.Options.DTO,
+                    value: BinaryOptions.Values.dto.MAPSTRUCT,
                     entityNames: ['A', 'C'],
                     excludedNames: ['Y'],
                 });
@@ -174,78 +238,35 @@ describe('JDLUnaryOption', () => {
             });
         });
     });
-    describe('excludeEntityName', () => {
-        context('when passing a nil name', () => {
-            let option;
-
-            before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-            });
-
-            it('should fail', () => {
-                expect(() => {
-                    option.excludeEntityName(null);
-                }).to.throw('An entity name has to be passed so as to be excluded from the option.');
-            });
-        });
-        context("when passing a name that hasn't been excluded yet", () => {
-            let option;
-
-            before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-                option.excludeEntityName('A');
-            });
-
-            it('should change the set', () => {
-                expect(option.excludedNames.size).to.equal(1);
-            });
-        });
-        context('when passing a name that has already been excluded', () => {
-            let option;
-
-            before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-                option.excludeEntityName('A');
-                option.excludeEntityName('A');
-            });
-
-            it('should not change the size', () => {
-                expect(option.excludedNames.size).to.equal(1);
-            });
-        });
-        context('when passing an added name', () => {
-            let option;
-
-            before(() => {
-                option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-                option.excludeEntityName('A');
-                option.addEntityName('A');
-            });
-
-            it('should not change the size', () => {
-                expect(option.entityNames.size).to.equal(1);
-            });
-        });
-    });
     describe('toString', () => {
         let option;
 
         before(() => {
-            option = new JDLUnaryOption({ name: UnaryOptions.SKIP_CLIENT });
-            expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} *`);
+            option = new JDLBinaryOption({
+                name: BinaryOptions.Options.DTO,
+                value: BinaryOptions.Values.dto.MAPSTRUCT,
+            });
+            expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} * with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
             option.addEntityName('D');
-            expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} D`);
+            expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} D with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
             option.addEntityName('E');
             option.addEntityName('F');
-            expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} D, E, F`);
+            expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT}`);
             option.excludeEntityName('A');
-            expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} D, E, F except A`);
+            expect(option.toString()).to.equal(`${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A`);
             option.excludeEntityName('B');
             option.excludeEntityName('C');
+            expect(option.toString()).to.equal(
+                `${BinaryOptions.Options.DTO} D, E, F with ${BinaryOptions.Values.dto.MAPSTRUCT} except A, B, C`
+            );
+            option = new JDLBinaryOption({
+                name: BinaryOptions.Options.PAGINATION,
+                value: BinaryOptions.Values.pagination.PAGINATION,
+            });
         });
 
         it('should stringify the option', () => {
-            expect(option.toString()).to.equal(`${UnaryOptions.SKIP_CLIENT} D, E, F except A, B, C`);
+            expect(option.toString()).to.equal(`paginate * with ${BinaryOptions.Values.pagination.PAGINATION}`);
         });
     });
 });

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { createJDLApplication } = require('../../domain/jdl-application-factory');
+const { createJDLApplication } = require('../../models/jdl-application-factory');
 const { convertOptions } = require('./option-converter');
 
 module.exports = { convertApplications };

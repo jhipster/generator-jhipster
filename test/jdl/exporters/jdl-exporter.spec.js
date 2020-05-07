@@ -21,8 +21,8 @@
 const { expect } = require('chai');
 
 const fs = require('fs');
-const JDLObject = require('../../../jdl/domain/jdl-object');
-const JDLEntity = require('../../../jdl/domain/jdl-entity');
+const JDLObject = require('../../../jdl/models/jdl-object');
+const JDLEntity = require('../../../jdl/models/jdl-entity');
 const JDLExporter = require('../../../jdl/exporters/jdl-exporter');
 
 describe('JDLExporter', () => {

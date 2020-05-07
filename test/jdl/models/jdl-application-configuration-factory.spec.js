@@ -18,13 +18,13 @@
  */
 
 const { expect } = require('chai');
-const JDLApplicationConfiguration = require('../../../jdl/domain/jdl-application-configuration');
-const StringJDLApplicationConfigurationOption = require('../../../jdl/domain/string-jdl-application-configuration-option');
-const IntegerJDLApplicationConfigurationOption = require('../../../jdl/domain/integer-jdl-application-configuration-option');
-const BooleanJDLApplicationConfigurationOption = require('../../../jdl/domain/boolean-jdl-application-configuration-option');
-const ListJDLApplicationConfigurationOption = require('../../../jdl/domain/list-jdl-application-configuration-option');
+const JDLApplicationConfiguration = require('../../../jdl/models/jdl-application-configuration');
+const StringJDLApplicationConfigurationOption = require('../../../jdl/models/string-jdl-application-configuration-option');
+const IntegerJDLApplicationConfigurationOption = require('../../../jdl/models/integer-jdl-application-configuration-option');
+const BooleanJDLApplicationConfigurationOption = require('../../../jdl/models/boolean-jdl-application-configuration-option');
+const ListJDLApplicationConfigurationOption = require('../../../jdl/models/list-jdl-application-configuration-option');
 const { OptionNames } = require('../../../jdl/jhipster/application-options');
-const { createApplicationConfigurationFromObject } = require('../../../jdl/domain/jdl-application-configuration-factory');
+const { createApplicationConfigurationFromObject } = require('../../../jdl/models/jdl-application-configuration-factory');
 
 describe('JDLApplicationConfigurationFactory', () => {
     describe('createApplicationConfigurationFromObject', () => {

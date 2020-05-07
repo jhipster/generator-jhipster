@@ -24,7 +24,7 @@ const fs = require('fs');
 const path = require('path');
 const { exportApplication, exportApplications } = require('../../../jdl/exporters/jhipster-application-exporter');
 const { MONOLITH } = require('../../../jdl/jhipster/application-types');
-const { createJDLApplication } = require('../../../jdl/domain/jdl-application-factory');
+const { createJDLApplication } = require('../../../jdl/models/jdl-application-factory');
 
 describe('JHipsterApplicationExporter', () => {
     describe('exportApplication', () => {

@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-const JDLObject = require('../../domain/jdl-object');
-const JDLEntity = require('../../domain/jdl-entity');
-const JDLUnaryOption = require('../../domain/jdl-unary-option');
-const JDLBinaryOption = require('../../domain/jdl-binary-option');
+const JDLObject = require('../../models/jdl-object');
+const JDLEntity = require('../../models/jdl-entity');
+const JDLUnaryOption = require('../../models/jdl-unary-option');
+const JDLBinaryOption = require('../../models/jdl-binary-option');
 const ApplicationTypes = require('../../jhipster/application-types');
 const BinaryOptions = require('../../jhipster/binary-options');
 const { lowerFirst } = require('../../utils/string-utils');

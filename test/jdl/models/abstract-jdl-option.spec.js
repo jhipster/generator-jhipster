@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const JDLBinaryOption = require('../../../jdl/domain/jdl-binary-option');
+const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
 describe('AbstractJDLOption', () => {

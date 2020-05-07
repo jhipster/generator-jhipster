@@ -18,11 +18,11 @@
  */
 
 const { expect } = require('chai');
-const JDLObject = require('../../../../jdl/domain/jdl-object');
-const JDLEntity = require('../../../../jdl/domain/jdl-entity');
-const JDLField = require('../../../../jdl/domain/jdl-field');
-const JDLEnum = require('../../../../jdl/domain/jdl-enum');
-const JDLValidation = require('../../../../jdl/domain/jdl-validation');
+const JDLObject = require('../../../../jdl/models/jdl-object');
+const JDLEntity = require('../../../../jdl/models/jdl-entity');
+const JDLField = require('../../../../jdl/models/jdl-field');
+const JDLEnum = require('../../../../jdl/models/jdl-enum');
+const JDLValidation = require('../../../../jdl/models/jdl-validation');
 const { CommonDBTypes } = require('../../../../jdl/jhipster/field-types');
 const { MINBYTES, PATTERN, MAXLENGTH, UNIQUE, REQUIRED, MAXBYTES, MINLENGTH, MIN, MAX } = require('../../../../jdl/jhipster/validations');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-field-converter');

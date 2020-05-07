@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const JDLBinaryOption = require('../../../jdl/domain/jdl-binary-option');
+const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
 const BinaryOptionValidator = require('../../../jdl/validators/binary-option-validator');
 
 describe('BinaryOptionValidator', () => {

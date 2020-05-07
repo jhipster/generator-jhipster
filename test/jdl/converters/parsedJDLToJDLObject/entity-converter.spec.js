@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const JDLEntity = require('../../../../jdl/domain/jdl-entity');
+const JDLEntity = require('../../../../jdl/models/jdl-entity');
 const { convertEntities } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/entity-converter');
 
 describe('EntityConverter', () => {

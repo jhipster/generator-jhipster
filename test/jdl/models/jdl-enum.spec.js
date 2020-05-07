@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const JDLEnum = require('../../../jdl/domain/jdl-enum');
+const JDLEnum = require('../../../jdl/models/jdl-enum');
 
 describe('JDLEnum', () => {
     describe('new', () => {

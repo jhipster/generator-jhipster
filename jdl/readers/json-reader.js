@@ -23,7 +23,7 @@ const { convertEntitiesToJDL } = require('../converters/json-to-jdl-entity-conve
 const { convertServerOptionsToJDL } = require('../converters/json-to-jdl-option-converter');
 const JSONFileReader = require('./json-file-reader');
 const { SKIP_USER_MANAGEMENT } = require('../jhipster/unary-options');
-const { mergeJDLObjects } = require('../domain/jdl-object-merger');
+const { mergeJDLObjects } = require('../models/jdl-object-merger');
 
 module.exports = {
     parseFromDir,

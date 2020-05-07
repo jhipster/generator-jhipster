@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const JDLEntity = require('../../domain/jdl-entity');
+const JDLEntity = require('../../models/jdl-entity');
 const { formatComment } = require('../../utils/format-utils');
 
 module.exports = { convertEntities };

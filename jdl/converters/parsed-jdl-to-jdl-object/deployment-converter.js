@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const JDLDeployment = require('../../domain/jdl-deployment');
+const JDLDeployment = require('../../models/jdl-deployment');
 
 module.exports = { convertDeployments };
 

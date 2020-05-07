@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const JDLValidation = require('../../../jdl/domain/jdl-validation');
+const JDLValidation = require('../../../jdl/models/jdl-validation');
 const Validations = require('../../../jdl/jhipster/validations');
 
 describe('JDLValidation', () => {

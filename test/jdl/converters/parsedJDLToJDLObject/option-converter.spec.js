@@ -18,8 +18,8 @@
  */
 
 const { expect } = require('chai');
-const JDLUnaryOption = require('../../../../jdl/domain/jdl-unary-option');
-const JDLBinaryOption = require('../../../../jdl/domain/jdl-binary-option');
+const JDLUnaryOption = require('../../../../jdl/models/jdl-unary-option');
+const JDLBinaryOption = require('../../../../jdl/models/jdl-binary-option');
 const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../../jdl/jhipster/binary-options');
 const { convertOptions } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/option-converter');

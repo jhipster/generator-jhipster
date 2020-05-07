@@ -18,9 +18,9 @@
  */
 
 const { expect } = require('chai');
-const { createJDLApplication } = require('../../../jdl/domain/jdl-application-factory');
+const { createJDLApplication } = require('../../../jdl/models/jdl-application-factory');
 const { convertApplicationsToJDL } = require('../../../jdl/converters/json-to-jdl-application-converter');
-const JDLObject = require('../../../jdl/domain/jdl-object');
+const JDLObject = require('../../../jdl/models/jdl-object');
 const { MONOLITH } = require('../../../jdl/jhipster/application-types');
 
 describe('JSONToJDLApplicationConverter', () => {

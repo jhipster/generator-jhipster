@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const JDLRelationship = require('../../../jdl/domain/jdl-relationship');
+const JDLRelationship = require('../../../jdl/models/jdl-relationship');
 const RelationshipValidator = require('../../../jdl/validators/relationship-validator');
 
 const { JPA_DERIVED_IDENTIFIER } = require('../../../jdl/jhipster/relationship-options');

@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-const JDLUnaryOption = require('../../domain/jdl-unary-option');
-const JDLBinaryOption = require('../../domain/jdl-binary-option');
+const JDLUnaryOption = require('../../models/jdl-unary-option');
+const JDLBinaryOption = require('../../models/jdl-binary-option');
 const UnaryOptions = require('../../jhipster/unary-options');
 const BinaryOptions = require('../../jhipster/binary-options');
 

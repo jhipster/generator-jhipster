@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const JDLUnaryOption = require('../../../jdl/domain/jdl-unary-option');
+const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
 const UnaryOptionValidator = require('../../../jdl/validators/unary-option-validator');
 
 describe('UnaryOptionValidator', () => {

@@ -19,8 +19,8 @@
 
 const path = require('path');
 const fs = require('fs');
-const JDLObject = require('../domain/jdl-object');
-const { mergeJDLObjects } = require('../domain/jdl-object-merger');
+const JDLObject = require('../models/jdl-object');
+const { mergeJDLObjects } = require('../models/jdl-object-merger');
 const { doesFileExist, doesDirectoryExist } = require('../utils/file-utils');
 const { readJSONFile } = require('../readers/json-file-reader');
 const { convertApplicationToJDL } = require('./json-to-jdl-application-converter');

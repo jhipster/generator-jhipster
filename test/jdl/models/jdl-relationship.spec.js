@@ -20,7 +20,7 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const JDLRelationship = require('../../../jdl/domain/jdl-relationship');
+const JDLRelationship = require('../../../jdl/models/jdl-relationship');
 const { JPA_DERIVED_IDENTIFIER } = require('../../../jdl/jhipster/relationship-options');
 const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
 

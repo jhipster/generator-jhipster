@@ -32,9 +32,9 @@ const { MONOLITH, UAA, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/
 const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/jhipster/database-types');
 const { READ_ONLY } = require('../../../jdl/jhipster/unary-options');
 const BinaryOptions = require('../../../jdl/jhipster/binary-options');
-const JDLApplication = require('../../../jdl/domain/jdl-application');
-const JDLUnaryOption = require('../../../jdl/domain/jdl-unary-option');
-const JDLBinaryOption = require('../../../jdl/domain/jdl-binary-option');
+const JDLApplication = require('../../../jdl/models/jdl-application');
+const JDLUnaryOption = require('../../../jdl/models/jdl-unary-option');
+const JDLBinaryOption = require('../../../jdl/models/jdl-binary-option');
 const logger = require('../../../jdl/utils/objects/logger');
 
 describe('ApplicationValidator', () => {

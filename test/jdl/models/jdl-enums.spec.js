@@ -19,8 +19,8 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const JDLEnums = require('../../../jdl/domain/jdl-enums');
-const JDLEnum = require('../../../jdl/domain/jdl-enum');
+const JDLEnums = require('../../../jdl/models/jdl-enums');
+const JDLEnum = require('../../../jdl/models/jdl-enum');
 
 describe('JDLEnums', () => {
     describe('add', () => {

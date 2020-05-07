@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const JDLEnum = require('../../../../jdl/domain/jdl-enum');
+const JDLEnum = require('../../../../jdl/models/jdl-enum');
 const { convertEnums } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/enum-converter');
 
 describe('EnumConverter', () => {

@@ -18,7 +18,7 @@
  */
 
 const { expect } = require('chai');
-const JDLValidation = require('../../../../jdl/domain/jdl-validation');
+const JDLValidation = require('../../../../jdl/models/jdl-validation');
 const { convertValidations } = require('../../../../jdl/converters/parsed-jdl-to-jdl-object/validation-converter');
 
 describe('ValidationConverter', () => {
