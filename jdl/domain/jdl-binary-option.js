@@ -18,7 +18,7 @@
  */
 
 const AbstractJDLOption = require('./abstract-jdl-option');
-const BinaryOptions = require('./jhipster/binary-options');
+const BinaryOptions = require('../jhipster/binary-options');
 const { join } = require('../utils/set-utils');
 
 /**

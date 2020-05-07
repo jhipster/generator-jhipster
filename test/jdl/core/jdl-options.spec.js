@@ -23,8 +23,8 @@ const { expect } = require('chai');
 const JDLOptions = require('../../../jdl/domain/jdl-options');
 const JDLUnaryOption = require('../../../jdl/domain/jdl-unary-option');
 const JDLBinaryOption = require('../../../jdl/domain/jdl-binary-option');
-const UnaryOptions = require('../../../jdl/domain/jhipster/unary-options');
-const BinaryOptions = require('../../../jdl/domain/jhipster/binary-options');
+const UnaryOptions = require('../../../jdl/jhipster/unary-options');
+const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
 describe('JDLOptions', () => {
     describe('addOption', () => {

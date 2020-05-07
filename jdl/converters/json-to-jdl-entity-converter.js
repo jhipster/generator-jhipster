@@ -25,11 +25,11 @@ const JDLEnum = require('../domain/jdl-enum');
 const JDLRelationship = require('../domain/jdl-relationship');
 const JDLUnaryOption = require('../domain/jdl-unary-option');
 const JDLBinaryOption = require('../domain/jdl-binary-option');
-const { CommonDBTypes } = require('../domain/jhipster/field-types');
-const { OptionNames } = require('../domain/jhipster/application-options');
-const { ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY } = require('../domain/jhipster/relationship-types');
-const { JPA_DERIVED_IDENTIFIER } = require('../domain/jhipster/relationship-options');
-const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = require('../domain/jhipster/unary-options');
+const { CommonDBTypes } = require('../jhipster/field-types');
+const { OptionNames } = require('../jhipster/application-options');
+const { ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, MANY_TO_MANY } = require('../jhipster/relationship-types');
+const { JPA_DERIVED_IDENTIFIER } = require('../jhipster/relationship-options');
+const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED } = require('../jhipster/unary-options');
 const {
     ANGULAR_SUFFIX,
     CLIENT_ROOT_FOLDER,
@@ -38,7 +38,7 @@ const {
     PAGINATION,
     SEARCH,
     SERVICE,
-} = require('../domain/jhipster/binary-options').Options;
+} = require('../jhipster/binary-options').Options;
 const { lowerFirst, upperFirst } = require('../utils/string-utils');
 
 module.exports = {

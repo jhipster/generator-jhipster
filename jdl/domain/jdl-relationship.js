@@ -18,7 +18,7 @@
  */
 const logger = require('../utils/objects/logger');
 const merge = require('../utils/object-utils').merge;
-const RelationshipTypes = require('./jhipster/relationship-types');
+const RelationshipTypes = require('../jhipster/relationship-types');
 const { lowerFirst } = require('../utils/string-utils');
 
 module.exports = class JDLRelationship {

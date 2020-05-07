@@ -18,8 +18,8 @@
  */
 
 const logger = require('../../utils/objects/logger');
-const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = require('../../domain/jhipster/unary-options');
-const BinaryOptions = require('../../domain/jhipster/binary-options');
+const { FILTER, NO_FLUENT_METHOD, READ_ONLY, EMBEDDED, SKIP_CLIENT, SKIP_SERVER } = require('../../jhipster/unary-options');
+const BinaryOptions = require('../../jhipster/binary-options');
 
 const {
     Options: { ANGULAR_SUFFIX, MICROSERVICE, SEARCH, DTO },

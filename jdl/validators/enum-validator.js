@@ -17,7 +17,7 @@
  */
 
 const Validator = require('./validator');
-const { isReservedClassName } = require('../domain/jhipster/reserved-keywords');
+const { isReservedClassName } = require('../jhipster/reserved-keywords');
 
 class EnumValidator extends Validator {
     constructor() {

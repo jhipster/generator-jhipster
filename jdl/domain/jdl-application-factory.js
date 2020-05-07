@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-const ApplicationTypes = require('./jhipster/application-types');
+const ApplicationTypes = require('../jhipster/application-types');
 const {
     getDefaultConfigForNewApplication,
     getConfigForMonolithApplication,
     getConfigForGatewayApplication,
     getConfigForMicroserviceApplication,
     getConfigForUAAApplication,
-} = require('./jhipster/default-application-options');
+} = require('../jhipster/default-application-options');
 const JDLApplication = require('./jdl-application');
 
 module.exports = {

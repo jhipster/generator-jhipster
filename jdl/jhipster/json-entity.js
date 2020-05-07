@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-const { merge } = require('../../utils/object-utils');
-const { formatDateForLiquibase, formatComment } = require('../../utils/format-utils');
-const { upperFirst } = require('../../utils/string-utils');
+const { merge } = require('../utils/object-utils');
+const { formatDateForLiquibase, formatComment } = require('../utils/format-utils');
+const { upperFirst } = require('../utils/string-utils');
 const { createFromEntityName } = require('./entity-table-name-creator');
 
 /**

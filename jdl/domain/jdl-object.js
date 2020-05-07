@@ -20,7 +20,7 @@
 const JDLEnums = require('./jdl-enums');
 const JDLRelationships = require('./jdl-relationships');
 const JDLOptions = require('./jdl-options');
-const BinaryOptions = require('./jhipster/binary-options');
+const BinaryOptions = require('../jhipster/binary-options');
 
 /**
  * The JDL object class, containing applications, entities etc.

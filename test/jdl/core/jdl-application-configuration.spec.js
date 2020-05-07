@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 const JDLApplicationConfiguration = require('../../../jdl/domain/jdl-application-configuration');
 const StringJDLApplicationConfigurationOption = require('../../../jdl/domain/string-jdl-application-configuration-option');
-const { OptionNames } = require('../../../jdl/domain/jhipster/application-options');
+const { OptionNames } = require('../../../jdl/jhipster/application-options');
 
 describe('JDLApplicationConfiguration', () => {
     describe('hasOption', () => {

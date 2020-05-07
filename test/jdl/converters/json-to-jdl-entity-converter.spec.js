@@ -23,8 +23,8 @@ const { expect } = require('chai');
 const fs = require('fs');
 const path = require('path');
 const { convertEntitiesToJDL } = require('../../../jdl/converters/json-to-jdl-entity-converter');
-const UnaryOptions = require('../../../jdl/domain/jhipster/unary-options');
-const { JPA_DERIVED_IDENTIFIER } = require('../../../jdl/domain/jhipster/relationship-options');
+const UnaryOptions = require('../../../jdl/jhipster/unary-options');
+const { JPA_DERIVED_IDENTIFIER } = require('../../../jdl/jhipster/relationship-options');
 const {
     Options: { DTO, SEARCH, PAGINATION, MICROSERVICE, ANGULAR_SUFFIX, SERVICE },
     Values: {
@@ -33,7 +33,7 @@ const {
         service: { SERVICE_CLASS },
         search: { ELASTIC_SEARCH },
     },
-} = require('../../../jdl/domain/jhipster/binary-options');
+} = require('../../../jdl/jhipster/binary-options');
 
 describe('JSONToJDLEntityConverter', () => {
     describe('convertEntitiesToJDL', () => {

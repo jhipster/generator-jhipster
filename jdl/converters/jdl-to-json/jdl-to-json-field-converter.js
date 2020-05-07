@@ -18,7 +18,7 @@
  */
 
 const _ = require('lodash');
-const { UNIQUE, REQUIRED } = require('../../domain/jhipster/validations');
+const { UNIQUE, REQUIRED } = require('../../jhipster/validations');
 const { formatComment } = require('../../utils/format-utils');
 const { camelCase } = require('../../utils/string-utils');
 

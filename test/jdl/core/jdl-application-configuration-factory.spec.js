@@ -23,7 +23,7 @@ const StringJDLApplicationConfigurationOption = require('../../../jdl/domain/str
 const IntegerJDLApplicationConfigurationOption = require('../../../jdl/domain/integer-jdl-application-configuration-option');
 const BooleanJDLApplicationConfigurationOption = require('../../../jdl/domain/boolean-jdl-application-configuration-option');
 const ListJDLApplicationConfigurationOption = require('../../../jdl/domain/list-jdl-application-configuration-option');
-const { OptionNames } = require('../../../jdl/domain/jhipster/application-options');
+const { OptionNames } = require('../../../jdl/jhipster/application-options');
 const { createApplicationConfigurationFromObject } = require('../../../jdl/domain/jdl-application-configuration-factory');
 
 describe('JDLApplicationConfigurationFactory', () => {

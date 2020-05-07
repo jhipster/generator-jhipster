@@ -27,11 +27,11 @@ const { expect } = chai;
 
 const ApplicationValidator = require('../../../jdl/validators/application-validator');
 
-const { OptionNames, OptionValues } = require('../../../jdl/domain/jhipster/application-options');
-const { MONOLITH, UAA, MICROSERVICE, GATEWAY } = require('../../../jdl/domain/jhipster/application-types');
-const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/domain/jhipster/database-types');
-const { READ_ONLY } = require('../../../jdl/domain/jhipster/unary-options');
-const BinaryOptions = require('../../../jdl/domain/jhipster/binary-options');
+const { OptionNames, OptionValues } = require('../../../jdl/jhipster/application-options');
+const { MONOLITH, UAA, MICROSERVICE, GATEWAY } = require('../../../jdl/jhipster/application-types');
+const { SQL, MYSQL, POSTGRESQL, MONGODB, CASSANDRA, COUCHBASE, NEO4J } = require('../../../jdl/jhipster/database-types');
+const { READ_ONLY } = require('../../../jdl/jhipster/unary-options');
+const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 const JDLApplication = require('../../../jdl/domain/jdl-application');
 const JDLUnaryOption = require('../../../jdl/domain/jdl-unary-option');
 const JDLBinaryOption = require('../../../jdl/domain/jdl-binary-option');

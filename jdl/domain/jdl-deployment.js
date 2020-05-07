@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const { isEqual } = require('lodash');
-const DeploymentOptions = require('./jhipster/deployment-options');
+const DeploymentOptions = require('../jhipster/deployment-options');
 const mergeObjects = require('../utils/object-utils').merge;
 const { join } = require('../utils/set-utils');
 

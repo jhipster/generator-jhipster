@@ -18,7 +18,7 @@
 
 const Rules = require('./rules');
 const EntityIssue = require('./issues/entity-issue');
-const { createFromEntityName } = require('../domain/jhipster/entity-table-name-creator');
+const { createFromEntityName } = require('../jhipster/entity-table-name-creator');
 
 let issues;
 

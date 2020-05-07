@@ -19,27 +19,10 @@
 const Validator = require('./validator');
 const UnaryOptionValidator = require('./unary-option-validator');
 const BinaryOptionValidator = require('./binary-option-validator');
-const {
-    OptionNames,
-    OptionValues,
-    getTypeForOption,
-    doesOptionExist,
-    doesOptionValueExist,
-} = require('../domain/jhipster/application-options');
-const { UAA, MICROSERVICE } = require('../domain/jhipster/application-types');
-const {
-    COUCHBASE,
-    NEO4J,
-    CASSANDRA,
-    MONGODB,
-    MARIADB,
-    MSSQL,
-    MYSQL,
-    ORACLE,
-    POSTGRESQL,
-    SQL,
-} = require('../domain/jhipster/database-types');
-const { Options } = require('../domain/jhipster/binary-options');
+const { OptionNames, OptionValues, getTypeForOption, doesOptionExist, doesOptionValueExist } = require('../jhipster/application-options');
+const { UAA, MICROSERVICE } = require('../jhipster/application-types');
+const { COUCHBASE, NEO4J, CASSANDRA, MONGODB, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL, SQL } = require('../jhipster/database-types');
+const { Options } = require('../jhipster/binary-options');
 
 class ApplicationValidator extends Validator {
     constructor() {

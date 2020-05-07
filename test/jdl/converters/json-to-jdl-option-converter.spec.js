@@ -23,7 +23,7 @@ const { expect } = require('chai');
 const { convertServerOptionsToJDL } = require('../../../jdl/converters/json-to-jdl-option-converter');
 const JDLObject = require('../../../jdl/domain/jdl-object');
 const JDLUnaryOption = require('../../../jdl/domain/jdl-unary-option');
-const { SKIP_USER_MANAGEMENT, SKIP_CLIENT } = require('../../../jdl/domain/jhipster/unary-options');
+const { SKIP_USER_MANAGEMENT, SKIP_CLIENT } = require('../../../jdl/jhipster/unary-options');
 
 describe('JSONToJDLOptionConverter', () => {
     describe('convertToServerOptions', () => {

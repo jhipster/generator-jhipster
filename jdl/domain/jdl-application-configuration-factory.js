@@ -22,7 +22,7 @@ const StringJDLApplicationConfigurationOption = require('./string-jdl-applicatio
 const IntegerJDLApplicationConfigurationOption = require('./integer-jdl-application-configuration-option');
 const BooleanJDLApplicationConfigurationOption = require('./boolean-jdl-application-configuration-option');
 const ListJDLApplicationConfigurationOption = require('./list-jdl-application-configuration-option');
-const { getTypeForOption, doesOptionExist, OptionTypes, shouldTheValueBeQuoted } = require('./jhipster/application-options');
+const { getTypeForOption, doesOptionExist, OptionTypes, shouldTheValueBeQuoted } = require('../jhipster/application-options');
 
 const logger = require('../utils/objects/logger');
 

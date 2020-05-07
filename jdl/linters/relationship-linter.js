@@ -18,7 +18,7 @@
 
 const Rules = require('./rules');
 const RelationshipIssue = require('./issues/relationship-issue');
-const RelationshipTypes = require('../domain/jhipster/relationship-types');
+const RelationshipTypes = require('../jhipster/relationship-types');
 
 let issues;
 

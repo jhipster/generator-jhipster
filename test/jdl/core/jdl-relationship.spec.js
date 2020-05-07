@@ -21,8 +21,8 @@
 const { expect } = require('chai');
 
 const JDLRelationship = require('../../../jdl/domain/jdl-relationship');
-const { JPA_DERIVED_IDENTIFIER } = require('../../../jdl/domain/jhipster/relationship-options');
-const RelationshipTypes = require('../../../jdl/domain/jhipster/relationship-types');
+const { JPA_DERIVED_IDENTIFIER } = require('../../../jdl/jhipster/relationship-options');
+const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
 
 describe('JDLRelationship', () => {
     describe('new', () => {

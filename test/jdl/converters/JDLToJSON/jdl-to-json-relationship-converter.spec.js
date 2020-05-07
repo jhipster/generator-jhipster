@@ -21,8 +21,8 @@
 const { expect } = require('chai');
 const JDLRelationship = require('../../../../jdl/domain/jdl-relationship');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-relationship-converter');
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../../jdl/domain/jhipster/relationship-types');
-const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/domain/jhipster/relationship-options');
+const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../../../../jdl/jhipster/relationship-types');
+const { JPA_DERIVED_IDENTIFIER } = require('../../../../jdl/jhipster/relationship-options');
 
 describe('JDLToJSONRelationshipConverter', () => {
     describe('convert', () => {

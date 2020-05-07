@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { OptionNames } = require('./jhipster/application-options');
+const { OptionNames } = require('../jhipster/application-options');
 
 module.exports = class JDLApplicationConfiguration {
     constructor(config = {}) {

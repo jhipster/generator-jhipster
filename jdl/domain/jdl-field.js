@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const { isReservedFieldName } = require('./jhipster/reserved-keywords');
+const { isReservedFieldName } = require('../jhipster/reserved-keywords');
 const { merge } = require('../utils/object-utils');
 
 module.exports = class JDLField {

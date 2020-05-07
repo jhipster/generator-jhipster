@@ -28,8 +28,8 @@ const JDLObject = require('../../../../jdl/domain/jdl-object');
 const JDLEntity = require('../../../../jdl/domain/jdl-entity');
 const JDLUnaryOption = require('../../../../jdl/domain/jdl-unary-option');
 const JDLBinaryOption = require('../../../../jdl/domain/jdl-binary-option');
-const UnaryOptions = require('../../../../jdl/domain/jhipster/unary-options');
-const BinaryOptions = require('../../../../jdl/domain/jhipster/binary-options');
+const UnaryOptions = require('../../../../jdl/jhipster/unary-options');
+const BinaryOptions = require('../../../../jdl/jhipster/binary-options');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-option-converter');
 const logger = require('../../../../jdl/utils/objects/logger');
 

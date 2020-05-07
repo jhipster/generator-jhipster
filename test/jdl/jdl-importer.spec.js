@@ -22,8 +22,8 @@ const fse = require('fs-extra');
 const path = require('path');
 const { expect } = require('chai');
 
-const ApplicationTypes = require('../../jdl/domain/jhipster/application-types');
-const DatabaseTypes = require('../../jdl/domain/jhipster/database-types');
+const ApplicationTypes = require('../../jdl/jhipster/application-types');
+const DatabaseTypes = require('../../jdl/jhipster/database-types');
 const { createImporterFromFiles, createImporterFromContent } = require('../../jdl/jdl-importer');
 const { formatDateForLiquibase } = require('../../jdl/utils/format-utils');
 

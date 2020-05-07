@@ -19,8 +19,8 @@
 
 const JDLUnaryOption = require('../../domain/jdl-unary-option');
 const JDLBinaryOption = require('../../domain/jdl-binary-option');
-const UnaryOptions = require('../../domain/jhipster/unary-options');
-const BinaryOptions = require('../../domain/jhipster/binary-options');
+const UnaryOptions = require('../../jhipster/unary-options');
+const BinaryOptions = require('../../jhipster/binary-options');
 
 module.exports = { convertOptions };
 

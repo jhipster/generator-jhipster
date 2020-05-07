@@ -26,7 +26,7 @@ const { readJSONFile } = require('../readers/json-file-reader');
 const { convertApplicationToJDL } = require('./json-to-jdl-application-converter');
 const { convertEntitiesToJDL } = require('./json-to-jdl-entity-converter');
 const { exportToJDL: exportJDLObject } = require('../exporters/jdl-exporter');
-const { SKIP_USER_MANAGEMENT } = require('../domain/jhipster/unary-options');
+const { SKIP_USER_MANAGEMENT } = require('../jhipster/unary-options');
 
 module.exports = {
     convertToJDL,

@@ -17,20 +17,21 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new, no-unused-expressions */
-const { expect } = require('chai');
-const RelationshipTypes = require('../../../../jdl/domain/jhipster/relationship-types');
+/* eslint-disable no-unused-expressions */
 
-describe('RelationshipTypes', () => {
+const { expect } = require('chai');
+const { JPA_DERIVED_IDENTIFIER, exists } = require('../../../jdl/jhipster/relationship-options');
+
+describe('RelationshipOptions', () => {
     describe('exists', () => {
-        context('when checking for a valid unary relationship type', () => {
-            it('should return true', () => {
-                expect(RelationshipTypes.exists(RelationshipTypes.MANY_TO_ONE)).to.be.true;
+        describe('when the option does not exist', () => {
+            it('should return false', () => {
+                expect(exists('toto')).to.be.false;
             });
         });
-        context('when checking for an invalid relationship type', () => {
-            it('should return false', () => {
-                expect(RelationshipTypes.exists('NOTHING')).to.be.false;
+        describe('when the option exists', () => {
+            it('should return true', () => {
+                expect(exists(JPA_DERIVED_IDENTIFIER)).to.be.true;
             });
         });
     });

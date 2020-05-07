@@ -18,11 +18,11 @@
  */
 
 const { expect } = require('chai');
-const { OptionNames } = require('../../../jdl/domain/jhipster/application-options');
-const ApplicationTypes = require('../../../jdl/domain/jhipster/application-types');
-const FieldTypes = require('../../../jdl/domain/jhipster/field-types');
-const UnaryOptions = require('../../../jdl/domain/jhipster/unary-options');
-const RelationshipTypes = require('../../../jdl/domain/jhipster/relationship-types');
+const { OptionNames } = require('../../../jdl/jhipster/application-options');
+const ApplicationTypes = require('../../../jdl/jhipster/application-types');
+const FieldTypes = require('../../../jdl/jhipster/field-types');
+const UnaryOptions = require('../../../jdl/jhipster/unary-options');
+const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
 const JDLObject = require('../../../jdl/domain/jdl-object');
 const { createJDLApplication } = require('../../../jdl/domain/jdl-application-factory');
 const JDLEntity = require('../../../jdl/domain/jdl-entity');

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const RelationshipTypes = require('./jhipster/relationship-types');
+const RelationshipTypes = require('../jhipster/relationship-types');
 
 class JDLRelationships {
     constructor() {

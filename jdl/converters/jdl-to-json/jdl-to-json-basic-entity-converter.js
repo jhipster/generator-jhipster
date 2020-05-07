@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-const JSONEntity = require('../../domain/jhipster/json-entity');
+const JSONEntity = require('../../jhipster/json-entity');
 const { formatComment, formatDateForLiquibase } = require('../../utils/format-utils');
-const { getTableNameFromEntityName } = require('../../domain/jhipster/entity-table-name-creator');
+const { getTableNameFromEntityName } = require('../../jhipster/entity-table-name-creator');
 const logger = require('../../utils/objects/logger');
 
 const USER = 'user';

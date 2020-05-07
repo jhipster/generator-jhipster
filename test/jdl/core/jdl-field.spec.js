@@ -23,7 +23,7 @@ const { expect } = require('chai');
 const { matchField } = require('../matchers/field-matcher');
 const JDLField = require('../../../jdl/domain/jdl-field');
 const JDLValidation = require('../../../jdl/domain/jdl-validation');
-const Validations = require('../../../jdl/domain/jhipster/validations');
+const Validations = require('../../../jdl/jhipster/validations');
 
 describe('JDLField', () => {
     describe('new', () => {

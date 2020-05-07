@@ -23,18 +23,8 @@ const JDLEntity = require('../../../../jdl/domain/jdl-entity');
 const JDLField = require('../../../../jdl/domain/jdl-field');
 const JDLEnum = require('../../../../jdl/domain/jdl-enum');
 const JDLValidation = require('../../../../jdl/domain/jdl-validation');
-const { CommonDBTypes } = require('../../../../jdl/domain/jhipster/field-types');
-const {
-    MINBYTES,
-    PATTERN,
-    MAXLENGTH,
-    UNIQUE,
-    REQUIRED,
-    MAXBYTES,
-    MINLENGTH,
-    MIN,
-    MAX,
-} = require('../../../../jdl/domain/jhipster/validations');
+const { CommonDBTypes } = require('../../../../jdl/jhipster/field-types');
+const { MINBYTES, PATTERN, MAXLENGTH, UNIQUE, REQUIRED, MAXBYTES, MINLENGTH, MIN, MAX } = require('../../../../jdl/jhipster/validations');
 const { convert } = require('../../../../jdl/converters/jdl-to-json/jdl-to-json-field-converter');
 
 describe('JDLToJSONFieldConverter', () => {

@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 
 const JDLUnaryOption = require('../../../jdl/domain/jdl-unary-option');
-const UnaryOptions = require('../../../jdl/domain/jhipster/unary-options');
+const UnaryOptions = require('../../../jdl/jhipster/unary-options');
 
 describe('JDLUnaryOption', () => {
     describe('new', () => {

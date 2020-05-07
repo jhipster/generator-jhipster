@@ -19,8 +19,8 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { OptionNames } = require('../../../jdl/domain/jhipster/application-options');
-const BinaryOptions = require('../../../jdl/domain/jhipster/binary-options');
+const { OptionNames } = require('../../../jdl/jhipster/application-options');
+const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 const StringJDLApplicationConfigurationOption = require('../../../jdl/domain/string-jdl-application-configuration-option');
 const JDLApplication = require('../../../jdl/domain/jdl-application');
 const JDLBinaryOption = require('../../../jdl/domain/jdl-binary-option');

@@ -18,10 +18,10 @@
  */
 
 const Validator = require('./validator');
-const { exists } = require('../domain/jhipster/relationship-types');
+const { exists } = require('../jhipster/relationship-types');
 
-const { JPA_DERIVED_IDENTIFIER } = require('../domain/jhipster/relationship-options');
-const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../domain/jhipster/relationship-types');
+const { JPA_DERIVED_IDENTIFIER } = require('../jhipster/relationship-options');
+const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = require('../jhipster/relationship-types');
 
 module.exports = class RelationshipValidator extends Validator {
     constructor() {

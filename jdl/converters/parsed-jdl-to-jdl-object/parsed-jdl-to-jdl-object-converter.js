@@ -20,8 +20,8 @@ const JDLObject = require('../../domain/jdl-object');
 const JDLEntity = require('../../domain/jdl-entity');
 const JDLUnaryOption = require('../../domain/jdl-unary-option');
 const JDLBinaryOption = require('../../domain/jdl-binary-option');
-const ApplicationTypes = require('../../domain/jhipster/application-types');
-const BinaryOptions = require('../../domain/jhipster/binary-options');
+const ApplicationTypes = require('../../jhipster/application-types');
+const BinaryOptions = require('../../jhipster/binary-options');
 const { lowerFirst } = require('../../utils/string-utils');
 
 const { convertApplications } = require('./application-converter');

@@ -21,7 +21,7 @@
 const { expect } = require('chai');
 
 const JDLRelationship = require('../../../jdl/domain/jdl-relationship');
-const RelationshipTypes = require('../../../jdl/domain/jhipster/relationship-types');
+const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
 const JDLRelationships = require('../../../jdl/domain/jdl-relationships');
 
 describe('JDLRelationships', () => {

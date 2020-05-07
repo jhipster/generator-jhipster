@@ -18,7 +18,7 @@
  */
 
 const merge = require('../utils/object-utils').merge;
-const { createFromEntityName } = require('./jhipster/entity-table-name-creator');
+const { createFromEntityName } = require('../jhipster/entity-table-name-creator');
 
 module.exports = class JDLEntity {
     constructor(args) {

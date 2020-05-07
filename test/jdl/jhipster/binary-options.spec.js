@@ -19,7 +19,7 @@
 
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const BinaryOptions = require('../../../../jdl/domain/jhipster/binary-options');
+const BinaryOptions = require('../../../jdl/jhipster/binary-options');
 
 describe('BinaryOptions', () => {
     describe('exists', () => {

@@ -20,10 +20,10 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const DatabaseTypes = require('../../../../jdl/domain/jhipster/database-types');
-const FieldTypes = require('../../../../jdl/domain/jhipster/field-types');
-const Validations = require('../../../../jdl/domain/jhipster/validations');
-const JDLEnum = require('../../../../jdl/domain/jdl-enum');
+const DatabaseTypes = require('../../../jdl/jhipster/database-types');
+const FieldTypes = require('../../../jdl/jhipster/field-types');
+const Validations = require('../../../jdl/jhipster/validations');
+const JDLEnum = require('../../../jdl/domain/jdl-enum');
 
 describe('FieldTypes', () => {
     describe('isCommonDBType', () => {

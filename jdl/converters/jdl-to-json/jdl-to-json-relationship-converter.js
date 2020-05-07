@@ -18,9 +18,9 @@
  */
 
 const _ = require('lodash');
-const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = require('../../domain/jhipster/relationship-types');
-const { REQUIRED } = require('../../domain/jhipster/validations');
-const { JPA_DERIVED_IDENTIFIER } = require('../../domain/jhipster/relationship-options');
+const { MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY, ONE_TO_ONE } = require('../../jhipster/relationship-types');
+const { REQUIRED } = require('../../jhipster/validations');
+const { JPA_DERIVED_IDENTIFIER } = require('../../jhipster/relationship-options');
 const { camelCase, lowerFirst } = require('../../utils/string-utils');
 
 const USER = 'user';

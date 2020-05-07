@@ -18,7 +18,7 @@
  */
 
 const JDLValidation = require('../../domain/jdl-validation');
-const { PATTERN } = require('../../domain/jhipster/validations');
+const { PATTERN } = require('../../jhipster/validations');
 
 module.exports = { convertValidations };
 

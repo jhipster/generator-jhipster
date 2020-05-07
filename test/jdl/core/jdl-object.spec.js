@@ -20,11 +20,11 @@
 /* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
 
-const { OptionNames } = require('../../../jdl/domain/jhipster/application-options');
-const { MONOLITH } = require('../../../jdl/domain/jhipster/application-types');
-const BinaryOptions = require('../../../jdl/domain/jhipster/binary-options');
-const UnaryOptions = require('../../../jdl/domain/jhipster/unary-options');
-const RelationshipTypes = require('../../../jdl/domain/jhipster/relationship-types');
+const { OptionNames } = require('../../../jdl/jhipster/application-options');
+const { MONOLITH } = require('../../../jdl/jhipster/application-types');
+const BinaryOptions = require('../../../jdl/jhipster/binary-options');
+const UnaryOptions = require('../../../jdl/jhipster/unary-options');
+const RelationshipTypes = require('../../../jdl/jhipster/relationship-types');
 const JDLObject = require('../../../jdl/domain/jdl-object');
 const { createJDLApplication } = require('../../../jdl/domain/jdl-application-factory');
 const JDLDeployment = require('../../../jdl/domain/jdl-deployment');

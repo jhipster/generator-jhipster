@@ -17,27 +17,28 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-new */
-/* eslint-disable no-unused-expressions */
-
+/* eslint-disable no-new, no-unused-expressions */
 const { expect } = require('chai');
-const ApplicationTypes = require('../../../../jdl/domain/jhipster/application-types');
+const Validations = require('../../../jdl/jhipster/validations');
 
-describe('ApplicationTypes', () => {
+describe('Validations', () => {
     describe('exists', () => {
-        context('when passing a nil arg', () => {
-            it('should return false', () => {
-                expect(ApplicationTypes.exists()).to.be.false;
-            });
-        });
-        context('when passing an invalid type', () => {
-            it('should return false', () => {
-                expect(ApplicationTypes.exists('NotAType')).to.be.false;
-            });
-        });
-        context('when passing a valid type', () => {
+        describe('when checking for a valid validation', () => {
             it('should return true', () => {
-                expect(ApplicationTypes.exists(ApplicationTypes.UAA)).to.be.true;
+                expect(Validations.exists(Validations.MAXBYTES)).to.be.true;
+            });
+        });
+        describe('when checking for an invalid validation', () => {
+            it('should return false', () => {
+                expect(Validations.exists('NOTHING')).to.be.false;
+            });
+        });
+    });
+    describe('needsValue', () => {
+        describe('when checking whether a validation needs a value', () => {
+            it('should return so', () => {
+                expect(Validations.needsValue(Validations.MAXLENGTH)).to.be.true;
+                expect(Validations.needsValue(Validations.REQUIRED)).to.be.false;
             });
         });
     });

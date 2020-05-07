@@ -21,7 +21,7 @@
 /* eslint-disable no-unused-expressions */
 
 const { expect } = require('chai');
-const { DeploymentTypes, Options } = require('../../../../jdl/domain/jhipster/deployment-options');
+const { DeploymentTypes, Options } = require('../../../jdl/jhipster/deployment-options');
 
 describe('DeploymentOptions', () => {
     describe('DeploymentTypes', () => {

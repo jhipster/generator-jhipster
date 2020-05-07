@@ -18,7 +18,7 @@
  */
 
 const { merge } = require('../utils/object-utils');
-const Validations = require('./jhipster/validations');
+const Validations = require('../jhipster/validations');
 
 module.exports = class JDLValidation {
     constructor(args) {
