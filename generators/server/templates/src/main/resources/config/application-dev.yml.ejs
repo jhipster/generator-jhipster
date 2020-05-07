@@ -190,6 +190,8 @@ spring:
     liquibase:
         <%_ if (!skipFakeData) { _%>
         # Remove 'faker' if you do not want the sample data to be loaded automatically
+        <%_ } else {  _%>
+        # Add 'faker' if you want the sample data to be loaded automatically
         <%_ } _%>
         contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
         <%_ } _%>

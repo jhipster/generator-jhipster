@@ -81,9 +81,9 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        // This adds support for a `--skip-fake-data` flag
-        this.option('skip-fake-data', {
-            desc: 'Skip generation of fake data for development',
+        // This adds support for a `--fake-data` flag
+        this.option('fake-data', {
+            desc: 'Enable generation of fake data for development',
             type: Boolean,
             defaults: false,
         });
@@ -205,7 +205,7 @@ module.exports = class extends BaseBlueprintGenerator {
             this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
-        this.skipFakeData = this.configOptions.skipFakeData = this.options['skip-fake-data'];
+        this.skipFakeData = this.configOptions.skipFakeData = !this.options['fake-data'];
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
         this.uaaBaseName = this.configOptions.uaaBaseName = this.options['uaa-base-name'] || this.config.get('uaaBaseName');
 
