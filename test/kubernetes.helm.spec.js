@@ -9,7 +9,7 @@ const expectedFiles = {
     consulregistry: [
         './csvc-helm/templates/consul.yml',
         './csvc-helm/templates/consul-config-loader.yml',
-        './csvc-helm/templates/application-configmap.yml'
+        './csvc-helm/templates/application-configmap.yml',
     ],
     jhgate: [
         './jhgate-helm/templates/jhgate-deployment.yml',
@@ -17,7 +17,7 @@ const expectedFiles = {
         './jhgate-helm/Chart.yaml',
         './jhgate-helm/requirements.yml',
         './jhgate-helm/values.yml',
-        './jhgate-helm/templates/_helpers.tpl'
+        './jhgate-helm/templates/_helpers.tpl',
     ],
     jhgateingress: ['./jhgate-helm/templates/jhgate-ingress.yml'],
     customnamespace: ['./namespace.yml'],
@@ -25,7 +25,7 @@ const expectedFiles = {
         './csvc-helm/templates/jhipster-console.yml',
         './csvc-helm/templates/jhipster-logstash.yml',
         './csvc-helm/templates/jhipster-dashboard-console.yml',
-        './csvc-helm/templates/jhipster-zipkin.yml'
+        './csvc-helm/templates/jhipster-zipkin.yml',
     ],
     msmysql: [
         './msmysql-helm/Chart.yaml',
@@ -33,7 +33,7 @@ const expectedFiles = {
         './msmysql-helm/values.yml',
         './msmysql-helm/templates/_helpers.tpl',
         './msmysql-helm/templates/msmysql-deployment.yml',
-        './msmysql-helm/templates/msmysql-service.yml'
+        './msmysql-helm/templates/msmysql-service.yml',
     ],
     mspsql: [
         './mspsql-helm/Chart.yaml',
@@ -41,7 +41,7 @@ const expectedFiles = {
         './mspsql-helm/values.yml',
         './mspsql-helm/templates/_helpers.tpl',
         './mspsql-helm/templates/mspsql-deployment.yml',
-        './mspsql-helm/templates/mspsql-service.yml'
+        './mspsql-helm/templates/mspsql-service.yml',
     ],
     msmongodb: [
         './msmongodb-helm/Chart.yaml',
@@ -49,7 +49,7 @@ const expectedFiles = {
         './msmongodb-helm/values.yml',
         './msmongodb-helm/templates/_helpers.tpl',
         './msmongodb-helm/templates/msmongodb-deployment.yml',
-        './msmongodb-helm/templates/msmongodb-service.yml'
+        './msmongodb-helm/templates/msmongodb-service.yml',
     ],
     msmariadb: [
         './msmariadb-helm/Chart.yaml',
@@ -57,7 +57,7 @@ const expectedFiles = {
         './msmariadb-helm/values.yml',
         './msmariadb-helm/templates/_helpers.tpl',
         './msmariadb-helm/templates/msmariadb-deployment.yml',
-        './msmariadb-helm/templates/msmariadb-service.yml'
+        './msmariadb-helm/templates/msmariadb-service.yml',
     ],
     monolith: [
         './samplemysql-helm/Chart.yaml',
@@ -66,13 +66,13 @@ const expectedFiles = {
         './samplemysql-helm/templates/_helpers.tpl',
         './samplemysql-helm/templates/samplemysql-deployment.yml',
         './samplemysql-helm/templates/samplemysql-service.yml',
-        './samplemysql-helm/templates/samplemysql-elasticsearch.yml'
+        './samplemysql-helm/templates/samplemysql-elasticsearch.yml',
     ],
     kafka: ['./samplekafka-helm/templates/samplekafka-deployment.yml', './samplekafka-helm/templates/samplekafka-service.yml'],
     jhgategateway: [
         './jhgate-helm/templates/jhgate-gateway.yml',
         './jhgate-helm/templates/jhgate-destination-rule.yml',
-        './jhgate-helm/templates/jhgate-virtual-service.yml'
+        './jhgate-helm/templates/jhgate-virtual-service.yml',
     ],
     applyScript: ['./helm-apply.sh', './helm-upgrade.sh'],
 };

@@ -99,7 +99,7 @@ Example:
     },
     'kubernetes-helm': {
         alias: 'helm',
-        desc: 'Deploy the current application to Kubernetes using Helm package manager'
+        desc: 'Deploy the current application to Kubernetes using Helm package manager',
     },
     'kubernetes-knative': {
         alias: 'knative',

@@ -134,6 +134,6 @@ function writeFiles() {
         writeConfigRunFile() {
             this.template('helm-apply.sh.ejs', 'helm-apply.sh');
             this.template('helm-upgrade.sh.ejs', 'helm-upgrade.sh');
-        }
+        },
     };
 }

@@ -8,7 +8,7 @@ const expectedFiles = {
     consulregistry: [
         './registry-knative/consul.yml',
         './registry-knative/consul-config-loader.yml',
-        './registry-knative/application-configmap.yml'
+        './registry-knative/application-configmap.yml',
     ],
     jhgate: ['./jhgate-knative/jhgate-mysql.yml', './jhgate-knative/jhgate-service.yml'],
     jhgateingress: ['./jhgate-knative/jhgate-ingress.yml'],
@@ -18,14 +18,14 @@ const expectedFiles = {
         './console-knative/jhipster-elasticsearch.yml',
         './console-knative/jhipster-logstash.yml',
         './console-knative/jhipster-dashboard-console.yml',
-        './console-knative/jhipster-zipkin.yml'
+        './console-knative/jhipster-zipkin.yml',
     ],
     msmysql: ['./msmysql-knative/msmysql-service.yml', './msmysql-knative/msmysql-mysql.yml'],
     mspsql: [
         './mspsql-knative/mspsql-service.yml',
         './mspsql-knative/mspsql-postgresql.yml',
         './mspsql-knative/mspsql-service.yml',
-        './mspsql-knative/mspsql-elasticsearch.yml'
+        './mspsql-knative/mspsql-elasticsearch.yml',
     ],
     msmongodb: ['./msmongodb-knative/msmongodb-service.yml', './msmongodb-knative/msmongodb-mongodb.yml'],
     msmariadb: ['./msmariadb-knative/msmariadb-service.yml', './msmariadb-knative/msmariadb-mariadb.yml'],
@@ -34,14 +34,14 @@ const expectedFiles = {
         './monitoring-knative/jhipster-prometheus-crd.yml',
         './monitoring-knative/jhipster-prometheus-cr.yml',
         './monitoring-knative/jhipster-grafana.yml',
-        './monitoring-knative/jhipster-grafana-dashboard.yml'
+        './monitoring-knative/jhipster-grafana-dashboard.yml',
     ],
     jhgategateway: [
         './jhgate-knative/jhgate-gateway.yml',
         './jhgate-knative/jhgate-destination-rule.yml',
-        './jhgate-knative/jhgate-virtual-service.yml'
+        './jhgate-knative/jhgate-virtual-service.yml',
     ],
-    applyScript: ['./kubectl-knative-apply.sh']
+    applyScript: ['./kubectl-knative-apply.sh'],
 };
 
 const helmExpectedFiles = {
@@ -49,41 +49,41 @@ const helmExpectedFiles = {
         './csvc-knative/Chart.yaml',
         './csvc-knative/requirements.yml',
         './csvc-knative/values.yml',
-        './csvc-knative/templates/_helpers.tpl'
+        './csvc-knative/templates/_helpers.tpl',
     ],
     eurekaregistry: ['./csvc-knative/templates/jhipster-registry.yml', './csvc-knative/templates/application-configmap.yml'],
     consulregistry: [
         './csvc-knative/templates/consul.yml',
         './csvc-knative/templates/consul-config-loader.yml',
-        './csvc-knative/templates/application-configmap.yml'
+        './csvc-knative/templates/application-configmap.yml',
     ],
     jhgate: [
         './jhgate-knative/templates/jhgate-service.yml',
         './jhgate-knative/Chart.yaml',
         './jhgate-knative/requirements.yml',
         './jhgate-knative/values.yml',
-        './jhgate-knative/templates/_helpers.tpl'
+        './jhgate-knative/templates/_helpers.tpl',
     ],
     customnamespace: ['./namespace.yml'],
     jhconsole: [
         './csvc-knative/templates/jhipster-console.yml',
         './csvc-knative/templates/jhipster-logstash.yml',
         './csvc-knative/templates/jhipster-dashboard-console.yml',
-        './csvc-knative/templates/jhipster-zipkin.yml'
+        './csvc-knative/templates/jhipster-zipkin.yml',
     ],
     msmysql: [
         './msmysql-knative/Chart.yaml',
         './msmysql-knative/requirements.yml',
         './msmysql-knative/values.yml',
         './msmysql-knative/templates/_helpers.tpl',
-        './msmysql-knative/templates/msmysql-service.yml'
+        './msmysql-knative/templates/msmysql-service.yml',
     ],
     mspsql: [
         './mspsql-knative/Chart.yaml',
         './mspsql-knative/requirements.yml',
         './mspsql-knative/values.yml',
         './mspsql-knative/templates/_helpers.tpl',
-        './mspsql-knative/templates/mspsql-service.yml'
+        './mspsql-knative/templates/mspsql-service.yml',
     ],
     msmongodb: [
         './msmongodb-knative/Chart.yaml',
@@ -91,7 +91,7 @@ const helmExpectedFiles = {
         './msmongodb-knative/values.yml',
         './msmongodb-knative/templates/_helpers.tpl',
         './msmongodb-knative/templates/msmongodb-service.yml',
-        './msmongodb-knative/templates/msmongodb-service.yml'
+        './msmongodb-knative/templates/msmongodb-service.yml',
     ],
     msmariadb: [
         './msmariadb-knative/Chart.yaml',
@@ -99,13 +99,13 @@ const helmExpectedFiles = {
         './msmariadb-knative/values.yml',
         './msmariadb-knative/templates/_helpers.tpl',
         './msmariadb-knative/templates/msmariadb-service.yml',
-        './msmariadb-knative/templates/msmariadb-service.yml'
+        './msmariadb-knative/templates/msmariadb-service.yml',
     ],
     kafka: ['./samplekafka-knative/templates/samplekafka-service.yml', './samplekafka-knative/templates/samplekafka-service.yml'],
     jhgategateway: [
         './jhgate-knative/templates/jhgate-gateway.yml',
         './jhgate-knative/templates/jhgate-destination-rule.yml',
-        './jhgate-knative/templates/jhgate-virtual-service.yml'
+        './jhgate-knative/templates/jhgate-virtual-service.yml',
     ],
     applyScript: ['./helm-knative-apply.sh', './helm-knative-upgrade.sh'],
 };

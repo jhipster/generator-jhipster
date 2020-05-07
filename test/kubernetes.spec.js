@@ -14,50 +14,50 @@ const expectedFiles = {
         './console-k8s/jhipster-elasticsearch.yml',
         './console-k8s/jhipster-logstash.yml',
         './console-k8s/jhipster-dashboard-console.yml',
-        './console-k8s/jhipster-zipkin.yml'
+        './console-k8s/jhipster-zipkin.yml',
     ],
     msmysql: ['./msmysql-k8s/msmysql-deployment.yml', './msmysql-k8s/msmysql-mysql.yml', './msmysql-k8s/msmysql-service.yml'],
     mspsql: [
         './mspsql-k8s/mspsql-deployment.yml',
         './mspsql-k8s/mspsql-postgresql.yml',
         './mspsql-k8s/mspsql-service.yml',
-        './mspsql-k8s/mspsql-elasticsearch.yml'
+        './mspsql-k8s/mspsql-elasticsearch.yml',
     ],
     msmongodb: [
         './msmongodb-k8s/msmongodb-deployment.yml',
         './msmongodb-k8s/msmongodb-mongodb.yml',
-        './msmongodb-k8s/msmongodb-service.yml'
+        './msmongodb-k8s/msmongodb-service.yml',
     ],
     msmariadb: [
         './msmariadb-k8s/msmariadb-deployment.yml',
         './msmariadb-k8s/msmariadb-mariadb.yml',
-        './msmariadb-k8s/msmariadb-service.yml'
+        './msmariadb-k8s/msmariadb-service.yml',
     ],
     msmssqldb: ['./msmssqldb-k8s/msmssqldb-deployment.yml', './msmssqldb-k8s/msmssqldb-mssql.yml', './msmssqldb-k8s/msmssqldb-service.yml'],
     monolith: [
         './samplemysql-k8s/samplemysql-deployment.yml',
         './samplemysql-k8s/samplemysql-mysql.yml',
         './samplemysql-k8s/samplemysql-service.yml',
-        './samplemysql-k8s/samplemysql-elasticsearch.yml'
+        './samplemysql-k8s/samplemysql-elasticsearch.yml',
     ],
     kafka: [
         './samplekafka-k8s/samplekafka-deployment.yml',
         './samplekafka-k8s/samplekafka-mysql.yml',
         './samplekafka-k8s/samplekafka-service.yml',
-        './messagebroker-k8s/kafka.yml'
+        './messagebroker-k8s/kafka.yml',
     ],
     prometheusmonit: [
         './monitoring-k8s/jhipster-prometheus-crd.yml',
         './monitoring-k8s/jhipster-prometheus-cr.yml',
         './monitoring-k8s/jhipster-grafana.yml',
-        './monitoring-k8s/jhipster-grafana-dashboard.yml'
+        './monitoring-k8s/jhipster-grafana-dashboard.yml',
     ],
     jhgategateway: [
         './jhgate-k8s/jhgate-gateway.yml',
         './jhgate-k8s/jhgate-destination-rule.yml',
-        './jhgate-k8s/jhgate-virtual-service.yml'
+        './jhgate-k8s/jhgate-virtual-service.yml',
     ],
-    applyScript: ['./kubectl-apply.sh']
+    applyScript: ['./kubectl-apply.sh'],
 };
 
 describe('JHipster Kubernetes Sub Generator', () => {
