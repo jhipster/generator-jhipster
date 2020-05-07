@@ -71,7 +71,7 @@ export const RegisterPage = (props: IRegisterProps) => {
               placeholder={translate('global.form.username.placeholder')}
               validate={{
                 required: { value: true, errorMessage: translate('register.messages.validate.login.required') },
-                pattern: { value: "^[a-zA-Z0-9!#$&'*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*|[_.@A-Za-z0-9-]+$", errorMessage: translate('register.messages.validate.login.pattern') },
+                pattern: { value: '<%= LOGIN_REGEX %>', errorMessage: translate('register.messages.validate.login.pattern') },
                 minLength: { value: 1, errorMessage: translate('register.messages.validate.login.minlength') },
                 maxLength: { value: 50, errorMessage: translate('register.messages.validate.login.maxlength') }
               }}
