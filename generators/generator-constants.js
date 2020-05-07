@@ -142,16 +142,16 @@ const R2DBC_DB_OPTIONS = [
 
 const SQL_DB_OPTIONS = [
     {
+        value: 'postgresql',
+        name: 'PostgreSQL',
+    },
+    {
         value: 'mysql',
         name: 'MySQL',
     },
     {
         value: 'mariadb',
         name: 'MariaDB',
-    },
-    {
-        value: 'postgresql',
-        name: 'PostgreSQL',
     },
     {
         value: 'oracle',
