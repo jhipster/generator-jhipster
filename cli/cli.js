@@ -30,8 +30,7 @@ const {
     getCommandOptions,
     getArgs,
     done,
-    loadBlueprints,
-    loadBlueprintsFromYoRc,
+    loadAllBlueprintsWithVersion,
     getBlueprintPackagePaths,
     loadBlueprintCommands,
     loadSharedOptions,
@@ -44,12 +43,12 @@ const program = new commander.Command();
 const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
 
-const argBlueprints = loadBlueprints();
-const configBlueprints = loadBlueprintsFromYoRc().map(bp => bp.name);
-const allBlueprints = [...new Set([...argBlueprints, ...configBlueprints])];
+const blueprintsWithVersion = loadAllBlueprintsWithVersion();
+const allBlueprints = Object.keys(blueprintsWithVersion);
 
 const env = createYeomanEnv(allBlueprints);
-const sharedOptions = loadSharedOptions(getBlueprintPackagePaths(env, allBlueprints)) || {};
+const blueprintsPackagePath = getBlueprintPackagePaths(env, blueprintsWithVersion);
+const sharedOptions = loadSharedOptions(blueprintsPackagePath) || {};
 // Env will forward sharedOptions to every generator
 Object.assign(env.sharedOptions, sharedOptions);
 
@@ -75,7 +74,7 @@ const runYoCommand = (cmd, args, options, opts) => {
 
 program.version(version).usage('[command] [options]').allowUnknownOption();
 
-const blueprintCommands = loadBlueprintCommands(getBlueprintPackagePaths(env, argBlueprints));
+const blueprintCommands = loadBlueprintCommands(blueprintsPackagePath);
 const allCommands = { ...SUB_GENERATORS, ...blueprintCommands };
 
 /* create commands */

@@ -1201,6 +1201,9 @@ module.exports = class extends PrivateBase {
     composeExternalModule(npmPackageName, subGen, options) {
         const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
         const generatorCallback = `${generatorName}:${subGen}`;
+        if (!this.env.get(generatorCallback)) {
+            throw new Error(`Generator ${generatorCallback} isn't registered.`);
+        }
         return this.composeWith(generatorCallback, options, true);
     }
 
@@ -1547,8 +1550,7 @@ module.exports = class extends PrivateBase {
         if (this._debug && this._debug.enabled) {
             this._debug(`${chalk.red.bold('ERROR!')} ${msg}`);
         }
-        // Terminate current environment.
-        this.env.error(`${msg}`);
+        throw new Error(`${msg}`);
     }
 
     /**

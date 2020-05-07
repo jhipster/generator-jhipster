@@ -253,11 +253,45 @@ const loadBlueprintsFromYoRc = () => {
     return loadBlueprintsFromConfiguration(yoRc['generator-jhipster']);
 };
 
+/**
+ * Creates a 'blueprintName: blueprintVersion' object.
+ */
+const loadAllBlueprintsWithVersion = () => {
+    const blueprintsWithVersion = loadBlueprints().reduce((acc, blueprint) => {
+        acc[blueprint] = undefined;
+        return acc;
+    }, {});
+
+    loadBlueprintsFromYoRc().reduce((acc, blueprint) => {
+        acc[blueprint.name] = blueprint.version;
+        return acc;
+    }, blueprintsWithVersion);
+    return blueprintsWithVersion;
+};
+
 const getBlueprintPackagePaths = (env, blueprints) => {
     if (!blueprints) {
         return undefined;
     }
-    return blueprints.map(blueprint => {
+
+    const blueprintsToInstall = Object.entries(blueprints)
+        .filter(([blueprint, _version]) => {
+            const namespace = packageNameToNamespace(blueprint);
+            if (!env.getPackagePath(namespace)) {
+                env.lookupLocalPackages(blueprint);
+            }
+            return !env.getPackagePath(namespace);
+        })
+        .reduce((acc, [blueprint, version]) => {
+            acc[blueprint] = version;
+            return acc;
+        }, {});
+
+    if (Object.keys(blueprintsToInstall).length > 0) {
+        env.installLocalGenerators(blueprintsToInstall);
+    }
+
+    return Object.entries(blueprints).map(([blueprint, _version]) => {
         const namespace = packageNameToNamespace(blueprint);
         const packagePath = env.getPackagePath(namespace);
         if (!packagePath) {
@@ -357,6 +391,7 @@ module.exports = {
     createYeomanEnv,
     loadBlueprints,
     loadBlueprintsFromYoRc,
+    loadAllBlueprintsWithVersion,
     getBlueprintPackagePaths,
     loadBlueprintCommands,
     loadSharedOptions,

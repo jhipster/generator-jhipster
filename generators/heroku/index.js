@@ -75,10 +75,12 @@ module.exports = class extends BaseGenerator {
         this.angularAppName = this.getAngularAppName();
         this.buildTool = configuration.get('buildTool');
         this.applicationType = configuration.get('applicationType');
+        this.reactive = configuration.get('reactive') || false;
         this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
         this.herokuAppName = configuration.get('herokuAppName');
         this.dynoSize = 'Free';
         this.herokuDeployType = configuration.get('herokuDeployType');
+        this.herokuJavaVersion = configuration.get('herokuJavaVersion');
     }
 
     get prompting() {
@@ -162,6 +164,47 @@ module.exports = class extends BaseGenerator {
 
                 this.prompt(prompts).then(props => {
                     this.herokuDeployType = props.herokuDeployType;
+                    done();
+                });
+            },
+
+            askForHerokuJavaVersion() {
+                if (this.abort) return;
+                if (this.herokuJavaVersion) return;
+                const done = this.async();
+                const prompts = [
+                    {
+                        type: 'list',
+                        name: 'herokuJavaVersion',
+                        message: 'Which Java version would you like to use to build and run your app ?',
+                        choices: [
+                            {
+                                value: '1.8',
+                                name: '1.8',
+                            },
+                            {
+                                value: '11',
+                                name: '11',
+                            },
+                            {
+                                value: '12',
+                                name: '12',
+                            },
+                            {
+                                value: '13',
+                                name: '13',
+                            },
+                            {
+                                value: '14',
+                                name: '14',
+                            },
+                        ],
+                        default: 1,
+                    },
+                ];
+
+                this.prompt(prompts).then(props => {
+                    this.herokuJavaVersion = props.herokuJavaVersion;
                     done();
                 });
             },
@@ -369,6 +412,15 @@ module.exports = class extends BaseGenerator {
                     );
                 }
 
+                if (this.prodDatabaseType === 'neo4j' && this.reactive) {
+                    this.log(
+                        chalk.red(
+                            'The reactive Neo4j driver requires Neo4j >= 4. The Graphene addon does not support this database version (yet).'
+                        )
+                    );
+                    done();
+                }
+
                 let dbAddOn = '';
                 if (this.prodDatabaseType === 'postgresql') {
                     dbAddOn = 'heroku-postgresql --as DATABASE';
@@ -378,6 +430,8 @@ module.exports = class extends BaseGenerator {
                     dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
                 } else if (this.prodDatabaseType === 'mongodb') {
                     dbAddOn = 'mongolab:sandbox --as MONGODB';
+                } else if (this.prodDatabaseType === 'neo4j') {
+                    dbAddOn = 'graphenedb:dev-free --as GRAPHENEDB';
                 } else {
                     done();
                     return;
@@ -448,6 +502,7 @@ module.exports = class extends BaseGenerator {
                 this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
                 this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
                 this.template('Procfile.ejs', 'Procfile');
+                this.template('system.properties.ejs', 'system.properties');
                 if (this.buildTool === 'gradle') {
                     this.template('heroku.gradle.ejs', 'gradle/heroku.gradle');
                 }

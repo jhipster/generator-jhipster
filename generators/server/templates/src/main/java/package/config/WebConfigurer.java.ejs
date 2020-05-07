@@ -28,7 +28,7 @@ import io.github.jhipster.config.JHipsterProperties;
 <%_ if (['h2Disk', 'h2Memory'].includes(devDatabaseType) && !reactive) { _%>
 import io.github.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
-<%_ if (!skipClient) { _%>
+<%_ if (!skipClient && reactive) { _%>
 import io.github.jhipster.web.filter.<% if (reactive) { %>reactive.<% } %>CachingHttpHeadersFilter;
 <%_ } _%>
 import org.slf4j.Logger;
@@ -122,12 +122,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         if (env.getActiveProfiles().length != 0) {
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
-        <%_ if (!skipClient) { _%>
-        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_PRODUCTION))) {
-            initCachingHttpHeadersFilter(servletContext, disps);
-        }
-        <%_ } _%>
+
         <%_ if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             initH2Console(servletContext);
@@ -191,21 +186,6 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         return extractedPath.substring(0, extractionEndIndex);
     }
 
-    /**
-     * Initializes the caching HTTP Headers Filter.
-     */
-    private void initCachingHttpHeadersFilter(ServletContext servletContext,
-                                              EnumSet<DispatcherType> disps) {
-        log.debug("Registering Caching HTTP Headers Filter");
-        FilterRegistration.Dynamic cachingHttpHeadersFilter =
-            servletContext.addFilter("cachingHttpHeadersFilter",
-                new CachingHttpHeadersFilter(jHipsterProperties));
-
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/i18n/*");
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/content/*");
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/app/*");
-        cachingHttpHeadersFilter.setAsyncSupported(true);
-    }
         <%_ } _%>
     <%_ } _%>
 
