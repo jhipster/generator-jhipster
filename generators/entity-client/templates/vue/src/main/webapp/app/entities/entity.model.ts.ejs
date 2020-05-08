@@ -33,9 +33,9 @@ fields.forEach(field => {
     if (field.fieldIsEnum && !enumsAlreadyDeclared.includes(field.fieldType)) {
         enumsAlreadyDeclared.push(field.fieldType); _%>
 export const enum <%= field.fieldType %> {<%
-        const enums = field.fieldValues.split(',');
+        const enums = getEnumValuesWithCustomValues(field.fieldValues);
         for (let i = 0; i < enums.length; i++) { %>
-    <%= enums[i] %> = '<%= enums[i] %>'<%if (i < enums.length - 1) { %>,<% }
+    <%= enums[i].name %> = '<%= enums[i].value %>'<%if (i < enums.length - 1) { %>,<% }
         } %>
 }
 
