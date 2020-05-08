@@ -17,7 +17,7 @@ export default class <%= entityAngularName %>Service {
   <%_ if (searchEngine === 'elasticsearch') { _%>
   public search(query<% if (pagination !== 'no') { %>, paginationQuery<% } %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      axios.get(`${baseSearchApiUrl}${query}<% if (pagination !== 'no') { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`).then(function(res) {
+      axios.get(`${baseSearchApiUrl}${query}<% if (pagination !== 'no') { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`).then(res => {
         resolve(<% if (pagination !== 'no') { %>res<% } else { %>res.data<% } %>);
       }).catch(err => { reject(err); });
     });
@@ -26,7 +26,7 @@ export default class <%= entityAngularName %>Service {
 
   public find(id: <% if (pkType === 'String'  || pkType === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
-      axios.get(`${baseApiUrl}/${id}`).then(function(res) {
+      axios.get(`${baseApiUrl}/${id}`).then(res => {
         resolve(res.data);
       }).catch(err => { reject(err); });
     });
@@ -34,7 +34,7 @@ export default class <%= entityAngularName %>Service {
 
   public retrieve(<% if (pagination !== 'no') { %>paginationQuery?: any<% } %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      axios.get(baseApiUrl<% if (pagination !== 'no') { %> + `?${buildPaginationQueryOpts(paginationQuery)}` <% } %>).then(function(res) {
+      axios.get(baseApiUrl<% if (pagination !== 'no') { %> + `?${buildPaginationQueryOpts(paginationQuery)}` <% } %>).then(res => {
         resolve(res);
       }).catch(err => { reject(err); });
     });
@@ -44,7 +44,7 @@ export default class <%= entityAngularName %>Service {
 
   public delete(id: <% if (pkType === 'String'  || pkType === 'UUID') { %>string<% } else { %>number<% } %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      axios.delete(`${baseApiUrl}/${id}`).then(function(res) {
+      axios.delete(`${baseApiUrl}/${id}`).then(res => {
         resolve(res);
       }).catch(err => { reject(err); });
     });
@@ -52,7 +52,7 @@ export default class <%= entityAngularName %>Service {
 
   public create(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
-      axios.post(`${baseApiUrl}`, entity).then(function(res) {
+      axios.post(`${baseApiUrl}`, entity).then(res => {
         resolve(res.data);
       }).catch(err => { reject(err); });
     });
@@ -60,7 +60,7 @@ export default class <%= entityAngularName %>Service {
 
   public update(entity: I<%= entityAngularName %>) : Promise<I<%= entityAngularName %>> {
     return new Promise<I<%= entityAngularName %>>((resolve, reject) => {
-      axios.put(`${baseApiUrl}`, entity).then(function(res) {
+      axios.put(`${baseApiUrl}`, entity).then(res => {
         resolve(res.data);
       }).catch(err => { reject(err); });
     });
