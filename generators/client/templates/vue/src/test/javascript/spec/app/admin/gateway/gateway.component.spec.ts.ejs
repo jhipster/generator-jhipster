@@ -23,8 +23,4 @@ describe('Gateway Component', () => {
     wrapper = shallowMount<GatewayClass>(GatewayComponent, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue, provide: {gatewayService: () => new GatewayService() } });
     comp = wrapper.vm;
   });
-
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
 });

@@ -79,10 +79,6 @@ describe('Component Tests', () => {
       comp = wrapper.vm;
     });
 
-    it('should be a Vue instance', () => {
-      expect(wrapper.isVueInstance()).toBeTruthy();
-    });
-
     it('Should call load all on init', async () => {
       // GIVEN
       <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ id: <%- tsKeyId %> }] });

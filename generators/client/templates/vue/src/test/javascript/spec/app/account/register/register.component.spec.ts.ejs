@@ -46,10 +46,6 @@ describe('Register Component', () => {
     register = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   it('should set all default values correctly', () => {
     expect(register.success).toBe(false);
     expect(register.doNotMatch).toBe('');

@@ -43,10 +43,6 @@ describe('Activate Component', () => {
     activate = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   it('should display error when activation fails using route', async () => {
     mockedAxios.get.mockReturnValue(Promise.reject({}));
     activate.beforeRouteEnter({query: {key: 'invalid-key'}}, null, cb => cb(activate));

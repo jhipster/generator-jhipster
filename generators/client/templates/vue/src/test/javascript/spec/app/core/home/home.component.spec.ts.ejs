@@ -36,10 +36,6 @@ describe('Home', () => {
     home = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   it('should not have user data set', () => {
     expect(home.authenticated).toBeFalsy();
     expect(home.username).toBe('');

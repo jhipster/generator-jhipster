@@ -46,10 +46,6 @@ describe('Settings Component', () => {
     settings = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   it('should send the current identity upon save', async () => {
     // GIVEN
     mockedAxios.post.mockReturnValue(Promise.resolve({}));
