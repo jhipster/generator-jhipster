@@ -130,7 +130,6 @@ const expectedFiles = {
         `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.component.spec.ts`,
         // `${CLIENT_SPEC_SRC_DIR}app/admin/audits/audits.service.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/configuration/configuration.component.spec.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/admin/docs/docs.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/health/health.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/health/health-modal.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/admin/health/health.service.spec.ts`,
@@ -153,7 +152,6 @@ const expectedFiles = {
 
         `${CLIENT_SPEC_SRC_DIR}app/core/error/error.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/core/home/home.component.spec.ts`,
-        `${CLIENT_SPEC_SRC_DIR}app/core/jhi-footer/jhi-footer.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/core/jhi-navbar/jhi-navbar.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/core/ribbon/ribbon.component.spec.ts`,
         `${CLIENT_SPEC_SRC_DIR}app/shared/alert/alert.service.spec.ts`,
