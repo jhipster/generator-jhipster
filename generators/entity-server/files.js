@@ -134,6 +134,10 @@ const serverFiles = {
                 {
                     file: 'package/repository/EntityReactiveRepositoryInternalImpl.java',
                     renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`
+                },
+                {
+                    file: 'package/repository/rowmapper/EntityRowMapper.java',
+                    renameTo: generator => `${generator.packageFolder}/repository/rowmapper/${generator.entityClass}RowMapper.java`
                 }
             ]
         },

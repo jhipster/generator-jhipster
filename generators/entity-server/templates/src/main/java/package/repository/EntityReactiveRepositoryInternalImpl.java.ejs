@@ -23,6 +23,10 @@ package <%= packageName %>.repository;
     let eagerRelations = relationships.filter(function(rel) {
         return rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one';
     });
+    let uniqueEntityTypes = new Set(eagerRelations.map(function(rel) {
+       return rel.otherEntityNameCapitalized;
+    }));
+    uniqueEntityTypes.add(entityClass);
 _%>
 import java.util.function.BiFunction;
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -55,6 +59,10 @@ import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ }); _%>
 
+<%_ uniqueEntityTypes.forEach(function(element) { _%>
+import <%= packageName %>.repository.rowmapper.<%= element %>RowMapper;
+<%_ }); _%>
+
 import reactor.core.publisher.Flux;
 
 /**
@@ -65,18 +73,15 @@ public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass
     private final DatabaseClient db;
     private final ReactiveDataAccessStrategy dataAccessStrategy;
 
-    private final <%= entityClass %>Reader entityReader = new <%= entityClass %>Reader("ent");
+<%_ uniqueEntityTypes.forEach(function(element) { _%>
+    private final <%= element %>RowMapper <%= element.toLowerCase() %>Mapper;
+<%_ }); _%>
 
-<%_ for (idx in eagerRelations) {
-      let rel = eagerRelations[idx];
-      _%>
-    private final <%= rel.otherEntityNameCapitalized %>Reader <%= rel.relationshipName %>Reader = new <%= rel.otherEntityNameCapitalized %>Reader("<%= rel.relationshipName %>");
 <%_
-    } 
   let joins = generateTableJoins(relationships);
 _%>
     private final static String SELECT = "SELECT "
-            + <%= entityClass %>SqlHelper.getColumnNames("ent", "entity")
+            + <%= entityClass %>SqlHelper.getColumnNames("entity", "e")
         <%_ for (idx in eagerRelations) {
             let rel = eagerRelations[idx];
           _%>
@@ -87,9 +92,13 @@ _%>
             + "<%= joins[idx] %>"
 <%_     } _%>;
 
-    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy) {
+    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy<%_ 
+            uniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
         this.db = db;
         this.dataAccessStrategy = dataAccessStrategy;
+        <%_ uniqueEntityTypes.forEach(function(element) { _%>
+        this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
+        <%_ }); _%>
     }
 
 <%_ if (pagination !== 'no') { _%>
@@ -127,9 +136,9 @@ _%>
     }
 
     private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {
-        <%= asEntity(entityClass) %> entity = entityReader.apply(row, metadata);
+        <%= asEntity(entityClass) %> entity = <%= entityClass.toLowerCase() %>Mapper.apply(row, "e");
         <%_ eagerRelations.forEach(function(rel) { _%>
-        entity.set<%= rel.relationshipNameCapitalized %>(<%= rel.relationshipName %>Reader.apply(row, metadata));
+        entity.set<%= rel.relationshipNameCapitalized %>(<%= rel.otherEntityNameCapitalized.toLowerCase() %>Mapper.apply(row, "<%= rel.relationshipName %>"));
         <%_ }); _%>
         return entity;
     }
@@ -148,30 +157,4 @@ class <%= entityClass %>SqlHelper {
 _%>
         return String.format("<%= columns %>", tableAlias, columnPrefix);
     }
-}
-
-class <%= entityClass %>Reader implements BiFunction<Row, RowMetadata, <%= asEntity(entityClass) %>> {
-    private final String prefix;
-    public <%= entityClass %>Reader(String prefix) {
-        this.prefix = prefix;
-    }
-    @Override
-    public <%= asEntity(entityClass) %> apply(Row row, RowMetadata metadata) {
-        <%= asEntity(entityClass) %> entity = new <%= asEntity(entityClass) %>();
-        entity.setId(row.get(prefix + "_id", Long.class));
-        <%_ for (idx in fields) { 
-            let field = fields[idx];
-            let fieldType = field.fieldType;
-            if (field.fieldTypeBlobContent === 'text') {
-                fieldType = 'String';
-            }
-            _%>
-        entity.set<%= field.fieldInJavaBeanMethod %>(row.get(prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
-        <%_ } _%>
-        <%_ eagerRelations.forEach(function(rel) { _%>
-        entity.set<%= rel.relationshipNameCapitalized %>Id(row.get(prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
-        <%_ }); _%> 
-        return entity;
-    }
-
 }

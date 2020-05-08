@@ -128,6 +128,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import java.sql.SQLException;
 <%_ } } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
