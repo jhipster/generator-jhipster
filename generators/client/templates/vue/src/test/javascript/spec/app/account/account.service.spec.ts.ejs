@@ -16,7 +16,7 @@ jest.mock('axios', () => ({
   post: jest.fn()
 }));
 <%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>
-const mockedCookie = { get: jest.fn(function() { return 'token'; }) };
+const mockedCookie = { get: jest.fn(() => { return 'token'; }) };
 <%_ } %>
 const localVue = createLocalVue();
 <%_ if (enableTranslation) { _%>
