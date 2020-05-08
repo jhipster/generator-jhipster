@@ -129,4 +129,5 @@ export const selectLastOption = async (dropdown: ElementFinder) => {
 export const clear = async (input: ElementFinder) => {
   await input.sendKeys(protractor.Key.chord(protractor.Key.CONTROL, 'a'));
   await input.sendKeys(protractor.Key.DELETE);
+  await input.sendKeys(protractor.Key.BACK_SPACE);
 };
