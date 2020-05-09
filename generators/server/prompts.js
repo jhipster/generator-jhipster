@@ -169,7 +169,7 @@ function askForServerSideOpts(meta) {
                 } else {
                     opts.push({
                         value: 'sql',
-                        name: 'SQL (H2, MySQL, PostgreSQL, MSSQL)',
+                        name: 'SQL (H2, MySQL, MariaDB, PostgreSQL, MSSQL)',
                     });
                 }
                 opts.push({
