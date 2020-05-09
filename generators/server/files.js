@@ -1092,12 +1092,8 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/cassandra/CassandraConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/cassandra/CassandraConfiguration.java`,
-                },
-                {
-                    file: 'package/config/cassandra/package-info.java',
-                    renameTo: generator => `${generator.javaDir}config/cassandra/package-info.java`,
+                    file: 'package/config/CassandraConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/CassandraConfiguration.java`,
                 },
             ],
         },

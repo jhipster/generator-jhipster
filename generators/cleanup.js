@@ -247,6 +247,8 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
             generator.removeFile(`${javaDir}config/metrics/package-info.java`);
             generator.removeFile(`${javaDir}config/metrics/CassandraHealthIndicator.java`);
             generator.removeFile(`${javaDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`);
+            generator.removeFile(`${javaDir}config/cassandra/package-info.java`);
+            generator.removeFile(`${javaDir}config/cassandra/CassandraConfiguration.java`);
         }
     }
 }
