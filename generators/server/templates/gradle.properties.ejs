@@ -60,6 +60,9 @@ r2dbc_mssql_version=0.8.2.RELEASE
     <%_ if (prodDatabaseType === 'postgresql') { _%>
 r2dbc_postgresql_version=0.8.2.RELEASE
     <%_ } _%>
+    <%_ if (prodDatabaseType === 'mariadb') { _%>
+r2dbc_mariadb_version=0.8.2-alpha2
+    <%_ } _%>
 spring_boot_starter_data_r2dbc_version=0.1.0.M3
 <%_ } _%>
 <%_ if (reactive) { _%>
