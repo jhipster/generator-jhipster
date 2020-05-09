@@ -1321,10 +1321,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.testDir}CassandraKeyspaceIT.java`,
                 },
                 { file: 'package/AbstractCassandraTest.java', renameTo: generator => `${generator.testDir}AbstractCassandraTest.java` },
-                {
-                    file: 'package/config/CassandraConfigurationIT.java',
-                    renameTo: generator => `${generator.testDir}config/CassandraConfigurationIT.java`,
-                },
             ],
         },
         {

@@ -462,8 +462,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
     implementation "org.zalando:problem-spring-web<% if (reactive) { %>flux<% } %>"
     <%_ if (databaseType === 'cassandra') { _%>
-    implementation "com.datastax.cassandra:cassandra-driver-extras"
-    implementation "com.datastax.cassandra:cassandra-driver-mapping"
+    implementation "com.datastax.oss:java-driver-mapper-runtime"
     <%_ } _%>
     <%_ if (applicationType === 'gateway') { _%>
         <%_ if (!reactive) { _%>
@@ -573,6 +572,9 @@ dependencies {
     <%_ if (databaseType === 'sql') { _%>
     annotationProcessor "org.hibernate:hibernate-jpamodelgen:${hibernate_version}"
     annotationProcessor "org.glassfish.jaxb:jaxb-runtime:${jaxb_runtime_version}"
+    <%_ } _%>
+    <%_ if (databaseType === 'cassandra') { _%>
+    annotationProcessor "com.datastax.oss:java-driver-mapper-processor:${cassandra_driver_version}"
     <%_ } _%>
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${spring_boot_version}"
     <%_ if (databaseType === 'cassandra') { _%>

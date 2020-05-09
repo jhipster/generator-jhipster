@@ -144,6 +144,11 @@
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
 <%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+        <!-- The cassandra driver version should match the one managed by
+        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
+        <cassandra-driver.version>4.6.0</cassandra-driver.version>
+<%_ } _%>
         <archunit-junit5.version>0.13.1</archunit-junit5.version>
 <%_ if (searchEngine === 'elasticsearch') { _%>
         <log4j2-mock.version>0.0.2</log4j2-mock.version>
@@ -856,12 +861,8 @@
 <%_ if (databaseType === 'cassandra') { _%>
         <!-- DataStax driver -->
         <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-extras</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-mapping</artifactId>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-mapper-runtime</artifactId>
         </dependency>
 <%_ } _%>
         <!-- Spring Cloud -->
@@ -1122,6 +1123,13 @@
                                 <groupId>org.glassfish.jaxb</groupId>
                                 <artifactId>jaxb-runtime</artifactId>
                                 <version>${jaxb-runtime.version}</version>
+                            </path>
+<%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+                            <path>
+                                <groupId>com.datastax.oss</groupId>
+                                <artifactId>java-driver-mapper-processor</artifactId>
+                                <version>${cassandra-driver.version}</version>
                             </path>
 <%_ } _%>
                             <!-- jhipster-needle-maven-add-annotation-processor -->

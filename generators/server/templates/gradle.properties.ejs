@@ -71,6 +71,11 @@ netty_common_version=4.1.49.Final
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
 jaxb_runtime_version=2.3.2
 <%_ } _%>
+<%_ if (databaseType === 'cassandra') { _%>
+# The cassandra driver version should match the one managed by
+# https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version}
+cassandra_driver_version=4.6.0
+<%_ } _%>
 
 # gradle plugin version
 jib_plugin_version=<%= JIB_VERSION %>
