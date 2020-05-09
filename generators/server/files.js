@@ -1092,24 +1092,6 @@ const serverFiles = {
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/metrics/package-info.java',
-                    renameTo: generator => `${generator.javaDir}config/metrics/package-info.java`,
-                },
-                {
-                    file: 'package/config/metrics/JHipsterHealthIndicatorConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`,
-                },
-                {
-                    file: 'package/config/metrics/CassandraHealthIndicator.java',
-                    renameTo: generator => `${generator.javaDir}config/metrics/CassandraHealthIndicator.java`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.databaseType === 'cassandra',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                {
                     file: 'package/config/cassandra/CassandraConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/cassandra/CassandraConfiguration.java`,
                 },

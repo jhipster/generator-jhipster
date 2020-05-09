@@ -242,6 +242,13 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`);
         generator.removeFile(`${javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
     }
+    if (generator.isJhipsterVersionLessThan('6.10.0')) {
+        if (generator.databaseType === 'cassandra') {
+            generator.removeFile(`${javaDir}config/metrics/package-info.java`);
+            generator.removeFile(`${javaDir}config/metrics/CassandraHealthIndicator.java`);
+            generator.removeFile(`${javaDir}config/metrics/JHipsterHealthIndicatorConfiguration.java`);
+        }
+    }
 }
 
 /**
