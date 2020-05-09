@@ -1445,13 +1445,20 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         PersistentToken token = new PersistentToken();
-        token.setSeries("current-sessions");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
-        token.setUser(user);<% } else { %><% if (databaseType === 'cassandra') { %>
-        token.setUserId(user.getId());<% } else { %>
-        token.setLogin(user.getLogin());<% } %><% } %>
-        token.setTokenValue("current-session-data");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'neo4j') { %>
-        token.setTokenDate(LocalDate.of(2017, 3, 23));<% } else { %>
-        token.setTokenDate(new Date(1490714757123L));<% } %>
+        token.setSeries("current-sessions");
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+        token.setUser(user);
+        <%_ } else if (databaseType === 'cassandra') { _%>
+        token.setUserId(user.getId());
+        <%_ } else if (databaseType === 'couchbase') { _%>
+        token.setLogin(user.getLogin());
+        <%_ } _%>
+        token.setTokenValue("current-session-data");
+        <%_ if (databaseType === 'cassandra') { _%>
+        token.setTokenDate(new Date(1490714757123L));
+        <%_ } else { _%>
+        token.setTokenDate(LocalDate.of(2017, 3, 23));
+        <% } %>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
         persistentTokenRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(token);
@@ -1481,13 +1488,20 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         PersistentToken token = new PersistentToken();
-        token.setSeries("invalidate-session");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
-        token.setUser(user);<% } else { %><% if (databaseType === 'cassandra') { %>
-        token.setUserId(user.getId());<% } else { %>
-        token.setLogin(user.getLogin());<% } %><% } %>
-        token.setTokenValue("invalidate-data");<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'neo4j') { %>
-        token.setTokenDate(LocalDate.of(2017, 3, 23));<% } else { %>
-        token.setTokenDate(new Date(1490714757123L));<% } %>
+        token.setSeries("invalidate-session");
+        <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+        token.setUser(user);
+        <%_ } else if (databaseType === 'cassandra') { _%>
+        token.setUserId(user.getId());
+        <%_ } else { _%>
+        token.setLogin(user.getLogin());
+        <%_ } _%>
+        token.setTokenValue("invalidate-data");
+        <%_ if (['sql', 'mongodb', 'couchbase', 'neo4j'].includes(databaseType)) { _%>
+        token.setTokenDate(LocalDate.of(2017, 3, 23));
+        <%_ } else if (databaseType === 'cassandra') { _%>
+        token.setTokenDate(new Date(1490714757123L));
+        <%_ } _%>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
         persistentTokenRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(token);

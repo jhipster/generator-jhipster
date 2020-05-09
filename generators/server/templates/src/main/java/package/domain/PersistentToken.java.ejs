@@ -115,24 +115,32 @@ public class PersistentToken implements Serializable {
     private String series;
 
     @JsonIgnore
-    @NotNull<% if (databaseType === 'sql') { %>
-    @Column(name = "token_value", nullable = false)<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "token_value")<% } %>
+    @NotNull
+    <%_ if (databaseType === 'sql') { _%>
+    @Column(name = "token_value", nullable = false)
+    <%_ } else if (databaseType === 'cassandra') { _%>
+    @Column(name = "token_value")
+    <%_ } _%>
     private String tokenValue;
-    <% if (databaseType === 'sql') { %>
+
+    <%_ if (databaseType === 'sql') { _%>
     @Column(name = "token_date")
-    private LocalDate tokenDate;<% } %><% if (databaseType === 'mongodb' || databaseType === 'couchbase') { %>
-    private LocalDate tokenDate;<% } %><% if (databaseType === 'neo4j') { %>
+    <%_ } else if (databaseType === 'neo4j') { _%>
     @Property(name = "token_date")
-    private LocalDate tokenDate;<% } %><% if (databaseType === 'cassandra') { %>
+    <%_ } else if (databaseType === 'cassandra') { _%>
     @Column(name = "token_date")
-    private Date tokenDate;<% } %>
+    <%_ } _%>
+    private <% if (databaseType !== 'cassandra') { %>LocalDate<% } else { %>Date<% } %> tokenDate;
 
     //an IPV6 address max length is 39 characters
-    @Size(min = 0, max = 39)<% if (databaseType === 'sql') { %>
-    @Column(name = "ip_address", length = 39)<% } %><% if (databaseType === 'cassandra') { %>
-    @Column(name = "ip_address")<% } %><% if (databaseType === 'neo4j') { %>
-    @Property(name = "ip_address")<% } %>
+    @Size(min = 0, max = 39)
+    <%_ if (databaseType === 'sql') { _%>
+    @Column(name = "ip_address", length = 39)
+    <%_ } else if (databaseType === 'cassandra') { _%>
+    @Column(name = "ip_address")
+    <%_ } else if (databaseType === 'neo4j') { _%>
+    @Property(name = "ip_address")
+    <%_ } _%>
     private String ipAddress;
 
     <%_ if (databaseType === 'sql' || databaseType === 'cassandra') { _%>
@@ -181,11 +189,11 @@ public class PersistentToken implements Serializable {
         this.tokenValue = tokenValue;
     }
 
-    public <% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> getTokenDate() {
+    public <% if (databaseType !== 'cassandra') { %>LocalDate<% } else { %>Date<% } %> getTokenDate() {
         return tokenDate;
     }
 
-    public void setTokenDate(<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase')  { %>LocalDate<% } %><% if (databaseType === 'cassandra') { %>Date<% } %> tokenDate) {
+    public void setTokenDate(<% if (databaseType !== 'cassandra') { %>LocalDate<% } else { %>Date<% } %> tokenDate) {
         this.tokenDate = tokenDate;
     }
 
@@ -207,7 +215,8 @@ public class PersistentToken implements Serializable {
         } else {
             this.userAgent = userAgent;
         }
-    }<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>
+    }
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
 
     public <%= asEntity('User') %> getUser() {
         return user;
@@ -215,7 +224,8 @@ public class PersistentToken implements Serializable {
 
     public void setUser(<%= asEntity('User') %> user) {
         this.user = user;
-    }<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>
+    }
+    <%_ } else if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
 
     public String getLogin() {
         return login;
@@ -223,7 +233,9 @@ public class PersistentToken implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
-    }<% } %><% if (databaseType === 'cassandra') { %>
+    }
+    <%_ } _%>
+    <%_ if (databaseType === 'cassandra') { _%>
 
     public String getUserId() {
         return userId;
@@ -231,7 +243,8 @@ public class PersistentToken implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }<% } %>
+    }
+    <%_ } _%>
 
     @Override
     public boolean equals(Object o) {
