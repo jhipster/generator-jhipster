@@ -57,10 +57,6 @@ describe('LoginForm Component', () => {
     loginForm = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   <%_ if (authenticationType === 'jwt') { _%>
   it('should not store token if authentication is KO', async () => {
     // GIVEN

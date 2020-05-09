@@ -47,10 +47,6 @@ describe('Audits Component', () => {
     audits = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   describe('today function ', () => {
     it('should set toDate to current date', () => {
       audits.today();

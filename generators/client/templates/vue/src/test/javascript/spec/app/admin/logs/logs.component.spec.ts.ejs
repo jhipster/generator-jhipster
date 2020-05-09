@@ -30,10 +30,6 @@ describe('Logs Component', () => {
     logs = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   describe('OnInit', () => {
     it('should set all default values correctly', () => {
       expect(logs.filtered).toBe('');

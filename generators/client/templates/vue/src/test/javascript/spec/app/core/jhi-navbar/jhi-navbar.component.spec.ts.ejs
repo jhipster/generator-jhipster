@@ -54,14 +54,11 @@ let wrapper: Wrapper<JhiNavbarClass>;
     });
     jhiNavbar = wrapper.vm;
   });
-
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-
-    <%_ if (enableTranslation) { _%>
+  <%_ if (enableTranslation) { _%>
+  it('should refresh translations', () => {
     expect(translationService.refreshTranslation).toHaveBeenCalled();
-    <%_ } _%>
   });
+  <%_ } _%>
 
   it('should not have user data set', () => {
     expect(jhiNavbar.authenticated).toBeFalsy();

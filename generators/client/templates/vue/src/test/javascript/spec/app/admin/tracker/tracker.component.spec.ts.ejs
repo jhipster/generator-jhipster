@@ -46,8 +46,7 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
     <%=jhiPrefix%>Tracker = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
+  it('should subscribe', () => {
     expect(trackerServiceStub.subscribe.called).toBeTruthy();
   });
 

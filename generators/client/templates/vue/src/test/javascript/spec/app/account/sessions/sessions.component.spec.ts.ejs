@@ -54,8 +54,7 @@ describe('Sessions Component', () => {
     sessions = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
+  it('should call remote service on init', () => {
     expect(mockedAxios.get).toHaveBeenCalledTimes(1);
   });
 

@@ -32,11 +32,6 @@ describe('Ribbon', () => {
     store.commit('setRibbonOnProfiles', null);
   });
 
-  it('should be a Vue instance', async () => {
-    await wrap();
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   it('should not have ribbonEnabled when no data', async () => {
     await wrap();
     expect(ribbon.ribbonEnabled).toBeFalsy();

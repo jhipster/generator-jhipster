@@ -37,10 +37,6 @@ describe('UserManagementView Component', () => {
     userManagementView = wrapper.vm;
   });
 
-  it('should be a Vue instance', () => {
-    expect(wrapper.isVueInstance()).toBeTruthy();
-  });
-
   describe('OnInit', () => {
     it('Should call load all on init', async () => {
       // GIVEN
