@@ -23,7 +23,7 @@ import <%= packageName %>.repository.PersistentTokenRepository;
 import <%= packageName %>.repository.UserRepository;
 
 <%_ if (databaseType === 'cassandra') { _%>
-import com.datastax.driver.core.exceptions.DriverException;
+import com.datastax.oss.driver.api.core.DriverException;
 <%_ } _%>
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -47,6 +47,7 @@ import java.io.Serializable;
 <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
 import java.time.LocalDate;
 <%_ } else if (databaseType === 'cassandra') { _%>
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 import java.util.*;
@@ -132,7 +133,7 @@ public class PersistentTokenRememberMeServices extends
             <%_ if (['sql', 'mongodb', 'neo4j', 'couchbase'].includes(databaseType)) { _%>
                 token.setTokenDate(LocalDate.now());
             <%_ } else if (databaseType === 'cassandra') { _%>
-                token.setTokenDate(new Date());
+                token.setTokenDate(Instant.now());
             <%_ } _%>
                 token.setTokenValue(RandomUtil.generateRandomAlphanumericString());
                 token.setIpAddress(request.getRemoteAddr());
@@ -173,7 +174,7 @@ public class PersistentTokenRememberMeServices extends
             t.setUserId(u.getId());
         <%_ } _%>
             t.setTokenValue(RandomUtil.generateRandomAlphanumericString());
-            t.setTokenDate(<% if (databaseType === 'cassandra') { %>new Date()<% } else { %>LocalDate.now()<% } %>);
+            t.setTokenDate(<% if (databaseType === 'cassandra') { %>Instant.now()<% } else { %>LocalDate.now()<% } %>);
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
@@ -259,7 +260,7 @@ public class PersistentTokenRememberMeServices extends
         if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {
         <%_ } _%>
         <%_ if (databaseType === 'cassandra') { _%>
-        if (token.getTokenDate().toInstant().plus(TOKEN_VALIDITY_DAYS, ChronoUnit.DAYS).isBefore((new Date()).toInstant())) {
+        if (token.getTokenDate().plus(TOKEN_VALIDITY_DAYS, ChronoUnit.DAYS).isBefore(Instant.now())) {
         <%_ } _%>
             <%_ if (databaseType === 'sql') { _%>
             persistentTokenRepository.deleteById(token.getSeries());
