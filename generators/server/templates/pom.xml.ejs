@@ -125,6 +125,9 @@
     <%_ if (reactive && prodDatabaseType === 'postgresql') { _%>
         <r2dbc-postgresql.version>0.8.2.RELEASE</r2dbc-postgresql.version>
     <%_ } _%>
+    <%_ if (reactive && prodDatabaseType === 'mariadb') { _%>
+        <r2dbc-mariadb.version>0.8.2-alpha2</r2dbc-mariadb.version>
+    <%_ } _%>
     <%_ if (reactive) { _%>
         <spring-boot-starter-data-r2dbc.version>0.1.0.M3</spring-boot-starter-data-r2dbc.version>
     <%_ } _%>
@@ -478,6 +481,13 @@
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
+        <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>org.mariadb</groupId>
+            <artifactId>r2dbc-mariadb</artifactId>
+            <version>${r2dbc-mariadb.version}</version>
+        </dependency>
+        <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
         <dependency>
