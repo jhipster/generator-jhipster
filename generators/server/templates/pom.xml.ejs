@@ -462,6 +462,13 @@
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
+        <%_ if (reactive) { _%>
+        <dependency>
+            <groupId>org.mariadb</groupId>
+            <artifactId>r2dbc-mariadb</artifactId>
+            <version>${r2dbc-mariadb.version}</version>
+        </dependency>
+        <%_ } _%>
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
         <dependency>

@@ -532,7 +532,11 @@ dependencies {
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mariadb') { _%>
     implementation "org.mariadb.jdbc:mariadb-java-client"
+        <%_ if (!reactive) { _%>
     liquibaseRuntime "org.mariadb.jdbc:mariadb-java-client"
+        <%_ } else { _%>
+        implementation "org.mariadb:r2dbc-mariadb:${r2dbc_mariadb_version}"
+        <%_ } _%>
     <%_ } _%>
     <%_ if (prodDatabaseType === 'mssql') { _%>
     implementation "com.microsoft.sqlserver:mssql-jdbc"
