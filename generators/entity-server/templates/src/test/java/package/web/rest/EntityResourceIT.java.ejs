@@ -157,16 +157,33 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
-import javax.persistence.EntityManager;<% } %><% if (fieldsContainBigDecimal === true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainBlob === true && databaseType === 'cassandra') { %>
-import java.nio.ByteBuffer;<% } %><% if (reactive || fieldsContainDuration === true) { %>
-import java.time.Duration;<% } %><% if (fieldsContainLocalDate === true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainInstant === true || fieldsContainZonedDateTime === true) { %>
-import java.time.Instant;<% } %><% if (fieldsContainZonedDateTime === true) { %>
+import javax.persistence.EntityManager;
+<%_ } _%>
+<%_ if (fieldsContainBigDecimal === true) { _%>
+import java.math.BigDecimal;
+<%_ } _%>
+<%_ if (fieldsContainBlob === true && databaseType === 'cassandra') { _%>
+import java.nio.ByteBuffer;
+<%_ } _%>
+<%_ if (reactive || fieldsContainDuration === true) { _%>
+import java.time.Duration;
+<%_ } _%>
+<%_ if (fieldsContainLocalDate === true) { _%>
+import java.time.LocalDate;
+<%_ } _%>
+<%_ if (fieldsContainInstant === true || fieldsContainZonedDateTime === true) { _%>
+import java.time.Instant;
+<%_ } _%>
+<%_ if (fieldsContainZonedDateTime === true) { _%>
 import java.time.ZonedDateTime;
-import java.time.ZoneOffset;<% } %><% if (fieldsContainLocalDate === true || fieldsContainZonedDateTime === true) { %>
-import java.time.ZoneId;<% } %><% if (fieldsContainInstant === true) { %>
-import java.time.temporal.ChronoUnit;<% } %>
+import java.time.ZoneOffset;
+<%_ } _%>
+<%_ if (fieldsContainLocalDate === true || fieldsContainZonedDateTime === true) { _%>
+import java.time.ZoneId;
+<%_ } _%>
+<%_ if (fieldsContainInstant === true) { _%>
+import java.time.temporal.ChronoUnit;
+<%_ } _%>
 <%_ if (fieldsContainOwnerManyToMany) { _%>
 import java.util.ArrayList;
 <%_ } _%>
@@ -579,8 +596,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     public void initTest() {
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j') { _%>
         <%= entityInstance %>Repository.deleteAll()<%= callBlock %>;
-        <%_ } _%>
-        <%_ if (databaseType === 'sql' && reactive) {  _%>
+        <%_ } else if (databaseType === 'sql' && reactive) {  _%>
         deleteEntities(em);
         <%_ } _%>
         <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
