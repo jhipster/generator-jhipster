@@ -145,13 +145,9 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (databaseType === 'sql') { _%>
 @Entity
 @Table(name = "<%= entityTableName %>")
-<%_     if (enableHibernateCache) {
-            if (cacheProvider === 'infinispan') { _%>
+<%_     if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-<%_         } else { _%>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-<%_         }
-        }
+<%_     }
 } if (!embedded) {
     if (databaseType === 'mongodb') { _%>
 @Document(collection = "<%= entityTableName %>")
@@ -299,13 +295,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
             if (databaseType === 'sql') {
     _%>
     @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
-            <%_ if (enableHibernateCache) {
-                    if (cacheProvider === 'infinispan') { _%>
+            <%_ if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-                <%_ } else { _%>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-                <%_ }
-            }
+            <%_ }
         } else if (databaseType === 'mongodb' || databaseType === 'couchbase') {
             if (databaseType === 'mongodb' && !otherEntityIsEmbedded) { _%>
     @DBRef
@@ -349,13 +341,9 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } else if (relationshipType === 'many-to-many') {
         if (databaseType === 'sql') { _%>
     @ManyToMany<% if (ownerSide === false) { %>(mappedBy = "<%= otherEntityRelationshipNamePlural %>")<% } %>
-        <%_ if (enableHibernateCache) {
-                if (cacheProvider === 'infinispan') { _%>
+        <%_ if (enableHibernateCache) {_%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-            <%_ } else { _%>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-            <%_ }
-        } if (ownerSide === true) {
+        <%_ } if (ownerSide === true) {
             if (relationshipValidate) { _%>
     <%- include('relationship_validators'); -%>
         <%_ } _%>
