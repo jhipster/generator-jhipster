@@ -640,7 +640,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } _%>
     }
 
-    <%_ if (databaseType === 'sql' && isUsingMapsId === true) { _%>
+    <%_ if (databaseType === 'sql' && isUsingMapsId === true && !reactive) { _%>
     @Test<%= transactionalAnnotation %>
     void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
@@ -650,7 +650,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>);
 <%_ } _%>
         <%_ const alreadyGeneratedEntities = []; _%>
-        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
 
         <%_ for (idx in relationships) {
             const relationshipValidate = relationships[idx].relationshipValidate;
@@ -660,15 +660,17 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             if (mapsIdUse === true) { _%>
         // Add a new parent entity
                 <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (otherEntityName !== 'user') { _%>Updated<%_ } %>Entity(em);
+        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (otherEntityName !== 'user') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql' && !reactive) { %>em<% } %>);
+                <%_   if (databaseType === 'sql' && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
+                <%_   } _%>
                 <%_ } _%>
         <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
         <%_ } break; } _%>
 
         // Load the <%= entityInstance %>
-        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId()).get();<% if (databaseType === 'sql' && !reactive) { %>
+        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId())<%= reactive ? '.block()' : '.get()' %>;<% if (databaseType === 'sql' && !reactive) { %>
         // Disconnect from session so that the updates on updated<%= asEntity(entityClass) %> are not directly saved in db
         em.detach(updated<%= asEntity(entityClass) %>);<% } %>
 
