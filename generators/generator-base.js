@@ -1199,12 +1199,23 @@ module.exports = class extends PrivateBase {
      * @return {object} the composed generator
      */
     composeExternalModule(npmPackageName, subGen, options) {
-        const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
-        const generatorCallback = `${generatorName}:${subGen}`;
-        if (!this.env.get(generatorCallback)) {
-            throw new Error(`Generator ${generatorCallback} isn't registered.`);
+        try {
+            let generatorTocall = path.join(process.cwd(), 'node_modules', npmPackageName, 'generators', subGen);
+            if (!fs.existsSync(generatorTocall)) {
+                this.debug('using global module as local version could not be found in node_modules');
+                generatorTocall = path.join(npmPackageName, 'generators', subGen);
+            }
+            this.debug('Running yeoman compose with options: ', generatorTocall, options);
+            return this.composeWith(require.resolve(generatorTocall), options);
+        } catch (err) {
+            this.debug('ERROR:', err);
+            const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
+            const generatorCallback = `${generatorName}:${subGen}`;
+            if (!this.env.get(generatorCallback)) {
+                throw new Error(`Generator ${generatorCallback} isn't registered.`);
+            }
+            return this.composeWith(generatorCallback, options, true);
         }
-        return this.composeWith(generatorCallback, options, true);
     }
 
     /**
