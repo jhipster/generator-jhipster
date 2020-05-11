@@ -32,6 +32,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.jhipsterContext = opts.jhipsterContext || opts.context;
 
         this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.jhipsterContext.authenticationType);
+        this.officialDatabaseType = constants.OFFICIAL_DATABASE_TYPE_NAMES[this.jhipsterContext.databaseType];
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('entity-server', { context: opts.context });
     }
@@ -101,4 +102,27 @@ module.exports = class extends BaseBlueprintGenerator {
         });
         return { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums };
     }
+
+    _generateTableJoins(relationships) {
+        let joins = [];
+        for (idx in relationships) {
+            let rel = relationships[idx];
+            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
+                joins.push(" LEFT JOIN " + rel.otherEntityTableName + " " + rel.relationshipName + " ON entity." + this.getColumnName(rel.relationshipName) + "_id = " + rel.relationshipName + ".id");
+            }
+        }
+        return joins;
+    }
+
+    _generateEagerRelationsAndEntityTypes(entityClass, relationships) {
+        let eagerRelations = relationships.filter(function(rel) {
+            return rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one';
+        });
+        let uniqueEntityTypes = new Set(eagerRelations.map(function(rel) {
+            return rel.otherEntityNameCapitalized;
+        }));
+        uniqueEntityTypes.add(entityClass);
+        return { eagerRelations, uniqueEntityTypes };
+    }
+
 };

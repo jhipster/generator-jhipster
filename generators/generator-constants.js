@@ -125,6 +125,14 @@ const SUPPORTED_CLIENT_FRAMEWORKS = {
 const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
+const OFFICIAL_DATABASE_TYPE_NAMES = {
+    'cassandra': 'Cassandra',
+    'couchbase': 'Couchbase',
+    'mongodb': 'MongoDB',
+    'neo4j': 'Neo4j',
+    'sql': 'SQL',
+};
+
 const R2DBC_DB_OPTIONS = [
     {
         value: 'mysql',
@@ -330,6 +338,9 @@ const constants = {
     SERVER_MAIN_RES_DIR: `${MAIN_DIR}resources/`,
     SERVER_TEST_SRC_DIR: `${TEST_DIR}java/`,
     SERVER_TEST_RES_DIR: `${TEST_DIR}resources/`,
+
+    // server related
+    OFFICIAL_DATABASE_TYPE_NAMES,
 
     // entity related
     SUPPORTED_VALIDATION_RULES,

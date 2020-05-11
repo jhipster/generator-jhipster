@@ -103,7 +103,7 @@ const serverFiles = {
         },
         {
             condition: generator =>
-                (!generator.reactive || !['mongodb', 'cassandra', 'couchbase', 'neo4j', 'sql'].includes(generator.databaseType)) &&
+                !generator.reactive &&
                 !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
@@ -116,7 +116,6 @@ const serverFiles = {
         {
             condition: generator =>
                 generator.reactive &&
-                ['mongodb', 'cassandra', 'couchbase', 'neo4j', 'sql'].includes(generator.databaseType) &&
                 !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [

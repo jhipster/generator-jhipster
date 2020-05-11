@@ -20,13 +20,7 @@ package <%= packageName %>.repository;
 
 <%_
     let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
-    let eagerRelations = relationships.filter(function(rel) {
-        return rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one';
-    });
-    let uniqueEntityTypes = new Set(eagerRelations.map(function(rel) {
-       return rel.otherEntityNameCapitalized;
-    }));
-    uniqueEntityTypes.add(entityClass);
+    let { eagerRelations, uniqueEntityTypes } = _generateEagerRelationsAndEntityTypes(entityClass, relationships);
 _%>
 import java.util.function.BiFunction;
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -66,7 +60,7 @@ import <%= packageName %>.repository.rowmapper.<%= element %>RowMapper;
 import reactor.core.publisher.Flux;
 
 /**
- * Spring Data <%= humanDatabaseType %> reactive custom repository implementation for the <%= asEntity(entityClass) %> entity.
+ * Spring Data <%= officialDatabaseType %> reactive custom repository implementation for the <%= asEntity(entityClass) %> entity.
  */
 @SuppressWarnings("unused")
 public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>RepositoryInternal {
@@ -78,7 +72,7 @@ public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass
 <%_ }); _%>
 
 <%_
-  let joins = generateTableJoins(relationships);
+  let joins = _generateTableJoins(relationships);
 _%>
     private final static String SELECT = "SELECT "
             + <%= entityClass %>SqlHelper.getColumnNames("entity", "e")

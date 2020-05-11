@@ -48,7 +48,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 <%_ } _%>
 import org.springframework.stereotype.Repository;
-<%_ if (databaseType === 'couchbase' || pagination !== 'no' || fieldsContainOwnerManyToMany === true || databaseType === 'sql') { _%>
+<%_ if (['couchbase', 'sql'].includes(databaseType) || pagination !== 'no' || fieldsContainOwnerManyToMany === true) { _%>
 import reactor.core.publisher.Flux;
 <%_ } _%>
 <%_ if (fieldsContainOwnerManyToMany === true || databaseType === 'sql') { _%>
@@ -60,7 +60,7 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Spring Data <%= humanDatabaseType %> reactive repository for the <%= asEntity(entityClass) %> entity.
+ * Spring Data <%= officialDatabaseType %> reactive repository for the <%= asEntity(entityClass) %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
@@ -71,7 +71,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
     <%_ } _%>
     <%_ if (fieldsContainOwnerManyToMany === true) { _%>
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase')  { _%>
+        <%_ if (['couchbase', 'mongodb'].includes(databaseType)) { _%>
 
     @Query("<%= (databaseType === 'mongodb') ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable pageable);
@@ -91,30 +91,30 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     @Query("MATCH (e:<%= asEntity(entityClass) %> {id: $id}) RETURN e")
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
-        <%_ }
-    }
-    if (databaseType === 'sql') {
-        let joins = generateTableJoins(relationships);
+        <%_ } _%>
+    <%_ } _%>
+    <%_ if (databaseType === 'sql') {
+        let joins = _generateTableJoins(relationships);
     _%>
 
     @Query("SELECT * FROM <%= entityTableName %> entity "
-<%_     for (idx in joins) { _%>
+      <%_ for (idx in joins) { _%>
                 + "<%= joins[idx] %>"
-<%_     } _%>
+      <%_ } _%>
                 + " WHERE entity.id = :id")
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
 
     @Query("SELECT * FROM <%= entityTableName %> entity "
-<%_     for (idx in joins) { _%>
+      <%_ for (idx in joins) { _%>
                 + "<%= joins[idx] %>"
-<%_     } _%>
+      <%_ } _%>
                 )
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
 
     @Query("SELECT * FROM <%= entityTableName %> entity "
-<%_     for (idx in joins) { _%>
+      <%_ for (idx in joins) { _%>
                 + "<%= joins[idx] %>"
-<%_     } _%>
+      <%_ } _%>
                 )
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
 

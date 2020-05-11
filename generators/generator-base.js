@@ -1604,17 +1604,6 @@ module.exports = class JHipsterBaseGenerator extends PrivateBase {
         return joinTableName;
     }
 
-    generateTableJoins(relationships) {
-        let joins = [];
-        for (idx in relationships) {
-            let rel = relationships[idx];
-            if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
-                joins.push(" LEFT JOIN " + rel.otherEntityTableName + " " + rel.relationshipName + " ON entity." + this.getColumnName(rel.relationshipName) + "_id = " + rel.relationshipName + ".id");
-            }
-        }
-        return joins;
-    }
-
     /**
      * get a constraint name for tables in JHipster preferred style after applying any length limits required.
      *
