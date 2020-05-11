@@ -18,6 +18,7 @@
  */
 const commander = require('commander');
 const chalk = require('chalk');
+const didYouMean = require('didyoumean');
 
 const packageJson = require('../package.json');
 const {
@@ -28,6 +29,7 @@ const {
     toString,
     getCommand,
     getCommandOptions,
+    addKebabCase,
     getArgs,
     done,
     loadAllBlueprintsWithVersion,
@@ -52,6 +54,8 @@ const sharedOptions = loadSharedOptions(blueprintsPackagePath) || {};
 // Env will forward sharedOptions to every generator
 Object.assign(env.sharedOptions, sharedOptions);
 
+program.storeOptionsAsProperties(false).passCommandToAction(false).version(version).usage('[command] [options]').allowUnknownOption();
+
 /* setup debugging */
 logger.init(program);
 
@@ -72,38 +76,103 @@ const runYoCommand = (cmd, args, options, opts) => {
     }
 };
 
-program.version(version).usage('[command] [options]').allowUnknownOption();
-
 const blueprintCommands = loadBlueprintCommands(blueprintsPackagePath);
 const allCommands = { ...SUB_GENERATORS, ...blueprintCommands };
 
 /* create commands */
 Object.entries(allCommands).forEach(([key, opts]) => {
-    const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: opts.default });
+    const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: key === 'app' });
     if (opts.alias) {
         command.alias(opts.alias);
     }
     command
         .allowUnknownOption()
         .description(opts.desc)
-        .action(args => {
-            const options = getCommandOptions(packageJson, process.argv.slice(2));
+        .action((first, second, third) => {
+            let args;
+            let cmdOptions;
+            let unknownArgs;
+            logger.debug(`first command arg: ${toString(first)}`);
+            logger.debug(`second command arg: ${toString(second)}`);
+            logger.debug(`third command arg: ${toString(third)}`);
+
+            if (opts.argument) {
+                // Option that contains arguments
+                // first=arguments second=cmdOptions third=unknownArgs
+                if (Array.isArray(first)) {
+                    // Var args unknown options are concatenated.
+                    // consider valid args before first unknown option (starts with -).
+                    args = [];
+                    unknownArgs = [];
+                    let unknown = false;
+                    first.forEach(item => {
+                        if (item.startsWith('-')) {
+                            unknown = true;
+                        }
+                        if (unknown) {
+                            unknownArgs.push(item);
+                        } else {
+                            args.push(item);
+                        }
+                    });
+                } else if (first !== undefined) {
+                    args = [first];
+                }
+                cmdOptions = second;
+                if (third) {
+                    unknownArgs = (unknownArgs || []).concat(third);
+                }
+            } else {
+                // Option that doesn't contain arguments
+                // first=cmdOptions second=unknownArgs
+                args = [];
+                cmdOptions = first;
+                unknownArgs = second || [];
+            }
+
+            const firstUnknownArg = Array.isArray(unknownArgs) && unknownArgs.length > 0 ? unknownArgs[0] : undefined;
+            if (key === 'app' && firstUnknownArg !== undefined && !firstUnknownArg.startsWith('-')) {
+                // Unknown commands.
+                /* eslint-disable-next-line no-console */
+                console.error(
+                    chalk.red(`${chalk.yellow(firstUnknownArg)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`)
+                );
+
+                const cmd = Object.values(args).join('');
+                const availableCommands = program.commands.map(c => c._name);
+
+                const suggestion = didYouMean(cmd, availableCommands);
+                if (suggestion) {
+                    logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
+                }
+
+                process.exit(1);
+            }
+
+            // Get unknown options and parse.
+            const options = {
+                ...getCommandOptions(packageJson, unknownArgs),
+                ...addKebabCase(program.opts()),
+                ...addKebabCase(cmdOptions),
+            };
+
             if (opts.cliOnly) {
                 logger.debug('Executing CLI only script');
                 /* eslint-disable global-require, import/no-dynamic-require */
-                require(`./${key}`)(program.args, options, env);
+                require(`./${key}`)(args, options, env);
                 /* eslint-enable */
             } else {
                 const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
-                runYoCommand(namespace, program.args, options, opts);
+                runYoCommand(namespace, args, options, opts);
             }
         })
         .on('--help', () => {
             if (opts.help) {
                 logger.info(opts.help);
             } else {
-                logger.debug('Adding additional help info');
-                env.run(`${JHIPSTER_NS}:${key} --help`, done);
+                /* eslint-disable-next-line no-console */
+                console.log('\n\nAdding additional help info');
+                env.run(`${JHIPSTER_NS}:${key}`, { help: true }, done);
             }
         });
 });
@@ -115,11 +184,3 @@ initHelp(program, CLI_NAME);
 initAutoCompletion(program, CLI_NAME);
 
 program.parse(process.argv);
-
-/* Run default when no commands are specified */
-if (program.rawArgs.length < 3 || program.rawArgs[2].startsWith('-')) {
-    logger.debug('No command specified. Running default');
-    logger.info(chalk.yellow('Running default command'));
-    const options = getCommandOptions(packageJson, process.argv.slice(2));
-    runYoCommand(`${JHIPSTER_NS}:app`, [], options, {});
-}
