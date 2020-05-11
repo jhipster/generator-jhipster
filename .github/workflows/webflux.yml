@@ -75,6 +75,7 @@ jobs:
                     #                    - webflux-couchbase
                     #                    - webflux-couchbase-es-oauth2
                     - webflux-psql
+                    - webflux-mysql
                 include:
                     - app-type: webflux-mongodb
                       entity: mongodb
@@ -112,7 +113,12 @@ jobs:
                     #                      war: 0
                     #                      e2e: 1
                     - app-type: webflux-psql
-                      entity: none
+                      entity: sql
+                      profile: prod
+                      war: 0
+                      protractor: 1
+                    - app-type: webflux-mysql
+                      entity: sqlfull
                       profile: prod
                       war: 0
                       e2e: 1
