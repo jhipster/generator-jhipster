@@ -59,7 +59,7 @@ describe('Directive: JhiSortByDirective', () => {
         expect(sortByDirective.jhiSortBy).toEqual('name');
         expect(component.predicate).toEqual('_score');
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual('sort');
+        expect(sortByDirective.iconComponent.icon).toEqual('sort');
         expect(sortDirective.activeIconComponent).toBeUndefined();
         expect(component.transition).toHaveBeenCalledTimes(0);
     });
@@ -78,7 +78,7 @@ describe('Directive: JhiSortByDirective', () => {
         expect(sortByDirective.jhiSortBy).toEqual('name');
         expect(component.predicate).toEqual('id');
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual('sort');
+        expect(sortByDirective.iconComponent.icon).toEqual('sort');
         expect(sortDirective.activeIconComponent).toBeUndefined();
         expect(component.transition).toHaveBeenCalledTimes(0);
     });
@@ -99,9 +99,9 @@ describe('Directive: JhiSortByDirective', () => {
         expect(component.predicate).toEqual('name');
         expect(component.ascending).toEqual(true);
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortUp);
+        expect(sortByDirective.iconComponent.icon).toEqual(faSortUp.iconName);
         expect(sortDirective.activeIconComponent).toBeDefined();
-        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortUp);
+        expect(sortDirective.activeIconComponent.icon).toEqual(faSortUp.iconName);
         expect(component.transition).toHaveBeenCalledTimes(0);
     });
 
@@ -123,7 +123,7 @@ describe('Directive: JhiSortByDirective', () => {
         expect(component.predicate).toEqual('_score');
         expect(component.ascending).toEqual(true);
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual('sort');
+        expect(sortByDirective.iconComponent.icon).toEqual('sort');
         expect(sortDirective.activeIconComponent).toBeUndefined();
         expect(component.transition).toHaveBeenCalledTimes(0);
     });
@@ -145,9 +145,9 @@ describe('Directive: JhiSortByDirective', () => {
         expect(component.predicate).toEqual('name');
         expect(component.ascending).toEqual(false);
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortDown);
+        expect(sortByDirective.iconComponent.icon).toEqual(faSortDown.iconName);
         expect(sortDirective.activeIconComponent).toBeDefined();
-        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortDown);
+        expect(sortDirective.activeIconComponent.icon).toEqual(faSortDown.iconName);
         expect(component.transition).toHaveBeenCalledTimes(1);
     });
 
@@ -173,9 +173,9 @@ describe('Directive: JhiSortByDirective', () => {
         expect(component.predicate).toEqual('name');
         expect(component.ascending).toEqual(true);
         expect(sortByDirective.iconComponent).toBeDefined();
-        expect(sortByDirective.iconComponent.iconProp).toEqual(faSortUp);
+        expect(sortByDirective.iconComponent.icon).toEqual(faSortUp.iconName);
         expect(sortDirective.activeIconComponent).toBeDefined();
-        expect(sortDirective.activeIconComponent.iconProp).toEqual(faSortUp);
+        expect(sortDirective.activeIconComponent.icon).toEqual(faSortUp.iconName);
         expect(component.transition).toHaveBeenCalledTimes(2);
     });
 });
