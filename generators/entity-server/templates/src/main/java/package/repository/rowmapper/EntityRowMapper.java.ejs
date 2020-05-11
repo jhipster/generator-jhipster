@@ -50,7 +50,7 @@ import <%= packageName %>.service.ColumnConverter;
 import io.r2dbc.spi.Row;
 
 /**
- * Converter between {@Row} to <%= asEntity(entityClass) %>, with proper type conversions.
+ * Converter between {@link Row} to {@link <%= asEntity(entityClass) %>}, with proper type conversions.
  */
 @Service
 public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= asEntity(entityClass) %>> {
@@ -59,6 +59,10 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
         this.converter = converter;
     }
 
+    /**
+     * Take a {@link Row} and a column prefix, and extract all the fields.
+     * @return the {@link <%= asEntity(entityClass) %>} stored in the database.
+     */
     @Override
     public <%= asEntity(entityClass) %> apply(Row row, String prefix) {
         <%= asEntity(entityClass) %> entity = new <%= asEntity(entityClass) %>();

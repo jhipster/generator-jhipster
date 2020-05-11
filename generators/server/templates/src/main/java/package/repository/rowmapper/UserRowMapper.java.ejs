@@ -30,7 +30,7 @@ import <%= packageName %>.service.ColumnConverter;
 import io.r2dbc.spi.Row;
 
 /**
- * Converter between {@Row} to User, with proper type conversions.
+ * Converter between {@link Row} to {@link User}, with proper type conversions.
  */
 @Service
 public class UserRowMapper implements BiFunction<Row, String, User> {
@@ -39,6 +39,10 @@ public class UserRowMapper implements BiFunction<Row, String, User> {
         this.converter = converter;
     }
 
+    /**
+     * Take a {@link Row} and a column prefix, and extract all the fields.
+     * @return the {@link User} stored in the database.
+     */
     @Override
     public User apply(Row row, String prefix) {
         User entity = new User();
