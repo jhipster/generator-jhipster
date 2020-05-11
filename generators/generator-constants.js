@@ -31,9 +31,9 @@ const GRADLE_VERSION = '6.4';
 const JIB_VERSION = '2.2.0';
 
 // Libraries version
-const JHIPSTER_DEPENDENCIES_VERSION = '3.7.0-SNAPSHOT';
+const JHIPSTER_DEPENDENCIES_VERSION = '3.7.1';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
-const SPRING_BOOT_VERSION = '2.2.6.RELEASE';
+const SPRING_BOOT_VERSION = '2.2.7.RELEASE';
 const LIQUIBASE_VERSION = '3.8.9';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
@@ -65,7 +65,7 @@ const DOCKER_HAZELCAST_MANAGEMENT_CENTER = 'hazelcast/management-center:3.12.9';
 const DOCKER_MEMCACHED = 'memcached:1.6.5-alpine';
 const DOCKER_REDIS = 'redis:5.0.9';
 const DOCKER_KEYCLOAK = 'jboss/keycloak:10.0.0'; // The version should match the attribute 'keycloakVersion' from /docker-compose/templates/realm-config/jhipster-realm.json.ejs and /server/templates/src/main/docker/config/realm-config/jhipster-realm.json.ejs
-const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.7'; // The version should be coherent with the one from spring-data-elasticsearch project
+const DOCKER_ELASTICSEARCH = 'docker.elastic.co/elasticsearch/elasticsearch:6.8.8'; // The version should be coherent with the one from spring-data-elasticsearch project
 const DOCKER_KAFKA = `confluentinc/cp-kafka:${KAFKA_VERSION}`;
 const DOCKER_ZOOKEEPER = `confluentinc/cp-zookeeper:${KAFKA_VERSION}`;
 const DOCKER_SONAR = 'sonarqube:8.3-community';
@@ -76,7 +76,7 @@ const DOCKER_JHIPSTER_LOGSTASH = 'jhipster/jhipster-logstash:v4.1.0';
 const DOCKER_JHIPSTER_IMPORT_DASHBOARDS = 'jhipster/jhipster-import-dashboards:v4.1.0';
 const DOCKER_JHIPSTER_ZIPKIN = 'jhipster/jhipster-zipkin:v4.1.0';
 const DOCKER_TRAEFIK = 'traefik:1.7.24'; // waiting for https://github.com/jhipster/generator-jhipster/issues/11198
-const DOCKER_CONSUL = 'consul:1.7.2';
+const DOCKER_CONSUL = 'consul:1.7.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.1';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.18.0';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.20.0';

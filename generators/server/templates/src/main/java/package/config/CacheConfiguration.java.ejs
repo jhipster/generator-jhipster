@@ -191,7 +191,7 @@ public class CacheConfiguration {
         <%_ } else { _%>
         JHipsterProperties.Cache.Caffeine caffeine = jHipsterProperties.getCache().getCaffeine();
 
-        CaffeineConfiguration caffeineConfiguration = new CaffeineConfiguration();
+        CaffeineConfiguration<Object, Object> caffeineConfiguration = new CaffeineConfiguration<>();
         caffeineConfiguration.setMaximumSize(OptionalLong.of(caffeine.getMaxEntries()));
         caffeineConfiguration.setExpireAfterWrite(OptionalLong.of(TimeUnit.SECONDS.toNanos(caffeine.getTimeToLiveSeconds())));
         caffeineConfiguration.setStatisticsEnabled(true);

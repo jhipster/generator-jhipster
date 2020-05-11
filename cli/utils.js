@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable no-console */
+const assert = require('assert');
 const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 const meow = require('meow');
@@ -221,7 +222,13 @@ const printSuccess = () => {
 const createYeomanEnv = packagePatterns => {
     const env = yeoman.createEnv();
     // Register jhipster generators.
-    env.lookup({ packagePaths: [path.join(__dirname, '..')] });
+    const registeredGenerators = env.lookup({ packagePaths: [path.join(__dirname, '..')] });
+    registeredGenerators.forEach(generator => {
+        assert(
+            generator.namespace.startsWith(`${CLI_NAME}:`),
+            `Error on the registered namespace ${generator.namespace}, make sure your folder is called generator-jhipster.`
+        );
+    });
     if (packagePatterns && packagePatterns.length > 0) {
         // Lookup for blueprints.
         env.lookup({ filterPaths: true, packagePatterns });

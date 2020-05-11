@@ -93,6 +93,7 @@ module.exports = class extends BaseGenerator {
                 this.skipServer = configuration.get('skipServer');
                 this.clientPackageManager = configuration.get('clientPackageManager');
                 this.buildTool = configuration.get('buildTool');
+                this.reactive = configuration.get('reactive');
                 this.herokuAppName = configuration.get('herokuAppName');
                 if (this.herokuAppName === undefined) {
                     this.herokuAppName = _.kebabCase(this.baseName);

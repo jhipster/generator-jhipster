@@ -355,11 +355,9 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-    <%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
+    <%_ if (enableHibernateCache) { _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    <%_ } else { _%>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    <%_ } } _%>
+    <%_ } _%>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
     public <% if (databaseType === 'sql' && authenticationType !== 'oauth2') { %>Long<% } else { %>String<% } %> getId() {
