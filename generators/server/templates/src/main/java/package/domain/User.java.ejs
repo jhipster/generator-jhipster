@@ -115,7 +115,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ } _%>
 <%_ if (databaseType === 'cassandra') { _%>
     <%_ if (reactive) { _%>
-@Table(name = "user")
+@Table("user")
     <%_ } else { _%>
 @Entity
 @NamingStrategy(convention = NamingConvention.SNAKE_CASE_INSENSITIVE)

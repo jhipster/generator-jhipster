@@ -25,14 +25,22 @@ import <%= packageName %>.domain.<%= asEntity('User') %>;
 
 <%_ if (databaseType === 'cassandra') { _%>
 import com.datastax.oss.driver.api.core.CqlIdentifier;
+    <%_ if (!reactive) { _%>
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.PagingIterable;
+    <%_ } _%>
 import com.datastax.oss.driver.api.core.cql.BatchStatement;
 import com.datastax.oss.driver.api.core.cql.BatchStatementBuilder;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
+    <%_ if (!reactive) { _%>
 import com.datastax.oss.driver.api.core.cql.BoundStatementBuilder;
+    <%_ } _%>
 import com.datastax.oss.driver.api.core.cql.DefaultBatchType;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+    <%_ if (reactive) { _%>
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
+    <%_ } _%>
+    <%_ if (!reactive) { _%>
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.mapper.annotations.Dao;
 import com.datastax.oss.driver.api.mapper.annotations.DaoFactory;
@@ -41,9 +49,10 @@ import com.datastax.oss.driver.api.mapper.annotations.Delete;
 import com.datastax.oss.driver.api.mapper.annotations.Insert;
 import com.datastax.oss.driver.api.mapper.annotations.Mapper;
 import com.datastax.oss.driver.api.mapper.annotations.Select;
+    <%_ } _%>
     <%_ if (reactive) { _%>
-import com.datastax.oss.driver.api.querybuilder.insert.Insert;
 import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.querybuilder.insert.RegularInsert;
     <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngine === 'couchbase') { _%>
@@ -85,7 +94,9 @@ import org.springframework.data.cassandra.core.mapping.CassandraPersistentEntity
 <%_ } _%>
 import org.springframework.stereotype.Repository;
 <%_ if (databaseType === 'cassandra') { _%>
+    <%_ if (!reactive) { _%>
 import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
+    <%_ } _%>
 import org.springframework.util.StringUtils;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -602,40 +613,41 @@ public class UserRepository {
                 return deleteOps;
             })
             .then(Mono.defer(() -> {
-                BatchStatement batch = new BatchStatement();
-                batch.add(getInsertStatement(user));
+                BatchStatementBuilder batch = BatchStatement.builder(DefaultBatchType.LOGGED);
+                batch.addStatement(getInsertStatement(user));
                 if (!StringUtils.isEmpty(user.getActivationKey())) {
-                    batch.add(insertByActivationKeyStmt.bind()
+                    batch.addStatement(insertByActivationKeyStmt.bind()
                         .setString("activation_key", user.getActivationKey())
                         .setString("id", user.getId()));
                 }
                 if (!StringUtils.isEmpty(user.getResetKey())) {
-                    batch.add(insertByResetKeyStmt.bind()
+                    batch.addStatement(insertByResetKeyStmt.bind()
                         .setString("reset_key", user.getResetKey())
                         .setString("id", user.getId()));
                 }
-                batch.add(insertByLoginStmt.bind()
+                batch.addStatement(insertByLoginStmt.bind()
                     .setString("login", user.getLogin())
                     .setString("id", user.getId()));
-                batch.add(insertByEmailStmt.bind()
+                batch.addStatement(insertByEmailStmt.bind()
                     .setString("email", user.getEmail().toLowerCase())
                     .setString("id", user.getId()));
-                return session.execute(batch);
+                return session.execute(batch.build());
             }))
             .thenReturn(user);
     }
 
-    private Insert getInsertStatement(User user) {
+    private SimpleStatement getInsertStatement(User user) {
         CassandraConverter converter = cqlTemplate.getConverter();
         CassandraPersistentEntity<?> persistentEntity = converter.getMappingContext()
             .getRequiredPersistentEntity(user.getClass());
-        Map<String, Object> toInsert = new LinkedHashMap<>();
+        Map<CqlIdentifier, Object> toInsert = new LinkedHashMap<>();
         converter.write(user, toInsert, persistentEntity);
-        Insert insert = QueryBuilder.insertInto(persistentEntity.getTableName().toCql());
-        for (Map.Entry<String, Object> entry : toInsert.entrySet()) {
-            insert.value(entry.getKey(), entry.getValue());
+        RegularInsert insert = QueryBuilder.insertInto(persistentEntity.getTableName())
+            .value("id", QueryBuilder.literal(user.getId()));
+        for (Map.Entry<CqlIdentifier, Object> entry : toInsert.entrySet()) {
+            insert = insert.value(entry.getKey(), QueryBuilder.literal(entry.getValue()));
         }
-        return insert;
+        return insert.build();
     }
         <%_ } _%>
 
