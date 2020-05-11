@@ -19,7 +19,6 @@
 
 const defaultCommands = {
     app: {
-        default: true,
         desc: '[Default] Create a new JHipster application based on the selected options',
     },
     aws: {
