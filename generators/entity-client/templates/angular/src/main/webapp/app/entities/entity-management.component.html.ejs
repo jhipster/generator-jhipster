@@ -58,7 +58,7 @@
         <span jhiTranslate="<%= i18nKeyPrefix %>.home.notFound">No <%= entityInstancePlural %> found</span>
     </div>
 
-    <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %>?.length > 0">
+    <div class="table-responsive" id="entities" *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr<% if (pagination !== 'no') { %> jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="<%= pagination !== 'infinite-scroll' ? 'loadPage.bind(this)' : 'reset.bind(this)'%>"<% } %>>
@@ -187,7 +187,7 @@
     </div>
     <%_ if (pagination === 'pagination') { _%>
 
-    <div *ngIf="<%= entityInstancePlural %>?.length > 0">
+    <div *ngIf="<%= entityInstancePlural %> && <%= entityInstancePlural %>.length > 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
