@@ -133,10 +133,6 @@ function writeFiles() {
          * Related to this issue https://github.com/OpenAPITools/openapi-generator/issues/2901 - remove this code when it's fixed.
          */
         addJacksonDataBindNullable() {
-            if (!_.map(this.clientsToGenerate, 'generatorName').includes('spring')) {
-                return;
-            }
-
             if (!this.enableSwaggerCodegen) {
                 if (this.buildTool === 'maven') {
                     this.addMavenProperty('jackson-databind-nullable.version', constants.JACKSON_DATABIND_NULLABLE_VERSION);
