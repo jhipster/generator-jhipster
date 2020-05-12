@@ -3,6 +3,9 @@
 const expect = require('chai').expect;
 const exec = require('child_process').exec;
 const path = require('path');
+const proxyquire = require('proxyquire').noCallThru().noPreserveCache();
+const sinon = require('sinon');
+const Environment = require('yeoman-environment');
 
 const { getJHipsterCli, testInTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
 
@@ -35,6 +38,141 @@ describe('jhipster cli test', () => {
             expect(error.code).to.equal(1);
             expect(stderr.includes('is not a known command')).to.be.true;
             done();
+        });
+    });
+
+    describe('with mocked generator command', () => {
+        const commands = { mocked: {} };
+        let oldArgv;
+        let callback;
+        before(() => {
+            oldArgv = process.argv;
+        });
+        after(() => {
+            process.argv = oldArgv;
+        });
+        beforeEach(() => {
+            commands.mocked = { desc: 'Mocked command' };
+            sinon.stub(Environment.prototype, 'run').callsFake((...args) => {
+                callback(...args);
+            });
+            sinon.stub(Environment.prototype, 'create').returns({ _options: {} });
+        });
+        afterEach(() => {
+            Environment.prototype.run.restore();
+            Environment.prototype.create.restore();
+        });
+
+        describe('without argument', () => {
+            beforeEach(() => {
+                process.argv = ['jhipster', 'jhipster', 'mocked', '--foo', '--foo-bar'];
+            });
+            it('should forward options', done => {
+                callback = (command, options) => {
+                    expect(command).to.not.be.undefined;
+                    expect(command).to.be.equal('jhipster:mocked');
+                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands });
+            });
+        });
+
+        describe('with argument', () => {
+            beforeEach(() => {
+                commands.mocked.argument = ['name'];
+                process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
+            });
+            it('should forward argument and options', done => {
+                callback = (command, options) => {
+                    expect(command).to.be.equal('jhipster:mocked Foo');
+                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands });
+            });
+        });
+
+        describe('with variable arguments', () => {
+            beforeEach(() => {
+                commands.mocked.argument = ['name...'];
+                process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
+            });
+            it('should forward argument and options', done => {
+                callback = (command, options) => {
+                    expect(command).to.be.equal('jhipster:mocked Foo Bar');
+                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands });
+            });
+        });
+    });
+
+    describe('with mocked cliOnly commands', () => {
+        let oldArgv;
+        const commands = { mocked: {} };
+        before(() => {
+            oldArgv = process.argv;
+        });
+        after(() => {
+            process.argv = oldArgv;
+        });
+        beforeEach(() => {
+            commands.mocked = { cb: () => {} };
+        });
+
+        describe('with argument', () => {
+            beforeEach(() => {
+                commands.mocked.desc = 'Mocked command';
+                commands.mocked.argument = ['name'];
+                commands.mocked.cliOnly = true;
+                process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
+            });
+            it('should forward argument and options', done => {
+                const cb = (args, options, env) => {
+                    expect(env).to.not.be.undefined;
+                    expect(args).to.eql(['Foo']);
+                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+            });
+        });
+
+        describe('with variable arguments', () => {
+            beforeEach(() => {
+                commands.mocked.desc = 'Mocked command';
+                commands.mocked.argument = ['name...'];
+                commands.mocked.cliOnly = true;
+                process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
+            });
+            it('should forward argument and options', done => {
+                const cb = (args, options, env) => {
+                    expect(env).to.not.be.undefined;
+                    expect(args).to.eql(['Foo', 'Bar']);
+                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+            });
+        });
+
+        describe('without argument', () => {
+            beforeEach(() => {
+                commands.mocked.desc = 'Mocked command';
+                commands.mocked.cliOnly = true;
+                process.argv = ['jhipster', 'jhipster', 'mocked', '--foo', '--foo-bar'];
+            });
+            it('should forward argument and options', done => {
+                const cb = (args, options, env) => {
+                    expect(env).to.not.be.undefined;
+                    expect(args).to.eql([]);
+                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+            });
         });
     });
 
