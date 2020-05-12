@@ -152,6 +152,18 @@ Example:
     openshift: {
         desc: 'Deploy the current application to OpenShift',
     },
+    sample: {
+        cliOnly: true,
+        argument: ['jdlFile'],
+        desc: 'Creates an application based on sample from https://github.com/jhipster/jdl-samples',
+        options: [
+            {
+                option: '--download-only',
+                desc: 'Download the sample jdl only, skip import-jdl.',
+                default: false,
+            },
+        ],
+    },
     'spring-service': {
         alias: 'service',
         argument: ['name'],
