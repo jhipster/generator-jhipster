@@ -28,7 +28,7 @@ describe('jhipster cli test', () => {
     });
 
     it('should return error on unknown command', function (done) {
-        this.timeout(4000);
+        this.timeout(10000);
 
         exec(`${cmd} junkcmd`, (error, stdout, stderr) => {
             expect(error).to.not.be.null;
@@ -39,7 +39,7 @@ describe('jhipster cli test', () => {
     });
 
     it('should delegate to blueprint on blueprint command but will not find it', function (done) {
-        this.timeout(4000);
+        this.timeout(10000);
 
         testInTempDir(tmpdir => {
             copyFakeBlueprint(tmpdir, 'bar');
@@ -55,7 +55,7 @@ describe('jhipster cli test', () => {
     });
 
     it('should delegate to blueprint on multiple blueprints command but will not find it', function (done) {
-        this.timeout(4000);
+        this.timeout(10000);
 
         testInTempDir(tmpdir => {
             copyFakeBlueprint(tmpdir, 'bar', 'baz');
@@ -72,7 +72,7 @@ describe('jhipster cli test', () => {
     });
 
     it('should delegate to blueprint on multiple blueprints command with sharedOptions and find it', function (done) {
-        this.timeout(4000);
+        this.timeout(10000);
 
         testInTempDir(tmpdir => {
             copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
@@ -88,7 +88,7 @@ describe('jhipster cli test', () => {
     });
 
     it('should delegate to blueprint on multiple blueprints command with multiple sharedOptions and find it', function (done) {
-        this.timeout(4000);
+        this.timeout(10000);
 
         testInTempDir(tmpdir => {
             copyBlueprint(path.join(__dirname, '../templates/blueprint-cli'), tmpdir, 'cli');
