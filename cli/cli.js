@@ -85,6 +85,30 @@ Object.entries(allCommands).forEach(([key, opts]) => {
     if (opts.alias) {
         command.alias(opts.alias);
     }
+
+    (opts.options || []).forEach(opt => {
+        command.option(opt.option, opt.desc, opt.default);
+    });
+
+    if (!opts.cliOnly) {
+        const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
+        const generator = env.create(namespace, { options: { help: true } });
+        Object.entries(generator._options).forEach(([key, value]) => {
+            if (value.hide || key === 'help') {
+                return;
+            }
+            let cmdString = '';
+            if (value.alias) {
+                cmdString = `-${value.alias}, `;
+            }
+            cmdString = `${cmdString}--${key}`;
+            if (value.type === String) {
+                cmdString = `${cmdString} <value>`;
+            }
+            command.option(cmdString, value.description, value.default);
+        });
+    }
+
     command
         .allowUnknownOption()
         .description(opts.desc)
@@ -168,11 +192,8 @@ Object.entries(allCommands).forEach(([key, opts]) => {
         })
         .on('--help', () => {
             if (opts.help) {
-                logger.info(opts.help);
-            } else {
                 /* eslint-disable-next-line no-console */
-                console.log('\n\nAdding additional help info');
-                env.run(`${JHIPSTER_NS}:${key}`, { help: true }, done);
+                console.log(opts.help);
             }
         });
 });

@@ -20,6 +20,12 @@
 const defaultCommands = {
     app: {
         desc: '[Default] Create a new JHipster application based on the selected options',
+        help: `
+Example:
+    jhipster
+
+This will compose jhipster:client, jhipster:server and jhipster:languages to scaffold a full application
+`,
     },
     aws: {
         desc: 'Deploy the current application to Amazon Web Services',
@@ -59,19 +65,54 @@ const defaultCommands = {
     'import-jdl': {
         argument: ['jdlFiles...'],
         cliOnly: true,
+        options: [
+            {
+                option: '--skip-install',
+                desc: 'Do not automatically install dependencies',
+                default: false,
+            },
+            {
+                option: '--interactive',
+                desc: 'Run generation in series so that questions can be interacted with',
+                default: false,
+            },
+            {
+                option: '--db <value>',
+                desc: 'Provide DB option for the application when using skip-server flag',
+            },
+            {
+                option: '--json-only',
+                desc: 'Generate only the JSON files and skip entity regeneration',
+                default: false,
+            },
+            {
+                option: '--ignore-application',
+                desc: 'Ignores application generation',
+                default: false,
+            },
+            {
+                option: '--ignore-deployments',
+                desc: 'Ignores deployments generation',
+                default: false,
+            },
+            {
+                option: '--skip-ui-grouping',
+                desc: 'Disable the UI grouping behavior for entity client side code',
+                default: false,
+            },
+            {
+                option: '--skip-db-changelog',
+                desc: 'Disable generation of database changelogs',
+                default: false,
+            },
+            {
+                option: '--inline <value>',
+                desc: 'Pass JDL content inline. Argument can be skipped when passing this',
+            },
+        ],
         desc: `Create entities from the JDL file/content passed in argument.
   By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
         help: `
-    --skip-install        # Do not automatically install dependencies                              Default: false
-    --interactive         # Run generation in series so that questions can be interacted with      Default: false
-    --db                  # Provide DB option for the application when using skip-server flag
-    --json-only           # Generate only the JSON files and skip entity regeneration              Default: false
-    --ignore-application  # Ignores application generation                                         Default: false
-    --ignore-deployments  # Ignores deployments generation                                         Default: false
-    --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
-    --skip-db-changelog   # Disable generation of database changelogs                              Default: false
-    --inline              # Pass JDL content inline. Argument can be skipped when passing this
-
 Arguments:
     jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
 
