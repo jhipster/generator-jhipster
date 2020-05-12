@@ -43,7 +43,7 @@
         <span jhiTranslate="audits.notFound">No audit found</span>
     </div>
 
-    <div class="table-responsive" *ngIf="audits?.length > 0">
+    <div class="table-responsive" *ngIf="audits && audits.length > 0">
         <table class="table table-sm table-striped" aria-describedby="audits-page-heading">
             <thead [ngSwitch]="canLoad()">
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)" *ngSwitchCase="true">
@@ -65,15 +65,15 @@
                     <td><small>{{ audit.principal }}</small></td>
                     <td>{{ audit.type }}</td>
                     <td>
-                        <span *ngIf="audit.data" ng-show="audit.data.message">{{ audit.data.message }}</span>
-                        <span *ngIf="audit.data" ng-show="audit.data.remoteAddress"><span jhiTranslate="audits.table.data.remoteAddress">Remote Address</span> {{ audit.data.remoteAddress }}</span>
+                        <span *ngIf="audit.data?.message">{{ audit.data.message }}</span>
+                        <span *ngIf="audit.data?.remoteAddress"><span jhiTranslate="audits.table.data.remoteAddress">Remote Address</span> {{ audit.data.remoteAddress }}</span>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div *ngIf="audits?.length > 0">
+    <div *ngIf="audits && audits.length > 0">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>

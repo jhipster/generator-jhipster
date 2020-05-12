@@ -135,7 +135,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">\n' +
                 '                                <a class="nav-link" routerLink="routerName1" (click)="collapseNavbar()">\n' +
-                '                                    <fa-icon icon="iconName1" fixedWidth="true"></fa-icon>\n' +
+                '                                    <fa-icon icon="iconName1" [fixedWidth]="true"></fa-icon>\n' +
                 '                                    <span jhiTranslate="global.menu.routerName1">Router Name 1</span>\n' +
                 '                                </a>\n' +
                 '                            </li>'
@@ -151,7 +151,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '                    <li>\n' +
                 '                        <a class="dropdown-item" routerLink="routerName2" routerLinkActive="active" (click)="collapseNavbar()">\n' +
-                '                            <fa-icon icon="iconName2" fixedWidth="true"></fa-icon>\n' +
+                '                            <fa-icon icon="iconName2" [fixedWidth]="true"></fa-icon>\n' +
                 '                            <span jhiTranslate="global.menu.admin.routerName2">Router Name 2</span>\n' +
                 '                        </a>\n' +
                 '                    </li>'
@@ -167,7 +167,7 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
             `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
             '                    <li>\n' +
                 '                        <a class="dropdown-item" routerLink="routerName3" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">\n' +
-                '                            <fa-icon icon="asterisk" fixedWidth="true"></fa-icon>\n' +
+                '                            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>\n' +
                 '                            <span jhiTranslate="global.menu.entities.routerName3">Router Name 3</span>\n' +
                 '                        </a>\n' +
                 '                    </li>'
