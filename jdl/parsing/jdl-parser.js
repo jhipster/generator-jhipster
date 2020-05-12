@@ -334,7 +334,9 @@ module.exports = class JDLParser extends CstParser {
         this.RULE('enumPropList', () => {
             this.SUBRULE(this.enumProp);
             this.MANY(() => {
-                this.CONSUME(LexerTokens.COMMA);
+                this.OPTION(() => {
+                    this.CONSUME(LexerTokens.COMMA);
+                });
                 this.SUBRULE1(this.enumProp);
             });
         });

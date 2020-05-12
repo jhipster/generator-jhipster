@@ -921,6 +921,73 @@ entity A {
         });
     });
     context('when parsing enums', () => {
+        context('with values separated by commas', () => {
+            let parsedEnum;
+
+            before(() => {
+                const content = parseFromContent(
+                    `enum MyEnum {
+  FRANCE,
+  ENGLAND,
+  ICELAND
+}
+`
+                );
+                parsedEnum = content.enums[0];
+            });
+
+            it('should parse them', () => {
+                expect(parsedEnum).to.deep.equal({
+                    name: 'MyEnum',
+                    values: [
+                        {
+                            key: 'FRANCE',
+                        },
+                        {
+                            key: 'ENGLAND',
+                        },
+                        {
+                            key: 'ICELAND',
+                        },
+                    ],
+                });
+            });
+        });
+        context('with values separated by whitespaces', () => {
+            let parsedEnum;
+
+            before(() => {
+                const content = parseFromContent(
+                    `enum MyEnum {
+  FRANCE ENGLAND("aaa bbb ccc") ICELAND
+  GERMANY
+}
+`
+                );
+                parsedEnum = content.enums[0];
+            });
+
+            it('should parse them', () => {
+                expect(parsedEnum).to.deep.equal({
+                    name: 'MyEnum',
+                    values: [
+                        {
+                            key: 'FRANCE',
+                        },
+                        {
+                            key: 'ENGLAND',
+                            value: 'aaa bbb ccc',
+                        },
+                        {
+                            key: 'ICELAND',
+                        },
+                        {
+                            key: 'GERMANY',
+                        },
+                    ],
+                });
+            });
+        });
         context('without custom values', () => {
             let parsedEnum;
 
