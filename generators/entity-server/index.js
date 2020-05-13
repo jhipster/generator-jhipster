@@ -104,25 +104,28 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     _generateTableJoins(relationships) {
-        let joins = [];
-        for (idx in relationships) {
-            let rel = relationships[idx];
+        const joins = [];
+        Object.values(relationships).forEach(rel => {
             if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') {
-                joins.push(" LEFT JOIN " + rel.otherEntityTableName + " " + rel.relationshipName + " ON entity." + this.getColumnName(rel.relationshipName) + "_id = " + rel.relationshipName + ".id");
+                const colName = this.getColumnName(rel.relationshipName);
+                joins.push(
+                    ` LEFT JOIN ${rel.otherEntityTableName} ${rel.relationshipName} ON entity.${colName}_id = ${rel.relationshipName}.id`
+                );
             }
-        }
+        });
         return joins;
     }
 
     _generateEagerRelationsAndEntityTypes(entityClass, relationships) {
-        let eagerRelations = relationships.filter(function(rel) {
+        const eagerRelations = relationships.filter(function (rel) {
             return rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one';
         });
-        let uniqueEntityTypes = new Set(eagerRelations.map(function(rel) {
-            return rel.otherEntityNameCapitalized;
-        }));
+        const uniqueEntityTypes = new Set(
+            eagerRelations.map(function (rel) {
+                return rel.otherEntityNameCapitalized;
+            })
+        );
         uniqueEntityTypes.add(entityClass);
         return { eagerRelations, uniqueEntityTypes };
     }
-
 };

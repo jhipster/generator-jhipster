@@ -102,9 +102,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                !generator.reactive &&
-                !generator.embedded,
+            condition: generator => !generator.reactive && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -114,9 +112,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                generator.reactive &&
-                !generator.embedded,
+            condition: generator => generator.reactive && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -126,19 +122,18 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                generator.reactive && ['sql'].includes(generator.databaseType) && !generator.embedded,
+            condition: generator => generator.reactive && ['sql'].includes(generator.databaseType) && !generator.embedded,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
                     file: 'package/repository/EntityReactiveRepositoryInternalImpl.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`
+                    renameTo: generator => `${generator.packageFolder}/repository/${generator.entityClass}RepositoryInternalImpl.java`,
                 },
                 {
                     file: 'package/repository/rowmapper/EntityRowMapper.java',
-                    renameTo: generator => `${generator.packageFolder}/repository/rowmapper/${generator.entityClass}RowMapper.java`
-                }
-            ]
+                    renameTo: generator => `${generator.packageFolder}/repository/rowmapper/${generator.entityClass}RowMapper.java`,
+                },
+            ],
         },
         {
             condition: generator => generator.service === 'serviceImpl' && !generator.embedded,

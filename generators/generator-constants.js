@@ -126,11 +126,11 @@ const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
 const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
 const OFFICIAL_DATABASE_TYPE_NAMES = {
-    'cassandra': 'Cassandra',
-    'couchbase': 'Couchbase',
-    'mongodb': 'MongoDB',
-    'neo4j': 'Neo4j',
-    'sql': 'SQL',
+    cassandra: 'Cassandra',
+    couchbase: 'Couchbase',
+    mongodb: 'MongoDB',
+    neo4j: 'Neo4j',
+    sql: 'SQL',
 };
 
 const R2DBC_DB_OPTIONS = [
