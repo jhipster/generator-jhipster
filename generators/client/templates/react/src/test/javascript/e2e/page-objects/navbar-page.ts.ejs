@@ -71,7 +71,7 @@ export default class NavBarPage extends BasePage {
 
   async clickOnAccountMenuItem(item: string) {
     await this.accountMenu.click();
-    await this.selector.$(`.dropdown-item[href="/account/${item}"`).click();
+    await this.selector.$(`.dropdown-item[href="/account/${item}"]`).click();
   }
 
   async clickOnAdminMenuItem(item: string) {
@@ -100,6 +100,6 @@ export default class NavBarPage extends BasePage {
 
   async autoSignOut() {
     await this.accountMenu.click();
-    await this.selector.$(`.dropdown-item[href="/logout"`).click();
+    await this.selector.$(`.dropdown-item[href="/logout"]`).click();
   }
 }
