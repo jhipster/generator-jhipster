@@ -163,11 +163,10 @@ function askForMoreModules() {
 }
 
 function askModulesToBeInstalled(done, generator) {
-
     const jHipsterMajorVersion = packagejs.version.match(/^(\d+)/g);
 
     generator.httpsGet(
-        'https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-' + jHipsterMajorVersion + '&from=0&size=50',
+        `https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-${jHipsterMajorVersion}&from=0&size=50`,
         body => {
             try {
                 const moduleResponse = JSON.parse(body);
