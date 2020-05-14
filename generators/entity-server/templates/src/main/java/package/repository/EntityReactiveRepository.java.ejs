@@ -125,6 +125,9 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id = :id")
     Flux<<%= asEntity(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>(<%= primaryKeyType %> id);
+
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id IS NULL")
+    Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
               <%_ } else if (relationshipType === 'many-to-many') { 
                   const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
                   _%>
