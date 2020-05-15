@@ -132,7 +132,7 @@
 <%_ } _%>
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version>1.0.3.RELEASE</blockhound-junit-platform.version>
-        <netty-common.version>4.1.49.Final</netty-common.version>
+        <netty-common.version>4.1.50.Final</netty-common.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
@@ -734,15 +734,13 @@
             <scope>test</scope>
         </dependency>
 <%_ if (reactive) { _%>
-        <!-- # Temporarily disabled see https://github.com/jhipster/generator-jhipster/issues/11599
         <dependency>
             <groupId>io.projectreactor.tools</groupId>
             <artifactId>blockhound-junit-platform</artifactId>
             <version>${blockhound-junit-platform.version}</version>
             <scope>test</scope>
         </dependency>
-        -->
-        <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
+        <!-- See https://github.com/netty/netty/pull/10262 . Remove when Spring Boot has caught up -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-common</artifactId>
