@@ -1296,7 +1296,7 @@ module.exports = class extends PrivateBase {
 
         try {
             let filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`);
-            if (this.context.microservicePath) {
+            if (this.context && this.context.microservicePath) {
                 filename = path.join(this.context.microservicePath, filename);
             }
             // TODO 7.0 filename = this.destinationPath(filename);
