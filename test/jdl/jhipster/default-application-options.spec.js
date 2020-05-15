@@ -398,6 +398,9 @@ describe('DefaultApplicationOptions', () => {
             it('should unset the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
             });
+            it('should set the service discovery type to eureka', () => {
+                expect(options.serviceDiscoveryType).to.equal('eureka');
+            });
         });
         context('when passing custom options', () => {
             let options;

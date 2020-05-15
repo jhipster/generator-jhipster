@@ -166,7 +166,7 @@ function getConfigForUAAApplication(customOptions = {}) {
         [AUTHENTICATION_TYPE]: OptionValues[AUTHENTICATION_TYPE].uaa,
         [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].hazelcast,
         [SERVER_PORT]: DEFAULT_SERVER_PORT,
-        [SERVICE_DISCOVERY_TYPE]: false,
+        [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
         ...customOptions,
     };
     delete options[CLIENT_FRAMEWORK];
