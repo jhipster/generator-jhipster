@@ -260,7 +260,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    <%_ if (!SPRING_BOOT_VERSION.endsWith('-RELEASE')) { _%>
+    <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
     maven { url 'https://repo.spring.io/milestone' }
     <%_ } _%>
     <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
