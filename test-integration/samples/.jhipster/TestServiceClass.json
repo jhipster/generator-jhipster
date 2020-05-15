@@ -44,7 +44,7 @@
         }
     ],
     "fields": [],
-    "changelogDate": "20160208210109",
+    "changelogDate": "20160208210114",
     "dto": "no",
     "service": "serviceClass",
     "jpaMetamodelFiltering": true,
