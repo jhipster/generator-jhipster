@@ -4,7 +4,8 @@
     "description": "Spring Boot + Angular/React in one handy generator",
     "files": [
         "cli",
-        "generators"
+        "generators",
+        "utils"
     ],
     "keywords": [
         "yeoman-generator",

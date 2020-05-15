@@ -21,6 +21,7 @@ const chalk = require('chalk');
 const faker = require('faker');
 const fs = require('fs');
 const utils = require('../utils');
+const liquibaseUtils = require('../../utils/liquibase');
 const constants = require('../generator-constants');
 
 /* Use customized randexp */
@@ -98,7 +99,7 @@ const serverFiles = {
                     options: {
                         interpolate: INTERPOLATE_REGEX,
                         context: {
-                            getRecentForLiquibase: utils.getRecentDateForLiquibase,
+                            getRecentForLiquibase: liquibaseUtils.getRecentDateForLiquibase,
                             faker,
                             randexp,
                         },
