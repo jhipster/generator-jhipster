@@ -126,7 +126,7 @@ import java.util.Optional;
 <%_ if (databaseType === 'cassandra') { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if ((searchEngine !== false && !reactive) || fieldsContainNoOwnerOneToOne === true) { _%>
+<%_ if ((searchEngine !== false || fieldsContainNoOwnerOneToOne === true) && !reactive) { _%>
     <%_ if (!viaService) { _%>
 import java.util.stream.Collectors;
     <%_ } _%>
