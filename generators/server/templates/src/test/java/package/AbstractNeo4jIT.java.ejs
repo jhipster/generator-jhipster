@@ -29,7 +29,7 @@ public class AbstractNeo4jIT implements BeforeAllCallback {
 
     private static final AtomicBoolean started = new AtomicBoolean(false);
 
-    private Neo4jContainer neo4jContainer = new Neo4jContainer("neo4j:4.0.3").withoutAuthentication();
+    private Neo4jContainer neo4jContainer = new Neo4jContainer("<%= DOCKER_NEO4J %>").withoutAuthentication();
 
     public void beforeAll(ExtensionContext extensionContext) {
         if (!started.get()) {
