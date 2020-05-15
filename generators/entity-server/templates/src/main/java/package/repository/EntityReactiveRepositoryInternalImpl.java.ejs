@@ -144,6 +144,9 @@ class <%= entityClass %>SqlHelper {
   let columns = "%1$s.id as %2$s_id";
   fields.forEach(function(field) {
       columns = columns + ",%1$s." + field.fieldNameAsDatabaseColumn + " as %2$s_" + field.fieldNameAsDatabaseColumn;
+      if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') {
+          columns = columns + ',%1$s.' + field.fieldNameAsDatabaseColumn + '_content_type as %2$s_' + field.fieldNameAsDatabaseColumn + '_content_type';
+      }
   });
   eagerRelations.forEach(function(rel) {
       columns = columns + ",%1$s." + getColumnName(rel.relationshipName) +"_id as %2$s_" + getColumnName(rel.relationshipName)+ "_id";

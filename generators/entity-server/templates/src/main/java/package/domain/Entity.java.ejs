@@ -485,7 +485,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         <%_ } else { _%>
     public <%= asEntity(entityClass) %> <%= fieldName %>(String <%= fieldName %>) {
         <%_ } _%>
+        <%_ if (fieldType === 'BigDecimal' && databaseType === 'sql' && reactive) { _%>
+        this.<%= fieldName %> = <%= fieldName %> != null ? <%= fieldName %>.stripTrailingZeros() : null;
+        <%_ } else { _%>
         this.<%= fieldName %> = <%= fieldName %>;
+        <%_ } _%>
         return this;
     }
     <%_ } _%>
@@ -495,7 +499,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     <%_ } else { _%>
     public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
     <%_ } _%>
+    <%_ if (fieldType === 'BigDecimal' && databaseType === 'sql' && reactive) { _%>
+        this.<%= fieldName %> = <%= fieldName %> != null ? <%= fieldName %>.stripTrailingZeros() : null;
+    <%_ } else { _%>
         this.<%= fieldName %> = <%= fieldName %>;
+    <%_ } _%>
     }
     <%_ if ((fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent !== 'text') { _%>
 
