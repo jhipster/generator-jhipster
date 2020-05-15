@@ -27,6 +27,10 @@ module.exports = class extends needleServer {
         this.addChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-changelog');
     }
 
+    addIncrementalChangelog(changelogName) {
+        this.addChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-incremental-changelog');
+    }
+
     addConstraintsChangelog(changelogName) {
         this.addChangelogToMaster(changelogName, 'jhipster-needle-liquibase-add-constraints-changelog');
     }

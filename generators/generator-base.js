@@ -539,6 +539,15 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a incremental changelog to the Liquibase master.xml file.
+     *
+     * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+     */
+    addIncrementalChangelogToLiquibase(changelogName) {
+        this.needleApi.serverLiquibase.addIncrementalChangelog(changelogName);
+    }
+
+    /**
      * Add a new constraints changelog to the Liquibase master.xml file.
      *
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
