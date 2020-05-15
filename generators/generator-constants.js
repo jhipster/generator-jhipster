@@ -34,7 +34,7 @@ const JIB_VERSION = '2.2.0';
 const JHIPSTER_DEPENDENCIES_VERSION = '3.7.1';
 // The spring-boot version should match the one managed by https://mvnrepository.com/artifact/io.github.jhipster/jhipster-dependencies/JHIPSTER_DEPENDENCIES_VERSION
 const SPRING_BOOT_VERSION = '2.2.7.RELEASE';
-const LIQUIBASE_VERSION = '3.8.9';
+const LIQUIBASE_VERSION = '3.9.0';
 const liquibaseSemVer = semver.parse(LIQUIBASE_VERSION);
 const LIQUIBASE_DTD_VERSION = `${liquibaseSemVer.major}.${liquibaseSemVer.minor}`;
 
