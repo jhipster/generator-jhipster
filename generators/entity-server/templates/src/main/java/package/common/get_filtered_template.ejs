@@ -20,7 +20,7 @@
 const instanceType = (dto === 'mapstruct') ? asDto(entityClass) : asEntity(entityClass);
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::' + 'toDto';
-const listType = (databaseType === 'sql' && reactive) ? 'Flux' : 'List';
+const reactiveSql = (databaseType === 'sql' && reactive);
 for (const idx in relationships) { if (relationships[idx].relationshipType === 'one-to-one' && relationships[idx].ownerSide !== true) { %>
 
     /**
@@ -28,9 +28,9 @@ for (const idx in relationships) { if (relationships[idx].relationshipType === '
      *  @return the list of entities.
      */<% if (databaseType === 'sql') { %>
     @Transactional(readOnly = true) <% } %>
-    public <%= listType %><<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull() {
+    public <%= reactiveSql ? 'Flux' : 'List' %><<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull() {
         log.debug("Request to get all <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null");
-        <%_ if (databaseType === 'sql' && reactive) { _%>
+        <%_ if (reactiveSql) { _%>
         return <%= entityInstance %>Repository.findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull()<% if (dto === 'mapstruct') { _%>
              .map(<%= entityToDtoReference %>)<%_ } _%>;
         <%_ } else { _%>
