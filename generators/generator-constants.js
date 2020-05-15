@@ -108,6 +108,10 @@ const HELM_MOGODB_REPLICASET = '^3.10.1';
 
 // all constants used throughout all generators
 
+const LOGIN_REGEX = '^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$';
+// JS does not support atomic groups
+const LOGIN_REGEX_JS = '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$';
+
 const MAIN_DIR = 'src/main/';
 const TEST_DIR = 'src/test/';
 
@@ -304,6 +308,8 @@ const constants = {
     MAIN_DIR,
     TEST_DIR,
 
+    LOGIN_REGEX,
+    LOGIN_REGEX_JS,
     // supported client frameworks
     SUPPORTED_CLIENT_FRAMEWORKS,
 
