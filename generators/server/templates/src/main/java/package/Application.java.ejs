@@ -104,7 +104,9 @@ public class <%= mainClass %> {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
+        ZoneId defaultZoneId = ZoneId.systemDefault();
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        log.info("Timezone changed from {} to UTC", defaultZoneId);
 
         SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
