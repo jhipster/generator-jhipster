@@ -62,7 +62,11 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
     heroku: {
         desc: 'Deploy the current application to Heroku',
     },
-    'import-jdl': {
+    info: {
+        desc: 'Display information about your current project and system',
+    },
+    jdl: {
+        alias: 'import-jdl',
         argument: ['jdlFiles...'],
         cliOnly: true,
         options: [
@@ -130,9 +134,6 @@ Example:
         }"
         `,
     },
-    info: {
-        desc: 'Display information about your current project and system',
-    },
     kubernetes: {
         alias: 'k8s',
         desc: 'Deploy the current application to Kubernetes',
@@ -151,18 +152,6 @@ Example:
     },
     openshift: {
         desc: 'Deploy the current application to OpenShift',
-    },
-    sample: {
-        cliOnly: true,
-        argument: ['jdlFile'],
-        desc: 'Creates an application based on sample from https://github.com/jhipster/jdl-samples',
-        options: [
-            {
-                option: '--download-only',
-                desc: 'Download the sample jdl only, skip import-jdl.',
-                default: false,
-            },
-        ],
     },
     'spring-service': {
         alias: 'service',

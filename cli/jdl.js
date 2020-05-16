@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const chalk = require('chalk');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
@@ -24,47 +25,70 @@ const importJdl = require('./import-jdl');
 
 const { logger } = cliUtils;
 
-module.exports = (args, options = {}, env) => {
-    let file = args[0];
-    let basename;
-    let filename;
-    const fileExtension = path.extname(file);
-    if (fileExtension) {
-        filename = path.basename(file);
-        basename = path.basename(file, fileExtension);
-    } else {
-        filename = `${file}.jdl`;
-        basename = file;
+/**
+ * Add jdl extension to the file
+ */
+const toJdlFile = file => {
+    if (!path.extname(file)) {
+        return `${file}.jdl`;
     }
-    if (!file || !path.isAbsolute(file)) {
-        file = `https://raw.githubusercontent.com/jhipster/jdl-samples/master/${filename}`;
-    }
+    return file;
+};
 
-    logger.debug(`Downloading file: ${file}`);
-    https
-        .get(file, response => {
-            if (response.statusCode !== 200) {
-                logger.error(`Error downloading ${file}: ${response.statusCode} - ${response.statusMessage}`);
-                return;
-            }
+const downloadFile = (url, filename) => {
+    return new Promise((resolve, reject) => {
+        logger.info(`Downloading file: ${url}`);
+        https
+            .get(url, response => {
+                if (response.statusCode !== 200) {
+                    return reject(new Error(`Error downloading ${url}: ${response.statusCode} - ${response.statusMessage}`));
+                }
 
-            logger.debug(`Creating folder: ${basename}`);
-            if (!fs.existsSync(basename)) {
-                fs.mkdirSync(basename);
-            }
-            logger.debug(`Creating file: ${path.join(basename, filename)}`);
-            const fileStream = fs.createWriteStream(`${basename}/${filename}`);
-            fileStream.on('finish', () => {
-                fileStream.close(() => {
-                    if (!options.downloadOnly) {
-                        process.chdir(path.resolve(basename));
-                        importJdl([`${filename}`], options, env);
-                    }
+                logger.debug(`Creating file: ${path.join(filename)}`);
+                const fileStream = fs.createWriteStream(`${filename}`);
+                fileStream.on('finish', () => {
+                    fileStream.close(() => {
+                        resolve(filename);
+                    });
                 });
+                response.pipe(fileStream);
+                return undefined;
+            })
+            .on('error', e => {
+                reject(e);
             });
-            response.pipe(fileStream);
-        })
-        .on('error', e => {
-            logger.error(e.message, e);
-        });
+    });
+};
+/**
+ * JDL command
+ * @param {any} args arguments passed for import-jdl
+ * @param {any} options options passed from CLI
+ * @param {any} env the yeoman environment
+ * @param {function} forkProcess the method to use for process forking
+ */
+module.exports = (args, options = {}, env, forkProcess) => {
+    logger.debug('cmd: import-jdl from ./import-jdl');
+    logger.debug(`args: ${toString(args)}`);
+    if (options.inline) {
+        return importJdl(args, options, env, forkProcess);
+    }
+    if (!args || args.length === 0) {
+        logger.fatal(chalk.red('\nAt least one jdl file is required.\n'));
+    }
+    const promises = args.map(toJdlFile).map(filename => {
+        if (!fs.existsSync(filename)) {
+            let url;
+            try {
+                const urlObject = new URL(filename);
+                url = filename;
+                filename = path.basename(urlObject.pathname);
+            } catch (_error) {
+                url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/master/').toString();
+                filename = path.basename(filename);
+            }
+            return downloadFile(url, filename);
+        }
+        return Promise.resolve(filename);
+    });
+    return Promise.all(promises).then(jdlFiles => importJdl(jdlFiles, options, env, forkProcess));
 };
