@@ -55,7 +55,7 @@ function convert(jdlOptionHolder) {
 
 function resolveEntityNamesForEachOption(jdlOptionHolder) {
     jdlOptionHolder.forEachOption(jdlOption => {
-        if (jdlOption.entityNames.size === 1 && jdlOption.entityNames.has('*')) {
+        if (jdlOption.entityNames.has('*')) {
             jdlOption.setEntityNames(
                 jdlOptionHolder
                     .getEntityNames()
