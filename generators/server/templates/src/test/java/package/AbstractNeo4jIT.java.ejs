@@ -31,7 +31,7 @@ public class AbstractNeo4jIT implements BeforeAllCallback {
 
     private static AtomicBoolean started = new AtomicBoolean(false);
 
-    private Neo4jContainer neo4jContainer = new Neo4jContainer("<%= DOCKER_NEO4J %>").withoutAuthentication();
+    private static Neo4jContainer neo4jContainer = new Neo4jContainer("<%= DOCKER_NEO4J %>").withoutAuthentication();
 
     @DynamicPropertySource
     static void neo4jProperties(DynamicPropertyRegistry registry) {
