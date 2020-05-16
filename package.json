@@ -83,8 +83,8 @@
         "test": "^0.6.0",
         "through2": "3.0.1",
         "uuid": "7.0.3",
-        "yeoman-environment": "2.9.6",
-        "yeoman-generator": "4.9.0"
+        "yeoman-environment": "2.10.2",
+        "yeoman-generator": "4.10.1"
     },
     "devDependencies": {
         "@openapitools/openapi-generator-cli": "1.0.12-4.3.0",
