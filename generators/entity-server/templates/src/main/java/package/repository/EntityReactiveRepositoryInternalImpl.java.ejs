@@ -58,6 +58,7 @@ import <%= packageName %>.repository.rowmapper.<%= element %>RowMapper;
 <%_ }); _%>
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Spring Data <%= officialDatabaseType %> reactive custom repository implementation for the <%= asEntity(entityClass) %> entity.
@@ -115,18 +116,18 @@ _%>
 
 <%_ } _%>
     @Override
-    public Flux<<%= asEntity(entityClass) %>> findAllEager() {
+    public Flux<<%= asEntity(entityClass) %>> findAll() {
         return db.execute(SELECT)
                 .map(this::process)
                 .all();
     }
 
     @Override
-    public Flux<<%= asEntity(entityClass) %>> findOneEager(<%= primaryKeyType %> id) {
+    public Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKeyType %> id) {
         return db.execute(SELECT + " WHERE entity.id = :id")
                 .bind("id", id)
                 .map(this::process)
-                .all();
+                .one();
     }
 
     private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {

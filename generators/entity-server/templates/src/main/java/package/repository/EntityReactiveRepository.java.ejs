@@ -136,13 +136,20 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     Flux<<%= asEntity(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>(<%= primaryKeyType %> id);
               <%_ } _%>
         <%_ } _%>
+
+    // just to avoid having unambigous methods
+    @Override
+    Flux<<%= asEntity(entityClass) %>> findAll();
+
+    @Override
+    Mono<<%= asEntity(entityClass) %>> findById(Long id);
     <%_ } _%>
 
 }
 <%_ if (databaseType === 'sql') { _%>
 interface <%= entityClass %>RepositoryInternal {
-    Flux<<%= asEntity(entityClass) %>> findAllEager();
-    Flux<<%= asEntity(entityClass) %>> findOneEager(<%= primaryKeyType %> id);
+    Flux<<%= asEntity(entityClass) %>> findAll();
+    Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKeyType %> id);
 
   <%_ if (pagination !== 'no') { _%>
     Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);

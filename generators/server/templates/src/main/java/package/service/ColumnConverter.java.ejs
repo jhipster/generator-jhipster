@@ -62,7 +62,13 @@ public class ColumnConverter {
      * Convert a value from the {@link Row} to a type - throws an exception, it it's impossible.
      */
     public <T> T fromRow(Row row, String columnName, Class<T> target) {
-        return convert(row.get(columnName), target);
+        try {
+            // try, directly the driver
+            return row.get(columnName, target);
+        } catch (Exception e) {
+            Object obj = row.get(columnName);
+            return convert(obj, target);
+        }
     }
 
 }
