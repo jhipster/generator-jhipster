@@ -45,7 +45,7 @@
         }
     ],
     "fields": [],
-    "changelogDate": "20160208210109",
+    "changelogDate": "20160208210116",
     "entityTableName": "test_multiple_rel",
     "dto": "no",
     "service": "no",

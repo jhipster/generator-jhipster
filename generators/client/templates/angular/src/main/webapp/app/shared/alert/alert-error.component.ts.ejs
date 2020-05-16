@@ -149,6 +149,7 @@ export class AlertErrorComponent implements OnDestroy {
     }
 
     close(alert: JhiAlert): void {
-        alert.close?.(this.alerts);
+        // NOSONAR can be removed after https://github.com/SonarSource/SonarJS/issues/1930 is resolved
+        alert.close?.(this.alerts); // NOSONAR
     }
 }

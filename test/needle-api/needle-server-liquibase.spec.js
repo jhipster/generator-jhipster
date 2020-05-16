@@ -62,6 +62,10 @@ const mockBlueprintSubGen = class extends ServerGenerator {
                 this.addConstraintsChangelogToLiquibase('aNewConstraintsChangeLog');
                 this.addLiquibaseChangelogToMaster('aNewChangeLogWithNeedle', 'jhipster-needle-liquibase-add-changelog');
             },
+            addIncrementalChangelog() {
+                this.addIncrementalChangelogToLiquibase('incrementalChangeLogWithNeedle');
+                this.addIncrementalChangelogToLiquibase('incrementalChangeLogWithNeedle2');
+            },
             addColumnStep() {
                 this.addColumnToLiquibaseEntityChangeset(
                     `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/dummy_changelog.xml`,
@@ -134,6 +138,17 @@ describe('needle API server liquibase: JHipster server generator with blueprint'
         assert.fileContent(
             `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
             '<include file="config/liquibase/changelog/aNewChangeLog.xml" relativeToChangelogFile="false"/>'
+        );
+    });
+
+    it('Assert incremental changelog is added to master.xml', () => {
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
+            '<include file="config/liquibase/changelog/incrementalChangeLogWithNeedle.xml" relativeToChangelogFile="false"/>'
+        );
+        assert.fileContent(
+            `${SERVER_MAIN_RES_DIR}config/liquibase/master.xml`,
+            '<include file="config/liquibase/changelog/incrementalChangeLogWithNeedle2.xml" relativeToChangelogFile="false"/>'
         );
     });
 

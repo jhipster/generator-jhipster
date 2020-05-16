@@ -27,17 +27,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AbstractNeo4jIT implements BeforeAllCallback {
 
-    private static final AtomicBoolean started = new AtomicBoolean(false);
+    private static AtomicBoolean started = new AtomicBoolean(false);
 
-    private Neo4jContainer neo4jContainer = new Neo4jContainer("neo4j:4.0.3").withoutAuthentication();
+    private Neo4jContainer neo4jContainer = new Neo4jContainer("<%= DOCKER_NEO4J %>").withoutAuthentication();
 
-    public void beforeAll(ExtensionContext extensionContext) {
+    @DynamicPropertySource
+    static void neo4jProperties(DynamicPropertyRegistry registry) {
+        registry.add("org.neo4j.driver.uri", () -> neo4jContainer.getBoltUrl());
+    }
+
+    @Override
+    public void beforeAll(ExtensionContext extensionContext) throws Exception {
         if (!started.get()) {
             neo4jContainer.start();
-            System.setProperty(
-                "org.neo4j.driver.uri",
-                neo4jContainer.getBoltUrl()
-            );
             started.set(true);
         }
     }

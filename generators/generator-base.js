@@ -539,6 +539,15 @@ module.exports = class extends PrivateBase {
     }
 
     /**
+     * Add a incremental changelog to the Liquibase master.xml file.
+     *
+     * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
+     */
+    addIncrementalChangelogToLiquibase(changelogName) {
+        this.needleApi.serverLiquibase.addIncrementalChangelog(changelogName);
+    }
+
+    /**
      * Add a new constraints changelog to the Liquibase master.xml file.
      *
      * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
@@ -882,21 +891,46 @@ module.exports = class extends PrivateBase {
 
     /**
      * Generate a date to be used by Liquibase changelogs.
+     *
+     * @param {Boolean} [reproducible=true] - Set true if the changelog date can be reproducible.
+     *                                 Set false to create a changelog date incrementing the last one.
+     * @return {String} Changelog date.
      */
-    dateFormatForLiquibase() {
+    dateFormatForLiquibase(reproducible = true) {
         let now = new Date();
+        // Miliseconds is ignored for changelogDate.
+        now.setMilliseconds(0);
         // Run reproducible timestamp when regenerating the project with with-entities option.
-        if (this.options.withEntities || this.options.creationTimestamp) {
-            if (this.configOptions.lastLiquibaseTimestamp) {
+        if (reproducible && (this.options.withEntities || this.options.creationTimestamp)) {
+            if (this.configOptions.reproducibleLiquibaseTimestamp) {
                 // Counter already started.
-                now = this.configOptions.lastLiquibaseTimestamp;
+                now = this.configOptions.reproducibleLiquibaseTimestamp;
             } else {
                 // Create a new counter
                 const creationTimestamp = this.parseCreationTimestamp() || this.config.get('creationTimestamp');
                 now = creationTimestamp ? new Date(creationTimestamp) : now;
+                now.setMilliseconds(0);
             }
             now.setMinutes(now.getMinutes() + 1);
-            this.configOptions.lastLiquibaseTimestamp = now;
+            this.configOptions.reproducibleLiquibaseTimestamp = now;
+
+            // Reproducible build can create future timestamp, save it.
+            const lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
+            if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
+                this.config.set('lastLiquibaseTimestamp', now.getTime());
+            }
+        } else {
+            // Get and store lastLiquibaseTimestamp, a future timestamp can be used
+            let lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
+            if (lastLiquibaseTimestamp) {
+                lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
+                if (lastLiquibaseTimestamp > now) {
+                    now = lastLiquibaseTimestamp;
+                    now.setSeconds(now.getSeconds() + 1);
+                    now.setMilliseconds(0);
+                }
+            }
+            this.config.set('lastLiquibaseTimestamp', now.getTime());
         }
 
         const nowUTC = new Date(
@@ -1296,7 +1330,7 @@ module.exports = class extends PrivateBase {
 
         try {
             let filename = path.join(JHIPSTER_CONFIG_DIR, `${_.upperFirst(file)}.json`);
-            if (this.context.microservicePath) {
+            if (this.context && this.context.microservicePath) {
                 filename = path.join(this.context.microservicePath, filename);
             }
             // TODO 7.0 filename = this.destinationPath(filename);

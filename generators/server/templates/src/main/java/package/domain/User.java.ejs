@@ -336,9 +336,9 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
         <%_ if (enableHibernateCache) { if (cacheProvider === 'infinispan') { _%>
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE) 
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
             <%_ } else { _%>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE) 
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
         <%_ } } _%>
     @BatchSize(size = 20)
     <%_ } _%>
@@ -495,6 +495,7 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "<%= asEntity('User') %>{" +
