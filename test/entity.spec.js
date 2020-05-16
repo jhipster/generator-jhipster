@@ -950,4 +950,27 @@ describe('JHipster generator for entity', () => {
             });
         });
     });
+    describe('regeneration from app generator', () => {
+        describe('with creation timestamp', () => {
+            before(done => {
+                helpers
+                    .run(require.resolve('../generators/app'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, '../test/templates/default-ng2'), dir);
+                        const jhipsterFolder = path.join(dir, '.jhipster');
+                        fse.ensureDirSync(jhipsterFolder);
+                        fse.writeJsonSync(path.join(jhipsterFolder, 'Foo.json'), {});
+                    })
+                    .withOptions({ creationTimestamp: '2016-01-20', withEntities: true })
+                    .on('end', done);
+            });
+
+            it('creates expected default files', () => {
+                assert.file(expectedFiles.server);
+                assert.file(expectedFiles.serverLiquibase);
+                assert.file(expectedFiles.clientNg2);
+                assert.file(expectedFiles.gatling);
+            });
+        });
+    });
 });
