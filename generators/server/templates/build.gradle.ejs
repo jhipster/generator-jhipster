@@ -293,6 +293,11 @@ dependencies {
     implementation group: "io.github.jhipster", name: "jhipster-framework"<% if (reactive) { %>, {
         exclude group: "org.springframework", module: "spring-webmvc"
     }<% } %>
+    <%_ // This is useful for major Spring Boot migration
+        // FIXME: remove the condition on JHIPSTER_DEPENDENCIES_VERSION once Spring Boot 2.3 migration is done
+    if (JHIPSTER_DEPENDENCIES_VERSION.endsWith('-SNAPSHOT') || !SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
+    runtime("org.springframework.boot:spring-boot-properties-migrator")
+    <%_ } _%>
     implementation "javax.annotation:javax.annotation-api"
     <%_ if (cacheProvider !== 'no') { _%>
     implementation "org.springframework.boot:spring-boot-starter-cache"
