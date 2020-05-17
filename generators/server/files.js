@@ -1571,22 +1571,6 @@ const serverFiles = {
     ],
     serverJavaUserManagement: [
         {
-            // Must be generated everytime either User or UserDTO is generated
-            condition: generator => (generator.authenticationType === 'oauth2' || !generator.skipUserManagement),
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
-                { file: 'package/validation/constraints/ValidLogin.java', renameTo: generator => `${generator.javaDir}validation/constraints/ValidLogin.java` },
-                { file: 'package/validation/constraints/ValidLoginValidator.java', renameTo: generator => `${generator.javaDir}validation/constraints/ValidLoginValidator.java` },
-            ]
-        },
-        {
-            condition: generator => (generator.authenticationType === 'oauth2' || !generator.skipUserManagement),
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                { file: 'package/validation/constraints/ValidLoginValidatorTest.java', renameTo: generator => `${generator.testDir}validation/constraints/ValidLoginValidatorTest.java` },
-            ]
-        },
-        {
             condition: generator =>
                 (generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice') ||
                 (!generator.skipUserManagement && generator.databaseType === 'sql'),
