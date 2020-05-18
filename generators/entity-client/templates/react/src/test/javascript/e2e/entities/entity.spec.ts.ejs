@@ -29,16 +29,16 @@ import { waitUntilDisplayed, waitUntilAnyDisplayed, click, getRecordsCount, wait
 import path from 'path';
 <%_ } _%>
 <%_
-let elementGetter = `getText()`;
-let openBlockComment = ``;
-let closeBlockComment = ``;
+let elementGetter = 'getText()';
+let openBlockComment = '';
+let closeBlockComment = '';
 if (enableTranslation) {
-    elementGetter = `getAttribute('jhiTranslate')`;
+    elementGetter = 'getAttribute(\'jhiTranslate\')';
 }
 for (let relationship of relationships) {
     if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
-        openBlockComment = `/* `;
-        closeBlockComment = ` */`;
+        openBlockComment = '/* ';
+        closeBlockComment = ' */';
         break;
     }
 } _%>
@@ -57,7 +57,6 @@ describe('<%= entityClass %> e2e test', () => {
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
 <%_ } _%>
-    let beforeRecordsCount = 0;
 
     before(async () => {
         await browser.get('/');
@@ -76,6 +75,7 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilDisplayed(navBarPage.entityMenu);
         await waitUntilDisplayed(navBarPage.adminMenu);
         await waitUntilDisplayed(navBarPage.accountMenu);
+        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords, <%= entityInstance %>ComponentsPage.table]);
     });
 
     it('should load <%= entityClassPlural %>', async () => {
@@ -87,10 +87,6 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ if (!readOnly) { _%>
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
         <%_ } _%>
-        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
-        <%= entityInstance %>ComponentsPage.table]);
-
-        beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
     });
 
 <%_ if (!readOnly) { _%>
@@ -108,6 +104,7 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
+        const beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         await <%= entityInstance %>ComponentsPage.createButton.click();
         <%_ fields.forEach((field) => {
             const fieldName = field.fieldName;
@@ -181,7 +178,7 @@ describe('<%= entityClass %> e2e test', () => {
     });<%= closeBlockComment %>
 
     <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
-
+        const countBeforeDeletion = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         const deleteButton = <%= entityInstance %>ComponentsPage.getDeleteButton(<%= entityInstance %>ComponentsPage.records.last());
         await click(deleteButton);
 
@@ -196,9 +193,9 @@ describe('<%= entityClass %> e2e test', () => {
 
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
         <%= entityInstance %>ComponentsPage.table]);
-    
+
         const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
-        expect(afterCount).to.eq(beforeRecordsCount);
+        expect(afterCount).to.eq(countBeforeDeletion - 1);
     });<%= closeBlockComment %>
 <%_ } _%>
 
