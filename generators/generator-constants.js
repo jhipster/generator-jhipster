@@ -173,6 +173,7 @@ const LANGUAGES = [
         dispName: 'Shqip',
         value: 'al',
         momentLocaleId: 'sq',
+        localeId: 'sq',
     },
     {
         name: 'Arabic (Libya)',
@@ -180,6 +181,7 @@ const LANGUAGES = [
         value: 'ar-ly',
         rtl: true,
         skipForLocale: true,
+        localeId: 'ar-LY',
     },
     {
         name: 'Armenian',
@@ -192,6 +194,7 @@ const LANGUAGES = [
         dispName: 'Беларускі',
         value: 'by',
         momentLocaleId: 'be-by',
+        localeId: 'be',
     },
     {
         name: 'Bengali',
