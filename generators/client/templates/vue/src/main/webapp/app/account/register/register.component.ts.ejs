@@ -5,7 +5,7 @@ import LoginService from '@/account/login.service';
 import RegisterService from '@/account/register/register.service';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
 
-const loginPattern = helpers.regex('alpha', /^[a-zA-Z0-9!#$&\'*+=?^_`{|}~.-]+@?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+const loginPattern = helpers.regex('alpha', /<%- LOGIN_REGEX %>/);
 const validations: any = {
   registerAccount: {
     login: {
