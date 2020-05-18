@@ -48,7 +48,6 @@ const expect = chai.expect;
 describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
-    let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
 <%_ if (!readOnly) { _%>
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
@@ -80,7 +79,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     it('should load <%= entityClassPlural %>', async () => {
         await navBarPage.getEntityPage('<%= entityStateName %>');
-        <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
+        const <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
         expect(await <%= entityInstance %>ComponentsPage.title.getText())
             .to.match(/<%= entityClassPluralHumanized %>/);
 
@@ -91,6 +90,7 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ if (!readOnly) { _%>
     it('should load create <%= entityClass %> page', async () => {
+        const <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
         await <%= entityInstance %>ComponentsPage.createButton.click();
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
         <%_ if (enableTranslation) { _%>
@@ -104,6 +104,7 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
+        const <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
         const beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         await <%= entityInstance %>ComponentsPage.createButton.click();
         <%_ fields.forEach((field) => {
@@ -178,6 +179,7 @@ describe('<%= entityClass %> e2e test', () => {
     });<%= closeBlockComment %>
 
     <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
+        const <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
         const countBeforeDeletion = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         const deleteButton = <%= entityInstance %>ComponentsPage.getDeleteButton(<%= entityInstance %>ComponentsPage.records.last());
         await click(deleteButton);
