@@ -1,0 +1,23 @@
+{
+    "name": "Foo",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "authority",
+            "otherEntityRelationshipName": "foo",
+            "relationshipName": "authority",
+            "otherEntityField": "name"
+        }
+    ],
+    "changelogDate": "20180905045309",
+    "entityTableName": "foo",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no"
+}
