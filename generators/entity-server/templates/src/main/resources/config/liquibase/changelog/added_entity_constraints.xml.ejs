@@ -30,9 +30,7 @@
             relationshipName = relationships[idx].relationshipName,
             idSuffix = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'name' : 'id',
             ownerSide = relationships[idx].ownerSide,
-            otherEntityTableName = relationships[idx].otherEntityTableName.toLowerCase() === 'authority'
-                    ? 'jhi_' + relationships[idx].otherEntityTableName
-                    : relationships[idx].otherEntityTableName;
+            otherEntityTableName = relationships[idx].otherEntityTableName;
         if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
                 const constraintName = getFKConstraintName(entityTableName, relationshipName, prodDatabaseType);
                 let baseColumnName = getColumnName(relationshipName) + '_' + idSuffix;

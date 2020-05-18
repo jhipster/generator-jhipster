@@ -543,7 +543,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.relationshipType !== ''
                     ) {
                         relationship.otherEntityRelationshipName = _.lowerFirst(entityName);
-                        if (relationship.otherEntityName !== 'user') {
+                        if (relationship.otherEntityName !== 'user' && relationship.otherEntityName !== 'authority') {
                             this.warning(
                                 `otherEntityRelationshipName is missing in .jhipster/${entityName}.json for relationship ${JSON.stringify(
                                     relationship,
@@ -994,8 +994,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
+                    relationship.otherEntityFieldName = 'id';
                     if (otherEntityName === 'user') {
                         relationship.otherEntityTableName = `${jhiTablePrefix}_user`;
+                        hasUserField = true;
+                    } else if (otherEntityName === 'authority') {
+                        relationship.otherEntityTableName = `${jhiTablePrefix}_authority`;
+                        relationship.otherEntityFieldName = 'name';
                         hasUserField = true;
                     } else {
                         relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;

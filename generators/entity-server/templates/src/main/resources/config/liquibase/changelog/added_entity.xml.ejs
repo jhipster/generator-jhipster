@@ -121,7 +121,7 @@
                 let nullable_relation = true,
                 relationshipType = relationships[idx].relationshipType,
                 relationshipName = relationships[idx].relationshipName,
-                idSuffix = relationships[idx].otherEntityName.toLowerCase() === 'authority' ? 'name' : 'id';
+                otherEntityFieldName = relationships[idx].otherEntityFieldName;
                 let relationshipColumnType = 'bigint';
                 if (relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2') {
                     relationshipColumnType = 'varchar(100)';
@@ -133,14 +133,14 @@
                     nullable_relation = false;
                 }
                 if (relationships[idx].relationshipType === 'many-to-one') { _%>
-            <column name="<%= getColumnName(relationshipName) %>_<%= idSuffix %>" type="<%= relationshipColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_<%= otherEntityFieldName %>" type="<%= relationshipColumnType %>">
                 <constraints nullable="<%= nullable_relation %>" />
             </column>
             <%_ } else if (relationshipType === 'one-to-one' && relationships[idx].ownerSide === true
                             && (relationships[idx].useJPADerivedIdentifier == null || relationships[idx].useJPADerivedIdentifier === false)) {
                 const uniqueConstraintName = getUXConstraintName(entityTableName, getColumnName(relationshipName) + '_id', prodDatabaseType);
             _%>
-            <column name="<%= getColumnName(relationshipName) %>_<%= idSuffix %>" type="<%= relationshipColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_<%= otherEntityFieldName %>" type="<%= relationshipColumnType %>">
                 <constraints unique="true" nullable="<%= nullable_relation %>" uniqueConstraintName="<%= uniqueConstraintName %>" />
             </column>
             <%_ }
@@ -163,12 +163,12 @@
             const relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
             if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
-                const idSuffix = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'name' : 'id';
-                const idColumnType = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'varchar(50)' : 'bigint';
+                const otherEntityFieldName = relationships[idx].otherEntityFieldName;
+                const relationShipColumnType = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'varchar(50)' : relationshipColumnType;
           _%>
 
         <createTable tableName="<%= joinTableName %>">
-            <column name="<%= getColumnName(relationshipName) %>_<%= idSuffix %>" type="<%= idColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_<%= otherEntityFieldName %>" type="<%= relationShipColumnType %>">
                 <constraints nullable="false"/>
             </column>
             <column name="<%= getColumnName(name) %>_id" type="bigint">
@@ -176,7 +176,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_<%= idSuffix %>" tableName="<%= joinTableName %>"/>
+        <addPrimaryKey columnNames="<%= getColumnName(name) %>_id, <%= getColumnName(relationshipName) %>_<%= otherEntityFieldName %>" tableName="<%= joinTableName %>"/>
         <% } %><% } %>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

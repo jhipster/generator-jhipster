@@ -983,7 +983,7 @@ function askForRelationship(done) {
                         name: 'one-to-one',
                     },
                 ];
-                if (['user', 'authority'].includes(response.otherEntityName.toLowerCase())) {
+                if (!['user', 'authority'].includes(response.otherEntityName.toLowerCase())) {
                     opts.unshift({
                         value: 'one-to-many',
                         name: 'one-to-many',
