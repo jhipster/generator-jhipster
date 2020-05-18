@@ -105,6 +105,7 @@ describe('<%= entityClass %> e2e test', () => {
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
         const <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
+        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords, <%= entityInstance %>ComponentsPage.table]);
         const beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         await <%= entityInstance %>ComponentsPage.createButton.click();
         <%_ fields.forEach((field) => {
