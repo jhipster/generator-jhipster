@@ -74,15 +74,14 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilDisplayed(navBarPage.entityMenu);
         await waitUntilDisplayed(navBarPage.adminMenu);
         await waitUntilDisplayed(navBarPage.accountMenu);
-        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords, <%= entityInstance %>ComponentsPage.table]);
     });
 
     it('should load <%= entityClassPlural %>', async () => {
         await navBarPage.getEntityPage('<%= entityStateName %>');
         const <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
+        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords, <%= entityInstance %>ComponentsPage.table]);
         expect(await <%= entityInstance %>ComponentsPage.title.getText())
             .to.match(/<%= entityClassPluralHumanized %>/);
-
         <%_ if (!readOnly) { _%>
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
         <%_ } _%>
@@ -91,6 +90,7 @@ describe('<%= entityClass %> e2e test', () => {
 <%_ if (!readOnly) { _%>
     it('should load create <%= entityClass %> page', async () => {
         const <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
+        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords, <%= entityInstance %>ComponentsPage.table]);
         await <%= entityInstance %>ComponentsPage.createButton.click();
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
         <%_ if (enableTranslation) { _%>
