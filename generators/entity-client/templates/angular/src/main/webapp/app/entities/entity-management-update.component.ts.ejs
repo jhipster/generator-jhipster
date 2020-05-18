@@ -381,12 +381,14 @@ _%>
     private getIdentifier(item: <%= selectableManyToManyEntitiesType %>): any {
         <%_ if (selectableManyToManyEntitiesType === 'IAuthority') { _%>
             return item.name;
-        <%_ } else { %>
+        <%_ } else if (selectableEntityContainsAuthority) { %>
         if ('name' in item) {
             return item.name;
         } else if ('id' in item) {
             return item.id;
         }
+        <%_ } else {_%>
+            return item.id;
         <%_ } _%>
     }
 
