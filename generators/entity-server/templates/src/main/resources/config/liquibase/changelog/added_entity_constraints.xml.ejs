@@ -28,7 +28,7 @@
         <% for (idx in relationships) {
             const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
-            idSuffix = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'name' : 'id',
+            idSuffix = relationships[idx].otherEntityFieldName,
             ownerSide = relationships[idx].ownerSide,
             otherEntityTableName = relationships[idx].otherEntityTableName;
         if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {

@@ -118,7 +118,7 @@
                     const otherEntityStateName = relationships[idx].otherEntityStateName;
                     let otherEntityField = relationships[idx].otherEntityField;
                     const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
-                    const idSuffix = otherEntityName === 'authority' ? 'name' : 'id';
+                    const idSuffix = relationships[idx].otherEntityFieldName;
                     // fallback for authority, if user has forgotten to define name....authorities do not have an ID
                     if (otherEntityName === 'authority' && otherEntityField === 'id') {
                         otherEntityField = 'name';
