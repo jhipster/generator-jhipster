@@ -49,7 +49,7 @@ if [[ "$JHI_REPO" == *"/generator-jhipster" ]]; then
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
     npm ci
-    npm install -g "$JHI_HOME"
+    npm link "$JHI_HOME"
 elif [[ "$JHI_GEN_BRANCH" == "release" ]]; then
     echo "*** generator-jhipster: use release version"
     npm install -g generator-jhipster
@@ -67,5 +67,5 @@ else
     git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 
     npm ci
-    npm install -g "$HOME"/generator-jhipster
+    npm link "$HOME"/generator-jhipster
 fi

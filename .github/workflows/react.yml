@@ -22,6 +22,7 @@ on:
     push:
         branches-ignore:
             - 'dependabot/**'
+            - 'skip_ci*'
     pull_request:
         branches:
             - '*'
@@ -161,8 +162,31 @@ jobs:
               run: $JHI_SCRIPTS/10-install-jhipster.sh
             - name: 'GENERATION: entities'
               run: $JHI_SCRIPTS/11-generate-entities.sh
+            - name: 'GENERATION: merge reference project'
+              if: github.event.pull_request
+              run: |
+                  git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+                  git branch -a
+
+                  # Checkout the destination branch
+                  git checkout ${{ github.event.pull_request.base.sha }}
+
+                  $JHI_SCRIPTS/12-generate-project.sh --skip-install
+
+                  # Checkout the source branch
+                  git reset --hard HEAD@{1}
+
+                  cd "$HOME"/app
+                  rm -rf src
+                  rm -rf node_modules
             - name: 'GENERATION: project'
               run: $JHI_SCRIPTS/12-generate-project.sh
+            - name: 'GENERATION: merge project diff'
+              if: github.event.pull_request
+              run: |
+                  cd "$HOME"/app
+                  git add .
+                  git diff --staged
             - name: 'GENERATION: replace version in generated project'
               run: $JHI_SCRIPTS/13-replace-version-generated-project.sh
             - name: 'GENERATION: jhipster info'
