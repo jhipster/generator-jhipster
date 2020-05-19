@@ -135,7 +135,7 @@ public class <%= serviceClassName %> extends QueryService<<%= asEntity(entityCla
 
             relationships.forEach((relationship) => {
                 const metamodelFieldName = (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') ? relationship.relationshipFieldNamePlural : relationship.relationshipFieldName;
-                const idColumn = relationships[idx].otherEntityFieldName;
+                const idColumn = relationship.otherEntityFieldName;
                 const idColumnCapitalized = _.upperFirst(idColumn);
             _%>
             if (criteria.get<%= relationship.relationshipNameCapitalized %><%= idColumnCapitalized %>() != null) {
