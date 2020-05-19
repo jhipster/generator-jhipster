@@ -44,6 +44,7 @@ import io.r2dbc.spi.RowMetadata;
 
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
+import org.springframework.data.r2dbc.mapping.SettableValue;
 import org.springframework.data.r2dbc.query.Criteria;
 <%_ } _%>
 
@@ -137,6 +138,42 @@ _%>
         <%_ }); _%>
         return entity;
     }
+
+    @Override
+    public Mono<<%= asEntity(entityClass) %>> insert(<%= asEntity(entityClass) %> entity) {
+        return db.insert().into("<%= entityTableName %>")
+         <%_ fields.forEach(function(field) {
+             let fieldType = field.fieldType;
+             if (field.fieldTypeBlobContent === 'text') {
+                 fieldType = 'String';
+             }
+             if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
+                 .value("<%= field.fieldNameAsDatabaseColumn %>_content_type", SettableValue.fromOrEmpty(entity.get<%= field.fieldInJavaBeanMethod %>ContentType(), String.class))
+         <%_ } _%>
+                 .value("<%= field.fieldNameAsDatabaseColumn %>", SettableValue.fromOrEmpty(entity.get<%= field.fieldInJavaBeanMethod %>(), <%= fieldType %>.class))
+         <%_ }); _%>
+         <%_ eagerRelations.forEach(function(rel) { _%>
+                 .value("<%= getColumnName(rel.relationshipName) %>_id", SettableValue.fromOrEmpty(entity.get<%= rel.relationshipNameCapitalized %>Id(), Long.class))
+         <%_ }); _%>
+                 .map(dataAccessStrategy.getConverter().populateIdIfNecessary(entity))
+                 .first()
+                 .defaultIfEmpty(entity);
+    }
+
+    @Override
+    public Mono<<%= asEntity(entityClass) %>> save(<%= asEntity(entityClass) %> entity) {
+        if (entity.getId() == null) {
+            return insert(entity);
+        } else {
+            return update(entity).thenReturn(entity);
+        }
+    }
+
+    @Override
+    public Mono<Integer> update(<%= asEntity(entityClass) %> entity) {
+        return db.update().table(<%= asEntity(entityClass) %>.class).using(entity).fetch().rowsUpdated();
+    }
+
 }
 
 class <%= entityClass %>SqlHelper {

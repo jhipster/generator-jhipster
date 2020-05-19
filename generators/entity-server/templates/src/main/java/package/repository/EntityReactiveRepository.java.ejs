@@ -121,7 +121,8 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
     <%_ for (idx in relationships) { 
                   let relationshipType = relationships[idx].relationshipType;
                   let relationshipName = relationships[idx].relationshipName;
-                  if (relationshipType === 'many-to-one' || relationshipType === 'one-to-one') { _%>
+                  let ownerSide = relationships[idx].ownerSide;
+                  if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide === true)) { _%>
 
     @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= getColumnName(relationshipName) %>_id = :id")
     Flux<<%= asEntity(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>(<%= primaryKeyType %> id);
@@ -148,6 +149,10 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 }
 <%_ if (databaseType === 'sql') { _%>
 interface <%= entityClass %>RepositoryInternal {
+    Mono<<%= asEntity(entityClass) %>> insert(<%= asEntity(entityClass) %> entity);
+    Mono<<%= asEntity(entityClass) %>> save(<%= asEntity(entityClass) %> entity);
+    Mono<Integer> update(<%= asEntity(entityClass) %> entity);
+
     Flux<<%= asEntity(entityClass) %>> findAll();
     Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKeyType %> id);
 

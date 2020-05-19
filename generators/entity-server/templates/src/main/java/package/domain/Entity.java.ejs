@@ -440,8 +440,10 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @com.fasterxml.jackson.annotation.JsonBackReference
     <%_     }
         } else if (databaseType === 'sql' && reactive) { _%>
+          <%_ if (ownerSide === true) { _%>
     private Long <%= relationshipFieldName %>Id;
 
+          <%_ } _%>
     @Transient
     <%_ } _%>
     private <%= asEntity(otherEntityNameCapitalized) %> <%= relationshipFieldName %>;
@@ -627,7 +629,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
         <%_ } _%>
     }
-        <%_ if (databaseType === 'sql' && reactive) { _%>
+        <%_ if (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' && relationships[idx].ownerSide === false)) { _%>
 
     public Long get<%= relationshipNameCapitalized %>Id() {
         return this.<%= relationshipFieldName %>Id;
