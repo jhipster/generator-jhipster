@@ -105,6 +105,7 @@ module.exports = {
     }),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      base: '/',
       template: './<%= MAIN_SRC_DIR %>index.html',
       chunks: ['vendors', 'main', 'global'],
       chunksSortMode: 'manual',
