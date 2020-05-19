@@ -1001,6 +1001,14 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     } else if (otherEntityName === 'authority') {
                         relationship.otherEntityTableName = `${jhiTablePrefix}_authority`;
                         relationship.otherEntityFieldName = 'name';
+                        if (relationship.otherEntityField === 'id') {
+                            this.warning(
+                                chalk.yellow(
+                                    "This relationship to authority has ID as display field, but authorities have no ID. Fall back to 'name' field"
+                                )
+                            );
+                            relationship.otherEntityField = 'name';
+                        }
                         hasUserField = true;
                     } else {
                         relationship.otherEntityTableName = otherEntityData ? otherEntityData.entityTableName : null;

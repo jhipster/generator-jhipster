@@ -64,7 +64,7 @@
                     const otherEntityStateName = relationships[idx].otherEntityStateName;
                     const otherEntityField = relationships[idx].otherEntityField;
                     const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
-                    const otherEntityId = _.upperFirst(relationships[idx].otherEntityFieldName);
+                    const otherEntityId = relationships[idx].otherEntityFieldName;
                     if (relationshipType === 'many-to-one'
                         || (relationshipType === 'one-to-one' && ownerSide === true)
                         || (relationshipType === 'many-to-many' && ownerSide === true)) {

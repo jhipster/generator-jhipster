@@ -119,10 +119,6 @@
                     let otherEntityField = relationships[idx].otherEntityField;
                     const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
                     const idSuffix = relationships[idx].otherEntityFieldName;
-                    // fallback for authority, if user has forgotten to define name....authorities do not have an ID
-                    if (otherEntityName === 'authority' && otherEntityField === 'id') {
-                        otherEntityField = 'name';
-                    }
                 _%>
                     <%_ if (relationshipType === 'many-to-one'
                             || (relationshipType === 'one-to-one' && ownerSide === true)

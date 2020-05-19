@@ -365,7 +365,6 @@ _%>
     <%_ } _%>
 
     <%_ if (selectableManyToManyEntitiesType) {
-        const idColumn = selectableManyToManyEntitiesType === 'IAuthority' ? 'name' : 'id';
     _%>
     getSelected(selectedVals: <%= selectableManyToManyEntitiesType %>[], option: <%= selectableManyToManyEntitiesType %>): <%= selectableManyToManyEntitiesType %> {
         if (selectedVals) {
