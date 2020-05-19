@@ -38,7 +38,8 @@ function convertApplications(parsedApplications, configuration = {}, entityNames
     return parsedApplications.map(parsedApplication => {
         const applicationWithCustomValues = addCustomValuesToApplication(parsedApplication, configuration);
         const applicationEntityNames = resolveApplicationEntityNames(parsedApplication, entityNames);
-        const jdlApplication = createJDLApplication(applicationWithCustomValues.config);
+        const formattedApplicationConfiguration = formatApplicationConfigurationOptions(applicationWithCustomValues.config);
+        const jdlApplication = createJDLApplication(formattedApplicationConfiguration);
         jdlApplication.addEntityNames(applicationEntityNames);
         const entityOptions = getEntityOptionsInApplication(parsedApplication);
         checkEntityNamesInOptions(jdlApplication.getConfigurationOptionValue('baseName'), entityOptions, applicationEntityNames);
@@ -69,6 +70,22 @@ function resolveApplicationEntityNames(application, entityNames) {
         applicationEntities = applicationEntities.filter(entity => !excluded.includes(entity));
     }
     return applicationEntities;
+}
+
+function formatApplicationConfigurationOptions(applicationConfiguration) {
+    const formattedOptions = {};
+    if (Array.isArray(applicationConfiguration.blueprints)) {
+        formattedOptions.blueprints = applicationConfiguration.blueprints.map(blueprintName => {
+            if (!/^generator-jhipster-/.test(blueprintName)) {
+                return `generator-jhipster-${blueprintName}`;
+            }
+            return blueprintName;
+        });
+    }
+    return {
+        ...applicationConfiguration,
+        ...formattedOptions,
+    };
 }
 
 /**

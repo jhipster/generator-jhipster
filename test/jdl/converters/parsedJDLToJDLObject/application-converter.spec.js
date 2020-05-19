@@ -128,6 +128,53 @@ describe('ApplicationConverter', () => {
                         expect(convertedApplication).to.deep.equal(expectedApplication);
                     });
                 });
+                context('with blueprints', () => {
+                    context("when there are blueprints without the 'generator-jhipster-' prefix", () => {
+                        let convertedApplication;
+                        let expectedApplication;
+
+                        before(() => {
+                            convertedApplication = convertApplications(
+                                [
+                                    {
+                                        config: {
+                                            applicationType: MONOLITH,
+                                            baseName: 'mono',
+                                            blueprints: [
+                                                'generator-jhipster-nodejs',
+                                                'vuejs',
+                                                'generator-jhipster-imaginary-blueprint',
+                                                'super-framework',
+                                            ],
+                                        },
+                                        entities: {
+                                            entityList: [],
+                                            excluded: [],
+                                        },
+                                        options: {},
+                                    },
+                                ],
+                                {}
+                            );
+                            expectedApplication = [
+                                createJDLApplication({
+                                    applicationType: MONOLITH,
+                                    baseName: 'mono',
+                                    blueprints: [
+                                        'generator-jhipster-nodejs',
+                                        'generator-jhipster-vuejs',
+                                        'generator-jhipster-imaginary-blueprint',
+                                        'generator-jhipster-super-framework',
+                                    ],
+                                }),
+                            ];
+                        });
+
+                        it('should add the prefix', () => {
+                            expect(convertedApplication).to.deep.equal(expectedApplication);
+                        });
+                    });
+                });
             });
             context('when including all entities in an application', () => {
                 let convertedApplication;
