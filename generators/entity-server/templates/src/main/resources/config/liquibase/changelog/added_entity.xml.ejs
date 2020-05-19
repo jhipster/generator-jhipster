@@ -159,16 +159,16 @@
             const relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
             ownerSide = relationships[idx].ownerSide,
-            otherEntityName = relationships[idx].otherEntityName;
-            const relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
+            otherEntityName = relationships[idx].otherEntityName.toLowerCase();
+            let relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
             if (relationshipType === 'many-to-many' && ownerSide) {
                 const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
                 const otherEntityFieldName = relationships[idx].otherEntityFieldName;
-                const relationShipColumnType = relationships[idx].otherEntityTableName.toLowerCase() === 'authority' ? 'varchar(50)' : relationshipColumnType;
+                relationshipColumnType = otherEntityName === 'authority' ? 'varchar(50)' : relationshipColumnType;
           _%>
 
         <createTable tableName="<%= joinTableName %>">
-            <column name="<%= getColumnName(relationshipName) %>_<%= otherEntityFieldName %>" type="<%= relationShipColumnType %>">
+            <column name="<%= getColumnName(relationshipName) %>_<%= otherEntityFieldName %>" type="<%= relationshipColumnType %>">
                 <constraints nullable="false"/>
             </column>
             <column name="<%= getColumnName(name) %>_id" type="bigint">
