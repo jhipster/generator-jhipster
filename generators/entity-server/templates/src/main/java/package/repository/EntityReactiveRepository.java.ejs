@@ -135,6 +135,13 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= joinTableName %> joinTable ON entity.id = joinTable.<%= getColumnName(name) %>_id WHERE joinTable.<%= getColumnName(relationshipName) %>_id = :id")
     Flux<<%= asEntity(entityClass) %>> findBy<%= relationships[idx].relationshipNameCapitalized %>(<%= primaryKeyType %> id);
+              <%_ } else if (relationshipType === 'one-to-one' && ownerSide === false) {
+                  let otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
+                  let otherEntityTableName = relationships[idx].otherEntityTableName;
+                  _%>
+
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.id is not in (select <%= getColumnName(otherEntityRelationshipName) %>_id from <%= otherEntityTableName %>)")
+    Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
               <%_ } _%>
         <%_ } _%>
 
