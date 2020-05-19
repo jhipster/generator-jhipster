@@ -37,7 +37,10 @@ env:
     SPRING_JPA_SHOW_SQL: false
     JHI_DISABLE_WEBPACK_LOGS: true
     JHI_E2E_HEADLESS: true
-    JHI_SCRIPTS: ./test-integration/scripts
+    JHI_HOME: ${{ github.workspace }}/generator-jhipster
+    JHI_SCRIPTS: ${{ github.workspace }}/generator-jhipster/test-integration/scripts
+    JHI_FOLDER_APP: ${{ github.workspace }}/app
+    JHI_FOLDER_UAA: ${{ github.workspace }}/uaa
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
     FORCE_COLOR: 1
@@ -45,6 +48,9 @@ jobs:
     applications:
         name: ${{ matrix.app-type }}
         runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                working-directory: ${{ github.workspace }}/app
         if: >-
             !contains(github.event.head_commit.message, '[react]') &&
             !contains(github.event.head_commit.message, '[vue]') &&
@@ -145,7 +151,16 @@ jobs:
             #----------------------------------------------------------------------
             # Install all tools and check configuration
             #----------------------------------------------------------------------
-            - uses: actions/checkout@v2
+            - name: 'Checkout generator-jhipster'
+              uses: actions/checkout@v2
+              with:
+                  path: generator-jhipster
+            - name: 'Create required dir'
+              run: |
+                  mkdir app
+                  mkdir -p base/app
+                  mkdir -p base/uaa
+              working-directory: ${{ github.workspace }}
             - uses: actions/setup-node@v2.1.1
               with:
                   node-version: ${{ matrix.node_version }}
@@ -158,6 +173,8 @@ jobs:
                   CHROME_VERSION=$(google-chrome --version | cut -f 3 -d ' ' | cut -d '.' -f 1) \
                   && CHROMEDRIVER_VERSION=$(curl --location --fail --retry 3 http://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}) \
                   && echo "::set-output name=version::$CHROMEDRIVER_VERSION"
+            - name: 'ENV: display variables'
+              run: $JHI_SCRIPTS/01-display-configuration.sh
             - name: 'TOOLS: configure tools installed by the system'
               run: $JHI_SCRIPTS/03-system.sh
             - name: 'TOOLS: configure git'
@@ -176,6 +193,62 @@ jobs:
             - name: 'GENERATION: jhipster info'
               run: $JHI_SCRIPTS/14-jhipster-info.sh
             #----------------------------------------------------------------------
+            # Detect changes against base commit
+            #----------------------------------------------------------------------
+            - name: 'MERGE: Checkout base generator-jhipster'
+              uses: actions/checkout@v2
+              if: ${{ github.event.pull_request }}
+              id: base-checkout
+              with:
+                  path: base/generator-jhipster
+                  repository: ${{ github.event.pull_request.base.repo.full_name }}
+                  ref: ${{ github.event.pull_request.base.sha }}
+            - name: 'MERGE: merge base project'
+              continue-on-error: true
+              id: base-app
+              if: ${{ steps.base-checkout.outcome == 'success' }}
+              working-directory: ${{ github.workspace }}/base/app
+              run: |
+                  $JHI_SCRIPTS/11-generate-entities.sh
+                  # 11-generate-entities.sh removes current dir, we need to switch to the new one
+                  cd ../app
+                  npm install ${{ github.workspace }}/base/generator-jhipster
+                  $JHI_SCRIPTS/12-generate-project.sh --skip-install --skip-git
+              env:
+                  JHI_FOLDER_APP: ${{ github.workspace }}/base/app
+                  JHI_FOLDER_UAA: ${{ github.workspace }}/base/uaa
+            - name: 'MERGE: merge uaa project diff'
+              continue-on-error: true
+              id: uaa-is-equal
+              if: ${{ steps.base-app.outcome == 'success' }}
+              working-directory: ${{ github.workspace }}/base/uaa
+              run: |
+                  # Copy git repository (clone without the files)
+                  cp -a ${{ github.workspace }}/uaa/.git ../uaa/ || exit 0
+                  git log
+                  # File keystore.p12 always changes
+                  # File package-lock.json is not generated
+                  # Verify if the generated source has changed
+                  git add .
+                  git diff --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12'
+            - name: 'MERGE: merge project diff'
+              continue-on-error: true
+              id: merge-is-equal
+              if: ${{ steps.uaa-is-equal.outcome == 'success' }}
+              working-directory: ${{ github.workspace }}/base/app
+              run: |
+                  # Copy git repository (clone without the files)
+                  cp -a ${{ github.workspace }}/app/.git .
+                  git log
+                  # File keystore.p12 always changes
+                  # File package-lock.json is not generated
+                  # Verify if the generated source has changed
+                  git add .
+                  git diff --cached --exit-code -- . ':!package-lock.json' ':!src/main/resources/config/tls/keystore.p12'
+            - name: 'MERGE: should run tests'
+              if: ${{ steps.merge-is-equal.outcome != 'success' }}
+              run: echo 'Tests should be executed'
+            #----------------------------------------------------------------------
             # Launch tests
             #----------------------------------------------------------------------
             - name: 'TESTS: Start docker-compose containers'
@@ -189,7 +262,7 @@ jobs:
             - name: 'Synchronize chromedriver version'
               if: ${{ matrix.e2e == 1 }}
               run: npm run e2e:update-webdriver -- --versions.chrome ${{ steps.chromedriver-version.outputs.version }}
-              working-directory: /home/runner/app
+              working-directory: ${{ github.workspace }}/app
             - name: 'TESTS: End-to-End'
               id: e2e
               run: $JHI_SCRIPTS/24-tests-e2e.sh
