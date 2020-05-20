@@ -178,9 +178,9 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/entities/entity.module.ts`,
             '      {\n' +
-                "        path: 'entityUrl',\n" +
-                "        loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroServiceNameentityNameModule)\n" +
-                '      }'
+            "        path: 'entityUrl',\n" +
+            "        loadChildren: () => import('./entityFolderName/entityFileName.module').then(m => m.MicroServiceNameentityNameModule)\n" +
+            '      }'
         );
     });
 
@@ -195,11 +195,11 @@ describe('needle API Angular: JHipster client generator with blueprint', () => {
     it('admin module contains the routing added by needle api', () => {
         assert.fileContent(
             `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-            ',\n' +
-                '      {\n' +
-                "        path: 'entity-audit',\n" +
-                "        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule)\n" +
-                '      }'
+            '        },\n' +
+            '        {\n' +
+            "        path: 'entity-audit',\n" +
+            "        loadChildren: () => import('./entity-audit/entity-audit.module').then(m => m.EntityAuditModule)\n" +
+            '      },'
         );
     });
 
