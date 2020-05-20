@@ -116,7 +116,7 @@ elif [[ "$JHI_ENTITY" == "sqlfull" ]]; then
     moveEntity TestTwoRelationshipsSameEntity
     moveEntity SuperMegaLargeTestEntity
     moveEntity AuthorityRelationshipOTO
-    moveEntity AuthorityRelationshipOTM
+    moveEntity AuthorityRelationshipMTO
     moveEntity AuthorityRelationshipMTM
 
     moveEntity EntityWithDTO
