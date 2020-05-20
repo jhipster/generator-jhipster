@@ -924,7 +924,7 @@ module.exports = class extends PrivateBase {
             let lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
             if (lastLiquibaseTimestamp) {
                 lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
-                if (lastLiquibaseTimestamp > now) {
+                if (lastLiquibaseTimestamp >= now) {
                     now = lastLiquibaseTimestamp;
                     now.setSeconds(now.getSeconds() + 1);
                     now.setMilliseconds(0);
