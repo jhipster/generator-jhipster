@@ -45,63 +45,16 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <%_ for (idx in fields) {
-                let nullable = true;
-                if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) {
-                    nullable = false;
-                }
-                let unique = false;
-                if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('unique')) {
-                    unique = true;
-                }
-                let maxlength = 255;
-                if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('maxlength')) {
-                    maxlength = fields[idx].fieldValidateRulesMaxlength;
-                }
-                const fieldType = fields[idx].fieldType;
-                const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-                const columnName = fields[idx].fieldNameAsDatabaseColumn;
-                let columnType;
-                if (fieldType === 'String' || fields[idx].fieldIsEnum) {
-                    columnType="varchar(" + maxlength + ")";
-                } else if (fieldType === 'Integer') {
-                    columnType="integer";
-                } else if (fieldType === 'Long') {
-                    columnType="bigint";
-                } else if (fieldType === 'Float') {
-                    columnType="${floatType}";
-                } else if (fieldType === 'Double') {
-                    columnType="double";
-                } else if (fieldType === 'BigDecimal') {
-                    columnType="decimal(21,2)";
-                } else if (fieldType === 'LocalDate') {
-                    columnType="date";
-                } else if (fieldType === 'Instant') {
-                    columnType="datetime";
-                } else if (fieldType === 'ZonedDateTime') {
-                    columnType="datetime";
-                } else if (fieldType === 'Duration') {
-                    columnType="bigint";
-                } else if (fieldType === 'UUID') {
-                    columnType="${uuidType}";
-                } else if (fieldType === 'byte[]' && fieldTypeBlobContent !== 'text') {
-                    if (prodDatabaseType === 'mysql' || prodDatabaseType === 'postgresql' || prodDatabaseType === 'mariadb') {
-                        columnType="longblob";
-                    } else {
-                        columnType="blob";
-                    }
-                } else if (fieldTypeBlobContent === 'text') {
-                    columnType="${clobType}";
-                } else if (fieldType === 'Boolean') {
-                    columnType="boolean";
-                }
+                const columnData = fields[idx];
+                const nullable = columnData.nullable;
+                const fieldType = columnData.fieldType;
+                const fieldTypeBlobContent = columnData.fieldTypeBlobContent;
+                const columnName = columnData.columnName;
+                const columnType = columnData.columnType;
                 _%>
-                <%_ if (typeof fields[idx].javadoc == 'undefined') { _%>
-            <column name="<%= columnName %>" type="<%= columnType %>">
-                <%_ } else { _%>
-            <column name="<%= columnName %>" type="<%= columnType %>" remarks="<%- formatAsLiquibaseRemarks(fields[idx].javadoc) %>">
-                <%_ } _%>
-                <%_ if (unique) {
-                    const uniqueConstraintName = getUXConstraintName(entityTableName, columnName, prodDatabaseType);
+            <column name="<%= columnName %>" type="<%= columnType %>"<%- columnData.remarks %>>
+                <%_ if (columnData.unique) {
+                    const uniqueConstraintName = columnData.getUXConstraintName(entityTableName);
                 _%>
                 <constraints nullable="<%= nullable %>" unique="true" uniqueConstraintName="<%= uniqueConstraintName %>" />
                 <%_ } else { _%>
@@ -115,7 +68,6 @@
                 <constraints nullable="<%= nullable %>" />
             </column>
                 <%_ }
-                fields[idx].columnType = columnType;
             } _%>
             <%_ for (idx in relationships) {
                 let nullable_relation = true,
@@ -141,8 +93,9 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <%_ for (const idx in fields) {
-            if (fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Instant') { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= fields[idx].fieldNameAsDatabaseColumn %>" columnDataType="datetime"/>
+            const columnData = fields[idx];
+            if (columnData.shouldDropDefaultValue()) { _%>
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%= columnData.columnName %>" columnDataType="datetime"/>
         <%_ }
         } _%>
     </changeSet>
@@ -188,29 +141,11 @@
                   tableName="<%= entityTableName %>">
             <column name="id" type="numeric"/>
             <%_ for (idx in fields) {
-                let loadColumnType = 'string';
-                let columnType = fields[idx].columnType;
-                if (columnType === 'integer' || columnType === 'bigint' || columnType === 'double' || columnType === 'decimal(21,2)' || columnType === '${floatType}') {
-                    loadColumnType = 'numeric';
-                } else if (columnType === 'date') {
-                    loadColumnType = 'date';
-                } else if (columnType === 'datetime') {
-                    loadColumnType = 'datetime';
-                } else if (columnType === 'boolean') {
-                    loadColumnType = 'boolean';
-                } else if (fields[idx].fieldIsEnum) {
-                    loadColumnType = 'string';
-                } else if (columnType === 'blob' || columnType === 'longblob') {
-                    loadColumnType = 'blob';
-                } else if (columnType === '${clobType}') {
-                    loadColumnType = 'clob';
-                } else if (columnType === '${uuidType}' && prodDatabaseType !== 'mysql' && prodDatabaseType !== 'mariadb') {
-                    loadColumnType = '${uuidType}';
-                }
+                const columnData = fields[idx];
                 _%>
-            <column name="<%= fields[idx].fieldNameAsDatabaseColumn %>" type="<%= loadColumnType %>"/>
-                <%_ if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
-            <column name="<%= fields[idx].fieldNameAsDatabaseColumn %>_content_type" type="string"/>
+            <column name="<%= columnData.columnName %>" type="<%= columnData.loadColumnType %>"/>
+                <%_ if (columnData.fieldType === 'byte[]' && columnData.fieldTypeBlobContent !== 'text') { _%>
+            <column name="<%= columnData.columnName %>_content_type" type="string"/>
                 <%_ } _%>
             <%_ } _%>
             <%_ for (idx in relationships) {

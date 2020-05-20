@@ -5,7 +5,8 @@
     "files": [
         "cli",
         "generators",
-        "utils"
+        "utils",
+        "lib"
     ],
     "keywords": [
         "yeoman-generator",

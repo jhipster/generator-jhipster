@@ -25,6 +25,7 @@ const prompts = require('./prompts');
 const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
+const JHipsterField = require('../../lib/jhipster-field');
 
 /* constants used throughout */
 const SUPPORTED_VALIDATION_RULES = constants.SUPPORTED_VALIDATION_RULES;
@@ -742,105 +743,23 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.i18nToLoad = [context.entityInstance];
                 context.i18nKeyPrefix = `${context.angularAppName}.${context.entityTranslationKey}`;
 
+                const { prodDatabaseType, jhiPrefix } = context;
+                const config = { prodDatabaseType, jhiPrefix };
                 // Load in-memory data for fields
-                context.fields.forEach(field => {
+                context.fields = context.fields.map(field => {
                     // Migration from JodaTime to Java Time
                     if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
                         field.fieldType = 'Instant';
                     }
-                    const fieldType = field.fieldType;
+                    const fieldEntity = new JHipsterField(entityName, field, this, config);
+                    if (fieldEntity.fieldIsEnum === true) {
+                        context.i18nToLoad.push(fieldEntity.enumInstance);
+                    }
+                    const fieldType = fieldEntity.fieldType;
 
                     if (!['Instant', 'ZonedDateTime', 'Boolean'].includes(fieldType)) {
                         context.fieldsIsReactAvField = true;
                     }
-
-                    field.fieldIsEnum = ![
-                        'String',
-                        'Integer',
-                        'Long',
-                        'Float',
-                        'Double',
-                        'BigDecimal',
-                        'LocalDate',
-                        'Instant',
-                        'ZonedDateTime',
-                        'Duration',
-                        'UUID',
-                        'Boolean',
-                        'byte[]',
-                        'ByteBuffer',
-                    ].includes(fieldType);
-
-                    if (field.fieldIsEnum === true) {
-                        context.i18nToLoad.push(field.enumInstance);
-                    }
-
-                    if (_.isUndefined(field.fieldNameCapitalized)) {
-                        field.fieldNameCapitalized = _.upperFirst(field.fieldName);
-                    }
-
-                    if (_.isUndefined(field.fieldNameUnderscored)) {
-                        field.fieldNameUnderscored = _.snakeCase(field.fieldName);
-                    }
-
-                    if (_.isUndefined(field.fieldNameAsDatabaseColumn)) {
-                        const fieldNameUnderscored = _.snakeCase(field.fieldName);
-                        const jhiFieldNamePrefix = this.getColumnName(context.jhiPrefix);
-                        if (jhiCore.isReservedTableName(fieldNameUnderscored, context.prodDatabaseType)) {
-                            if (!jhiFieldNamePrefix) {
-                                this.warning(
-                                    chalk.red(
-                                        `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`
-                                    )
-                                );
-                                field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-                            } else {
-                                field.fieldNameAsDatabaseColumn = `${jhiFieldNamePrefix}_${fieldNameUnderscored}`;
-                            }
-                        } else {
-                            field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-                        }
-                    }
-
-                    if (_.isUndefined(field.fieldNameHumanized)) {
-                        field.fieldNameHumanized = _.startCase(field.fieldName);
-                    }
-
-                    if (_.isUndefined(field.fieldInJavaBeanMethod)) {
-                        // Handle the specific case when the second letter is capitalized
-                        // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-                        if (field.fieldName.length > 1) {
-                            const firstLetter = field.fieldName.charAt(0);
-                            const secondLetter = field.fieldName.charAt(1);
-                            if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
-                                field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
-                            } else {
-                                field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
-                            }
-                        } else {
-                            field.fieldInJavaBeanMethod = _.upperFirst(field.fieldName);
-                        }
-                    }
-
-                    if (_.isUndefined(field.fieldValidateRulesPatternJava)) {
-                        field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-                            : field.fieldValidateRulesPattern;
-                    }
-
-                    if (_.isUndefined(field.fieldValidateRulesPatternAngular)) {
-                        field.fieldValidateRulesPatternAngular = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/"/g, '&#34;')
-                            : field.fieldValidateRulesPattern;
-                    }
-
-                    if (_.isUndefined(field.fieldValidateRulesPatternReact)) {
-                        field.fieldValidateRulesPatternReact = field.fieldValidateRulesPattern
-                            ? field.fieldValidateRulesPattern.replace(/'/g, "\\'")
-                            : field.fieldValidateRulesPattern;
-                    }
-
-                    field.fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
 
                     if (fieldType === 'ZonedDateTime') {
                         context.fieldsContainZonedDateTime = true;
@@ -870,9 +789,10 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         }
                     }
 
-                    if (field.fieldValidate) {
+                    if (fieldEntity.fieldValidate) {
                         context.validation = true;
                     }
+                    return fieldEntity;
                 });
                 let hasUserField = false;
                 // Load in-memory data for relationships
