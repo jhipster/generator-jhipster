@@ -59,12 +59,8 @@ const relationshipType = relationship.relationshipType;
 // user has a String PK when using OAuth, so change relationships accordingly
 let oauthAwareReferenceFilterType = referenceFilterType;
 let idColumn = _.upperFirst(relationship.otherEntityFieldName);
-if (relationship.otherEntityName === 'user' && authenticationType === 'oauth2') {
+if (relationship.otherEntityName === 'authority' || (relationship.otherEntityName === 'user' && authenticationType === 'oauth2')) {
     oauthAwareReferenceFilterType = 'StringFilter';
-}
-if (relationship.otherEntityName === 'authority') {
-    oauthAwareReferenceFilterType = 'StringFilter';
-    idColumn = 'Name';
 }
 
 filterVariables.push({ filterType : oauthAwareReferenceFilterType,
