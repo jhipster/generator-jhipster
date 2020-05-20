@@ -36,6 +36,8 @@ import java.time.Duration;
 <%_ } if (fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ } _%>
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.data.domain.Pageable;
 <%_ if (databaseType === 'sql') { _%>
@@ -43,7 +45,9 @@ import io.r2dbc.spi.Row;
 import io.r2dbc.spi.RowMetadata;
 
 import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.data.r2dbc.core.DatabaseClient.GenericInsertSpec;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
+import org.springframework.data.r2dbc.mapping.OutboundRow;
 import org.springframework.data.r2dbc.mapping.SettableValue;
 import org.springframework.data.r2dbc.query.Criteria;
 <%_ } _%>
@@ -141,27 +145,15 @@ _%>
 
     @Override
     public <S extends <%= asEntity(entityClass) %>> Mono<S> insert(S entity) {
-        return db.insert().into("<%= entityTableName %>")
-      <%_  fields.forEach(function(field) {
-             let fieldType = field.fieldType;
-             if (field.fieldTypeBlobContent === 'text') {
-                 fieldType = 'String';
-             }
-             if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
-                 .value("<%= field.fieldNameAsDatabaseColumn %>_content_type", SettableValue.fromOrEmpty(entity.get<%= field.fieldInJavaBeanMethod %>ContentType(), String.class))
-         <%_ } _%>
-         <%_ if (fieldType.toLowerCase() === 'boolean') { _%>
-                 .value("<%= field.fieldNameAsDatabaseColumn %>", SettableValue.fromOrEmpty(entity.is<%= field.fieldInJavaBeanMethod %>(), <%= fieldType %>.class))
-         <%_ } else { _%>
-                 .value("<%= field.fieldNameAsDatabaseColumn %>", SettableValue.fromOrEmpty(entity.get<%= field.fieldInJavaBeanMethod %>(), <%= fieldType %>.class))
-         <%_ } _%>
-     <%_ }); _%>
-     <%_ eagerRelations.forEach(function(rel) { _%>
-                 .value("<%= getColumnName(rel.relationshipName) %>_id", SettableValue.fromOrEmpty(entity.get<%= rel.relationshipNameCapitalized %>Id(), Long.class))
-     <%_ }); _%>
-                 .map(dataAccessStrategy.getConverter().populateIdIfNecessary(entity))
-                 .first()
-                 .defaultIfEmpty(entity);
+        OutboundRow row = dataAccessStrategy.getOutboundRow(entity);
+
+        GenericInsertSpec<Map<String, Object>> insertSpec = db.insert().into("<%= entityTableName %>");
+        for (Entry<String, SettableValue> column : row.entrySet()) {
+            insertSpec = insertSpec.value(column.getKey(), column.getValue());
+        }
+        return insertSpec.map(dataAccessStrategy.getConverter().populateIdIfNecessary(entity))
+            .first()
+            .defaultIfEmpty(entity);
     }
 
     @Override
