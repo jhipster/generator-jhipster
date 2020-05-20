@@ -204,7 +204,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         <%_ }) _%>
       }
       <%_ if (uniqueRelationFields.has('users') && dto !== 'mapstruct') { _%>
-      entity.user = users.find(user => user.id.toString() === entity.user.id.toString());
+      entity.user = users.find(user => user.id.toString() === values.user.id.toString());
       <%_ } _%>
 
       if (isNew) {
@@ -407,10 +407,9 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               id="<%= entityFileName %>-<%= relationshipName %>"
               type="select"
               className="form-control"
-              name="<%= relationshipFieldName %><% if (relationshipFieldName !== 'user') { %>.id<% } %>"
+              name="<%= relationshipFieldName %>.id"
             >
               <option value="" key="0" />
-              <%_ if (relationshipFieldName !== 'user') { _%>
               {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                   <option
@@ -420,17 +419,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                   </option>
                 ) : null
               }
-              <%_ } else { _%>
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((otherEntity, index) =>
-                  <option
-                    value={index}
-                    key={otherEntity.id}>
-                    {otherEntity.<%= otherEntityField %>}
-                  </option>
-                ) : null
-              }
-              <%_ } _%>
             </AvInput>
               <%_ } else { _%>
             <AvInput
