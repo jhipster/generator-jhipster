@@ -151,13 +151,17 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     @Override
     Mono<<%= asEntity(entityClass) %>> findById(Long id);
+
+    @Override
+    <S extends <%= asEntity(entityClass) %>> Mono<S> save(S entity);
+
     <%_ } _%>
 
 }
 <%_ if (databaseType === 'sql') { _%>
 interface <%= entityClass %>RepositoryInternal {
-    Mono<<%= asEntity(entityClass) %>> insert(<%= asEntity(entityClass) %> entity);
-    Mono<<%= asEntity(entityClass) %>> save(<%= asEntity(entityClass) %> entity);
+    <S extends <%= asEntity(entityClass) %>> Mono<S> insert(S entity);
+    <S extends <%= asEntity(entityClass) %>> Mono<S> save(S entity);
     Mono<Integer> update(<%= asEntity(entityClass) %> entity);
 
     Flux<<%= asEntity(entityClass) %>> findAll();
