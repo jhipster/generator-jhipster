@@ -1,0 +1,33 @@
+{
+  "name": "AuthorityRelationshipMTM",
+  "fields": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "authority",
+      "otherEntityRelationshipName": "authorityRelationshipMTM",
+      "relationshipName": "authority",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "authorityRelationshipMTO",
+      "otherEntityRelationshipName": "gamma",
+      "relationshipName": "beta",
+      "otherEntityField": "id",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20200520072545",
+  "entityTableName": "authority_relationship_mtm",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

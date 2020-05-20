@@ -1,0 +1,39 @@
+{
+  "name": "AuthorityRelationshipMTO",
+  "fields": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "authority",
+      "otherEntityRelationshipName": "authorityRelationshipMTO",
+      "relationshipName": "authority",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "authorityRelationshipOTO",
+      "otherEntityRelationshipName": "authorityRelationshipMTO",
+      "relationshipName": "alpha",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "authorityRelationshipMTM",
+      "otherEntityRelationshipName": "beta",
+      "relationshipName": "gamma",
+      "otherEntityField": "id",
+      "ownerSide": false
+    }
+  ],
+  "changelogDate": "20200520072445",
+  "entityTableName": "authority_relationship_mto",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

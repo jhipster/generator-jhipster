@@ -1,0 +1,25 @@
+{
+  "name": "AuthorityRelationshipOTO",
+  "fields": [],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "authority",
+      "otherEntityRelationshipName": "authorityRelationshipOTO",
+      "relationshipName": "authority",
+      "otherEntityField": "name",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20200520072345",
+  "entityTableName": "authority_relationship_oto",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
+}

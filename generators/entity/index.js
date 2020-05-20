@@ -1003,9 +1003,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                         relationship.otherEntityFieldName = 'name';
                         if (relationship.otherEntityField === 'id') {
                             this.warning(
-                                chalk.yellow(
-                                    "This relationship to authority has ID as display field, but authorities have no ID. Fall back to 'name' field"
-                                )
+                                "This relationship to authority has ID as display field, but authorities have no ID. Fall back to 'name' field"
                             );
                             relationship.otherEntityField = 'name';
                         }

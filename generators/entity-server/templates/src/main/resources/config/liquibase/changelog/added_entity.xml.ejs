@@ -128,7 +128,7 @@
                 } else if (relationships[idx].otherEntityName === 'authority') {
                     relationshipColumnType = 'varchar(50)';
                 }
-                relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'bigint';
+                relationshipColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : relationshipColumnType;
                 if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired) {
                     nullable_relation = false;
                 }
