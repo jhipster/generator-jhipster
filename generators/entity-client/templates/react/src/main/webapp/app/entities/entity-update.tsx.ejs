@@ -203,8 +203,8 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
         <%_ }) _%>
       }
-      <%_ if (uniqueRelationFields.has('users')) { _%>
-      entity.user = props.users.find(user => user.id === values.user.id);
+      <%_ if (uniqueRelationFields.has('users') && dto !== 'mapstruct') { _%>
+      entity.user = users.find(user => user.id.toString() === entity.user.id.toString());
       <%_ } _%>
 
       if (isNew) {
