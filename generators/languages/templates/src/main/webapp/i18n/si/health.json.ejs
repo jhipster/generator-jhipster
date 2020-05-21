@@ -40,6 +40,9 @@
             "consul": "Consul",<% } else if (reactive) { %>
             "reactiveDiscoveryClients": "Microservice Discovery Clients",<% } %>
             <%_ } _%>
+            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hazelcast": "Hazelcast",
+            <%_ } _%>
             "diskSpace": "තැටියේ ඉඩ",
             "mail": "විද්යුත් තැපෑල",
             "ping": "අයදුම්පත"<% if (searchEngine === 'elasticsearch') { %>,
