@@ -8,6 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const jhiUtils = require('./utils.js');
 
 const env = require('../config/prod.env');
@@ -49,8 +50,38 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new TerserPlugin({
       terserOptions: {
-        warnings: false,
+        compress: {
+          arrows: false,
+          collapse_vars: false,
+          comparisons: false,
+          computed_props: false,
+          hoist_funs: false,
+          hoist_props: false,
+          hoist_vars: false,
+          inline: false,
+          loops: false,
+          negate_iife: false,
+          properties: false,
+          reduce_funcs: false,
+          reduce_vars: false,
+          switches: false,
+          toplevel: false,
+          typeofs: false,
+          booleans: true,
+          if_return: true,
+          sequences: true,
+          unused: true,
+          conditionals: true,
+          dead_code: true,
+          evaluate: true
+        },
+        mangle: {
+          safari10: true
+        }
       },
+      cache: true,
+      parallel: true,
+      extractComments: false,
       sourceMap: config.build.productionSourceMap,
     }),
     // extract css into its own file
@@ -79,7 +110,18 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
     }),
     // keep module.id stable when vendor modules does not change
-    new webpack.HashedModuleIdsPlugin()
+    new webpack.HashedModuleIdsPlugin(),
+    new ForkTsCheckerWebpackPlugin(
+      {
+        vue: {
+          enabled: true,
+          compiler: 'vue-template-compiler'
+        },
+        tslint: false,
+        formatter: 'codeframe',
+        checkSyntacticErrors: false
+      }
+    )
   ]
 });
 
