@@ -47,7 +47,16 @@ module.exports = merge(baseWebpackConfig, {
         target: 'http://127.0.0.1:<%= serverPort %>',
         secure: false,
         headers: { host: 'localhost:9000' }
+      },
+      <%_ if (websocket === 'spring-websocket') { _%>
+      {
+        context: [
+          '/websocket'
+        ],
+        target: 'ws://127.0.0.1:<%= serverPort %>',
+        ws: true
       }
+      <%_ } _%>
     ],
     watchOptions: {
       ignored: /node_modules/
@@ -66,7 +75,10 @@ module.exports = merge(baseWebpackConfig, {
         host: 'localhost',
         port: 9000,
         proxy: {
-          target: 'http://localhost:9060'
+          target: 'http://localhost:9060',
+          <%_ if (websocket === 'spring-websocket') { _%>
+          ws: true,
+          <%_ } _%>
         },
         socket: {
           clients: {
