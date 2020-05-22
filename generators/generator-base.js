@@ -344,7 +344,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * check if Right-to-Left support is necesary for i18n
+     * check if Right-to-Left support is necessary for i18n
      * @param {string[]} languages - languages array
      */
     isI18nRTLSupportNecessary(languages) {
