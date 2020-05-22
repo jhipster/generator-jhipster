@@ -189,7 +189,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
-            askForI18n: prompts.askForI18n,
+            askFori18n: prompts.askForI18n,
             askForClientTheme: prompts.askForClientTheme,
             askForClientThemeVariant: prompts.askForClientThemeVariant,
 
