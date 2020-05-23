@@ -115,9 +115,13 @@ import org.springframework.data.convert.CustomConversions;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
+import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.dialect.DialectResolver;
 import org.springframework.data.r2dbc.dialect.R2dbcDialect;
+import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import org.springframework.data.relational.core.dialect.RenderContextFactory;
+import org.springframework.data.relational.core.sql.render.SqlRenderer;
     <%_ } else { _%>
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -428,8 +432,7 @@ public class DatabaseConfiguration {
     // LocalDateTime seems to be the only type that is supported across all drivers atm
     // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
     @Bean
-    public R2dbcCustomConversions r2dbcCustomConversions(ConnectionFactory connectionFactory) {
-        R2dbcDialect dialect = DialectResolver.getDialect(connectionFactory);
+    public R2dbcCustomConversions r2dbcCustomConversions(R2dbcDialect dialect) {
         List<Object> converters = new ArrayList<>(dialect.getConverters());
         converters.add(new InstantWriteConverter());
         converters.add(new InstantReadConverter());
@@ -441,6 +444,22 @@ public class DatabaseConfiguration {
         return new R2dbcCustomConversions(
             CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
             Collections.emptyList());
+    }
+
+    @Bean
+    public R2dbcDialect dialect(ConnectionFactory connectionFactory) {
+        return DialectResolver.getDialect(connectionFactory);
+    }
+
+    @Bean
+    public UpdateMapper updateMapper(ReactiveDataAccessStrategy dataAccessStrategy) {
+        return new UpdateMapper(dataAccessStrategy.getConverter());
+    }
+
+    @Bean
+    public SqlRenderer sqlRenderer(R2dbcDialect dialect) {
+        RenderContextFactory factory = new RenderContextFactory(dialect);
+        return SqlRenderer.create(factory.createRenderContext());
     }
 
     @WritingConverter

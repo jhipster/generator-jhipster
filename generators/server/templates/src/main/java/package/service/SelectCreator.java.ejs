@@ -1,0 +1,101 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
+import org.springframework.data.r2dbc.query.UpdateMapper;
+import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
+import org.springframework.data.relational.core.sql.OrderByField;
+import org.springframework.data.relational.core.sql.Select;
+import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin;
+import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoinCondition;
+import org.springframework.data.relational.core.sql.Table;
+import org.springframework.data.relational.core.sql.render.SqlRenderer;
+import org.springframework.stereotype.Service;
+
+/**
+ * Helper class to create SQL selects based on the entity, paging parameters and criteria.
+ * 
+ */
+@Service
+public class SelectCreator {
+    public final static String ENTITY_ALIAS = "e";
+    public final static String ALIAS_PREFIX = "e_";
+
+    private final ReactiveDataAccessStrategy dataAccessStrategy;
+    private final SqlRenderer sqlRenderer;
+    private final UpdateMapper updateMapper;
+
+    public SelectCreator(ReactiveDataAccessStrategy dataAccessStrategy, SqlRenderer sqlRenderer, UpdateMapper updateMapper) {
+        this.dataAccessStrategy = dataAccessStrategy;
+        this.sqlRenderer = sqlRenderer;
+        this.updateMapper = updateMapper;
+    }
+
+    public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable) {
+        return createSelect(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+    }
+
+    public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable) {
+        return createSelect(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+    }
+
+    private String createSelect(SelectFromAndJoin selectFromWithPageable, Class<?> entityType, Sort sortParameter) {
+        final Select select;
+        if (sortParameter.isSorted()) {
+            RelationalPersistentEntity<?> entity = (RelationalPersistentEntity<?>) dataAccessStrategy.getConverter().getMappingContext()
+                    .getPersistentEntity(entityType);
+            Sort sort = updateMapper.getMappedObject(sortParameter, entity);
+            select = selectFromWithPageable.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(SelectCreator.ENTITY_ALIAS), sort)).build();
+        } else {
+            select = selectFromWithPageable.build();
+        }
+        return createSelect(select);
+    }
+
+    public String createSelect(Select select) {
+        return sqlRenderer.render(select);
+    }
+
+    private Collection<? extends OrderByField> createOrderByFields(Table table, Sort sortToUse) {
+
+        List<OrderByField> fields = new ArrayList<>();
+
+        for (Sort.Order order : sortToUse) {
+
+            String propertyName = order.getProperty();
+            OrderByField orderByField = OrderByField.from(table.column(propertyName).as(SelectCreator.ALIAS_PREFIX + propertyName));
+
+            if (order.getDirection() != null) {
+                fields.add(order.isAscending() ? orderByField.asc() : orderByField.desc());
+            } else {
+                fields.add(orderByField);
+            }
+        }
+
+        return fields;
+    }
+
+}

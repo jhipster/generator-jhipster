@@ -36,6 +36,8 @@ import java.time.Duration;
 <%_ } if (fieldsContainUUID === true) { _%>
 import java.util.UUID;
 <%_ } _%>
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -50,6 +52,11 @@ import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
 import org.springframework.data.r2dbc.mapping.OutboundRow;
 import org.springframework.data.r2dbc.mapping.SettableValue;
 import org.springframework.data.r2dbc.query.Criteria;
+import org.springframework.data.relational.core.sql.Column;
+import org.springframework.data.relational.core.sql.Expression;
+import org.springframework.data.relational.core.sql.Select;
+import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<% if (eagerRelations.length > 0) { %>Condition<% } %>;
+import org.springframework.data.relational.core.sql.Table;
 <%_ } _%>
 
 import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
@@ -61,6 +68,7 @@ import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ uniqueEntityTypes.forEach(function(element) { _%>
 import <%= packageName %>.repository.rowmapper.<%= element %>RowMapper;
 <%_ }); _%>
+import <%= packageName %>.service.SelectCreator;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -72,6 +80,7 @@ import reactor.core.publisher.Mono;
 public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>RepositoryInternal {
     private final DatabaseClient db;
     private final ReactiveDataAccessStrategy dataAccessStrategy;
+    private final SelectCreator selectCreator;
 
 <%_ uniqueEntityTypes.forEach(function(element) { _%>
     private final <%= element %>RowMapper <%= element.toLowerCase() %>Mapper;
@@ -81,21 +90,27 @@ public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass
   let joins = _generateTableJoins(relationships);
 _%>
     private final static String SELECT = "SELECT "
-            + <%= entityClass %>SqlHelper.getColumnNames("entity", "e")
+            + <%= entityClass %>SqlHelper.getColumnNames("entity", SelectCreator.ENTITY_ALIAS)
         <%_ for (idx in eagerRelations) {
             let rel = eagerRelations[idx];
           _%>
            + ", " + <%= rel.otherEntityNameCapitalized %>SqlHelper.getColumnNames("<%= rel.relationshipName %>", "<%= rel.relationshipName %>")
         <%_ } _%>
             + " FROM <%= entityTableName %> entity "
-<%_     for (idx in joins) { _%>
+        <%_ for (idx in joins) { _%>
             + "<%= joins[idx] %>"
-<%_     } _%>;
+        <%_ } _%>;
 
-    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy<%_ 
+    private final static Table entityTable = Table.aliased("<%= entityTableName %>", SelectCreator.ENTITY_ALIAS);
+        <%_ eagerRelations.forEach(function(rel) { _%>
+    private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= rel.relationshipName %>");
+        <%_ }); _%>;
+
+    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, SelectCreator selectCreator<%_ 
             uniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
         this.db = db;
         this.dataAccessStrategy = dataAccessStrategy;
+        this.selectCreator = selectCreator;
         <%_ uniqueEntityTypes.forEach(function(element) { _%>
         this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
         <%_ }); _%>
@@ -104,18 +119,22 @@ _%>
 <%_ if (pagination !== 'no') { _%>
     @Override
     public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable) {
-        return db.select().from(<%= asEntity(entityClass) %>.class)
-                .page(pageable)
-                .as(<%= asEntity(entityClass) %>.class)
-                .all();
+        return findAllBy(pageable, null);
     }
 
     @Override
     public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria) {
-        return db.select().from(<%= asEntity(entityClass) %>.class)
-                .matching(criteria)
-                .page(pageable)
-                .as(<%= asEntity(entityClass) %>.class)
+        List<Expression> columns = <%= asEntity(entityClass) %>SqlHelper.getColumns(entityTable, SelectCreator.ENTITY_ALIAS);
+        <%_ eagerRelations.forEach(function(rel) { _%>
+        columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
+        <%_ }); _%>
+        SelectFromAndJoin<% if (eagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)<%_ eagerRelations.forEach(function(rel) { 
+            const colName = getColumnName(rel.relationshipName); %>
+            .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>_id", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))<%_ }); _%>;
+
+        String select = selectCreator.createSelect(selectFrom, <%= asEntity(entityClass) %>.class, pageable/*, criteria */);
+        return db.execute(select)
+                .map(this::process)
                 .all();
     }
 
@@ -188,4 +207,23 @@ class <%= entityClass %>SqlHelper {
 _%>
         return String.format("<%= columns %>", tableAlias, columnPrefix);
     }
+
+    static List<Expression> getColumns(Table table, String columnPrefix) {
+        List<Expression> columns = new ArrayList<>();
+        columns.add(Column.aliased("id", table, columnPrefix + "_id"));
+<%_ fields.forEach(function(field) { 
+    let col = field.fieldNameAsDatabaseColumn;
+    _%>
+        columns.add(Column.aliased("<%= col %>", table, columnPrefix + "_<%= col %>"));
+   <%_  if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { _%>
+        columns.add(Column.aliased("<%= col %>_content_type", table, columnPrefix + "_<%= col %>_content_type"));
+   <%_  } _%>
+<%_ }); _%>
+
+<%_ eagerRelations.forEach(function(rel) { _%>
+        columns.add(Column.aliased("<%= getColumnName(rel.relationshipName) %>_id", table, columnPrefix + "_<%= getColumnName(rel.relationshipName) %>_id"));
+<%_ }); _%>
+        return columns;
+    }
+
 }

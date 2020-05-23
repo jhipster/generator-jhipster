@@ -1034,6 +1034,10 @@ const serverFiles = {
                     file: 'package/service/ColumnConverter.java',
                     renameTo: generator => `${generator.javaDir}service/ColumnConverter.java`,
                 },
+                {
+                    file: 'package/service/SelectCreator.java',
+                    renameTo: generator => `${generator.javaDir}service/SelectCreator.java`,
+                },
             ],
         },
         {
