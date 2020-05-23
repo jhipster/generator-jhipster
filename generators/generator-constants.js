@@ -23,9 +23,12 @@ const packagejs = require('../package.json');
 const JAVA_VERSION = '1.8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
 
 // Version of Node, Yarn, NPM
+// Node version used when installing
 const NODE_VERSION = '12.16.1';
+const ENGINES_NODE_RANGE = packagejs.engines.node;
 const YARN_VERSION = '1.22.4';
 const NPM_VERSION = '6.14.5';
+const ENGINES_NPM_RANGE = packagejs.engines.npm;
 
 const GRADLE_VERSION = '6.4.1';
 const JIB_VERSION = '2.2.0';
@@ -366,8 +369,10 @@ const constants = {
     DOCKER_GRAFANA,
     JAVA_VERSION,
     NODE_VERSION,
+    ENGINES_NODE_RANGE,
     YARN_VERSION,
     NPM_VERSION,
+    ENGINES_NPM_RANGE,
     KAFKA_VERSION,
     GRADLE_VERSION,
 

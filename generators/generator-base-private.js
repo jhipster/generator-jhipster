@@ -51,6 +51,8 @@ module.exports = class extends Generator {
         super(args, opts);
         // expose lodash to templates
         this._ = _;
+        // expose constants to templates
+        this.constants = constants;
     }
 
     /* ======================================================================== */

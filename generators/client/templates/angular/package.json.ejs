@@ -165,7 +165,8 @@
     "write-file-webpack-plugin": "4.5.1"
   },
   "engines": {
-    "node": ">=<%= NODE_VERSION %>"<% if (clientPackageManager === 'yarn') { %>,
+    "node": "<%- constants.ENGINES_NODE_RANGE %>"<% if (clientPackageManager === 'npm') { %>,
+    "npm": "<%- constants.ENGINES_NPM_RANGE %>"<% } %><% if (clientPackageManager === 'yarn') { %>,
     "yarn": ">=1.19.0"<% } %>
   },
   "scripts": {
