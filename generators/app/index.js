@@ -199,6 +199,12 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
+        this.option('skip-jhipster-dependencies', {
+            desc: 'Generate package.json without generator-jhipster[-*] dependencies',
+            type: Boolean,
+            defaults: false,
+        });
+
         this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
         this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
         this.skipUserManagement = this.configOptions.skipUserManagement =
@@ -247,6 +253,10 @@ module.exports = class extends BaseBlueprintGenerator {
         this.experimental = this.configOptions.experimental = this.options.experimental;
         this.registerPrettierTransform();
         this.setupAppOptions(this);
+
+        if (this.options.skipJhipsterDependencies) {
+            this.config.set('skipJhipsterDependencies', this.options.skipJhipsterDependencies);
+        }
     }
 
     _initializing() {

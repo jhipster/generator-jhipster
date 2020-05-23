@@ -469,6 +469,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             getSharedConfigOptions() {
+                this.skipJhipsterDependencies = this.config.get('skipJhipsterDependencies');
                 if (this.configOptions.enableTranslation !== undefined) {
                     this.enableTranslation = this.configOptions.enableTranslation;
                 }

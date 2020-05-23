@@ -103,7 +103,12 @@
     "eslint-loader": "4.0.2",
     "file-loader": "6.0.0",
     "friendly-errors-webpack-plugin": "1.7.0",
+    <%_ if (!skipJhipsterDependencies) { %>
     "generator-jhipster": "<%= packagejs.version %>",
+    <%_     otherModules.forEach(module => { _%>
+    "<%= module.name %>": "<%= module.version %>",
+    <%_     }); _%>
+    <%_ } _%>
     "html-loader": "1.1.0",
     "html-webpack-plugin": "3.2.0",
     <%_ if (!skipCommitHook) { _%>
@@ -149,9 +154,6 @@
     <%_ } _%>
     "tslint": "6.1.2",
     "typescript": "3.8.3",
-    <%_ otherModules.forEach(module => { _%>
-    "<%= module.name %>": "<%= module.version %>",
-    <%_ }); _%>
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
     <%_ } _%>
