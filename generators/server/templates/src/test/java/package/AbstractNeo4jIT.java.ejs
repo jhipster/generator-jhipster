@@ -20,12 +20,9 @@ package <%= packageName %>;
 
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.Neo4jContainer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-
 
 public class AbstractNeo4jIT implements BeforeAllCallback {
 
@@ -33,15 +30,13 @@ public class AbstractNeo4jIT implements BeforeAllCallback {
 
     private static Neo4jContainer neo4jContainer = new Neo4jContainer("<%= DOCKER_NEO4J %>").withoutAuthentication();
 
-    @DynamicPropertySource
-    static void neo4jProperties(DynamicPropertyRegistry registry) {
-        registry.add("org.neo4j.driver.uri", () -> neo4jContainer.getBoltUrl());
-    }
-
-    @Override
-    public void beforeAll(ExtensionContext extensionContext) throws Exception {
+    public void beforeAll(ExtensionContext extensionContext) {
         if (!started.get()) {
             neo4jContainer.start();
+            System.setProperty(
+                "org.neo4j.driver.uri",
+                neo4jContainer.getBoltUrl()
+            );
             started.set(true);
         }
     }

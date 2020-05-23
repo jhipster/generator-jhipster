@@ -25,6 +25,7 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 module.exports = {
     askForModuleName,
     askForClient,
+    askForI18n,
     askFori18n,
     askForClientTheme,
     askForClientThemeVariant,
@@ -78,10 +79,20 @@ function askForClient(meta) {
     });
 }
 
-function askFori18n() {
+function askForI18n() {
     if (this.existingProject || this.configOptions.skipI18nQuestion) return;
 
     this.aski18n(this);
+}
+
+/**
+ * @deprecated Use askForI18n() instead.
+ * This method will be removed in JHipster v7.
+ */
+function askFori18n() {
+    // eslint-disable-next-line no-console
+    console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
+    this.askForI18n();
 }
 
 function askForClientTheme(meta) {

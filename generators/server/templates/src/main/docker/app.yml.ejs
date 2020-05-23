@@ -41,6 +41,9 @@ services:
             - SPRING_DATA_MONGODB_URI=mongodb://<%= baseName.toLowerCase() %>-mongodb:27017<% if (reactive) { %>/?waitQueueMultiple=1000<% } %>
             - SPRING_DATA_MONGODB_DATABASE=<%= baseName %>
             <%_ } _%>
+            <%_ if (prodDatabaseType === 'neo4j') { _%>
+            - ORG_NEO4J_DRIVER_URI=bolt://<%= baseName.toLowerCase() %>-neo4j:7687
+            <%_ } _%>
             <%_ if (prodDatabaseType === 'couchbase') { _%>
             - SPRING_COUCHBASE_BOOTSTRAP_HOSTS=<%= baseName.toLowerCase() %>-couchbase
             - SPRING_COUCHBASE_BUCKET_NAME=<%= baseName %>
