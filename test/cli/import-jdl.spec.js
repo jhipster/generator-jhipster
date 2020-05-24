@@ -2,9 +2,11 @@ const path = require('path');
 const fse = require('fs-extra');
 const assert = require('yeoman-assert');
 const expect = require('chai').expect;
+const sinon = require('sinon');
 
 const importJdl = require('../../cli/import-jdl');
 const { testInTempDir, revertTempDir } = require('../utils/utils');
+const { logger } = require('../../cli/utils');
 
 let subGenCallParams = {
     count: 0,
@@ -85,6 +87,28 @@ describe('JHipster generator import jdl', () => {
     afterEach(() => {
         process.chdir(originalCwd);
     });
+    describe('when the file is not found', () => {
+        beforeEach(() => {
+            sinon.stub(logger, 'fatal');
+        });
+        afterEach(() => {
+            logger.fatal.restore();
+        });
+        it('should call logger.fatal', () => {
+            testInTempDir(() => {
+                importJdl(['foo.jdl']).then(
+                    () => {
+                        assert.fail('import-jdl should not succeed.');
+                    },
+                    error => {
+                        expect(error.message).to.include('foo.jdl');
+                    }
+                );
+            });
+            expect(logger.fatal.getCall(0).args[0]).to.include('foo.jdl');
+        });
+    });
+
     // this test for some reason works only when put at the beginning.
     describe('runs in series with --interactive flag', () => {
         beforeEach(() => {

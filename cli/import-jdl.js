@@ -18,6 +18,7 @@
  */
 const chalk = require('chalk');
 const _ = require('lodash');
+const fs = require('fs');
 const path = require('path');
 const jhiCore = require('jhipster-core');
 const pretty = require('js-object-pretty-print').pretty;
@@ -403,7 +404,17 @@ class JDLProcessor {
  * @param {any} env the yeoman environment
  * @param {function} forkProcess the method to use for process forking
  */
-module.exports = (jdlFiles, options = {}, env, forkProcess = fork) => {
+module.exports = (jdlFiles = [], options = {}, env, forkProcess = fork) => {
+    logger.debug('cmd: import-jdl from ./import-jdl');
+    logger.debug(`args: ${toString(jdlFiles)}`);
+    if (!options.inline) {
+        const notFound = jdlFiles.find(jdl => !fs.existsSync(jdl));
+        if (notFound) {
+            const errorMsg = `\nCould not find ${notFound}, make sure the path is correct.\n`;
+            logger.fatal(errorMsg);
+            return Promise.reject(new Error(errorMsg));
+        }
+    }
     logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
     logger.info(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
