@@ -544,6 +544,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         if (embedded && !otherEntityIsEmbedded && ownerSide === false) {
             continue;
         }
+        const reactiveRelationShipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' && ownerSide === false));
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
@@ -616,7 +617,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     public <%= asEntity(entityClass) %> <%= relationshipFieldName %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-            <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
+            <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationShipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
             <%_ } _%>
         return this;
@@ -625,11 +626,11 @@ public class <%= asEntity(entityClass) %> implements Serializable {
 
     public void set<%= relationshipNameCapitalized %>(<%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>) {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
-        <%_ if (databaseType === 'couchbase' && !otherEntityIsEmbedded) { _%>
+        <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationShipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
         <%_ } _%>
     }
-        <%_ if (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' && relationships[idx].ownerSide === false)) { _%>
+        <%_ if (reactiveRelationShipWithId) { _%>
 
     public Long get<%= relationshipNameCapitalized %>Id() {
         return this.<%= relationshipFieldName %>Id;
