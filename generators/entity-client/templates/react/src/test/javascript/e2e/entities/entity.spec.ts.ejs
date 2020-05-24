@@ -116,6 +116,7 @@ describe('<%= entityClass %> e2e test', () => {
             const fieldIsEnum = field.fieldIsEnum;
             const fieldValidateSampleString = field.fieldValidateSampleString;
         _%>
+        await waitUntilDisplayed(<%= entityInstance %>UpdatePage.saveButton);
         <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5');
@@ -166,7 +167,6 @@ describe('<%= entityClass %> e2e test', () => {
         // <%= entityInstance %>UpdatePage.<%= relationshipName %>SelectLastOption();
         <%_ } _%>
         <%_ }); _%>
-        await waitUntilDisplayed(<%= entityInstance %>UpdatePage.saveButton);
         await <%= entityInstance %>UpdatePage.save();
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
