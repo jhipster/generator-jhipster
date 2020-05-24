@@ -990,20 +990,12 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                generator.databaseType === 'sql' ||
-                generator.databaseType === 'mongodb' ||
-                generator.databaseType === 'neo4j' ||
-                generator.databaseType === 'couchbase',
+            condition: generator => ['sql', 'mongodb', 'neo4j', 'couchbase'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
                     file: 'package/config/CloudDatabaseConfiguration.java',
                     renameTo: generator => `${generator.javaDir}config/CloudDatabaseConfiguration.java`,
-                },
-                {
-                    file: 'package/config/DatabaseConfiguration.java',
-                    renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
                 },
                 {
                     file: 'package/config/audit/package-info.java',
@@ -1012,6 +1004,26 @@ const serverFiles = {
                 {
                     file: 'package/config/audit/AuditEventConverter.java',
                     renameTo: generator => `${generator.javaDir}config/audit/AuditEventConverter.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => ['sql', 'mongodb', 'neo4j'].includes(generator.databaseType),
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/DatabaseConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'couchbase',
+            path: SERVER_MAIN_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/database/CouchbaseDatabaseConfiguration.java',
+                    renameTo: generator => `${generator.javaDir}config/DatabaseConfiguration.java`,
                 },
             ],
         },
@@ -1318,8 +1330,8 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/DatabaseConfigurationIT.java',
-                    renameTo: generator => `${generator.testDir}config/DatabaseConfigurationIT.java`,
+                    file: 'package/CouchbaseTestContainerExtension.java',
+                    renameTo: generator => `${generator.testDir}CouchbaseTestContainerExtension.java`,
                 },
             ],
         },

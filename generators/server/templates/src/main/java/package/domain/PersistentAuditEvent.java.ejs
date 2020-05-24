@@ -32,8 +32,8 @@ import org.neo4j.springframework.data.core.support.UUIDStringGenerator;
 import org.springframework.data.annotation.Transient;
 <%_ } else if (databaseType === 'couchbase') { _%>
 import org.springframework.data.annotation.Id;
-import com.couchbase.client.java.repository.annotation.Field;
 import org.springframework.data.couchbase.core.mapping.Document;
+import org.springframework.data.couchbase.core.mapping.Field;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdPrefix;
 <%_ } else if (databaseType === 'sql') { _%>
@@ -147,8 +147,7 @@ public class PersistentAuditEvent implements Serializable {
         <%_ } else { _%>
     @Transient
         <%_ } _%>
-    <%_ } _%>
-    <%_ if (databaseType === 'neo4j') { _%>
+    <%_ } else if (databaseType === 'neo4j') { _%>
     @Transient
     <%_ } _%>
     private Map<String, String> data = new HashMap<>();

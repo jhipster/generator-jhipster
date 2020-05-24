@@ -60,8 +60,9 @@ if (databaseType === 'sql' && !reactive) {
 _%>
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ } else if (databaseType === 'couchbase') { _%>
+import <%= packageName %>.CouchbaseTestContainerExtension;
+<%_ } else if (databaseType === 'neo4j') { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
@@ -115,7 +116,7 @@ import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (['neo4j', 'couchbase'].includes(databaseType)) { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -216,7 +217,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany === true) { _%>
 @ExtendWith(MockitoExtension.class)
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseType === 'couchbase') { _%>
+@ExtendWith(CouchbaseTestContainerExtension.class)
+<%_ } else if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 <%_ if (!reactive) { _%>

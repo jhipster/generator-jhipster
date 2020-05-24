@@ -18,7 +18,9 @@
 -%>
 package <%= packageName %>.service;
 
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseType === 'couchbase') { _%>
+import <%= packageName %>.CouchbaseTestContainerExtension;
+<%_ } else if (databaseType === 'neo4j') { _%>
 import <%= packageName %>.AbstractNeo4jIT;
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
@@ -30,10 +32,7 @@ import <%= packageName %>.<%= mainClass %>;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (cacheProvider === 'redis') { _%>
-import org.junit.jupiter.api.extension.ExtendWith;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (['neo4j', 'couchbase'].includes(databaseType) || cacheProvider === 'redis') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +62,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
 <%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ if (databaseType === 'couchbase') { _%>
+@ExtendWith(CouchbaseTestContainerExtension.class)
+<%_ } else if (databaseType === 'neo4j') { _%>
 @ExtendWith(AbstractNeo4jIT.class)
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>

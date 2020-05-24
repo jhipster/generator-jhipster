@@ -180,10 +180,9 @@ spring:
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>
     couchbase:
-        bootstrap-hosts: localhost
-        bucket:
-            name: <%= baseName %>
-            password: password
+        connection-string: couchbase://localhost
+        username: Administrator
+        password: password
     <%_ } _%>
     <%_ if (databaseType === 'sql') { _%>
     liquibase:
@@ -276,6 +275,11 @@ jhipster:
         authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
             app1: /api,/v2/api-docs # recommended dev configuration
         <%_ } _%>
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    database:
+        couchbase:
+            bucket-name: <%= baseName %>
     <%_ } _%>
     <%_ if (cacheProvider !== 'no') { _%>
     cache: # Cache configuration

@@ -254,6 +254,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         if (generator.searchEngine === 'elasticsearch') {
             generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
         }
+        if (generator.databaseType === 'couchbase') {
+            generator.removeFile(`${testDir}config/DatabaseConfigurationIT.java`);
+        }
     }
 }
 
