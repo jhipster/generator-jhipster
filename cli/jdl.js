@@ -46,11 +46,8 @@ const downloadFile = (url, filename) => {
 
                 logger.debug(`Creating file: ${path.join(filename)}`);
                 const fileStream = fs.createWriteStream(`${filename}`);
-                fileStream.on('finish', () => {
-                    fileStream.close(() => {
-                        resolve(filename);
-                    });
-                });
+                fileStream.on('finish', () => fileStream.close());
+                fileStream.on('close', () => resolve(filename));
                 response.pipe(fileStream);
                 return undefined;
             })
