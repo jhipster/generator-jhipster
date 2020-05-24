@@ -68,7 +68,7 @@ import <%= packageName %>.domain.enumeration.<%= element %>;
 <%_ uniqueEntityTypes.forEach(function(element) { _%>
 import <%= packageName %>.repository.rowmapper.<%= element %>RowMapper;
 <%_ }); _%>
-import <%= packageName %>.service.SelectCreator;
+import <%= packageName %>.service.EntityManager;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -77,10 +77,10 @@ import reactor.core.publisher.Mono;
  * Spring Data <%= officialDatabaseType %> reactive custom repository implementation for the <%= asEntity(entityClass) %> entity.
  */
 @SuppressWarnings("unused")
-public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>RepositoryInternal {
+class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass %>RepositoryInternal {
     private final DatabaseClient db;
     private final ReactiveDataAccessStrategy dataAccessStrategy;
-    private final SelectCreator selectCreator;
+    private final EntityManager entityManager;
 
 <%_ uniqueEntityTypes.forEach(function(element) { _%>
     private final <%= element %>RowMapper <%= element.toLowerCase() %>Mapper;
@@ -90,7 +90,7 @@ public class <%= entityClass %>RepositoryInternalImpl implements <%= entityClass
   let joins = _generateTableJoins(relationships);
 _%>
     private final static String SELECT = "SELECT "
-            + <%= entityClass %>SqlHelper.getColumnNames("entity", SelectCreator.ENTITY_ALIAS)
+            + <%= entityClass %>SqlHelper.getColumnNames("entity", EntityManager.ENTITY_ALIAS)
         <%_ for (idx in eagerRelations) {
             let rel = eagerRelations[idx];
           _%>
@@ -101,16 +101,16 @@ _%>
             + "<%= joins[idx] %>"
         <%_ } _%>;
 
-    private final static Table entityTable = Table.aliased("<%= entityTableName %>", SelectCreator.ENTITY_ALIAS);
+    private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
         <%_ eagerRelations.forEach(function(rel) { _%>
     private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntityTableName %>", "<%= rel.relationshipName %>");
         <%_ }); _%>;
 
-    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, SelectCreator selectCreator<%_ 
+    public <%= entityClass %>RepositoryInternalImpl(DatabaseClient db, ReactiveDataAccessStrategy dataAccessStrategy, EntityManager entityManager<%_ 
             uniqueEntityTypes.forEach(function(element) { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>) {
         this.db = db;
         this.dataAccessStrategy = dataAccessStrategy;
-        this.selectCreator = selectCreator;
+        this.entityManager = entityManager;
         <%_ uniqueEntityTypes.forEach(function(element) { _%>
         this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
         <%_ }); _%>
@@ -124,7 +124,7 @@ _%>
 
     @Override
     public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria) {
-        List<Expression> columns = <%= asEntity(entityClass) %>SqlHelper.getColumns(entityTable, SelectCreator.ENTITY_ALIAS);
+        List<Expression> columns = <%= asEntity(entityClass) %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
         <%_ eagerRelations.forEach(function(rel) { _%>
         columns.addAll(<%= rel.otherEntityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
         <%_ }); _%>
@@ -132,7 +132,7 @@ _%>
             const colName = getColumnName(rel.relationshipName); %>
             .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= colName %>_id", entityTable)).equals(Column.create("id", <%= rel.relationshipName %>Table ))<%_ }); _%>;
 
-        String select = selectCreator.createSelect(selectFrom, <%= asEntity(entityClass) %>.class, pageable/*, criteria */);
+        String select = entityManager.createSelect(selectFrom, <%= asEntity(entityClass) %>.class, pageable/*, criteria */);
         return db.execute(select)
                 .map(this::process)
                 .all();
@@ -164,15 +164,7 @@ _%>
 
     @Override
     public <S extends <%= asEntity(entityClass) %>> Mono<S> insert(S entity) {
-        OutboundRow row = dataAccessStrategy.getOutboundRow(entity);
-
-        GenericInsertSpec<Map<String, Object>> insertSpec = db.insert().into("<%= entityTableName %>");
-        for (Entry<String, SettableValue> column : row.entrySet()) {
-            insertSpec = insertSpec.value(column.getKey(), column.getValue());
-        }
-        return insertSpec.map(dataAccessStrategy.getConverter().populateIdIfNecessary(entity))
-            .first()
-            .defaultIfEmpty(entity);
+        return entityManager.insert(entity);
     }
 
     @Override

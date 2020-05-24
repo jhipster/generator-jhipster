@@ -46,6 +46,12 @@ let saveMethod = 'save';
 if (!reactive && databaseType === 'sql') {
     saveMethod = 'saveAndFlush';
 }
+let createEntityPrefix = '';
+let createEntityPostfix = '';
+if (databaseType === 'sql' && reactive) {
+    createEntityPrefix = 'em.insert(';
+    createEntityPostfix = ').block()';
+}
 let idValue = `${asEntity(entityInstance)}.getId()`;
 if (primaryKeyType === 'Long') {
     idValue = idValue + '.intValue()';
@@ -93,6 +99,9 @@ import <%= packageName %>.domain.<%= asEntity(otherEntityNameCapitalized) %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ } _%>
 import <%= packageName %>.repository.<%= entityClass %>Repository;
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import <%= packageName %>.service.EntityManager;
+<%_ } _%>
 <%_ if (isUsingMapsId === true && ( dto !== 'mapstruct' && service === 'no')) { _%>
 import <%= packageName %>.repository.<%= mapsIdAssoc.otherEntityNameCapitalized %>Repository;
 <%_ } _%>
@@ -446,7 +455,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     @Autowired
     private <%= entityClass %>QueryService <%= entityInstance %>QueryService;
     <%_ } _%>
-    <%_ if (databaseType === 'sql' && !reactive) { _%>
+    <%_ if (databaseType === 'sql') { _%>
 
     @Autowired
     private EntityManager em;
@@ -470,7 +479,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%= asEntity(entityClass) %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql' && !reactive) { %>EntityManager em<% } %>) {
+    public static <%= asEntity(entityClass) %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql') { %>EntityManager em<% } %>) {
         <%_ if (fluentMethods) { _%>
         <%= asEntity(entityClass) %> <%= asEntity(entityInstance) %> = new <%= asEntity(entityClass) %>()<% for (idx in fields) { %>
             .<%= fields[idx].fieldName %>(<%= fieldStatus + fields[idx].fieldNameUnderscored.toUpperCase() %>)<% if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>
@@ -485,7 +494,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ } _%>
         <%_ } _%>
         <%_
-        const alreadyGeneratedEntities = []
+        const alreadyGeneratedEntities = [];
         for (idx in relationships) {
             const relationshipValidate = relationships[idx].relationshipValidate;
             const otherEntityName = relationships[idx].otherEntityName;
@@ -498,7 +507,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         // Add required entity
             <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
     <%_ if (otherEntityName === 'user') { // TODO or other entity has no unique fields _%>
-        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseType === 'sql' && !reactive) { %>em<% } %>);
+        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.createEntity(<% if (databaseType === 'sql') { %>em<% } %>)<%= createEntityPostfix %>;
                 <%_ if (databaseType === 'sql' && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();
@@ -510,14 +519,14 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %>;
         <%_ if (databaseType === 'sql' && !reactive) { _%>
         if (TestUtil.findAll(em, <%= otherEntityNameCapitalized %>.class).isEmpty()) {
-            <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(em);
+            <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(em)<%= createEntityPostfix %>;
             em.persist(<%= otherEntityName %>);
             em.flush();
         } else {
             <%= otherEntityName %> = TestUtil.findAll(em, <%= otherEntityNameCapitalized %>.class).get(0);
         }
         <%_ } else { _%>
-        <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && !reactive) { %>em<% } %>);
+        <%= otherEntityName %> = <%= createEntityPrefix %><%= otherEntityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>)<%= createEntityPostfix %>;
         <%_ } _%>
         <%_ if (databaseType === 'mongodb') { _%>
         <%= otherEntityName %>.setId("fixed-id-for-tests");
@@ -547,7 +556,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j' || (databaseType === 'sql' && reactive)) { _%>
         <%= entityInstance %>Repository.deleteAll()<%= callBlock %>;
         <%_ } _%>
-        <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql' && !reactive) { %>em<% } %>);
+        <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
     }
 <%_ if (!readOnly) { _%>
 
@@ -660,7 +669,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             if (mapsIdUse === true) { _%>
         // Add a new parent entity
                 <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (otherEntityName !== 'user') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql' && !reactive) { %>em<% } %>);
+        <%= asEntity(otherEntityNameCapitalized) %> <%= otherEntityName %> = <%= otherEntityNameCapitalized %>ResourceIT.create<% if (otherEntityName !== 'user') { _%>Updated<%_ } %>Entity(<% if (databaseType === 'sql') { %>em<% } %>);
                 <%_   if (databaseType === 'sql' && !reactive) { _%>
         em.persist(<%= otherEntityName %>);
         em.flush();

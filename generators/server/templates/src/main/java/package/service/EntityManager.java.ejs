@@ -21,10 +21,16 @@ package <%= packageName %>.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.data.r2dbc.core.DatabaseClient.GenericInsertSpec;
 import org.springframework.data.r2dbc.core.ReactiveDataAccessStrategy;
+import org.springframework.data.r2dbc.mapping.OutboundRow;
+import org.springframework.data.r2dbc.mapping.SettableValue;
 import org.springframework.data.r2dbc.query.UpdateMapper;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.sql.OrderByField;
@@ -35,29 +41,41 @@ import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
 import org.springframework.stereotype.Service;
 
+import reactor.core.publisher.Mono;
+
 /**
  * Helper class to create SQL selects based on the entity, paging parameters and criteria.
  * 
  */
 @Service
-public class SelectCreator {
+public class EntityManager {
     public final static String ENTITY_ALIAS = "e";
     public final static String ALIAS_PREFIX = "e_";
 
     private final ReactiveDataAccessStrategy dataAccessStrategy;
     private final SqlRenderer sqlRenderer;
     private final UpdateMapper updateMapper;
+    private final DatabaseClient db;
 
-    public SelectCreator(ReactiveDataAccessStrategy dataAccessStrategy, SqlRenderer sqlRenderer, UpdateMapper updateMapper) {
+    public EntityManager(ReactiveDataAccessStrategy dataAccessStrategy, SqlRenderer sqlRenderer, UpdateMapper updateMapper, DatabaseClient db) {
         this.dataAccessStrategy = dataAccessStrategy;
         this.sqlRenderer = sqlRenderer;
         this.updateMapper = updateMapper;
+        this.db = db;
     }
 
+    /**
+     * Creates an SQL select statement from the given fragment and pagination parameters.
+     * @return sql select statement
+     */
     public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable) {
         return createSelect(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
     }
 
+    /**
+     * Creates an SQL select statement from the given fragment and pagination parameters.
+     * @return sql select statement
+     */
     public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable) {
         return createSelect(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
     }
@@ -65,28 +83,49 @@ public class SelectCreator {
     private String createSelect(SelectFromAndJoin selectFromWithPageable, Class<?> entityType, Sort sortParameter) {
         final Select select;
         if (sortParameter.isSorted()) {
-            RelationalPersistentEntity<?> entity = (RelationalPersistentEntity<?>) dataAccessStrategy.getConverter().getMappingContext()
-                    .getPersistentEntity(entityType);
+            RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
             Sort sort = updateMapper.getMappedObject(sortParameter, entity);
-            select = selectFromWithPageable.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(SelectCreator.ENTITY_ALIAS), sort)).build();
+            select = selectFromWithPageable.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort)).build();
         } else {
             select = selectFromWithPageable.build();
         }
         return createSelect(select);
     }
 
+    private RelationalPersistentEntity<?> getPersistentEntity(Class<?> entityType) {
+        return (RelationalPersistentEntity<?>) dataAccessStrategy.getConverter().getMappingContext()
+                .getPersistentEntity(entityType);
+    }
+
     public String createSelect(Select select) {
         return sqlRenderer.render(select);
     }
 
-    private Collection<? extends OrderByField> createOrderByFields(Table table, Sort sortToUse) {
+    /**
+     * Inserts the given entity into the database - and sets the id, if it's an autoincrement field.
+     */
+    public <S> Mono<S> insert(S entity) {
+        OutboundRow row = dataAccessStrategy.getOutboundRow(entity);
+        RelationalPersistentEntity<?> persistentEntity = getPersistentEntity(entity.getClass());
+
+        GenericInsertSpec<Map<String, Object>> insertSpec = db.insert().into(persistentEntity.getTableName());
+        for (Entry<String, SettableValue> column : row.entrySet()) {
+            insertSpec = insertSpec.value(column.getKey(), column.getValue());
+        }
+        return insertSpec.map(dataAccessStrategy.getConverter().populateIdIfNecessary(entity))
+            .first()
+            .defaultIfEmpty(entity);
+    }
+
+
+    private static Collection<? extends OrderByField> createOrderByFields(Table table, Sort sortToUse) {
 
         List<OrderByField> fields = new ArrayList<>();
 
         for (Sort.Order order : sortToUse) {
 
             String propertyName = order.getProperty();
-            OrderByField orderByField = OrderByField.from(table.column(propertyName).as(SelectCreator.ALIAS_PREFIX + propertyName));
+            OrderByField orderByField = OrderByField.from(table.column(propertyName).as(EntityManager.ALIAS_PREFIX + propertyName));
 
             if (order.getDirection() != null) {
                 fields.add(order.isAscending() ? orderByField.asc() : orderByField.desc());
