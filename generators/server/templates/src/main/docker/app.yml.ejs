@@ -85,7 +85,7 @@ services:
             - SPRING_ELASTICSEARCH_REST_URIS=http://<%= baseName.toLowerCase() %>-elasticsearch:9200
             <%_ } _%>
             <%_ if (messageBroker === 'kafka') { _%>
-            - KAFKA_BOOTSTRAPSERVERS=kafka:9092
+            - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
             <%_ } _%>
             <%_ if (cacheProvider === 'infinispan') { _%>
             - JAVA_OPTS=-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true
@@ -177,7 +177,7 @@ services:
             service: kafka
         environment:
             - KAFKA_ADVERTISED_HOST_NAME=kafka
-            - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+            - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
     zookeeper:
         extends:
             file: kafka.yml

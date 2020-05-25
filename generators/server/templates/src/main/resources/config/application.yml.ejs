@@ -368,7 +368,7 @@ jhipster:
     <%_ } _%>
 <%_ if (messageBroker === 'kafka') { _%>
 kafka:
-  bootstrap-servers: localhost:9092
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
   consumer:
     key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value.deserializer: org.apache.kafka.common.serialization.StringDeserializer
