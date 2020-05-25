@@ -19,7 +19,7 @@
 package <%= packageName %>.repository.rowmapper;
 <%_ 
     let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
-    let { eagerRelations, uniqueEntityTypes } = _generateEagerRelationsAndEntityTypes(entityClass, relationships);
+    let { eagerRelations, uniqueEntityTypes, regularEagerRelations } = _generateEagerRelationsAndEntityTypes(entityClass, relationships);
 _%>
 
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -75,7 +75,7 @@ public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= 
             <%_ } _%>
         entity.set<%= field.fieldInJavaBeanMethod %>(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
         <%_ }); _%>
-        <%_ eagerRelations.forEach(function(rel) { _%>
+        <%_ regularEagerRelations.forEach(function(rel) { _%>
         entity.set<%= rel.relationshipNameCapitalized %>Id(converter.fromRow(row, prefix + "_<%= getColumnName(rel.relationshipName) %>_id", Long.class));
         <%_ }); _%> 
         return entity;

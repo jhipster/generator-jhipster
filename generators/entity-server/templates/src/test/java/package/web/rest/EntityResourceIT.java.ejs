@@ -679,7 +679,8 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } break; } _%>
 
         // Load the <%= entityInstance %>
-        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId())<%= reactive ? '.block()' : '.get()' %>;<% if (databaseType === 'sql' && !reactive) { %>
+        <%= asEntity(entityClass) %> updated<%= asEntity(entityClass) %> = <%= entityInstance %>Repository.findById(<%= asEntity(entityInstance) %>.getId())<%= reactive ? '.block()' : '.get()' %>;
+        assertThat(updated<%= asEntity(entityClass) %>).isNotNull();<% if (databaseType === 'sql' && !reactive) { %>
         // Disconnect from session so that the updates on updated<%= asEntity(entityClass) %> are not directly saved in db
         em.detach(updated<%= asEntity(entityClass) %>);<% } %>
 
@@ -687,6 +688,7 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         updated<%= asEntity(entityClass) %>.set<%= mapsIdEntity %>(<%= alreadyGeneratedEntities.pop() %>);
         <%_ if (dto === 'mapstruct') { _%>
         <%= asDto(entityClass) %> updated<%= asDto(entityClass) %> = <%= entityInstance %>Mapper.toDto(updated<%= asEntity(entityClass) %>);
+        assertThat(updated<%= asDto(entityClass) %>).isNotNull();
         <%_ } _%>
 
         // Update the entity

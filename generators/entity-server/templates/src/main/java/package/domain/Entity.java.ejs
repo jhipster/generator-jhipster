@@ -440,7 +440,7 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     @com.fasterxml.jackson.annotation.JsonBackReference
     <%_     }
         } else if (databaseType === 'sql' && reactive) { _%>
-          <%_ if (ownerSide === true) { _%>
+          <%_ if (ownerSide === true && isUsingMapsId !== true) { _%>
     private Long <%= relationshipFieldName %>Id;
 
           <%_ } _%>
@@ -538,13 +538,17 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         const otherEntityRelationshipNameCapitalized = relationships[idx].otherEntityRelationshipNameCapitalized;
         const otherEntityRelationshipNameCapitalizedPlural = relationships[idx].otherEntityRelationshipNameCapitalizedPlural;
         const otherEntityIsEmbedded = relationships[idx].otherEntityIsEmbedded;
-        const ownerSide = relationships[idx].ownerSide || false;
+        const ownerSide = relationships[idx].ownerSide;
 
         // An embedded entity should not reference entities that embeds it, unless the other entity is also embedded
         if (embedded && !otherEntityIsEmbedded && ownerSide === false) {
             continue;
         }
-        const reactiveRelationShipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' && ownerSide === false));
+
+        const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
+        const reactiveDerivedIdentifier = (databaseType === 'sql' && reactive && relationshipType === 'one-to-one' && ownerSide === true && useJPADerivedIdentifier === true);
+        const reactiveRelationShipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' && 
+                (ownerSide === false || (ownerSide === true && useJPADerivedIdentifier === true))));
     _%>
     <%_ if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') { _%>
 
@@ -619,6 +623,8 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
             <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationShipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
+            <%_ } else if (reactiveDerivedIdentifier) { _%>
+        this.id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
             <%_ } _%>
         return this;
     }
@@ -628,6 +634,8 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
         <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationShipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
+        <%_ } else if (reactiveDerivedIdentifier) { _%>
+        this.id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
         <%_ } _%>
     }
         <%_ if (reactiveRelationShipWithId) { _%>

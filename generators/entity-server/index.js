@@ -103,13 +103,21 @@ module.exports = class extends BaseBlueprintGenerator {
         return { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums };
     }
 
+    _getJoinColumnName(relationship) {
+        if (relationship.useJPADerivedIdentifier === true) {
+            return 'id';
+        } else {
+            return this.getColumnName(relationship.relationshipName) + '_id';
+        }
+    }
+
     _generateTableJoins(relationships) {
         const joins = [];
         Object.values(relationships).forEach(rel => {
             if (rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)) {
-                const colName = this.getColumnName(rel.relationshipName);
+                const colName = this._getJoinColumnName(rel);
                 joins.push(
-                    ` LEFT JOIN ${rel.otherEntityTableName} ${rel.relationshipName} ON entity.${colName}_id = ${rel.relationshipName}.id`
+                    ` LEFT JOIN ${rel.otherEntityTableName} ${rel.relationshipName} ON entity.${colName} = ${rel.relationshipName}.id`
                 );
             }
         });
@@ -120,12 +128,15 @@ module.exports = class extends BaseBlueprintGenerator {
         const eagerRelations = relationships.filter(function (rel) {
             return rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true);
         });
+        const regularEagerRelations = eagerRelations.filter(function (rel) {
+            return rel.useJPADerivedIdentifier !== true;
+        });
         const uniqueEntityTypes = new Set(
             eagerRelations.map(function (rel) {
                 return rel.otherEntityNameCapitalized;
             })
         );
         uniqueEntityTypes.add(entityClass);
-        return { eagerRelations, uniqueEntityTypes };
+        return { eagerRelations, uniqueEntityTypes, regularEagerRelations };
     }
 };
