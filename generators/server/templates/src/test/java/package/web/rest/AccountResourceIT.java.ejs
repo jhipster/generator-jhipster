@@ -181,6 +181,9 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
 import <%= packageName %>.repository.search.UserSearchRepository;
@@ -228,6 +231,9 @@ import static <%= packageName %>.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
@@ -270,6 +276,9 @@ public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends 
 <%_ if (databaseType === 'cassandra') { _%>
 import <%= packageName %>.AbstractCassandraTest;
 <%_ } _%>
+<%_ if (databaseType === 'neo4j') { _%>
+import <%= packageName %>.AbstractNeo4jIT;
+<%_ } _%>
 import <%= packageName %>.<%= mainClass %>;
 import <%= packageName %>.config.Constants;
 <%_ if (authenticationType === 'session' && !reactive) { _%>
@@ -293,7 +302,9 @@ import <%= packageName %>.service.dto.<%= asDto('User') %>;
 import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
 import <%= packageName %>.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
-
+<%_ if (databaseType === 'neo4j') { _%>
+import org.junit.jupiter.api.extension.ExtendWith;
+<%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -359,6 +370,9 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 <%_ } _%>
 @WithMockUser(value = TEST_USER_LOGIN)
 @SpringBootTest(classes = <%= mainClass %>.class)
+<%_ if (databaseType === 'neo4j') { _%>
+@ExtendWith(AbstractNeo4jIT.class)
+<%_ } _%>
 public class AccountResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCassandraTest <% } %>{
     static final String TEST_USER_LOGIN = "test";
 
