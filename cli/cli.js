@@ -157,12 +157,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             const firstUnknownArg = Array.isArray(unknownArgs) && unknownArgs.length > 0 ? unknownArgs[0] : undefined;
             if (key === 'app' && firstUnknownArg !== undefined && !firstUnknownArg.startsWith('-')) {
                 // Unknown commands.
-                /* eslint-disable-next-line no-console */
-                console.error(
-                    chalk.red(`${chalk.yellow(firstUnknownArg)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`)
-                );
-
-                const cmd = Object.values(args).join('');
+                const cmd = Object.values(unknownArgs).join('');
                 const availableCommands = program.commands.map(c => c._name);
 
                 const suggestion = didYouMean(cmd, availableCommands);
@@ -170,7 +165,8 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                     logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
                 }
 
-                process.exit(1);
+                logger.fatal(`${chalk.yellow(firstUnknownArg)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`);
+                return;
             }
 
             // Get unknown options and parse.

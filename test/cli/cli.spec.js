@@ -8,6 +8,7 @@ const sinon = require('sinon');
 const Environment = require('yeoman-environment');
 
 const { getJHipsterCli, testInTempDir, copyFakeBlueprint, copyBlueprint, lnYeoman } = require('../utils/utils');
+const { logger } = require('../../cli/utils');
 
 describe('jhipster cli test', () => {
     const cmd = getJHipsterCli();
@@ -38,6 +39,32 @@ describe('jhipster cli test', () => {
             expect(error.code).to.equal(1);
             expect(stderr.includes('is not a known command')).to.be.true;
             done();
+        });
+    });
+
+    describe('with an unknown command', () => {
+        let oldArgv;
+        before(() => {
+            oldArgv = process.argv;
+            process.argv = ['jhipster', 'jhipster', 'entitt'];
+            sinon.stub(logger, 'fatal');
+            sinon.stub(logger, 'info');
+        });
+        after(() => {
+            process.argv = oldArgv;
+            logger.fatal.restore();
+            logger.info.restore();
+        });
+        it('should print did you mean message', () => {
+            proxyquire('../../cli/cli', {});
+            expect(logger.info.getCall(0).args[0]).to.include('Did you mean');
+            expect(logger.info.getCall(0).args[0]).to.include('entity');
+        });
+
+        it('should print error message', () => {
+            proxyquire('../../cli/cli', {});
+            expect(logger.fatal.getCall(0).args[0]).to.include('entitt');
+            expect(logger.fatal.getCall(0).args[0]).to.include('is not a known command');
         });
     });
 
