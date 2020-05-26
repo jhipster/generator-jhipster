@@ -171,22 +171,19 @@ _%>
 
     @Override
     public <S extends <%= asEntity(entityClass) %>> Mono<S> save(S entity) {
-        <%_ if (isUsingMapsId) { _%>
-        // Even if there is an id set, it is possible, that the entity is not yet persisted.
-        return update(entity).flatMap(numberOfUpdates -> {
-            if (numberOfUpdates.intValue() <= 0) {
-                return insert(entity);
-            } else {
-                return Mono.just(entity);
-            }
-        });
-        <%_ } else { _%>
         if (entity.getId() == null) {
+            <%_ if (isUsingMapsId) { _%>
+            entity.setId(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId());
+            <%_ } _%>
             return insert(entity);
         } else {
-            return update(entity).thenReturn(entity);
+            return update(entity).map(numberOfUpdates -> {
+                if (numberOfUpdates.intValue() <= 0) {
+                    throw new IllegalStateException("Unable to update <%= entityClass %> with id = " + entity.getId());
+                }
+                return entity;
+            });
         }
-        <%_ } _%>
     }
 
     @Override

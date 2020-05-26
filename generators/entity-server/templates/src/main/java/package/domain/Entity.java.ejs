@@ -540,7 +540,6 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         }
 
         const useJPADerivedIdentifier = relationships[idx].useJPADerivedIdentifier;
-        const reactiveDerivedIdentifier = (databaseType === 'sql' && reactive && relationshipType === 'one-to-one' && ownerSide === true && useJPADerivedIdentifier === true);
         const reactiveRelationShipWithId = (databaseType === 'sql' && reactive && !(relationshipType === 'one-to-one' && 
                 (ownerSide === false || (ownerSide === true && useJPADerivedIdentifier === true))));
     _%>
@@ -617,8 +616,6 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
             <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationShipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
-            <%_ } else if (reactiveDerivedIdentifier) { _%>
-        this.id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
             <%_ } _%>
         return this;
     }
@@ -628,8 +625,6 @@ public class <%= asEntity(entityClass) %> implements Serializable {
         this.<%= relationshipFieldName %> = <%= otherEntityName %>;
         <%_ if ((databaseType === 'couchbase' && !otherEntityIsEmbedded) || reactiveRelationShipWithId) { _%>
         this.<%= relationshipFieldName %>Id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
-        <%_ } else if (reactiveDerivedIdentifier) { _%>
-        this.id = <%= otherEntityName %> != null ? <%= otherEntityName %>.getId() : null;
         <%_ } _%>
     }
         <%_ if (reactiveRelationShipWithId) { _%>
