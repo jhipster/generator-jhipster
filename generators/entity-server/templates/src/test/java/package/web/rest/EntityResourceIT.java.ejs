@@ -117,6 +117,9 @@ import <%= packageName %>.service.dto.<%= entityClass %>Criteria;
 import <%= packageName %>.service.<%= entityClass %>QueryService;
 <%_ } _%>
 
+<%_ if (databaseType === 'sql' && reactive) { _%>
+import org.junit.jupiter.api.AfterEach;
+<%_ } _%>
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 <%_ if ((searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany || cacheProvider === 'redis') || databaseType === 'neo4j' || reactiveSqlTestContainers) { _%>
@@ -552,6 +555,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
             }
         }); _%>
+    }
+
+    @AfterEach
+    public void cleanup() {
+        deleteEntities(em);
     }
 
     <%_ } _%>
