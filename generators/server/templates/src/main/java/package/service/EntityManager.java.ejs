@@ -97,12 +97,33 @@ public class EntityManager {
                 .getPersistentEntity(entityType);
     }
 
+    /**
+     * Delete all the entity with the given type, and return the number of deletions.
+     * @return the number of deleted entity
+     */
+    public Mono<Integer> deleteAll(Class<?> entityType) {
+        return db.delete().from(entityType).fetch().rowsUpdated();
+    }
+
+    /**
+     * Delete all the rows from the given table, and return the number of deletions.
+     * @return the number of deleted rows.
+     */
+    public Mono<Integer> deleteAll(String tableName) {
+        return db.delete().from(tableName).fetch().rowsUpdated();
+    }
+
+    /**
+     * Generate an actual SQL from the given {@link Select}.
+     * @return the generated SQL select.
+     */
     public String createSelect(Select select) {
         return sqlRenderer.render(select);
     }
 
     /**
      * Inserts the given entity into the database - and sets the id, if it's an autoincrement field.
+     * @return the persisted entity.
      */
     public <S> Mono<S> insert(S entity) {
         OutboundRow row = dataAccessStrategy.getOutboundRow(entity);

@@ -19,6 +19,7 @@
 package <%= packageName %>.web.rest;
 
 <%_
+
 let isUsingMapsId = false;
 let mapsIdAssoc;
 let mapsIdEntity;
@@ -544,6 +545,20 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     }
 <%_ }); _%>
 
+    <%_ if (databaseType === 'sql' && reactive) {
+        const alreadyGeneratedDeletionCalls = [];
+        _%>
+    public static void deleteEntities(EntityManager em) {
+        em.deleteAll(<%= entityClass %>.class).block();
+    <%_ relationships.forEach(function(rel) {
+            if ((rel.relationshipValidate === true || rel.useJPADerivedIdentifier === true) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
+        <%= rel.otherEntityNameCapitalized %>ResourceIT.deleteEntities(em);
+            <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
+            }
+        }); _%>
+    }
+
+    <%_ } _%>
     <%_ if (reactive && testsNeedCsrf) { _%>
     @BeforeEach
     public void setupCsrf() {
@@ -553,8 +568,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
     <%_ } _%>
     @BeforeEach
     public void initTest() {
-        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j' || (databaseType === 'sql' && reactive)) { _%>
+        <%_ if (databaseType === 'mongodb' || databaseType === 'couchbase' || databaseType === 'cassandra' || databaseType === 'neo4j') { _%>
         <%= entityInstance %>Repository.deleteAll()<%= callBlock %>;
+        <%_ } _%>
+        <%_ if (databaseType === 'sql' && reactive) {  _%>
+        deleteEntities(em);
         <%_ } _%>
         <%= asEntity(entityInstance) %> = createEntity(<% if (databaseType === 'sql') { %>em<% } %>);
     }

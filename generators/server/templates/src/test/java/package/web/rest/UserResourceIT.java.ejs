@@ -275,6 +275,14 @@ class UserResourceIT <% if (databaseType === 'cassandra') { %>extends AbstractCa
         return user;
     }
 
+    /**
+     * Delete all the users from the database.
+     */
+    public static void deleteEntities(EntityManager em) {
+        em.deleteAll("<%= jhiTablePrefix %>_user_authority").block();
+        em.deleteAll(User.class).block();
+    }
+
     @BeforeEach
     public void initTest() {
         <%_ if (databaseType === 'sql' && reactive) { _%>
