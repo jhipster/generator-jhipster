@@ -23,12 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import <%= packageName %>.web.rest.TestUtil;
 <%_
 let hasOauthUser = false;
-for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
-    if (isUsingMapsId) {
-        hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
-        break;
-    }
+
+let { isUsingMapsId, mapsIdAssoc } = _getUseMapsIdRelation(relationships);
+if (isUsingMapsId) {
+    hasOauthUser = mapsIdAssoc.otherEntityName === 'user' && authenticationType === 'oauth2';
 }
 _%>
 <%_ if (databaseType === 'cassandra' || (databaseType === 'sql' && hasOauthUser === true)) { _%>

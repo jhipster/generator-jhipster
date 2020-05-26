@@ -23,17 +23,11 @@ package <%= packageName %>.domain;
 let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
 
 let hasDto = dto === 'mapstruct';
-let isUsingMapsId = false;
+let { isUsingMapsId, mapsIdAssoc } = _getUseMapsIdRelation(relationships);
 let hasTextBlob = false;
 let hasRelationship = relationships.length !== 0;
 _%>
 <%_
-for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
-    if (isUsingMapsId) {
-        break;
-    }
-}
 for (idx in fields) {
     if (prodDatabaseType === 'postgresql' && fields[idx].fieldTypeBlobContent === 'text') {
         hasTextBlob = true;

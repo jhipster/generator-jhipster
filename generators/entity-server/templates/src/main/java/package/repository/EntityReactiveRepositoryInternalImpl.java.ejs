@@ -21,6 +21,8 @@ package <%= packageName %>.repository;
 <%_
     let { importApiModelProperty, importJsonIgnore, importJsonIgnoreProperties, importSet, uniqueEnums } = _processJavaEntityImports(fields, relationships);
     let { eagerRelations, uniqueEntityTypes, regularEagerRelations } = _generateEagerRelationsAndEntityTypes(entityClass, relationships);
+    let { isUsingMapsId, mapsIdAssoc } = _getUseMapsIdRelation(relationships);
+
 _%>
 import java.util.function.BiFunction;
 <%_ if (fieldsContainBigDecimal === true) { _%>
@@ -169,11 +171,22 @@ _%>
 
     @Override
     public <S extends <%= asEntity(entityClass) %>> Mono<S> save(S entity) {
+        <%_ if (isUsingMapsId) { _%>
+        // Even if there is an id set, it is possible, that the entity is not yet persisted.
+        return update(entity).flatMap(numberOfUpdates -> {
+            if (numberOfUpdates.intValue() <= 0) {
+                return insert(entity);
+            } else {
+                return Mono.just(entity);
+            }
+        });
+        <%_ } else { _%>
         if (entity.getId() == null) {
             return insert(entity);
         } else {
             return update(entity).thenReturn(entity);
         }
+        <%_ } _%>
     }
 
     @Override

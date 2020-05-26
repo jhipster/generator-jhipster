@@ -124,6 +124,15 @@ module.exports = class extends BaseBlueprintGenerator {
         return joins;
     }
 
+    _getUseMapsIdRelation(relationships) {
+        for (idx in relationships) {
+            if (relationships[idx].useJPADerivedIdentifier === true) {
+                return { isUsingMapsId: true, mapsIdAssoc: relationships[idx] };
+            }
+        }
+        return { isUsingMapsId: false, mapsIdAssoc: null };
+    }
+
     _generateEagerRelationsAndEntityTypes(entityClass, relationships) {
         const eagerRelations = relationships.filter(function (rel) {
             return rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true);

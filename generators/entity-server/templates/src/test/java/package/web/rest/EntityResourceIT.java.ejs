@@ -20,23 +20,19 @@ package <%= packageName %>.web.rest;
 
 <%_
 
-let isUsingMapsId = false;
-let mapsIdAssoc;
+let { isUsingMapsId, mapsIdAssoc } = _getUseMapsIdRelation(relationships);
+
 let mapsIdEntity;
 let mapsIdEntityInstance;
 let mapsIdRepoInstance;
 let hasOauthUser = false;
-for (idx in relationships) {
-    isUsingMapsId = relationships[idx].useJPADerivedIdentifier === true;
-    if (isUsingMapsId) {
-        mapsIdAssoc = relationships[idx];
-        mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
-        mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
-        mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
-        hasOauthUser = relationships[idx].otherEntityName === 'user' && authenticationType === 'oauth2';
-        break;
-    }
+if (isUsingMapsId) {
+    mapsIdEntity = mapsIdAssoc.otherEntityNameCapitalized;
+    mapsIdEntityInstance =  mapsIdEntity.charAt(0).toLowerCase() + mapsIdEntity.slice(1);
+    mapsIdRepoInstance = `${mapsIdEntityInstance}Repository`;
+    hasOauthUser = mapsIdAssoc.otherEntityName === 'user' && authenticationType === 'oauth2';
 }
+
 let callBlock = '';
 let callListBlock = '';
 if (reactive) {
