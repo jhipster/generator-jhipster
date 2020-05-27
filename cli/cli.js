@@ -21,22 +21,8 @@ const chalk = require('chalk');
 const didYouMean = require('didyoumean');
 
 const packageJson = require('../package.json');
-const {
-    CLI_NAME,
-    initHelp,
-    logger,
-    createYeomanEnv,
-    toString,
-    getCommand,
-    getCommandOptions,
-    addKebabCase,
-    getArgs,
-    done,
-    loadAllBlueprintsWithVersion,
-    getBlueprintPackagePaths,
-    loadBlueprintCommands,
-    loadSharedOptions,
-} = require('./utils');
+const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, addKebabCase, getArgs, done } = require('./utils');
+const EnvironmentBuilder = require('./environment-builder');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
@@ -45,14 +31,8 @@ const program = new commander.Command();
 const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
 
-const blueprintsWithVersion = loadAllBlueprintsWithVersion();
-const allBlueprints = Object.keys(blueprintsWithVersion);
-
-const env = createYeomanEnv(allBlueprints);
-const blueprintsPackagePath = getBlueprintPackagePaths(env, blueprintsWithVersion);
-const sharedOptions = loadSharedOptions(blueprintsPackagePath) || {};
-// Env will forward sharedOptions to every generator
-Object.assign(env.sharedOptions, sharedOptions);
+const envBuilder = EnvironmentBuilder.createDefaultBuilder();
+const env = envBuilder.getEnvironment();
 
 program.storeOptionsAsProperties(false).passCommandToAction(false).version(version).usage('[command] [options]').allowUnknownOption();
 
@@ -76,8 +56,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     }
 };
 
-const blueprintCommands = loadBlueprintCommands(blueprintsPackagePath);
-const allCommands = { ...SUB_GENERATORS, ...blueprintCommands };
+const allCommands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() };
 
 /* create commands */
 Object.entries(allCommands).forEach(([key, opts]) => {

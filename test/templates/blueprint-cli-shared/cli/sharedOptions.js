@@ -1,3 +1,4 @@
 module.exports = {
-    fooBar: 'fooValue'
+    fooBar: 'fooValue',
+    single: true
 };

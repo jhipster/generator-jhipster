@@ -1,0 +1,299 @@
+const assert = require('assert');
+const chalk = require('chalk');
+const _ = require('lodash');
+const path = require('path');
+const Environment = require('yeoman-environment');
+const { CLI_NAME, logger } = require('./utils');
+const { normalizeBlueprintName, packageNameToNamespace, loadYoRc, loadBlueprintsFromConfiguration } = require('../generators/utils');
+
+module.exports = class EnvironmentBuilder {
+    /**
+     * Creates a new EnvironmentBuilder with a new Environment.
+     *
+     * @return {EnvironmentBuilder} envBuilder
+     */
+    static create(...args) {
+        const env = Environment.createEnv(...args);
+        return new EnvironmentBuilder(env);
+    }
+
+    /**
+     * Creates a new EnvironmentBuilder with a new Environment.
+     *
+     * @return {EnvironmentBuilder} envBuilder
+     */
+    static fromEnvironment(env) {
+        return new EnvironmentBuilder(env);
+    }
+
+    /**
+     * Creates a new EnvironmentBuilder with a new Environment and load jhipster, blueprints and sharedOptions.
+     *
+     * @return {EnvironmentBuilder} envBuilder
+     */
+    static createDefaultBuilder() {
+        return EnvironmentBuilder.create().lookupJHipster().loadBlueprints().lookupBlueprints().loadSharedOptions();
+    }
+
+    /**
+     * Class to manipulate yeoman environment for jhipster needs.
+     */
+    constructor(env) {
+        this.env = env;
+    }
+
+    /**
+     * Lookup current jhipster generators.
+     *
+     * @return {EnvironmentBuilder} this for chaining.
+     */
+    lookupJHipster() {
+        // Register jhipster generators.
+        this.env.lookup({ packagePaths: [path.join(__dirname, '..')] }).forEach(generator => {
+            // Verify jhipster generators namespace.
+            assert(
+                generator.namespace.startsWith(`${CLI_NAME}:`),
+                `Error on the registered namespace ${generator.namespace}, make sure your folder is called generator-jhipster.`
+            );
+        });
+        return this;
+    }
+
+    /**
+     * Load blueprints from argv, .yo-rc.json.
+     *
+     * @return {EnvironmentBuilder} this for chaining.
+     */
+    loadBlueprints() {
+        this.blueprintsWithVersion = this._getAllBlueprintsWithVersion();
+        return this;
+    }
+
+    /**
+     * Get blueprints with version.
+     *
+     * return {Object} blueprints with versions.
+     */
+    getBlueprintsWithVersion() {
+        return this.blueprintsWithVersion;
+    }
+
+    /**
+     * Lookup current loaded blueprints.
+     *
+     * @return {EnvironmentBuilder} this for chaining.
+     */
+    lookupBlueprints(options) {
+        const allBlueprints = Object.keys(this.blueprintsWithVersion);
+        if (allBlueprints && allBlueprints.length > 0) {
+            // Lookup for blueprints.
+            this.env.lookup({ ...options, filterPaths: true, packagePatterns: allBlueprints });
+        }
+        return this;
+    }
+
+    /**
+     * Load sharedOptions from jhipster and blueprints.
+     *
+     * @return {EnvironmentBuilder} this for chaining.
+     */
+    loadSharedOptions() {
+        const blueprintsPackagePath = this._getBlueprintPackagePaths();
+        const sharedOptions = this._getSharedOptions(blueprintsPackagePath) || {};
+        // Env will forward sharedOptions to every generator
+        Object.assign(this.env.sharedOptions, sharedOptions);
+        return this;
+    }
+
+    /**
+     * Get blueprints commands.
+     *
+     * @return {Object[]} blueprint commands.
+     */
+    getBlueprintCommands() {
+        const blueprintsPackagePath = this._getBlueprintPackagePaths();
+        return this._getBlueprintCommands(blueprintsPackagePath);
+    }
+
+    /**
+     * Get the environment.
+     *
+     * @return {Environment} the yeoman environment.
+     */
+    getEnvironment() {
+        return this.env;
+    }
+
+    /**
+     * @private
+     * Load blueprints from argv.
+     * At this point, commander has not parsed yet because we are building it.
+     */
+    _getBlueprintsFromArgv() {
+        const blueprintNames = [];
+        const indexOfBlueprintArgv = process.argv.indexOf('--blueprint');
+        if (indexOfBlueprintArgv > -1) {
+            blueprintNames.push(process.argv[indexOfBlueprintArgv + 1]);
+        }
+        const indexOfBlueprintsArgv = process.argv.indexOf('--blueprints');
+        if (indexOfBlueprintsArgv > -1) {
+            blueprintNames.push(...process.argv[indexOfBlueprintsArgv + 1].split(','));
+        }
+        if (!blueprintNames.length) {
+            return [];
+        }
+        return blueprintNames.filter((v, i, a) => a.indexOf(v) === i).map(v => normalizeBlueprintName(v));
+    }
+
+    /**
+     * @private
+     * Load blueprints from .yo-rc.json.
+     */
+    _getBlueprintsFromYoRc() {
+        const yoRc = loadYoRc();
+        if (!yoRc || !yoRc['generator-jhipster']) {
+            return [];
+        }
+        return loadBlueprintsFromConfiguration(yoRc['generator-jhipster']);
+    }
+
+    /**
+     * @private
+     * Creates a 'blueprintName: blueprintVersion' object from argv and .yo-rc.json blueprints.
+     */
+    _getAllBlueprintsWithVersion() {
+        const blueprintsWithVersion = this._getBlueprintsFromArgv().reduce((acc, blueprint) => {
+            acc[blueprint] = undefined;
+            return acc;
+        }, {});
+
+        this._getBlueprintsFromYoRc().reduce((acc, blueprint) => {
+            acc[blueprint.name] = blueprint.version;
+            return acc;
+        }, blueprintsWithVersion);
+        return blueprintsWithVersion;
+    }
+
+    /**
+     * @private
+     * Get packagePaths from current loaded blueprints.
+     */
+    _getBlueprintPackagePaths() {
+        const blueprints = this.blueprintsWithVersion;
+        if (!blueprints) {
+            return undefined;
+        }
+
+        const blueprintsToInstall = Object.entries(blueprints)
+            .filter(([blueprint, _version]) => {
+                const namespace = packageNameToNamespace(blueprint);
+                if (!this.env.getPackagePath(namespace)) {
+                    this.env.lookupLocalPackages(blueprint);
+                }
+                return !this.env.getPackagePath(namespace);
+            })
+            .reduce((acc, [blueprint, version]) => {
+                acc[blueprint] = version;
+                return acc;
+            }, {});
+
+        if (Object.keys(blueprintsToInstall).length > 0) {
+            this.env.installLocalGenerators(blueprintsToInstall);
+        }
+
+        return Object.entries(blueprints).map(([blueprint, _version]) => {
+            const namespace = packageNameToNamespace(blueprint);
+            const packagePath = this.env.getPackagePath(namespace);
+            if (!packagePath) {
+                logger.fatal(
+                    `The ${chalk.yellow(blueprint)} blueprint provided is not installed. Please install it using command ${chalk.yellow(
+                        `npm i -g ${blueprint}`
+                    )}`
+                );
+            }
+            return [blueprint, packagePath];
+        });
+    }
+
+    /**
+     * @private
+     * Get blueprints commands.
+     *
+     * @return {Object[]} commands.
+     */
+    _getBlueprintCommands(blueprintPackagePaths) {
+        if (!blueprintPackagePaths) {
+            return undefined;
+        }
+        let result;
+        blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
+            /* eslint-disable import/no-dynamic-require */
+            /* eslint-disable global-require */
+            try {
+                const blueprintCommands = require(`${packagePath}/cli/commands`);
+                result = { ...result, ...blueprintCommands };
+            } catch (e) {
+                const msg = `No custom commands found within blueprint: ${blueprint} at ${packagePath}`;
+                /* eslint-disable no-console */
+                console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+            }
+        });
+        return result;
+    }
+
+    /**
+     * @private
+     * Get blueprints sharedOptions.
+     *
+     * @return {Object} sharedOptions.
+     */
+    _getSharedOptions(blueprintPackagePaths) {
+        function joiner(objValue, srcValue) {
+            if (objValue === undefined) {
+                return srcValue;
+            }
+            if (Array.isArray(objValue) && Array.isArray(srcValue)) {
+                return objValue.concat(srcValue);
+            }
+            if (Array.isArray(objValue)) {
+                return [...objValue, srcValue];
+            }
+            if (Array.isArray(srcValue)) {
+                return [objValue, ...srcValue];
+            }
+            return [objValue, srcValue];
+        }
+
+        function loadSharedOptionsFromFile(sharedOptionsFile, msg, errorMsg) {
+            /* eslint-disable import/no-dynamic-require */
+            /* eslint-disable global-require */
+            try {
+                const opts = require(sharedOptionsFile);
+                /* eslint-disable no-console */
+                if (msg) {
+                    console.info(`${chalk.green.bold('INFO!')} ${msg}`);
+                }
+                return opts;
+            } catch (e) {
+                if (errorMsg) {
+                    console.info(`${chalk.green.bold('INFO!')} ${errorMsg}`);
+                }
+            }
+            return {};
+        }
+
+        const localPath = './.jhipster/sharedOptions';
+        let result = loadSharedOptionsFromFile(path.resolve(localPath), `SharedOptions found at local config ${localPath}`);
+
+        if (!blueprintPackagePaths) {
+            return undefined;
+        }
+
+        blueprintPackagePaths.forEach(([blueprint, packagePath]) => {
+            const errorMsg = `No custom sharedOptions found within blueprint: ${blueprint} at ${packagePath}`;
+            const opts = loadSharedOptionsFromFile(`${packagePath}/cli/sharedOptions`, undefined, errorMsg);
+            result = _.mergeWith(result, opts, joiner);
+        });
+        return result;
+    }
+};
