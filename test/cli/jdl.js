@@ -64,6 +64,26 @@ describe('jdl command test', () => {
                 expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
             });
         });
+        describe('using import-jdl alias', () => {
+            let oldArgv;
+            let jdlStub;
+            beforeEach(() => {
+                oldArgv = process.argv;
+                process.argv = ['jhipster', 'jhipster', 'import-jdl', 'foo.jdl', '--download-only'];
+                jdlStub = sinon.stub();
+                proxyquire('../../cli/cli', { './jdl': jdlStub });
+            });
+            afterEach(() => {
+                process.argv = oldArgv;
+            });
+            it('should call jdl.js with foo.jdl arg', () => {
+                expect(jdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl']);
+            });
+            it('should forward options to jdl.js', () => {
+                expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
+                expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
+            });
+        });
     });
     describe('with local file', () => {
         let importJdlStub;

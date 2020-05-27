@@ -62,7 +62,11 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
     heroku: {
         desc: 'Deploy the current application to Heroku',
     },
-    'import-jdl': {
+    info: {
+        desc: 'Display information about your current project and system',
+    },
+    jdl: {
+        alias: 'import-jdl',
         argument: ['jdlFiles...'],
         cliOnly: true,
         options: [
@@ -111,83 +115,23 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
             },
         ],
         desc: `Create entities from the JDL file/content passed in argument.
-By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
-        help: `
-Arguments:
-  jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
-
-Example:
-  jhipster import-jdl myfile.jdl
-  jhipster import-jdl myfile.jdl --interactive
-  jhipster import-jdl myfile1.jdl myfile2.jdl
-  jhipster import-jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
-  jhipster import-jdl --inline \\
-      "application {
-          config {
-              baseName jhapp,
-              testFrameworks [protractor]
-          }
-      }"
-      `,
-    },
-    info: {
-        desc: 'Display information about your current project and system',
-    },
-    jdl: {
-        argument: ['jdlFiles...'],
-        cliOnly: true,
-        options: [
-            {
-                option: '--skip-install',
-                desc: 'Do not automatically install dependencies',
-                default: false,
-            },
-            {
-                option: '--interactive',
-                desc: 'Run generation in series so that questions can be interacted with',
-                default: false,
-            },
-            {
-                option: '--db <value>',
-                desc: 'Provide DB option for the application when using skip-server flag',
-            },
-            {
-                option: '--json-only',
-                desc: 'Generate only the JSON files and skip entity regeneration',
-                default: false,
-            },
-            {
-                option: '--ignore-application',
-                desc: 'Ignores application generation',
-                default: false,
-            },
-            {
-                option: '--ignore-deployments',
-                desc: 'Ignores deployments generation',
-                default: false,
-            },
-            {
-                option: '--skip-ui-grouping',
-                desc: 'Disable the UI grouping behavior for entity client side code',
-                default: false,
-            },
-            {
-                option: '--skip-db-changelog',
-                desc: 'Disable generation of database changelogs',
-                default: false,
-            },
-        ],
-        desc: `Create entities from the JDL file/content passed in argument.
-If the file is not found, it will be fetched from https://github.com/jhipster/jdl-samples.`,
+  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
         help: `
 Arguments:
     jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
 
 Example:
-    jhipster jdl myfile.jdl
-    jhipster jdl myfile.jdl --interactive
-    jhipster jdl myfile1.jdl myfile2.jdl
-    jhipster jdl https://raw.githubusercontent.com/jhipster/jdl-samples/master/bootiful-music.jh
+    jhipster import-jdl myfile.jdl
+    jhipster import-jdl myfile.jdl --interactive
+    jhipster import-jdl myfile1.jdl myfile2.jdl
+    jhipster import-jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster import-jdl --inline \\
+        "application {
+            config {
+                baseName jhapp,
+                testFrameworks [protractor]
+            }
+        }"
         `,
     },
     kubernetes: {
