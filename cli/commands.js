@@ -110,22 +110,28 @@ This will compose jhipster:client, jhipster:server and jhipster:languages to sca
                 default: false,
             },
             {
+                option: '--skip-sample-repository',
+                desc: 'Disable fetching sample files when the file is not a URL',
+                default: false,
+            },
+            {
                 option: '--inline <value>',
                 desc: 'Pass JDL content inline. Argument can be skipped when passing this',
             },
         ],
         desc: `Create entities from the JDL file/content passed in argument.
-  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
+  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.
+Note: jhipster import-jdl is the same as 'jhipster jdl --skip-sample-repository'`,
         help: `
 Arguments:
     jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
 
 Example:
-    jhipster import-jdl myfile.jdl
-    jhipster import-jdl myfile.jdl --interactive
-    jhipster import-jdl myfile1.jdl myfile2.jdl
-    jhipster import-jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
-    jhipster import-jdl --inline \\
+    jhipster jdl myfile.jdl
+    jhipster jdl myfile.jdl --interactive
+    jhipster jdl myfile1.jdl myfile2.jdl
+    jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster jdl --inline \\
         "application {
             config {
                 baseName jhapp,

@@ -79,6 +79,9 @@ describe('jdl command test', () => {
             it('should call jdl.js with foo.jdl arg', () => {
                 expect(jdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl']);
             });
+            it('should call jdl.js with skipSampleRepository option', () => {
+                expect(jdlStub.getCall(0).args[1].skipSampleRepository).to.be.true;
+            });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].downloadOnly).to.be.true;
                 expect(jdlStub.getCall(0).args[1]['download-only']).to.be.true;
@@ -143,10 +146,78 @@ describe('jdl command test', () => {
         });
     });
     describe('without local file', () => {
+        describe('when passing skipSampleRepository=true', () => {
+            describe('with local file argument', () => {
+                beforeEach(() => {
+                    sinon.stub(https, 'get');
+                });
+                afterEach(() => {
+                    https.get.restore();
+                });
+                it('should return file not found', () => {
+                    proxyquire('../../cli/jdl', {})(
+                        ['foo.jdl'],
+                        { bar: 'foo', skipSampleRepository: true },
+                        { env: 'foo' },
+                        { fork: 'foo' }
+                    ).then(
+                        () => assert.fail('Should fail'),
+                        error => {
+                            expect(https.get.callCount).to.be.equal(0);
+                            expect(error.message).to.include('Could not find foo.jdl');
+                        }
+                    );
+                });
+            });
+            describe('with url argument', () => {
+                let importJdlStub;
+                const jdlReturn = { foo: 'bar' };
+                beforeEach(() => {
+                    // Fake a success response
+                    const response = { statusCode: 200, pipe: fileStream => fileStream.close() };
+                    sinon.stub(https, 'get').callsFake((_url, cb) => {
+                        cb(response);
+                        return { on: () => {} };
+                    });
+                    // Fake a success import jdl
+                    importJdlStub = sinon.stub().callsFake(() => {
+                        return jdlReturn;
+                    });
+                });
+                afterEach(() => {
+                    https.get.restore();
+                });
+                it('should call https.get', () => {
+                    return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(
+                        ['https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jdl'],
+                        { bar: 'foo', skipSampleRepository: true },
+                        { env: 'foo' },
+                        { fork: 'foo' }
+                    ).then(() => {
+                        expect(https.get.callCount).to.be.equal(1);
+                        expect(https.get.getCall(0).args[0]).to.be.equal(
+                            'https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jdl'
+                        );
+                    });
+                });
+                it('should call importJdl', () => {
+                    return proxyquire('../../cli/jdl', { './import-jdl': importJdlStub })(
+                        ['https://raw.githubusercontent.com/jhipster/jdl-samples/master/foo.jdl'],
+                        { bar: 'foo', skipSampleRepository: true },
+                        { env: 'foo' },
+                        { fork: 'foo' }
+                    ).then(() => {
+                        expect(importJdlStub.callCount).to.be.equal(1);
+                        expect(importJdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl']);
+                    });
+                });
+            });
+        });
         describe('with success get response', () => {
             let importJdlStub;
             const jdlReturn = { foo: 'bar' };
             beforeEach(() => {
+                // Fake a success response
                 const response = { statusCode: 200, pipe: fileStream => fileStream.close() };
                 sinon.stub(https, 'get').callsFake((_url, cb) => {
                     cb(response);

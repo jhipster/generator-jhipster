@@ -169,11 +169,17 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                 return;
             }
 
+            const customOptions = {};
+            if (key === 'jdl' && process.argv[2] === 'import-jdl') {
+                customOptions.skipSampleRepository = true;
+            }
+
             // Get unknown options and parse.
             const options = {
                 ...getCommandOptions(packageJson, unknownArgs),
                 ...addKebabCase(program.opts()),
                 ...addKebabCase(cmdOptions),
+                ...addKebabCase(customOptions),
             };
 
             if (opts.cliOnly) {

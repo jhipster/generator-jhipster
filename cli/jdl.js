@@ -80,6 +80,9 @@ module.exports = (args, options = {}, env, forkProcess) => {
                 url = filename;
                 filename = path.basename(urlObject.pathname);
             } catch (_error) {
+                if (options.skipSampleRepository) {
+                    return Promise.reject(new Error(`Could not find ${filename}, make sure the path is correct.`));
+                }
                 url = new URL(filename, 'https://raw.githubusercontent.com/jhipster/jdl-samples/master/').toString();
                 filename = path.basename(filename);
             }
