@@ -196,6 +196,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords, <%= entityInstance %>ComponentsPage.table]);
         await waitUntilDisplayed(element(by.css('.Toastify__toast-body')));
+        await waitUntilHidden(element(by.css('.Toastify__toast-body')));
 
         const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         expect(afterCount).to.eq(countBeforeDeletion - 1);
