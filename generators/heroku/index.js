@@ -549,6 +549,7 @@ module.exports = class extends BaseGenerator {
                 if (this.buildTool === 'gradle') {
                     this.template('heroku.gradle.ejs', 'gradle/heroku.gradle');
                 }
+                this.template('provision-okta-addson.sh.ejs', 'provision-okta-addon.sh');
 
                 this.conflicter.resolve(err => {
                     done();

@@ -1,0 +1,116 @@
+#! /usr/bin/env bash
+# abort on nonzero exitstatus
+set -o errexit
+# abort on unbound variable
+set -o nounset
+# don't hide errors within pipes
+set -o pipefail
+
+get_app_url() {
+    heroku info -j | jq '.app.web_url'
+}
+
+get_apps() {
+    curl -s --location --request GET "${1}/api/v1/apps" \
+        --header "Accept: application/json" \
+        --header "Content-Type: application/json" \
+        --header "Authorization: SSWS ${2}" >apps.json
+
+    jq '.[0]' apps-sh.json >app1.json
+    jq '.[1]' apps-sh.json >app2.json
+}
+
+add_redirect_url() {
+    REDIRECT_URL="${1//\"/}login/oauth2/code/oidc"
+    jq '.settings.oauthClient.redirect_uris += ["'"${REDIRECT_URL}"'"]' app1.json >app1-mod.json
+    jq '.settings.oauthClient.redirect_uris += ["'"${REDIRECT_URL}"'"]' app2.json >app2-mod.json
+}
+
+update_apps() {
+    data=$(jq '.' app1-mod.json)
+    id=$(jq '.id' app1-mod.json)
+
+    curl -s --location --request PUT "${1}/api/v1/apps/${id//\"/}" \
+        --header "Accept: application/json" \
+        --header "Content-Type: application/json" \
+        --header "Authorization: SSWS ${2}" \
+        --data-raw "${data}"
+
+    data=$(jq '.' app2-mod.json)
+    id=$(jq '.id' app2-mod.json)
+
+    curl -s --location --request PUT "${1}/api/v1/apps/${id//\"/}" \
+        --header "Accept: application/json" \
+        --header "Content-Type: application/json" \
+        --header "Authorization: SSWS ${2}" \
+        --data-raw "${data}"
+}
+
+add_groups() {
+    curl --location --request POST "${1}/api/v1/groups" \
+        --header "Content-Type: application/json" \
+        --header "Authorization: SSWS ${2}" \
+        --data-raw '{"profile":
+            {
+                "name": "ROLE_ADMIN",
+                "description": "JHipster Admin Role"
+            }
+        }'
+
+    curl --location --request POST "${1}/api/v1/groups" \
+        --header "Content-Type: application/json" \
+        --header "Authorization: SSWS ${2}" \
+        --data-raw '{"profile":
+            {
+                "name": "ROLE_USER",
+                "description": "JHipster User Role"
+            }
+        }'
+}
+
+add_admin_to_group() {
+    ADMIN_EMAIL=$(heroku config:get OKTA_ADMIN_EMAIL)
+
+    GROUP_ID=$(curl --location --request GET "${1}/api/v1/groups?q=ROLE_ADMIN" \
+        --header "Authorization: SSWS ${2}" | jq '.[0].id')
+
+    USER_ID=$(curl --location --request GET "${1}/api/v1/users?q=${ADMIN_EMAIL}" \
+        --header "Accept: application/json" \
+        --header "Content-Type: application/json" \
+        --header "Authorization: SSWS ${2}" | jq '.[0].id')
+
+    curl --location --request PUT "${1}/api/v1/groups/${GROUP_ID//\"/}/users/${USER_ID//\"/}" \
+        --header "Authorization: SSWS ${2}" \
+        --data-raw ''
+}
+
+main() {
+    OKTA_URL=$(heroku config:get OKTA_CLIENT_ORGURL)
+    OKTA_TOKEN=$(heroku config:get OKTA_CLIENT_TOKEN)
+
+    APP_URL=$(get_app_url)
+
+    # First add the correct redirect url to each application
+    get_apps "${OKTA_URL}" "${OKTA_TOKEN}"
+    add_redirect_url "${APP_URL}"
+    update_apps "${OKTA_URL}" "${OKTA_TOKEN}"
+
+    # Create ROLE_ADMIN and ROLE_USER groups
+    add_groups "${OKTA_URL}" "${OKTA_TOKEN}"
+
+    # Add the automatically provisioned HEROKU ADMIN to the ROLE_ADMIN group
+    add_admin_to_group "${OKTA_URL}" "${OKTA_TOKEN}"
+
+    # Add the groups claim, see https://www.jhipster.tech/security/#okta
+    # TODO
+
+    # Delete all temporary files created during this script
+    rm apps.json
+    rm app1.json
+    rm app2.json
+    rm app1-mod.json
+    rm app2-mod.json
+    rm heroku.json
+}
+
+main
