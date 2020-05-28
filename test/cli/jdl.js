@@ -155,7 +155,7 @@ describe('jdl command test', () => {
                     https.get.restore();
                 });
                 it('should return file not found', () => {
-                    proxyquire('../../cli/jdl', {})(
+                    return proxyquire('../../cli/jdl', {})(
                         ['foo.jdl'],
                         { bar: 'foo', skipSampleRepository: true },
                         { env: 'foo' },
