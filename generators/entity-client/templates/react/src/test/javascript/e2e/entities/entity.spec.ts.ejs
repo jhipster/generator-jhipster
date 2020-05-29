@@ -194,10 +194,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await isVisible(<%= entityInstance %>DeleteDialog.deleteModal)).to.be.false;
 
-        await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords, <%= entityInstance %>ComponentsPage.table]);
-
-        const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
-        expect(afterCount).to.eq(countBeforeDeletion - 1);
+        await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.noRecords);
     });<%= closeBlockComment %>
 <%_ } _%>
 
