@@ -87,6 +87,8 @@ module.exports = class extends BaseGenerator {
         this.herokuDeployType = configuration.get('herokuDeployType');
         this.herokuJavaVersion = configuration.get('herokuJavaVersion');
         this.useOkta = configuration.get('useOkta');
+        this.oktaAdminLogin = configuration.get('oktaAdminLogin')
+        this.oktaAdminPassword = configuration.get('oktaAdminPassword')
     }
 
     get prompting() {
@@ -236,10 +238,35 @@ module.exports = class extends BaseGenerator {
                         ],
                         default: 1,
                     },
+                    {
+                        type: 'input',
+                        name: 'oktaAdminLogin',
+                        message: 'Login (valid email) for the JHipster Admin user:',
+                        validate: input => {
+                            if (!input) {
+                                return 'You must enter a login for the JHipster admin'
+                            }
+                            return true;
+                        },  
+                    },
+                    {
+                        type: 'password',
+                        name: 'oktaAdminPassword',
+                        message: 'Initial password for the JHipster Admin user:',
+                        mask: true,
+                        validate: input => {
+                            if (!input) {
+                                return 'You must enter an initial password for the JHipster admin'
+                            }
+                            return true;
+                        },
+                    },
                 ];
 
                 this.prompt(prompts).then(props => {
                     this.useOkta = props.useOkta;
+                    this.oktaAdminLogin = props.oktaAdminLogin;
+                    this.oktaAdminPassword = props.oktaAdminPassword;
                     done();
                 });
             },
@@ -267,6 +294,8 @@ module.exports = class extends BaseGenerator {
                     herokuDeployType: this.herokuDeployType,
                     herokuJavaVersion: this.herokuJavaVersion,
                     useOkta: this.useOkta,
+                    oktaAdminLogin: this.oktaAdminLogin,
+                    oktaAdminPassword: this.oktaAdminPassword
                 });
             },
         };
@@ -584,6 +613,19 @@ module.exports = class extends BaseGenerator {
 
     get end() {
         return {
+            makeScriptExecutable() {
+                if (this.useOkta) {
+                    try {
+                        fs.chmodSync('provision-okta-addon.sh', '755');
+                    } catch (err) {
+                        this.log(
+                            `${chalk.yellow.bold(
+                                'WARNING!'
+                            )}Failed to make 'provision-okta-addon.sh' executable, you may need to run 'chmod +x provison-okta-addon.sh'`
+                        );
+                    }
+                }
+            },
             productionBuild() {
                 if (this.abort) return;
 
