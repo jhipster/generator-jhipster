@@ -84,6 +84,26 @@ add_admin_to_group() {
         --data-raw ''
 }
 
+add_groups_claim() {
+    curl --location --request POST "${1}/api/v1/authorizationServers/default/claims" \
+        --header "Accept: application/json" \
+        --header "Content-Type: application/json" \
+        --header "Authorization: SSWS ${2}" \
+        --data-raw '{
+        "name": "groups",
+        "status": "ACTIVE",
+        "claimType": "IDENTITY",
+        "valueType": "GROUPS",
+        "value": ".*",
+        "conditions": {
+            "scopes": []
+        },
+        "system": false,
+        "alwaysIncludeInToken": true,
+        "group_filter_type": "REGEX"
+    }'
+}
+
 main() {
     OKTA_URL=$(heroku config:get OKTA_CLIENT_ORGURL)
     OKTA_TOKEN=$(heroku config:get OKTA_CLIENT_TOKEN)
@@ -102,7 +122,7 @@ main() {
     add_admin_to_group "${OKTA_URL}" "${OKTA_TOKEN}"
 
     # Add the groups claim, see https://www.jhipster.tech/security/#okta
-    # TODO
+    add_groups_claim "${OKTA_URL}" "${OKTA_TOKEN}"
 
     # Delete all temporary files created during this script
     rm apps.json
