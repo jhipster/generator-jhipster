@@ -551,7 +551,11 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         const alreadyGeneratedDeletionCalls = [];
         _%>
     public static void deleteEntities(EntityManager em) {
-        em.deleteAll(<%= entityClass %>.class).block();
+        try {
+            em.deleteAll(<%= entityClass %>.class).block();
+        } catch (Exception e) {
+            // It can fail, if other entities are still referring this - it will be removed later.
+        }
     <%_ relationships.forEach(function(rel) {
             if ((rel.relationshipValidate === true || rel.useJPADerivedIdentifier === true) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
         <%= rel.otherEntityNameCapitalized %>ResourceIT.deleteEntities(em);
