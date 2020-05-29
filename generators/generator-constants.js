@@ -28,7 +28,7 @@ const YARN_VERSION = '1.22.4';
 const NPM_VERSION = '6.14.5';
 
 const GRADLE_VERSION = '6.4.1';
-const JIB_VERSION = '2.2.0';
+const JIB_VERSION = '2.3.0';
 
 // Libraries version
 const JHIPSTER_DEPENDENCIES_VERSION = '3.8.0-SNAPSHOT';
@@ -55,8 +55,8 @@ const DOCKER_JHIPSTER_REGISTRY = 'jhipster/jhipster-registry:v6.2.0';
 const DOCKER_JAVA_JRE = 'adoptopenjdk:11-jre-hotspot';
 const DOCKER_MYSQL = 'mysql:8.0.20';
 const DOCKER_MARIADB = 'mariadb:10.5.3';
-const DOCKER_POSTGRESQL = 'postgres:12.1'; // issues upgrading to 12.2
-const DOCKER_MONGODB = 'mongo:4.2.6';
+const DOCKER_POSTGRESQL = 'postgres:12.3';
+const DOCKER_MONGODB = 'mongo:4.2.7';
 const DOCKER_COUCHBASE = 'couchbase:6.5.1';
 const DOCKER_CASSANDRA = 'cassandra:3.11.5'; // issues upgrading to 3.11.6
 const DOCKER_MSSQL = 'mcr.microsoft.com/mssql/server:2017-latest-ubuntu';
@@ -80,7 +80,7 @@ const DOCKER_CONSUL = 'consul:1.7.3';
 const DOCKER_CONSUL_CONFIG_LOADER = 'jhipster/consul-config-loader:v0.3.1';
 const DOCKER_PROMETHEUS = 'prom/prometheus:v2.18.1';
 const DOCKER_PROMETHEUS_ALERTMANAGER = 'prom/alertmanager:v0.20.0';
-const DOCKER_GRAFANA = 'grafana/grafana:6.7.3';
+const DOCKER_GRAFANA = 'grafana/grafana:7.0.1';
 const DOCKER_JENKINS = 'jenkins/jenkins:lts';
 const DOCKER_SWAGGER_EDITOR = 'swaggerapi/swagger-editor:latest';
 const DOCKER_COMPOSE_FORMAT_VERSION = '2';

@@ -26,6 +26,7 @@
     "node_modules"
   ],
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
     <%_ otherModules.forEach(module => { _%>
     "<%= module.name %>": "<%= module.version %>",
     <%_ }); _%>
@@ -34,11 +35,8 @@
     "husky": "<%= HUSKY_VERSION %>",
     "lint-staged": "<%= LINT_STAGED_VERSION %>",
     <%_ } _%>
-    "prettier": "<%= PRETTIER_VERSION %>",
-    <%_ if (prettierJava) { _%>
-    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
-    <%_ } _%>
-    "@openapitools/openapi-generator-cli": "1.0.12-4.3.0"
+    "prettier": "<%= PRETTIER_VERSION %>"<% if (prettierJava) { %>,
+    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>"<% } %>
   },
   "engines": {
     "node": ">=<%= NODE_VERSION %>"
