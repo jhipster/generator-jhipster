@@ -182,6 +182,9 @@ import java.util.List;
 import java.util.UUID;
 <%_ } _%>
 
+<%_ if (fieldsContainBigDecimal === true) { _%>
+import static <%= packageName %>.web.rest.TestUtil.sameNumber;
+<%_ } _%>
 <%_ if (fieldsContainZonedDateTime === true) { _%>
 import static <%= packageName %>.web.rest.TestUtil.sameInstant;
 <%_ } _%>
@@ -619,6 +622,8 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
         assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        <%_ } else if (fields[idx].fieldType === 'BigDecimal') { _%>
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ }} _%>
@@ -819,6 +824,8 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
         <%_ } else if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { _%>
         assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>ContentType()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        <%_ } else if (fields[idx].fieldType === 'BigDecimal') { _%>
+        assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualByComparingTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ } else { _%>
         assertThat(test<%= entityClass %>.get<%= fields[idx].fieldInJavaBeanMethod %>()).isEqualTo(<%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %>);
         <%_ }} _%>
@@ -854,13 +861,14 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ } _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% 
                     if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else 
-                        if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% 
+                        if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } else
+                            if (fields[idx].fieldType === 'BigDecimal') { %>sameNumber(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% 
                         if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% 
                             if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else 
                                 if (fields[idx].fieldType === 'Integer') { %><% } else 
                                     if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else 
                                         if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else 
-                                            if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else 
+                                            if (fields[idx].fieldType === 'BigDecimal') { %>)<% } else
                                                 if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else 
                                                     if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else 
                                                         if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
@@ -944,13 +952,14 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ } _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= fields[idx].fieldName %>").value(<%= reactive ? 'is(' : '' %><% 
                     if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else 
-                        if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% 
+                        if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } else
+                            if (fields[idx].fieldType === 'BigDecimal') { %>sameNumber(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% 
                         if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% 
                             if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else 
                                 if (fields[idx].fieldType === 'Integer') { %><% } else 
                                     if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else 
                                         if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else 
-                                            if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else 
+                                            if (fields[idx].fieldType === 'BigDecimal') { %>)<% } else
                                                 if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else 
                                                     if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else 
                                                         if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<%_ } _%>;
@@ -1175,12 +1184,13 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ } _%>
             .jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% if 
                     ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else 
-                        if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% 
+                        if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } else
+                            if (fields[idx].fieldType === 'BigDecimal') { %>sameNumber(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% 
                         if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else 
                             if (fields[idx].fieldType === 'Integer') { %><% } else 
                                 if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else 
                                     if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else 
-                                        if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else 
+                                        if (fields[idx].fieldType === 'BigDecimal') { %>)<% } else
                                             if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else 
                                                 if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else 
                                                     if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<%_ } _%>;
@@ -1204,13 +1214,14 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ } _%>
             .andExpect(jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<% 
                     if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else 
-                        if (field.fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><% 
+                        if (field.fieldType === 'ZonedDateTime') { %>sameInstant(<% } else
+                            if (fields[idx].fieldType === 'BigDecimal') { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><% 
                         if ((field.fieldType === 'byte[]' || field.fieldType === 'ByteBuffer') && field.fieldTypeBlobContent !== 'text') { %><% 
                             if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else 
                                 if (field.fieldType === 'Integer') { %><% } else 
                                     if (field.fieldType === 'Long') { %>.intValue()<% } else 
                                         if (field.fieldType === 'Float' || field.fieldType === 'Double') { %>.doubleValue()<% } else 
-                                            if (field.fieldType === 'BigDecimal') { %>.intValue()<% } else 
+                                            if (field.fieldType === 'BigDecimal') { %>)<% } else
                                                 if (field.fieldType === 'Boolean') { %>.booleanValue()<% } else 
                                                     if (field.fieldType === 'ZonedDateTime') { %>)<% } else 
                                                         if (field.fieldType !== 'String') { %>.toString()<% } %>)))<% }); %>;
@@ -1498,13 +1509,14 @@ class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') { %>exte
             <%_ } _%>
             <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= fields[idx].fieldName %>").value(hasItem(<% 
                     if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %>Base64Utils.encodeToString(<% } else 
-                        if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% 
+                        if (fields[idx].fieldType === 'ZonedDateTime') { %>sameInstant(<% } else
+                            if (fields[idx].fieldType === 'BigDecimal') { %>sameNumber(<% } %><%= 'DEFAULT_' + fields[idx].fieldNameUnderscored.toUpperCase() %><% 
                         if ((fields[idx].fieldType === 'byte[]' || fields[idx].fieldType === 'ByteBuffer') && fields[idx].fieldTypeBlobContent !== 'text') { %><% 
                             if (databaseType === 'cassandra') { %>.array()<% } %>)<% } else 
                                 if (fields[idx].fieldType === 'Integer') { %><% } else 
                                     if (fields[idx].fieldType === 'Long') { %>.intValue()<% } else 
                                         if (fields[idx].fieldType === 'Float' || fields[idx].fieldType === 'Double') { %>.doubleValue()<% } else 
-                                            if (fields[idx].fieldType === 'BigDecimal') { %>.intValue()<% } else 
+                                            if (fields[idx].fieldType === 'BigDecimal') { %>)<% } else
                                                 if (fields[idx].fieldType === 'Boolean') { %>.booleanValue()<% } else 
                                                     if (fields[idx].fieldType === 'ZonedDateTime') { %>)<% } else 
                                                         if (fields[idx].fieldType !== 'String') { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
