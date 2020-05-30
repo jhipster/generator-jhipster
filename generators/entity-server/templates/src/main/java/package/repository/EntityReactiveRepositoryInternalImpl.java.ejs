@@ -191,6 +191,7 @@ _%>
             <%_ if (isUsingMapsId) { _%>
             entity.setId(entity.get<%= mapsIdAssoc.relationshipNameCapitalized %>().getId());
             <%_ } _%>
+            // TODO: implement many-to-many and one-to-many relationship persistence
             return insert(entity);
         } else {
             return update(entity).map(numberOfUpdates -> {
@@ -204,7 +205,13 @@ _%>
 
     @Override
     public Mono<Integer> update(<%= asEntity(entityClass) %> entity) {
+        // TODO: implement many-to-many and one-to-many relationship persistence
+        <%_ if (fields.length + eagerRelations.length > 0) { _%>
         return db.update().table(<%= asEntity(entityClass) %>.class).using(entity).fetch().rowsUpdated();
+        <%_ } else { _%>
+        // What can we update on this field?
+        return Mono.just(1);
+        <%_ } _%>
     }
 
 }
