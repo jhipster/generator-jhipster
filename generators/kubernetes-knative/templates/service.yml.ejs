@@ -185,7 +185,7 @@ spec:
               timeoutSeconds: 5
             livenessProbe:
               httpGet:
-                path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/info
+                path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/liveness
               initialDelaySeconds: 120
               timeoutSeconds: 5
   traffic:
