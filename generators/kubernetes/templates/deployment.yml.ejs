@@ -204,6 +204,8 @@ spec:
         <%_ } _%>
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
+        - name: SERVER_SHUTDOWN
+          value: graceful
         resources:
           requests:
             memory: "512Mi"
@@ -216,13 +218,13 @@ spec:
           containerPort: <%= app.serverPort %>
         readinessProbe:
           httpGet:
-            path: /management/health
+            path: /management/health/readiness
             port: http
           initialDelaySeconds: 20
           periodSeconds: 15
           failureThreshold: 6
         livenessProbe:
           httpGet:
-            path: /management/health
+            path: /management/health/liveness
             port: http
           initialDelaySeconds: 120
