@@ -223,6 +223,6 @@ spec:
           failureThreshold: 6
         livenessProbe:
           httpGet:
-            path: /management/health
+            path: /management/health/liveness
             port: http
           initialDelaySeconds: 120
