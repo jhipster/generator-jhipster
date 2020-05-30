@@ -118,7 +118,6 @@ _%>
         <%_ }); _%>
     }
 
-<%_ if (pagination !== 'no') { _%>
     @Override
     public Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable) {
         return findAllBy(pageable, null);
@@ -140,7 +139,6 @@ _%>
                 .all();
     }
 
-<%_ } _%>
     @Override
     public Flux<<%= asEntity(entityClass) %>> findAll() {
         return db.execute(SELECT)
@@ -154,6 +152,21 @@ _%>
                 .bind("id", id)
                 .map(this::process)
                 .one();
+    }
+
+    @Override
+    public Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(Long id) {
+        return findById(id);
+    }
+
+    @Override
+    public Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships() {
+        return findAll();
+    }
+
+    @Override
+    public Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page) {
+        return findAllBy(page);
     }
 
     private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {

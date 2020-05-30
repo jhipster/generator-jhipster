@@ -94,31 +94,20 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
         <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'sql') {
-        let joins = _generateTableJoins(relationships);
-    _%>
+            if (fieldsContainOwnerManyToMany) { _%>
 
-    @Query("SELECT * FROM <%= entityTableName %> entity "
-      <%_ for (idx in joins) { _%>
-                + "<%= joins[idx] %>"
-      <%_ } _%>
-                + " WHERE entity.id = :id")
+    @Override
     Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
 
-    @Query("SELECT * FROM <%= entityTableName %> entity "
-      <%_ for (idx in joins) { _%>
-                + "<%= joins[idx] %>"
-      <%_ } _%>
-                )
+    @Override
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
-
-    @Query("SELECT * FROM <%= entityTableName %> entity "
-      <%_ for (idx in joins) { _%>
-                + "<%= joins[idx] %>"
-      <%_ } _%>
-                )
+        <%_ } _%>
+        <%_ if (pagination !== 'no') { _%>
+    @Override
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
+        <%_ } _%>
 
-    <%_ for (idx in relationships) { 
+        <%_ for (idx in relationships) { 
                   let relationshipType = relationships[idx].relationshipType;
                   let relationshipName = relationships[idx].relationshipName;
                   let ownerSide = relationships[idx].ownerSide;
@@ -166,6 +155,17 @@ interface <%= entityClass %>RepositoryInternal {
 
     Flux<<%= asEntity(entityClass) %>> findAll();
     Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKeyType %> id);
+
+    <%_ if (fieldsContainOwnerManyToMany) { _%>
+
+    Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(<%= primaryKeyType %> id);
+
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
+
+        <%_ if (pagination !== 'no') { _%>
+    Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
+        <%_ } _%>
+    <%_ } _%>
 
   <%_ if (pagination !== 'no') { _%>
     Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
