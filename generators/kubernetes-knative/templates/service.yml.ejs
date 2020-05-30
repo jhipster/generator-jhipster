@@ -178,7 +178,7 @@ spec:
             - containerPort: <%= app.serverPort %>
             readinessProbe:
               httpGet:
-                path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health
+                path: <%= app.applicationType === 'microservice' && !app.serviceDiscoveryType ? `/services/${app.baseName.toLowerCase()}` : '' %>/management/health/readiness
               initialDelaySeconds: 20
               periodSeconds: 15
               failureThreshold: 6
