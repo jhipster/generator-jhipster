@@ -131,7 +131,7 @@ describe('<%= entityClass %> e2e test', () => {
       expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('5');
 
       <%_ } else if (fieldType === 'LocalDate') { _%>
-      await updatePage.<%= fieldName %>Input.sendKeys('01-01-2001');
+      await updatePage.<%= fieldName %>Input.sendKeys('2001-01-01');
       expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('2001-01-01');
 
       <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
@@ -266,7 +266,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         <%_ } else if (fieldType === 'LocalDate') { _%>
           await updatePage.<%= fieldName %>Input.clear();
-          await updatePage.<%= fieldName %>Input.sendKeys('01-01-2019');
+          await updatePage.<%= fieldName %>Input.sendKeys('2019-01-01');
           expect(await updatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('2019-01-01');
 
         <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
