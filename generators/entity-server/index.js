@@ -124,7 +124,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     _getUseMapsIdRelation(relationships) {
-        const jpaDerivedRelation = Object.values(relationships).find(rel => rel.useJPADerivedIdentifier);
+        const jpaDerivedRelation = Object.values(relationships).find(rel => rel.useJPADerivedIdentifier === true);
         if (jpaDerivedRelation) {
             return { isUsingMapsId: true, mapsIdAssoc: jpaDerivedRelation };
         }
