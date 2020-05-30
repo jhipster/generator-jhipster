@@ -154,6 +154,8 @@ _%>
                 .one();
     }
 
+    <%_ if (fieldsContainOwnerManyToMany) { _%>
+
     @Override
     public Mono<<%= asEntity(entityClass) %>> findOneWithEagerRelationships(Long id) {
         return findById(id);
@@ -169,6 +171,7 @@ _%>
         return findAllBy(page);
     }
 
+    <%_ } _%>
     private <%= asEntity(entityClass) %> process(Row row, RowMetadata metadata) {
         <%= asEntity(entityClass) %> entity = <%= entityClass.toLowerCase() %>Mapper.apply(row, "e");
         <%_ eagerRelations.forEach(function(rel) { _%>

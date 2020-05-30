@@ -37,6 +37,7 @@ import org.springframework.data.relational.core.sql.OrderByField;
 import org.springframework.data.relational.core.sql.Select;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoinCondition;
+import org.springframework.data.relational.core.sql.SelectBuilder.SelectOrdered;
 import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,11 @@ public class EntityManager {
      * @return sql select statement
      */
     public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable) {
-        return createSelect(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+        if (pageable != null) {
+            return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+        } else {
+            return createSelectImpl(selectFrom, entityType, null);
+        }
     }
 
     /**
@@ -77,17 +82,21 @@ public class EntityManager {
      * @return sql select statement
      */
     public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable) {
-        return createSelect(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+        if (pageable != null) {
+            return createSelectImpl(selectFrom.limitOffset(pageable.getPageSize(), pageable.getOffset()), entityType, pageable.getSort());
+        } else {
+            return createSelectImpl(selectFrom, entityType, null);
+        }
     }
 
-    private String createSelect(SelectFromAndJoin selectFromWithPageable, Class<?> entityType, Sort sortParameter) {
+    private String createSelectImpl(SelectOrdered selectFrom, Class<?> entityType, Sort sortParameter) {
         final Select select;
-        if (sortParameter.isSorted()) {
+        if (sortParameter != null && sortParameter.isSorted()) {
             RelationalPersistentEntity<?> entity = getPersistentEntity(entityType);
             Sort sort = updateMapper.getMappedObject(sortParameter, entity);
-            select = selectFromWithPageable.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort)).build();
+            select = selectFrom.orderBy(createOrderByFields(Table.create(entity.getTableName()).as(EntityManager.ENTITY_ALIAS), sort)).build();
         } else {
-            select = selectFromWithPageable.build();
+            select = selectFrom.build();
         }
         return createSelect(select);
     }

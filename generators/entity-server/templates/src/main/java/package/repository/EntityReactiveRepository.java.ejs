@@ -101,8 +101,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
 
     @Override
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
-        <%_ } _%>
-        <%_ if (pagination !== 'no') { _%>
+
     @Override
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
         <%_ } _%>
@@ -155,6 +154,8 @@ interface <%= entityClass %>RepositoryInternal {
 
     Flux<<%= asEntity(entityClass) %>> findAll();
     Mono<<%= asEntity(entityClass) %>> findById(<%= primaryKeyType %> id);
+    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
+    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria);
 
     <%_ if (fieldsContainOwnerManyToMany) { _%>
 
@@ -162,14 +163,8 @@ interface <%= entityClass %>RepositoryInternal {
 
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships();
 
-        <%_ if (pagination !== 'no') { _%>
     Flux<<%= asEntity(entityClass) %>> findAllWithEagerRelationships(Pageable page);
-        <%_ } _%>
     <%_ } _%>
 
-  <%_ if (pagination !== 'no') { _%>
-    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable);
-    Flux<<%= asEntity(entityClass) %>> findAllBy(Pageable pageable, Criteria criteria);
-  <%_ } _%>
 }
 <%_ } _%>
