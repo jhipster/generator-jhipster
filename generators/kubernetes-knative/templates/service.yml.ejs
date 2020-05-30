@@ -167,6 +167,8 @@ spec:
             <%_ } _%>
             - name: JAVA_OPTS
               value: " -Xmx256m -Xms256m"
+            - name: SERVER_SHUTDOWN
+              value: graceful
             resources:
               requests:
                 memory: "512Mi"
