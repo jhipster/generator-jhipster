@@ -23,6 +23,6 @@
                 "remoteAddress": "遠端位址:"
             }
         },
-        "notFound": "No audit found"
+        "notFound": "沒有稽核事件"
     }
 }

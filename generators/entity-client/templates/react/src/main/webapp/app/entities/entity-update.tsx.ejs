@@ -203,8 +203,10 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
         , <%= rel.relationshipFieldNamePlural %>: mapIdList(values.<%= rel.relationshipFieldNamePlural %>)
         <%_ }) _%>
       }
-      <%_ if (uniqueRelationFields.has('users')) { _%>
-      entity.user = values.user;
+      <%_ if (uniqueRelationFields.has('users') && authenticationType === 'oauth2' && applicationType === 'gateway' && dto !== 'mapstruct') { _%>
+        <%_ relationships.filter(rel => rel.relationshipType === 'one-to-one' && rel.ownerSide === true && rel.otherEntityName === 'user').forEach(rel => { _%>
+      entity.<%= rel.relationshipFieldName %> = users.find(user => user.id.toString() === values.<%= rel.relationshipFieldName %>.id.toString());
+        <%_ }) _%>
       <%_ } _%>
 
       if (isNew) {
@@ -407,10 +409,9 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               id="<%= entityFileName %>-<%= relationshipName %>"
               type="select"
               className="form-control"
-              name="<%= relationshipFieldName %><% if (relationshipFieldName !== 'user') { %>.id<% } %>"
+              name="<%= relationshipFieldName %>.id"
             >
               <option value="" key="0" />
-              <%_ if (relationshipFieldName !== 'user') { _%>
               {
                 <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map(otherEntity =>
                   <option
@@ -420,17 +421,6 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
                   </option>
                 ) : null
               }
-              <%_ } else { _%>
-              {
-                <%= otherEntityNamePlural %> ? <%= otherEntityNamePlural %>.map((otherEntity, index) =>
-                  <option
-                    value={index}
-                    key={otherEntity.id}>
-                    {otherEntity.<%= otherEntityField %>}
-                  </option>
-                ) : null
-              }
-              <%_ } _%>
             </AvInput>
               <%_ } else { _%>
             <AvInput

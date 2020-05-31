@@ -19,10 +19,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse, <%_ if (prodDatabaseType !== 'cassandra') { _%> HttpHeaders <%_ } _%>} from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 <%_ if (prodDatabaseType !== 'cassandra') { _%>
-import { flatMap } from 'rxjs/operators';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
@@ -45,12 +44,10 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     users: User[] | null = null;
     userListSubscription?: Subscription;
     <%_ if (databaseType !== 'cassandra') { _%>
-    firstCall = true;
     totalItems = 0;
     itemsPerPage = ITEMS_PER_PAGE;
     page!: number;
     predicate!: string;
-    previousPage!: number;
     ascending!: boolean;
     <%_ } _%>
 
@@ -66,30 +63,12 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
+        this.accountService.identity().subscribe(account => this.currentAccount = account);
+        this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
         <%_ if (databaseType === 'cassandra') { _%>
-        this.accountService.identity().subscribe((account) => {
-            this.currentAccount = account;
-            this.loadAll();
-            this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
-        });
+        this.loadAll();
         <%_ } else { _%>
-        this.activatedRoute.data
-            .pipe(
-                flatMap(
-                    () => this.accountService.identity(),
-                    (data, account) => {
-                        this.page = data.pagingParams.page;
-                        this.previousPage = data.pagingParams.page;
-                        this.ascending = data.pagingParams.ascending;
-                        this.predicate = data.pagingParams.predicate;
-                        this.currentAccount = account;
-                        this.loadAll();
-                        this.userListSubscription = this.eventManager.subscribe('userListModification', () => this.loadAll());
-                    }
-                )
-            )
-            .subscribe();
-        this.handleBackNavigation();
+        this.handleNavigation();
         <%_ } _%>
     }
 
@@ -107,39 +86,13 @@ export class UserManagementComponent implements OnInit, OnDestroy {
         return item.id;
     }
 
+    deleteUser(user: User): void {
+        const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+        modalRef.componentInstance.user = user;
+    }
+
     <%_ if (databaseType !== 'cassandra') { _%>
-    loadPage(page: number): void {
-        this.firstCall = false;
-        this.previousPage = page;
-        this.transition();
-    }
-
-    handleBackNavigation(): void {
-        this.activatedRoute.queryParamMap.subscribe((params: ParamMap) => {
-            if (!this.firstCall) {
-                let prevPage = params.get('page');
-                if (prevPage === null) {
-                    prevPage = '1'; // because there are no params in the URL the first time /admin/user-management
-                }
-                const prevSort = params.get('sort');
-                const prevSortSplit = prevSort?.split(',');
-                if (prevSortSplit) {
-                    this.predicate = prevSortSplit[0];
-                    this.ascending = prevSortSplit[1] === 'asc';
-                } else {
-                    this.predicate = 'id';
-                    this.ascending = true;
-                }
-                if (+prevPage !== this.page) {
-                    this.page = +prevPage;
-                }
-                this.loadPage(this.page);
-            }
-        });
-    }
-
     transition(): void {
-        this.firstCall = false;
         this.router.navigate(['./'], {
             relativeTo: this.activatedRoute.parent,
             queryParams: {
@@ -147,14 +100,19 @@ export class UserManagementComponent implements OnInit, OnDestroy {
                 sort: this.predicate + ',' + (this.ascending ? 'asc' : 'desc')
             }
         });
-        this.loadAll();
+    }
+
+    private handleNavigation(): void {
+        combineLatest(this.activatedRoute.data, this.activatedRoute.queryParamMap, (data: Data, params: ParamMap) => {
+            const page = params.get('page');
+            this.page = page !== null ? +page : 1;
+            const sort = (params.get('sort') ?? data['defaultSort']).split(',');
+            this.predicate = sort[0];
+            this.ascending = sort[1] === 'asc';
+            this.loadAll();
+        }).subscribe();
     }
     <%_ } _%>
-
-    deleteUser(user: User): void {
-        const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-        modalRef.componentInstance.user = user;
-    }
 
     private loadAll(): void {
         this.userService.query(<% if (databaseType !== 'cassandra') { %>{

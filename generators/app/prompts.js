@@ -18,11 +18,13 @@
  */
 const chalk = require('chalk');
 const statistics = require('../statistics');
+const packagejs = require('../../package.json');
 
 module.exports = {
     askForInsightOptIn,
     askForApplicationType,
     askForModuleName,
+    askForI18n,
     askFori18n,
     askForTestOpts,
     askForMoreModules,
@@ -39,7 +41,7 @@ function askForInsightOptIn() {
         default: true,
     }).then(prompt => {
         if (prompt.insight !== undefined) {
-            statistics.setOptoutStatus(!prompt.insight);
+            statistics.setOptOutStatus(!prompt.insight);
         }
         done();
     });
@@ -105,9 +107,19 @@ function askForModuleName() {
     this.askModuleName(this);
 }
 
-function askFori18n() {
+function askForI18n() {
     if (this.skipI18n || this.existingProject) return;
     this.aski18n(this);
+}
+
+/**
+ * @deprecated Use askForI18n() instead.
+ * This method will be removed in JHipster v7.
+ */
+function askFori18n() {
+    // eslint-disable-next-line no-console
+    console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
+    this.askForI18n();
 }
 
 function askForTestOpts(meta) {
@@ -162,8 +174,10 @@ function askForMoreModules() {
 }
 
 function askModulesToBeInstalled(done, generator) {
+    const jHipsterMajorVersion = packagejs.version.match(/^(\d+)/g);
+
     generator.httpsGet(
-        'https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-5&from=0&size=50',
+        `https://api.npms.io/v2/search?q=keywords:jhipster-module+jhipster-${jHipsterMajorVersion}&from=0&size=50`,
         body => {
             try {
                 const moduleResponse = JSON.parse(body);

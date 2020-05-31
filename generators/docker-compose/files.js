@@ -60,6 +60,16 @@ function writeFiles() {
             }
         },
 
+        writeGatewayConfig() {
+            if (this.serviceDiscoveryType) {
+                this.appConfigs.forEach(appConfig => {
+                    if (appConfig.applicationType === 'gateway') {
+                        this.template('central-server-config/gateway.yml.ejs', `central-server-config/${appConfig.baseName}.yml`);
+                    }
+                });
+            }
+        },
+
         writeElkFiles() {
             if (this.monitoring !== 'elk') return;
 

@@ -141,9 +141,6 @@ spring:
         allow-bean-definition-overriding: true
     messages:
         basename: i18n/messages
-    mvc:
-        favicon:
-            enabled: false
     <%_ if (databaseType === 'sql' && reactive) { _%>
     r2dbc:
         url: r2dbc:h2:mem:///<%= baseName %>?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE

@@ -344,7 +344,7 @@ module.exports = class extends PrivateBase {
     }
 
     /**
-     * check if Right-to-Left support is necesary for i18n
+     * check if Right-to-Left support is necessary for i18n
      * @param {string[]} languages - languages array
      */
     isI18nRTLSupportNecessary(languages) {
@@ -924,7 +924,7 @@ module.exports = class extends PrivateBase {
             let lastLiquibaseTimestamp = this.config.get('lastLiquibaseTimestamp');
             if (lastLiquibaseTimestamp) {
                 lastLiquibaseTimestamp = new Date(lastLiquibaseTimestamp);
-                if (lastLiquibaseTimestamp > now) {
+                if (lastLiquibaseTimestamp >= now) {
                     now = lastLiquibaseTimestamp;
                     now.setSeconds(now.getSeconds() + 1);
                     now.setMilliseconds(0);
