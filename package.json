@@ -84,6 +84,7 @@
         "test": "^0.6.0",
         "through2": "3.0.1",
         "uuid": "7.0.3",
+        "winston": "3.2.1",
         "yeoman-environment": "2.10.2",
         "yeoman-generator": "4.10.1"
     },
@@ -101,6 +102,10 @@
         "jsdoc": "3.6.4",
         "mocha": "7.1.2",
         "sinon": "9.0.2",
+        "sinon-chai": "3.5.0",
+        "terser-webpack-plugin": "2.3.5",
+        "webpack": "4.43.0",
+        "webpack-cli": "3.3.11",
         "yeoman-assert": "3.1.1",
         "yeoman-test": "2.4.1"
     },
