@@ -214,7 +214,7 @@
                 <%_ } _%>
             <%_ } _%>
             <%_ for (idx in relationships) {
-                    let loadColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'varchar(100)' : 'numeric';
+                    let loadColumnType = relationships[idx].otherEntityPrimaryKeyType === 'String' ? 'string' : 'numeric';
                     if (relationships[idx].relationshipValidate === true && relationships[idx].relationshipRequired
                         && (relationships[idx].relationshipType === "many-to-one"
                             || (relationships[idx].relationshipType === "one-to-one" && relationships[idx].ownerSide === true

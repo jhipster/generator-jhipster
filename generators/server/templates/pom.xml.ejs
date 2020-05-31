@@ -132,12 +132,12 @@
 <%_ } _%>
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version>1.0.3.RELEASE</blockhound-junit-platform.version>
-        <netty-common.version>4.1.49.Final</netty-common.version>
+        <netty-common.version>4.1.50.Final</netty-common.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
-        <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
+        <jaxb-runtime.version>2.3.3</jaxb-runtime.version>
 <%_ } _%>
-        <archunit-junit5.version>0.13.1</archunit-junit5.version>
+        <archunit-junit5.version>0.14.1</archunit-junit5.version>
 <%_ if (searchEngine === 'elasticsearch') { _%>
         <log4j2-mock.version>0.0.2</log4j2-mock.version>
 <%_ } _%>
@@ -146,7 +146,7 @@
         <jackson-databind-nullable.version><%= JACKSON_DATABIND_NULLABLE_VERSION %></jackson-databind-nullable.version>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-        <caffeine.version>2.8.2</caffeine.version>
+        <caffeine.version>2.8.4</caffeine.version>
         <typesafe.version>1.4.0</typesafe.version>
 <%_ } _%>
 <%_ if (reactive && (applicationType === 'gateway' || applicationType === 'monolith')) { _%>
@@ -174,7 +174,7 @@
         <jib-maven-plugin.version><%= JIB_VERSION %></jib-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 <%_ if (enableSwaggerCodegen) { _%>
-        <openapi-generator-maven-plugin.version>4.3.0</openapi-generator-maven-plugin.version>
+        <openapi-generator-maven-plugin.version>4.3.1</openapi-generator-maven-plugin.version>
 <%_ } _%>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
@@ -244,10 +244,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-afterburner</artifactId>
         </dependency>
 <%_ if (databaseType === 'sql') { _%>
         <dependency>

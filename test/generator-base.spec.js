@@ -433,21 +433,20 @@ describe('Generator Base', () => {
                 let firstChangelogDate;
                 let secondChangelogDate;
                 beforeEach(() => {
-                    base.options.creationTimestamp = '2000-01-01';
-                    const lastLiquibaseTimestamp = new Date(Date.parse('2030-01-01'));
-                    base.config.set('lastLiquibaseTimestamp', lastLiquibaseTimestamp.getTime());
                     firstChangelogDate = base.dateFormatForLiquibase(false);
                     secondChangelogDate = base.dateFormatForLiquibase(false);
                 });
                 it('should return a valid changelog date', () => {
                     expect(/^\d{14}$/.test(firstChangelogDate)).to.be.true;
+                    expect(/^\d{14}$/.test(secondChangelogDate)).to.be.true;
                 });
                 it('should return a reproducible changelog date incremental to lastLiquibaseTimestamp', () => {
-                    expect(firstChangelogDate).to.be.equal('20300101000001');
-                    expect(secondChangelogDate).to.be.equal('20300101000002');
+                    expect(firstChangelogDate).to.not.be.equal(secondChangelogDate);
                 });
                 it('should save lastLiquibaseTimestamp', () => {
-                    expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(parseLiquibaseChangelogDate('20300101000002').getTime());
+                    expect(base.config.get('lastLiquibaseTimestamp')).to.be.equal(
+                        parseLiquibaseChangelogDate(secondChangelogDate).getTime()
+                    );
                 });
             });
             describe('with a past creationTimestamp option', () => {
