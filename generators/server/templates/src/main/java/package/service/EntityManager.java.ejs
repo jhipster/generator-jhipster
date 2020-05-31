@@ -67,6 +67,9 @@ public class EntityManager {
 
     /**
      * Creates an SQL select statement from the given fragment and pagination parameters.
+     * @param selectFrom a representation of a select statement.
+     * @param entityType the entity type which holds the table name.
+     * @param pageable page parameter, or null, if everything needs to be returned
      * @return sql select statement
      */
     public String createSelect(SelectFromAndJoin selectFrom, Class<?> entityType, Pageable pageable) {
@@ -79,6 +82,9 @@ public class EntityManager {
 
     /**
      * Creates an SQL select statement from the given fragment and pagination parameters.
+     * @param selectFrom a representation of a select statement.
+     * @param entityType the entity type which holds the table name.
+     * @param pageable page parameter, or null, if everything needs to be returned
      * @return sql select statement
      */
     public String createSelect(SelectFromAndJoinCondition selectFrom, Class<?> entityType, Pageable pageable) {
@@ -108,6 +114,7 @@ public class EntityManager {
 
     /**
      * Delete all the entity with the given type, and return the number of deletions.
+     * @param entityType the entity type which holds the table name.
      * @return the number of deleted entity
      */
     public Mono<Integer> deleteAll(Class<?> entityType) {
@@ -116,6 +123,7 @@ public class EntityManager {
 
     /**
      * Delete all the rows from the given table, and return the number of deletions.
+     * @param tableName the name of the table to delete.
      * @return the number of deleted rows.
      */
     public Mono<Integer> deleteAll(String tableName) {
@@ -124,6 +132,7 @@ public class EntityManager {
 
     /**
      * Generate an actual SQL from the given {@link Select}.
+     * @param select a representation of a select statement.
      * @return the generated SQL select.
      */
     public String createSelect(Select select) {

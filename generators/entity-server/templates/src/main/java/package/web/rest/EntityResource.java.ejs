@@ -333,7 +333,7 @@ public class <%= entityClass %>Resource {
             .then(Mono.just(ResponseEntity.noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build())
             );
-        <%_ } else { _%>
+        <%_ } else { %>
             .map(result -> ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKeyType !== 'String') { %>.toString()<% } %>)).build()
         );

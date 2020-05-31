@@ -41,6 +41,13 @@ public class ColumnConverter {
         this.conversions = conversions;
     }
 
+    /**
+     * Converts the value to the target class with the help of the {@link ConversionService}.
+     * @param value to convert.
+     * @param target class.
+     * @param <T> the parameter for the intended type.
+     * @return the value which can be constructed from the input.
+     */
     public <T> T convert(@Nullable Object value, @Nullable Class<T> target) {
 
         if (value == null || target == null || ClassUtils.isAssignableValue(target, value)) {
@@ -60,6 +67,11 @@ public class ColumnConverter {
 
     /**
      * Convert a value from the {@link Row} to a type - throws an exception, it it's impossible.
+     * @param row which contains the column values.
+     * @param target class.
+     * @param columnName the name of the column which to convert.
+     * @param <T> the parameter for the intended type.
+     * @return the value which can be constructed from the input.
      */
     public <T> T fromRow(Row row, String columnName, Class<T> target) {
         try {

@@ -164,6 +164,7 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
     <%_ if (service !== 'serviceImpl') { _%>
     /**
      * Returns the number of <%= entityInstancePlural %> available.
+     * @return the number of entities in the database.
      *
      */
     <%_ } _%>
@@ -207,6 +208,9 @@ public class <%= serviceClassName %><% if (service === 'serviceImpl') { %> imple
      * Delete the <%= entityInstance %> by id.
      *
      * @param id the id of the entity.
+<%_ if (reactive) { _%>
+     * @return a Mono to signal the deletion
+<%_ } _%>
      */
     <%_ } _%>
     <%_ if (service === 'serviceImpl') { _%>
