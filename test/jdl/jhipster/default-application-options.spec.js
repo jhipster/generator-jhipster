@@ -408,6 +408,7 @@ describe('DefaultApplicationOptions', () => {
             before(() => {
                 options = getConfigForUAAApplication({
                     applicationType: 'ignored',
+                    authenticationType: 'jwt',
                     skipClient: false,
                     clientFramework: 'react',
                     clientTheme: 'something',
@@ -437,6 +438,9 @@ describe('DefaultApplicationOptions', () => {
             });
             it('should remove the server skipping option', () => {
                 expect(options.skipServer).to.be.undefined;
+            });
+            it('should always set the authentication type option to uaa', () => {
+                expect(options.authenticationType).to.equal('uaa');
             });
         });
     });

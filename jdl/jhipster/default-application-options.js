@@ -163,7 +163,6 @@ function getConfigForMicroserviceApplication(customOptions = {}) {
 function getConfigForUAAApplication(customOptions = {}) {
     const DEFAULT_SERVER_PORT = '9999';
     const options = {
-        [AUTHENTICATION_TYPE]: OptionValues[AUTHENTICATION_TYPE].uaa,
         [CACHE_PROVIDER]: OptionValues[CACHE_PROVIDER].hazelcast,
         [SERVER_PORT]: DEFAULT_SERVER_PORT,
         [SERVICE_DISCOVERY_TYPE]: OptionValues[SERVICE_DISCOVERY_TYPE].eureka,
@@ -177,6 +176,7 @@ function getConfigForUAAApplication(customOptions = {}) {
     return {
         ...options,
         [APPLICATION_TYPE]: UAA,
+        [AUTHENTICATION_TYPE]: OptionValues[AUTHENTICATION_TYPE].uaa,
         [SKIP_CLIENT]: true,
         [SKIP_USER_MANAGEMENT]: false,
     };
