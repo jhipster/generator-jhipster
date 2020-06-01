@@ -50,7 +50,7 @@ update_apps() {
 }
 
 add_groups() {
-    curl --location --request POST "${1}/api/v1/groups" \
+    curl -s --location --request POST "${1}/api/v1/groups" \
         --header "Content-Type: application/json" \
         --header "Authorization: SSWS ${2}" \
         --data-raw '{"profile":
@@ -60,7 +60,7 @@ add_groups() {
             }
         }'
 
-    curl --location --request POST "${1}/api/v1/groups" \
+    curl -s --location --request POST "${1}/api/v1/groups" \
         --header "Content-Type: application/json" \
         --header "Authorization: SSWS ${2}" \
         --data-raw '{"profile":
@@ -74,21 +74,21 @@ add_groups() {
 add_admin_to_group() {
     ADMIN_EMAIL=$(heroku config:get OKTA_ADMIN_EMAIL)
 
-    GROUP_ID=$(curl --location --request GET "${1}/api/v1/groups?q=ROLE_ADMIN" \
+    GROUP_ID=$(curl -s --location --request GET "${1}/api/v1/groups?q=ROLE_ADMIN" \
         --header "Authorization: SSWS ${2}" | jq '.[0].id')
 
-    USER_ID=$(curl --location --request GET "${1}/api/v1/users?q=${ADMIN_EMAIL}" \
+    USER_ID=$(curl -s --location --request GET "${1}/api/v1/users?q=${ADMIN_EMAIL}" \
         --header "Accept: application/json" \
         --header "Content-Type: application/json" \
         --header "Authorization: SSWS ${2}" | jq '.[0].id')
 
-    curl --location --request PUT "${1}/api/v1/groups/${GROUP_ID//\"/}/users/${USER_ID//\"/}" \
+    curl -s --location --request PUT "${1}/api/v1/groups/${GROUP_ID//\"/}/users/${USER_ID//\"/}" \
         --header "Authorization: SSWS ${2}" \
         --data-raw ''
 }
 
 add_groups_claim() {
-    curl --location --request POST "${1}/api/v1/authorizationServers/default/claims" \
+    curl -s --location --request POST "${1}/api/v1/authorizationServers/default/claims" \
         --header "Accept: application/json" \
         --header "Content-Type: application/json" \
         --header "Authorization: SSWS ${2}" \
@@ -109,11 +109,11 @@ add_groups_claim() {
 
 add_admin_user() {
 
-    GROUP_ID=$(curl --location --request GET "${1}/api/v1/groups?q=ROLE_ADMIN" \
+    GROUP_ID=$(curl -s --location --request GET "${1}/api/v1/groups?q=ROLE_ADMIN" \
         --header "Authorization: SSWS ${2}" | jq '.[0].id')
 
     # Create user with provided initial password
-    USER_ID=$(curl --location --request POST "${1}/api/v1/users?activate=true" \
+    USER_ID=$(curl -s --location --request POST "${1}/api/v1/users?activate=true" \
         --header "Accept: application/json" \
         --header "Content-Type: application/json" \
         --header "Authorization: SSWS ${2}" \
@@ -130,16 +130,30 @@ add_admin_user() {
           }
         }' | jq '.id')
 
-    curl --location --request PUT "${1}/api/v1/groups/${GROUP_ID//\"/}/users/${USER_ID//\"/}" \
+    curl -s --location --request PUT "${1}/api/v1/groups/${GROUP_ID//\"/}/users/${USER_ID//\"/}" \
         --header "Authorization: SSWS ${2}" \
         --data-raw ''
 
     # directly expire the password such that the user is forced to select a new password
-    curl --location --request POST "${1}/api/v1/users/${USER_ID//\"/}/lifecycle/expire_password" \
+    curl -s --location --request POST "${1}/api/v1/users/${USER_ID//\"/}/lifecycle/expire_password" \
         --header "Content-Type: application/json" \
         --header "Accept: application/json" \
         --header "Authorization: SSWS ${2}" \
         --data-raw ''
+}
+
+already_done() {
+    LENGTH=$(curl -s --location --request GET "${1}/api/v1/users?q=<%= oktaAdminLogin  %>" \
+        --header "Accept: application/json" \
+        --header "Content-Type: application/json" \
+        --header "Authorization: SSWS ${2}" | jq '. | length')
+    
+    if [ $LENGTH -gt 0 ]
+    then
+        echo "true"
+    else
+        echo "false"
+    fi
 }
 
 main() {
@@ -147,6 +161,14 @@ main() {
     OKTA_TOKEN=$(heroku config:get OKTA_CLIENT_TOKEN)
 
     APP_URL=$(get_app_url)
+
+    DONE=$(already_done ${OKTA_URL} ${OKTA_TOKEN})
+
+    if  [ ${DONE} == "true" ]
+    then
+        echo "User already created, doing nothing."
+        return 0
+    fi
 
     # First add the correct redirect url to each application
     get_apps "${OKTA_URL}" "${OKTA_TOKEN}"
