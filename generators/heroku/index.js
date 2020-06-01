@@ -150,7 +150,6 @@ module.exports = class extends BaseGenerator {
             askForHerokuDeployType() {
                 if (this.abort) return;
                 if (this.herokuDeployType) return;
-                const done = this.async();
                 const prompts = [
                     {
                         type: 'list',
@@ -170,16 +169,14 @@ module.exports = class extends BaseGenerator {
                     },
                 ];
 
-                this.prompt(prompts).then(props => {
+                return this.prompt(prompts).then(props => {
                     this.herokuDeployType = props.herokuDeployType;
-                    done();
                 });
             },
 
             askForHerokuJavaVersion() {
                 if (this.abort) return;
                 if (this.herokuJavaVersion) return;
-                const done = this.async();
                 const prompts = [
                     {
                         type: 'list',
@@ -211,16 +208,14 @@ module.exports = class extends BaseGenerator {
                     },
                 ];
 
-                this.prompt(prompts).then(props => {
+                return this.prompt(prompts).then(props => {
                     this.herokuJavaVersion = props.herokuJavaVersion;
-                    done();
                 });
             },
             askForOkta() {
                 if (this.abort) return;
                 if (this.authenticationType !== 'oauth2') return;
                 if (this.useOkta) return;
-                const done = this.async();
                 const prompts = [
                     {
                         type: 'list',
@@ -271,11 +266,10 @@ module.exports = class extends BaseGenerator {
                     },
                 ];
 
-                this.prompt(prompts).then(props => {
+                return this.prompt(prompts).then(props => {
                     this.useOkta = props.useOkta;
                     this.oktaAdminLogin = props.oktaAdminLogin;
                     this.oktaAdminPassword = props.oktaAdminPassword;
-                    done();
                 });
             },
         };
