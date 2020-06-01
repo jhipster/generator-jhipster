@@ -69,10 +69,24 @@
                         </div>
                         <%_ } _%>
                         <%_ if (fieldType === 'LocalDate') { _%>
-                        <div class="input-group">
-                            <input id="<%= entityFileName %>-<%= fieldName %>" type="date" class="<%= fieldInputClass %>" name="<%= fieldName %>"  :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"
+                        <b-input-group class="mb-3">
+                            <b-input-group-prepend>
+                                <b-form-datepicker
+                                    aria-controls="<%= entityFileName %>-<%= fieldName %>"
+                                    v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model"
+                                    name="<%= fieldName %>"
+                                    class="<%= fieldInputClass %>"
+                                    :locale="currentLanguage"
+                                    button-only
+                                    today-button
+                                    reset-button
+                                    close-button
+                                >
+                                </b-form-datepicker>
+                            </b-input-group-prepend>
+                            <b-form-input id="<%= entityFileName %>-<%= fieldName %>" type="text" class="<%= fieldInputClass %>" name="<%= fieldName %>"  :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"
                             v-model="$v.<%= entityInstance %>.<%= fieldName %>.$model" <% if (fields[idx].fieldValidate === true && fields[idx].fieldValidateRules.includes('required')) { %> required<% } %> />
-                        </div>
+                        </b-input-group>
                         <%_ } else if (['Instant'].includes(fieldType)) { _%>
                         <div class="d-flex">
                             <input id="<%= entityFileName %>-<%= fieldName %>" type="datetime-local" class="<%= fieldInputClass %>" name="<%= fieldName %>" :class="{'valid': !$v.<%= entityInstance %>.<%= fieldName %>.$invalid, 'invalid': $v.<%= entityInstance %>.<%= fieldName %>.$invalid }"

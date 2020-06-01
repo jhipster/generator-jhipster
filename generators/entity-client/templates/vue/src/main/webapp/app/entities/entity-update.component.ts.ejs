@@ -107,6 +107,7 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
   <%_ } _%>
   <%_ entitiesSeen.push(otherEntityAngularName);entitiesSeen.push(otherEntityNamePlural); } } } _%>
   public isSaving = false;
+  public currentLanguage = '';
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -119,8 +120,15 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
     });
   }
 
-  <%_ if (hasManyToMany) { _%>
   created(): void {
+    this.currentLanguage = this.$store.getters.currentLanguage;
+    this.$store.watch(
+      () => this.$store.getters.currentLanguage,
+      () => {
+        this.currentLanguage = this.$store.getters.currentLanguage;
+      }
+    );
+    <%_ if (hasManyToMany) { _%>
     <%_
       for (idx in relationships) {
       const otherEntityNamePlural = relationships[idx].otherEntityNamePlural;
@@ -129,8 +137,8 @@ export default class <%= entityAngularName %>Update extends <% if (fieldsContain
     _%>
     this.<%= entityInstance %>.<%= relationshipFieldNamePlural %> = [];
     <%_ } } _%>
+    <%_ } _%>
   }
-  <%_ } _%>
 
   public save() : void {
     this.isSaving = true;
