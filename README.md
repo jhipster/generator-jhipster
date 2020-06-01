@@ -72,11 +72,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://uxplanet.org/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/uxplanet.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://opencollective.com/top-web-design-agencies" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/top-web-design-agencies.png">
         </a>
@@ -96,13 +91,13 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://matchbanker.no/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://vpngorilla.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/vpngorilla.png">
