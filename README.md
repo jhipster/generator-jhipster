@@ -118,13 +118,13 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://unscramblex.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/unscramblex.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://manwoman.co/pl" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/manwoman.png">
