@@ -92,7 +92,8 @@ const serverFiles = {
                 {
                     file: 'config/liquibase/changelog/updated_entity.xml',
                     options: { interpolate: INTERPOLATE_REGEX },
-                    renameTo: generator => `config/liquibase/changelog/${generator.newChangelogDate}_updated_entity_${generator.entityClass}.xml`
+                    renameTo: generator =>
+                        `config/liquibase/changelog/${generator.newChangelogDate}_updated_entity_${generator.entityClass}.xml`
                 }
             ]
         },
@@ -118,7 +119,9 @@ const serverFiles = {
                 !generator.skipDbChangelog &&
                 (generator.fieldsContainOwnerManyToMany || generator.fieldsContainOwnerOneToOne || generator.fieldsContainManyToOne) &&
                 generator.newChangelog &&
-                fs.existsSync(`config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`),
+                fs.existsSync(
+                    `config/liquibase/changelog/${generator.changelogDate}_added_entity_constraints_${generator.entityClass}.xml`
+                ),
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -143,10 +146,7 @@ const serverFiles = {
     fakeData: [
         {
             condition: generator =>
-                generator.databaseType === 'sql' &&
-                !generator.skipFakeData &&
-                !generator.skipDbChangelog &&
-                !generator.newChangelog,
+                generator.databaseType === 'sql' && !generator.skipFakeData && !generator.skipDbChangelog && !generator.newChangelog,
             path: SERVER_MAIN_RES_DIR,
             templates: [
                 {
@@ -401,7 +401,9 @@ function writeFiles() {
                                 `config/liquibase/changelog/${this.changelogDate}_added_entity_constraints_${this.entityClass}.xml`
                             )
                         ) {
-                            this.addConstraintsChangelogToLiquibase(`${this.newChangelogDate}_updated_entity_constraints_${this.entityClass}`);
+                            this.addConstraintsChangelogToLiquibase(
+                                `${this.newChangelogDate}_updated_entity_constraints_${this.entityClass}`
+                            );
                         }
                     }
                     this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_${this.entityClass}`);
