@@ -87,8 +87,8 @@ module.exports = class extends BaseGenerator {
         this.herokuDeployType = configuration.get('herokuDeployType');
         this.herokuJavaVersion = configuration.get('herokuJavaVersion');
         this.useOkta = configuration.get('useOkta');
-        this.oktaAdminLogin = configuration.get('oktaAdminLogin')
-        this.oktaAdminPassword = configuration.get('oktaAdminPassword')
+        this.oktaAdminLogin = configuration.get('oktaAdminLogin');
+        this.oktaAdminPassword = configuration.get('oktaAdminPassword');
     }
 
     get prompting() {
@@ -244,21 +244,29 @@ module.exports = class extends BaseGenerator {
                         message: 'Login (valid email) for the JHipster Admin user:',
                         validate: input => {
                             if (!input) {
-                                return 'You must enter a login for the JHipster admin'
+                                return 'You must enter a login for the JHipster admin';
                             }
                             return true;
-                        },  
+                        },
                     },
                     {
                         type: 'password',
                         name: 'oktaAdminPassword',
-                        message: 'Initial password for the JHipster Admin user:',
+                        message:
+                            'Initial password for the JHipster Admin user. Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username.',
                         mask: true,
                         validate: input => {
                             if (!input) {
-                                return 'You must enter an initial password for the JHipster admin'
+                                return 'You must enter an initial password for the JHipster admin';
                             }
-                            return true;
+                            // try to mimic the password requirements by the okta addon
+                            const passwordRegex = new RegExp('^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}$');
+
+                            if (passwordRegex.test(input)) {
+                                return true;
+                            }
+
+                            return 'Your password must be at least 8 characters long and contain a lowercase letter, and uppercase letter, a number and no parts of your username!';
                         },
                     },
                 ];
@@ -295,7 +303,7 @@ module.exports = class extends BaseGenerator {
                     herokuJavaVersion: this.herokuJavaVersion,
                     useOkta: this.useOkta,
                     oktaAdminLogin: this.oktaAdminLogin,
-                    oktaAdminPassword: this.oktaAdminPassword
+                    oktaAdminPassword: this.oktaAdminPassword,
                 });
             },
         };
@@ -578,7 +586,12 @@ module.exports = class extends BaseGenerator {
                 if (this.buildTool === 'gradle') {
                     this.template('heroku.gradle.ejs', 'gradle/heroku.gradle');
                 }
-                this.template('provision-okta-addon.sh.ejs', 'provision-okta-addon.sh');
+                if (this.useOkta) {
+                    this.template('provision-okta-addon.sh.ejs', 'provision-okta-addon.sh');
+                    fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', (err, data) => {
+                        this.log(`${chalk.yellow.bold('WARNING!')}Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
+                    });
+                }
 
                 this.conflicter.resolve(err => {
                     done();
@@ -724,6 +737,24 @@ module.exports = class extends BaseGenerator {
                                                             )}`
                                                         )
                                                     );
+
+                                                    if (this.useOkta) {
+                                                        this.log(
+                                                            chalk.green(
+                                                                'Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster'
+                                                            )
+                                                        );
+                                                        const child = exec('./provision-okta-addon.sh', (err, stdout, stderr) => {
+                                                            if (err) {
+                                                                this.log.warn(err);
+                                                            }
+                                                            done();
+                                                        });
+
+                                                        child.stdout.on('data', data => {
+                                                            process.stdout.write(data.toString());
+                                                        });
+                                                    }
                                                 }
                                                 done();
                                             });
@@ -766,6 +797,23 @@ module.exports = class extends BaseGenerator {
                             this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
                             this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
                             this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
+                            if (this.useOkta) {
+                                this.log(
+                                    chalk.green(
+                                        'Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster'
+                                    )
+                                );
+                                const child = exec('./provision-okta-addon.sh', (err, stdout, stderr) => {
+                                    if (err) {
+                                        this.log.warn(err);
+                                    }
+                                    done();
+                                });
+
+                                child.stdout.on('data', data => {
+                                    process.stdout.write(data.toString());
+                                });
+                            }
                             done();
                         });
 
