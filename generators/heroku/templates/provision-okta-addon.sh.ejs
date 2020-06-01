@@ -112,6 +112,7 @@ add_admin_user() {
     GROUP_ID=$(curl --location --request GET "${1}/api/v1/groups?q=ROLE_ADMIN" \
         --header "Authorization: SSWS ${2}" | jq '.[0].id')
 
+    # Create user with provided initial password
     USER_ID=$(curl --location --request POST "${1}/api/v1/users?activate=true" \
         --header "Accept: application/json" \
         --header "Content-Type: application/json" \
@@ -130,6 +131,13 @@ add_admin_user() {
         }' | jq '.id')
 
     curl --location --request PUT "${1}/api/v1/groups/${GROUP_ID//\"/}/users/${USER_ID//\"/}" \
+        --header "Authorization: SSWS ${2}" \
+        --data-raw ''
+
+    # directly expire the password such that the user is forced to select a new password
+    curl --location --request POST "${1}/api/v1/users/${USER_ID//\"/}/lifecycle/expire_password" \
+        --header "Content-Type: application/json" \
+        --header "Accept: application/json" \
         --header "Authorization: SSWS ${2}" \
         --data-raw ''
 }
