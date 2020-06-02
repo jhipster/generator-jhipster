@@ -675,7 +675,7 @@ module.exports = class extends BaseGenerator {
                         this.log(chalk.bold('\nUpdating Git repository'));
                         const gitAddCmd = 'git add .';
                         this.log(chalk.cyan(gitAddCmd));
-    
+
                         const gitAdd = execCmd(gitAddCmd);
                         gitAdd.child.stdout.on('data', data => {
                             this.log(data);
@@ -685,7 +685,7 @@ module.exports = class extends BaseGenerator {
                             this.log(data);
                         });
                         await gitAdd;
-                        
+
                         const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
                         this.log(chalk.cyan(gitCommitCmd));
 
@@ -698,7 +698,6 @@ module.exports = class extends BaseGenerator {
                             this.log(data);
                         });
                         await gitCommit;
-
 
                         let buildpack = 'heroku/java';
                         let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
