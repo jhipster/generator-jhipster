@@ -19,10 +19,6 @@
                 <div class="alert alert-danger" role="alert" v-if="errorEmailExists" v-html="$t('register.messages.error.emailexists')">
                     <strong>Email is already in use!</strong> Please choose another one.
                 </div>
-
-                <div class="alert alert-danger" role="alert" v-if="doNotMatch" v-text="$t('global.messages.error.dontmatch')">
-                    The password and its confirmation do not match!
-                </div>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -115,10 +111,14 @@
                                    v-text="$t('global.messages.validate.confirmpassword.maxlength')">
                                 Your confirmation password cannot be longer than 50 characters.
                             </small>
+                            <small class="form-text text-danger" v-if="!$v.confirmPassword.sameAsPassword"
+                                   v-text="$t('global.messages.error.dontmatch')">
+                                The password and its confirmation do not match!
+                            </small>
                         </div>
                     </div>
 
-                    <button type="submit" :disabled="$v.registerAccount.$invalid || $v.confirmPassword.$invalid" class="btn btn-primary" v-text="$t('register.form.button')">Register</button>
+                    <button type="submit" :disabled="$v.$invalid " class="btn btn-primary" v-text="$t('register.form.button')">Register</button>
                 </form>
                 <p></p>
                 <div class="alert alert-warning">
