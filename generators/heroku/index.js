@@ -18,6 +18,7 @@
  */
 const fs = require('fs');
 const ChildProcess = require('child_process');
+const util = require('util');
 const chalk = require('chalk');
 const _ = require('lodash');
 const glob = require('glob');
@@ -25,6 +26,8 @@ const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
+
+const execCmd = util.promisify(ChildProcess.exec);
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -148,8 +151,8 @@ module.exports = class extends BaseGenerator {
             },
 
             askForHerokuDeployType() {
-                if (this.abort) return;
-                if (this.herokuDeployType) return;
+                if (this.abort) return null;
+                if (this.herokuDeployType) return null;
                 const prompts = [
                     {
                         type: 'list',
@@ -175,8 +178,8 @@ module.exports = class extends BaseGenerator {
             },
 
             askForHerokuJavaVersion() {
-                if (this.abort) return;
-                if (this.herokuJavaVersion) return;
+                if (this.abort) return null;
+                if (this.herokuJavaVersion) return null;
                 const prompts = [
                     {
                         type: 'list',
@@ -213,9 +216,9 @@ module.exports = class extends BaseGenerator {
                 });
             },
             askForOkta() {
-                if (this.abort) return;
-                if (this.authenticationType !== 'oauth2') return;
-                if (this.useOkta) return;
+                if (this.abort) return null;
+                if (this.authenticationType !== 'oauth2') return null;
+                if (this.useOkta) return null;
                 const prompts = [
                     {
                         type: 'list',
@@ -659,7 +662,7 @@ module.exports = class extends BaseGenerator {
                 });
             },
 
-            productionDeploy() {
+            async productionDeploy() {
                 if (this.abort) return;
 
                 if (this.herokuSkipDeploy) {
@@ -667,101 +670,75 @@ module.exports = class extends BaseGenerator {
                     return;
                 }
 
-                const done = this.async();
                 if (this.herokuDeployType === 'git') {
                     const gitAddCmd = 'git add .';
+                    const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
+
+                    let buildpack = 'heroku/java';
+                    let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
+                    if (this.buildTool === 'gradle') {
+                        buildpack = 'heroku/gradle';
+                        configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
+                    }
+
                     this.log(chalk.bold('\nUpdating Git repository'));
                     this.log(chalk.cyan(gitAddCmd));
-                    ChildProcess.exec(gitAddCmd, (err, stdout, stderr) => {
-                        if (err) {
-                            this.abort = true;
-                            this.log.error(err);
-                        } else {
-                            const line = stderr.toString().trimRight();
-                            if (line.trim().length !== 0) this.log(line);
-                            const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
-                            this.log(chalk.cyan(gitCommitCmd));
-                            ChildProcess.exec(gitCommitCmd, (err, stdout, stderr) => {
-                                if (err) {
-                                    this.abort = true;
-                                    this.log.error(err);
-                                } else {
-                                    const line = stderr.toString().trimRight();
-                                    if (line.trim().length !== 0) this.log(line);
 
-                                    let buildpack = 'heroku/java';
-                                    let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
-                                    if (this.buildTool === 'gradle') {
-                                        buildpack = 'heroku/gradle';
-                                        configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
-                                    }
-                                    this.log(chalk.bold('\nConfiguring Heroku'));
-                                    exec(`heroku config:set ${configVars}--app ${this.herokuAppName}`, (err, stdout, stderr) => {
-                                        if (err) {
-                                            this.log(stderr);
-                                        }
+                    try {
+                        const gitAdd = execCmd(gitAddCmd);
+                        gitAdd.child.stdout.on('data', data => {
+                            this.log(data);
+                        });
 
-                                        exec(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
-                                            if (err) {
-                                                const line = stderr.toString().trimRight();
-                                                if (line.trim().length !== 0 && line.indexOf('is already set') < 0) this.log(line);
-                                            }
-                                            this.log(chalk.bold('\nDeploying application'));
-                                            const child = exec('git push heroku HEAD:master', { maxBuffer: 1024 * 10000 }, err => {
-                                                if (err) {
-                                                    this.abort = true;
-                                                    this.log.error(err);
-                                                } else {
-                                                    this.log(
-                                                        chalk.green(
-                                                            `\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`
-                                                        )
-                                                    );
-                                                    this.log(
-                                                        chalk.yellow(
-                                                            `And you can view the logs with this command\n\t${chalk.bold(
-                                                                'heroku logs --tail'
-                                                            )}`
-                                                        )
-                                                    );
-                                                    this.log(
-                                                        chalk.yellow(
-                                                            `After application modification, redeploy it with\n\t${chalk.bold(
-                                                                'jhipster heroku'
-                                                            )}`
-                                                        )
-                                                    );
+                        gitAdd.child.stderr.on('data', data => {
+                            this.log(data);
+                        });
+                        await gitAdd;
 
-                                                    if (this.useOkta) {
-                                                        this.log(
-                                                            chalk.green(
-                                                                'Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster'
-                                                            )
-                                                        );
-                                                        const child = exec('./provision-okta-addon.sh', (err, stdout, stderr) => {
-                                                            if (err) {
-                                                                this.log.warn(err);
-                                                            }
-                                                            done();
-                                                        });
+                        this.log(chalk.cyan(gitCommitCmd));
 
-                                                        child.stdout.on('data', data => {
-                                                            process.stdout.write(data.toString());
-                                                        });
-                                                    }
-                                                }
-                                                done();
-                                            });
-                                            child.stderr.on('data', data => {
-                                                const line = data.toString().trimRight();
-                                                if (line.trim().length !== 0) this.log(line);
-                                            });
-                                        });
-                                    });
-                                }
-                            });
+                        const gitCommit = execCmd(gitCommitCmd);
+                        gitCommit.child.stdout.on('data', data => {
+                            this.log(data);
+                        });
+
+                        gitCommit.child.stderr.on('data', data => {
+                            this.log(data);
+                        });
+                        await gitCommit;
+
+                        this.log(chalk.bold('\nConfiguring Heroku'));
+                        await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
+                        await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
+
+                        this.log(chalk.bold('\nDeploying application'));
+
+                        const herokuPush = execCmd('git push heroku HEAD:master', { maxBuffer: 1024 * 10000 });
+
+                        herokuPush.child.stdout.on('data', data => {
+                            this.log(data);
+                        });
+
+                        herokuPush.child.stderr.on('data', data => {
+                            this.log(data);
+                        });
+
+                        await herokuPush;
+
+                        this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
+                        this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
+                        this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
+
+                        if (this.useOkta) {
+                            this.log(
+                                chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster')
+                            );
+                            await execCmd('./provision-okta-addon.sh');
                         }
-                    });
+                    } catch (err) {
+                        this.abort = true;
+                        this.log.error(err);
+                    }
                 } else {
                     this.log(chalk.bold('\nDeploying application'));
                     let jarFileWildcard = 'target/*.jar';
@@ -781,41 +758,35 @@ module.exports = class extends BaseGenerator {
                             )} depending on your connection speed...`
                         )
                     );
-
-                    exec(herokuSetBuildpackCommand, (err, stdout) => {
-                        const child = exec(herokuDeployCommand, (err, stdout) => {
-                            if (err) {
-                                this.abort = true;
-                                this.log.error(err);
-                            }
-                            this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
-                            this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
-                            this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-                            if (this.useOkta) {
-                                this.log(
-                                    chalk.green(
-                                        'Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster'
-                                    )
-                                );
-                                const child = exec('./provision-okta-addon.sh', (err, stdout, stderr) => {
-                                    if (err) {
-                                        this.log.warn(err);
-                                    }
-                                    done();
-                                });
-
-                                child.stdout.on('data', data => {
-                                    process.stdout.write(data.toString());
-                                });
-                            }
-                            done();
+                    try {
+                        await execCmd(herokuSetBuildpackCommand);
+                        const herokuDeploy = execCmd(herokuDeployCommand);
+                        herokuDeploy.child.stdout.on('data', data => {
+                            this.log(data);
                         });
 
-                        child.stdout.on('data', data => {
-                            const line = data.toString().trimRight();
-                            if (line.trim().length !== 0) this.log(line);
+                        herokuDeploy.child.stderr.on('data', data => {
+                            this.log(data);
                         });
-                    });
+                        await herokuDeploy;
+                        this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
+                        this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
+                        this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
+
+                        if (this.useOkta) {
+                            this.log(
+                                chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster')
+                            );
+                            try {
+                                await execCmd('./provision-okta-addon.sh');
+                            } catch (err) {
+                                this.log.warn(err);
+                            }
+                        }
+                    } catch (err) {
+                        this.abort = true;
+                        this.log.error(err);
+                    }
                 }
             },
         };
