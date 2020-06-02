@@ -671,20 +671,11 @@ module.exports = class extends BaseGenerator {
                 }
 
                 if (this.herokuDeployType === 'git') {
-                    const gitAddCmd = 'git add .';
-                    const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
-
-                    let buildpack = 'heroku/java';
-                    let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
-                    if (this.buildTool === 'gradle') {
-                        buildpack = 'heroku/gradle';
-                        configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
-                    }
-
-                    this.log(chalk.bold('\nUpdating Git repository'));
-                    this.log(chalk.cyan(gitAddCmd));
-
                     try {
+                        this.log(chalk.bold('\nUpdating Git repository'));
+                        const gitAddCmd = 'git add .';
+                        this.log(chalk.cyan(gitAddCmd));
+    
                         const gitAdd = execCmd(gitAddCmd);
                         gitAdd.child.stdout.on('data', data => {
                             this.log(data);
@@ -694,7 +685,8 @@ module.exports = class extends BaseGenerator {
                             this.log(data);
                         });
                         await gitAdd;
-
+                        
+                        const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
                         this.log(chalk.cyan(gitCommitCmd));
 
                         const gitCommit = execCmd(gitCommitCmd);
@@ -706,6 +698,14 @@ module.exports = class extends BaseGenerator {
                             this.log(data);
                         });
                         await gitCommit;
+
+
+                        let buildpack = 'heroku/java';
+                        let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
+                        if (this.buildTool === 'gradle') {
+                            buildpack = 'heroku/gradle';
+                            configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
+                        }
 
                         this.log(chalk.bold('\nConfiguring Heroku'));
                         await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
@@ -736,7 +736,6 @@ module.exports = class extends BaseGenerator {
                             await execCmd('./provision-okta-addon.sh');
                         }
                     } catch (err) {
-                        this.abort = true;
                         this.log.error(err);
                     }
                 } else {
@@ -784,7 +783,6 @@ module.exports = class extends BaseGenerator {
                             }
                         }
                     } catch (err) {
-                        this.abort = true;
                         this.log.error(err);
                     }
                 }
