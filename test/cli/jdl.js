@@ -79,8 +79,62 @@ describe('jdl command test', () => {
             it('should call jdl.js with foo.jdl arg', () => {
                 expect(jdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl']);
             });
-            it('should call jdl.js with skipSampleRepository option', () => {
+            it('should call jdl.js forcing skipSampleRepository option', () => {
                 expect(jdlStub.getCall(0).args[1].skipSampleRepository).to.be.true;
+            });
+            it('should forward options to jdl.js', () => {
+                expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;
+                expect(jdlStub.getCall(0).args[1]['json-only']).to.be.true;
+            });
+        });
+        describe('when env variable CI is true', () => {
+            let oldArgv;
+            let jdlStub;
+            let oldCI;
+            beforeEach(() => {
+                oldArgv = process.argv;
+                process.argv = ['jhipster', 'jhipster', 'jdl', 'foo.jdl', '--json-only'];
+                oldCI = process.env.CI;
+                process.env.CI = 'true';
+                jdlStub = sinon.stub();
+                proxyquire('../../cli/cli', { './jdl': jdlStub });
+            });
+            afterEach(() => {
+                process.argv = oldArgv;
+                process.env.CI = oldCI;
+            });
+            it('should call jdl.js with foo.jdl arg', () => {
+                expect(jdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl']);
+            });
+            it('should call jdl.js forcing skipSampleRepository option', () => {
+                expect(jdlStub.getCall(0).args[1].skipSampleRepository).to.be.true;
+            });
+            it('should forward options to jdl.js', () => {
+                expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;
+                expect(jdlStub.getCall(0).args[1]['json-only']).to.be.true;
+            });
+        });
+        describe('when env variable CI is undefined', () => {
+            let oldArgv;
+            let jdlStub;
+            let oldCI;
+            beforeEach(() => {
+                oldArgv = process.argv;
+                process.argv = ['jhipster', 'jhipster', 'jdl', 'foo.jdl', '--json-only'];
+                oldCI = process.env.CI;
+                delete process.env.CI;
+                jdlStub = sinon.stub();
+                proxyquire('../../cli/cli', { './jdl': jdlStub });
+            });
+            afterEach(() => {
+                process.argv = oldArgv;
+                process.env.CI = oldCI;
+            });
+            it('should call jdl.js with foo.jdl arg', () => {
+                expect(jdlStub.getCall(0).args[0]).to.be.eql(['foo.jdl']);
+            });
+            it('should call jdl.js without forcing skipSampleRepository option', () => {
+                expect(jdlStub.getCall(0).args[1].skipSampleRepository).to.be.false;
             });
             it('should forward options to jdl.js', () => {
                 expect(jdlStub.getCall(0).args[1].jsonOnly).to.be.true;

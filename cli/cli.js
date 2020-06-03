@@ -170,7 +170,8 @@ Object.entries(allCommands).forEach(([key, opts]) => {
             }
 
             const customOptions = {};
-            if (key === 'jdl' && process.argv[2] === 'import-jdl') {
+            if (key === 'jdl' && (program.args[0] === 'import-jdl' || process.env.CI === 'true')) {
+                // When running inside CI environment we should use skipSampleRepository by default.
                 customOptions.skipSampleRepository = true;
             }
 
