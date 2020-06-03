@@ -536,7 +536,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 if (dbAddOn) {
                     this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-                    exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                    ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                         addonCreateCallback('Database', err, stdout, stderr);
                     });
                 } else {
@@ -546,7 +546,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                     addonCreateCallback('Database', err, stdout, stderr);
                 });
-                
+
                 let cacheAddOn;
                 if (this.cacheProvider === 'memcached') {
                     cacheAddOn = 'memcachier:dev --as MEMCACHIER';
@@ -556,7 +556,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 if (cacheAddOn) {
                     this.log(chalk.bold(`\nProvisioning cache addon ${cacheAddOn}`));
-                    exec(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                    ChildProcess.exec(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                         addonCreateCallback('Cache', err, stdout, stderr);
                     });
                 } else {
