@@ -366,7 +366,7 @@ module.exports = class extends BaseGenerator {
                 const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-                const child = exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
+                const child = ChildProcess.exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
                     if (err) {
                         if (stderr.includes('is already taken')) {
                             const prompts = [
@@ -405,7 +405,7 @@ module.exports = class extends BaseGenerator {
                                         done();
                                     });
                                 } else {
-                                    exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
+                                    ChildProcess.exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -493,7 +493,7 @@ module.exports = class extends BaseGenerator {
                 }
 
                 if (this.useOkta) {
-                    exec(`heroku addons:create okta --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                    ChildProcess.exec(`heroku addons:create okta --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                         addonCreateCallback('Okta', err, stdout, stderr);
                     });
                 }
