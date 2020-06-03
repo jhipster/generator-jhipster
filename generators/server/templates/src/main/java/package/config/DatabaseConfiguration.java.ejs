@@ -142,6 +142,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import java.util.ArrayList;
@@ -398,8 +399,9 @@ public class DatabaseConfiguration {
             return Base64.decodeBase64(source);
         }
     }
-
-    /**
+<%_ } _%>
+<% if ((databaseType === 'couchbase') || (databaseType === 'sql' && reactive)) { %>
+   /**
     * Simple singleton to convert {@link UUID}s to their {@link String} representation.
     */
     @WritingConverter
@@ -427,6 +429,7 @@ public class DatabaseConfiguration {
         }
 
     }
+
 <%_ } _%>
 <%_ if (databaseType === 'sql' && reactive) { _%>
     // LocalDateTime seems to be the only type that is supported across all drivers atm
@@ -440,6 +443,9 @@ public class DatabaseConfiguration {
         converters.add(new DurationWriteConverter());
         converters.add(new DurationReadConverter());
         converters.add(new ZonedDateTimeReadConverter());
+        converters.add(new ZonedDateTimeWriteConverter());
+        converters.add(UUIDToStringConverter.INSTANCE);
+        converters.add(StringToUUIDConverter.INSTANCE);
         converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
         return new R2dbcCustomConversions(
             CustomConversions.StoreConversions.of(dialect.getSimpleTypeHolder(), converters),
@@ -496,6 +502,15 @@ public class DatabaseConfiguration {
         public ZonedDateTime convert(LocalDateTime localDateTime) {
             // Be aware - we are using the system default timezone
             return ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+        }
+    }
+
+    @WritingConverter
+    public static class ZonedDateTimeWriteConverter implements Converter<ZonedDateTime, LocalDateTime> {
+
+        @Override
+        public LocalDateTime convert(ZonedDateTime zonedDateTime) {
+            return zonedDateTime.toLocalDateTime();
         }
     }
 
