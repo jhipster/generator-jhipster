@@ -726,11 +726,32 @@ public class CacheConfiguration {
     @Bean
     public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
+
+        URI redisUri = URI.create(jHipsterProperties.getCache().getRedis().getServer()[0]);
+
         Config config = new Config();
         if (jHipsterProperties.getCache().getRedis().isCluster()) {
-            config.useClusterServers().addNodeAddress(jHipsterProperties.getCache().getRedis().getServer());
+            ClusterServersConfig clusterServersConfig = config
+                .useClusterServers()
+                .setMasterConnectionPoolSize(jHipsterProperties.getCache().getRedis().getConnectionPoolSize())
+                .setMasterConnectionMinimumIdleSize(jHipsterProperties.getCache().getRedis().getConnectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(jHipsterProperties.getCache().getRedis().getSubscriptionConnectionPoolSize())
+                .addNodeAddress(jHipsterProperties.getCache().getRedis().getServer());
+
+            if (redisUri.getUserInfo() != null) {
+                clusterServersConfig.setPassword(redisUri.getUserInfo().substring(redisUri.getUserInfo().indexOf(':') + 1));
+            }
         } else {
-            config.useSingleServer().setAddress(jHipsterProperties.getCache().getRedis().getServer()[0]);
+            SingleServerConfig singleServerConfig = config
+                .useSingleServer()
+                .setConnectionPoolSize(jHipsterProperties.getCache().getRedis().getConnectionPoolSize())
+                .setConnectionMinimumIdleSize(jHipsterProperties.getCache().getRedis().getConnectionMinimumIdleSize())
+                .setSubscriptionConnectionPoolSize(jHipsterProperties.getCache().getRedis().getSubscriptionConnectionPoolSize())
+                .setAddress(jHipsterProperties.getCache().getRedis().getServer()[0]);
+
+            if (redisUri.getUserInfo() != null) {
+                singleServerConfig.setPassword(redisUri.getUserInfo().substring(redisUri.getUserInfo().indexOf(':') + 1));
+            }
         }
         jcacheConfig.setStatisticsEnabled(true);
         jcacheConfig.setExpiryPolicyFactory(CreatedExpiryPolicy.factoryOf(new Duration(TimeUnit.SECONDS, jHipsterProperties.getCache().getRedis().getExpiration())));
