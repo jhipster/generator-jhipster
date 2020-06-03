@@ -19,7 +19,6 @@
 /* eslint-disable no-console */
 const assert = require('assert');
 const chalk = require('chalk');
-const didYouMean = require('didyoumean');
 const meow = require('meow');
 const yeoman = require('yeoman-environment');
 const _ = require('lodash');
@@ -70,12 +69,19 @@ const fatal = function (msg, trace) {
 const init = function (program) {
     program.option('-d, --debug', 'enable debugger');
 
-    const argv = program.normalize(process.argv);
-    this.debugEnabled = program.debug = argv.includes('-d') || argv.includes('--debug'); // Need this early
+    this.debugEnabled = process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
 
-    if (this.debugEnabled) {
-        info('Debug logging is on');
-    }
+    const self = this;
+    // Option event fallback.
+    program.on('option:debug', function () {
+        if (self.debugEnabled) {
+            return;
+        }
+        self.debugEnabled = this.debug;
+        if (self.debugEnabled) {
+            info('Debug logging is on');
+        }
+    });
 };
 
 const logger = {
@@ -105,20 +111,6 @@ const initHelp = (program, cliName) => {
         logger.info(`  For more info visit ${chalk.blue('https://www.jhipster.tech')}`);
         logger.info('');
     });
-
-    program.on('command:*', name => {
-        console.error(chalk.red(`${chalk.yellow(name)} is not a known command. See '${chalk.white(`${cliName} --help`)}'.`));
-
-        const cmd = Object.values(name).join('');
-        const availableCommands = program.commands.map(c => c._name);
-
-        const suggestion = didYouMean(cmd, availableCommands);
-        if (suggestion) {
-            logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
-        }
-
-        process.exit(1);
-    });
 };
 
 /**
@@ -134,7 +126,7 @@ const getArgs = opts => {
 /**
  * Get options from arguments
  */
-const getOptionsFromArgs = args => {
+const getOptionsFromArgs = (args = []) => {
     const options = [];
     args.forEach(item => {
         if (typeof item == 'string') {
@@ -184,19 +176,18 @@ const getCommand = (cmd, args, opts) => {
     return `${cmd}${cmdArgs ? ` ${cmdArgs}` : ''}`;
 };
 
-const getCommandOptions = (pkg, argv) => {
+const addKebabCase = (options = {}) => {
+    const kebabCase = Object.keys(options).reduce((acc, key) => {
+        acc[_.kebabCase(key)] = options[key];
+        return acc;
+    }, {});
+    return { ...kebabCase, ...options };
+};
+
+const getCommandOptions = (pkg, argv = []) => {
     const options = meow({ help: false, pkg, argv });
-    const flags = options ? options.flags : null;
-    if (flags) {
-        flags['from-cli'] = true;
-        // Add un-camelized options too, for legacy
-        Object.keys(flags).forEach(key => {
-            const legacyKey = key.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`);
-            flags[legacyKey] = flags[key];
-        });
-        return flags;
-    }
-    return { 'from-cli': true };
+    const flags = options ? options.flags : undefined;
+    return addKebabCase({ fromCli: true, ...flags });
 };
 
 const doneFactory = successMsg => {
@@ -392,6 +383,7 @@ module.exports = {
     getOptionsFromArgs,
     getCommand,
     getCommandOptions,
+    addKebabCase,
     doneFactory,
     done: doneFactory(SUCCESS_MESSAGE),
     printSuccess,
