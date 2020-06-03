@@ -39,8 +39,8 @@ update_apps() {
         --header "Authorization: SSWS ${2}" \
         --data-raw "${data}"
 
-    data=$(jq '.' app2-mod.json)
-    id=$(jq '.id' app2-mod.json)
+    data=$(jq '.' app2.json)
+    id=$(jq '.id' app2.json)
 
     curl -s --location --request PUT "${1}/api/v1/apps/${id//\"/}" \
         --header "Accept: application/json" \
