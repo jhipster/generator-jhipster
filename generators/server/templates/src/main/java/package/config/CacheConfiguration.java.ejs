@@ -139,6 +139,8 @@ import java.util.List;
     <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProvider === 'memcached') { _%>
+import java.util.HashMap;
+import java.util.Map;
 import java.net.InetSocketAddress;
 import net.rubyeye.xmemcached.auth.AuthInfo;
 import net.rubyeye.xmemcached.utils.AddrUtil;
