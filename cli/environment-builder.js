@@ -55,6 +55,10 @@ module.exports = class EnvironmentBuilder {
 
     /**
      * Class to manipulate yeoman environment for jhipster needs.
+     * - Registers jhipster generators.
+     * - Loads blueprints from argv and .yo-rc.json.
+     * - Installs blueprints if not found.
+     * - Loads sharedOptions.
      */
     constructor(env) {
         this.env = env;

@@ -89,7 +89,7 @@ describe('Environment builder', () => {
             });
         });
 
-        describe('when blueprints was passed by command', () => {
+        describe('when blueprints were passed by command', () => {
             let oldCwd;
             let oldArgv;
             let blueprintsWithVersion;
