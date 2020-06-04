@@ -138,6 +138,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.boot.test.mock.mockito.SpyBean;
+<%_ } _%>
 <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
@@ -193,13 +196,8 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     private UserService userService;
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
-     *
-     * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private UserSearchRepository mockUserSearchRepository;
+    @SpyBean
+    private UserSearchRepository userSearchRepository;
     <%_ } _%>
     <%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
 
@@ -382,12 +380,6 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (databaseType === 'sql' && !reactive) { _%>
         when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)));
         <%_ } _%>
-        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-        when(mockUserSearchRepository.delete(any())).thenReturn(Mono.empty());
-        <%_ } _%>
         user.setActivated(false);
         user.setActivationKey(RandomStringUtils.random(20));
         <%= asEntity('User') %> dbUser = userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
@@ -408,7 +400,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, times(1)).delete(user);
+        verify(userSearchRepository, times(1)).delete(user);
         <%_ } _%>
     }
 
@@ -439,7 +431,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
-        verify(mockUserSearchRepository, never()).delete(user);
+        verify(userSearchRepository, never()).delete(user);
         <%_ } _%>
     }
     <%_ } _%>
