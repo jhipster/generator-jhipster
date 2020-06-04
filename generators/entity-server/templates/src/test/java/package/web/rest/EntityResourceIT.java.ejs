@@ -110,22 +110,30 @@ import <%= packageName %>.service.<%= entityClass %>QueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.mockito.AdditionalAnswers;
+<%_ } _%>
 <%_ if (searchEngine === 'elasticsearch' || fieldsContainOwnerManyToMany || cacheProvider === 'redis') { _%>
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.SpyBean;
-<%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.beans.factory.ObjectProvider;
+<%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 <%_ } else { _%>
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+<%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 <%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
 <%_ if (searchEngine === 'elasticsearch' && pagination !== 'no' || fieldsContainOwnerManyToMany) { _%>
@@ -187,6 +195,9 @@ import static org.hamcrest.Matchers.hasItem;
 <%_ if (reactive) { _%>
 import static org.hamcrest.Matchers.is;
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import static org.mockito.Mockito.mock;
+<%_ } _%>
 <%_ if (testsNeedCsrf) { _%>
     <%_ if (reactive) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
@@ -208,11 +219,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
 <%_ if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = { <%= mainClass %>.class, TestSecurityConfiguration.class })
+@SpringBootTest(classes = { <%= mainClass %>.class, TestSecurityConfiguration.class<% if (searchEngine === 'elasticsearch') { %>, <%= entityClass %>ResourceIT.SearchRepositorySpyBeanConfig.class<% } %> })
 <%_ } else if (authenticationType === 'uaa' && applicationType !== 'uaa') { _%>
-@SpringBootTest(classes = { SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class })
+@SpringBootTest(classes = { SecurityBeanOverrideConfiguration.class, <%= mainClass %>.class<% if (searchEngine === 'elasticsearch') { %>, <%= entityClass %>ResourceIT.SearchRepositorySpyBeanConfig.class<% } %> })
 <%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
+@SpringBootTest(classes = { <%= mainClass %>.class<% if (searchEngine === 'elasticsearch') { %>, <%= entityClass %>ResourceIT.SearchRepositorySpyBeanConfig.class<% } %> })
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith({ RedisTestContainerExtension.class, MockitoExtension.class })
@@ -433,8 +444,21 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     private <%= entityClass %>Service <%= entityInstance %>Service;
     <%_ } if (searchEngine === 'elasticsearch') { _%>
 
-    @SpyBean
-    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
+    @TestConfiguration // see https://github.com/spring-projects/spring-boot/issues/21488
+    static class SearchRepositorySpyBeanConfig {
+        @Primary
+        @Bean
+        <%= entityClass %>SearchRepository spyBean(<%= entityClass %>SearchRepository real) {
+            <%= entityClass %>SearchRepository mock = mock(<%= entityClass %>SearchRepository.class,
+                AdditionalAnswers.delegatesTo(real));
+
+            return mock;
+        }
+    }
+
+    @Autowired
+    private ObjectProvider<<%= entityClass %>SearchRepository> <%= entityInstance %>SearchRepository;
+
     <%_ } _%>
     <%_ if (jpaMetamodelFiltering) { _%>
 
@@ -591,7 +615,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(<%= entityInstance %>SearchRepository, times(1)).save(test<%= entityClass %>);
+        verify(<%= entityInstance %>SearchRepository.getIfAvailable(), times(1)).save(test<%= entityClass %>);
         <%_ } _%>
     }
 
@@ -628,7 +652,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(<%= entityInstance %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        verify(<%= entityInstance %>SearchRepository.getIfAvailable(), times(0)).save(<%= asEntity(entityInstance) %>);
         <%_ } _%>
     }
 
@@ -692,9 +716,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
         // Validate the <%= entityClass %> in Elasticsearch
             <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        verify(<%= entityInstance %>SearchRepository, times(2)).save(<%= asEntity(entityInstance) %>);
+        verify(<%= entityInstance %>SearchRepository.getIfAvailable(), times(2)).save(<%= asEntity(entityInstance) %>);
             <%_ } else { _%>
-        verify(<%= entityInstance %>SearchRepository, times(1)).save(<%= asEntity(entityInstance) %>);
+        verify(<%= entityInstance %>SearchRepository.getIfAvailable(), times(1)).save(<%= asEntity(entityInstance) %>);
             <%_ } _%>
         <%_ } _%>
     }
@@ -1209,7 +1233,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(<%= entityInstance %>SearchRepository, times(<%= service !== 'no' && dto !== 'mapstruct' ? '2' : '1' %>)).save(test<%= entityClass %>);
+        verify(<%= entityInstance %>SearchRepository.getIfAvailable(), times(<%= service !== 'no' && dto !== 'mapstruct' ? '2' : '1' %>)).save(test<%= entityClass %>);
         <%_ } _%>
     }
 
@@ -1245,7 +1269,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(<%= entityInstance %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        verify(<%= entityInstance %>SearchRepository.getIfAvailable(), times(0)).save(<%= asEntity(entityInstance) %>);
         <%_ } _%>
     }
 
@@ -1284,7 +1308,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(<%= entityInstance %>SearchRepository, times(1)).deleteById(<%= asEntity(entityInstance) %>.getId());
+        verify(<%= entityInstance %>SearchRepository.getIfAvailable(), times(1)).deleteById(<%= asEntity(entityInstance) %>.getId());
         <%_ } _%>
     }
 <%_ } _%>
@@ -1301,7 +1325,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ } else { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 <%_ } _%>
-<%_ if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+        <%= entityInstance %>SearchRepository.getIfAvailable().save(<%= asEntity(entityInstance) %>)<%= callBlock %>;
+<%_ } else if (searchEngine === 'couchbase') { _%>
 
         // Wait for the <%= entityInstance %> to be indexed
         TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, "id:" + <%= entityInstance %>.getId())<% if (reactive) { %>.collectList().block()<% } %>);

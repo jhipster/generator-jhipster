@@ -67,11 +67,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 <%_ if (databaseType === 'neo4j') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.mockito.AdditionalAnswers;
+<%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
 import org.mockito.Mock;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.test.context.TestConfiguration;
+<%_ } _%>
 import org.springframework.boot.test.context.SpringBootTest;
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+<%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
 import org.springframework.data.auditing.AuditingHandler;
 import org.springframework.data.auditing.DateTimeProvider;
@@ -139,7 +150,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 <%_ } _%>
 <%_ if (searchEngine === 'elasticsearch') { _%>
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import static org.mockito.Mockito.mock;
 <%_ } _%>
 <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
 import static org.mockito.Mockito.when;
@@ -153,9 +164,9 @@ import static org.mockito.Mockito.when;
  * Integration tests for {@link UserService}.
  */
 <%_ if (authenticationType === 'oauth2') { _%>
-@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class})
+@SpringBootTest(classes = {<%= mainClass %>.class, TestSecurityConfiguration.class<% if (searchEngine === 'elasticsearch') { %>, UserServiceIT.SearchRepositorySpyBeanConfig.class<% } %>})
 <%_ } else { _%>
-@SpringBootTest(classes = <%= mainClass %>.class)
+@SpringBootTest(classes = { <%= mainClass %>.class<% if (searchEngine === 'elasticsearch') { %>, UserServiceIT.SearchRepositorySpyBeanConfig.class<% } %> })
 <%_ } _%>
 <%_ if (cacheProvider === 'redis') { _%>
 @ExtendWith(RedisTestContainerExtension.class)
@@ -196,8 +207,21 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
     private UserService userService;
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    @SpyBean
-    private UserSearchRepository userSearchRepository;
+    @TestConfiguration // see https://github.com/spring-projects/spring-boot/issues/21488
+    static class SearchRepositorySpyBeanConfig {
+        @Primary
+        @Bean
+        UserSearchRepository spyBean(UserSearchRepository real) {
+            UserSearchRepository mock = mock(UserSearchRepository.class,
+                AdditionalAnswers.delegatesTo(real));
+
+            return mock;
+        }
+    }
+
+    @Autowired
+    private ObjectProvider<UserSearchRepository> userSearchRepository;
+
     <%_ } _%>
     <%_ if (databaseType === 'sql' && !reactive && authenticationType !== 'oauth2') { _%>
 
@@ -400,7 +424,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
-        verify(userSearchRepository, times(1)).delete(user);
+        verify(userSearchRepository.getIfAvailable(), times(1)).delete(user);
         <%_ } _%>
     }
 
@@ -431,7 +455,7 @@ public class UserServiceIT <% if (databaseType === 'cassandra') { %>extends Abst
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Verify Elasticsearch mock
-        verify(userSearchRepository, never()).delete(user);
+        verify(userSearchRepository.getIfAvailable(), never()).delete(user);
         <%_ } _%>
     }
     <%_ } _%>
