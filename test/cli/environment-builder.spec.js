@@ -44,7 +44,7 @@ describe('Environment builder', () => {
     describe('createDefaultBuilder', () => {
         before(() => {
             sinon.spy(EnvironmentBuilder, 'create');
-            sinon.spy(EnvironmentBuilder.prototype, 'lookupJHipster');
+            sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
             sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
             sinon.spy(EnvironmentBuilder.prototype, 'lookupBlueprints');
             // Use localOnly to lookup at local node_modules only to improve lookup speed.
@@ -52,13 +52,13 @@ describe('Environment builder', () => {
         });
         after(() => {
             EnvironmentBuilder.create.restore();
-            EnvironmentBuilder.prototype.lookupJHipster.restore();
+            EnvironmentBuilder.prototype._lookupJHipster.restore();
             EnvironmentBuilder.prototype._loadBlueprints.restore();
             EnvironmentBuilder.prototype.lookupBlueprints.restore();
         });
-        it('should call create, lookupJHipster, _loadBlueprints and lookupBlueprints', () => {
+        it('should call create, _lookupJHipster, _loadBlueprints and lookupBlueprints', () => {
             expect(EnvironmentBuilder.create.callCount).to.be.equal(1);
-            expect(EnvironmentBuilder.prototype.lookupJHipster.callCount).to.be.equal(1);
+            expect(EnvironmentBuilder.prototype._lookupJHipster.callCount).to.be.equal(1);
             expect(EnvironmentBuilder.prototype._loadBlueprints.callCount).to.be.equal(1);
             expect(EnvironmentBuilder.prototype.lookupBlueprints.callCount).to.be.equal(1);
         });

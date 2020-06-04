@@ -50,7 +50,7 @@ module.exports = class EnvironmentBuilder {
      * @return {EnvironmentBuilder} envBuilder
      */
     static createDefaultBuilder() {
-        return EnvironmentBuilder.create().lookupJHipster()._loadBlueprints().lookupBlueprints().loadSharedOptions();
+        return EnvironmentBuilder.create()._lookupJHipster()._loadBlueprints().lookupBlueprints().loadSharedOptions();
     }
 
     /**
@@ -65,11 +65,12 @@ module.exports = class EnvironmentBuilder {
     }
 
     /**
+     * @private
      * Lookup current jhipster generators.
      *
      * @return {EnvironmentBuilder} this for chaining.
      */
-    lookupJHipster() {
+    _lookupJHipster() {
         // Register jhipster generators.
         this.env.lookup({ packagePaths: [path.join(__dirname, '..')] }).forEach(generator => {
             // Verify jhipster generators namespace.
