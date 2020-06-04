@@ -500,8 +500,8 @@ public class DatabaseConfiguration {
 
         @Override
         public ZonedDateTime convert(LocalDateTime localDateTime) {
-            // Be aware - we are using the system default timezone
-            return ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+            // Be aware - we are using the UTC timezone
+            return ZonedDateTime.of(localDateTime, ZoneOffset.UTC);
         }
     }
 
