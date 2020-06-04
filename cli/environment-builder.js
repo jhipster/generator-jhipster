@@ -28,6 +28,7 @@ module.exports = class EnvironmentBuilder {
     /**
      * Creates a new EnvironmentBuilder with a new Environment.
      *
+     * @param {...any} args - Arguments passed to Environment.createEnv().
      * @return {EnvironmentBuilder} envBuilder
      */
     static create(...args) {
@@ -36,21 +37,27 @@ module.exports = class EnvironmentBuilder {
     }
 
     /**
-     * Creates a new EnvironmentBuilder with a new Environment.
+     * Creates a new Environment with blueprints.
      *
+     * Can be used to create a new test environment:
+     * @example
+     * require('yeoman-test').run('jhipster:app', {}, {createEnv: EnvironmentBuilder.createEnv});
+     *
+     * @param {...any} args - Arguments passed to Environment.createEnv().
      * @return {EnvironmentBuilder} envBuilder
      */
-    static fromEnvironment(env) {
-        return new EnvironmentBuilder(env);
+    static createEnv(...args) {
+        return EnvironmentBuilder.createDefaultBuilder(...args).getEnvironment();
     }
 
     /**
      * Creates a new EnvironmentBuilder with a new Environment and load jhipster, blueprints and sharedOptions.
      *
+     * @param {...any} args - Arguments passed to Environment.createEnv().
      * @return {EnvironmentBuilder} envBuilder
      */
-    static createDefaultBuilder() {
-        return EnvironmentBuilder.create()._lookupJHipster()._loadBlueprints()._lookupBlueprints()._loadSharedOptions();
+    static createDefaultBuilder(...args) {
+        return EnvironmentBuilder.create(...args)._lookupJHipster()._loadBlueprints()._lookupBlueprints()._loadSharedOptions();
     }
 
     /**
