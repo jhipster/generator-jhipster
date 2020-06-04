@@ -260,17 +260,6 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.searchEngine === 'elasticsearch',
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/search/EntitySearchRepositoryMockConfiguration.java',
-                    renameTo: generator =>
-                        `${generator.packageFolder}/repository/search/${generator.entityClass}SearchRepositoryMockConfiguration.java`,
-                },
-            ],
-        },
-        {
             condition: generator => generator.gatlingTests,
             path: TEST_DIR,
             templates: [

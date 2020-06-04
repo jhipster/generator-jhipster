@@ -194,13 +194,8 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     private UserRepository userRepository;
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
-     *
-     * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
-     */
     @Autowired
-    private UserSearchRepository mockUserSearchRepository;
+    private UserSearchRepository userSearchRepository;
     <%_ } _%>
 
     @Autowired
@@ -294,12 +289,6 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     public void createUser() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
-        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-        <%_ } _%>
-
         // Create the User
         ManagedUserVM managedUserVM = new ManagedUserVM();
         managedUserVM.setLogin(DEFAULT_LOGIN);
@@ -398,7 +387,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
+        userSearchRepository.save(user);
         <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -443,7 +432,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
+        userSearchRepository.save(user);
         <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -530,7 +519,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Initialize the database
         userRepository.<% if (databaseType === 'sql' && reactive && authenticationType === 'oauth2') { %>create<% } else { %>save<% } %><% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
+        userSearchRepository.save(user);
         <%_ } _%>
         <%_ if (cacheManagerIsAvailable === true) { _%>
 
@@ -598,11 +587,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     public void updateUser() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-        <%_ } _%>
+
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
@@ -664,11 +649,6 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     public void updateUserLogin() throws Exception {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-        <%_ } _%>
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
@@ -732,7 +712,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Initialize the database with 2 users
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
+        userSearchRepository.save(user);
         <%_ } _%>
 
         <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
@@ -754,7 +734,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(anotherUser);
+        userSearchRepository.save(anotherUser);
         <%_ } _%>
 
         // Update the user
@@ -803,7 +783,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(user);
+        userSearchRepository.save(user);
         <%_ } _%>
 
         <%= asEntity('User') %> anotherUser = new <%= asEntity('User') %>();
@@ -825,7 +805,7 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
         <%_ } _%>
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
         <%_ if (searchEngine === 'elasticsearch') { _%>
-        mockUserSearchRepository.save(anotherUser);
+        userSearchRepository.save(anotherUser);
         <%_ } _%>
 
         // Update the user
@@ -873,10 +853,6 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     public void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
         userRepository.save<% if (databaseType === 'sql' && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        <%_ if (searchEngine === 'elasticsearch' && reactive) { _%>
-        // Configure the mock search repository
-        when(mockUserSearchRepository.delete(any())).thenReturn(Mono.empty());
-        <%_ } _%>
         int databaseSizeBeforeDelete = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 

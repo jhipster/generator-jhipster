@@ -1695,16 +1695,6 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'oauth2' && generator.searchEngine === 'elasticsearch',
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java',
-                    renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java`,
-                },
-            ],
-        },
-        {
             condition: generator =>
                 generator.authenticationType === 'oauth2' && ['sql', 'mongodb', 'couchbase', 'neo4j'].includes(generator.databaseType),
             path: SERVER_MAIN_SRC_DIR,
@@ -1865,16 +1855,6 @@ const serverFiles = {
                 {
                     file: 'package/repository/search/UserSearchRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/search/UserSearchRepository.java`,
-                },
-            ],
-        },
-        {
-            condition: generator => !generator.skipUserManagement && generator.searchEngine === 'elasticsearch',
-            path: SERVER_TEST_SRC_DIR,
-            templates: [
-                {
-                    file: 'package/repository/search/UserSearchRepositoryMockConfiguration.java',
-                    renameTo: generator => `${generator.testDir}repository/search/UserSearchRepositoryMockConfiguration.java`,
                 },
             ],
         },

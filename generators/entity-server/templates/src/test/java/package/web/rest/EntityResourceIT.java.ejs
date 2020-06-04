@@ -115,6 +115,9 @@ import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <%_ } _%>
+<%_ if (searchEngine === 'elasticsearch') { _%>
+import org.springframework.boot.test.mock.mockito.SpyBean;
+<%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
 import org.junit.jupiter.api.extension.ExtendWith;
 <%_ } _%>
@@ -430,13 +433,8 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     private <%= entityClass %>Service <%= entityInstance %>Service;
     <%_ } if (searchEngine === 'elasticsearch') { _%>
 
-    /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
-     *
-     * @see <%= packageName %>.repository.search.<%= entityClass %>SearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private <%= entityClass %>SearchRepository mock<%= entityClass %>SearchRepository;
+    @SpyBean
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
     <%_ } _%>
     <%_ if (jpaMetamodelFiltering) { _%>
 
@@ -551,11 +549,6 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
     @Test<%= transactionalAnnotation %>
     public void create<%= entityClass %>() throws Exception {
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll()<%= callListBlock %>.size();
-    <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
-        // Configure the mock search repository
-        when(mock<%= entityClass %>SearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-    <%_ } _%>
         // Create the <%= entityClass %>
         <%_ if (dto === 'mapstruct') { _%>
         <%= asDto(entityClass) %> <%= asDto(entityInstance) %> = <%= entityInstance %>Mapper.toDto(<%= asEntity(entityInstance) %>);
@@ -598,7 +591,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(1)).save(test<%= entityClass %>);
+        verify(<%= entityInstance %>SearchRepository, times(1)).save(test<%= entityClass %>);
         <%_ } _%>
     }
 
@@ -635,7 +628,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        verify(<%= entityInstance %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
         <%_ } _%>
     }
 
@@ -699,9 +692,9 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
         // Validate the <%= entityClass %> in Elasticsearch
             <%_ if (service !== 'no' && dto !== 'mapstruct') { _%>
-        verify(mock<%= entityClass %>SearchRepository, times(2)).save(<%= asEntity(entityInstance) %>);
+        verify(<%= entityInstance %>SearchRepository, times(2)).save(<%= asEntity(entityInstance) %>);
             <%_ } else { _%>
-        verify(mock<%= entityClass %>SearchRepository, times(1)).save(<%= asEntity(entityInstance) %>);
+        verify(<%= entityInstance %>SearchRepository, times(1)).save(<%= asEntity(entityInstance) %>);
             <%_ } _%>
         <%_ } _%>
     }
@@ -1149,11 +1142,6 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
     @Test<%= transactionalAnnotation %>
     public void update<%= entityClass %>() throws Exception {
-    <%_ if (reactive && searchEngine === 'elasticsearch') { _%>
-        // Configure the mock search repository
-        when(mock<%= entityClass %>SearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-    <%_ } _%>
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -1221,7 +1209,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(<%= service !== 'no' && dto !== 'mapstruct' ? '2' : '1' %>)).save(test<%= entityClass %>);
+        verify(<%= entityInstance %>SearchRepository, times(<%= service !== 'no' && dto !== 'mapstruct' ? '2' : '1' %>)).save(test<%= entityClass %>);
         <%_ } _%>
     }
 
@@ -1257,20 +1245,12 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
+        verify(<%= entityInstance %>SearchRepository, times(0)).save(<%= asEntity(entityInstance) %>);
         <%_ } _%>
     }
 
     @Test<%= transactionalAnnotation %>
     public void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
-<%_ if (reactive && searchEngine === 'elasticsearch') { _%>
-        // Configure the mock search repository
-    <%_ if (service !== 'no') { _%>
-        when(mock<%= entityClass %>SearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-    <%_ } _%>
-        when(mock<%= entityClass %>SearchRepository.deleteById(any<%= primaryKeyType %>())).thenReturn(Mono.empty());
-<%_ } _%>
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -1304,7 +1284,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
         <%_ if (searchEngine === 'elasticsearch') { _%>
 
         // Validate the <%= entityClass %> in Elasticsearch
-        verify(mock<%= entityClass %>SearchRepository, times(1)).deleteById(<%= asEntity(entityInstance) %>.getId());
+        verify(<%= entityInstance %>SearchRepository, times(1)).deleteById(<%= asEntity(entityInstance) %>.getId());
         <%_ } _%>
     }
 <%_ } _%>
@@ -1312,16 +1292,6 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 
     @Test<%= transactionalAnnotation %>
     public void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
-<%_ if (searchEngine === 'elasticsearch') { _%>
-        // Configure the mock search repository
-    <%_ if (reactive) { _%>
-        when(mock<%= entityClass %>SearchRepository.save(any()))
-            .thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-        <%_ if (pagination !== 'no') { _%>
-        when(mock<%= entityClass %>SearchRepository.count()).thenReturn(Mono.just(1L));
-        <%_ } _%>
-    <%_ } _%>
-<%_ } _%>
         // Initialize the database
         <%_ if (databaseType === 'cassandra') { _%>
         <%= asEntity(entityInstance) %>.setId(UUID.randomUUID());
@@ -1331,20 +1301,7 @@ public class <%= entityClass %>ResourceIT <% if (databaseType === 'cassandra') {
 <%_ } else { _%>
         <%= entityInstance %>Repository.<%= saveMethod %>(<%= asEntity(entityInstance) %>)<%= callBlock %>;
 <%_ } _%>
-<%_ if (searchEngine === 'elasticsearch') { _%>
-    <%_ if (reactive) { _%>
-        when(mock<%= entityClass %>SearchRepository.search("id:" + <%= asEntity(entityInstance) %>.getId()<%_ if (pagination !== 'no') { _%>, PageRequest.of(0, 20)<% }%>))
-            .thenReturn(Flux.just(<%= asEntity(entityInstance) %>));
-    <%_ } else { _%>
-        <%_ if (pagination !== 'no') { _%>
-        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= asEntity(entityInstance) %>.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(<%= asEntity(entityInstance) %>), PageRequest.of(0, 1), 1));
-        <%_     } else { _%>
-        when(mock<%= entityClass %>SearchRepository.search(queryStringQuery("id:" + <%= asEntity(entityInstance) %>.getId())))
-            .thenReturn(Collections.singletonList(<%= asEntity(entityInstance) %>));
-        <%_ } _%>
-    <%_ } _%>
-<%_ } else if (searchEngine === 'couchbase') { _%>
+<%_ if (searchEngine === 'couchbase') { _%>
 
         // Wait for the <%= entityInstance %> to be indexed
         TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search(<%= entityClass %>.PREFIX, "id:" + <%= entityInstance %>.getId())<% if (reactive) { %>.collectList().block()<% } %>);
