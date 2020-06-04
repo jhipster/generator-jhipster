@@ -50,7 +50,7 @@ module.exports = class EnvironmentBuilder {
      * @return {EnvironmentBuilder} envBuilder
      */
     static createDefaultBuilder() {
-        return EnvironmentBuilder.create().lookupJHipster().loadBlueprints().lookupBlueprints().loadSharedOptions();
+        return EnvironmentBuilder.create().lookupJHipster()._loadBlueprints().lookupBlueprints().loadSharedOptions();
     }
 
     /**
@@ -82,11 +82,12 @@ module.exports = class EnvironmentBuilder {
     }
 
     /**
+     * @private
      * Load blueprints from argv, .yo-rc.json.
      *
      * @return {EnvironmentBuilder} this for chaining.
      */
-    loadBlueprints() {
+    _loadBlueprints() {
         this._blueprintsWithVersion = this._getAllBlueprintsWithVersion();
         return this;
     }
