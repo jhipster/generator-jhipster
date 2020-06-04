@@ -252,11 +252,11 @@ describe('Environment builder', () => {
         });
     });
 
-    describe('loadSharedOptions', () => {
+    describe('_loadSharedOptions', () => {
         let envBuilder;
         beforeEach(() => {
             // Use localOnly to lookup at local node_modules only to improve lookup speed.
-            envBuilder = EnvironmentBuilder.create()._loadBlueprints().lookupBlueprints({ localOnly: true }).loadSharedOptions();
+            envBuilder = EnvironmentBuilder.create()._loadBlueprints().lookupBlueprints({ localOnly: true })._loadSharedOptions();
         });
         describe('with multiple blueprints', () => {
             let oldCwd;

@@ -50,7 +50,7 @@ module.exports = class EnvironmentBuilder {
      * @return {EnvironmentBuilder} envBuilder
      */
     static createDefaultBuilder() {
-        return EnvironmentBuilder.create()._lookupJHipster()._loadBlueprints().lookupBlueprints().loadSharedOptions();
+        return EnvironmentBuilder.create()._lookupJHipster()._loadBlueprints().lookupBlueprints()._loadSharedOptions();
     }
 
     /**
@@ -108,11 +108,12 @@ module.exports = class EnvironmentBuilder {
     }
 
     /**
+     * @private
      * Load sharedOptions from jhipster and blueprints.
      *
      * @return {EnvironmentBuilder} this for chaining.
      */
-    loadSharedOptions() {
+    _loadSharedOptions() {
         const blueprintsPackagePath = this._getBlueprintPackagePaths();
         const sharedOptions = this._getSharedOptions(blueprintsPackagePath) || {};
         // Env will forward sharedOptions to every generator
