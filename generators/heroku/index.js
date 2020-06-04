@@ -543,10 +543,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
                 }
 
-                ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
-                    addonCreateCallback('Database', err, stdout, stderr);
-                });
-
                 let cacheAddOn;
                 if (this.cacheProvider === 'memcached') {
                     cacheAddOn = 'memcachier:dev --as MEMCACHIER';
