@@ -87,17 +87,8 @@ module.exports = class EnvironmentBuilder {
      * @return {EnvironmentBuilder} this for chaining.
      */
     loadBlueprints() {
-        this.blueprintsWithVersion = this._getAllBlueprintsWithVersion();
+        this._blueprintsWithVersion = this._getAllBlueprintsWithVersion();
         return this;
-    }
-
-    /**
-     * Get blueprints with version.
-     *
-     * return {Object} blueprints with versions.
-     */
-    getBlueprintsWithVersion() {
-        return this.blueprintsWithVersion;
     }
 
     /**
@@ -106,7 +97,7 @@ module.exports = class EnvironmentBuilder {
      * @return {EnvironmentBuilder} this for chaining.
      */
     lookupBlueprints(options) {
-        const allBlueprints = Object.keys(this.blueprintsWithVersion);
+        const allBlueprints = Object.keys(this._blueprintsWithVersion);
         if (allBlueprints && allBlueprints.length > 0) {
             // Lookup for blueprints.
             this.env.lookup({ ...options, filterPaths: true, packagePatterns: allBlueprints });
@@ -201,7 +192,7 @@ module.exports = class EnvironmentBuilder {
      * Get packagePaths from current loaded blueprints.
      */
     _getBlueprintPackagePaths() {
-        const blueprints = this.blueprintsWithVersion;
+        const blueprints = this._blueprintsWithVersion;
         if (!blueprints) {
             return undefined;
         }

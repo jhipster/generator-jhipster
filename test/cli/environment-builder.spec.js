@@ -81,7 +81,7 @@ describe('Environment builder', () => {
                 revertTempDir(oldCwd);
             });
             beforeEach(() => {
-                blueprintsWithVersion = envBuilder.getBlueprintsWithVersion();
+                blueprintsWithVersion = envBuilder._blueprintsWithVersion;
             });
 
             it('returns an empty object', () => {
@@ -105,7 +105,7 @@ describe('Environment builder', () => {
                 revertTempDir(oldCwd);
             });
             beforeEach(() => {
-                blueprintsWithVersion = envBuilder.getBlueprintsWithVersion();
+                blueprintsWithVersion = envBuilder._blueprintsWithVersion;
             });
 
             it('returns blueprints with no version', () => {
@@ -134,7 +134,7 @@ describe('Environment builder', () => {
                 revertTempDir(oldCwd);
             });
             beforeEach(() => {
-                blueprintsWithVersion = envBuilder.getBlueprintsWithVersion();
+                blueprintsWithVersion = envBuilder._blueprintsWithVersion;
             });
 
             it('returns an empty object', () => {
@@ -163,7 +163,7 @@ describe('Environment builder', () => {
                 revertTempDir(oldCwd);
             });
             beforeEach(() => {
-                blueprintsWithVersion = envBuilder.getBlueprintsWithVersion();
+                blueprintsWithVersion = envBuilder._blueprintsWithVersion;
             });
 
             it('returns the blueprints names & versions', () => {
@@ -201,7 +201,7 @@ describe('Environment builder', () => {
                 revertTempDir(oldCwd);
             });
             beforeEach(() => {
-                blueprintsWithVersion = envBuilder.getBlueprintsWithVersion();
+                blueprintsWithVersion = envBuilder._blueprintsWithVersion;
             });
 
             it('returns the blueprints names & versions, .yo-rc taking precedence', () => {
