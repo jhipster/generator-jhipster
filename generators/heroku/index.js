@@ -729,10 +729,34 @@ module.exports = class extends BaseGenerator {
                         this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
 
                         if (this.useOkta) {
-                            this.log(
-                                chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster')
-                            );
-                            await execCmd('./provision-okta-addon.sh');
+                            let curlAvailable = false;
+                            let jqAvailable = false;
+                            try {
+                                await execCmd("curl --help")
+                                curlAvailable = true;
+                            } catch (err) {
+                                this.log(chalk.red("cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance."));
+                                this.log(chalk.yellow("After you have installed curl execute ./provision-okta-addon.sh manually."));
+                            }
+                            try {
+                                await execCmd("jq --help");
+                                jqAvailable = true;
+                            } catch (err) {
+                                this.log(chalk.red("jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance."));
+                                this.log(chalk.yellow("After you have installed jq execute ./provision-okta-addon.sh manually."));
+                            }
+                            if (curlAvailable && jqAvailable) {
+                                this.log(
+                                    chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster.')
+                                );
+                                try {
+                                    await execCmd('./provision-okta-addon.sh');
+                                } catch (err) {
+                                    this.log(
+                                        chalk.red("Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.")
+                                    )
+                                }
+                            }
                         }
                     } catch (err) {
                         this.log.error(err);
@@ -772,13 +796,33 @@ module.exports = class extends BaseGenerator {
                         this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
 
                         if (this.useOkta) {
-                            this.log(
-                                chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster')
-                            );
+                            let curlAvailable = false;
+                            let jqAvailable = false;
                             try {
-                                await execCmd('./provision-okta-addon.sh');
+                                await execCmd("curl --help")
+                                curlAvailable = true;
                             } catch (err) {
-                                this.log.warn(err);
+                                this.log(chalk.red("cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance."));
+                                this.log(chalk.yellow("After you have installed curl execute ./provision-okta-addon.sh manually."));
+                            }
+                            try {
+                                await execCmd("jq --help");
+                                jqAvailable = true;
+                            } catch (err) {
+                                this.log(chalk.red("jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance."));
+                                this.log(chalk.yellow("After you have installed jq execute ./provision-okta-addon.sh manually."));
+                            }
+                            if (curlAvailable && jqAvailable) {
+                                this.log(
+                                    chalk.green('Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster.')
+                                );
+                                try {
+                                    await execCmd('./provision-okta-addon.sh');
+                                } catch (err) {
+                                    this.log(
+                                        chalk.red("Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.")
+                                    )
+                                }
                             }
                         }
                     } catch (err) {

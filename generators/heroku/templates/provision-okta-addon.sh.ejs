@@ -156,7 +156,27 @@ already_done() {
     fi
 }
 
+check_required_dependencies() {
+    if hash curl 2>/dev/null;
+    then
+        echo -e "\U2714 cURL is available."
+    else
+        echo "\U1F6D1cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance."
+        return 0;
+    fi
+
+    if hash jq 2>/dev/null;
+    then
+        echo -e "\U2611 jq is available.️"
+    else
+        echo -e "\U1F6D1jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance."
+        return 0;
+    fi
+}
+
 main() {
+    check_required_dependencies
+
     OKTA_URL=$(heroku config:get OKTA_CLIENT_ORGURL)
     OKTA_TOKEN=$(heroku config:get OKTA_CLIENT_TOKEN)
 
