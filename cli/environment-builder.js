@@ -39,9 +39,9 @@ module.exports = class EnvironmentBuilder {
     /**
      * Creates a new Environment with blueprints.
      *
-     * Can be used to create a new test environment:
+     * Can be used to create a new test environment (requires yeoman-test >= 2.6.0):
      * @example
-     * require('yeoman-test').run('jhipster:app', {}, {createEnv: EnvironmentBuilder.createEnv});
+     * const promise = require('yeoman-test').create('jhipster:app', {}, {createEnv: EnvironmentBuilder.createEnv}).run();
      *
      * @param {...any} args - Arguments passed to Environment.createEnv().
      * @return {EnvironmentBuilder} envBuilder
@@ -57,7 +57,11 @@ module.exports = class EnvironmentBuilder {
      * @return {EnvironmentBuilder} envBuilder
      */
     static createDefaultBuilder(...args) {
-        return EnvironmentBuilder.create(...args)._lookupJHipster()._loadBlueprints()._lookupBlueprints()._loadSharedOptions();
+        return EnvironmentBuilder.create(...args)
+            ._lookupJHipster()
+            ._loadBlueprints()
+            ._lookupBlueprints()
+            ._loadSharedOptions();
     }
 
     /**

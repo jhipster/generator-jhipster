@@ -22,6 +22,7 @@ const expect = require('chai').expect;
 const fs = require('fs');
 const path = require('path');
 const sinon = require('sinon');
+const helpers = require('yeoman-test');
 
 const EnvironmentBuilder = require('../../cli/environment-builder');
 
@@ -285,6 +286,20 @@ describe('Environment builder', () => {
             it('should merge sharedOptions', () => {
                 expect(envBuilder.getEnvironment().sharedOptions.fooBar.includes('fooValue')).to.be.true;
                 expect(envBuilder.getEnvironment().sharedOptions.fooBar.includes('barValue')).to.be.true;
+            });
+        });
+    });
+
+    describe('yeoman-test integration', () => {
+        before(() => {
+            sinon.spy(EnvironmentBuilder.prototype, 'getEnvironment');
+        });
+        after(() => {
+            EnvironmentBuilder.prototype.getEnvironment.restore();
+        });
+        it('calls getEnvironment', () => {
+            return helpers.create('jhipster:info', {}, { createEnv: EnvironmentBuilder.createEnv }).run(() => {
+                expect(EnvironmentBuilder.prototype.getEnvironment.callCount).to.be.equal(1);
             });
         });
     });
