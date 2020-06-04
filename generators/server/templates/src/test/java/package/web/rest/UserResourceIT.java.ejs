@@ -194,11 +194,6 @@ public class UserResourceIT <% if (databaseType === 'cassandra') { %>extends Abs
     private UserRepository userRepository;
     <%_ if (searchEngine === 'elasticsearch') { _%>
 
-    /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
-     *
-     * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
-     */
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
     <%_ } _%>

@@ -33,5 +33,12 @@ public class ElasticsearchTestConfiguration {
     public void elasticsearchProperties(ElasticsearchProperties elasticsearchProperties) {
         File tempdir = Files.newTemporaryFolder();
         elasticsearchProperties.getProperties().put("path.home", tempdir.getAbsolutePath());
+        elasticsearchProperties.getProperties().put("cluster.name", "testCluster");
+        elasticsearchProperties.getProperties().put("cluster.routing.allocation.disk.threshold_enabled", "false");
+<%_ if (cucumberTests) { _%>
+        // See https://github.com/jhipster/generator-jhipster/issues/10302
+        elasticsearchProperties.getProperties().put("node.max_local_storage_nodes", "2");
+<%_ } _%>
+
     }
 }
