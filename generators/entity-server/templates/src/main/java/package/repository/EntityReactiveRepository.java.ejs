@@ -128,7 +128,7 @@ public interface <%= entityClass %>Repository extends <% if (databaseType === 's
                   let otherEntityTableName = relationships[idx].otherEntityTableName;
                   _%>
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.id is not in (select <%= getColumnName(otherEntityRelationshipName) %>_id from <%= otherEntityTableName %>)")
+    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.id not in (select <%= getColumnName(otherEntityRelationshipName) %>_id from <%= otherEntityTableName %>)")
     Flux<<%= asEntity(entityClass) %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
               <%_ } _%>
         <%_ } _%>
