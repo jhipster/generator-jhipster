@@ -50,7 +50,7 @@ module.exports = class EnvironmentBuilder {
      * @return {EnvironmentBuilder} envBuilder
      */
     static createDefaultBuilder() {
-        return EnvironmentBuilder.create()._lookupJHipster()._loadBlueprints().lookupBlueprints()._loadSharedOptions();
+        return EnvironmentBuilder.create()._lookupJHipster()._loadBlueprints()._lookupBlueprints()._loadSharedOptions();
     }
 
     /**
@@ -94,11 +94,12 @@ module.exports = class EnvironmentBuilder {
     }
 
     /**
+     * @private
      * Lookup current loaded blueprints.
      *
      * @return {EnvironmentBuilder} this for chaining.
      */
-    lookupBlueprints(options) {
+    _lookupBlueprints(options) {
         const allBlueprints = Object.keys(this._blueprintsWithVersion);
         if (allBlueprints && allBlueprints.length > 0) {
             // Lookup for blueprints.

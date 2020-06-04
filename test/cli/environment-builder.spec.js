@@ -46,7 +46,7 @@ describe('Environment builder', () => {
             sinon.spy(EnvironmentBuilder, 'create');
             sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
             sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
-            sinon.spy(EnvironmentBuilder.prototype, 'lookupBlueprints');
+            sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
             // Use localOnly to lookup at local node_modules only to improve lookup speed.
             EnvironmentBuilder.createDefaultBuilder();
         });
@@ -54,13 +54,13 @@ describe('Environment builder', () => {
             EnvironmentBuilder.create.restore();
             EnvironmentBuilder.prototype._lookupJHipster.restore();
             EnvironmentBuilder.prototype._loadBlueprints.restore();
-            EnvironmentBuilder.prototype.lookupBlueprints.restore();
+            EnvironmentBuilder.prototype._lookupBlueprints.restore();
         });
-        it('should call create, _lookupJHipster, _loadBlueprints and lookupBlueprints', () => {
+        it('should call create, _lookupJHipster, _loadBlueprints and _lookupBlueprints', () => {
             expect(EnvironmentBuilder.create.callCount).to.be.equal(1);
             expect(EnvironmentBuilder.prototype._lookupJHipster.callCount).to.be.equal(1);
             expect(EnvironmentBuilder.prototype._loadBlueprints.callCount).to.be.equal(1);
-            expect(EnvironmentBuilder.prototype.lookupBlueprints.callCount).to.be.equal(1);
+            expect(EnvironmentBuilder.prototype._lookupBlueprints.callCount).to.be.equal(1);
         });
     });
 
@@ -214,11 +214,11 @@ describe('Environment builder', () => {
         });
     });
 
-    describe('lookupBlueprints', () => {
+    describe('_lookupBlueprints', () => {
         let envBuilder;
         beforeEach(() => {
             // Use localOnly to lookup at local node_modules only to improve lookup speed.
-            envBuilder = EnvironmentBuilder.create()._loadBlueprints().lookupBlueprints({ localOnly: true });
+            envBuilder = EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true });
         });
         describe('with multiple blueprints', () => {
             let oldCwd;
@@ -256,7 +256,7 @@ describe('Environment builder', () => {
         let envBuilder;
         beforeEach(() => {
             // Use localOnly to lookup at local node_modules only to improve lookup speed.
-            envBuilder = EnvironmentBuilder.create()._loadBlueprints().lookupBlueprints({ localOnly: true })._loadSharedOptions();
+            envBuilder = EnvironmentBuilder.create()._loadBlueprints()._lookupBlueprints({ localOnly: true })._loadSharedOptions();
         });
         describe('with multiple blueprints', () => {
             let oldCwd;
