@@ -123,7 +123,7 @@ spring:
         <%_ } _%>
         show-sql: false
     <%_ } _%>
-    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || searchEngine === 'elasticsearch') { _%>
+    <%_ if (databaseType === 'mongodb' || databaseType === 'cassandra' || (searchEngine === 'elasticsearch' && reactive)) { _%>
     data:
     <%_ } _%>
     <%_ if (databaseType === 'mongodb') { _%>
@@ -139,18 +139,15 @@ spring:
             local-datacenter: datacenter1
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
-        <%_ if (!reactive) { _%>
-        jest:
-            uri: http://localhost:9200
-    # see https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-nosql.html#boot-features-connecting-to-elasticsearch-jest
-    elasticsearch:
-        rest:
-            uris: http://localhost:9200
-        <%_ } else { _%>
+        <%_ if (reactive) { _%>
         elasticsearch:
           client:
             reactive:
               endpoints: localhost:9200
+        <%_ } else { _%>
+    elasticsearch:
+        rest:
+            uris: http://localhost:9200
         <%_ } _%>
     <%_ } _%>
     <%_ if (databaseType === 'couchbase') { _%>

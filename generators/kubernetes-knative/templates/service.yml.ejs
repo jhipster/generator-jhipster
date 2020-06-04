@@ -118,8 +118,6 @@ spec:
               value: <%= app.baseName.toLowerCase() %>
             <%_ } _%>
             <%_ if (app.searchEngine === 'elasticsearch') { _%>
-            - name: SPRING_DATA_JEST_URI
-              value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
             - name: SPRING_ELASTICSEARCH_REST_URIS
               value: http://<%= app.baseName.toLowerCase() %>-elasticsearch.<%= kubernetesNamespace %>.svc.cluster.local:9200
             <%_ } _%>

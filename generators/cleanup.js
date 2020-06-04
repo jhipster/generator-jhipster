@@ -251,6 +251,9 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
             generator.removeFile(`${javaDir}config/cassandra/CassandraConfiguration.java`);
             generator.removeFile(`${testDir}config/CassandraConfigurationIT.java`);
         }
+        if (generator.searchEngine === 'elasticsearch') {
+            generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
+        }
     }
 }
 
