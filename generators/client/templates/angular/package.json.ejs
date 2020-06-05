@@ -172,7 +172,7 @@
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "ngc": "ngc -p tsconfig.app.json",
-    "cleanup": "rimraf <%= DIST_DIR %> <%= AOT_DIR %>",
+    "cleanup": "rimraf <%= DIST_DIR %>",
     "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
     <%_ if (protractorTests) { _%>
     "e2e": "protractor <%= TEST_SRC_DIR %>protractor.conf.js",
