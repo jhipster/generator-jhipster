@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const fs = require('fs');
-const exec = require('child_process').exec;
+const ChildProcess = require('child_process');
 const chalk = require('chalk');
 const _ = require('lodash');
 const glob = require('glob');
@@ -46,6 +46,10 @@ module.exports = class extends BaseGenerator {
             type: Boolean,
             defaults: false,
         });
+
+        if (this.options.help) {
+            return;
+        }
 
         this.herokuSkipBuild = this.options['skip-build'];
         this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
@@ -89,7 +93,7 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
 
                 if (this.herokuAppName) {
-                    exec('heroku apps:info --json', (err, stdout) => {
+                    ChildProcess.exec('heroku apps:info --json', (err, stdout) => {
                         if (err) {
                             this.config.set({
                                 herokuAppName: null,
@@ -217,7 +221,7 @@ module.exports = class extends BaseGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                exec('heroku --version', err => {
+                ChildProcess.exec('heroku --version', err => {
                     if (err) {
                         this.log.error("You don't have the Heroku CLI installed. Download it from https://cli.heroku.com/");
                         this.abort = true;
@@ -252,7 +256,7 @@ module.exports = class extends BaseGenerator {
                 } catch (e) {
                     // An exception is thrown if the folder doesn't exist
                     this.log(chalk.bold('\nInitializing Git repository'));
-                    const child = exec('git init', (err, stdout, stderr) => {
+                    const child = ChildProcess.exec('git init', (err, stdout, stderr) => {
                         done();
                     });
                     child.stdout.on('data', data => {
@@ -266,13 +270,13 @@ module.exports = class extends BaseGenerator {
                 const done = this.async();
                 const cliPlugin = 'heroku-cli-deploy';
 
-                exec('heroku plugins', (err, stdout) => {
+                ChildProcess.exec('heroku plugins', (err, stdout) => {
                     if (_.includes(stdout, cliPlugin)) {
                         this.log('\nHeroku CLI deployment plugin already installed');
                         done();
                     } else {
                         this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-                        const child = exec(`heroku plugins:install ${cliPlugin}`, (err, stdout) => {
+                        const child = ChildProcess.exec(`heroku plugins:install ${cliPlugin}`, (err, stdout) => {
                             if (err) {
                                 this.abort = true;
                                 this.log.error(err);
@@ -295,7 +299,7 @@ module.exports = class extends BaseGenerator {
                 const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-                const child = exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
+                const child = ChildProcess.exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
                     if (err) {
                         if (stderr.includes('is already taken')) {
                             const prompts = [
@@ -320,7 +324,7 @@ module.exports = class extends BaseGenerator {
                             this.log('');
                             this.prompt(prompts).then(props => {
                                 if (props.herokuForceName === 'Yes') {
-                                    exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                                    ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -334,7 +338,7 @@ module.exports = class extends BaseGenerator {
                                         done();
                                     });
                                 } else {
-                                    exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
+                                    ChildProcess.exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -347,7 +351,7 @@ module.exports = class extends BaseGenerator {
                                             this.log(stdout.trim());
 
                                             // ensure that the git remote is the same as the appName
-                                            exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                                            ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                                                 if (err) {
                                                     this.abort = true;
                                                     this.log.error(err);
@@ -406,7 +410,7 @@ module.exports = class extends BaseGenerator {
 
                 this.log(chalk.bold('\nProvisioning addons'));
                 if (this.searchEngine === 'elasticsearch') {
-                    exec(
+                    ChildProcess.exec(
                         `heroku addons:create bonsai --as BONSAI --app ${this.herokuAppName}`,
                         addonCreateCallback.bind(this, 'Elasticsearch')
                     );
@@ -437,7 +441,7 @@ module.exports = class extends BaseGenerator {
                     return;
                 }
 
-                exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                     addonCreateCallback('Database', err, stdout, stderr);
                     done();
                 });
@@ -474,7 +478,7 @@ module.exports = class extends BaseGenerator {
                         props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
                         const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
                         const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-                        const child = exec(configSetCmd, (err, stdout, stderr) => {
+                        const child = ChildProcess.exec(configSetCmd, (err, stdout, stderr) => {
                             if (err) {
                                 this.abort = true;
                                 this.log.error(err);
@@ -579,7 +583,7 @@ module.exports = class extends BaseGenerator {
                     const gitAddCmd = 'git add .';
                     this.log(chalk.bold('\nUpdating Git repository'));
                     this.log(chalk.cyan(gitAddCmd));
-                    exec(gitAddCmd, (err, stdout, stderr) => {
+                    ChildProcess.exec(gitAddCmd, (err, stdout, stderr) => {
                         if (err) {
                             this.abort = true;
                             this.log.error(err);
@@ -588,7 +592,7 @@ module.exports = class extends BaseGenerator {
                             if (line.trim().length !== 0) this.log(line);
                             const gitCommitCmd = 'git commit -m "Deploy to Heroku" --allow-empty';
                             this.log(chalk.cyan(gitCommitCmd));
-                            exec(gitCommitCmd, (err, stdout, stderr) => {
+                            ChildProcess.exec(gitCommitCmd, (err, stdout, stderr) => {
                                 if (err) {
                                     this.abort = true;
                                     this.log.error(err);
@@ -603,20 +607,20 @@ module.exports = class extends BaseGenerator {
                                         configVars = 'GRADLE_TASK="stage -Pprod" ';
                                     }
                                     this.log(chalk.bold('\nConfiguring Heroku'));
-                                    exec(
+                                    ChildProcess.exec(
                                         `heroku config:set NPM_CONFIG_PRODUCTION="false" ${configVars}--app ${this.herokuAppName}`,
                                         (err, stdout, stderr) => {
                                             if (err) {
                                                 this.log(stderr);
                                             }
-                                            exec(
+                                            ChildProcess.exec(
                                                 `heroku buildpacks:add -i 1 heroku/nodejs --app ${this.herokuAppName}`,
                                                 (err, stdout, stderr) => {
                                                     if (err) {
                                                         const line = stderr.toString().trimRight();
                                                         if (line.trim().length !== 0 && line.indexOf('is already set') < 0) this.log(line);
                                                     }
-                                                    exec(
+                                                    ChildProcess.exec(
                                                         `heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`,
                                                         (err, stdout, stderr) => {
                                                             if (err) {
@@ -625,7 +629,7 @@ module.exports = class extends BaseGenerator {
                                                                     this.log(line);
                                                             }
                                                             this.log(chalk.bold('\nDeploying application'));
-                                                            const child = exec(
+                                                            const child = ChildProcess.exec(
                                                                 'git push heroku HEAD:master',
                                                                 { maxBuffer: 1024 * 10000 },
                                                                 err => {
@@ -690,7 +694,7 @@ module.exports = class extends BaseGenerator {
                             )} depending on your connection speed...`
                         )
                     );
-                    const child = exec(herokuDeployCommand, (err, stdout) => {
+                    const child = ChildProcess.exec(herokuDeployCommand, (err, stdout) => {
                         if (err) {
                             this.abort = true;
                             this.log.error(err);
