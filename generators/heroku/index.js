@@ -223,7 +223,7 @@ module.exports = class extends BaseGenerator {
                     {
                         type: 'list',
                         name: 'useOkta',
-                        message: 'You are using oauth2. Do you want to use Okta as IAM or configure e.g. keycloak yourself?',
+                        message: 'You are using oauth2. Do you want to use Okta as IAM or configure e.g. keycloak yourself? When you choose Okta the automatic setup of users and groups requires cURL and jq.',
                         choices: [
                             {
                                 value: true,
