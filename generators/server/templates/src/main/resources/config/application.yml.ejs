@@ -254,11 +254,6 @@ spring:
         basename: i18n/messages
     main:
         allow-bean-definition-overriding: true
-    <%_ if (!reactive) { _%>
-    mvc:
-        favicon:
-            enabled: false
-    <%_ } _%>
     <%_ if (skipUserManagement && ['monolith', 'gateway'].includes(applicationType) && !['oauth2','uaa'].includes(authenticationType)) { _%>
     security:
         user:

@@ -30,7 +30,7 @@ module.exports = class extends BaseGenerator {
         this.skipChecks = this.options['skip-checks'];
 
         // Verify 6.6.0 app blueprint bug
-        if (!this.config.existed && !this.options.blueprints) {
+        if (!this.config.existed && !this.options.blueprints && !this.options.help) {
             this.error(
                 'This seems to be an app blueprinted project with jhipster 6.6.0 bug (https://github.com/jhipster/generator-jhipster/issues/11045), you should pass --blueprints to jhipster upgrade commmand.'
             );

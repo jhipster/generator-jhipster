@@ -67,7 +67,15 @@ function testInTempDir(cb, keepInTestDir) {
     process.chdir(tempDir);
     /* eslint-disable-next-line no-console */
     console.log(`New cwd: ${process.cwd()}`);
-    cb(tempDir);
+    const cbReturn = cb(tempDir);
+    if (cbReturn instanceof Promise) {
+        return cbReturn.then(() => {
+            if (!keepInTestDir) {
+                revertTempDir(cwd);
+            }
+            return cwd;
+        });
+    }
     if (!keepInTestDir) {
         revertTempDir(cwd);
     }
@@ -77,7 +85,7 @@ function testInTempDir(cb, keepInTestDir) {
 function revertTempDir(cwd) {
     process.chdir(cwd);
     /* eslint-disable-next-line no-console */
-    console.log(`current cwd: ${process.cwd()}`);
+    console.log(`reverted to cwd: ${process.cwd()}`);
 }
 
 function copyBlueprint(sourceDir, packagePath, ...blueprintNames) {
