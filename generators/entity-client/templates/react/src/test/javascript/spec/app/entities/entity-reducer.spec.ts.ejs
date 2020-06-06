@@ -361,7 +361,7 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
           payload: resolvedObject
-        }<%_ if (pagination !== 'infinite-scroll') { _%>,
+        },
         {
           type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
         },
@@ -369,7 +369,6 @@ describe('Entities reducer tests', () => {
           type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
           payload: resolvedObject
         }
-        <%_ } _%>
       ];
       await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
