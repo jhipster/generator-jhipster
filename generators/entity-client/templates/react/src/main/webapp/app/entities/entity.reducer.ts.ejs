@@ -240,7 +240,7 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
-  <%_ if (pagination !== 'no') { _%>
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
   <%_ } _%>
   return result;
