@@ -91,46 +91,48 @@ Object.entries(allCommands).forEach(([key, opts]) => {
     command
         .allowUnknownOption()
         .description(opts.desc)
-        .action((first, second, third) => {
-            let args;
+        .action((...everything) => {
             let cmdOptions;
-            let unknownArgs;
-            logger.debug(`first command arg: ${toString(first)}`);
-            logger.debug(`second command arg: ${toString(second)}`);
-            logger.debug(`third command arg: ${toString(third)}`);
-
-            if (opts.argument) {
-                // Option that contains arguments
-                // first=arguments second=cmdOptions third=unknownArgs
-                if (Array.isArray(first)) {
-                    // Var args unknown options are concatenated.
-                    // consider valid args before first unknown option (starts with -).
-                    args = [];
-                    unknownArgs = [];
-                    let unknown = false;
-                    first.forEach(item => {
-                        if (item.startsWith('-')) {
-                            unknown = true;
-                        }
-                        if (unknown) {
-                            unknownArgs.push(item);
-                        } else {
-                            args.push(item);
-                        }
-                    });
-                } else if (first !== undefined) {
-                    args = [first];
-                }
-                cmdOptions = second;
-                if (third) {
-                    unknownArgs = (unknownArgs || []).concat(third);
-                }
+            let unknownArgs = [];
+            const last = everything.pop();
+            if (Array.isArray(last)) {
+                unknownArgs = last || [];
+                cmdOptions = everything.pop();
             } else {
-                // Option that doesn't contain arguments
-                // first=cmdOptions second=unknownArgs
-                args = [];
-                cmdOptions = first;
-                unknownArgs = second || [];
+                cmdOptions = last;
+            }
+
+            // Arguments processing merges unknown options with cmd args, move unknown options back
+            // Unknown options should be disabled for jhipster 7
+            const splitUnknown = argsToSplit => {
+                const args = [];
+                const unknown = [];
+                argsToSplit.find((item, index) => {
+                    if (item && item.startsWith('-')) {
+                        unknown.push(...argsToSplit.slice(index));
+                        return true;
+                    }
+                    args.push(item);
+                    return false;
+                });
+                return [args, unknown];
+            };
+            const variadicArg = everything.pop();
+
+            const splitted = splitUnknown(everything);
+            const args = splitted[0];
+            unknownArgs.unshift(...splitted[1]);
+
+            if (variadicArg) {
+                if (Array.isArray(variadicArg)) {
+                    const splittedVariadic = splitUnknown(variadicArg);
+                    if (splittedVariadic[0].length > 0) {
+                        args.push(splittedVariadic[0]);
+                    }
+                    unknownArgs.unshift(...splittedVariadic[1]);
+                } else {
+                    args.push(variadicArg);
+                }
             }
 
             const firstUnknownArg = Array.isArray(unknownArgs) && unknownArgs.length > 0 ? unknownArgs[0] : undefined;
@@ -163,6 +165,11 @@ Object.entries(allCommands).forEach(([key, opts]) => {
 
             if (opts.cliOnly) {
                 logger.debug('Executing CLI only script');
+                if (args.length > 0 && Array.isArray(args[args.length - 1])) {
+                    // Convert the variadic argument into a argument for backward compatibility.
+                    // Remove for jhipster 7
+                    args.push(...args.pop());
+                }
                 /* eslint-disable global-require, import/no-dynamic-require */
                 require(`./${key}`)(args, options, env);
                 /* eslint-enable */
