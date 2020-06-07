@@ -182,7 +182,7 @@ const addKebabCase = (options = {}) => {
 const getCommandOptions = (pkg, argv = []) => {
     const options = meow({ help: false, pkg, argv });
     const flags = options ? options.flags : undefined;
-    return addKebabCase({ fromCli: true, ...flags });
+    return addKebabCase({ ...flags });
 };
 
 const doneFactory = successMsg => {

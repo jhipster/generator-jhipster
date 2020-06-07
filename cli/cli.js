@@ -159,6 +159,7 @@ Object.entries(allCommands).forEach(([key, opts]) => {
                 ...addKebabCase(program.opts()),
                 ...addKebabCase(cmdOptions),
                 ...addKebabCase(customOptions),
+                ...addKebabCase({ fromCli: true }),
             };
 
             if (opts.cliOnly) {
