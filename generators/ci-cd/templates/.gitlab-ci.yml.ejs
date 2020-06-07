@@ -137,7 +137,7 @@ sonar-analyze:
 gradle-package:
     stage: package
     script:
-        - ./gradlew bootJar -Pprod -x check --no-daemon
+        - ./gradlew bootJar -Pprod -PnodeInstall -x check --no-daemon
     artifacts:
         paths:
             - build/libs/*.jar

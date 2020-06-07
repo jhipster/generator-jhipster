@@ -19,13 +19,12 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const path = require('path');
-const shelljs = require('shelljs');
 const jhiCore = require('jhipster-core');
 const pretty = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
-const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
 const jhipsterUtils = require('../generators/utils');
 
 const packagejs = require('../package.json');
@@ -397,16 +396,6 @@ class JDLProcessor {
     }
 }
 
-const validateFiles = jdlFiles => {
-    if (jdlFiles) {
-        jdlFiles.forEach(key => {
-            if (!shelljs.test('-f', key)) {
-                logger.fatal(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
-            }
-        });
-    }
-};
-
 /**
  * Import-JDL sub generator
  * @param {any} args arguments passed for import-jdl
@@ -414,14 +403,7 @@ const validateFiles = jdlFiles => {
  * @param {any} env the yeoman environment
  * @param {function} forkProcess the method to use for process forking
  */
-module.exports = (args, options, env, forkProcess = fork) => {
-    logger.debug('cmd: import-jdl from ./import-jdl');
-    logger.debug(`args: ${toString(args)}`);
-    let jdlFiles = [];
-    if (!options.inline) {
-        jdlFiles = getOptionsFromArgs(args);
-        validateFiles(jdlFiles);
-    }
+module.exports = (jdlFiles, options = {}, env, forkProcess = fork) => {
     logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
     logger.info(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
@@ -437,9 +419,12 @@ module.exports = (args, options, env, forkProcess = fork) => {
             .then(() => {
                 return jdlImporter.generateDeployments(forkProcess);
             })
-            .then(printSuccess);
+            .then(() => {
+                printSuccess();
+                return jdlFiles;
+            });
     } catch (e) {
         logger.error(`Error during import-jdl: ${e.message}`, e);
-        return Promise.resolve();
+        return Promise.reject(new Error(`Error during import-jdl: ${e.message}`));
     }
 };

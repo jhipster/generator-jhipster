@@ -371,10 +371,6 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
 <%_ } _%>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
 <%_ if (enableSwaggerCodegen) { _%>
         <dependency>
             <groupId>org.openapitools</groupId>
@@ -382,10 +378,6 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
 <%_ } _%>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
 <%_ if (databaseType === 'mongodb') { _%>
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
