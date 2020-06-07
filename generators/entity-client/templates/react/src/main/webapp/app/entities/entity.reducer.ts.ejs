@@ -260,7 +260,7 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
-  <%_ if (pagination !== 'no') { _%>
+  <%_ if (pagination !== 'infinite-scroll') { _%>
   dispatch(getEntities());
   <%_ } _%>
   return result;
