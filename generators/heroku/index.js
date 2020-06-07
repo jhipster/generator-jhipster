@@ -224,15 +224,15 @@ module.exports = class extends BaseGenerator {
                         type: 'list',
                         name: 'useOkta',
                         message:
-                            'You are using oauth2. Do you want to use Okta as IAM or configure e.g. keycloak yourself? When you choose Okta the automatic setup of users and groups requires cURL and jq.',
+                            'You are using OAuth 2.0. Do you want to use Okta as your identity provider it yourself? When you choose Okta, the automated configuration of users and groups requires cURL and jq.',
                         choices: [
                             {
                                 value: true,
-                                name: 'Yes, provision the Okta addon',
+                                name: 'Yes, provision the Okta add-on',
                             },
                             {
                                 value: false,
-                                name: 'No, I want to configure the IAM manually',
+                                name: 'No, I want to configure my identity provider manually',
                             },
                         ],
                         default: 1,
@@ -265,7 +265,7 @@ module.exports = class extends BaseGenerator {
                                 return true;
                             }
 
-                            return 'Your password must be at least 8 characters long and contain a lowercase letter, and uppercase letter, a number and no parts of your username!';
+                            return 'Your password must be at least 8 characters long and contain a lowercase letter, an uppercase letter, a number, and no parts of your username!';
                         },
                     },
                 ];
