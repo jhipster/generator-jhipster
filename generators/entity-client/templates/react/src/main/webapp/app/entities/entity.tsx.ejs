@@ -147,7 +147,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   <%_ if (pagination === 'infinite-scroll') { _%>
   useEffect(() => {
-    if(props.updateSuccess) {
+    if (props.updateSuccess) {
       resetAll();
     }
   }, [props.updateSuccess]);
