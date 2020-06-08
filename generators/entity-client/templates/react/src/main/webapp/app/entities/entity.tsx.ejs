@@ -75,7 +75,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const [sorting, setSorting] = useState(false);
   <%_ } _%>
 
-  <%_ if (pagination === 'pagination' || pagination === 'pager' || pagination === 'infinite-scroll' || pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
+  <%_ if (pagination !== 'no') { _%>
   const getAllEntities = () => {
     <%_ if (searchEngine !== false) { _%>
     if (search) {
