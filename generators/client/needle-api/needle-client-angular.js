@@ -125,16 +125,11 @@ module.exports = class extends needleClientBase {
         const iconImport = `fa${this.generator.upperFirstCamelCase(iconName)}`;
         if (!jhipsterUtils.checkRegexInFile(iconsPath, new RegExp(`\\b${iconImport}\\b`), this.generator)) {
             try {
-                let newIconContent = `\n  ${iconImport},\n  // jhipster-needle-add-icon-import`;
-                const iconNeedle = '\\r?\\n\\s*\\/\\/ jhipster-needle-add-icon-import';
-                if (!jhipsterUtils.checkRegexInFile(iconsPath, new RegExp(`,${iconNeedle}`), this.generator)) {
-                    newIconContent = `,${newIconContent}`;
-                }
                 jhipsterUtils.replaceContent(
                     {
                         file: iconsPath,
-                        pattern: new RegExp(iconNeedle, 'g'),
-                        content: newIconContent,
+                        pattern: /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
+                        content: `\n  ${iconImport},\n  // jhipster-needle-add-icon-import`,
                     },
                     this.generator
                 );
