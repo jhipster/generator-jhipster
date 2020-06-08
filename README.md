@@ -135,6 +135,11 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/zadluzenia.png">	
         </a>
       </td>
+      <td align="center" valign="middle">	
+        <a href="https://opencollective.com/jim-van-dam" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/jim-van-dam.png">	
+        </a>
+      </td>
     </tr>
   </tbody>
 </table>
