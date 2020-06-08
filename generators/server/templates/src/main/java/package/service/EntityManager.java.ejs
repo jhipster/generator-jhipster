@@ -148,8 +148,11 @@ public class EntityManager {
         RelationalPersistentEntity<?> persistentEntity = getPersistentEntity(entity.getClass());
 
         GenericInsertSpec<Map<String, Object>> insertSpec = db.insert().into(persistentEntity.getTableName());
+        String idColumn = persistentEntity.getIdColumn();
         for (Entry<String, SettableValue> column : row.entrySet()) {
-            insertSpec = insertSpec.value(column.getKey(), column.getValue());
+            if (column.getValue().hasValue() || !column.getKey().equals(idColumn)) {
+                insertSpec = insertSpec.value(column.getKey(), column.getValue());
+            }
         }
         return insertSpec.map(dataAccessStrategy.getConverter().populateIdIfNecessary(entity))
             .first()

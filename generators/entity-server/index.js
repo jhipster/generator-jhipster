@@ -116,7 +116,7 @@ module.exports = class extends BaseBlueprintGenerator {
             if (rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true)) {
                 const colName = this._getJoinColumnName(rel);
                 joins.push(
-                    ` LEFT JOIN ${rel.otherEntityTableName} ${rel.relationshipName} ON entity.${colName} = ${rel.relationshipName}.id`
+                    ` LEFT JOIN ${rel.otherEntityTableName} \\"${rel.relationshipName}\\" ON entity.${colName} = \\"${rel.relationshipName}\\".id`
                 );
             }
         });

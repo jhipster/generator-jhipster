@@ -444,7 +444,6 @@ public class DatabaseConfiguration {
         converters.add(new DurationReadConverter());
         converters.add(new ZonedDateTimeReadConverter());
         converters.add(new ZonedDateTimeWriteConverter());
-        converters.add(UUIDToStringConverter.INSTANCE);
         converters.add(StringToUUIDConverter.INSTANCE);
         converters.addAll(R2dbcCustomConversions.STORE_CONVERTERS);
         return new R2dbcCustomConversions(

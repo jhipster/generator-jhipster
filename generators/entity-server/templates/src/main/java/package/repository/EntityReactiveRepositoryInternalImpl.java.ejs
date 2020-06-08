@@ -96,11 +96,11 @@ _%>
         <%_ for (idx in eagerRelations) {
             let rel = eagerRelations[idx];
           _%>
-           + ", " + <%= rel.otherEntityNameCapitalized %>SqlHelper.getColumnNames("<%= rel.relationshipName %>", "<%= rel.relationshipName %>")
+           + ", " + <%= rel.otherEntityNameCapitalized %>SqlHelper.getColumnNames("\"<%= rel.relationshipName %>\"", "<%= rel.relationshipName %>")
         <%_ } _%>
             + " FROM <%= entityTableName %> entity "
         <%_ for (idx in joins) { _%>
-            + "<%= joins[idx] %>"
+            + "<%- joins[idx] %>"
         <%_ } _%>;
 
     private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
