@@ -53,6 +53,8 @@ describe('JHipster Heroku Sub Generator', () => {
                         herokuJHipsterRegistryApp: 'sushi',
                         herokuJHipsterRegistryUsername: 'admin',
                         herokuJHipsterRegistryPassword: 'changeme',
+                        herokuJavaVersion: '11',
+                        useOkta: false,
                     })
                     .on('end', done);
             });
@@ -90,6 +92,8 @@ describe('JHipster Heroku Sub Generator', () => {
                         herokuRegion: 'us',
                         herokuDeployType: 'jar',
                         herokuForceName: 'No',
+                        herokuJavaVersion: '11',
+                        useOkta: false,
                     })
                     .on('end', done);
             });
@@ -105,10 +109,11 @@ describe('JHipster Heroku Sub Generator', () => {
                 stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
                 stub.withArgs('git add .').yields(false, '', '');
                 stub.withArgs('git commit -m "Deploy to Heroku" --allow-empty').yields(false, '', '');
-                stub.withArgs(
-                    `heroku config:set NPM_CONFIG_PRODUCTION="false" MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" --app ${herokuAppName}`
-                ).yields(false, '', '');
-                stub.withArgs(`heroku buildpacks:add -i 1 heroku/nodejs --app ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs(`heroku config:set MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" --app ${herokuAppName}`).yields(
+                    false,
+                    '',
+                    ''
+                );
                 stub.withArgs(`heroku buildpacks:add heroku/java --app ${herokuAppName}`).yields(false, '', '');
                 stub.withArgs('git push heroku HEAD:master').yields(false, '', '');
                 helpers
@@ -120,6 +125,8 @@ describe('JHipster Heroku Sub Generator', () => {
                         herokuAppName,
                         herokuRegion: 'us',
                         herokuDeployType: 'git',
+                        herokuJavaVersion: '11',
+                        useOkta: false,
                     })
                     .on('end', done);
             });
@@ -143,6 +150,8 @@ describe('JHipster Heroku Sub Generator', () => {
                         herokuAppName,
                         herokuRegion: 'us',
                         herokuDeployType: 'jar',
+                        herokuJavaVersion: '11',
+                        useOkta: false,
                     })
                     .on('end', done);
             });
@@ -168,6 +177,8 @@ describe('JHipster Heroku Sub Generator', () => {
                         herokuAppName,
                         herokuRegion: 'eu',
                         herokuDeployType: 'jar',
+                        herokuJavaVersion: '11',
+                        useOkta: false,
                     })
                     .on('end', done);
             });
@@ -190,6 +201,8 @@ describe('JHipster Heroku Sub Generator', () => {
                         herokuAppName,
                         herokuRegion: 'eu',
                         herokuDeployType: 'jar',
+                        herokuJavaVersion: '11',
+                        useOkta: false,
                     })
                     .on('end', done);
             });
@@ -235,6 +248,8 @@ describe('JHipster Heroku Sub Generator', () => {
                         herokuAppName,
                         herokuRegion: 'us',
                         herokuDeployType: 'jar',
+                        herokuJavaVersion: '11',
+                        useOkta: false,
                     })
                     .on('end', done);
             });
