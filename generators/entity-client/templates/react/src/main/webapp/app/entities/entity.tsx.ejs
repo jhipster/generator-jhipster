@@ -75,7 +75,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   const [sorting, setSorting] = useState(false);
   <%_ } _%>
 
-  <%_ if (pagination === 'pagination' || pagination === 'pager' || pagination === 'infinite-scroll' || pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
+  <%_ if (pagination === 'pagination' || pagination === 'infinite-scroll' || pagination !== 'no' && pagination !== 'infinite-scroll') { _%>
   const getAllEntities = () => {
     <%_ if (searchEngine !== false) { _%>
     if (search) {
@@ -168,7 +168,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   <%_ if (pagination !== 'no') { _%>
 
-  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+  <%_ if (pagination === 'pagination') { _%>
   const sortEntities = () => {
     getAllEntities();
     const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
@@ -189,7 +189,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <% } %>
   }, [<% if (pagination === 'infinite-scroll') { %>sorting<% } else { %>paginationState.activePage, paginationState.order, paginationState.sort<% } %><%_ if (searchEngine !== false) { _%>, search<% } %>]);
 
-  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+  <%_ if (pagination === 'pagination') { _%>
   useEffect(() => {
     const params = new URLSearchParams(props.location.search);
     const page = params.get('page');
@@ -225,7 +225,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
     <% } %>
   };
 
-  <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+  <%_ if (pagination === 'pagination') { _%>
   const handlePagination = currentPage =>
     setPaginationState({
       ...paginationState,
@@ -234,7 +234,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
   <%_ } _%>
 
-  const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination' || pagination === 'pager') { %>, totalItems<% } %>} = props;
+  const { <%= entityInstance %>List, match, loading<% if (pagination === 'pagination') { %>, totalItems<% } %>} = props;
   return (
     <div>
       <h2 id="<%= entityFileName %>-heading">
@@ -410,10 +410,10 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
                           <%_ if (!readOnly) { _%>
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/edit<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination' || pagination === 'pager') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}/delete<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
                           <%_ } _%>
@@ -437,7 +437,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
         <%_ } _%>
       </div>
       <%_ if (databaseType !== 'cassandra') { _%>
-        <%_ if (pagination === 'pagination' || pagination === 'pager') { _%>
+        <%_ if (pagination === 'pagination') { _%>
         { props.totalItems ? (<div className={ <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ? '' : 'd-none' }>
           <Row className="justify-content-center">
             <JhiItemCount
