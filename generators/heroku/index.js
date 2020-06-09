@@ -16,22 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/* eslint-disable consistent-return */
+const _ = require('lodash');
 const fs = require('fs');
 const ChildProcess = require('child_process');
 const util = require('util');
 const chalk = require('chalk');
-const _ = require('lodash');
 const glob = require('glob');
-const BaseGenerator = require('../generator-base');
+
+const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const statistics = require('../statistics');
 
 const constants = require('../generator-constants');
 
 const execCmd = util.promisify(ChildProcess.exec);
 
-module.exports = class extends BaseGenerator {
+let useBlueprints;
+
+module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
+        this.configOptions = this.options.configOptions || {};
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -57,44 +62,51 @@ module.exports = class extends BaseGenerator {
         this.herokuSkipBuild = this.options['skip-build'];
         this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
         this.registerPrettierTransform();
+
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('heroku');
     }
 
-    initializing() {
-        if (!this.options['from-cli']) {
-            this.warning(
-                `Deprecated: JHipster seems to be invoked using Yeoman command. Please use the JHipster CLI. Run ${chalk.red(
-                    'jhipster <command>'
-                )} instead of ${chalk.red('yo jhipster:<command>')}`
-            );
-        }
+    _initializing() {
+        return {
+            validateFromCli() {
+                this.checkInvocationFromCLI();
+            },
 
-        this.log(chalk.bold('Heroku configuration is starting'));
-        const configuration = this.getAllJhipsterConfig(this, true);
-        this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
-        this.baseName = configuration.get('baseName');
-        this.packageName = configuration.get('packageName');
-        this.packageFolder = configuration.get('packageFolder');
-        this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
-        this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-        this.databaseType = configuration.get('databaseType');
-        this.prodDatabaseType = configuration.get('prodDatabaseType');
-        this.searchEngine = configuration.get('searchEngine');
-        this.angularAppName = this.getAngularAppName();
-        this.buildTool = configuration.get('buildTool');
-        this.applicationType = configuration.get('applicationType');
-        this.reactive = configuration.get('reactive') || false;
-        this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
-        this.authenticationType = configuration.get('authenticationType');
-        this.herokuAppName = configuration.get('herokuAppName');
-        this.dynoSize = 'Free';
-        this.herokuDeployType = configuration.get('herokuDeployType');
-        this.herokuJavaVersion = configuration.get('herokuJavaVersion');
-        this.useOkta = configuration.get('useOkta');
-        this.oktaAdminLogin = configuration.get('oktaAdminLogin');
-        this.oktaAdminPassword = configuration.get('oktaAdminPassword');
+            initializing() {
+                this.log(chalk.bold('Heroku configuration is starting'));
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+                this.baseName = configuration.get('baseName');
+                this.packageName = configuration.get('packageName');
+                this.packageFolder = configuration.get('packageFolder');
+                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
+                this.databaseType = configuration.get('databaseType');
+                this.prodDatabaseType = configuration.get('prodDatabaseType');
+                this.searchEngine = configuration.get('searchEngine');
+                this.angularAppName = this.getAngularAppName();
+                this.buildTool = configuration.get('buildTool');
+                this.applicationType = configuration.get('applicationType');
+                this.reactive = configuration.get('reactive') || false;
+                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
+                this.authenticationType = configuration.get('authenticationType');
+                this.herokuAppName = configuration.get('herokuAppName');
+                this.dynoSize = 'Free';
+                this.herokuDeployType = configuration.get('herokuDeployType');
+                this.herokuJavaVersion = configuration.get('herokuJavaVersion');
+                this.useOkta = configuration.get('useOkta');
+                this.oktaAdminLogin = configuration.get('oktaAdminLogin');
+                this.oktaAdminPassword = configuration.get('oktaAdminPassword');
+            },
+        };
     }
 
-    get prompting() {
+    get initializing() {
+        if (useBlueprints) return;
+        return this._initializing();
+    }
+
+    _prompting() {
         return {
             askForApp() {
                 const done = this.async();
@@ -279,7 +291,12 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get configuring() {
+    get prompting() {
+        if (useBlueprints) return;
+        return this._prompting();
+    }
+
+    _configuring() {
         return {
             checkInstallation() {
                 if (this.abort) return;
@@ -307,7 +324,12 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get default() {
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
+    }
+
+    _default() {
         return {
             insight() {
                 statistics.sendSubGenEvent('generator', 'heroku');
@@ -622,7 +644,12 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    get end() {
+    get default() {
+        if (useBlueprints) return;
+        return this._default();
+    }
+
+    _end() {
         return {
             makeScriptExecutable() {
                 if (this.useOkta) {
@@ -856,5 +883,10 @@ module.exports = class extends BaseGenerator {
                 }
             },
         };
+    }
+
+    get end() {
+        if (useBlueprints) return;
+        return this._end();
     }
 };
