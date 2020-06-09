@@ -4,7 +4,7 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 
 const expectedFiles = {
-    csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yml', './csvc-helm/values.yml', './csvc-helm/templates/_helpers.tpl'],
+    csvcfiles: ['./csvc-helm/Chart.yaml', './csvc-helm/requirements.yaml', './csvc-helm/values.yaml', './csvc-helm/templates/_helpers.tpl'],
     eurekaregistry: ['./csvc-helm/templates/jhipster-registry.yml', './csvc-helm/templates/application-configmap.yml'],
     consulregistry: [
         './csvc-helm/templates/consul.yml',
@@ -15,8 +15,8 @@ const expectedFiles = {
         './jhgate-helm/templates/jhgate-deployment.yml',
         './jhgate-helm/templates/jhgate-service.yml',
         './jhgate-helm/Chart.yaml',
-        './jhgate-helm/requirements.yml',
-        './jhgate-helm/values.yml',
+        './jhgate-helm/requirements.yaml',
+        './jhgate-helm/values.yaml',
         './jhgate-helm/templates/_helpers.tpl',
     ],
     jhgateingress: ['./jhgate-helm/templates/jhgate-ingress.yml'],
@@ -29,40 +29,40 @@ const expectedFiles = {
     ],
     msmysql: [
         './msmysql-helm/Chart.yaml',
-        './msmysql-helm/requirements.yml',
-        './msmysql-helm/values.yml',
+        './msmysql-helm/requirements.yaml',
+        './msmysql-helm/values.yaml',
         './msmysql-helm/templates/_helpers.tpl',
         './msmysql-helm/templates/msmysql-deployment.yml',
         './msmysql-helm/templates/msmysql-service.yml',
     ],
     mspsql: [
         './mspsql-helm/Chart.yaml',
-        './mspsql-helm/requirements.yml',
-        './mspsql-helm/values.yml',
+        './mspsql-helm/requirements.yaml',
+        './mspsql-helm/values.yaml',
         './mspsql-helm/templates/_helpers.tpl',
         './mspsql-helm/templates/mspsql-deployment.yml',
         './mspsql-helm/templates/mspsql-service.yml',
     ],
     msmongodb: [
         './msmongodb-helm/Chart.yaml',
-        './msmongodb-helm/requirements.yml',
-        './msmongodb-helm/values.yml',
+        './msmongodb-helm/requirements.yaml',
+        './msmongodb-helm/values.yaml',
         './msmongodb-helm/templates/_helpers.tpl',
         './msmongodb-helm/templates/msmongodb-deployment.yml',
         './msmongodb-helm/templates/msmongodb-service.yml',
     ],
     msmariadb: [
         './msmariadb-helm/Chart.yaml',
-        './msmariadb-helm/requirements.yml',
-        './msmariadb-helm/values.yml',
+        './msmariadb-helm/requirements.yaml',
+        './msmariadb-helm/values.yaml',
         './msmariadb-helm/templates/_helpers.tpl',
         './msmariadb-helm/templates/msmariadb-deployment.yml',
         './msmariadb-helm/templates/msmariadb-service.yml',
     ],
     monolith: [
         './samplemysql-helm/Chart.yaml',
-        './samplemysql-helm/requirements.yml',
-        './samplemysql-helm/values.yml',
+        './samplemysql-helm/requirements.yaml',
+        './samplemysql-helm/values.yaml',
         './samplemysql-helm/templates/_helpers.tpl',
         './samplemysql-helm/templates/samplemysql-deployment.yml',
         './samplemysql-helm/templates/samplemysql-service.yml',
@@ -106,7 +106,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected gateway files and content', () => {
             assert.file(expectedFiles.jhgate);
-            assert.fileContent('./jhgate-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./jhgate-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -143,7 +143,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -178,12 +178,12 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('creates expected jhipster-console files', () => {
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.jhconsole);
-            assert.fileContent('./csvc-helm/requirements.yml', /name: elasticsearch/);
+            assert.fileContent('./csvc-helm/requirements.yaml', /name: elasticsearch/);
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
@@ -228,7 +228,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
             assert.file(expectedFiles.jhgate);
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.jhgateingress);
-            assert.fileContent('./jhgate-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./jhgate-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -266,11 +266,11 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
-            assert.fileContent('./mspsql-helm/requirements.yml', /name: postgresql/);
+            assert.fileContent('./mspsql-helm/requirements.yaml', /name: postgresql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -308,19 +308,19 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('creates expected psql files', () => {
             assert.file(expectedFiles.mspsql);
-            assert.fileContent('./mspsql-helm/requirements.yml', /name: postgresql/);
+            assert.fileContent('./mspsql-helm/requirements.yaml', /name: postgresql/);
         });
         it('creates expected mongodb files', () => {
             assert.file(expectedFiles.msmongodb);
-            assert.fileContent('./msmongodb-helm/requirements.yml', /name: mongodb-replicaset/);
+            assert.fileContent('./msmongodb-helm/requirements.yaml', /name: mongodb-replicaset/);
         });
         it('creates expected mariadb files', () => {
             assert.file(expectedFiles.msmariadb);
-            assert.fileContent('./msmariadb-helm/requirements.yml', /name: mariadb/);
+            assert.fileContent('./msmariadb-helm/requirements.yaml', /name: mariadb/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -353,7 +353,7 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected default files', () => {
             assert.file(expectedFiles.monolith);
-            assert.fileContent('./samplemysql-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./samplemysql-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -384,8 +384,8 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         it('creates expected default files', () => {
             assert.file(expectedFiles.csvcfiles);
             assert.file(expectedFiles.kafka);
-            assert.fileContent('./csvc-helm/requirements.yml', /name: kafka/);
-            assert.fileContent('./samplekafka-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./csvc-helm/requirements.yaml', /name: kafka/);
+            assert.fileContent('./samplekafka-helm/requirements.yaml', /name: mysql/);
         });
         it('create the apply script', () => {
             assert.file(expectedFiles.applyScript);
@@ -417,12 +417,12 @@ describe('JHipster Kubernetes Helm Sub Generator', () => {
         });
         it('creates expected mysql files', () => {
             assert.file(expectedFiles.msmysql);
-            assert.fileContent('./msmysql-helm/requirements.yml', /name: mysql/);
+            assert.fileContent('./msmysql-helm/requirements.yaml', /name: mysql/);
         });
         it('creates expected prometheus files', () => {
             assert.file(expectedFiles.csvcfiles);
-            assert.fileContent('./csvc-helm/requirements.yml', /name: prometheus/);
-            assert.fileContent('./csvc-helm/requirements.yml', /name: grafana/);
+            assert.fileContent('./csvc-helm/requirements.yaml', /name: prometheus/);
+            assert.fileContent('./csvc-helm/requirements.yaml', /name: grafana/);
         });
         it('creates expected namespace file', () => {
             assert.file(expectedFiles.customnamespace);
