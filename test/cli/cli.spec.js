@@ -90,15 +90,37 @@ describe('jhipster cli test', () => {
             Environment.prototype.create.restore();
         });
 
+        const commonTests = () => {
+            it('should pass a truthy fromCli', done => {
+                callback = (_command, options) => {
+                    expect(options.fromCli).to.be.true;
+                    expect(options['from-cli']).to.be.true;
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands });
+            });
+            it('should pass a defined command', done => {
+                callback = (command, _options) => {
+                    expect(command).to.not.be.undefined;
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands });
+            });
+        };
+
         describe('without argument', () => {
             beforeEach(() => {
                 process.argv = ['jhipster', 'jhipster', 'mocked', '--foo', '--foo-bar'];
             });
+
+            commonTests();
+
             it('should forward options', done => {
                 callback = (command, options) => {
-                    expect(command).to.not.be.undefined;
                     expect(command).to.be.equal('jhipster:mocked');
-                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    expect(options.foo).to.be.true;
+                    expect(options.fooBar).to.be.true;
+                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -110,10 +132,15 @@ describe('jhipster cli test', () => {
                 commands.mocked.argument = ['name'];
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
             });
+
+            commonTests();
+
             it('should forward argument and options', done => {
                 callback = (command, options) => {
                     expect(command).to.be.equal('jhipster:mocked Foo');
-                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    expect(options.foo).to.be.true;
+                    expect(options.fooBar).to.be.true;
+                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -125,10 +152,15 @@ describe('jhipster cli test', () => {
                 commands.mocked.argument = ['name...'];
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
             });
+
+            commonTests();
+
             it('should forward argument and options', done => {
                 callback = (command, options) => {
                     expect(command).to.be.equal('jhipster:mocked Foo Bar');
-                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    expect(options.foo).to.be.true;
+                    expect(options.fooBar).to.be.true;
+                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands });
@@ -149,6 +181,24 @@ describe('jhipster cli test', () => {
             commands.mocked = { cb: () => {} };
         });
 
+        const commonTests = () => {
+            it('should pass a truthy fromCli', done => {
+                const cb = (_args, options, _env) => {
+                    expect(options.fromCli).to.be.true;
+                    expect(options['from-cli']).to.be.true;
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+            });
+            it('should pass a defined environment', done => {
+                const cb = (_args, _options, env) => {
+                    expect(env).to.not.be.undefined;
+                    done();
+                };
+                proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
+            });
+        };
+
         describe('with argument', () => {
             beforeEach(() => {
                 commands.mocked.desc = 'Mocked command';
@@ -156,11 +206,15 @@ describe('jhipster cli test', () => {
                 commands.mocked.cliOnly = true;
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
             });
+
+            commonTests();
+
             it('should forward argument and options', done => {
-                const cb = (args, options, env) => {
-                    expect(env).to.not.be.undefined;
+                const cb = (args, options) => {
                     expect(args).to.eql(['Foo']);
-                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    expect(options.foo).to.be.true;
+                    expect(options.fooBar).to.be.true;
+                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -174,11 +228,15 @@ describe('jhipster cli test', () => {
                 commands.mocked.cliOnly = true;
                 process.argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
             });
+
+            commonTests();
+
             it('should forward argument and options', done => {
                 const cb = (args, options, env) => {
-                    expect(env).to.not.be.undefined;
                     expect(args).to.eql(['Foo', 'Bar']);
-                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    expect(options.foo).to.be.true;
+                    expect(options.fooBar).to.be.true;
+                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
@@ -191,11 +249,15 @@ describe('jhipster cli test', () => {
                 commands.mocked.cliOnly = true;
                 process.argv = ['jhipster', 'jhipster', 'mocked', '--foo', '--foo-bar'];
             });
+
+            commonTests();
+
             it('should forward argument and options', done => {
                 const cb = (args, options, env) => {
-                    expect(env).to.not.be.undefined;
                     expect(args).to.eql([]);
-                    expect(options).to.eql({ foo: true, 'from-cli': true, fromCli: true, fooBar: true, 'foo-bar': true });
+                    expect(options.foo).to.be.true;
+                    expect(options.fooBar).to.be.true;
+                    expect(options['foo-bar']).to.be.true;
                     done();
                 };
                 proxyquire('../../cli/cli', { './commands': commands, './mocked': cb });
