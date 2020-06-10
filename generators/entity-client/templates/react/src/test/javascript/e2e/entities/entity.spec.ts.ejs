@@ -70,6 +70,7 @@ describe('<%= entityClass %> e2e test', () => {
 
     beforeEach(async() => {
         await browser.get('/');
+        await waitUntilDisplayed(navBarPage.entityMenu);
         <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
         <%= entityInstance %>ComponentsPage = await <%= entityInstance %>ComponentsPage.goToPage(navBarPage);
     });
