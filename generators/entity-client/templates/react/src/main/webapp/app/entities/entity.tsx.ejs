@@ -151,7 +151,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
       resetAll();
     }
   }, [props.updateSuccess]);
-  
+
   useEffect(() => {
     getAllEntities()
   }, [paginationState.activePage]);
@@ -357,6 +357,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       const otherEntityName = relationships[idx].otherEntityName;
                       const otherEntityStateName = relationships[idx].otherEntityStateName;
                       const otherEntityField = relationships[idx].otherEntityField;
+                      const otherEntityFieldName = relationships[idx].otherEntityFieldName;
                       const otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
                       <%_ if (relationshipType === 'many-to-one'
                       || (relationshipType === 'one-to-one' && ownerSide === true)
@@ -383,14 +384,14 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                         {
                           (<%= entityInstance %>.<%= relationshipFieldNamePlural %>) ?
                               (<%= entityInstance %>.<%= relationshipFieldNamePlural %>.map((val, j) =>
-                                  <span key={j}><Link to={`<%= otherEntityStateName %>/${val.id}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+                                  <span key={j}><Link to={`<%= otherEntityStateName %>/${val.<%= otherEntityFieldName %>}`}>{val.<%= otherEntityField %>}</Link>{(j === <%= entityInstance %>.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
                               )
                           ) : null
                         }
                           <%_ } else { _%>
                               <%_ if (dto === 'no') { _%>
                         {<%= entityInstance + "." + relationshipFieldName %> ?
-                        <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + ".id}" %>`}>
+                        <Link to={`<%= otherEntityStateName %>/${<%= entityInstance + "." + relationshipFieldName + "." + otherEntityFieldName + "}" %>`}>
                           {<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
                         </Link> : ''}
                               <%_ } else { _%>

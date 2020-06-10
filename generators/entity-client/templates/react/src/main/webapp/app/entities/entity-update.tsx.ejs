@@ -55,6 +55,7 @@ let otherEntityActions = new Set();
 let manyToManyOwners = new Set();
 let relFieldNames = new Set();
 let uniqueRelationFields = new Set();
+let userMgmtEntities = [];
 
 Object.keys(differentRelationships).forEach(key => {
 
@@ -73,21 +74,25 @@ Object.keys(differentRelationships).forEach(key => {
     });
   }
   if (differentRelationships[key].some(rel => rel.relationshipType !== 'one-to-many')) {
-    const uniqueRel = differentRelationships[key][0];
+  const uniqueRel = differentRelationships[key][0];
+  const isUserMgmtEntity = ['User', 'Authority'].includes(uniqueRel.otherEntityAngularName);
     uniqueRelationFields.add(uniqueRel.otherEntityNamePlural);
     otherEntityActions.add({
       action: `get${upperFirstCamelCase(uniqueRel.otherEntityNamePlural)}`,
-      instance: `${uniqueRel.otherEntityNamePlural}`,
+      instance: uniqueRel.otherEntityAngularName === 'Authority' ? 'authorities' : `${uniqueRel.otherEntityNamePlural}`,
       entity: uniqueRel.otherEntityAngularName,
-      reducer: uniqueRel.otherEntityAngularName === 'User' ? 'userManagement' : uniqueRel.otherEntityName
+      isUserMgmtEntity: isUserMgmtEntity,
+      reducer: isUserMgmtEntity ? 'userManagement' : uniqueRel.otherEntityName
     });
-    if (uniqueRel.otherEntityAngularName === 'User') {
+    if (isUserMgmtEntity) {
+      if(uniqueRel.otherEntityAngularName === 'User') {
+        userMgmtEntities.push('get' + upperFirstCamelCase(uniqueRel.otherEntityNamePlural));
 _%>
-import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
-<%_ if (authenticationType === 'oauth2') { _%>
-import { getUsers } from 'app/shared/reducers/user-management';
-<%_ } else { _%>
-import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+  import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/user.model';
+<%_ } else if (uniqueRel.otherEntityAngularName === 'Authority') {
+        userMgmtEntities.push('getRoles as get' + upperFirstCamelCase(uniqueRel.otherEntityNamePlural));
+_%>
+import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/authority.model';
 <%_ } _%>
 <%_
   } else {
@@ -98,7 +103,18 @@ import { I<%= uniqueRel.otherEntityAngularName %> } from 'app/shared/model/<%= u
 import { getEntities as get<%= upperFirstCamelCase(uniqueRel.otherEntityNamePlural) %> } from 'app/entities/<%= uniqueRel.otherEntityPath %>/<%= uniqueRel.otherEntityFileName %>.reducer';
 <%_ }
   }
-}); _%>
+});_%>
+
+<%_ if (userMgmtEntities.length > 0) {
+    const userMgmtImports = userMgmtEntities.join(', ');
+
+      if (authenticationType === 'oauth2') { _%>
+  import { getUsers } from 'app/shared/reducers/user-management';
+  <%_ } else { _%>
+    import { <%= userMgmtImports %> } from 'app/modules/administration/user-management/user-management.reducer';
+  <%_ } _%>
+<%_ } _%>
+
 import {
   getEntity,
   updateEntity,
@@ -388,6 +404,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               const relationshipType = rel.relationshipType;
               const ownerSide = rel.ownerSide;
               const otherEntityName = rel.otherEntityName;
+              const otherEntityFieldName = relationships[idx].otherEntityFieldName;
               const otherEntityNamePlural = rel.otherEntityNamePlural;
               const otherEntityNameCapitalized = rel.otherEntityNameCapitalized;
               const relationshipName = rel.relationshipName;
@@ -536,7 +553,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
               multiple
               className="form-control"
               name="<%= relationshipFieldNamePlural %>"
-              value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e => e.id)}
+              value={<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map(e => e.<%= otherEntityFieldName %>)}
             >
               <option value="" key="0" />
               {
@@ -571,7 +588,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
 
 const mapStateToProps = (storeState: IRootState) => ({
   <%_ otherEntityActions.forEach(val => { _%>
-    <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.entity === 'User' ? val.instance : 'entities' %>,
+    <%= val.instance %>: storeState.<%= val.reducer %>.<%= val.isUserMgmtEntity ? val.instance : 'entities' %>,
   <%_ }) _%>
   <%= entityInstance %>Entity: storeState.<%= entityInstance %>.entity,
   loading: storeState.<%= entityInstance %>.loading,

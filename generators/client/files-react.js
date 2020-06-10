@@ -287,6 +287,7 @@ const files = {
                 { file: 'shared/error/error-boundary-route.tsx', method: 'processJsx' },
                 { file: 'shared/error/page-not-found.tsx', method: 'processJsx' },
                 // model
+                'shared/model/authority.model.ts',
                 'shared/model/user.model.ts',
             ],
         },
