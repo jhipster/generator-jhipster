@@ -18,8 +18,7 @@
 -%>
 
 exports.config = {
-  allScriptsTimeout: 300000,
-  getPageTimeout: 30000,
+  allScriptsTimeout: 60000,
 
   specs: [
     './e2e/modules/account/*.spec.ts',
@@ -73,7 +72,7 @@ exports.config = {
     global.chai = chai;
   },
   params: {
-    waitTimeoutInMillis: 20000,
+    waitTimeoutInMillis: 10000,
     logWaitErrors: false
   }
 };
