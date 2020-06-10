@@ -153,7 +153,7 @@ spring:
     jpa:
         <%_ if (devDatabaseType === 'postgresql') { _%>
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
-        <%_ } else if (devDatabaseType === 'h2disk' || devDatabaseType === 'h2Memory') { _%>
+        <%_ } else if (devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory') { _%>
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         <%_ } _%>
         show-sql: true

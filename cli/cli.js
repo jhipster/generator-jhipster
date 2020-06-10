@@ -18,23 +18,11 @@
  */
 const commander = require('commander');
 const chalk = require('chalk');
+const didYouMean = require('didyoumean');
 
 const packageJson = require('../package.json');
-const {
-    CLI_NAME,
-    initHelp,
-    logger,
-    createYeomanEnv,
-    toString,
-    getCommand,
-    getCommandOptions,
-    getArgs,
-    done,
-    loadAllBlueprintsWithVersion,
-    getBlueprintPackagePaths,
-    loadBlueprintCommands,
-    loadSharedOptions,
-} = require('./utils');
+const { CLI_NAME, initHelp, logger, toString, getCommand, getCommandOptions, addKebabCase, getArgs, done } = require('./utils');
+const EnvironmentBuilder = require('./environment-builder');
 const initAutoCompletion = require('./completion').init;
 const SUB_GENERATORS = require('./commands');
 const { packageNameToNamespace } = require('../generators/utils');
@@ -43,14 +31,10 @@ const program = new commander.Command();
 const version = packageJson.version;
 const JHIPSTER_NS = CLI_NAME;
 
-const blueprintsWithVersion = loadAllBlueprintsWithVersion();
-const allBlueprints = Object.keys(blueprintsWithVersion);
+const envBuilder = EnvironmentBuilder.createDefaultBuilder();
+const env = envBuilder.getEnvironment();
 
-const env = createYeomanEnv(allBlueprints);
-const blueprintsPackagePath = getBlueprintPackagePaths(env, blueprintsWithVersion);
-const sharedOptions = loadSharedOptions(blueprintsPackagePath) || {};
-// Env will forward sharedOptions to every generator
-Object.assign(env.sharedOptions, sharedOptions);
+program.storeOptionsAsProperties(false).passCommandToAction(false).version(version).usage('[command] [options]').allowUnknownOption();
 
 /* setup debugging */
 logger.init(program);
@@ -64,7 +48,7 @@ const runYoCommand = (cmd, args, options, opts) => {
     logger.debug(`opts: ${toString(opts)}`);
     const command = getCommand(cmd, args, opts);
     logger.info(chalk.yellow(`Executing ${command}`));
-    logger.info(chalk.yellow(`Options: ${toString(options)}`));
+    logger.debug(chalk.yellow(`Options: ${toString(options)}`));
     try {
         env.run(command, options, done);
     } catch (e) {
@@ -72,38 +56,125 @@ const runYoCommand = (cmd, args, options, opts) => {
     }
 };
 
-program.version(version).usage('[command] [options]').allowUnknownOption();
-
-const blueprintCommands = loadBlueprintCommands(blueprintsPackagePath);
-const allCommands = { ...SUB_GENERATORS, ...blueprintCommands };
+const allCommands = { ...SUB_GENERATORS, ...envBuilder.getBlueprintCommands() };
 
 /* create commands */
 Object.entries(allCommands).forEach(([key, opts]) => {
-    const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: opts.default });
+    const command = program.command(`${key} ${getArgs(opts)}`, '', { isDefault: key === 'app' });
     if (opts.alias) {
         command.alias(opts.alias);
     }
+
+    (opts.options || []).forEach(opt => {
+        command.option(opt.option, opt.desc, opt.default);
+    });
+
+    if (!opts.cliOnly) {
+        const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
+        const generator = env.create(namespace, { options: { help: true } });
+        Object.entries(generator._options).forEach(([key, value]) => {
+            if (value.hide || key === 'help') {
+                return;
+            }
+            let cmdString = '';
+            if (value.alias) {
+                cmdString = `-${value.alias}, `;
+            }
+            cmdString = `${cmdString}--${key}`;
+            if (value.type === String) {
+                cmdString = `${cmdString} <value>`;
+            }
+            command.option(cmdString, value.description, value.default);
+        });
+    }
+
     command
         .allowUnknownOption()
         .description(opts.desc)
-        .action(args => {
-            const options = getCommandOptions(packageJson, process.argv.slice(2));
+        .action((first, second, third) => {
+            let args;
+            let cmdOptions;
+            let unknownArgs;
+            logger.debug(`first command arg: ${toString(first)}`);
+            logger.debug(`second command arg: ${toString(second)}`);
+            logger.debug(`third command arg: ${toString(third)}`);
+
+            if (opts.argument) {
+                // Option that contains arguments
+                // first=arguments second=cmdOptions third=unknownArgs
+                if (Array.isArray(first)) {
+                    // Var args unknown options are concatenated.
+                    // consider valid args before first unknown option (starts with -).
+                    args = [];
+                    unknownArgs = [];
+                    let unknown = false;
+                    first.forEach(item => {
+                        if (item.startsWith('-')) {
+                            unknown = true;
+                        }
+                        if (unknown) {
+                            unknownArgs.push(item);
+                        } else {
+                            args.push(item);
+                        }
+                    });
+                } else if (first !== undefined) {
+                    args = [first];
+                }
+                cmdOptions = second;
+                if (third) {
+                    unknownArgs = (unknownArgs || []).concat(third);
+                }
+            } else {
+                // Option that doesn't contain arguments
+                // first=cmdOptions second=unknownArgs
+                args = [];
+                cmdOptions = first;
+                unknownArgs = second || [];
+            }
+
+            const firstUnknownArg = Array.isArray(unknownArgs) && unknownArgs.length > 0 ? unknownArgs[0] : undefined;
+            if (key === 'app' && firstUnknownArg !== undefined && !firstUnknownArg.startsWith('-')) {
+                // Unknown commands.
+                const cmd = Object.values(unknownArgs).join('');
+                const availableCommands = program.commands.map(c => c._name);
+
+                const suggestion = didYouMean(cmd, availableCommands);
+                if (suggestion) {
+                    logger.info(`Did you mean ${chalk.yellow(suggestion)}?`);
+                }
+
+                logger.fatal(`${chalk.yellow(firstUnknownArg)} is not a known command. See '${chalk.white(`${CLI_NAME} --help`)}'.`);
+                return;
+            }
+
+            const customOptions = { fromCli: true };
+            if (key === 'jdl' && process.argv[2] === 'import-jdl') {
+                customOptions.skipSampleRepository = true;
+            }
+
+            // Get unknown options and parse.
+            const options = {
+                ...getCommandOptions(packageJson, unknownArgs),
+                ...addKebabCase(program.opts()),
+                ...addKebabCase(cmdOptions),
+                ...addKebabCase(customOptions),
+            };
+
             if (opts.cliOnly) {
                 logger.debug('Executing CLI only script');
                 /* eslint-disable global-require, import/no-dynamic-require */
-                require(`./${key}`)(program.args, options, env);
+                require(`./${key}`)(args, options, env);
                 /* eslint-enable */
             } else {
                 const namespace = opts.blueprint ? `${packageNameToNamespace(opts.blueprint)}:${key}` : `${JHIPSTER_NS}:${key}`;
-                runYoCommand(namespace, program.args, options, opts);
+                runYoCommand(namespace, args, options, opts);
             }
         })
         .on('--help', () => {
             if (opts.help) {
-                logger.info(opts.help);
-            } else {
-                logger.debug('Adding additional help info');
-                env.run(`${JHIPSTER_NS}:${key} --help`, done);
+                /* eslint-disable-next-line no-console */
+                console.log(opts.help);
             }
         });
 });
@@ -115,11 +186,3 @@ initHelp(program, CLI_NAME);
 initAutoCompletion(program, CLI_NAME);
 
 program.parse(process.argv);
-
-/* Run default when no commands are specified */
-if (program.rawArgs.length < 3 || program.rawArgs[2].startsWith('-')) {
-    logger.debug('No command specified. Running default');
-    logger.info(chalk.yellow('Running default command'));
-    const options = getCommandOptions(packageJson, process.argv.slice(2));
-    runYoCommand(`${JHIPSTER_NS}:app`, [], options, {});
-}
