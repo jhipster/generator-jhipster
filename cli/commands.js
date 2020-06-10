@@ -19,8 +19,13 @@
 
 const defaultCommands = {
     app: {
-        default: true,
         desc: '[Default] Create a new JHipster application based on the selected options',
+        help: `
+Example:
+    jhipster
+
+This will compose jhipster:client, jhipster:server and jhipster:languages to scaffold a full application
+`,
     },
     aws: {
         desc: 'Deploy the current application to Amazon Web Services',
@@ -57,31 +62,76 @@ const defaultCommands = {
     heroku: {
         desc: 'Deploy the current application to Heroku',
     },
-    'import-jdl': {
+    info: {
+        desc: 'Display information about your current project and system',
+    },
+    jdl: {
+        alias: 'import-jdl',
         argument: ['jdlFiles...'],
         cliOnly: true,
+        options: [
+            {
+                option: '--skip-install',
+                desc: 'Do not automatically install dependencies',
+                default: false,
+            },
+            {
+                option: '--interactive',
+                desc: 'Run generation in series so that questions can be interacted with',
+                default: false,
+            },
+            {
+                option: '--db <value>',
+                desc: 'Provide DB option for the application when using skip-server flag',
+            },
+            {
+                option: '--json-only',
+                desc: 'Generate only the JSON files and skip entity regeneration',
+                default: false,
+            },
+            {
+                option: '--ignore-application',
+                desc: 'Ignores application generation',
+                default: false,
+            },
+            {
+                option: '--ignore-deployments',
+                desc: 'Ignores deployments generation',
+                default: false,
+            },
+            {
+                option: '--skip-ui-grouping',
+                desc: 'Disable the UI grouping behavior for entity client side code',
+                default: false,
+            },
+            {
+                option: '--skip-db-changelog',
+                desc: 'Disable generation of database changelogs',
+                default: false,
+            },
+            {
+                option: '--skip-sample-repository',
+                desc: 'Disable fetching sample files when the file is not a URL',
+                default: false,
+            },
+            {
+                option: '--inline <value>',
+                desc: 'Pass JDL content inline. Argument can be skipped when passing this',
+            },
+        ],
         desc: `Create entities from the JDL file/content passed in argument.
-  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.`,
+  By default everything is run in parallel. If you like to interact with the console use '--interactive' flag.
+Note: jhipster import-jdl is the same as 'jhipster jdl --skip-sample-repository'`,
         help: `
-    --skip-install        # Do not automatically install dependencies                              Default: false
-    --interactive         # Run generation in series so that questions can be interacted with      Default: false
-    --db                  # Provide DB option for the application when using skip-server flag
-    --json-only           # Generate only the JSON files and skip entity regeneration              Default: false
-    --ignore-application  # Ignores application generation                                         Default: false
-    --ignore-deployments  # Ignores deployments generation                                         Default: false
-    --skip-ui-grouping    # Disable the UI grouping behavior for entity client side code           Default: false
-    --skip-db-changelog   # Disable generation of database changelogs                              Default: false
-    --inline              # Pass JDL content inline. Argument can be skipped when passing this
-
 Arguments:
     jdlFiles # The JDL file names Type: String[] Required: true if --inline is not set
 
 Example:
-    jhipster import-jdl myfile.jdl
-    jhipster import-jdl myfile.jdl --interactive
-    jhipster import-jdl myfile1.jdl myfile2.jdl
-    jhipster import-jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
-    jhipster import-jdl --inline \\
+    jhipster jdl myfile.jdl
+    jhipster jdl myfile.jdl --interactive
+    jhipster jdl myfile1.jdl myfile2.jdl
+    jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [protractor] }}"
+    jhipster jdl --inline \\
         "application {
             config {
                 baseName jhapp,
@@ -89,9 +139,6 @@ Example:
             }
         }"
         `,
-    },
-    info: {
-        desc: 'Display information about your current project and system',
     },
     kubernetes: {
         alias: 'k8s',

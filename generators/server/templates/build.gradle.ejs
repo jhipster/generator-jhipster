@@ -307,7 +307,6 @@ dependencies {
     <%_ } _%>
     implementation "com.fasterxml.jackson.core:jackson-annotations"
     implementation "com.fasterxml.jackson.core:jackson-databind"
-    implementation "com.fasterxml.jackson.module:jackson-module-afterburner"
     <%_ if (applicationType === 'gateway' && authenticationType === 'uaa') { _%>
     implementation "org.apache.httpcomponents:httpclient"
     <%_ } _%>
@@ -350,8 +349,6 @@ dependencies {
     <%_ if (enableSwaggerCodegen) { _%>
     implementation "org.openapitools:jackson-databind-nullable:${jackson_databind_nullable_version}"
     <%_ } _%>
-    implementation "org.apache.commons:commons-lang3"
-    implementation "commons-io:commons-io"
     implementation "javax.transaction:javax.transaction-api"
     <%_ if (databaseType === 'cassandra') { _%>
     implementation "org.lz4:lz4-java"
@@ -412,6 +409,9 @@ dependencies {
     <%_ if (databaseType === 'neo4j') { _%>
     implementation "org.neo4j.springframework.data:spring-data-neo4j-rx-spring-boot-starter"
     implementation "eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter"
+    // This is done here explicitly as dependency resolution seems to have changed recently such that the validation starter
+    // and therefore hibernate validators is not included anymore
+    implementation "org.springframework.boot:spring-boot-starter-validation"
     testImplementation "org.testcontainers:neo4j"
     testImplementation 'org.testcontainers:junit-jupiter'
     <%_ } _%>

@@ -10,7 +10,7 @@
                     "required": "您的帳號是必填欄位。",
                     "minlength": "您的帳號長度至少要有 1 個字元。",
                     "maxlength": "您的帳號長度不能超過 50 個字元。",
-                    "pattern": "Your username is invalid."
+                    "pattern": "您的帳號無效。"
                 }
             },
             "success": "<strong>註冊成功!</strong> 請檢查您的電子郵件信箱進行確認。",

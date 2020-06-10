@@ -110,6 +110,13 @@ module.exports = class extends BaseDockerGenerator {
                         yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_HOST=jhipster-logstash');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=true');
                         yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_REPORT_FREQUENCY=60');
+                        yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=false');
+                    }
+
+                    if (appConfig.applicationType === 'monolith' && this.monitoring === 'prometheus') {
+                        yamlConfig.environment.push('JHIPSTER_LOGGING_LOGSTASH_ENABLED=false');
+                        yamlConfig.environment.push('JHIPSTER_METRICS_LOGS_ENABLED=false');
+                        yamlConfig.environment.push('MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true');
                     }
 
                     if (this.serviceDiscoveryType === 'eureka') {

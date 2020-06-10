@@ -953,7 +953,7 @@ public class UserService {
      * @return the user from the authentication.
      */
         <%_ if (databaseType === 'sql') { _%>
-    @Transactional(readOnly = true)
+    @Transactional
         <%_ } _%>
     public <% if (!reactive) { %>UserDTO<% } else { %>Mono<UserDTO><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;

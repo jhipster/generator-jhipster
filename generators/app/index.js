@@ -38,6 +38,7 @@ module.exports = class extends BaseBlueprintGenerator {
             desc: 'Indicates the command is run from JHipster CLI',
             type: Boolean,
             defaults: false,
+            hide: true,
         });
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
@@ -448,7 +449,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 });
             },
 
-            askFori18n: prompts.askFori18n,
+            askFori18n: prompts.askForI18n,
         };
     }
 

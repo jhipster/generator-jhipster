@@ -33,7 +33,7 @@ spring_boot_version=<%= SPRING_BOOT_VERSION %>
 # https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-dependencies/${spring-boot.version} -->
 hibernate_version=5.4.15.Final
 mapstruct_version=1.3.1.Final
-archunit_junit5_version=0.13.1
+archunit_junit5_version=0.14.1
 <%_ if (searchEngine === 'elasticsearch') { _%>
 log4j2_mock_version=0.0.2
 <%_ } _%>
@@ -41,7 +41,7 @@ log4j2_mock_version=0.0.2
 jackson_databind_nullable_version=<%= JACKSON_DATABIND_NULLABLE_VERSION %>
 <%_ } _%>
 <%_ if (cacheProvider === 'caffeine') { _%>
-caffeine_version=2.8.2
+caffeine_version=2.8.4
 typesafe_config_version=1.4.0
 <%_ } _%>
 <%_ if (databaseType === 'sql' && !reactive) { _%>
@@ -65,26 +65,26 @@ spring_boot_starter_data_r2dbc_version=0.1.0.M3
 <%_ if (reactive) { _%>
 blockhound_junit_platform_version=1.0.3.RELEASE
 junit_platform_launcher_version=1.6.2
-netty_common_version=4.1.49.Final
+netty_common_version=4.1.50.Final
 <%_ } _%>
 
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
-jaxb_runtime_version=2.3.2
+jaxb_runtime_version=2.3.3
 <%_ } _%>
 
 # gradle plugin version
 jib_plugin_version=<%= JIB_VERSION %>
 git_properties_plugin_version=2.2.2
 <%_ if (!skipClient) { _%>
-gradle_node_plugin_version=2.2.3
+gradle_node_plugin_version=2.2.4
 <%_ } _%>
 apt_plugin_version=0.21
 <%_ if (databaseType === 'sql' && !reactive) { _%>
-liquibase_plugin_version=2.0.2
+liquibase_plugin_version=2.0.3
 <%_ } _%>
 sonarqube_plugin_version=2.8
 <%_ if (enableSwaggerCodegen) { _%>
-openapi_plugin_version=4.3.0
+openapi_plugin_version=4.3.1
 <%_ } _%>
 spring_no_http_plugin_version=0.0.4.RELEASE
 checkstyle_version=8.32

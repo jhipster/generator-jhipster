@@ -24,6 +24,7 @@ module.exports = {
     askForInsightOptIn,
     askForApplicationType,
     askForModuleName,
+    askForI18n,
     askFori18n,
     askForTestOpts,
     askForMoreModules,
@@ -40,7 +41,7 @@ function askForInsightOptIn() {
         default: true,
     }).then(prompt => {
         if (prompt.insight !== undefined) {
-            statistics.setOptoutStatus(!prompt.insight);
+            statistics.setOptOutStatus(!prompt.insight);
         }
         done();
     });
@@ -106,9 +107,19 @@ function askForModuleName() {
     this.askModuleName(this);
 }
 
-function askFori18n() {
+function askForI18n() {
     if (this.skipI18n || this.existingProject) return;
     this.aski18n(this);
+}
+
+/**
+ * @deprecated Use askForI18n() instead.
+ * This method will be removed in JHipster v7.
+ */
+function askFori18n() {
+    // eslint-disable-next-line no-console
+    console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
+    this.askForI18n();
 }
 
 function askForTestOpts(meta) {

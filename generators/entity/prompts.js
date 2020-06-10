@@ -580,7 +580,7 @@ function askForField(done) {
                 return false;
             },
             type: 'input',
-            name: 'fieldType',
+            name: 'enumType',
             validate: input => {
                 if (input === '') {
                     return 'Your class name cannot be empty.';
@@ -877,7 +877,7 @@ function askForField(done) {
 
             const field = {
                 fieldName: props.fieldName,
-                fieldType: props.fieldType,
+                fieldType: props.enumType || props.fieldType,
                 fieldTypeBlobContent: props.fieldTypeBlobContent,
                 fieldValues: props.fieldValues,
                 fieldValidateRules: props.fieldValidateRules,
