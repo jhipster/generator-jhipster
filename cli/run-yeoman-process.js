@@ -19,9 +19,10 @@
 const chalk = require('chalk');
 
 const packageJson = require('../package.json');
-const { logger, createYeomanEnv, toString, getCommandOptions, doneFactory } = require('./utils');
+const { logger, toString, getCommandOptions, doneFactory } = require('./utils');
+const EnvironmentBuilder = require('./environment-builder');
 
-const env = createYeomanEnv();
+const env = EnvironmentBuilder.createDefaultBuilder().getEnvironment();
 
 const command = process.argv[2];
 const options = getCommandOptions(packageJson, process.argv.slice(3));
