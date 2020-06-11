@@ -23,9 +23,6 @@ import { FindLanguageFromKeyPipe } from './language/find-language-from-key.pipe'
 <%_ } _%>
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalComponent } from './login/login.component';
-<%_ } _%>
 import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 
 @NgModule({
@@ -38,14 +35,8 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         <%_ } _%>
         AlertComponent,
         AlertErrorComponent,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalComponent,
-        <%_ } _%>
         HasAnyAuthorityDirective
     ],
-    <%_ if (authenticationType !== 'oauth2') { _%>
-    entryComponents: [LoginModalComponent],
-    <%_ } _%>
     exports: [
         <%= angularXAppName %>SharedLibsModule,
         <%_ if (enableTranslation) { _%>
@@ -53,9 +44,6 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
         <%_ } _%>
         AlertComponent,
         AlertErrorComponent,
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        LoginModalComponent,
-        <%_ } _%>
         HasAnyAuthorityDirective
     ]
 })
