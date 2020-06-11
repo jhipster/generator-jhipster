@@ -3,8 +3,10 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { <%= angularXAppName %>TestModule } from '../../test.module';
 import { HomeComponent } from 'app/home/home.component';
 import { AccountService } from 'app/core/auth/account.service';
+
 <%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalService } from 'app/core/login/login-modal.service';
+import { Router } from '@angular/router';
+import { MockRouter } from '../../helpers/mock-route.service';
 <%_ } _%>
 
 describe('Component Tests', () => {
@@ -13,7 +15,7 @@ describe('Component Tests', () => {
         let fixture: ComponentFixture<HomeComponent>;
         let accountService: AccountService;
         <%_ if (authenticationType !== 'oauth2') { _%>
-        let loginModalService: LoginModalService;
+        let mockRouter: MockRouter;
         <%_ } _%>
 
         beforeEach(async(() => {
@@ -30,7 +32,7 @@ describe('Component Tests', () => {
             comp = fixture.componentInstance;
             accountService = TestBed.get(AccountService);
             <%_ if (authenticationType !== 'oauth2') { _%>
-            loginModalService = TestBed.get(LoginModalService);
+                mockRouter = TestBed.get(Router);
             <%_ } _%>
         });
 
@@ -53,12 +55,12 @@ describe('Component Tests', () => {
         });
 
         <%_ if (authenticationType !== 'oauth2') { _%>
-        it('Should call loginModalService.open on login', () => {
+        it('Should navigate to /login on login', () => {
             // WHEN
             comp.login();
 
             // THEN
-            expect(loginModalService.open).toHaveBeenCalled();
+            expect(mockRouter.navigateSpy).toHaveBeenCalledWith(['/login']);
         });
         <%_ } _%>
     });

@@ -28,10 +28,6 @@ import { <% if (enableTranslation) { %>JhiLanguageService, <% } %>JhiDataUtils, 
 import { MockLanguageService } from './helpers/mock-language.service';
 <%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
-<%_ if (authenticationType !== 'oauth2') { _%>
-import { LoginModalService } from 'app/core/login/login-modal.service';
-import { MockLoginModalService } from './helpers/mock-login-modal.service';
-<%_ } _%>
 import { MockAccountService } from './helpers/mock-account.service';
 import { MockActivatedRoute, MockRouter } from './helpers/mock-route.service';
 import { MockActiveModal } from './helpers/mock-active-modal.service';
@@ -73,12 +69,6 @@ _%>
             provide: AccountService,
             useClass: MockAccountService
         },
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        {
-            provide: LoginModalService,
-            useClass: MockLoginModalService
-        },
-        <%_ } _%>
         {
             provide: JhiAlertService,
             useClass: MockAlertService

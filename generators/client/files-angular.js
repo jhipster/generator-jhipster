@@ -169,6 +169,17 @@ const files = {
             path: ANGULAR_DIR,
             templates: ['layouts/profiles/page-ribbon.scss', 'layouts/navbar/navbar.scss', 'home/home.scss'],
         },
+        // login
+        {
+            path: ANGULAR_DIR,
+            condition: generator => generator.authenticationType !== 'oauth2',
+            templates: [
+                { file: 'login/login.module.ts', method: 'processJs' },
+                { file: 'login/login.route.ts', method: 'processJs' },
+                { file: 'login/login.component.ts', method: 'processJs' },
+                { file: 'login/login.component.html', method: 'processHtml' },
+            ],
+        },
     ],
     angularAccountModule: [
         {
@@ -330,7 +341,6 @@ const files = {
             templates: [
                 // login
                 'core/login/login.model.ts',
-                'core/login/login-modal.service.ts',
             ],
         },
         {
@@ -367,15 +377,6 @@ const files = {
                 'shared/alert/alert-error.model.ts',
                 // dates
                 'shared/util/datepicker-adapter.ts',
-            ],
-        },
-        {
-            path: ANGULAR_DIR,
-            condition: generator => generator.authenticationType !== 'oauth2',
-            templates: [
-                // login
-                'shared/login/login.component.ts',
-                { file: 'shared/login/login.component.html', method: 'processHtml' },
             ],
         },
         {
@@ -429,7 +430,6 @@ const files = {
                 'spec/helpers/mock-account.service.ts',
                 'spec/helpers/mock-route.service.ts',
                 'spec/helpers/mock-login.service.ts',
-                'spec/helpers/mock-login-modal.service.ts',
                 'spec/helpers/mock-event-manager.service.ts',
                 'spec/helpers/mock-active-modal.service.ts',
                 'spec/helpers/mock-state-storage.service.ts',
@@ -453,10 +453,9 @@ const files = {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
             templates: [
-                'spec/app/shared/login/login.component.spec.ts',
+                'spec/app/login/login.component.spec.ts',
                 'spec/app/shared/alert/alert.component.spec.ts',
                 'spec/app/shared/alert/alert-error.component.spec.ts',
-                'spec/app/core/login/login-modal.service.spec.ts',
             ],
         },
         {
