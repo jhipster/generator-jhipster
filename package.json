@@ -55,7 +55,7 @@
     "lint-fix": "npm run lint -- --fix",
     "pretest": "npm run lint",
     "test": "npm run test:unit -- test/*.spec.js",
-    "test:unit": "mocha --timeout 30000 --slow 0 --reporter spec",
+    "test:unit": "mocha --timeout 60000 --slow 0 --reporter spec",
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "release": "git push && git push --tags && npm publish",
     "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
