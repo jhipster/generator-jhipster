@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+const listOrFlux = (reactive === true) ? 'Flux' : 'List';
+const pageOrFlux = (reactive === true) ? 'Flux' : 'Page';
+_%>
 package <%= packageName %>.repository;
 
 import <%= packageName %>.domain.PersistentAuditEvent;
@@ -62,8 +66,13 @@ import java.util.List;
 @Repository
 public interface PersistenceAuditEventRepository extends R2dbcRepository<PersistentAuditEvent, Long>, PersistenceAuditEventRepositoryInternal {
 
+    Flux<PersistentAuditEvent> findByPrincipal(String principal);
+
+    Flux<PersistentAuditEvent> findAllBy(Pageable pageable);
+
     @Query("INSERT INTO <%= jhiTablePrefix %>_persistent_audit_evt_data VALUES(:eventId, :name, :value)")
     Mono<Void> savePersistenceAuditEventData(Long eventId, String name, String value);
+
 }
 
 interface PersistenceAuditEventRepositoryInternal {
@@ -72,18 +81,22 @@ public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Re
  %><PersistentAuditEvent, String><% } %> {
 <%_ } _%>
 
-    <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByPrincipal(String principal);
+    <%_ if (databaseType !== 'sql' || !reactive) { _%>
+    <%= listOrFlux %><PersistentAuditEvent> findByPrincipal(String principal);
 
+    <%_ } _%>
     <%_ if (!reactive) { _%>
     List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfterAndAuditEventType(String principal, Instant after, String type);
 
     <%_ } _%>
-    <% if (reactive) { %>Flux<% } else { %>Page<% } %><PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable);
+    <%= pageOrFlux %><PersistentAuditEvent> findAllByAuditEventDateBetween(Instant fromDate, Instant toDate, Pageable pageable);
 
-    <% if (reactive) { %>Flux<% } else { %>List<% } %><PersistentAuditEvent> findByAuditEventDateBefore(Instant before);
+    <%= listOrFlux %><PersistentAuditEvent> findByAuditEventDateBefore(Instant before);
     <%_ if (reactive) { _%>
-
+        <%_ if (databaseType !== 'sql') { _%>
     Flux<PersistentAuditEvent> findAllBy(Pageable pageable);
+
+        <%_ } _%>
 
     Mono<Long> countByAuditEventDateBetween(Instant fromDate, Instant toDate);
 
@@ -98,11 +111,6 @@ class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEve
 
     public PersistenceAuditEventRepositoryInternalImpl(DatabaseClient databaseClient) {
         this.databaseClient = databaseClient;
-    }
-
-    @Override
-    public Flux<PersistentAuditEvent> findByPrincipal(String principal) {
-        return findAllByCriteria(Criteria.where("principal").is(principal));
     }
 
     @Override
@@ -123,11 +131,6 @@ class PersistenceAuditEventRepositoryInternalImpl implements PersistenceAuditEve
         // See https://github.com/r2dbc/r2dbc-h2/pull/139 https://github.com/mirromutth/r2dbc-mysql/issues/105
         LocalDateTime beforeLocal = LocalDateTime.ofInstant(before, ZoneOffset.UTC);
         return findAllByCriteria(Criteria.where("event_date").lessThan(beforeLocal));
-    }
-
-    @Override
-    public Flux<PersistentAuditEvent> findAllBy(Pageable pageable) {
-        return findAllFromSpec(select().page(pageable));
     }
 
     @Override

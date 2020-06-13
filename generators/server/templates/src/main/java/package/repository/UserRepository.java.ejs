@@ -225,23 +225,19 @@ public interface UserRepository extends <% if (databaseType === 'sql') { %>JpaRe
 public interface UserRepository extends R2dbcRepository<User, <% if (authenticationType === 'oauth2') { %>String<% } else { %>Long<% } %>>, UserRepositoryInternal {
 
     <%_ if (authenticationType !== 'oauth2') { _%>
-    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE activation_key = :activationKey")
     Mono<User> findOneByActivationKey(String activationKey);
 
-    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE activated = false AND activation_key IS NOT NULL AND created_date < :dateTime")
     Flux<User> findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(LocalDateTime dateTime);
 
-    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE reset_key = :resetKey")
     Mono<User> findOneByResetKey(String resetKey);
 
-    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE LOWER(email) = LOWER(:email)")
     Mono<User> findOneByEmailIgnoreCase(String email);
 
     <%_ } _%>
-    @Query("SELECT * FROM <%= jhiTablePrefix %>_user WHERE login = :login")
     Mono<User> findOneByLogin(String login);
 
-    @Query("SELECT COUNT(DISTINCT id) FROM <%= jhiTablePrefix %>_user WHERE login != :anonymousUser")
+    Flux<User> findAllByLoginNot(Pageable pageable, String login);
+
     Mono<Long> countAllByLoginNot(String anonymousUser);
 
     @Query("INSERT INTO <%= jhiTablePrefix %>_user_authority VALUES(:userId, :authority)")
@@ -265,7 +261,6 @@ interface UserRepositoryInternal<% if (authenticationType !== 'oauth2') { %> ext
     Mono<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
     <%_ } _%>
-    Flux<User> findAllByLoginNot(Pageable pageable, String login);
     <%_ if (authenticationType == 'oauth2') { _%>
 
     Mono<User> create(User user);
@@ -319,15 +314,6 @@ class UserRepositoryInternalImpl implements UserRepositoryInternal {
                 );
                 return user;
             });
-    }
-
-    @Override
-    public Flux<User> findAllByLoginNot(Pageable pageable, String login) {
-        return db.select().from(User.class)
-            .matching(Criteria.where("login").not(login))
-            .page(pageable)
-            .as(User.class)
-            .all();
     }
 
     <%_ if (authenticationType !== 'oauth2') { _%>
