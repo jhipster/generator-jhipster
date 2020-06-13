@@ -37,7 +37,7 @@
             </snapshots>
         </repository>
         <%_ } _%>
-        <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE') || reactive) { _%>
+        <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
         <repository>
             <id>spring-milestone</id>
             <url>https://repo.spring.io/milestone</url>
@@ -120,26 +120,10 @@
     <%_ if (devDatabaseType === 'h2Disk') { _%>
         <h2.version>1.4.200</h2.version>
     <%_ } _%>
-    <%_ if (reactive) { _%>
-        <r2dbc-h2.version>0.8.3.RELEASE</r2dbc-h2.version>
-    <%_ } _%>
-    <%_ if (reactive && prodDatabaseType === 'mysql') { _%>
-        <r2dbc-mysql.version>0.8.1.RELEASE</r2dbc-mysql.version>
-    <%_ } _%>
-    <%_ if (reactive && prodDatabaseType === 'mssql') { _%>
-        <r2dbc-mssql.version>0.8.2.RELEASE</r2dbc-mssql.version>
-    <%_ } _%>
-    <%_ if (reactive && prodDatabaseType === 'postgresql') { _%>
-        <r2dbc-postgresql.version>0.8.2.RELEASE</r2dbc-postgresql.version>
-    <%_ } _%>
-    <%_ if (reactive) { _%>
-        <spring-boot-starter-data-r2dbc.version>0.1.0.M3</spring-boot-starter-data-r2dbc.version>
-    <%_ } _%>
         <validation-api.version>2.0.1.Final</validation-api.version>
 <%_ } _%>
 <%_ if (reactive) { _%>
         <blockhound-junit-platform.version>1.0.3.RELEASE</blockhound-junit-platform.version>
-        <netty-common.version>4.1.49.Final</netty-common.version>
 <%_ } _%>
 <%_ if (databaseType === 'sql' || authenticationType === 'uaa') { _%>
         <jaxb-runtime.version>2.3.2</jaxb-runtime.version>
@@ -279,7 +263,6 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-h2</artifactId>
-            <version>${r2dbc-h2.version}</version>
             <scope>test</scope>
         </dependency>
     <%_ } _%>
@@ -489,7 +472,6 @@
         <dependency>
             <groupId>dev.miku</groupId>
             <artifactId>r2dbc-mysql</artifactId>
-            <version>${r2dbc-mysql.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -524,7 +506,6 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-mssql</artifactId>
-            <version>${r2dbc-mssql.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -625,7 +606,6 @@
         <dependency>
             <groupId>io.r2dbc</groupId>
             <artifactId>r2dbc-postgresql</artifactId>
-            <version>${r2dbc-postgresql.version}</version>
         </dependency>
         <%_ } _%>
 <%_ } _%>
@@ -663,9 +643,8 @@
         </dependency>
     <%_ } else { _%>
         <dependency>
-            <groupId>org.springframework.boot.experimental</groupId>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-            <version>${spring-boot-starter-data-r2dbc.version}</version>
         </dependency>
     <%_ } _%>
 <%_ } _%>
@@ -745,12 +724,6 @@
             <scope>test</scope>
         </dependency>
         -->
-        <!-- See https://github.com/netty/netty/pull/10020 . Remove when Spring Boot has caught up -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-common</artifactId>
-            <version>${netty-common.version}</version>
-        </dependency>
 <%_ } _%>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
@@ -1609,7 +1582,6 @@
                 <dependency>
                     <groupId>io.r2dbc</groupId>
                     <artifactId>r2dbc-h2</artifactId>
-                    <version>${r2dbc-h2.version}</version>
                 </dependency>
         <%_ } _%>
     <%_ } _%>
@@ -1709,7 +1681,6 @@
                 <dependency>
                     <groupId>io.r2dbc</groupId>
                     <artifactId>r2dbc-h2</artifactId>
-                    <version>${r2dbc-h2.version}</version>
                 </dependency>
     <%_ } _%>
 <%_ } _%>
