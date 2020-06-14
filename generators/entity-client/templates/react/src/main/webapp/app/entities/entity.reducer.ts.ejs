@@ -70,6 +70,9 @@ const initialState = {
   <%_ if (pagination !== 'no') { _%>
   totalItems: 0,
   <%_ } _%>
+  <%_ if (pagination === 'pagination') { _%>
+  deleteSuccess: false,
+  <%_ } _%>
   updateSuccess: false
 };
 
@@ -87,7 +90,9 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       return {
         ...state,
         errorMessage: null,
+        <%_ if (pagination === 'pagination') { _%>
         deleteSuccess: false,
+        <%_ } _%>
         updateSuccess: false,
         loading: true
       };
@@ -98,7 +103,9 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       return {
         ...state,
         errorMessage: null,
+        <%_ if (pagination === 'pagination') { _%>
         deleteSuccess: false,
+        <%_ } _%>
         updateSuccess: false,
         updating: true
       };
@@ -117,7 +124,9 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         ...state,
         loading: false,
         updating: false,
+        <%_ if (pagination === 'pagination') { _%>
         deleteSuccess: false,
+        <%_ } _%>
         updateSuccess: false,
         errorMessage: action.payload
       };
@@ -169,7 +178,9 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       return {
         ...state,
         updating: false,
+        <%_ if (pagination === 'pagination') { _%>
         deleteSuccess: true,
+        <%_ } _%>
         updateSuccess: true,
         entity: {}
       };
