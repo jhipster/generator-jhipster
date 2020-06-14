@@ -89,7 +89,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
-  <%_ if (pagination === 'infinite-scroll') { _%>
+  <%_ if (pagination !== 'no') { _%>
   const resetAll = () => {
     props.reset();
     setPaginationState({
@@ -99,20 +99,16 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
-  <%_ if (pagination === 'no' || pagination === 'infinite-scroll') { _%>
   useEffect(() => {
     <%_ if (pagination !== 'no') { _%>
     resetAll();
-    <%_ if (pagination === 'infinite-scroll') { _%>
     if (props.updateSuccess) {
       props.getEntities();
     }
-    <%_ } _%>
     <%_ } else { _%>
     props.getEntities();
     <%_ } _%>
-  }, <%_ if (pagination === 'infinite-scroll') { _%>[props.updateSuccess]<%_ } else { _%>[]<%_ } _%>);
-  <%_ } _%>
+  }, <%_ if (pagination !== 'no') { _%>[props.updateSuccess]<%_ } else { _%>[]<%_ } _%>);
 
   <%_ if (searchEngine !== false) { _%>
   const startSearching = () => {
@@ -470,6 +466,8 @@ const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
   <%_ if (pagination === 'infinite-scroll') { _%>
   links: <%= entityInstance %>.links,
   entity: <%= entityInstance %>.entity,
+  <%_ } _%>
+  <%_ if (pagination !== 'no') { _%>
   updateSuccess: <%= entityInstance %>.updateSuccess,
   <%_ } _%>
 });
@@ -479,7 +477,7 @@ const mapDispatchToProps = {
  getSearchEntities,
  <%_ } _%>
  getEntities,
- <%_ if (pagination === 'infinite-scroll') { _%>
+ <%_ if (pagination !== 'no') { _%>
  reset
  <%_ } _%>
 };
