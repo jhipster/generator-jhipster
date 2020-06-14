@@ -129,6 +129,6 @@ export const getRecordsCount = async (table: ElementFinder): Promise<number> => 
  * Returns a promise that evaluates to the total pagination items.
  */
 export const getTotalItemsCount = async (jhiItemCount: ElementFinder): Promise<number> => {
-  let jhiItemCountText = await jhiItemCount.getText();
+  const jhiItemCountText = await jhiItemCount.getText();
   return jhiItemCountText.match(/\d+/g).map(Number)[2];
 };
