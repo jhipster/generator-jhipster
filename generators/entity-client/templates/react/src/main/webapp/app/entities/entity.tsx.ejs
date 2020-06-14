@@ -99,6 +99,16 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
+  <%_ if (pagination === 'pagination') { _%>
+  const sortEntities = () => {
+    getAllEntities();
+    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
+    if (props.location.search !== endURL) {
+      props.history.push(`${props.location.pathname}${endURL}`);
+    }
+  };
+  <%_ } _%>
+  
   <%_ if (pagination === 'no' || pagination === 'infinite-scroll' || pagination === 'pagination') { _%>
   useEffect(() => {
     <%_ if (pagination === 'infinite-scroll') { _%>
@@ -169,16 +179,6 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   <%_ } _%>
 
   <%_ if (pagination !== 'no') { _%>
-
-  <%_ if (pagination === 'pagination') { _%>
-  const sortEntities = () => {
-    getAllEntities();
-    const endURL = `?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}`;
-    if (props.location.search !== endURL) {
-      props.history.push(`${props.location.pathname}${endURL}`);
-    }
-  };
-  <%_ } _%>
 
   useEffect(() => {
     <% if (pagination === 'infinite-scroll') { %>
