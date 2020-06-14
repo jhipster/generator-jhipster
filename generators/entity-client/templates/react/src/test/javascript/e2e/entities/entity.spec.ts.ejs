@@ -24,7 +24,7 @@ import <%= entityClass %>ComponentsPage<%_ if (!readOnly) { _%>, { <%= entityCla
 <%_ if (!readOnly) { _%>
 import <%= entityClass %>UpdatePage from './<%= entityFileName %>-update.page-object';
 <%_ } _%>
-import { waitUntilDisplayed, waitUntilAnyDisplayed, click, getRecordsCount, waitUntilHidden, waitUntilCount, isVisible } from '../../<%= entityParentPathAddition %>util/utils';
+import { waitUntilDisplayed, waitUntilAnyDisplayed, click, <%_ if (pagination === 'pagination') { _%>getTotalItemsCount<%_ } else { _%>getRecordsCount<%_ } _%>, waitUntilHidden, waitUntilCount, isVisible } from '../../<%= entityParentPathAddition %>util/utils';
 <%_ if (fieldsContainBlobOrImage && !readOnly) { _%>
 import path from 'path';
 <%_ } _%>
@@ -90,7 +90,11 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
         <%= entityInstance %>ComponentsPage.table]);
 
+        <%_ if (pagination === 'pagination') { _%>
+        beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getTotalItemsCount(<%= entityInstance %>ComponentsPage.jhiItemCount);
+        <%_ } else { _%>
         beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
+        <%_ } _%>
     });
 
 <%_ if (!readOnly) { _%>
@@ -176,8 +180,12 @@ describe('<%= entityClass %> e2e test', () => {
 
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
 
+        <%_ if (pagination === 'pagination') { _%>
+        expect(await getTotalItemsCount(<%= entityInstance %>ComponentsPage.jhiItemCount)).to.eq(beforeRecordsCount + 1);
+        <%_ } else { _%>
         await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
         expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
+        <%_ } _%>
     });<%= closeBlockComment %>
 
     <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
@@ -197,7 +205,11 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
         <%= entityInstance %>ComponentsPage.table]);
     
+        <%_ if (pagination === 'pagination') { _%>
+        const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getTotalItemsCount(<%= entityInstance %>ComponentsPage.jhiItemCount);
+        <%_ } else { _%>
         const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
+        <%_ } _%>
         expect(afterCount).to.eq(beforeRecordsCount);
     });<%= closeBlockComment %>
 <%_ } _%>

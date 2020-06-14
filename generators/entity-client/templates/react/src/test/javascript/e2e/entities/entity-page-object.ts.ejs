@@ -28,6 +28,9 @@ export default class <%= entityClass %>ComponentsPage {
     table: ElementFinder = element(by.css('#app-view-container div.table-responsive > table'));
 
     records: ElementArrayFinder = this.table.all(by.css('tbody tr'));
+    <%_ if (pagination === 'pagination') { _%>
+    jhiItemCount: ElementFinder = element(by.className('jhi-item-count'));
+    <%_ } _%>
 
     getDetailsButton(record: ElementFinder) {
       return record.element(by.css('a.btn.btn-info.btn-sm'));
