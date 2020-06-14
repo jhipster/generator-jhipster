@@ -87,6 +87,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       return {
         ...state,
         errorMessage: null,
+        deleteSuccess: false,
         updateSuccess: false,
         loading: true
       };
@@ -97,6 +98,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       return {
         ...state,
         errorMessage: null,
+        deleteSuccess: false,
         updateSuccess: false,
         updating: true
       };
@@ -115,6 +117,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
         ...state,
         loading: false,
         updating: false,
+        deleteSuccess: false,
         updateSuccess: false,
         errorMessage: action.payload
       };
@@ -166,6 +169,7 @@ export default (state: <%= entityReactName %>State = initialState, action): <%= 
       return {
         ...state,
         updating: false,
+        deleteSuccess: true,
         updateSuccess: true,
         entity: {}
       };
@@ -240,6 +244,9 @@ export const createEntity: ICrudPutAction<I<%= entityReactName %>> = entity => a
     type: ACTION_TYPES.CREATE_<%= entityActionName %>,
     payload: axios.post(apiUrl, cleanEntity(entity))
   });
+  <%_ if (pagination !== 'infinite-scroll' && pagination !== 'pagination') { _%>
+  dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 
@@ -257,6 +264,9 @@ export const deleteEntity: ICrudDeleteAction<I<%= entityReactName %>> = id => as
     type: ACTION_TYPES.DELETE_<%= entityActionName %>,
     payload: axios.delete(requestUrl)
   });
+  <%_ if (pagination !== 'infinite-scroll' && pagination !== 'pagination') { _%>
+  dispatch(getEntities());
+  <%_ } _%>
   return result;
 };
 

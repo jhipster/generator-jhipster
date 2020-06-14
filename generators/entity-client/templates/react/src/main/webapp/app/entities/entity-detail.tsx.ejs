@@ -47,6 +47,10 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
     props.getEntity(props.match.params.id);
   }, []);
 
+  const handleClose = () => {
+    props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination') { _%> + props.location.search<%_ } _%>);
+  };
+
   const { <%= entityInstance %>Entity } = props;
   return (
     <Row>
@@ -167,7 +171,7 @@ export const <%= entityReactName %>Detail = (props: I<%= entityReactName %>Detai
             <%_ } _%>
           <%_ } _%>
           </dl>
-        <Button tag={Link} to="/<%= entityFileName %>" replace color="info">
+        <Button onClick={handleClose} replace color="info">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
         </Button>&nbsp;
         <Button tag={Link} to={`/<%= entityFileName %>/${<%= entityInstance %>Entity.id}/edit`} replace color="primary">

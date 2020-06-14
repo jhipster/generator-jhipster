@@ -148,7 +148,15 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
   <%_ } _%>
 
   const handleClose = () => {
-    props.history.push('/<%= entityFileName %>'<%_ if (pagination === 'pagination') { _%> + props.location.search<%_ } _%>);
+    <%_ if (pagination === 'pagination') { _%>
+    if (isNew) {
+      props.history.goBack();
+    } else {
+      props.history.push('/<%= entityFileName %>' + props.location.search);
+    }
+    <%_ } else { _%>
+    props.history.push('/<%= entityFileName %>');
+    <%_ } _%>
   }
 
   useEffect(() => {
@@ -552,7 +560,7 @@ export const <%= entityReactName %>Update = (props: I<%= entityReactName %>Updat
           </AvGroup>
           <%_ } _%>
         <%_ }) _%>
-          <Button tag={Link} id="cancel-save" to="/<%= entityFileName %>" replace color="info">
+          <Button onClick={handleClose} replace color="info">
             <FontAwesomeIcon icon="arrow-left" />&nbsp;
             <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
           </Button>

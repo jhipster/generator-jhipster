@@ -89,11 +89,9 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
-  <%_ if (pagination !== 'no') { _%>
+  <%_ if (pagination === 'infinite-scroll') { _%>
   const resetAll = () => {
-    <% if (pagination === 'infinite-scroll') { %>
     props.reset();
-    <%_ } _%>
     setPaginationState({
       ...paginationState,
       activePage: 1
@@ -101,16 +99,24 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
   };
   <%_ } _%>
 
+  <%_ if (pagination === 'no' || pagination === 'infinite-scroll' || pagination === 'pagination') { _%>
   useEffect(() => {
-    <%_ if (pagination !== 'no') { _%>
+    <%_ if (pagination === 'infinite-scroll') { _%>
     resetAll();
     if (props.updateSuccess) {
       props.getEntities();
     }
-    <%_ } else { _%>
+    <%_ } _%>
+    <%_ if (pagination === 'pagination') { _%>
+    if (props.deleteSuccess) {
+      sortEntities();
+    }
+    <%_ } _%>
+    <%_ if (pagination === 'no') { _%>
     props.getEntities();
     <%_ } _%>
-  }, <%_ if (pagination !== 'no') { _%>[props.updateSuccess]<%_ } else { _%>[]<%_ } _%>);
+  }, <%_ if (pagination === 'infinite-scroll') { _%>[props.updateSuccess]<%_ } else if (pagination === 'pagination') { _%>[props.deleteSuccess]<%_ } else { _%>[]<%_ } _%>);
+  <%_ } _%>
 
   <%_ if (searchEngine !== false) { _%>
   const startSearching = () => {
@@ -402,7 +408,7 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
                       <%_ } _%>
                       <td className="text-right">
                         <div className="btn-group flex-btn-group-container">
-                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}`} color="info" size="sm">
+                          <Button tag={Link} to={`${match.url}/${<%= entityInstance %>.id}<%_ if (pagination === 'pagination') { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="info" size="sm">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
                           <%_ if (!readOnly) { _%>
@@ -468,9 +474,10 @@ const mapStateToProps = ({ <%= entityInstance %> }: IRootState) => ({
   <%_ if (pagination === 'infinite-scroll') { _%>
   links: <%= entityInstance %>.links,
   entity: <%= entityInstance %>.entity,
-  <%_ } _%>
-  <%_ if (pagination !== 'no') { _%>
   updateSuccess: <%= entityInstance %>.updateSuccess,
+  <%_ } _%>
+  <%_ if (pagination === 'pagination') { _%>
+  deleteSuccess: <%= entityInstance %>.deleteSuccess,
   <%_ } _%>
 });
 

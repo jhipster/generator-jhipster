@@ -327,7 +327,15 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.CREATE_<%= entityActionName %>),
           payload: resolvedObject
+        }<%_ if (pagination !== 'infinite-scroll' && pagination !== 'pagination') { _%>,
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          payload: resolvedObject
         }
+        <%_ } _%>
       ];
       await store.dispatch(createEntity({ id: <% if (primaryKeyType === 'Long') { %>1<% } else { %>'1'<% } %> })).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
@@ -353,7 +361,15 @@ describe('Entities reducer tests', () => {
         {
           type: SUCCESS(ACTION_TYPES.DELETE_<%= entityActionName %>),
           payload: resolvedObject
+        }<%_ if (pagination !== 'infinite-scroll' && pagination !== 'pagination') { _%>,
+        {
+          type: REQUEST(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST)
+        },
+        {
+          type: SUCCESS(ACTION_TYPES.FETCH_<%= entityActionName %>_LIST),
+          payload: resolvedObject
         }
+        <%_ } _%>
       ];
       await store.dispatch(deleteEntity(42666)).then(() => expect(store.getActions()).toEqual(expectedActions));
     });
