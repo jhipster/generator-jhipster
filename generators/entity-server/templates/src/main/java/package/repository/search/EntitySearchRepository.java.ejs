@@ -24,6 +24,7 @@ import <%= packageName %>.domain.<%= asEntity(entityClass) %>;
 import org.springframework.data.domain.Pageable;
     <%_ } _%>
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 <%_ } _%>
 import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
@@ -64,7 +65,9 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
         <%_ if (pagination !== 'no') { _%>
         nativeSearchQuery.setPageable(pageable);
         <%_ } _%>
-        return reactiveElasticsearchTemplate.find(nativeSearchQuery, <%= entityClass %>.class);
+        return reactiveElasticsearchTemplate
+            .search(nativeSearchQuery, <%= entityClass %>.class)
+            .map(SearchHit::getContent);
     }
 }
 <%_ } _%>
