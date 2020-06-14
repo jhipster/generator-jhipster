@@ -91,7 +91,9 @@ export const <%= entityReactName %> = (props: I<%= entityReactName %>Props) => {
 
   <%_ if (pagination !== 'no') { _%>
   const resetAll = () => {
+    <% if (pagination === 'infinite-scroll') { %>
     props.reset();
+    <%_ } _%>
     setPaginationState({
       ...paginationState,
       activePage: 1
@@ -477,7 +479,7 @@ const mapDispatchToProps = {
  getSearchEntities,
  <%_ } _%>
  getEntities,
- <%_ if (pagination !== 'no') { _%>
+ <%_ if (pagination === 'infinite-scroll') { _%>
  reset
  <%_ } _%>
 };
