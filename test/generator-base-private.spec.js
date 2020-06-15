@@ -223,9 +223,9 @@ export * from './entityFolderName/entityFileName.state';`;
             });
         });
         describe('when called for mssql', () => {
-            it('return jdbc:sqlserver://localhost:1433;database=test', () => {
+            it('return jdbc:sqlserver://localhost:1433;database=test;sendStringParametersAsUnicode=false', () => {
                 expect(BaseGenerator.getJDBCUrl('mssql', { databaseName: 'test', hostname: 'localhost' })).to.equal(
-                    'jdbc:sqlserver://localhost:1433;database=test'
+                    'jdbc:sqlserver://localhost:1433;database=test;sendStringParametersAsUnicode=false'
                 );
             });
         });

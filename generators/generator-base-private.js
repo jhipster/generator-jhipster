@@ -1508,7 +1508,7 @@ module.exports = class extends Generator {
         } else if (databaseType === 'oracle') {
             jdbcUrl = `jdbc:oracle:thin:@${options.hostname}:1521:${options.databaseName}`;
         } else if (databaseType === 'mssql') {
-            jdbcUrl = `jdbc:sqlserver://${options.hostname}:1433;database=${options.databaseName}`;
+            jdbcUrl = `jdbc:sqlserver://${options.hostname}:1433;database=${options.databaseName};sendStringParametersAsUnicode=false`;
         } else if (databaseType === 'h2Disk') {
             if (!options.localDirectory) {
                 throw new Error(`'localDirectory' option should be provided for ${databaseType} databaseType`);
