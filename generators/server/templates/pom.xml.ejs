@@ -368,6 +368,10 @@
             <artifactId>HikariCP</artifactId>
         </dependency>
 <%_ } _%>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
 <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
         <dependency>
             <groupId>commons-codec</groupId>

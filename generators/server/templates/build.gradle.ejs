@@ -351,6 +351,7 @@ dependencies {
     implementation "org.hibernate:hibernate-core"
     implementation "com.zaxxer:HikariCP"
     <%_ } _%>
+    implementation "org.apache.commons:commons-lang3"
     <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase' || applicationType === 'gateway') { _%>
     implementation "commons-codec:commons-codec"
     <%_ } _%>
