@@ -79,6 +79,10 @@ module.exports = class extends BaseGenerator {
      * @return {true} useBlueprints - true if one or more blueprints generators have been constructed; false otherwise
      */
     instantiateBlueprints(subGen, extraOptions) {
+        if (this.options.help) {
+            // Ignore blueprint registered options.
+            return false;
+        }
         let useBlueprints = false;
 
         const blueprints = jhipsterUtils.parseBluePrints(

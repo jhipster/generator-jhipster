@@ -33,6 +33,7 @@ env:
     JHI_SCRIPTS: ./test-integration/scripts
     NG_CLI_ANALYTICS: 'false'
     JHI_GITHUB_CI: true
+    FORCE_COLOR: 1
 jobs:
     applications:
         name: ${{ matrix.app-type }}

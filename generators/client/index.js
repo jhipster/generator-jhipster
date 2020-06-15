@@ -189,7 +189,7 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForClient: prompts.askForClient,
-            askFori18n: prompts.askFori18n,
+            askFori18n: prompts.askForI18n,
             askForClientTheme: prompts.askForClientTheme,
             askForClientThemeVariant: prompts.askForClientThemeVariant,
 
@@ -350,7 +350,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
-                this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
             },
 
             composeLanguages() {
