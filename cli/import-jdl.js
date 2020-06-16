@@ -405,7 +405,7 @@ class JDLProcessor {
  */
 module.exports = (jdlFiles, options = {}, env, forkProcess = fork) => {
     logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
-    logger.info(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
+    logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
         const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
         jdlImporter.getConfig();
