@@ -1235,8 +1235,8 @@ module.exports = class extends PrivateBase {
     composeExternalModule(npmPackageName, subGen, options) {
         const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
         const generatorCallback = `${generatorName}:${subGen}`;
-        if (!this.env.get(generatorCallback)) {
-            this.env.lookup({ packagePatterns: npmPackageName });
+        if (!this.env.isPackageRegistered(generatorName)) {
+            this.env.lookup({ filterPaths: true, packagePatterns: npmPackageName });
         }
         if (!this.env.get(generatorCallback)) {
             throw new Error(`Generator ${generatorCallback} isn't registered.`);
