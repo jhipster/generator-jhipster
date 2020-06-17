@@ -190,6 +190,12 @@ describe('<%= entityClass %> e2e test', () => {
 
     <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
 
+        <%_ if (pagination === 'pagination') { _%>
+        await waitUntilDisplayed(await <%= entityInstance %>ComponentsPage.sortByID);
+        const sortByID = <%= entityInstance %>ComponentsPage.sortByID;
+        await click(await sortByID);
+    
+        <%_ } _%>
         const deleteButton = <%= entityInstance %>ComponentsPage.getDeleteButton(<%= entityInstance %>ComponentsPage.records.last());
         await click(deleteButton);
 
