@@ -2,7 +2,7 @@ import { $, ElementFinder } from 'protractor';
 
 import AlertPage from './alert-page';
 
-export default class settingsForm extends AlertPage {
+export default class SettingsForm extends AlertPage {
   settingsForm: ElementFinder = $('#settings-form');
   firstName: ElementFinder = this.settingsForm.$('#firstName');
   lastName: ElementFinder = this.settingsForm.$('#lastName');
