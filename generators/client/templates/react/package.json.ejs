@@ -164,6 +164,9 @@ limitations under the License.
     <%_ if (protractorTests) { _%>
     "ts-node": "8.9.1",
     <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "cypress": "4.8.0",
+    <%_ } _%>
     "typescript": "3.8.3",
     <%_ if (protractorTests) { _%>
     "webdriver-manager": "12.1.7",
@@ -191,6 +194,9 @@ limitations under the License.
     <%_ } _%>
     <%_ if (skipServer) { _%>
     "sonar": "sonar-scanner",
+    <%_ } _%>
+    <%_ if (cypressTests) { _%>
+    "cypress": "<%= clientPackageManager %> run cypress open",
     <%_ } _%>
     "start": "<%= clientPackageManager %> run webpack:dev",
     "start-tls": "<%= clientPackageManager %> run webpack:dev -- --env.tls",

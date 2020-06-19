@@ -1,0 +1,58 @@
+<%# Add OAuth2 login feature %>
+describe('/admin', () => {
+
+    before(() => {
+        cy.login();
+    });
+
+    after(() => {
+        cy.logout();
+    });
+<%_ if (!skipUserManagement) { _%>
+    describe('/user-management', () => {
+        it('should load the page', () => {
+             cy.visit('/admin/user-management');
+             cy.contains('#user-management-page-heading', 'Users');
+        });
+    });
+<%_ } _%>
+    
+    describe('/metrics', () => {
+        it('should load the page', () => {
+            cy.visit('/admin/metrics');
+            cy.contains('#metrics-page-heading', 'Application Metrics');
+        });
+    });
+    
+    
+    describe('/health', () => {
+        it('should load the page', () => {
+            cy.visit('/admin/health');
+            cy.contains('#health-page-heading', 'Health Checks');
+        });
+    });
+    
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+    describe('/audits', () => {
+        it('should load the page', () => {
+            cy.visit('/admin/audits');
+            cy.contains('#audits-page-heading', 'Audits');
+        });
+    });
+<%_ } _%>
+
+    describe('/logs', () => {
+        it('should load the page', () => {
+            cy.visit('/admin/logs');
+            cy.contains('#logs-page-heading', 'Logs');
+        });
+    });
+    
+    describe('/configuration', () => {
+        it('should load the page', () => {
+            cy.visit('/admin/configuration');
+            cy.contains('#configuration-page-heading', 'Configuration');
+        });
+    });
+
+});
