@@ -501,7 +501,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.bold('\nProvisioning addons'));
                 if (this.searchEngine === 'elasticsearch') {
                     ChildProcess.exec(
-                        `heroku addons:create bonsai --as BONSAI --app ${this.herokuAppName}`,
+                        `heroku addons:create bonsai:sandbox --as BONSAI --app ${this.herokuAppName}`,
                         addonCreateCallback.bind(this, 'Elasticsearch')
                     );
                 }
@@ -521,7 +521,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     });
                 }
 
-                let dbAddOn = '';
+                let dbAddOn;
                 if (this.prodDatabaseType === 'postgresql') {
                     dbAddOn = 'heroku-postgresql --as DATABASE';
                 } else if (this.prodDatabaseType === 'mysql') {
@@ -532,15 +532,34 @@ module.exports = class extends BaseBlueprintGenerator {
                     dbAddOn = 'mongolab:sandbox --as MONGODB';
                 } else if (this.prodDatabaseType === 'neo4j') {
                     dbAddOn = 'graphenedb:dev-free --as GRAPHENEDB';
-                } else {
-                    done();
-                    return;
                 }
 
-                ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
-                    addonCreateCallback('Database', err, stdout, stderr);
-                    done();
-                });
+                if (dbAddOn) {
+                    this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
+                    ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                        addonCreateCallback('Database', err, stdout, stderr);
+                    });
+                } else {
+                    this.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
+                }
+
+                let cacheAddOn;
+                if (this.cacheProvider === 'memcached') {
+                    cacheAddOn = 'memcachier:dev --as MEMCACHIER';
+                } else if (this.cacheProvider === 'redis') {
+                    cacheAddOn = 'heroku-redis:hobby-dev --as REDIS';
+                }
+
+                if (cacheAddOn) {
+                    this.log(chalk.bold(`\nProvisioning cache addon ${cacheAddOn}`));
+                    ChildProcess.exec(`heroku addons:create ${cacheAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                        addonCreateCallback('Cache', err, stdout, stderr);
+                    });
+                } else {
+                    this.log(chalk.bold(`\nNo suitable cache addon for cacheprovider ${this.cacheProvider} available.`));
+                }
+
+                done();
             },
 
             configureJHipsterRegistry() {
