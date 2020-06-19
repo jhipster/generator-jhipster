@@ -3,6 +3,20 @@ import { ElementFinder, by, element, $ } from 'protractor';
 import AlertPage from './alert-page';
 import { click, waitUntilClickable, waitUntilDisplayed, waitUntilHidden } from '../util/utils';
 
+export class UserManagementDetailsPage extends AlertPage {
+  title: ElementFinder = element(by.css('h2.jh-entity-heading'));
+  loginDetails: ElementFinder = element.all(by.css('.jh-entity-details > dd > span')).first();
+
+  editTitle: ElementFinder = element(by.css('h1#editUserHeading'));
+  email: ElementFinder = $('input#email');
+  saveBtn: ElementFinder = element(by.css('.btn-primary'));
+}
+
+export class UserManagementDeletePage {
+  modal: ElementFinder = element(by.id('removeUser'));
+  okButton: ElementFinder = element(by.id('confirm-delete-user'));
+}
+
 export class UserManagementPage extends AlertPage {
   title: ElementFinder = element(by.id('user-management-page-heading'));
   modifiedDatSort: ElementFinder = element(by.id('modified-date-sort'));
@@ -54,20 +68,6 @@ export class UserManagementPage extends AlertPage {
     await waitUntilDisplayed(emailControl);
     return await emailControl.getText();
   }
-}
-
-export class UserManagementDetailsPage extends AlertPage {
-  title: ElementFinder = element(by.css('h2.jh-entity-heading'));
-  loginDetails: ElementFinder = element.all(by.css('.jh-entity-details > dd > span')).first();
-
-  editTitle: ElementFinder = element(by.css('h1#editUserHeading'));
-  email: ElementFinder = $('input#email');
-  saveBtn: ElementFinder = element(by.css('.btn-primary'));
-}
-
-export class UserManagementDeletePage {
-  modal: ElementFinder = element(by.id('removeUser'));
-  okButton: ElementFinder = element(by.id('confirm-delete-user'));
 }
 
 <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { _%>
