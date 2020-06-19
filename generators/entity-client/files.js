@@ -243,6 +243,10 @@ const reactFiles = {
                     renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.page-object.ts`,
                 },
                 {
+                    file: 'e2e/entities/entity-details-page-object.ts',
+                    renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}-details.page-object.ts`,
+                },
+                {
                     file: 'e2e/entities/entity.spec.ts',
                     renameTo: generator => `e2e/entities/${generator.entityFolderName}/${generator.entityFileName}.spec.ts`,
                 },

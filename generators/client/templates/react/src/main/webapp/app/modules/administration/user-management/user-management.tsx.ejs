@@ -126,8 +126,8 @@ export const UserManagement = (props: IUserManagementProps) => {
                   {user.id}
                 </Button>
               </td>
-              <td>{user.login}</td>
-              <td>{user.email}</td>
+              <td className="user-login">{user.login}</td>
+              <td className="user-email">{user.email}</td>
               <td>
                 {user.activated ? (
                   <Button color="success" onClick={toggleActive(user) }>
@@ -166,18 +166,21 @@ export const UserManagement = (props: IUserManagementProps) => {
               <td className="text-right">
                 <div className="btn-group flex-btn-group-container">
                   <Button
+                    className="view"
                     tag={Link} to={`${match.url}/${user.login}`}
                     color="info" size="sm"
                   >
                     <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                   </Button>
                   <Button
+                    className="edit"
                     tag={Link} to={`${match.url}/${user.login}/edit`}
                     color="primary" size="sm"
                   >
                     <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                   </Button>
                   <Button
+                    className="delete"
                     tag={Link} to={`${match.url}/${user.login}/delete`}
                     color="danger" size="sm" disabled={account.login === user.login}
                   >

@@ -27,9 +27,9 @@ export default class <%= entityClass %>ComponentsPage {
     noRecords: ElementFinder = element(by.css('#app-view-container .table-responsive div.alert.alert-warning'));
     table: ElementFinder = element(by.css('#app-view-container div.table-responsive > table'));
 
-    sortByID: ElementFinder = this.table.all(by.className('svg-inline--fa fa-sort fa-w-10')).first();
     records: ElementArrayFinder = this.table.all(by.css('tbody tr'));
     <%_ if (pagination === 'pagination') { _%>
+    sortByID: ElementFinder = this.table.all(by.className('svg-inline--fa fa-sort')).first();
     jhiItemCount: ElementFinder = element(by.className('jhi-item-count'));
     <%_ } _%>
 

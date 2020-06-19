@@ -93,6 +93,19 @@ export const waitUntilAnyDisplayed = async (selectors: ElementFinder[], timeout 
 };
 
 /**
+ * Returns a void promise on all elements present inside an array to become
+ * visible. If all elements are not visible within threshold time, promise
+ * will be rejected.
+ */
+export const waitUntilAllDisplayed = async (selectors: ElementFinder[], timeout = waitUntilDisplayedTimeout): Promise<void> => {
+  await browser.wait(
+    ExpectedConditions.and(...selectors.map(selector => ExpectedConditions.visibilityOf(selector))),
+    timeout,
+    `"${selectors.map(selector => selector.locator())}" are not visible.`
+  );
+};
+
+/**
  * Returns a boolean if an element is visible on screen. It's a wrapper on
  * isDisplayed() to gracefully handle the scenario when an element is not
  * present in the DOM.
@@ -131,4 +144,13 @@ export const getRecordsCount = async (table: ElementFinder): Promise<number> => 
 export const getTotalItemsCount = async (jhiItemCount: ElementFinder): Promise<number> => {
   const jhiItemCountText = await jhiItemCount.getText();
   return jhiItemCountText.match(/\d+/g).map(Number)[2];
+};
+
+/**
+ * Returns a void promise for an element value to be cleared. It's useful to
+ * clear numeric field values.
+ */
+export const clear = async (input: ElementFinder) => {
+  await input.sendKeys(protractor.Key.chord(protractor.Key.CONTROL, 'a'));
+  await input.sendKeys(protractor.Key.DELETE);
 };

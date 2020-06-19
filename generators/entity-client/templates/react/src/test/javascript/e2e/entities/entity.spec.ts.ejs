@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { browser, element, by<% if ( fieldsContainInstant || fieldsContainZonedDateTime ) { %>, protractor<% } %> } from 'protractor';
+import { browser, element, by<% if ( fieldsContainInstant || fieldsContainZonedDateTime || pagination === 'pagination') { %>, protractor<% } %> } from 'protractor';
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
@@ -24,7 +24,18 @@ import <%= entityClass %>ComponentsPage<%_ if (!readOnly) { _%>, { <%= entityCla
 <%_ if (!readOnly) { _%>
 import <%= entityClass %>UpdatePage from './<%= entityFileName %>-update.page-object';
 <%_ } _%>
-import { waitUntilDisplayed, waitUntilAnyDisplayed, click, <%_ if (pagination === 'pagination') { _%>getTotalItemsCount<%_ } else { _%>getRecordsCount<%_ } _%>, waitUntilHidden, waitUntilCount, isVisible } from '../../<%= entityParentPathAddition %>util/utils';
+import <%= entityClass %>DetailsPage from './<%= entityFileName%>-details.page-object';
+import {
+  waitUntilDisplayed,
+  waitUntilAllDisplayed,
+  waitUntilAnyDisplayed,
+  clear,
+  click,
+  <%_ if (pagination === 'pagination') { _%>getTotalItemsCount<%_ } else { _%>getRecordsCount<%_ } _%>,
+  waitUntilHidden,
+  waitUntilCount,
+  isVisible
+} from '../../<%= entityParentPathAddition %>util/utils';
 <%_ if (fieldsContainBlobOrImage && !readOnly) { _%>
 import path from 'path';
 <%_ } _%>
@@ -49,6 +60,7 @@ describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
+    let <%= entityInstance %>DetailsPage: <%= entityClass %>DetailsPage;
 <%_ if (!readOnly) { _%>
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
@@ -57,25 +69,18 @@ describe('<%= entityClass %> e2e test', () => {
     const absolutePath = path.resolve(__dirname, fileToUpload);
     <%_ } _%>
 <%_ } _%>
+    const username = process.env.E2E_USERNAME || 'admin';
+    const password = process.env.E2E_PASSWORD || 'admin';
     let beforeRecordsCount = 0;
 
     before(async () => {
         await browser.get('/');
         navBarPage = new NavBarPage();
-        signInPage = await navBarPage.getSignInPage();
-        <%_ if (authenticationType !== 'oauth2') { _%>
-        await signInPage.waitUntilDisplayed();
+        await navBarPage.login(username, password);
+    });
 
-        await signInPage.username.sendKeys('admin');
-        await signInPage.password.sendKeys('admin');
-        await signInPage.loginButton.click();
-        await signInPage.waitUntilHidden();
-        <%_ } else { _%>
-        await signInPage.loginWithOAuth('admin', 'admin');
-        <%_ } _%>
-        await waitUntilDisplayed(navBarPage.entityMenu);
-        await waitUntilDisplayed(navBarPage.adminMenu);
-        await waitUntilDisplayed(navBarPage.accountMenu);
+    after(async () => {
+        await navBarPage.autoSignOut();
     });
 
     it('should load <%= entityClassPlural %>', async () => {
@@ -179,7 +184,6 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
 
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
-
         <%_ if (pagination === 'pagination') { _%>
         expect(await getTotalItemsCount(<%= entityInstance %>ComponentsPage.jhiItemCount)).to.eq(beforeRecordsCount + 1);
         <%_ } else { _%>
@@ -188,15 +192,120 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } _%>
     });<%= closeBlockComment %>
 
-    <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
-
+    it('should view last <%= entityClass %>', async () => {
         <%_ if (pagination === 'pagination') { _%>
         await waitUntilDisplayed(await <%= entityInstance %>ComponentsPage.sortByID);
         const sortByID = <%= entityInstance %>ComponentsPage.sortByID;
         await click(await sortByID);
-    
+
         <%_ } _%>
-        const deleteButton = <%= entityInstance %>ComponentsPage.getDeleteButton(<%= entityInstance %>ComponentsPage.records.last());
+        const detailsButton = <%= entityInstance %>ComponentsPage.getDetailsButton(<%= entityInstance %>ComponentsPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no' ) { _%>last()<%_ } else {_%>first()<%_ } _%>);
+        await click(detailsButton);
+
+        <%= entityInstance %>DetailsPage = new <%= entityClass %>DetailsPage();
+
+        await waitUntilAllDisplayed([<%= entityInstance %>DetailsPage.title, <%= entityInstance %>DetailsPage.backButton, <%= entityInstance %>DetailsPage.firstDetail]);
+
+        expect(await <%= entityInstance %>DetailsPage.title.getText()).not.to.be.empty;
+        expect(await <%= entityInstance %>DetailsPage.firstDetail.getText()).not.to.be.empty;
+
+        await click(<%= entityInstance %>DetailsPage.backButton);
+
+        await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
+        <%_ if (pagination === 'pagination') { _%>
+        expect(await getTotalItemsCount(<%= entityInstance %>ComponentsPage.jhiItemCount)).to.eq(beforeRecordsCount + 1);
+        await browser.actions().sendKeys(protractor.Key.HOME).perform();
+        <%_ } else { _%>
+        await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
+        expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
+        <%_ } _%>
+    });
+    
+    <%= openBlockComment %> it('should update last <%= entityClass %>', async () => {
+        const editButton = <%= entityInstance %>ComponentsPage.getEditButton(<%= entityInstance %>ComponentsPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no') { _%>last()<%_ } else {_%>first()<%_ } _%>);
+        await click(editButton);
+
+        await waitUntilAllDisplayed([<%= entityInstance %>UpdatePage.pageTitle, <%= entityInstance %>UpdatePage.saveButton, <%= entityInstance %>UpdatePage.cancelButton]);
+
+        expect(await <%= entityInstance %>UpdatePage.pageTitle.getText()).not.to.be.empty;
+
+        <%_ fields.forEach((field) => {
+          const fieldName = field.fieldName;
+          const fieldNameCapitalized = field.fieldNameCapitalized;
+          const fieldType = field.fieldType;
+          const fieldTypeBlobContent = field.fieldTypeBlobContent;
+          const fieldIsEnum = field.fieldIsEnum;
+          const fieldValidateModifiedString = field.fieldValidateModifiedString;
+        _%>
+        <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
+          await clear(<%= entityInstance %>UpdatePage.<%= fieldName %>Input);
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.sendKeys('6');
+          expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('6');
+
+        <%_ } else if (fieldType === 'LocalDate') { _%>
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.clear();
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.sendKeys('01-01-2019');
+          expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('2019-01-01');
+
+        <%_ } else if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.clear();
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.sendKeys('01/01/2019' + protractor.Key.TAB + '02:30AM');
+          expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('2019-01-01T02:30');
+
+        <%_ } else if (fieldType === 'Duration') { _%>
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.clear();
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.sendKeys('PT14S');
+          expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.getAttribute('value')).to.contain('14');
+
+        <%_ } else if (fieldType === 'Boolean') { _%>
+          const selected<%= fieldNameCapitalized %> = await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.isSelected();
+          if (selected<%= fieldNameCapitalized %>) {
+            await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.click();
+            expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.isSelected()).to.be.false;
+          } else {
+            await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.click();
+            expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.isSelected()).to.be.true;
+          }
+
+        <%_ } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent === 'text') { _%>
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.clear();
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.sendKeys('updated<%= fieldName %>');
+          expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/updated<%= fieldName %>/);
+
+        <%_ } else if (fieldType === 'UUID'){ _%>
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.clear();
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.sendKeys('64c99148-3908-465d-8c4a-e510e3ade978');
+          expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/64c99148-3908-465d-8c4a-e510e3ade978/);
+
+        <%_ } else if (fieldType === 'String' && fieldValidateModifiedString) { _%>
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.clear();
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.sendKeys('<%= fieldValidateModifiedString %>');
+          expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.getAttribute('value')).to.eq('<%= fieldValidateModifiedString %>');
+
+        <%_ } else if (!fieldIsEnum && !['byte[]', 'ByteBuffer'].includes(fieldType)) { _%>
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.clear();
+          await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.sendKeys('modified');
+          expect(await <%= entityInstance %>UpdatePage.<%= fieldName %>Input.getAttribute('value')).to.match(/modified/);
+
+        <%_ } _%>
+        <%_ }); _%>
+
+        await <%= entityInstance %>UpdatePage.save();
+        await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
+        expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
+
+        await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
+        <%_ if (pagination === 'pagination') { _%>
+        expect(await getTotalItemsCount(<%= entityInstance %>ComponentsPage.jhiItemCount)).to.eq(beforeRecordsCount + 1);
+        await browser.actions().sendKeys(protractor.Key.HOME).perform();
+        <%_ } else { _%>
+        await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
+        expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
+        <%_ } _%>
+    });<%= closeBlockComment %>
+
+    <%= openBlockComment %> it('should delete last <%= entityClass %>', async () => {
+        const deleteButton = <%= entityInstance %>ComponentsPage.getDeleteButton(<%= entityInstance %>ComponentsPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no' ) { _%>last()<%_ } else {_%>first()<%_ } _%>);
         await click(deleteButton);
 
         <%= entityInstance %>DeleteDialog = new <%= entityClass %>DeleteDialog();
@@ -219,8 +328,4 @@ describe('<%= entityClass %> e2e test', () => {
         expect(afterCount).to.eq(beforeRecordsCount);
     });<%= closeBlockComment %>
 <%_ } _%>
-
-    after(async () => {
-        await navBarPage.autoSignOut();
-    });
 });

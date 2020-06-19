@@ -53,11 +53,11 @@ export const UserManagementDeleteDialog = (props: IUserManagementDeleteDialogPro
         <Translate contentKey="userManagement.delete.question" interpolate={{ login: user.login }}>Are you sure you want to delete this User?</Translate>
       </ModalBody>
       <ModalFooter>
-        <Button color="secondary" onClick={handleClose}>
+        <Button id="cancel-delete-user" color="secondary" onClick={handleClose}>
           <FontAwesomeIcon icon="ban"/>&nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
-        <Button color="danger" onClick={confirmDelete}>
+        <Button id="confirm-delete-user" color="danger" onClick={confirmDelete}>
           <FontAwesomeIcon icon="trash" />&nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>
         </Button>
