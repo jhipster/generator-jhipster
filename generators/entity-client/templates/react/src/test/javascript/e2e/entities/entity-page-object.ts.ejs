@@ -99,8 +99,6 @@ export default class <%= entityClass %>ComponentsPage {
       await waitUntilHidden(<%= entityInstance %>DeleteDialog.deleteModal);
 
       expect(await isVisible(<%= entityInstance %>DeleteDialog.deleteModal)).to.be.false;
-
-      await waitUntilAnyDisplayed([this.noRecords, this.table]);
     }
     <%_ } _%>
 }
