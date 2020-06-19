@@ -86,7 +86,7 @@ export class GatewayPage extends React.Component<IGatewayPageProps> {
     const { routes, isFetching } = this.props;
     return (
       <div>
-        <h2>Gateway</h2>
+        <h2 id="gateway-page-heading">Gateway</h2>
           <p>
             <Button onClick={this.gatewayRoutes} color={isFetching ? 'danger' : 'primary'} disabled={isFetching}>
               <FontAwesomeIcon icon="sync" />&nbsp;
