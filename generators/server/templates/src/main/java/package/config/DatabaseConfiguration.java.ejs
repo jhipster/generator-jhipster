@@ -457,8 +457,8 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public UpdateMapper updateMapper(ReactiveDataAccessStrategy dataAccessStrategy) {
-        return new UpdateMapper(dataAccessStrategy.getConverter());
+    public UpdateMapper updateMapper(R2dbcDialect dialect, ReactiveDataAccessStrategy dataAccessStrategy) {
+        return new UpdateMapper(dialect, dataAccessStrategy.getConverter());
     }
 
     @Bean

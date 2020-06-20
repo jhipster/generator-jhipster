@@ -38,6 +38,7 @@ import org.springframework.data.relational.core.sql.Select;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoinCondition;
 import org.springframework.data.relational.core.sql.SelectBuilder.SelectOrdered;
+import org.springframework.data.relational.core.sql.SqlIdentifier;
 import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.core.sql.render.SqlRenderer;
 import org.springframework.stereotype.Service;
@@ -148,8 +149,8 @@ public class EntityManager {
         RelationalPersistentEntity<?> persistentEntity = getPersistentEntity(entity.getClass());
 
         GenericInsertSpec<Map<String, Object>> insertSpec = db.insert().into(persistentEntity.getTableName());
-        String idColumn = persistentEntity.getIdColumn();
-        for (Entry<String, SettableValue> column : row.entrySet()) {
+        SqlIdentifier idColumn = persistentEntity.getIdColumn();
+        for (Entry<SqlIdentifier, SettableValue> column : row.entrySet()) {
             if (column.getValue().hasValue() || !column.getKey().equals(idColumn)) {
                 insertSpec = insertSpec.value(column.getKey(), column.getValue());
             }
