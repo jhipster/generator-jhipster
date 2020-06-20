@@ -50,7 +50,7 @@
         "jsdoc": "jsdoc --configure jsdoc-conf.json"
     },
     "dependencies": {
-        "aws-sdk": "2.665.0",
+        "aws-sdk": "2.701.0",
         "axios": "0.19.2",
         "chalk": "4.0.0",
         "commander": "5.1.0",
