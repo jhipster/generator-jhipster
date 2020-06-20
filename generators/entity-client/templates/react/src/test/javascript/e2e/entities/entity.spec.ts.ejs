@@ -95,9 +95,12 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
         
         await <%= entityInstance %>ComponentsPage.delete<%= entityClass %>();
-        
-        await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount);
-        expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount);
+        if(beforeRecordsCount !== 1) { 
+          await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount);
+          expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount);
+        } else {
+          await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.noRecords);
+        }
     });<%= closeBlockComment %>
 <%_ } _%>
 
