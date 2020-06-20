@@ -30,7 +30,7 @@ UserManagementDetailsPage,
 UserManagementPage
 } from '../../page-objects/administration-page';
 <%_ } _%>
-import {getToastByInnerText, isVisible, waitUntilDisplayed, waitUntilHidden,} from '../../util/utils';
+import {<%_ if (authenticationType !== 'oauth2') { _%>getToastByInnerText, <%_ } _%>isVisible, waitUntilDisplayed, waitUntilHidden} from '../../util/utils';
 
 const expect = chai.expect;
 
