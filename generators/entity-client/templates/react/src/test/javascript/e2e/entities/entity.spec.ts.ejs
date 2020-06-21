@@ -20,7 +20,7 @@ import { browser, element, by<% if ( fieldsContainInstant || fieldsContainZonedD
 
 import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navbar-page';
 import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
-import <%= entityClass %>ComponentsPage<%_ if (!readOnly) { _%>, { <%= entityClass %>DeleteDialog }<%_ } %> from './<%= entityFileName %>.page-object';
+import <%= entityClass %>ComponentsPage from './<%= entityFileName %>.page-object';
 <%_ if (!readOnly) { _%>
 import <%= entityClass %>UpdatePage from './<%= entityFileName %>-update.page-object';
 <%_ } _%>
@@ -40,16 +40,12 @@ import {
 import path from 'path';
 <%_ } _%>
 <%_
-let elementGetter = `getText()`;
-let openBlockComment = ``;
-let closeBlockComment = ``;
-if (enableTranslation) {
-    elementGetter = `getAttribute('jhiTranslate')`;
-}
+let openBlockComment = '';
+let closeBlockComment = '';
 for (let relationship of relationships) {
     if (relationship.relationshipRequired || relationship.useJPADerivedIdentifier) {
-        openBlockComment = `/* `;
-        closeBlockComment = ` */`;
+        openBlockComment = '/* ';
+        closeBlockComment = ' */';
         break;
     }
 } _%>
@@ -63,15 +59,13 @@ describe('<%= entityClass %> e2e test', () => {
     let <%= entityInstance %>DetailsPage: <%= entityClass %>DetailsPage;
 <%_ if (!readOnly) { _%>
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
-    <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
-    <%_ if (fieldsContainBlobOrImage) { _%>
-    const fileToUpload = '../../../../../../<%= entityParentPathAddition %><%= CLIENT_MAIN_SRC_DIR %>content/images/logo-jhipster.png';
-    const absolutePath = path.resolve(__dirname, fileToUpload);
-    <%_ } _%>
 <%_ } _%>
+<<<<<<< HEAD
     const username = process.env.E2E_USERNAME || 'admin';
     const password = process.env.E2E_PASSWORD || 'admin';
     let beforeRecordsCount = 0;
+=======
+>>>>>>> e77ebe851394af18e289aaf4b1481c3a42f8f540
 
     before(async () => {
         await browser.get('/');
@@ -83,15 +77,20 @@ describe('<%= entityClass %> e2e test', () => {
         await navBarPage.autoSignOut();
     });
 
-    it('should load <%= entityClassPlural %>', async () => {
-        await navBarPage.getEntityPage('<%= entityStateName %>');
+    beforeEach(async() => {
+        await browser.get('/');
+        await waitUntilDisplayed(navBarPage.entityMenu);
         <%= entityInstance %>ComponentsPage = new <%= entityClass %>ComponentsPage();
+        <%= entityInstance %>ComponentsPage = await <%= entityInstance %>ComponentsPage.goToPage(navBarPage);
+    });
+
+    it('should load <%= entityClassPlural %>', async () => {
         expect(await <%= entityInstance %>ComponentsPage.title.getText())
             .to.match(/<%= entityClassPluralHumanized %>/);
-
         <%_ if (!readOnly) { _%>
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
         <%_ } _%>
+<<<<<<< HEAD
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
         <%= entityInstance %>ComponentsPage.table]);
 
@@ -199,6 +198,15 @@ describe('<%= entityClass %> e2e test', () => {
 
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
+=======
+    });
+
+<%_ if (!readOnly) { _%>
+    <%= openBlockComment %>it('should create and delete <%= entityClassPlural %>', async () => {
+        const beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
+        <%= entityInstance %>UpdatePage = await <%= entityInstance %>ComponentsPage.goToCreate<%= entityClass %>();
+        await <%= entityInstance %>UpdatePage.enterData();
+>>>>>>> e77ebe851394af18e289aaf4b1481c3a42f8f540
 
         const toast = <%= entityInstance %>ComponentsPage.toastSuccess;
         await waitUntilDisplayed(toast);
@@ -207,8 +215,8 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await toast.getText()).to.contain('A new <%= entityInstance %> is created with identifier');
 
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
-
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
+<<<<<<< HEAD
         <%_ if (pagination === 'pagination') { _%>
         expect(await getTotalItemsCount(<%= entityInstance %>ComponentsPage.jhiItemCount)).to.eq(beforeRecordsCount + 1);
         <%_ } else { _%>
@@ -373,6 +381,18 @@ describe('<%= entityClass %> e2e test', () => {
         const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         <%_ } _%>
         expect(afterCount).to.eq(beforeRecordsCount);
+=======
+        await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
+        expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
+        
+        await <%= entityInstance %>ComponentsPage.delete<%= entityClass %>();
+        if(beforeRecordsCount !== 0) { 
+          await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount);
+          expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount);
+        } else {
+          await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.noRecords);
+        }
+>>>>>>> e77ebe851394af18e289aaf4b1481c3a42f8f540
     });<%= closeBlockComment %>
 <%_ } _%>
 });

@@ -1,0 +1,9 @@
+version: 2
+updates:
+    - package-ecosystem: npm
+      directory: "/"
+      schedule:
+          interval: weekly
+      labels:
+          - "theme: dependabot-dependencies"
+      open-pull-requests-limit: 10
