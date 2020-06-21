@@ -104,8 +104,13 @@ describe('<%= entityClass %> e2e test', () => {
 
 <%_ if (!readOnly) { _%>
     it('should load create <%= entityClass %> page', async () => {
-        await <%= entityInstance %>ComponentsPage.createButton.click();
+        const createButton = await <%= entityInstance %>ComponentsPage.createButton;
+        await click(createButton);
+        
         <%= entityInstance %>UpdatePage = new <%= entityClass %>UpdatePage();
+
+        await waitUntilAllDisplayed([<%= entityInstance %>UpdatePage.pageTitle, <%= entityInstance %>UpdatePage.saveButton, <%= entityInstance %>UpdatePage.cancelButton]);
+
         <%_ if (enableTranslation) { _%>
         expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
             .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
@@ -117,7 +122,19 @@ describe('<%= entityClass %> e2e test', () => {
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
-        await <%= entityInstance %>ComponentsPage.createButton.click();
+        const createButton = await <%= entityInstance %>ComponentsPage.createButton;
+        await click(createButton);
+
+        await waitUntilAllDisplayed([<%= entityInstance %>UpdatePage.pageTitle, <%= entityInstance %>UpdatePage.saveButton, <%= entityInstance %>UpdatePage.cancelButton]);
+
+        <%_ if (enableTranslation) { _%>
+        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
+            .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
+        <%_ } else { _%>
+        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
+            .to.match(/Create or edit a <%= entityClass %>/);
+        <%_ } _%>
+
         <%_ fields.forEach((field) => {
             const fieldName = field.fieldName;
             const fieldNameCapitalized = field.fieldNameCapitalized;
@@ -176,10 +193,18 @@ describe('<%= entityClass %> e2e test', () => {
         // <%= entityInstance %>UpdatePage.<%= relationshipName %>SelectLastOption();
         <%_ } _%>
         <%_ }); _%>
-        await waitUntilDisplayed(<%= entityInstance %>UpdatePage.saveButton);
-        await <%= entityInstance %>UpdatePage.save();
+
+        expect(await <%= entityInstance %>UpdatePage.saveButton.isEnabled()).to.be.true;
+        await click(<%= entityInstance %>UpdatePage.saveButton);
+
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
+
+        const toast = <%= entityInstance %>ComponentsPage.toastSuccess;
+        await waitUntilDisplayed(toast);
+        // Success toast should appear
+        expect(await toast.isPresent()).to.be.true;
+        expect(await toast.getText()).to.contain('A new <%= entityInstance %> is created with identifier');
 
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
 
@@ -194,9 +219,10 @@ describe('<%= entityClass %> e2e test', () => {
 
     it('should view last <%= entityClass %>', async () => {
         <%_ if (pagination === 'pagination') { _%>
-        await waitUntilDisplayed(await <%= entityInstance %>ComponentsPage.sortByID);
         const sortByID = <%= entityInstance %>ComponentsPage.sortByID;
         await click(await sortByID);
+
+        await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
 
         <%_ } _%>
         const detailsButton = <%= entityInstance %>ComponentsPage.getDetailsButton(<%= entityInstance %>ComponentsPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no' ) { _%>last()<%_ } else {_%>first()<%_ } _%>);
@@ -221,14 +247,22 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } _%>
     });
     
-    <%= openBlockComment %> it('should update last <%= entityClass %>', async () => {
+    it('should load edit last <%= entityClass %> page', async () => {
         const editButton = <%= entityInstance %>ComponentsPage.getEditButton(<%= entityInstance %>ComponentsPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no') { _%>last()<%_ } else {_%>first()<%_ } _%>);
         await click(editButton);
 
         await waitUntilAllDisplayed([<%= entityInstance %>UpdatePage.pageTitle, <%= entityInstance %>UpdatePage.saveButton, <%= entityInstance %>UpdatePage.cancelButton]);
 
-        expect(await <%= entityInstance %>UpdatePage.pageTitle.getText()).not.to.be.empty;
+        <%_ if (enableTranslation) { _%>
+        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
+            .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
+        <%_ } else { _%>
+        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
+            .to.match(/Create or edit a <%= entityClass %>/);
+        <%_ } _%>
+    });
 
+    <%= openBlockComment %> it('should update last <%= entityClass %>', async () => {
         <%_ fields.forEach((field) => {
           const fieldName = field.fieldName;
           const fieldNameCapitalized = field.fieldNameCapitalized;
@@ -290,9 +324,16 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } _%>
         <%_ }); _%>
 
-        await <%= entityInstance %>UpdatePage.save();
+        expect(await <%= entityInstance %>UpdatePage.saveButton.isEnabled()).to.be.true;
+        await click(<%= entityInstance %>UpdatePage.saveButton);
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
+
+        const toast = <%= entityInstance %>ComponentsPage.toastSuccess;
+        await waitUntilDisplayed(toast);
+        // Success toast should appear
+        expect(await toast.isPresent()).to.be.true;
+        expect(await toast.getText()).to.contain('A <%= entityInstance %> is updated with identifier');
 
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
         <%_ if (pagination === 'pagination') { _%>
@@ -317,6 +358,12 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await isVisible(<%= entityInstance %>DeleteDialog.deleteModal)).to.be.false;
 
+        const toast = <%= entityInstance %>ComponentsPage.toastSuccess;
+        await waitUntilDisplayed(toast);
+        // Success toast should appear
+        expect(await toast.isPresent()).to.be.true;
+        expect(await toast.getText()).to.contain('A <%= entityInstance %> is deleted with identifier');
+        
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
         <%= entityInstance %>ComponentsPage.table]);
     

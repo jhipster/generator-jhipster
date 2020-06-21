@@ -17,8 +17,9 @@
  limitations under the License.
 -%>
 import { element, by, ElementFinder, ElementArrayFinder } from 'protractor';
+import AlertPage from '../../page-objects/alert-page';
 
-export default class <%= entityClass %>ComponentsPage {
+export default class <%= entityClass %>ComponentsPage extends AlertPage {
     <%_ if (!readOnly) { _%>
     createButton: ElementFinder = element(by.id('jh-create-entity'));
     deleteButtons = element.all(by.css('div table .btn-danger'));
