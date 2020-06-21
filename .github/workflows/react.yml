@@ -43,7 +43,8 @@ jobs:
             !contains(github.event.head_commit.message, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[skip ci]') &&
             !contains(github.event.pull_request.title, '[ci skip]') &&
-            (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci'))
+            (github.event.pull_request.draft == false || !contains(github.event.pull_request.labels.*.name, 'pr: skip-ci')) &&
+            !contains(github.event.pull_request.labels.*.name, 'theme: dependabot-dependencies')
         timeout-minutes: 40
         strategy:
             fail-fast: false
