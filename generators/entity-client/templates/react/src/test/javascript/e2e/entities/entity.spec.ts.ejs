@@ -205,7 +205,7 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilDisplayed(toast);
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
-        expect(await toast.getText()).to.contain('A new <%= entityInstance %> is created with identifier');
+        expect(await toast.getText()).to.contain('A new <%= entityName %> is created with identifier');
 
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
 
@@ -334,7 +334,7 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilDisplayed(toast);
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
-        expect(await toast.getText()).to.contain('A <%= entityInstance %> is updated with identifier');
+        expect(await toast.getText()).to.contain('A <%= entityName %> is updated with identifier');
 
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
         <%_ if (pagination === 'pagination') { _%>
@@ -363,7 +363,7 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilDisplayed(toast);
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
-        expect(await toast.getText()).to.contain('A <%= entityInstance %> is deleted with identifier');
+        expect(await toast.getText()).to.contain('A <%= entityName %> is deleted with identifier');
         
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
         <%= entityInstance %>ComponentsPage.table]);
