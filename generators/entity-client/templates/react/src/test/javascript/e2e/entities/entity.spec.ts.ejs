@@ -60,12 +60,9 @@ describe('<%= entityClass %> e2e test', () => {
 <%_ if (!readOnly) { _%>
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
 <%_ } _%>
-<<<<<<< HEAD
     const username = process.env.E2E_USERNAME || 'admin';
     const password = process.env.E2E_PASSWORD || 'admin';
     let beforeRecordsCount = 0;
-=======
->>>>>>> e77ebe851394af18e289aaf4b1481c3a42f8f540
 
     before(async () => {
         await browser.get('/');
@@ -90,7 +87,6 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ if (!readOnly) { _%>
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
         <%_ } _%>
-<<<<<<< HEAD
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
         <%= entityInstance %>ComponentsPage.table]);
 
@@ -198,15 +194,6 @@ describe('<%= entityClass %> e2e test', () => {
 
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
-=======
-    });
-
-<%_ if (!readOnly) { _%>
-    <%= openBlockComment %>it('should create and delete <%= entityClassPlural %>', async () => {
-        const beforeRecordsCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
-        <%= entityInstance %>UpdatePage = await <%= entityInstance %>ComponentsPage.goToCreate<%= entityClass %>();
-        await <%= entityInstance %>UpdatePage.enterData();
->>>>>>> e77ebe851394af18e289aaf4b1481c3a42f8f540
 
         const toast = <%= entityInstance %>ComponentsPage.toastSuccess;
         await waitUntilDisplayed(toast);
@@ -216,7 +203,6 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
-<<<<<<< HEAD
         <%_ if (pagination === 'pagination') { _%>
         expect(await getTotalItemsCount(<%= entityInstance %>ComponentsPage.jhiItemCount)).to.eq(beforeRecordsCount + 1);
         <%_ } else { _%>
@@ -381,18 +367,6 @@ describe('<%= entityClass %> e2e test', () => {
         const afterCount = await isVisible(<%= entityInstance %>ComponentsPage.noRecords) ? 0 : await getRecordsCount(<%= entityInstance %>ComponentsPage.table);
         <%_ } _%>
         expect(afterCount).to.eq(beforeRecordsCount);
-=======
-        await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
-        expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
-        
-        await <%= entityInstance %>ComponentsPage.delete<%= entityClass %>();
-        if(beforeRecordsCount !== 0) { 
-          await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount);
-          expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount);
-        } else {
-          await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.noRecords);
-        }
->>>>>>> e77ebe851394af18e289aaf4b1481c3a42f8f540
     });<%= closeBlockComment %>
 <%_ } _%>
 });
