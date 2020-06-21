@@ -80,6 +80,13 @@ export const getToastByInnerText = (text: string): ElementFinder =>
 <%_ } _%>
 
 /**
+ * Get toast alert
+ * @returns {ElementFinder}
+ */
+export const getToast = (): ElementFinder =>
+  element.all(by.className('Toastify__toast--success')).last().element(by.css('div[role=alert]'));
+
+/**
  * Returns a void promise on any element present inside an array to become
  * visible. If no element is visible within threshold time, promise will
  * be rejected.

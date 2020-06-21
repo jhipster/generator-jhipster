@@ -31,6 +31,7 @@ import {
   waitUntilAnyDisplayed,
   clear,
   click,
+  getToast,
   <%_ if (pagination === 'pagination') { _%>getTotalItemsCount<%_ } else { _%>getRecordsCount<%_ } _%>,
   waitUntilHidden,
   waitUntilCount,
@@ -200,7 +201,7 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
 
-        const toast = <%= entityInstance %>ComponentsPage.toastSuccess;
+        const toast = getToast();
         await waitUntilDisplayed(toast);
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
@@ -329,7 +330,7 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
 
-        const toast = <%= entityInstance %>ComponentsPage.toastSuccess;
+        const toast = getToast();
         await waitUntilDisplayed(toast);
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
@@ -358,7 +359,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await isVisible(<%= entityInstance %>DeleteDialog.deleteModal)).to.be.false;
 
-        const toast = <%= entityInstance %>ComponentsPage.toastSuccess;
+        const toast = getToast();
         await waitUntilDisplayed(toast);
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
