@@ -32,7 +32,6 @@ export default class <%= entityClass %>ComponentsPage {
     sortByID: ElementFinder = this.table.all(by.className('svg-inline--fa fa-sort')).first();
     jhiItemCount: ElementFinder = element(by.className('jhi-item-count'));
     <%_ } _%>
-    toastSuccess: ElementFinder = element.all(by.className('Toastify__toast--success')).last().element(by.css('div[role=alert]'));
 
     getDetailsButton(record: ElementFinder) {
       return record.element(by.css('a.btn.btn-info.btn-sm'));
