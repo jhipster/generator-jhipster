@@ -17,9 +17,8 @@
  limitations under the License.
 -%>
 import { element, by, ElementFinder, ElementArrayFinder } from 'protractor';
-import AlertPage from '../../page-objects/alert-page';
 
-export default class <%= entityClass %>ComponentsPage extends AlertPage {
+export default class <%= entityClass %>ComponentsPage {
     <%_ if (!readOnly) { _%>
     createButton: ElementFinder = element(by.id('jh-create-entity'));
     deleteButtons = element.all(by.css('div table .btn-danger'));
@@ -33,6 +32,7 @@ export default class <%= entityClass %>ComponentsPage extends AlertPage {
     sortByID: ElementFinder = this.table.all(by.className('svg-inline--fa fa-sort')).first();
     jhiItemCount: ElementFinder = element(by.className('jhi-item-count'));
     <%_ } _%>
+    toastSuccess: ElementFinder = element.all(by.className('Toastify__toast--success')).last().element(by.css('div[role=alert]'));
 
     getDetailsButton(record: ElementFinder) {
       return record.element(by.css('a.btn.btn-info.btn-sm'));
