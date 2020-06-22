@@ -325,7 +325,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await <%= entityInstance %>UpdatePage.saveButton.isEnabled()).to.be.true;
         await click(<%= entityInstance %>UpdatePage.saveButton);
-        
+    
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
 

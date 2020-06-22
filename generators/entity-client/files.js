@@ -300,6 +300,7 @@ function addSampleRegexTestingStrings(generator) {
         if (field.fieldValidateRulesPattern !== undefined) {
             const randExp = new Randexp(field.fieldValidateRulesPattern);
             field.fieldValidateSampleString = randExp.gen();
+            field.fieldValidateModifiedString = randExp.gen();
         }
     });
 }
