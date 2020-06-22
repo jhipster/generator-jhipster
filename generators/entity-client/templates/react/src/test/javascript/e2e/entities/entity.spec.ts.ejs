@@ -22,9 +22,9 @@ import NavBarPage from './../../<%= entityParentPathAddition %>page-objects/navb
 import SignInPage from './../../<%= entityParentPathAddition %>page-objects/signin-page';
 import <%= entityClass %>ComponentsPage<%_ if (!readOnly) { _%>, { <%= entityClass %>DeleteDialog }<%_ } %> from './<%= entityFileName %>.page-object';
 <%_ if (!readOnly) { _%>
+import <%= entityClass %>DetailsPage from './<%= entityFileName%>-details.page-object';
 import <%= entityClass %>UpdatePage from './<%= entityFileName %>-update.page-object';
 <%_ } _%>
-import <%= entityClass %>DetailsPage from './<%= entityFileName%>-details.page-object';
 import {
   waitUntilDisplayed,
   waitUntilAllDisplayed,
@@ -61,8 +61,8 @@ describe('<%= entityClass %> e2e test', () => {
     let navBarPage: NavBarPage;
     let signInPage: SignInPage;
     let <%= entityInstance %>ComponentsPage: <%= entityClass %>ComponentsPage;
-    let <%= entityInstance %>DetailsPage: <%= entityClass %>DetailsPage;
 <%_ if (!readOnly) { _%>
+    <%= openBlockComment %>let <%= entityInstance %>DetailsPage: <%= entityClass %>DetailsPage;<%= closeBlockComment %>
     let <%= entityInstance %>UpdatePage: <%= entityClass %>UpdatePage;
     <%= openBlockComment %>let <%= entityInstance %>DeleteDialog: <%= entityClass %>DeleteDialog;<%= closeBlockComment %>
     <%_ if (fieldsContainBlobOrImage) { _%>
@@ -119,16 +119,20 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
             .to.match(/Create or edit a <%= entityClass %>/);
         <%_ } _%>
+
+        await <%= entityInstance %>UpdatePage.cancel();
+        
+        await waitUntilHidden(<%= entityInstance %>UpdatePage.cancelButton);
+        expect(await isVisible(<%= entityInstance %>UpdatePage.cancelButton)).to.be.false;
+
+        expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
-        <%_ if (enableTranslation) { _%>
-        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
-            .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
-        <%_ } else { _%>
-        expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
-            .to.match(/Create or edit a <%= entityClass %>/);
-        <%_ } _%>
+        const createButton = await <%= entityInstance %>ComponentsPage.createButton;
+        await click(createButton);
+
+        await waitUntilAllDisplayed([<%= entityInstance %>UpdatePage.pageTitle, <%= entityInstance %>UpdatePage.saveButton, <%= entityInstance %>UpdatePage.cancelButton]);
 
         <%_ fields.forEach((field) => {
             const fieldName = field.fieldName;
@@ -216,7 +220,7 @@ describe('<%= entityClass %> e2e test', () => {
         <%_ } _%>
     });<%= closeBlockComment %>
 
-    it('should view last <%= entityClass %>', async () => {
+    <%= openBlockComment %> it('should view last <%= entityClass %>', async () => {
         <%_ if (pagination === 'pagination') { _%>
         const sortByID = <%= entityInstance %>ComponentsPage.sortByID;
         await click(await sortByID);
@@ -244,9 +248,9 @@ describe('<%= entityClass %> e2e test', () => {
         await waitUntilCount(<%= entityInstance %>ComponentsPage.records, beforeRecordsCount + 1);
         expect(await <%= entityInstance %>ComponentsPage.records.count()).to.eq(beforeRecordsCount + 1);
         <%_ } _%>
-    });
+    });<%= closeBlockComment %>
     
-    it('should load edit last <%= entityClass %> page', async () => {
+    <%= openBlockComment %> it('should load edit last <%= entityClass %> page', async () => {
         const editButton = <%= entityInstance %>ComponentsPage.getEditButton(<%= entityInstance %>ComponentsPage.records.<%_ if (pagination === 'infinite-scroll' || pagination === 'no') { _%>last()<%_ } else {_%>first()<%_ } _%>);
         await click(editButton);
 
@@ -259,7 +263,7 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
             .to.match(/Create or edit a <%= entityClass %>/);
         <%_ } _%>
-    });
+    });<%= closeBlockComment %>
 
     <%= openBlockComment %> it('should update last <%= entityClass %>', async () => {
         <%_ fields.forEach((field) => {
