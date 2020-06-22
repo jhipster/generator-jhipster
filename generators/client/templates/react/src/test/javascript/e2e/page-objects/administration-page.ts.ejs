@@ -8,7 +8,7 @@ export class UserManagementDetailsPage extends AlertPage {
   loginDetails: ElementFinder = element.all(by.css('.jh-entity-details > dd > span')).first();
 
   editTitle: ElementFinder = element(by.css('h1#editUserHeading'));
-  email: ElementFinder = $('input#email');
+  email: ElementFinder = element(by.css('input#email'));
   saveBtn: ElementFinder = element(by.css('.btn-primary'));
 }
 

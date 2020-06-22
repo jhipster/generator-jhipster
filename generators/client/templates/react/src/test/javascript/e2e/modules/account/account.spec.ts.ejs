@@ -431,6 +431,7 @@ describe('Account', () => {
 
         const detailsPage: UserManagementDetailsPage = await userManagementPage.getEditPage('user_test');
 
+        await waitUntilDisplayed(detailsPage.email);
         await detailsPage.email.sendKeys('ipster');
         await detailsPage.saveBtn.click();
 
