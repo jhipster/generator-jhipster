@@ -52,7 +52,7 @@
     "dependencies": {
         "aws-sdk": "2.665.0",
         "axios": "0.19.2",
-        "chalk": "4.0.0",
+        "chalk": "4.1.0",
         "commander": "5.1.0",
         "conf": "6.2.4",
         "didyoumean": "1.2.1",
