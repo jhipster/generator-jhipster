@@ -44,6 +44,7 @@ import path from 'path';
 let elementGetter = `getText()`;
 let openBlockComment = ``;
 let closeBlockComment = ``;
+let noInput = true;
 if (enableTranslation) {
     elementGetter = `getAttribute('jhiTranslate')`;
 }
@@ -142,6 +143,7 @@ describe('<%= entityClass %> e2e test', () => {
             const fieldIsEnum = field.fieldIsEnum;
             const fieldValidateSampleString = field.fieldValidateSampleString;
         _%>
+        <%_ if (noInput && (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType) || fieldType === 'UUID' || fieldType === 'String')) noInput = false;_%>
         <%_ if (['Integer', 'Long', 'Float', 'Double', 'BigDecimal'].includes(fieldType)) { _%>
         await <%= entityInstance %>UpdatePage.set<%= fieldNameCapitalized %>Input('5');
         expect(await <%= entityInstance %>UpdatePage.get<%= fieldNameCapitalized %>Input()).to.eq('5');
@@ -233,10 +235,14 @@ describe('<%= entityClass %> e2e test', () => {
 
         <%= entityInstance %>DetailsPage = new <%= entityClass %>DetailsPage();
 
-        await waitUntilAllDisplayed([<%= entityInstance %>DetailsPage.title, <%= entityInstance %>DetailsPage.backButton, <%= entityInstance %>DetailsPage.firstDetail]);
+        await waitUntilAllDisplayed([<%= entityInstance %>DetailsPage.title, <%= entityInstance %>DetailsPage.backButton]);
 
         expect(await <%= entityInstance %>DetailsPage.title.getText()).not.to.be.empty;
-        expect(await <%= entityInstance %>DetailsPage.firstDetail.getText()).not.to.be.empty;
+        expect(await <%= entityInstance %>DetailsPage.getDetailTermsCount()).to.greaterThan(0);
+        expect(await <%= entityInstance %>DetailsPage.getDetailDataCount()).to.greaterThan(0);
+        <%_ if (!noInput) { _%>
+        expect(await <%= entityInstance %>DetailsPage.getFirstDetailText()).not.to.be.empty;
+        <%_ } _%>
 
         await click(<%= entityInstance %>DetailsPage.backButton);
 
