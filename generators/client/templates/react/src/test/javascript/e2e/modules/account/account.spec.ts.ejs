@@ -168,6 +168,7 @@ describe('Account', () => {
 <%_ if (databaseType !== 'cassandra') { _%>
 
     const modifiedDateSortButton = getModifiedDateSortButton();
+    await waitUntilDisplayed(modifiedDateSortButton);
     await waitUntilClickable(modifiedDateSortButton);
     await modifiedDateSortButton.click();
 <%_ } _%>

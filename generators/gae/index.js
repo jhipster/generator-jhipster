@@ -770,7 +770,12 @@ module.exports = class extends BaseGenerator {
         return {
             productionBuild() {
                 if (this.abort) return;
-
+                // Until issue; https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376 is fixed we shall disable .gcloudignore
+                this.log(
+                    chalk.bold(
+                        'Due to a Bug in GCloud SDK you will need to disable the generation of .gcloudignore file before deploying using: "gcloud config set gcloudignore/enabled false". For more info refer: https://github.com/GoogleCloudPlatform/app-gradle-plugin/issues/376'
+                    )
+                );
                 if (this.buildTool === 'maven') {
                     this.log(chalk.bold('Deploy to App Engine: ./mvnw package appengine:deploy -DskipTests -Pgae,prod,prod-gae'));
                 } else if (this.buildTool === 'gradle') {
