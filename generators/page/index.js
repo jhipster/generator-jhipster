@@ -34,7 +34,7 @@ module.exports = class extends EntityClientGenerator {
     }
 
     get prompting() {
-        // The prompting phase is being overriden so that we can ask our own questions
+        // The prompting phase is being overridden so that we can ask our own questions
         return {
             askForPage: prompts.askForPage
         };
