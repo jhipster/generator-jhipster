@@ -206,9 +206,9 @@ describe('<%= entityClass %> e2e test', () => {
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
         <%_ if (enableTranslation) { _%>
-        expect(await toast.getText()).to.contain('A new <%= entityClassHumanized %> is created with identifier');
+        expect((await toast.getText()).toLowerCase()).to.contain('<%= entityClassHumanized %> is created'.toLowerCase());
         <% } else { %>
-        expect(await toast.getText()).to.contain('A new <%= entityInstance %> is created with identifier');
+        expect((await toast.getText()).toLowerCase()).to.contain('<%= entityInstance %> is created'.toLowerCase());
         <%_ } _%>
 
         expect(await <%= entityInstance %>ComponentsPage.createButton.isEnabled()).to.be.true;
@@ -344,9 +344,9 @@ describe('<%= entityClass %> e2e test', () => {
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
         <%_ if (enableTranslation) { _%>
-        expect(await toast.getText()).to.contain('A <%= entityClassHumanized %> is updated with identifier');
+        expect((await toast.getText()).toLowerCase()).to.contain('<%= entityClassHumanized %> is updated'.toLowerCase());
         <% } else { %>
-        expect(await toast.getText()).to.contain('A <%= entityInstance %> is updated with identifier');
+        expect((await toast.getText()).toLowerCase()).to.contain('<%= entityInstance %> is updated'.toLowerCase());
         <%_ } _%>
         
         await waitUntilDisplayed(<%= entityInstance %>ComponentsPage.table);
@@ -377,9 +377,9 @@ describe('<%= entityClass %> e2e test', () => {
         // Success toast should appear
         expect(await toast.isPresent()).to.be.true;
         <%_ if (enableTranslation) { _%>
-        expect(await toast.getText()).to.contain('A <%= entityClassHumanized %> is deleted with identifier');
+        expect((await toast.getText()).toLowerCase()).to.contain('<%= entityClassHumanized %> is deleted'.toLowerCase());
         <% } else { %>
-        expect(await toast.getText()).to.contain('A <%= entityInstance %> is deleted with identifier');
+        expect((await toast.getText()).toLowerCase()).to.contain('<%= entityInstance %> is deleted'.toLowerCase());
         <%_ } _%>
         
         await waitUntilAnyDisplayed([<%= entityInstance %>ComponentsPage.noRecords,
