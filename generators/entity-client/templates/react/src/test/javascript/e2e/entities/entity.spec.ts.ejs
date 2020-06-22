@@ -119,15 +119,9 @@ describe('<%= entityClass %> e2e test', () => {
         expect(await <%= entityInstance %>UpdatePage.getPageTitle().getText())
             .to.match(/Create or edit a <%= entityClass %>/);
         <%_ } _%>
-        await <%= entityInstance %>UpdatePage.cancel();
     });
 
    <%= openBlockComment %> it('should create and save <%= entityClassPlural %>', async () => {
-        const createButton = await <%= entityInstance %>ComponentsPage.createButton;
-        await click(createButton);
-
-        await waitUntilAllDisplayed([<%= entityInstance %>UpdatePage.pageTitle, <%= entityInstance %>UpdatePage.saveButton, <%= entityInstance %>UpdatePage.cancelButton]);
-
         <%_ if (enableTranslation) { _%>
         expect(await <%= entityInstance %>UpdatePage.getPageTitle().getAttribute('id'))
             .to.match(/<%= i18nKeyPrefix %>.home.createOrEditLabel/);
@@ -331,6 +325,7 @@ describe('<%= entityClass %> e2e test', () => {
 
         expect(await <%= entityInstance %>UpdatePage.saveButton.isEnabled()).to.be.true;
         await click(<%= entityInstance %>UpdatePage.saveButton);
+        
         await waitUntilHidden(<%= entityInstance %>UpdatePage.saveButton);
         expect(await isVisible(<%= entityInstance %>UpdatePage.saveButton)).to.be.false;
 
