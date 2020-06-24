@@ -688,9 +688,13 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
 
                 context.entityClass = context.entityNameCapitalized;
-                context.entityClassHumanized = _.startCase(context.entityNameCapitalized);
                 context.entityClassPlural = pluralize(context.entityClass);
-                context.entityClassPluralHumanized = _.startCase(context.entityClassPlural);
+
+                const fileData = this.data || this.context.fileData;
+                // Used for i18n
+                context.entityClassHumanized = fileData.entityClassHumanized || _.startCase(context.entityNameCapitalized);
+                context.entityClassPluralHumanized = fileData.entityClassPluralHumanized || _.startCase(context.entityClassPlural);
+
                 context.entityInstance = _.lowerFirst(entityName);
                 context.entityInstancePlural = pluralize(context.entityInstance);
                 context.entityApiUrl = entityNamePluralizedAndSpinalCased;
