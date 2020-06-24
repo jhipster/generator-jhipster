@@ -748,6 +748,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
+                    const fieldOptions = field.options || {};
                     // Migration from JodaTime to Java Time
                     if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
                         field.fieldType = 'Instant';
@@ -807,7 +808,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (_.isUndefined(field.fieldNameHumanized)) {
-                        field.fieldNameHumanized = _.startCase(field.fieldName);
+                        field.fieldNameHumanized = fieldOptions.fieldNameHumanized || _.startCase(field.fieldName);
                     }
 
                     if (_.isUndefined(field.fieldInJavaBeanMethod)) {
@@ -881,6 +882,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 let hasUserField = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach(relationship => {
+                    const relationshipOptions = relationship.options || {};
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
                     if (otherEntityData) {
@@ -969,7 +971,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (_.isUndefined(relationship.relationshipNameHumanized)) {
-                        relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
+                        relationship.relationshipNameHumanized =
+                            relationshipOptions.relationshipNameHumanized || _.startCase(relationship.relationshipName);
                     }
 
                     if (_.isUndefined(relationship.relationshipNamePlural)) {
