@@ -42,7 +42,7 @@ public class CassandraKeyspaceIT extends AbstractCassandraTest {
     private Session session;
 
     @Test
-    public void shouldListCassandraUnitKeyspace() throws Exception {
+    public void shouldListCassandraUnitKeyspace() {
         Metadata metadata = session.getCluster().getMetadata();
         assertThat(metadata.getKeyspace(CASSANDRA_UNIT_KEYSPACE)).isNotNull();
     }
