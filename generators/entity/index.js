@@ -694,6 +694,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 // Used for i18n
                 context.entityClassHumanized = fileData.entityClassHumanized || _.startCase(context.entityNameCapitalized);
                 context.entityClassPluralHumanized = fileData.entityClassPluralHumanized || _.startCase(context.entityClassPlural);
+                // Implement i18n variant ex: 'male', 'female' when applied
+                context.entityI18nVariant = fileData.entityI18nVariant || 'default';
 
                 context.entityInstance = _.lowerFirst(entityName);
                 context.entityInstancePlural = pluralize(context.entityInstance);
