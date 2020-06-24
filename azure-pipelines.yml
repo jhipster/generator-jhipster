@@ -19,7 +19,7 @@
 trigger:
     branches:
         exclude:
-        - dependabot/*
+            - dependabot/*
 jobs:
     - job: Test
       condition: not(contains(variables['Build.RequestedFor'], 'dependabot'))
