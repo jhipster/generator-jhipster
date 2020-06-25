@@ -63,7 +63,7 @@
         "insight": "0.10.3",
         "jhipster-core": "7.3.2",
         "js-object-pretty-print": "0.3.0",
-        "js-yaml": "3.13.1",
+        "js-yaml": "3.14.0",
         "lodash": "4.17.15",
         "meow": "6.1.0",
         "mkdirp": "1.0.4",
