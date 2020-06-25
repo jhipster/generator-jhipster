@@ -360,10 +360,9 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
     <%_ if (databaseType === 'sql' && reactive) { _%>
     @Transient
     <%_ } _%>
-    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { _%>
+    <%_ if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { _%>
     private Set<Authority> authorities = new HashSet<>();
-    <%_ } _%>
-    <%_ if (databaseType === 'cassandra' || databaseType === 'couchbase') { _%>
+    <%_ } else if (['cassandra', 'couchbase'].includes(databaseType)) { _%>
     private Set<String> authorities = new HashSet<>();
     <%_ } _%>
     <%_ if (authenticationType === 'session' && databaseType === 'sql' && !reactive) { _%>
@@ -478,13 +477,14 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
         this.langKey = langKey;
     }
 
-    public Set<<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j')  { %>Authority<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>String<% } %>> getAuthorities() {
+    public Set<<% if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { %>Authority<% } else if (['cassandra', 'couchbase'].includes(databaseType)) { %>String<% } %>> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<<% if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'neo4j') { %>Authority<% } %><% if (databaseType === 'cassandra' || databaseType === 'couchbase') { %>String<% } %>> authorities) {
+    public void setAuthorities(Set<<% if (['sql', 'mongodb', 'neo4j'].includes(databaseType)) { %>Authority<% } else if (['cassandra', 'couchbase'].includes(databaseType)) { %>String<% } %>> authorities) {
         this.authorities = authorities;
-    }<% if (authenticationType === 'session' && databaseType === 'sql' && !reactive) { %>
+    }
+<%_ if (authenticationType === 'session' && databaseType === 'sql' && !reactive) { _%>
 
     public Set<PersistentToken> getPersistentTokens() {
         return persistentTokens;
@@ -492,7 +492,8 @@ public class <%= asEntity('User') %><% if (databaseType === 'sql' || databaseTyp
 
     public void setPersistentTokens(Set<PersistentToken> persistentTokens) {
         this.persistentTokens = persistentTokens;
-    }<% } %>
+    }
+<%_ } _%>
 
     @Override
     public boolean equals(Object o) {
