@@ -81,7 +81,7 @@
         "sync-request": "6.1.0",
         "tabtab": "2.2.2",
         "test": "^0.6.0",
-        "through2": "3.0.1",
+        "through2": "3.0.2",
         "uuid": "7.0.3",
         "yeoman-environment": "2.10.3",
         "yeoman-generator": "4.10.1"
