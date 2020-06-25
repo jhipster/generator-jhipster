@@ -22,6 +22,7 @@ trigger:
         - dependabot/*
 jobs:
     - job: Test
+      condition: not(contains(variables['Build.RequestedFor'], 'dependabot'))
       pool:
           vmImage: 'ubuntu-18.04'
       variables:
