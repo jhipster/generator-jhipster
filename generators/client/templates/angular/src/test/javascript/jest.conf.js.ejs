@@ -1,4 +1,4 @@
-const tsconfig = require('../../../tsconfig.json');
+const tsconfig = require('../../../tsconfig.base.json');
 
 module.exports = {
     preset: 'jest-preset-angular',
@@ -9,7 +9,7 @@ module.exports = {
     globals: {
         'ts-jest': {
             stringifyContentPathRegex: '\\.html$',
-            tsConfig: '<rootDir>/tsconfig.json',
+            tsConfig: '<rootDir>/tsconfig.base.json',
             astTransformers: ['jest-preset-angular/build/InlineFilesTransformer', 'jest-preset-angular/build/StripStylesTransformer']
         }
     },
