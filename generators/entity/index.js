@@ -688,9 +688,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
 
                 context.entityClass = context.entityNameCapitalized;
-                context.entityClassHumanized = _.startCase(context.entityNameCapitalized);
                 context.entityClassPlural = pluralize(context.entityClass);
-                context.entityClassPluralHumanized = _.startCase(context.entityClassPlural);
+
+                const fileData = this.data || this.context.fileData;
+                // Used for i18n
+                context.entityClassHumanized = fileData.entityClassHumanized || _.startCase(context.entityNameCapitalized);
+                context.entityClassPluralHumanized = fileData.entityClassPluralHumanized || _.startCase(context.entityClassPlural);
+                // Implement i18n variant ex: 'male', 'female' when applied
+                context.entityI18nVariant = fileData.entityI18nVariant || 'default';
+
                 context.entityInstance = _.lowerFirst(entityName);
                 context.entityInstancePlural = pluralize(context.entityInstance);
                 context.entityApiUrl = entityNamePluralizedAndSpinalCased;
@@ -744,6 +750,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
+                    const fieldOptions = field.options || {};
                     // Migration from JodaTime to Java Time
                     if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
                         field.fieldType = 'Instant';
@@ -803,7 +810,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (_.isUndefined(field.fieldNameHumanized)) {
-                        field.fieldNameHumanized = _.startCase(field.fieldName);
+                        field.fieldNameHumanized = fieldOptions.fieldNameHumanized || _.startCase(field.fieldName);
                     }
 
                     if (_.isUndefined(field.fieldInJavaBeanMethod)) {
@@ -877,6 +884,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 let hasUserField = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach(relationship => {
+                    const relationshipOptions = relationship.options || {};
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
                     if (otherEntityData) {
@@ -965,7 +973,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (_.isUndefined(relationship.relationshipNameHumanized)) {
-                        relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
+                        relationship.relationshipNameHumanized =
+                            relationshipOptions.relationshipNameHumanized || _.startCase(relationship.relationshipName);
                     }
 
                     if (_.isUndefined(relationship.relationshipNamePlural)) {
