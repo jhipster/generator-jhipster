@@ -196,8 +196,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                 }
 
+                const fileData = this.context.fileData || {};
                 context.skipClient =
-                    context.applicationType === 'microservice' || this.options['skip-client'] || configuration.get('skipClient');
+                    context.applicationType === 'microservice' ||
+                    this.options['skip-client'] ||
+                    configuration.get('skipClient') ||
+                    fileData.skipClient;
                 context.skipServer = this.options['skip-server'] || configuration.get('skipServer');
                 context.skipDbChangelog = this.options['skip-db-changelog'] || configuration.get('skipDbChangelog');
 
