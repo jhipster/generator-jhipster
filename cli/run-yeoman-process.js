@@ -27,7 +27,7 @@ const env = EnvironmentBuilder.createDefaultBuilder().getEnvironment();
 const command = process.argv[2];
 const options = getCommandOptions(packageJson, process.argv.slice(3));
 logger.info(chalk.yellow(`Executing ${command} on ${process.cwd()}`));
-logger.info(chalk.yellow(`Options: ${toString(options)}`));
+logger.debug(chalk.yellow(`Options: ${toString(options)}`));
 try {
     env.run(command, options, doneFactory());
 } catch (e) {
