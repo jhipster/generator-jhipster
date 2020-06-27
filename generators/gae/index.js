@@ -18,10 +18,12 @@
  */
 const os = require('os');
 const shelljs = require('shelljs');
+const fs = require('fs');
 const chalk = require('chalk');
 const _ = require('lodash');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
+const dockerPrompts = require('../docker-prompts');
 
 const constants = require('../generator-constants');
 
@@ -116,33 +118,64 @@ module.exports = class extends BaseGenerator {
         };
     }
 
-    defaultProjectId() {
-        if (this.abort) return null;
-        if (this.gcpProjectId) {
-            return this.gcpProjectId;
-        }
-        try {
-            const projectId = shelljs.exec('gcloud config get-value core/project --quiet', { silent: true }).stdout;
-            return projectId.trim();
-        } catch (ex) {
-            this.log.error('Unable to determine the default Google Cloud Project ID');
-            return undefined;
-        }
-    }
-
-    defaultServiceNameChoices(defaultServiceExists) {
-        if (this.applicationType === 'monolith') {
-            return defaultServiceExists ? ['default', _.kebabCase(this.baseName)] : ['default'];
-        }
-        if (this.applicationType === 'gateway') {
-            return ['default'];
-        }
-
-        return [_.kebabCase(this.baseName)];
-    }
-
     get prompting() {
         return {
+            askForPath() {
+                if (this.abort) return undefined;
+                if (this.applicationType !== 'gateway') return undefined;
+                const messageAskForPath = 'Enter the root directory where the microservices are located';
+                const prompts = [
+                    {
+                        type: 'input',
+                        name: 'directoryPath',
+                        message: messageAskForPath,
+                        default: this.directoryPath || '../',
+                        validate: input => {
+                            const path = this.destinationPath(input);
+                            if (shelljs.test('-d', path)) {
+                                const appsFolders = this._getMicroserviceFolders(input);
+
+                                if (appsFolders.length === 0) {
+                                    return `No microservices are found in ${path}`;
+                                }
+                                return true;
+                            }
+                            return `${path} is not a directory or doesn't exist`;
+                        },
+                    },
+                ];
+
+                return this.prompt(prompts).then(props => {
+                    this.directoryPath = props.directoryPath;
+                    // Patch the path if there is no trailing "/"
+                    if (!this.directoryPath.endsWith('/')) {
+                        this.log(chalk.yellow(`The path "${this.directoryPath}" does not end with a trailing "/", adding it anyway.`));
+                        this.directoryPath += '/';
+                    }
+                    this.appsFolders = this._getMicroserviceFolders(this.directoryPath);
+                    this.log(chalk.green(`${this.appsFolders.length} applications found at ${this.destinationPath(this.directoryPath)}\n`));
+                });
+            },
+            askForApps() {
+                if (this.regenerate) return undefined;
+                if (this.applicationType !== 'gateway') return undefined;
+                const messageAskForApps = 'Which microservice applications do you want to include in your configuration?';
+                const prompts = [
+                    {
+                        type: 'checkbox',
+                        name: 'chosenApps',
+                        message: messageAskForApps,
+                        choices: this.appsFolders,
+                        default: this.defaultAppsFolders,
+                        validate: input => (input.length === 0 ? 'Please choose at least one application' : true),
+                    },
+                ];
+
+                return this.prompt(prompts).then(props => {
+                    this.appsFolders = props.chosenApps;
+                    dockerPrompts.loadConfigs.call(this);
+                });
+            },
             askForProjectId() {
                 if (this.abort) return;
                 const done = this.async();
@@ -151,7 +184,7 @@ module.exports = class extends BaseGenerator {
                         type: 'input',
                         name: 'gcpProjectId',
                         message: 'Google Cloud Project ID',
-                        default: this.defaultProjectId(),
+                        default: this._defaultProjectId(),
                         validate: input => {
                             if (input.trim().length === 0) {
                                 return 'Project ID cannot empty';
@@ -236,7 +269,7 @@ module.exports = class extends BaseGenerator {
                         type: 'list',
                         name: 'gaeServiceName',
                         message: 'Google App Engine Service Name',
-                        choices: this.defaultServiceNameChoices(this.defaultServiceExists),
+                        choices: this._defaultServiceNameChoices(this.defaultServiceExists),
                         default: this.gaeServiceName ? this.gaeServiceName : 0,
                     },
                 ];
@@ -708,6 +741,9 @@ module.exports = class extends BaseGenerator {
                 this.log(chalk.bold('\nCreating Google App Engine deployment files'));
 
                 this.template('app.yaml.ejs', `${constants.MAIN_DIR}/appengine/app.yaml`);
+                if (this.applicationType === 'gateway') {
+                    this.template('dispatch.yaml.ejs', `${constants.MAIN_DIR}/appengine/dispatch.yaml`);
+                }
                 this.template('application-prod-gae.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-prod-gae.yml`);
                 if (this.buildTool === 'gradle') {
                     this.template('gae.gradle.ejs', 'gradle/gae.gradle');
@@ -802,9 +838,57 @@ module.exports = class extends BaseGenerator {
 
                 child.stdout.on('data', (data) => {
                     process.stdout.write(data.toString());
-                });
-*/
+                }); */
             },
         };
+    }
+
+    _defaultProjectId() {
+        if (this.abort) return null;
+        if (this.gcpProjectId) {
+            return this.gcpProjectId;
+        }
+        try {
+            const projectId = shelljs.exec('gcloud config get-value core/project --quiet', { silent: true }).stdout;
+            return projectId.trim();
+        } catch (ex) {
+            this.log.error('Unable to determine the default Google Cloud Project ID');
+            return undefined;
+        }
+    }
+
+    _defaultServiceNameChoices(defaultServiceExists) {
+        if (this.applicationType === 'monolith') {
+            return defaultServiceExists ? ['default', _.kebabCase(this.baseName)] : ['default'];
+        }
+        if (this.applicationType === 'gateway') {
+            return ['default'];
+        }
+
+        return [_.kebabCase(this.baseName)];
+    }
+
+    _getMicroserviceFolders(input) {
+        const destinationPath = this.destinationPath(input);
+        const files = shelljs.ls('-l', destinationPath);
+        const appsFolders = [];
+
+        files.forEach(file => {
+            if (file.isDirectory()) {
+                if (fs.existsSync(`${destinationPath}/${file.name}/.yo-rc.json`)) {
+                    try {
+                        const fileData = this.fs.readJSON(`${destinationPath}/${file.name}/.yo-rc.json`);
+                        if (fileData['generator-jhipster'].applicationType === 'microservice') {
+                            appsFolders.push(file.name.match(/([^/]*)\/*$/)[1]);
+                        }
+                    } catch (err) {
+                        this.log(chalk.red(`${file}: this .yo-rc.json can't be read`));
+                        this.debug('Error:', err);
+                    }
+                }
+            }
+        });
+
+        return appsFolders;
     }
 };
