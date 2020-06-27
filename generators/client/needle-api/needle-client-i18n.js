@@ -39,7 +39,7 @@ module.exports = class extends needleClient {
     _addTranslationKey(key, value, language, errorMessage, needle) {
         const fullErrorMessage = `${chalk.yellow(' Reference to ') + language} ${chalk.yellow(errorMessage)}`;
         const fullPath = `${this.CLIENT_MAIN_SRC_DIR}i18n/${language}/global.json`;
-        const rewriteFileModel = this.generateFileModel(fullPath, needle, `"${key}": "${_.startCase(value)}",`);
+        const rewriteFileModel = this.generateFileModel(fullPath, needle, `"${key}": "${value}",`);
 
         this.addBlockContentToFile(rewriteFileModel, fullErrorMessage);
     }
