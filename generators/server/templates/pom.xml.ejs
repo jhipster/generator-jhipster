@@ -37,6 +37,13 @@
             </snapshots>
         </repository>
         <%_ } _%>
+        <%_ if (databaseType === 'couchbase') { _%>
+        <!-- FIXME: remove once spring-data-couchbase 4.0.2 is released with DATACOUCH-546 and DATACOUCH-576 fixes -->
+        <repository>
+            <id>spring-milestone</id>
+            <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <%_ } _%>
         <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
         <repository>
             <id>spring-milestone</id>
@@ -642,10 +649,27 @@
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
 <%_ } _%>
+<%_ if (databaseType === 'couchbase') { _%>
+        <!-- FIXME: remove once spring-data-couchbase 4.0.2 is released with DATACOUCH-546 and DATACOUCH-576 fixes -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-couchbase</artifactId>
+            <version>4.1.0-M1</version>
+        </dependency>
+<%_ } _%>
 <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %></artifactId>
+            <%_ if (databaseType === 'couchbase') { _%>
+            <!-- FIXME: remove once spring-data-couchbase 4.0.2 is released with DATACOUCH-546 and DATACOUCH-576 fixes -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-couchbase</artifactId>
+                </exclusion>
+            </exclusions>
+            <%_ } _%>
         </dependency>
 <%_ } _%>
 <%_ if (reactive) { _%>

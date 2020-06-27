@@ -260,6 +260,10 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
+    <%_ if (databaseType === 'couchbase') { _%>
+    // FIXME: remove once spring-data-couchbase 4.0.2 is released with DATACOUCH-546 and DATACOUCH-576 fixes
+    maven { url 'https://repo.spring.io/milestone' }
+    <%_ } _%>
     <%_ if (!SPRING_BOOT_VERSION.endsWith('RELEASE')) { _%>
     maven { url 'https://repo.spring.io/milestone' }
     <%_ } _%>
@@ -402,6 +406,10 @@ dependencies {
     <%_ } _%>
     <%_ if (searchEngine === 'elasticsearch') { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
+    <%_ } _%>
+    <%_ if (databaseType === 'couchbase') { _%>
+    // FIXME: remove once spring-data-couchbase 4.0.2 is released with DATACOUCH-546 and DATACOUCH-576 fixes
+    implementation "org.springframework.data:spring-data-couchbase:4.1.0-M1"
     <%_ } _%>
     <%_ if (['mongodb', 'cassandra', 'couchbase'].includes(databaseType)) { _%>
     implementation "org.springframework.boot:spring-boot-starter-data-<%= databaseType %><% if (reactive) { %>-reactive<% } %>"
