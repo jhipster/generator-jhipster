@@ -39,6 +39,9 @@
             "hystrix": "Hystrix",<% if (serviceDiscoveryType === 'consul') { %>
             "consul": "Consul",<% } %>
             <%_ } _%>
+            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hazelcast": "Hazelcast",
+            <%_ } _%>
             "diskSpace": "Spațiu disc",
             "mail": "Email",
             "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,

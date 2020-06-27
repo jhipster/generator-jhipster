@@ -40,6 +40,9 @@
             "consul": "Consul",<% } else if (reactive) { %>
             "reactiveDiscoveryClients": "Microservice Discovery Clients",<% } %>
             <%_ } _%>
+            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hazelcast": "Hazelcast",
+            <%_ } _%>
             "diskSpace": "Disk space",
             "mail": "Email",
             "ping": "Application"<% if (searchEngine === 'elasticsearch') { %>,

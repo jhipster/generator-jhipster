@@ -40,6 +40,9 @@
             "consul": "Consul",<% } else if (reactive) { %>
             "reactiveDiscoveryClients": "Клиенти за откриване на микросървиси",<% } %>
             <%_ } _%>
+            <%_ if (cacheProvider === 'hazelcast') { _%>
+            "hazelcast": "Hazelcast",
+            <%_ } _%>
             "diskSpace": "Място на диска",
             "mail": "Имейл",
             "ping": "Приложение"<% if (searchEngine === 'elasticsearch') { %>,

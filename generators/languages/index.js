@@ -114,6 +114,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
                 this.databaseType = configuration.get('databaseType');
+                this.cacheProvider = configuration.get('cacheProvider');
                 this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
                 this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
                 this.enableTranslation = configuration.get('enableTranslation');
@@ -181,6 +182,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.databaseType) {
                     this.databaseType = this.configOptions.databaseType;
                 }
+
+                if (this.configOptions.cacheProvider) {
+                    this.cacheProvider = this.configOptions.cacheProvider;
+                }
+
                 if (this.configOptions.searchEngine !== undefined) {
                     this.searchEngine = this.configOptions.searchEngine;
                 }
