@@ -26,8 +26,8 @@ import org.springframework.data.cassandra.repository.ReactiveCassandraRepository
 import <%= packageName %>.repository.search.SearchCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseType === 'couchbase') { _%>
-import org.springframework.data.couchbase.core.query.Query;
-import org.springframework.data.couchbase.repository.ReactiveCouchbaseSortingRepository;
+import org.springframework.data.couchbase.repository.Query;
+import org.springframework.data.couchbase.repository.ReactiveCouchbaseRepository;
 <%_ } _%>
 <%_ if (databaseType === 'neo4j') { _%>
 import org.neo4j.springframework.data.repository.ReactiveNeo4jRepository;
@@ -59,7 +59,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>N1qlCouchbase<% } if (databaseType === 'neo4j') { %>Neo4j<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% } %> {
+public interface <%= entityClass %>Repository extends Reactive<% if (databaseType === 'mongodb') { %>Mongo<% } if (databaseType === 'couchbase') { %>Couchbase<% } if (databaseType === 'neo4j') { %>Neo4j<% } if (databaseType === 'cassandra') { %>Cassandra<% } %>Repository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% if (searchEngine === 'couchbase') { %>, SearchCouchbaseRepository<<%= asEntity(entityClass) %>, <%= primaryKeyType %>><% } %> {
 
     <%_ if (pagination !== 'no') { _%>
 

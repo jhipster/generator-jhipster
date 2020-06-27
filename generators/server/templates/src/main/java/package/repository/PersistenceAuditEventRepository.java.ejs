@@ -40,8 +40,9 @@ import org.springframework.stereotype.Repository;
 <%_ } _%>
 <%_ if (databaseType === 'mongodb') { _%>
 import org.springframework.data.mongodb.repository.<% if (reactive) { %>Reactive<% } %>MongoRepository;
-<%_ } _%>
-<%_ if (databaseType === 'neo4j') { _%>
+<%_ } else if (databaseType === 'couchbase') { _%>
+import org.springframework.data.couchbase.repository.<% if (reactive) { %>Reactive<% } %>CouchbaseRepository;
+<%_ } else if (databaseType === 'neo4j') { _%>
 import org.neo4j.springframework.data.repository.<% if (reactive) { %>Reactive<% } %>Neo4jRepository;
 <%_ } _%>
 <%_ if (reactive) { _%>
@@ -77,7 +78,7 @@ public interface PersistenceAuditEventRepository extends R2dbcRepository<Persist
 
 interface PersistenceAuditEventRepositoryInternal {
 <%_ } else { _%>
-public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>N1qlCouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') {
+public interface PersistenceAuditEventRepository extends <% if (reactive) { %>Reactive<% } %><% if (databaseType === 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType === 'mongodb') { %>MongoRepository<% } %><% if (databaseType === 'neo4j') { %>Neo4jRepository<% } %><% if (databaseType === 'couchbase') { %>CouchbaseRepository<% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') {
  %><PersistentAuditEvent, String><% } %> {
 <%_ } _%>
 

@@ -1038,23 +1038,13 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => !generator.reactive && generator.databaseType === 'couchbase',
+            condition: generator => generator.searchEngine === 'couchbase',
             path: SERVER_MAIN_SRC_DIR,
             templates: [
-                {
-                    file: 'package/repository/N1qlCouchbaseRepository.java',
-                    renameTo: generator => `${generator.javaDir}repository/N1qlCouchbaseRepository.java`,
-                },
                 {
                     file: 'package/repository/CustomN1qlCouchbaseRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/CustomN1qlCouchbaseRepository.java`,
                 },
-            ],
-        },
-        {
-            condition: generator => generator.searchEngine === 'couchbase',
-            path: SERVER_MAIN_SRC_DIR,
-            templates: [
                 {
                     file: 'package/repository/search/SearchCouchbaseRepository.java',
                     renameTo: generator => `${generator.javaDir}repository/search/SearchCouchbaseRepository.java`,

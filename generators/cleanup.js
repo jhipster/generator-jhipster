@@ -255,7 +255,11 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
             generator.removeFile(`${testDir}config/ElasticsearchTestConfiguration.java`);
         }
         if (generator.databaseType === 'couchbase') {
+            generator.removeFile(`${javaDir}repository/N1qlCouchbaseRepository.java`);
             generator.removeFile(`${testDir}config/DatabaseConfigurationIT.java`);
+            if (generator.searchEngine !== 'couchbase') {
+                generator.removeFile(`${javaDir}repository/CustomN1qlCouchbaseRepository.java`);
+            }
         }
     }
 }
