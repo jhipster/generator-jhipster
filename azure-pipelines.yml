@@ -22,7 +22,7 @@ trigger:
             - dependabot/*
 jobs:
     - job: Test
-      condition: not(contains(variables['Build.RequestedFor'], 'dependabot'))
+      condition: not(contains(variables['System.PullRequest.SourceBranch'], 'dependabot'))
       pool:
           vmImage: 'ubuntu-18.04'
       variables:
