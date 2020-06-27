@@ -38,6 +38,7 @@
     },
     "scripts": {
         "prettier:format": "prettier --write \"{,**/}*.{js,json,md,yml,java}\"",
+        "prettier:check": "prettier --check \"{,**/}*.{js,json,md,yml,java}\"",
         "completion": "tabtab install --name jhipster --auto",
         "lint": "npm run eslint && npm run ejs-lint",
         "lint-fix": "npm run prettier:format && npm run eslint -- --fix",
