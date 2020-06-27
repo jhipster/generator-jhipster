@@ -61,7 +61,7 @@
         "glob": "7.1.6",
         "gulp-filter": "6.0.0",
         "insight": "0.10.3",
-        "jhipster-core": "7.3.2",
+        "jhipster-core": "7.3.4",
         "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.14.0",
         "lodash": "4.17.15",
