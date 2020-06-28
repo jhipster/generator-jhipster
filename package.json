@@ -24,8 +24,8 @@
   "dependencies": {
     "chalk": "2.4.1",
     "eslint-config-airbnb": "17.1.0",
-    "generator-jhipster": "6.9.1",
-    "jhipster-core": "7.3.1",
+    "generator-jhipster": "6.10.0",
+    "jhipster-core": "7.3.4",
     "lodash": "4.17.13",
     "mkdirp": "0.5.1",
     "pluralize": "7.0.0",
