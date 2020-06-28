@@ -94,7 +94,7 @@
         "eslint": "6.8.0",
         "eslint-config-airbnb-base": "14.2.0",
         "eslint-config-prettier": "6.11.0",
-        "eslint-plugin-import": "2.21.2",
+        "eslint-plugin-import": "2.22.0",
         "eslint-plugin-prettier": "3.1.4",
         "fs-extra": "9.0.1",
         "jsdoc": "3.6.4",
