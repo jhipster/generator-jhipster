@@ -91,7 +91,7 @@
         "@openapitools/openapi-generator-cli": "1.0.13-4.3.1",
         "chai": "4.2.0",
         "ejs-lint": "1.1.0",
-        "eslint": "6.8.0",
+        "eslint": "7.3.1",
         "eslint-config-airbnb-base": "14.2.0",
         "eslint-config-prettier": "6.11.0",
         "eslint-plugin-import": "2.22.0",
