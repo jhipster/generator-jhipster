@@ -247,6 +247,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
         this.experimental = this.configOptions.experimental = this.options.experimental;
         this.registerPrettierTransform();
+        this.registerForceEntitiesTransform();
         this.setupAppOptions(this);
     }
 
