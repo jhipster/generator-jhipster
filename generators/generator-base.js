@@ -222,13 +222,19 @@ module.exports = class extends PrivateBase {
      * @param {string} clientFramework - The name of the client framework
      * @param {string} entityTranslationKeyMenu - i18n key for entity entry in menu
      */
-    addEntityToMenu(routerName, enableTranslation, clientFramework, entityTranslationKeyMenu = _.camelCase(routerName)) {
+    addEntityToMenu(
+        routerName,
+        enableTranslation,
+        clientFramework,
+        entityTranslationKeyMenu = _.camelCase(routerName),
+        entityTranslationValue = _.startCase(routerName)
+    ) {
         if (this.clientFramework === ANGULAR) {
-            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientAngular.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === REACT) {
-            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientReact.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         } else if (this.clientFramework === VUE) {
-            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu);
+            this.needleApi.clientVue.addEntityToMenu(routerName, enableTranslation, entityTranslationKeyMenu, entityTranslationValue);
         }
     }
 

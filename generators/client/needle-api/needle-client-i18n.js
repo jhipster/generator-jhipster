@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const _ = require('lodash');
 const needleClient = require('./needle-client');
 
 module.exports = class extends needleClient {
