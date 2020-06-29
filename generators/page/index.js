@@ -30,7 +30,7 @@ module.exports = class extends EntityClientGenerator {
         this.skipClient = configuration.skipClient;
         this.clientPackageManager = configuration.clientPackageManager;
         this.enableTranslation = configuration.enableTranslation;
-        this.protractorTests = configuration.testFrameworks.includes('protractor');
+        this.protractorTests = configuration.testFrameworks && configuration.testFrameworks.includes('protractor');
     }
 
     get prompting() {

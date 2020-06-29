@@ -111,6 +111,9 @@ limitations under the License.
     "postcss-loader": "3.0.0",
     "postcss-url": "8.0.0",
     "prettier": "2.0.5",
+    <%_ if (!skipServer && prettierJava) { _%>
+    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
+    <%_ } _%>
 <%_ if (protractorTests) { _%>
     "protractor": "5.4.4",
 <%_ } _%>
@@ -153,7 +156,7 @@ limitations under the License.
   },
   <%_ } _%>
   "scripts": {
-    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,js,ts,tsx,css,scss}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,js,ts,tsx,css,scss<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
     "cleanup": "rimraf <%= DIST_DIR %>",
