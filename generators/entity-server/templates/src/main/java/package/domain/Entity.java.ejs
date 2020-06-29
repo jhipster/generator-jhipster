@@ -416,6 +416,13 @@ public class <%= asEntity(entityClass) %> implements Serializable {
     public void setId(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
+
+        <%_ if (fluentMethods) { _%>
+    public <%= asEntity(entityClass) %> id(<% if (databaseType === 'sql') { %><%= primaryKeyType %><% } %><% if (databaseType === 'mongodb' || databaseType === 'neo4j' || databaseType === 'couchbase') { %>String<% } %><% if (databaseType === 'cassandra') { %>UUID<% } %> id) {
+        this.id = id;
+        return this;
+    }
+        <%_ } _%>
     <%_ } _%>
 <%_ for (idx in fields) {
         const fieldType = fields[idx].fieldType;
