@@ -487,22 +487,6 @@ const files = {
             condition: generator => generator.protractorTests,
             templates: ['tsconfig.e2e.json'],
         },
-        {
-            condition: generator => generator.cypressTests,
-            path: CYPRESS_DIR,
-            templates: [
-                'integration/account/login_page_spec.js',
-                'integration/account/register_page_spec.js',
-                'integration/administration/administration_spec.js',
-                'plugins/index.js',
-                'support/index.js',
-                'support/commands.js',
-            ],
-        },
-        {
-            condition: generator => generator.cypressTests,
-            templates: ['cypress.json'],
-        },
     ],
 };
 
