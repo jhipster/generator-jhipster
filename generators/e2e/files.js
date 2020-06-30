@@ -42,6 +42,7 @@ const cypressFiles = {
                 'cypress/integration/account/register_page_spec.ts',
                 'cypress/integration/administration/administration_spec.ts',
                 'cypress/support/commands.ts',
+                'cypress/support/navbar.ts',
                 'cypress/support/index.ts',
                 'cypress/tsconfig.json',
             ],

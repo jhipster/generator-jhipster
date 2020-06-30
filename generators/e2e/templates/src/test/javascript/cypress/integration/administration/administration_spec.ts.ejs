@@ -1,3 +1,12 @@
+import {
+    userManagementPageHeadingSelector,
+    metricsPageHeadingSelector,
+    healthPageHeadingSelector,
+    auditsPageHeadingSelector,
+    logsPageHeadingSelector,
+    configurationPageHeadingSelector,
+} from '../../support/commands';
+
 <%# Add OAuth2 login feature %>
 describe('/admin', () => {
 
@@ -12,31 +21,31 @@ describe('/admin', () => {
     describe('/user-management', () => {
         it('should load the page', () => {
              cy.visit('/admin/user-management');
-             cy.contains('#user-management-page-heading', 'Users');
+             cy.contains(userManagementPageHeadingSelector, 'Users');
         });
     });
 <%_ } _%>
-    
+
     describe('/metrics', () => {
         it('should load the page', () => {
             cy.visit('/admin/metrics');
-            cy.contains('#metrics-page-heading', 'Application Metrics');
+            cy.contains(metricsPageHeadingSelector, 'Application Metrics');
         });
     });
-    
-    
+
+
     describe('/health', () => {
         it('should load the page', () => {
             cy.visit('/admin/health');
-            cy.contains('#health-page-heading', 'Health Checks');
+            cy.contains(healthPageHeadingSelector, 'Health Checks');
         });
     });
-    
+
 <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     describe('/audits', () => {
         it('should load the page', () => {
             cy.visit('/admin/audits');
-            cy.contains('#audits-page-heading', 'Audits');
+            cy.contains(auditsPageHeadingSelector, 'Audits');
         });
     });
 <%_ } _%>
@@ -44,14 +53,14 @@ describe('/admin', () => {
     describe('/logs', () => {
         it('should load the page', () => {
             cy.visit('/admin/logs');
-            cy.contains('#logs-page-heading', 'Logs');
+            cy.contains(logsPageHeadingSelector, 'Logs');
         });
     });
-    
+
     describe('/configuration', () => {
         it('should load the page', () => {
             cy.visit('/admin/configuration');
-            cy.contains('#configuration-page-heading', 'Configuration');
+            cy.contains(configurationPageHeadingSelector, 'Configuration');
         });
     });
 

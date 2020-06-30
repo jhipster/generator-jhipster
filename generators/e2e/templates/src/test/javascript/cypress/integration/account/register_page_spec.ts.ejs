@@ -1,3 +1,8 @@
+import {
+    emailRegisterSelector,
+    secondPasswordRegisterSelector,
+} from '../../support/commands';
+
 describe('/account/register', () => {
     beforeEach(() => {
         cy.server();
@@ -17,22 +22,22 @@ describe('/account/register', () => {
 
     it('requires email', () => {
         cy.register('admin', '', 'password', 'password');
-        cy.get('#email').should('have.class', 'is-invalid');
+        cy.get(emailRegisterSelector).should('have.class', 'is-invalid');
     });
 
     it('requires email in correct format', () => {
         cy.register('admin', 'someemail', 'password', 'password');
-        cy.get('#email').should('have.class', 'is-invalid');
+        cy.get(emailRegisterSelector).should('have.class', 'is-invalid');
     });
 
     it('requires confirm password', () => {
         cy.register('admin', 'someemail@example.com', 'password', '');
-        cy.get('#secondPassword').should('have.class', 'is-invalid');
+        cy.get(secondPasswordRegisterSelector).should('have.class', 'is-invalid');
     });
 
     it('requires password and confirm password to be same', () => {
         cy.register('admin', 'someemail@example.com', 'password', 'different-password');
-        cy.get('#secondPassword').should('have.class', 'is-invalid');
+        cy.get(secondPasswordRegisterSelector).should('have.class', 'is-invalid');
     });
 
     it('register a valid user', () => {

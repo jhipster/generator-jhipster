@@ -23,7 +23,6 @@ const constants = require('../generator-constants');
 const MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const ANGULAR_DIR = constants.ANGULAR_DIR;
-const CYPRESS_DIR = 'cypress/';
 
 /**
  * The default is to use a file path string. It implies use of the template method.

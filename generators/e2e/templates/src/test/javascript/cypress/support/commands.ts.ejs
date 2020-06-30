@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 // ***********************************************
-// This commands.js shows you how to
+// This commands.ts shows you how to
 // create various custom commands and overwrite
 // existing commands.
 //
@@ -8,27 +11,67 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-const isNotEmpty = (str) => str && str !== '';
+// ***********************************************
+// Begin Specific Selector Attributes for Cypress
+// ***********************************************
 
-Cypress.Commands.add("login", (email = "admin", password="admin") => {
-    cy.visit('/login');
-    cy.get('#username').type(email);
-    cy.get('#password').type(password);
-    cy.get('button[type="submit"]').click();
-    cy.hash().should('eq', '');
-    cy.contains(`You are logged in as user "${email}".`)
+// Navbar
+export const navbarSelector = '[data-cy=navbar]';
+export const adminMenuSelector = '[data-cy=admin-menu]';
+export const accountMenuSelector = '[data-cy=account-menu]';
+export const registerItemSelector = '[data-cy=register]';
+export const loginItemSelector = '[data-cy=login]';
+export const logoutItemSelector = '[data-cy=logout]';
+
+// Login
+export const titleLoginSelector = '[data-cy=login-title]';
+export const errorLoginSelector = '[data-cy=login-error]';
+export const usernameLoginSelector = '[data-cy=username]';
+export const passwordLoginSelector = '[data-cy=password]';
+export const submitLoginSelector = '[data-cy=submit]';
+
+// Register
+export const usernameRegisterSelector = '[data-cy=username]';
+export const emailRegisterSelector = '[data-cy=email]';
+export const firstPasswordRegisterSelector = '[data-cy=firstPassword]';
+export const secondPasswordRegisterSelector = '[data-cy=secondPassword]';
+
+// Administration
+export const userManagementPageHeadingSelector = '[data-cy=user-management-page-heading]';
+export const metricsPageHeadingSelector = '[data-cy=metrics-page-heading]';
+export const healthPageHeadingSelector = '[data-cy=health-page-heading]';
+export const auditsPageHeadingSelector = '[data-cy=audits-page-heading]';
+export const logsPageHeadingSelector = '[data-cy=logs-page-heading]';
+export const configurationPageHeadingSelector = '[data-cy=configuration-page-heading]';
+
+// ***********************************************
+// End Specific Selector Attributes for Cypress
+// ***********************************************
+
+const isNotEmpty = (str: string) => str && str !== '';
+
+Cypress.Commands.add('logout', () => {
+  cy.get(accountMenuSelector).click();
+  cy.get(logoutItemSelector).click();
 });
 
-Cypress.Commands.add("logout", () => {
-    cy.get('#account-menu').click();
-    cy.get('a[href="/logout"]').click();
+Cypress.Commands.add('register', (username, email, password, confirmPassword) => {
+  cy.visit('/account/register');
+  if (isNotEmpty(username)) cy.get(usernameRegisterSelector).type(username);
+  if (isNotEmpty(email)) cy.get(emailRegisterSelector).type(email);
+  if (isNotEmpty(password)) cy.get(firstPasswordRegisterSelector).type(password);
+  if (isNotEmpty(confirmPassword)) cy.get(secondPasswordRegisterSelector).type(confirmPassword);
+  cy.get('button[type="submit"]').click();
 });
 
-Cypress.Commands.add("register", (username, email, password, confirmPassword) => {
-    cy.visit('/account/register');
-    if(isNotEmpty(username)) cy.get('#username').type(username);
-    if(isNotEmpty(email)) cy.get('#email').type(email);
-    if(isNotEmpty(password)) cy.get('#firstPassword').type(password);
-    if(isNotEmpty(confirmPassword)) cy.get('#secondPassword').type(confirmPassword);
-    cy.get('button[type="submit"]').click();
-});
+declare global {
+  namespace Cypress {
+    interface Chainable<Subject> {
+      logout(): Cypress.Chainable;
+      register(username: string, email: string, password: string, confirmPassword: string): Cypress.Chainable;
+    }
+  }
+}
+
+// Convert this to a module instead of script (allows import/export)
+export {};
