@@ -41,12 +41,12 @@ class LoginModal extends React.Component<ILoginModalProps> {
     return (
       <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
         <AvForm onSubmit={this.handleSubmit}>
-          <ModalHeader id="login-title" toggle={handleClose}><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
+          <ModalHeader id="login-title" data-cy="login-title" toggle={handleClose}><Translate contentKey="login.title">Sign in</Translate></ModalHeader>
           <ModalBody>
             <Row>
               <Col md="12">
                 { loginError ?
-                  <Alert color="danger">
+                  <Alert color="danger" data-cy="login-error">
                     <Translate contentKey="login.messages.error.authentication">
                       <strong>Failed to sign in!</strong> Please check your credentials and try again.
                     </Translate>
@@ -61,12 +61,14 @@ class LoginModal extends React.Component<ILoginModalProps> {
                   placeholder={translate('global.form.username.placeholder')}
                   required errorMessage="Username cannot be empty!"
                   autoFocus
+                  data-cy="username"
                 />
                 <AvField
                   name="password" type="password"
                   label={translate('login.form.password')}
                   placeholder={translate('login.form.password.placeholder')}
                   required errorMessage="Password cannot be empty!"
+                  data-cy="password"
                 />
                 <AvGroup check inline<% if (authenticationType === 'session' && databaseType === 'no') { %> hidden<% } %>>
                   <Label className="form-check-label">
@@ -98,7 +100,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
                 <Translate contentKey="entity.action.cancel">Cancel</Translate>
             </Button>
             {' '}
-            <Button color="primary" type="submit"><Translate contentKey="login.form.button">Sign in</Translate></Button>
+            <Button color="primary" type="submit" data-cy="submit"><Translate contentKey="login.form.button">Sign in</Translate></Button>
           </ModalFooter>
         </AvForm>
       </Modal>

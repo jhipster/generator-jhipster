@@ -16,7 +16,8 @@ describe('login modal', () => {
 
   it('requires username', () => {
     cy.get(submitLoginSelector).click();
-    cy.get(errorLoginSelector).should('be.visible');
+    // login page should stay open when login fails
+    cy.get(titleLoginSelector).should('be.visible');
     cy.get(usernameLoginSelector).type('admin');
   });
 
