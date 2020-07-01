@@ -77,11 +77,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
         </a>
       </td>
       <td align="center" valign="middle">
-        <a href="https://opencollective.com/top-web-design-agencies" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/top-web-design-agencies.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://fair-laan.se/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/fair-laan.png">
         </a>
@@ -96,13 +91,13 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://writersperhour.com/urgent-essay-writing-service" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://www.minitool.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
