@@ -72,11 +72,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://uxplanet.org/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/uxplanet.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://fair-laan.se/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/fair-laan.png">
         </a>
@@ -96,13 +91,13 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/writersperhour.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://www.minitool.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/minitool.png">
         </a>
       </td>
+    </tr>
+    <tr>
       <td align="center" valign="middle">
         <a href="https://edubirdie.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">	
