@@ -1,52 +1,73 @@
 import {
+    usernameRegisterSelector,
     emailRegisterSelector,
+    firstPasswordRegisterSelector,
     secondPasswordRegisterSelector,
-} from '../../support/commands';
+    submitRegisterSelector } from '../../support/commands';
 
-describe('/account/register', () => {
+  describe('/account/register', () => {
     beforeEach(() => {
-        cy.server();
-        cy.route('POST', '/api/register').as('registerSave')
+      cy.server();
+      cy.route('POST', '/api/register').as('registerSave');
+    });
+
+    before(() => {
+      cy.visit('');
+      cy.clickOnRegisterItem();
     });
 
     it('should load the register page', () => {
-        cy.visit('/account/register');
-        // TODO add translation support here.
-        cy.contains('h1', 'Registration');
+      cy.get(submitRegisterSelector).should('be.visible');
     });
 
     it('requires username', () => {
-        cy.register('', 'someemail@example.com', 'password', 'password');
-        cy.get('#username').should('have.class', 'is-invalid');
+      cy.get(submitRegisterSelector).click({force: true});
+      // Should stay in the same page when register fails
+      cy.get(submitRegisterSelector).should('be.visible');
+      cy.get(usernameRegisterSelector).type('test');
     });
 
     it('requires email', () => {
-        cy.register('admin', '', 'password', 'password');
-        cy.get(emailRegisterSelector).should('have.class', 'is-invalid');
+      cy.get(submitRegisterSelector).click({force: true});
+      // Should stay in the same page when register fails
+      cy.get(submitRegisterSelector).should('be.visible');
+      cy.get(emailRegisterSelector).type('testtest.fr');
     });
 
     it('requires email in correct format', () => {
-        cy.register('admin', 'someemail', 'password', 'password');
-        cy.get(emailRegisterSelector).should('have.class', 'is-invalid');
+      cy.get(submitRegisterSelector).click({force: true});
+      // Should stay in the same page when register fails
+      cy.get(submitRegisterSelector).should('be.visible');
+      cy.get(emailRegisterSelector).type('test@test.fr');
     });
 
-    it('requires confirm password', () => {
-        cy.register('admin', 'someemail@example.com', 'password', '');
-        cy.get(secondPasswordRegisterSelector).should('have.class', 'is-invalid');
+    it('requires first password', () => {
+      cy.get(submitRegisterSelector).click({force: true});
+      // Should stay in the same page when register fails
+      cy.get(submitRegisterSelector).should('be.visible');
+      cy.get(firstPasswordRegisterSelector).type('test');
     });
 
     it('requires password and confirm password to be same', () => {
-        cy.register('admin', 'someemail@example.com', 'password', 'different-password');
-        cy.get(secondPasswordRegisterSelector).should('have.class', 'is-invalid');
+      cy.get(submitRegisterSelector).click({force: true});
+      // Should stay in the same page when register fails
+      cy.get(submitRegisterSelector).should('be.visible');
+      cy.get(secondPasswordRegisterSelector).type('test');
     });
 
     it('register a valid user', () => {
-        cy.register('new-user', 'new-user@example.com', 'password', 'password');
-        cy.wait('@registerSave').its('status').should('equal', 201);
+      cy.get(submitRegisterSelector).click();
+      cy.wait('@registerSave').its('status').should('equal', 201);
     });
 
     it('error for existing user', () => {
-        cy.register('admin', 'admin@localhost.com', 'password', 'password');
-        cy.wait('@registerSave').its('status').should('equal', 400);
+      cy.visit('');
+      cy.clickOnRegisterItem();
+      cy.get(usernameRegisterSelector).type('admin');
+      cy.get(emailRegisterSelector).type('admin@localhost.com');
+      cy.get(firstPasswordRegisterSelector).type('admin');
+      cy.get(secondPasswordRegisterSelector).type('admin');
+      cy.get(submitRegisterSelector).click();
+      cy.wait('@registerSave').its('status').should('equal', 400);
     });
-});
+  });

@@ -31,10 +31,12 @@ export const passwordLoginSelector = '[data-cy="password"]';
 export const submitLoginSelector = '[data-cy="submit"]';
 
 // Register
+export const titleRegisterSelector = '[data-cy="register-title"]'
 export const usernameRegisterSelector = '[data-cy="username"]';
 export const emailRegisterSelector = '[data-cy="email"]';
 export const firstPasswordRegisterSelector = '[data-cy="firstPassword"]';
 export const secondPasswordRegisterSelector = '[data-cy="secondPassword"]';
+export const submitRegisterSelector = '[data-cy="submit"]';
 
 // Administration
 export const userManagementPageHeadingSelector = '[data-cy="user-management-page-heading"]';
@@ -47,31 +49,6 @@ export const configurationPageHeadingSelector = '[data-cy="configuration-page-he
 // ***********************************************
 // End Specific Selector Attributes for Cypress
 // ***********************************************
-
-const isNotEmpty = (str: string) => str && str !== '';
-
-Cypress.Commands.add('logout', () => {
-  cy.get(accountMenuSelector).click();
-  cy.get(logoutItemSelector).click();
-});
-
-Cypress.Commands.add('register', (username, email, password, confirmPassword) => {
-  cy.visit('/account/register');
-  if (isNotEmpty(username)) cy.get(usernameRegisterSelector).type(username);
-  if (isNotEmpty(email)) cy.get(emailRegisterSelector).type(email);
-  if (isNotEmpty(password)) cy.get(firstPasswordRegisterSelector).type(password);
-  if (isNotEmpty(confirmPassword)) cy.get(secondPasswordRegisterSelector).type(confirmPassword);
-  cy.get('button[type="submit"]').click();
-});
-
-declare global {
-  namespace Cypress {
-    interface Chainable<Subject> {
-      logout(): Cypress.Chainable;
-      register(username: string, email: string, password: string, confirmPassword: string): Cypress.Chainable;
-    }
-  }
-}
 
 // Convert this to a module instead of script (allows import/export)
 export {};

@@ -19,7 +19,7 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h1 jhiTranslate="register.title">Registration</h1>
+            <h1 jhiTranslate="register.title" data-cy="register-title">Registration</h1>
 
             <div class="alert alert-success" *ngIf="success" jhiTranslate="register.messages.success">
                 <strong>Registration saved!</strong> Please check your email for confirmation.
@@ -164,7 +164,7 @@
                     </div>
                 </div>
 
-                <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary" jhiTranslate="register.form.button">Register</button>
+                <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary" jhiTranslate="register.form.button" data-cy="submit">Register</button>
             </form>
 
             <div class="mt-3 alert alert-warning">

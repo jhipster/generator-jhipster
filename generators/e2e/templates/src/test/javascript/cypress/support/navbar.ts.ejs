@@ -7,39 +7,29 @@ import {
     accountMenuSelector,
     registerItemSelector,
     loginItemSelector,
-} from './commands';
+    logoutItemSelector } from './commands';
 
 Cypress.Commands.add('clickOnLoginItem', () => {
-  return cy
-    .get(navbarSelector)
-    .find(accountMenuSelector)
-    .click()
-    .get(loginItemSelector)
-    .click();
+  return cy.get(navbarSelector).find(accountMenuSelector).click().get(loginItemSelector).click();
+});
+
+Cypress.Commands.add('clickOnLogoutItem', () => {
+  return cy.get(navbarSelector).find(accountMenuSelector).click().get(logoutItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnRegisterItem', () => {
-    return cy
-        .get(navbarSelector)
-        .find(accountMenuSelector)
-        .click()
-        .get(registerItemSelector)
-        .click();
+  return cy.get(navbarSelector).find(accountMenuSelector).click().get(registerItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnAdminMenuItem', (item: string) => {
-    return cy
-        .get(navbarSelector)
-        .find(adminMenuSelector)
-        .click()
-        .get(`.dropdown-item[href="/admin/${item}"]`)
-        .click();
+  return cy.get(navbarSelector).find(adminMenuSelector).click().get(`.dropdown-item[href="/admin/${item}"]`).click();
 });
 
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       clickOnLoginItem(): Cypress.Chainable;
+      clickOnLogoutItem(): Cypress.Chainable;
       clickOnRegisterItem(): Cypress.Chainable;
       clickOnAdminMenuItem(item: string): Cypress.Chainable;
     }
