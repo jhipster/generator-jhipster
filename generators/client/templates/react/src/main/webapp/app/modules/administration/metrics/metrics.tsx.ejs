@@ -55,7 +55,7 @@ export const MetricsPage = (props: IMetricsPageProps) => {
 
   return (
     <div>
-      <h2 id="metrics-page-heading">Application Metrics</h2>
+      <h2 id="metrics-page-heading" data-cy="metrics-page-heading">Application Metrics</h2>
       <p>
         <Button onClick={getMetrics} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
           <FontAwesomeIcon icon="sync" />
