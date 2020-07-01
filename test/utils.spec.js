@@ -1,5 +1,4 @@
 const assert = require('yeoman-assert');
-const helpers = require('yeoman-test');
 const sinon = require('sinon');
 const utils = require('../generators/utils');
 
@@ -250,76 +249,6 @@ describe('JHipster Utils', () => {
         it("doesn't  do anything for scoped package", () => {
             const generatorName = utils.normalizeBlueprintName('@corp/foo');
             assert.textEqual(generatorName, '@corp/foo');
-        });
-    });
-    describe('::getAllJhipsterConfig', () => {
-        describe('without blueprint', () => {
-            const cwd = process.cwd();
-            const configRootDir = './test/templates/default';
-            const expectedConfig = {
-                applicationType: 'monolith',
-                baseName: 'sampleMysql',
-                packageName: 'com.mycompany.myapp',
-                packageFolder: 'com/mycompany/myapp',
-                authenticationType: 'session',
-                cacheProvider: 'ehcache',
-                websocket: 'no',
-                databaseType: 'sql',
-                devDatabaseType: 'h2Disk',
-                prodDatabaseType: 'mysql',
-                searchEngine: 'no',
-                buildTool: 'maven',
-                enableTranslation: true,
-                nativeLanguage: 'en',
-                languages: ['en', 'fr'],
-                rememberMeKey: '2bb60a80889aa6e6767e9ccd8714982681152aa5',
-                testFrameworks: ['gatling'],
-            };
-
-            it('load config from alternate directory', () => {
-                const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true, configRootDir);
-                assert.objectContent(loadedConfig, expectedConfig);
-            });
-            it('load config from current working directory', () => {
-                process.chdir(configRootDir);
-                const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true);
-                assert.objectContent(loadedConfig, expectedConfig);
-            });
-            after(() => {
-                process.chdir(cwd);
-            });
-        });
-        describe('with blueprint', () => {
-            const configRootDir = './test/templates/ngx-blueprint';
-
-            it('merges config from main generator and blueprint', () => {
-                const expectedConfig = {
-                    applicationType: 'monolith',
-                    baseName: 'myblueprint',
-                    packageName: 'com.mycompany.myapp',
-                    packageFolder: 'com/mycompany/myapp',
-                    authenticationType: 'jwt',
-                    cacheProvider: 'ehcache',
-                    websocket: false,
-                    databaseType: 'sql',
-                    devDatabaseType: 'h2Disk',
-                    prodDatabaseType: 'mysql',
-                    searchEngine: false,
-                    buildTool: 'maven',
-                    enableTranslation: true,
-                    nativeLanguage: 'en',
-                    languages: ['en', 'fr'],
-                    testFrameworks: ['gatling', 'protractor'],
-                    jhiPrefix: 'jhi',
-                };
-                const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true, configRootDir);
-                assert.objectContent(loadedConfig, expectedConfig);
-            });
-            it('correctly handles deprecated blueprint information', () => {
-                const expectedBlueprints = [{ name: 'generator-jhipster-myblueprint', version: '0.2' }];
-                const loadedConfig = utils.getAllJhipsterConfig(helpers.createDummyGenerator(), true, configRootDir);
-                assert.deepStrictEqual(loadedConfig.get('blueprints'), expectedBlueprints);
-            });
         });
     });
     describe('::stringHashCode', () => {

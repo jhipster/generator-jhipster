@@ -59,7 +59,6 @@ module.exports = {
     getEnumInfo,
     copyObjectProps,
     decodeBase64,
-    getAllJhipsterConfig,
     getDBTypeFromDBValue,
     getBase64Secret,
     getRandomHex,
@@ -582,44 +581,6 @@ function loadYoRc(filePath = '.yo-rc.json') {
         return undefined;
     }
     return JSON.parse(fs.readFileSync(filePath, { encoding: 'utf-8' }));
-}
-
-/**
- * Get all the generator configuration from the .yo-rc.json file
- * @param {Generator} generator the generator instance to use
- * @param {boolean} force force getting direct from file
- * @param {String} base path where the .yo-rc.json file is located. Default is cwd.
- */
-function getAllJhipsterConfig(generator, force, basePath = '') {
-    let configuration = generator && generator.config ? generator.config.getAll() || {} : {};
-    const filePath = path.join(basePath || '', '.yo-rc.json');
-    if ((force || !configuration.baseName) && jhiCore.FileUtils.doesFileExist(filePath)) {
-        let yoRc;
-        if (generator && generator.fs) {
-            yoRc = generator.fs.readJSON(filePath);
-        } else {
-            yoRc = loadYoRc(filePath);
-        }
-        configuration = yoRc['generator-jhipster'];
-        // merge the blueprint configs if available
-        configuration.blueprints = loadBlueprintsFromConfiguration(configuration);
-        const blueprintConfigs = configuration.blueprints.map(bp => yoRc[bp.name]).filter(el => el !== null && el !== undefined);
-        if (blueprintConfigs.length > 0) {
-            const mergedConfigs = Object.assign(...blueprintConfigs);
-            configuration = { ...configuration, ...mergedConfigs };
-        }
-    }
-    if (!configuration.get || typeof configuration.get !== 'function') {
-        configuration = {
-            ...configuration,
-            getAll: () => configuration,
-            get: key => configuration[key],
-            set: (key, value) => {
-                configuration[key] = value;
-            },
-        };
-    }
-    return configuration;
 }
 
 /**

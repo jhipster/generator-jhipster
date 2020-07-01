@@ -144,7 +144,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             getConfig() {
                 const context = this.context;
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 context.useConfigurationFile = false;
                 context.options = this.options;
                 context.baseName = configuration.get('baseName');

@@ -94,7 +94,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             setupConsts() {
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 if (this.languages) {
                     if (this.skipClient) {
                         this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));

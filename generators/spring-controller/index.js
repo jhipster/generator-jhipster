@@ -60,7 +60,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             initializing() {
                 this.log(`The spring-controller ${this.name} is being created.`);
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.baseName = configuration.get('baseName');
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');

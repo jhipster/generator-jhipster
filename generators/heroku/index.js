@@ -74,7 +74,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             initializing() {
                 this.log(chalk.bold('Heroku configuration is starting'));
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.baseName = configuration.get('baseName');
                 this.packageName = configuration.get('packageName');

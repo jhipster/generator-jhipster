@@ -142,7 +142,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
 
                 this.packagejs = packagejs;
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';

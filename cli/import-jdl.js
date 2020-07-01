@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
 const jhiCore = require('jhipster-core');
@@ -25,7 +26,7 @@ const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
 const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
-const jhipsterUtils = require('../generators/utils');
+const { getDBTypeFromDBValue, loadYoRc } = require('../generators/utils');
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
@@ -242,16 +243,20 @@ class JDLProcessor {
     }
 
     getConfig() {
-        if (jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+        if (fs.existsSync('.yo-rc.json')) {
+            const yoRC = loadYoRc('.yo-rc.json');
+            const configuration = yoRC['generator-jhipster'];
+            if (!configuration) {
+                return;
+            }
             logger.info('Found .yo-rc.json on path. This is an existing app');
-            const configuration = jhipsterUtils.getAllJhipsterConfig(null, true);
             if (_.isUndefined(this.options.interactive)) {
                 logger.debug('Setting interactive true for existing apps');
                 this.options.interactive = true;
             }
             this.applicationType = configuration.applicationType;
             this.baseName = configuration.baseName;
-            this.databaseType = configuration.databaseType || jhipsterUtils.getDBTypeFromDBValue(this.options.db);
+            this.databaseType = configuration.databaseType || getDBTypeFromDBValue(this.options.db);
             this.prodDatabaseType = configuration.prodDatabaseType || this.options.db;
             this.devDatabaseType = configuration.devDatabaseType || this.options.db;
             this.skipClient = configuration.skipClient;
