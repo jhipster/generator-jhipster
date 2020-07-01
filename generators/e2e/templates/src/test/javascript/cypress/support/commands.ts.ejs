@@ -50,5 +50,20 @@ export const configurationPageHeadingSelector = '[data-cy="configuration-page-he
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
+Cypress.Commands.add('login', (username: string, password: string) => {
+    cy.clickOnLoginItem();
+    cy.get(usernameLoginSelector).type(username);
+    cy.get(passwordLoginSelector).type(password);
+    cy.get(submitLoginSelector).click();
+  });
+
+declare global {
+    namespace Cypress {
+        interface Chainable<Subject> {
+        login(username: string, password: string): Cypress.Chainable;
+        }
+    }
+}
+
 // Convert this to a module instead of script (allows import/export)
 export {};

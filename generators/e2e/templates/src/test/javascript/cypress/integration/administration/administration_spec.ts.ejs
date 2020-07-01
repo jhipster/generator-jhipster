@@ -11,56 +11,56 @@ import {
 describe('/admin', () => {
 
     before(() => {
-        cy.login();
+        cy.visit('');
+        cy.login('admin','admin');
     });
 
     after(() => {
-        cy.logout();
+        cy.clickOnLogoutItem();
     });
 <%_ if (!skipUserManagement) { _%>
     describe('/user-management', () => {
         it('should load the page', () => {
-             cy.visit('/admin/user-management');
-             cy.contains(userManagementPageHeadingSelector, 'Users');
+          cy.clickOnAdminMenuItem('user-management');
+          cy.get(userManagementPageHeadingSelector).should('be.visible');
         });
     });
 <%_ } _%>
 
     describe('/metrics', () => {
         it('should load the page', () => {
-            cy.visit('/admin/metrics');
-            cy.contains(metricsPageHeadingSelector, 'Application Metrics');
+        cy.clickOnAdminMenuItem('metrics');
+        cy.get(metricsPageHeadingSelector).should('be.visible');
         });
     });
 
-
     describe('/health', () => {
         it('should load the page', () => {
-            cy.visit('/admin/health');
-            cy.contains(healthPageHeadingSelector, 'Health Checks');
+        cy.clickOnAdminMenuItem('health');
+        cy.get(healthPageHeadingSelector).should('be.visible');
         });
     });
 
 <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
     describe('/audits', () => {
         it('should load the page', () => {
-            cy.visit('/admin/audits');
-            cy.contains(auditsPageHeadingSelector, 'Audits');
+          cy.clickOnAdminMenuItem('audits');
+          cy.get(auditsPageHeadingSelector).should('be.visible');
         });
     });
 <%_ } _%>
 
     describe('/logs', () => {
         it('should load the page', () => {
-            cy.visit('/admin/logs');
-            cy.contains(logsPageHeadingSelector, 'Logs');
+        cy.clickOnAdminMenuItem('logs');
+        cy.get(logsPageHeadingSelector).should('be.visible');
         });
     });
 
     describe('/configuration', () => {
         it('should load the page', () => {
-            cy.visit('/admin/configuration');
-            cy.contains(configurationPageHeadingSelector, 'Configuration');
+        cy.clickOnAdminMenuItem('configuration');
+        cy.get(configurationPageHeadingSelector).should('be.visible');
         });
     });
 
