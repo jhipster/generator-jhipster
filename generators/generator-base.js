@@ -51,6 +51,13 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+    constructor(args, opts) {
+        super(args, opts);
+
+        // JHipster config using proxy mode (like a plain object)
+        this.jhipsterConfig = this._getStorage('generator-jhipster').createProxy();
+    }
+
     /**
      * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
      */
