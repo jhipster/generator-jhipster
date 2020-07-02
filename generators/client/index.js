@@ -194,7 +194,7 @@ module.exports = class extends BaseBlueprintGenerator {
             askForClientThemeVariant: prompts.askForClientThemeVariant,
 
             setSharedConfigOptions() {
-                this.configOptions.skipClient = this.skipClient;
+                this.jhipsterConfig.skipClient = this.skipClient;
                 this.configOptions.clientFramework = this.clientFramework;
                 this.configOptions.clientTheme = this.clientTheme;
                 this.configOptions.clientThemeVariant = this.clientThemeVariant;
@@ -293,63 +293,63 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.enableHibernateCache) {
                     this.enableHibernateCache = this.configOptions.enableHibernateCache;
                 }
-                if (this.configOptions.websocket !== undefined) {
-                    this.websocket = this.configOptions.websocket;
+                if (this.jhipsterConfig.websocket !== undefined) {
+                    this.websocket = this.jhipsterConfig.websocket;
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                if (this.configOptions.databaseType) {
-                    this.databaseType = this.configOptions.databaseType;
+                if (this.jhipsterConfig.databaseType) {
+                    this.databaseType = this.jhipsterConfig.databaseType;
                 }
-                if (this.configOptions.devDatabaseType) {
-                    this.devDatabaseType = this.configOptions.devDatabaseType;
+                if (this.jhipsterConfig.devDatabaseType) {
+                    this.devDatabaseType = this.jhipsterConfig.devDatabaseType;
                 }
-                if (this.configOptions.prodDatabaseType) {
-                    this.prodDatabaseType = this.configOptions.prodDatabaseType;
+                if (this.jhipsterConfig.prodDatabaseType) {
+                    this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
                 }
                 if (this.configOptions.messageBroker !== undefined) {
                     this.messageBroker = this.configOptions.messageBroker;
                 }
-                if (this.configOptions.searchEngine !== undefined) {
-                    this.searchEngine = this.configOptions.searchEngine;
+                if (this.jhipsterConfig.searchEngine !== undefined) {
+                    this.searchEngine = this.jhipsterConfig.searchEngine;
                 }
-                if (this.configOptions.buildTool) {
-                    this.buildTool = this.configOptions.buildTool;
+                if (this.jhipsterConfig.buildTool) {
+                    this.buildTool = this.jhipsterConfig.buildTool;
                 }
-                if (this.configOptions.authenticationType) {
-                    this.authenticationType = this.configOptions.authenticationType;
+                if (this.jhipsterConfig.authenticationType) {
+                    this.authenticationType = this.jhipsterConfig.authenticationType;
                 }
                 if (this.configOptions.otherModules) {
                     this.otherModules = this.configOptions.otherModules;
                 }
-                if (this.configOptions.testFrameworks) {
-                    this.testFrameworks = this.configOptions.testFrameworks;
+                if (this.jhipsterConfig.testFrameworks) {
+                    this.testFrameworks = this.jhipsterConfig.testFrameworks;
                 }
                 this.protractorTests = this.testFrameworks.includes('protractor');
 
-                if (this.configOptions.enableTranslation !== undefined) {
-                    this.enableTranslation = this.configOptions.enableTranslation;
+                if (this.jhipsterConfig.enableTranslation !== undefined) {
+                    this.enableTranslation = this.jhipsterConfig.enableTranslation;
                 }
-                if (this.configOptions.nativeLanguage !== undefined) {
-                    this.nativeLanguage = this.configOptions.nativeLanguage;
+                if (this.jhipsterConfig.nativeLanguage !== undefined) {
+                    this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
                 }
-                if (this.configOptions.languages !== undefined) {
-                    this.languages = this.configOptions.languages;
+                if (this.jhipsterConfig.languages !== undefined) {
+                    this.languages = this.jhipsterConfig.languages;
                     this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
                 }
 
-                if (this.configOptions.uaaBaseName !== undefined) {
-                    this.uaaBaseName = this.configOptions.uaaBaseName;
+                if (this.jhipsterConfig.uaaBaseName !== undefined) {
+                    this.uaaBaseName = this.jhipsterConfig.uaaBaseName;
                 }
 
                 // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.configOptions.buildTool);
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
 
                 this.styleSheetExt = 'scss';
                 this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
-                this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
+                this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
             },
 
             composeLanguages() {

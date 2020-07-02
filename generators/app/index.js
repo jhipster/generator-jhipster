@@ -199,27 +199,27 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        this.skipClient = this.configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
-        this.skipServer = this.configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
-        this.skipUserManagement = this.configOptions.skipUserManagement =
+        this.skipClient = this.jhipsterConfig.skipClient = this.options['skip-client'] || this.config.get('skipClient');
+        this.skipServer = this.jhipsterConfig.skipServer = this.options['skip-server'] || this.config.get('skipServer');
+        this.skipUserManagement = this.jhipsterConfig.skipUserManagement =
             this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
         this.skipFakeData = this.configOptions.skipFakeData = this.options['skip-fake-data'];
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
-        this.uaaBaseName = this.configOptions.uaaBaseName = this.options['uaa-base-name'] || this.config.get('uaaBaseName');
+        this.uaaBaseName = this.jhipsterConfig.uaaBaseName = this.options['uaa-base-name'] || this.config.get('uaaBaseName');
 
-        this.entitySuffix = this.configOptions.entitySuffix = _.isNil(this.config.get('entitySuffix'))
+        this.entitySuffix = this.jhipsterConfig.entitySuffix = _.isNil(this.config.get('entitySuffix'))
             ? this.options['entity-suffix']
             : this.config.get('entitySuffix');
 
-        this.dtoSuffix = this.configOptions.dtoSuffix = _.isNil(this.config.get('dtoSuffix'))
+        this.dtoSuffix = this.jhipsterConfig.dtoSuffix = _.isNil(this.config.get('dtoSuffix'))
             ? this.options['dto-suffix']
             : this.config.get('dtoSuffix');
 
         this.withEntities = this.options['with-entities'];
         this.skipChecks = this.options['skip-checks'];
-        this.prettierJava = this.configOptions.prettierJava = this.options['prettier-java'] || this.config.get('prettierJava');
+        this.prettierJava = this.jhipsterConfig.prettierJava = this.options['prettier-java'] || this.config.get('prettierJava');
 
         let blueprints = this.options.blueprints || '';
         // check for old single blueprint declaration
@@ -373,20 +373,20 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             setup() {
                 this.configOptions.skipI18nQuestion = true;
-                this.configOptions.baseName = this.baseName;
+                this.jhipsterConfig.baseName = this.baseName;
                 this.configOptions.logo = false;
                 this.configOptions.otherModules = this.otherModules;
                 this.generatorType = 'app';
                 if (this.applicationType === 'microservice') {
                     this.skipClient = true;
                     this.generatorType = 'server';
-                    this.skipUserManagement = this.configOptions.skipUserManagement = true;
+                    this.skipUserManagement = this.jhipsterConfig.skipUserManagement = true;
                 }
                 if (this.applicationType === 'uaa') {
                     this.skipClient = true;
                     this.generatorType = 'server';
-                    this.skipUserManagement = this.configOptions.skipUserManagement = false;
-                    this.authenticationType = this.configOptions.authenticationType = 'uaa';
+                    this.skipUserManagement = this.jhipsterConfig.skipUserManagement = false;
+                    this.authenticationType = this.jhipsterConfig.authenticationType = 'uaa';
                 }
                 if (this.skipClient) {
                     // defaults to use when skipping client
@@ -395,17 +395,17 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.skipServer) {
                     // defaults to use when skipping server
                     this.generatorType = 'client';
-                    this.configOptions.databaseType = this.getDBTypeFromDBValue(this.options.db);
-                    this.configOptions.devDatabaseType = this.options.db;
-                    this.configOptions.prodDatabaseType = this.options.db;
-                    this.configOptions.authenticationType = this.options.auth;
-                    this.configOptions.uaaBaseName = this.options.uaaBaseName;
+                    this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
+                    this.jhipsterConfig.devDatabaseType = this.options.db;
+                    this.jhipsterConfig.prodDatabaseType = this.options.db;
+                    this.jhipsterConfig.authenticationType = this.options.auth;
+                    this.jhipsterConfig.uaaBaseName = this.options.uaaBaseName;
                     this.configOptions.useYarn = this.useYarn;
-                    this.configOptions.searchEngine = this.options['search-engine'];
-                    this.configOptions.buildTool = this.options.build;
-                    this.configOptions.websocket = this.options.websocket;
+                    this.jhipsterConfig.searchEngine = this.options['search-engine'];
+                    this.jhipsterConfig.buildTool = this.options.build;
+                    this.jhipsterConfig.websocket = this.options.websocket;
                 }
-                this.configOptions.clientPackageManager = this.clientPackageManager;
+                this.jhipsterConfig.clientPackageManager = this.clientPackageManager;
             },
 
             composeServer() {
@@ -465,11 +465,11 @@ module.exports = class extends BaseBlueprintGenerator {
             askForMoreModules: prompts.askForMoreModules,
 
             setSharedConfigOptions() {
-                this.configOptions.testFrameworks = this.testFrameworks;
-                this.configOptions.enableTranslation = this.enableTranslation;
-                this.configOptions.nativeLanguage = this.nativeLanguage;
-                this.configOptions.languages = this.languages;
-                this.configOptions.clientPackageManager = this.clientPackageManager;
+                this.jhipsterConfig.testFrameworks = this.testFrameworks;
+                this.jhipsterConfig.enableTranslation = this.enableTranslation;
+                this.jhipsterConfig.nativeLanguage = this.nativeLanguage;
+                this.jhipsterConfig.languages = this.languages;
+                this.jhipsterConfig.clientPackageManager = this.clientPackageManager;
             },
 
             composeLanguages() {

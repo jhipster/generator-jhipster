@@ -171,32 +171,32 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.configOptions.applicationType) {
                     this.applicationType = this.configOptions.applicationType;
                 }
-                if (this.configOptions.baseName) {
-                    this.baseName = this.configOptions.baseName;
+                if (this.jhipsterConfig.baseName) {
+                    this.baseName = this.jhipsterConfig.baseName;
                 }
-                if (this.configOptions.websocket !== undefined) {
-                    this.websocket = this.configOptions.websocket;
+                if (this.jhipsterConfig.websocket !== undefined) {
+                    this.websocket = this.jhipsterConfig.websocket;
                 }
-                if (this.configOptions.databaseType) {
-                    this.databaseType = this.configOptions.databaseType;
+                if (this.jhipsterConfig.databaseType) {
+                    this.databaseType = this.jhipsterConfig.databaseType;
                 }
-                if (this.configOptions.searchEngine !== undefined) {
-                    this.searchEngine = this.configOptions.searchEngine;
+                if (this.jhipsterConfig.searchEngine !== undefined) {
+                    this.searchEngine = this.jhipsterConfig.searchEngine;
                 }
                 if (this.configOptions.messageBroker !== undefined) {
                     this.messageBroker = this.configOptions.messageBroker;
                 }
-                if (this.configOptions.enableTranslation) {
-                    this.enableTranslation = this.configOptions.enableTranslation;
+                if (this.jhipsterConfig.enableTranslation) {
+                    this.enableTranslation = this.jhipsterConfig.enableTranslation;
                 }
-                if (this.configOptions.nativeLanguage) {
-                    this.nativeLanguage = this.configOptions.nativeLanguage;
+                if (this.jhipsterConfig.nativeLanguage) {
+                    this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
                 }
-                if (this.configOptions.skipClient) {
-                    this.skipClient = this.configOptions.skipClient;
+                if (this.jhipsterConfig.skipClient) {
+                    this.skipClient = this.jhipsterConfig.skipClient;
                 }
-                if (this.configOptions.skipServer) {
-                    this.skipServer = this.configOptions.skipServer;
+                if (this.jhipsterConfig.skipServer) {
+                    this.skipServer = this.jhipsterConfig.skipServer;
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;

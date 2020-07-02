@@ -55,7 +55,7 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        this.uaaBaseName = this.options.uaaBaseName || this.configOptions.uaaBaseName || this.config.get('uaaBaseName');
+        this.uaaBaseName = this.options.uaaBaseName || this.jhipsterConfig.uaaBaseName || this.config.get('uaaBaseName');
 
         this.setupServerOptions(this);
 
@@ -353,25 +353,26 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.configOptions.packageName = this.packageName;
                 this.configOptions.cacheProvider = this.cacheProvider;
                 this.configOptions.enableHibernateCache = this.enableHibernateCache;
-                this.configOptions.websocket = this.websocket;
-                this.configOptions.databaseType = this.databaseType;
-                this.configOptions.devDatabaseType = this.devDatabaseType;
-                this.configOptions.prodDatabaseType = this.prodDatabaseType;
-                this.configOptions.searchEngine = this.searchEngine;
+                this.jhipsterConfig.websocket = this.websocket;
+                this.jhipsterConfig.databaseType = this.databaseType;
+                this.jhipsterConfig.devDatabaseType = this.devDatabaseType;
+                this.jhipsterConfig.prodDatabaseType = this.prodDatabaseType;
+                this.jhipsterConfig.searchEngine = this.searchEngine;
                 this.configOptions.messageBroker = this.messageBroker;
                 this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
-                this.configOptions.buildTool = this.buildTool;
+                this.jhipsterConfig.buildTool = this.buildTool;
                 this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
-                this.configOptions.authenticationType = this.authenticationType;
+                this.jhipsterConfig.authenticationType = this.authenticationType;
                 const uaaBaseName = this.uaaBaseName;
                 if (uaaBaseName) {
-                    this.configOptions.uaaBaseName = this.uaaBaseName;
+                    this.jhipsterConfig.uaaBaseName = this.uaaBaseName;
                 }
                 this.configOptions.serverPort = this.serverPort;
 
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
+                this.CLIENT_DIST_DIR =
+                    this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
             },
         };
     }
@@ -468,27 +469,27 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             getSharedConfigOptions() {
-                if (this.configOptions.enableTranslation !== undefined) {
-                    this.enableTranslation = this.configOptions.enableTranslation;
+                if (this.jhipsterConfig.enableTranslation !== undefined) {
+                    this.enableTranslation = this.jhipsterConfig.enableTranslation;
                 }
-                if (this.configOptions.nativeLanguage !== undefined) {
-                    this.nativeLanguage = this.configOptions.nativeLanguage;
+                if (this.jhipsterConfig.nativeLanguage !== undefined) {
+                    this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
                 }
-                if (this.configOptions.languages !== undefined) {
-                    this.languages = this.configOptions.languages;
+                if (this.jhipsterConfig.languages !== undefined) {
+                    this.languages = this.jhipsterConfig.languages;
                 }
                 this.testFrameworks = [];
-                if (this.configOptions.testFrameworks) {
-                    this.testFrameworks = this.configOptions.testFrameworks;
+                if (this.jhipsterConfig.testFrameworks) {
+                    this.testFrameworks = this.jhipsterConfig.testFrameworks;
                 }
                 if (this.configOptions.clientFramework) {
                     this.clientFramework = this.configOptions.clientFramework;
                 }
-                if (this.configOptions.skipClient) {
-                    this.skipClient = this.configOptions.skipClient;
+                if (this.jhipsterConfig.skipClient) {
+                    this.skipClient = this.jhipsterConfig.skipClient;
                 }
-                if (this.configOptions.uaaBaseName !== undefined) {
-                    this.uaaBaseName = this.configOptions.uaaBaseName;
+                if (this.jhipsterConfig.uaaBaseName !== undefined) {
+                    this.uaaBaseName = this.jhipsterConfig.uaaBaseName;
                 }
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');

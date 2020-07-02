@@ -33,7 +33,7 @@ function askForLanguages() {
             choices: languageOptions,
         },
     ];
-    if (this.enableTranslation || this.configOptions.enableTranslation) {
+    if (this.enableTranslation || this.jhipsterConfig.enableTranslation) {
         return this.prompt(prompts).then(props => {
             this.languagesToApply = props.languages || [];
         });
