@@ -60,9 +60,12 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        this.authenticationType = this.config.get('authenticationType');
-        this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
-        this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
+        if (this.options.help) {
+            return;
+        }
+
+        this.skipClient = this.options.skipClient || this.config.get('skipClient');
+        this.skipServer = this.options.skipServer || this.config.get('skipServer');
         // Validate languages passed as argument
         this.languages = this.options.languages;
         if (this.languages) {
@@ -92,8 +95,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.checkInvocationFromCLI();
             },
 
-            setupConsts() {
-                const configuration = this.config;
+            validate() {
+                this.currentLanguages = this.jhipsterConfig.languages || [];
                 if (this.languages) {
                     if (this.skipClient) {
                         this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));
@@ -106,23 +109,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 } else {
                     this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
-                this.applicationType = configuration.get('applicationType');
-                this.reactive = configuration.get('reactive') || this.jhipsterConfig.reactive;
-                this.baseName = configuration.get('baseName');
-                this.packageFolder = configuration.get('packageFolder');
-                this.capitalizedBaseName = _.upperFirst(this.baseName);
-                this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
-                this.databaseType = configuration.get('databaseType');
-                this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
-                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                this.enableTranslation = configuration.get('enableTranslation');
-                this.currentLanguages = configuration.get('languages');
-                this.clientFramework = configuration.get('clientFramework');
-                this.serviceDiscoveryType =
-                    configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
-                // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(configuration.get('buildTool'));
-                this.skipUserManagement = configuration.get('skipUserManagement');
             },
         };
     }
@@ -148,10 +134,7 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             saveConfig() {
-                if (this.enableTranslation) {
-                    this.languages = _.union(this.currentLanguages, this.languagesToApply);
-                    this.config.set('languages', this.languages);
-                }
+                this.jhipsterConfig.languages = _.union(this.currentLanguages, this.languagesToApply);
             },
         };
     }
@@ -168,39 +151,29 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             getSharedConfigOptions() {
-                if (this.jhipsterConfig.applicationType) {
-                    this.applicationType = this.jhipsterConfig.applicationType;
-                }
-                if (this.jhipsterConfig.baseName) {
-                    this.baseName = this.jhipsterConfig.baseName;
-                }
-                if (this.jhipsterConfig.websocket !== undefined) {
-                    this.websocket = this.jhipsterConfig.websocket;
-                }
-                if (this.jhipsterConfig.databaseType) {
-                    this.databaseType = this.jhipsterConfig.databaseType;
-                }
-                if (this.jhipsterConfig.searchEngine !== undefined) {
-                    this.searchEngine = this.jhipsterConfig.searchEngine;
-                }
-                if (this.jhipsterConfig.messageBroker !== undefined) {
-                    this.messageBroker = this.jhipsterConfig.messageBroker;
-                }
-                if (this.jhipsterConfig.enableTranslation) {
-                    this.enableTranslation = this.jhipsterConfig.enableTranslation;
-                }
-                if (this.jhipsterConfig.nativeLanguage) {
-                    this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
-                }
-                if (this.jhipsterConfig.skipClient) {
-                    this.skipClient = this.jhipsterConfig.skipClient;
-                }
-                if (this.jhipsterConfig.skipServer) {
-                    this.skipServer = this.jhipsterConfig.skipServer;
-                }
-                if (this.jhipsterConfig.clientFramework) {
-                    this.clientFramework = this.jhipsterConfig.clientFramework;
-                }
+                this.applicationType = this.jhipsterConfig.applicationType;
+                this.reactive = this.jhipsterConfig.reactive;
+                this.baseName = this.jhipsterConfig.baseName;
+                this.authenticationType = this.jhipsterConfig.authenticationType;
+                this.packageFolder = this.jhipsterConfig.packageFolder;
+                this.websocket = this.jhipsterConfig.websocket === 'no' ? false : this.jhipsterConfig.websocket;
+                this.databaseType = this.jhipsterConfig.databaseType;
+                this.searchEngine = this.jhipsterConfig.searchEngine === 'no' ? false : this.jhipsterConfig.searchEngine;
+                this.messageBroker = this.jhipsterConfig.messageBroker === 'no' ? false : this.jhipsterConfig.messageBroker;
+                this.clientFramework = this.jhipsterConfig.clientFramework;
+                this.serviceDiscoveryType =
+                    this.jhipsterConfig.serviceDiscoveryType === 'no' ? false : this.jhipsterConfig.serviceDiscoveryType;
+                // Make dist dir available in templates
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
+                this.skipUserManagement = this.jhipsterConfig.skipUserManagement;
+
+                this.enableTranslation = this.jhipsterConfig.enableTranslation;
+                this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
+                this.skipClient = this.jhipsterConfig.skipClient;
+                this.skipServer = this.jhipsterConfig.skipServer;
+                this.clientFramework = this.jhipsterConfig.clientFramework;
+
+                this.capitalizedBaseName = _.upperFirst(this.baseName);
             },
         };
     }

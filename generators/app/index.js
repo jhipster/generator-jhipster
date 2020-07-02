@@ -25,6 +25,7 @@ const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 const statistics = require('../statistics');
 const jhipsterUtils = require('../utils');
+const { appDefaultConfig, defaultConfig } = require('../generator-defaults');
 
 let useBlueprints;
 
@@ -39,18 +40,23 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
             hide: true,
         });
+        this.option('defaults', {
+            desc: 'Execute jhipster with default config',
+            type: Boolean,
+            defaults: false,
+        });
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client-side application generation',
             type: Boolean,
-            defaults: false,
+            defaults: defaultConfig.skipClient,
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side application generation',
             type: Boolean,
-            defaults: false,
+            defaults: defaultConfig.skipServer,
         });
 
         // This adds support for a `--skip-git` flag
@@ -71,21 +77,21 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('skip-user-management', {
             desc: 'Skip the user management module during app generation',
             type: Boolean,
-            defaults: false,
+            defaults: defaultConfig.skipUserManagement,
         });
 
         // This adds support for a `--skip-check-length-of-identifier` flag
         this.option('skip-check-length-of-identifier', {
             desc: 'Skip check the length of the identifier, only for recent Oracle databases that support 30+ characters metadata',
             type: Boolean,
-            defaults: false,
+            defaults: defaultConfig.skipCheckLengthOfIdentifier,
         });
 
         // This adds support for a `--skip-fake-data` flag
         this.option('skip-fake-data', {
             desc: 'Skip generation of fake data for development',
             type: Boolean,
-            defaults: false,
+            defaults: defaultConfig.skipFakeData,
         });
 
         // This adds support for a `--with-entities` flag
@@ -106,21 +112,18 @@ module.exports = class extends BaseBlueprintGenerator {
         this.option('jhi-prefix', {
             desc: 'Add prefix before services, controllers and states name',
             type: String,
-            defaults: 'jhi',
         });
 
         // This adds support for a `--entity-suffix` flag
         this.option('entity-suffix', {
             desc: 'Add suffix after entities name',
             type: String,
-            defaults: '',
         });
 
         // This adds support for a `--dto-suffix` flag
         this.option('dto-suffix', {
             desc: 'Add suffix after dtos name',
             type: String,
-            defaults: 'DTO',
         });
 
         // This adds support for a `--yarn` flag
@@ -199,28 +202,88 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        this.skipClient = this.jhipsterConfig.skipClient = this.options['skip-client'] || this.config.get('skipClient');
-        this.skipServer = this.jhipsterConfig.skipServer = this.options['skip-server'] || this.config.get('skipServer');
-        this.skipUserManagement = this.jhipsterConfig.skipUserManagement =
-            this.options['skip-user-management'] || this.config.get('skipUserManagement');
-        this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
-            this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
-        this.skipFakeData = this.configOptions.skipFakeData = this.options['skip-fake-data'];
-        this.jhiPrefix = this.jhipsterConfig.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
-        this.uaaBaseName = this.jhipsterConfig.uaaBaseName =
-            this.options.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
+        // Just constructing help, stop here
+        if (this.options.help) {
+            return;
+        }
 
-        this.entitySuffix = this.jhipsterConfig.entitySuffix = _.isNil(this.config.get('entitySuffix'))
-            ? this.options['entity-suffix']
-            : this.config.get('entitySuffix');
+        // Load runtime only options
+        this.withEntities = this.configOptions.withEntities = this.options.withEntities;
+        this.skipChecks = this.configOptions.skipChecks = this.options.skipChecks;
+        this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
+        this.experimental = this.configOptions.experimental = this.options.experimental;
 
-        this.dtoSuffix = this.jhipsterConfig.dtoSuffix = _.isNil(this.config.get('dtoSuffix'))
-            ? this.options['dto-suffix']
-            : this.config.get('dtoSuffix');
+        // Load stored options
+        if (this.options.skipClient) {
+            this.skipClient = this.jhipsterConfig.skipClient = true;
+        }
+        if (this.options.skipServer) {
+            this.skipServer = this.jhipsterConfig.skipServer = true;
+        }
+        if (this.options.skipFakeData) {
+            this.jhipsterConfig.skipFakeData = true;
+        }
+        if (this.options.skipUserManagement) {
+            this.jhipsterConfig.skipUserManagement = true;
+        }
+        if (this.options.skipCheckLengthOfIdentifier) {
+            this.jhipsterConfig.skipCheckLengthOfIdentifier = true;
+        }
+        if (this.options.prettierJava) {
+            this.jhipsterConfig.prettierJava = true;
+        }
+        if (this.options.skipCommitHook) {
+            this.jhipsterConfig.skipCommitHook = true;
+        }
 
-        this.withEntities = this.options['with-entities'];
-        this.skipChecks = this.options['skip-checks'];
-        this.prettierJava = this.jhipsterConfig.prettierJava = this.options['prettier-java'] || this.config.get('prettierJava');
+        if (this.options.db) {
+            this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
+            this.jhipsterConfig.devDatabaseType = this.options.db;
+            this.jhipsterConfig.prodDatabaseType = this.options.db;
+        }
+        if (this.options.auth) {
+            this.jhipsterConfig.authenticationType = this.options.auth;
+        }
+        if (this.options.uaaBaseName) {
+            this.jhipsterConfig.uaaBaseName = this.options.uaaBaseName;
+        }
+        if (this.options.searchEngine) {
+            this.jhipsterConfig.searchEngine = this.options.searchEngine;
+        }
+        if (this.options.build) {
+            this.jhipsterConfig.buildTool = this.options.build;
+        }
+        if (this.options.websocket) {
+            this.jhipsterConfig.websocket = this.options.websocket;
+        }
+        if (this.options.jhiPrefix) {
+            this.jhipsterConfig.jhiPrefix = this.options.jhiPrefix;
+        }
+        if (this.options.entitySuffix) {
+            this.jhipsterConfig.entitySuffix = this.options.entitySuffix;
+        }
+        if (this.options.dtoSuffix) {
+            this.jhipsterConfig.dtoSuffix = this.options.dtoSuffix;
+        }
+        this.useYarn = this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
+        this.useNpm = this.configOptions.useNpm = !this.options.yarn;
+        this.jhipsterConfig.clientPackageManager = this.useYarn ? 'yarn' : 'npm';
+
+        if (this.options.creationTimestamp) {
+            const creationTimestamp = this.parseCreationTimestamp();
+            if (creationTimestamp) {
+                this.jhipsterConfig.creationTimestamp = creationTimestamp;
+            }
+        }
+
+        // Use jhipster defaults
+        if (this.options.defaults) {
+            this.setConfigDefaults();
+        }
+
+        this.existingProject = this.jhipsterConfig.baseName !== undefined && this.jhipsterConfig.applicationType !== undefined;
+        // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+        this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
         let blueprints = this.options.blueprints || '';
         // check for old single blueprint declaration
@@ -239,16 +302,10 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.blueprints = this.configOptions.blueprints = blueprints;
 
-        this.useNpm = this.configOptions.useNpm = !this.options.yarn;
-        this.useYarn = !this.useNpm;
-
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('app');
 
-        this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
-        this.experimental = this.configOptions.experimental = this.options.experimental;
         this.registerPrettierTransform();
         this.registerForceEntitiesTransform();
-        this.setupAppOptions(this);
     }
 
     _initializing() {
@@ -297,50 +354,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.error(`You can not pass both ${chalk.yellow('--skip-client')} and ${chalk.yellow('--skip-server')} together`);
                 }
             },
-
-            setupconsts() {
-                this.applicationType = this.config.get('applicationType');
-                if (!this.applicationType) {
-                    this.applicationType = 'monolith';
-                }
-                this.baseName = this.config.get('baseName');
-                this.jhipsterVersion = packagejs.version;
-                if (this.jhipsterVersion === undefined) {
-                    this.jhipsterVersion = this.config.get('jhipsterVersion');
-                }
-                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-                this.jhipsterOldVersion = this.config.get('jhipsterVersion');
-                this.otherModules = this.config.get('otherModules') || [];
-                if (this.blueprints && this.blueprints.length > 0) {
-                    this.blueprints.forEach(blueprint => {
-                        blueprint.version = this.findBlueprintVersion(blueprint.name) || blueprint.version || 'latest';
-                    });
-
-                    // Remove potential previous value to avoid duplicates
-                    this.otherModules = this.otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
-                    this.otherModules.push(...this.blueprints);
-                }
-                this.testFrameworks = this.config.get('testFrameworks');
-                this.enableTranslation = this.config.get('enableTranslation');
-                this.nativeLanguage = this.config.get('nativeLanguage');
-                this.languages = this.config.get('languages');
-                const configFound = this.baseName !== undefined && this.applicationType !== undefined;
-                if (configFound) {
-                    this.existingProject = true;
-                    // If translation is not defined, it is enabled by default
-                    if (this.enableTranslation === undefined) {
-                        this.enableTranslation = true;
-                    }
-                }
-                this.clientPackageManager = this.config.get('clientPackageManager');
-                if (!this.clientPackageManager) {
-                    if (this.useNpm) {
-                        this.clientPackageManager = 'npm';
-                    } else {
-                        this.clientPackageManager = 'yarn';
-                    }
-                }
-            },
         };
     }
 
@@ -367,20 +380,35 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             setup() {
+                // Update jhipsterVersion.
+                this.jhipsterConfig.jhipsterVersion = packagejs.version;
+                this.jhipsterConfig.creationTimestamp = this.parseCreationTimestamp() || this.config.get('') || new Date().getTime();
+
+                this.otherModules = this.config.get('otherModules') || [];
+                if (this.blueprints && this.blueprints.length > 0) {
+                    this.blueprints.forEach(blueprint => {
+                        blueprint.version = this.findBlueprintVersion(blueprint.name) || blueprint.version || 'latest';
+                    });
+
+                    // Remove potential previous value to avoid duplicates
+                    this.otherModules = this.otherModules.filter(module => this.blueprints.findIndex(bp => bp.name === module.name) === -1);
+                    this.otherModules.push(...this.blueprints);
+                }
+                this.jhipsterConfig.otherModules = this.otherModules;
+
                 this.configOptions.skipI18nQuestion = true;
-                this.jhipsterConfig.baseName = this.baseName;
                 this.configOptions.logo = false;
                 this.generatorType = 'app';
-                if (this.applicationType === 'microservice') {
-                    this.skipClient = true;
+                if (this.jhipsterConfig.applicationType === 'microservice') {
+                    this.jhipsterConfig.skipClient = true;
                     this.generatorType = 'server';
-                    this.skipUserManagement = this.jhipsterConfig.skipUserManagement = true;
+                    this.jhipsterConfig.skipUserManagement = true;
                 }
-                if (this.applicationType === 'uaa') {
-                    this.skipClient = true;
+                if (this.jhipsterConfig.applicationType === 'uaa') {
+                    this.jhipsterConfig.skipClient = true;
                     this.generatorType = 'server';
-                    this.skipUserManagement = this.jhipsterConfig.skipUserManagement = false;
-                    this.authenticationType = this.jhipsterConfig.authenticationType = 'uaa';
+                    this.jhipsterConfig.skipUserManagement = false;
+                    this.jhipsterConfig.authenticationType = 'uaa';
                 }
                 if (this.skipClient) {
                     // defaults to use when skipping client
@@ -389,17 +417,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.skipServer) {
                     // defaults to use when skipping server
                     this.generatorType = 'client';
-                    this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
-                    this.jhipsterConfig.devDatabaseType = this.options.db;
-                    this.jhipsterConfig.prodDatabaseType = this.options.db;
-                    this.jhipsterConfig.authenticationType = this.options.auth;
-                    this.jhipsterConfig.uaaBaseName = this.options.uaaBaseName;
-                    this.configOptions.useYarn = this.useYarn;
-                    this.jhipsterConfig.searchEngine = this.options['search-engine'];
-                    this.jhipsterConfig.buildTool = this.options.build;
-                    this.jhipsterConfig.websocket = this.options.websocket;
                 }
-                this.jhipsterConfig.clientPackageManager = this.clientPackageManager;
+
+                // Set app defaults
+                this.setConfigDefaults(appDefaultConfig);
             },
 
             composeServer() {
@@ -458,14 +479,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
             askForMoreModules: prompts.askForMoreModules,
 
-            setSharedConfigOptions() {
-                this.jhipsterConfig.testFrameworks = this.testFrameworks;
-                this.jhipsterConfig.enableTranslation = this.enableTranslation;
-                this.jhipsterConfig.nativeLanguage = this.nativeLanguage;
-                this.jhipsterConfig.languages = this.languages;
-                this.jhipsterConfig.clientPackageManager = this.clientPackageManager;
-            },
-
             composeLanguages() {
                 if (this.skipI18n || this.configOptions.skipComposeLanguages) return;
                 this.configOptions.skipComposeLanguages = true;
@@ -473,40 +486,19 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             saveConfig() {
-                const creationTimestamp = this.parseCreationTimestamp() || this.config.get('creationTimestamp') || new Date().getTime();
+                this.setConfigDefaults();
 
-                const config = {
-                    jhipsterVersion: packagejs.version,
-                    creationTimestamp,
-                    applicationType: this.applicationType,
-                    baseName: this.baseName,
-                    testFrameworks: this.testFrameworks,
-                    jhiPrefix: this.jhiPrefix,
-                    entitySuffix: this.entitySuffix,
-                    dtoSuffix: this.dtoSuffix,
-                    skipCheckLengthOfIdentifier: this.skipCheckLengthOfIdentifier,
-                    otherModules: this.otherModules,
-                    enableTranslation: this.enableTranslation,
-                    clientPackageManager: this.clientPackageManager,
-                };
-                if (this.enableTranslation) {
-                    config.nativeLanguage = this.nativeLanguage;
-                    config.languages = this.languages;
-                }
+                const config = {};
                 this.blueprints && (config.blueprints = this.blueprints);
                 this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
-                this.reactive && (config.reactive = this.reactive);
-                this.skipClient && (config.skipClient = true);
-                this.skipServer && (config.skipServer = true);
-                this.skipUserManagement && (config.skipUserManagement = true);
-                this.skipFakeData && (config.skipFakeData = true);
-                this.prettierJava && (config.prettierJava = true);
                 this.config.set(config);
+
+                this.validateConfiguration();
             },
 
             insight() {
                 const yorc = {
-                    ..._.omit(this.configOptions, [
+                    ..._.omit(this.jhipsterConfig, [
                         'jhiPrefix',
                         'baseName',
                         'jwtSecretKey',
@@ -515,8 +507,8 @@ module.exports = class extends BaseBlueprintGenerator {
                         'rememberMeKey',
                     ]),
                 };
-                yorc.applicationType = this.applicationType;
-                statistics.sendYoRc(yorc, this.existingProject, this.jhipsterVersion);
+                yorc.applicationType = this.jhipsterConfig.applicationType;
+                statistics.sendYoRc(yorc, this.existingProject, this.jhipsterConfig.jhipsterVersion);
             },
         };
     }

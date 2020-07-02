@@ -305,16 +305,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.jwtSecretKey = getBase64Secret(null, 64);
                     }
 
-                    // If translation is not defined, it is enabled by default
-                    if (this.enableTranslation === undefined) {
-                        this.enableTranslation = true;
-                    }
-                    if (this.nativeLanguage === undefined) {
-                        this.nativeLanguage = 'en';
-                    }
-                    if (this.languages === undefined) {
-                        this.languages = ['en', 'fr'];
-                    }
                     // user-management will be handled by UAA app, oauth expects users to be managed in IpP
                     if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
                         this.skipUserManagement = true;
@@ -423,34 +413,12 @@ module.exports = class extends BaseBlueprintGenerator {
 
             saveConfig() {
                 const config = {
-                    jhipsterVersion: packagejs.version,
-                    applicationType: this.applicationType,
-                    baseName: this.baseName,
                     packageName: this.packageName,
                     packageFolder: this.packageFolder,
-                    serverPort: this.serverPort,
-                    authenticationType: this.authenticationType,
-                    uaaBaseName: this.uaaBaseName,
-                    cacheProvider: this.cacheProvider,
-                    enableHibernateCache: this.enableHibernateCache,
-                    websocket: this.websocket,
-                    databaseType: this.databaseType,
-                    devDatabaseType: this.devDatabaseType,
-                    prodDatabaseType: this.prodDatabaseType,
-                    searchEngine: this.searchEngine,
-                    messageBroker: this.messageBroker,
-                    serviceDiscoveryType: this.serviceDiscoveryType,
-                    buildTool: this.buildTool,
-                    enableSwaggerCodegen: this.enableSwaggerCodegen,
                     jwtSecretKey: this.jwtSecretKey,
                     rememberMeKey: this.rememberMeKey,
-                    enableTranslation: this.enableTranslation,
                     embeddableLaunchScript: this.embeddableLaunchScript,
                 };
-                if (this.enableTranslation && !this.configOptions.skipI18nQuestion) {
-                    config.nativeLanguage = this.nativeLanguage;
-                    config.languages = this.languages;
-                }
                 this.config.set(config);
             },
         };
@@ -465,28 +433,13 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             getSharedConfigOptions() {
-                if (this.jhipsterConfig.enableTranslation !== undefined) {
-                    this.enableTranslation = this.jhipsterConfig.enableTranslation;
-                }
-                if (this.jhipsterConfig.nativeLanguage !== undefined) {
-                    this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
-                }
-                if (this.jhipsterConfig.languages !== undefined) {
-                    this.languages = this.jhipsterConfig.languages;
-                }
-                this.testFrameworks = [];
-                if (this.jhipsterConfig.testFrameworks) {
-                    this.testFrameworks = this.jhipsterConfig.testFrameworks;
-                }
-                if (this.jhipsterConfig.clientFramework) {
-                    this.clientFramework = this.jhipsterConfig.clientFramework;
-                }
-                if (this.jhipsterConfig.skipClient) {
-                    this.skipClient = this.jhipsterConfig.skipClient;
-                }
-                if (this.jhipsterConfig.uaaBaseName !== undefined) {
-                    this.uaaBaseName = this.jhipsterConfig.uaaBaseName;
-                }
+                this.enableTranslation = this.jhipsterConfig.enableTranslation;
+                this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
+                this.languages = this.jhipsterConfig.languages;
+                this.clientFramework = this.jhipsterConfig.clientFramework;
+                this.skipClient = this.jhipsterConfig.skipClient;
+                this.uaaBaseName = this.jhipsterConfig.uaaBaseName;
+                this.testFrameworks = this.jhipsterConfig.testFrameworks || [];
                 this.gatlingTests = this.testFrameworks.includes('gatling');
                 this.cucumberTests = this.testFrameworks.includes('cucumber');
             },

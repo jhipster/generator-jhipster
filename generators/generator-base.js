@@ -34,6 +34,7 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
+const { defaultConfig } = require('./generator-defaults');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -1896,10 +1897,17 @@ module.exports = class extends PrivateBase {
             },
         ];
 
-        generator.prompt(prompts).then(prompt => {
-            generator.enableTranslation = generator.jhipsterConfig.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = generator.jhipsterConfig.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = generator.jhipsterConfig.languages = [prompt.nativeLanguage].concat(prompt.languages);
+        generator.prompt(prompts).then(answers => {
+            generator.enableTranslation = generator.jhipsterConfig.enableTranslation = answers.enableTranslation;
+            generator.nativeLanguage = generator.jhipsterConfig.nativeLanguage = answers.nativeLanguage;
+            const languages = [];
+            if (answers.nativeLanguage) {
+                languages.push(answers.nativeLanguage);
+            }
+            if (answers.languages) {
+                languages.push(...answers.languages);
+            }
+            generator.languages = generator.jhipsterConfig.languages = languages;
             done();
         });
     }
@@ -1912,7 +1920,7 @@ module.exports = class extends PrivateBase {
      * @param {String} type - server | client
      */
     composeLanguagesSub(generator, configOptions, type) {
-        if (generator.enableTranslation) {
+        if (generator.jhipsterConfig.enableTranslation) {
             // skip server if app type is client
             const skipServer = type && type === 'client';
             // skip client if app type is server
@@ -1924,7 +1932,7 @@ module.exports = class extends PrivateBase {
                 'skip-client': skipClient,
                 'from-cli': generator.options['from-cli'],
                 skipChecks: generator.options.skipChecks,
-                languages: generator.languages,
+                languages: generator.jhipsterConfig.languages,
                 force: generator.options.force,
                 debug: generator.options.debug,
             });
@@ -2253,5 +2261,31 @@ module.exports = class extends PrivateBase {
                 value: matched[2],
             };
         });
+    }
+
+    setConfigDefaults(defaults = defaultConfig) {
+        const jhipsterVersion = packagejs.version;
+        const baseName = this.getDefaultAppName();
+        const creationTimestamp = new Date().getTime();
+
+        this.config.defaults({
+            ...defaults,
+            jhipsterVersion,
+            baseName,
+            creationTimestamp,
+        });
+    }
+
+    validateConfiguration() {
+        this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+        if (this.jhipsterConfig.serviceDiscoveryType === 'no') {
+            this.jhipsterConfig.serviceDiscoveryType = false;
+        }
+        if (this.jhipsterConfig.authenticationType === 'uaa' && !this.jhipsterConfig.uaaBaseName) {
+            if (this.jhipsterConfig.applicationType !== 'uaa') {
+                this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
+            }
+            this.jhipsterConfig.uaaBaseName = this.jhipsterConfig.baseName;
+        }
     }
 };
