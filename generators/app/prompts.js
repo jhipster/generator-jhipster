@@ -43,8 +43,8 @@ async function askForInsightOptIn() {
     }
 }
 
-async function askForApplicationType(meta) {
-    if (!meta && this.existingProject) return;
+async function askForApplicationType() {
+    if (this.existingProject) return;
 
     const DEFAULT_APPTYPE = 'monolith';
 
@@ -67,29 +67,24 @@ async function askForApplicationType(meta) {
         },
     ];
 
-    const PROMPT = {
-        type: 'list',
-        name: 'applicationType',
-        message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-        choices: applicationTypeChoices,
-        default: DEFAULT_APPTYPE,
-    };
-
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
-
-    const answers = await this.prompt(PROMPT);
+    const answers = await this.prompt([
+        {
+            type: 'list',
+            name: 'applicationType',
+            message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
+            choices: applicationTypeChoices,
+            default: DEFAULT_APPTYPE,
+        },
+        {
+            when: answers => ['gateway', 'monolith', 'microservice'].includes(answers.applicationType),
+            type: 'confirm',
+            name: 'reactive',
+            message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
+            default: false,
+        },
+    ]);
     this.applicationType = this.configOptions.applicationType = answers.applicationType;
-
-    const REACTIVE_PROMPT = {
-        when: () => ['gateway', 'monolith', 'microservice'].includes(this.applicationType),
-        type: 'confirm',
-        name: 'reactive',
-        message: '[Beta] Do you want to make it reactive with Spring WebFlux?',
-        default: false,
-    };
-
-    const reactiveAnswers = await this.prompt(REACTIVE_PROMPT);
-    this.reactive = this.configOptions.reactive = reactiveAnswers.reactive || false;
+    this.reactive = this.configOptions.reactive = answers.reactive || false;
 }
 
 function askForModuleName() {
@@ -112,16 +107,16 @@ function askFori18n() {
     this.askForI18n();
 }
 
-async function askForTestOpts(meta) {
-    if (!meta && this.existingProject) return undefined;
+async function askForTestOpts() {
+    if (this.existingProject) return undefined;
 
     const choices = [];
     const defaultChoice = [];
-    if (meta || !this.skipServer) {
+    if (!this.skipServer) {
         // all server side test frameworks should be added here
         choices.push({ name: 'Gatling', value: 'gatling' }, { name: 'Cucumber', value: 'cucumber' });
     }
-    if (meta || !this.skipClient) {
+    if (!this.skipClient) {
         // all client side test frameworks should be added here
         choices.push({ name: 'Protractor', value: 'protractor' });
     }
@@ -132,8 +127,6 @@ async function askForTestOpts(meta) {
         choices,
         default: defaultChoice,
     };
-
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
 
     const answers = await this.prompt(PROMPT);
     this.testFrameworks = answers.testFrameworks;

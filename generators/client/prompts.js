@@ -32,13 +32,13 @@ module.exports = {
 };
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.baseName) return undefined;
 
-    this.askModuleName(this);
+    return this.askModuleName(this);
 }
 
-function askForClient(meta) {
-    if (!meta && this.existingProject) return true;
+function askForClient() {
+    if (this.existingProject) return true;
 
     const applicationType = this.applicationType;
 
@@ -66,8 +66,6 @@ function askForClient(meta) {
         default: ANGULAR,
     };
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
-
     return this.prompt(PROMPT).then(prompt => {
         this.clientFramework = prompt.clientFramework;
         if (this.clientFramework === 'no') {
@@ -92,8 +90,8 @@ function askFori18n() {
     this.askForI18n();
 }
 
-function askForClientTheme(meta) {
-    if (!meta && this.existingProject) {
+function askForClientTheme() {
+    if (this.existingProject) {
         return;
     }
 
@@ -160,8 +158,6 @@ function askForClientTheme(meta) {
                         name: theme.name,
                     })),
                 ];
-
-                if (meta) return PROMPT;
             } catch (err) {
                 this.warning('Could not fetch bootswatch themes from API. Using default ones.');
             }
@@ -174,8 +170,8 @@ function askForClientTheme(meta) {
     );
 }
 
-function askForClientThemeVariant(meta) {
-    if (!meta && this.existingProject) {
+function askForClientThemeVariant() {
+    if (this.existingProject) {
         return undefined;
     }
     if (this.clientTheme === 'none') {
@@ -199,8 +195,6 @@ function askForClientThemeVariant(meta) {
         choices,
         default: 'primary',
     };
-
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
 
     return this.prompt(PROMPT).then(prompt => {
         this.clientThemeVariant = prompt.clientThemeVariant;

@@ -31,13 +31,13 @@ module.exports = {
 };
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.baseName) return undefined;
 
-    this.askModuleName(this);
+    return this.askModuleName(this);
 }
 
-function askForServerSideOpts(meta) {
-    if (!meta && this.existingProject) return undefined;
+function askForServerSideOpts() {
+    if (this.existingProject) return undefined;
 
     const applicationType = this.applicationType;
     const reactive = this.reactive;
@@ -294,8 +294,6 @@ function askForServerSideOpts(meta) {
         },
     ];
 
-    if (meta) return prompts; // eslint-disable-line consistent-return
-
     return this.prompt(prompts).then(props => {
         this.serviceDiscoveryType = props.serviceDiscoveryType;
         this.authenticationType = props.authenticationType;
@@ -352,8 +350,8 @@ function askForServerSideOpts(meta) {
     });
 }
 
-function askForOptionalItems(meta) {
-    if (!meta && this.existingProject) return undefined;
+function askForOptionalItems() {
+    if (this.existingProject) return undefined;
 
     const applicationType = this.applicationType;
     const choices = [];
@@ -395,8 +393,6 @@ function askForOptionalItems(meta) {
         default: defaultChoice,
     };
 
-    if (meta) return PROMPTS; // eslint-disable-line consistent-return
-
     if (choices.length > 0) {
         return this.prompt(PROMPTS).then(prompt => {
             this.serverSideOptions = prompt.serverSideOptions;
@@ -414,9 +410,9 @@ function askForOptionalItems(meta) {
 }
 
 function askForI18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
+    if (this.existingProject || this.configOptions.skipI18nQuestion) return undefined;
 
-    this.aski18n(this);
+    return this.aski18n(this);
 }
 
 /**
@@ -426,5 +422,5 @@ function askForI18n() {
 function askFori18n() {
     // eslint-disable-next-line no-console
     console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
-    this.askForI18n();
+    return this.askForI18n();
 }
