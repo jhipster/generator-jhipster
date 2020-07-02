@@ -2,12 +2,14 @@ import {
     firstNameSettingsSelector,
     lastNameSettingsSelector,
     submitSettingsSelector,
-    successSettingsSelector,
     emailSettingsSelector,
-    errorSettingsSelector
-} from '../../support/commands'
+  } from '../../support/commands'
 
-describe('/account/settings', () => {
+  describe('/account/settings', () => {
+    beforeEach(() => {
+      cy.server();
+      cy.route('POST', '/api/account').as('settingsSave');
+    });
 
     before(() => {
       cy.visit('');
@@ -18,28 +20,38 @@ describe('/account/settings', () => {
     it("should be able to change 'user' firstname settings", () => {
       cy.get(firstNameSettingsSelector).clear().type('jhipster');
       cy.get(submitSettingsSelector).click();
-      cy.get(successSettingsSelector).should('be.visible');
+      cy.wait('@settingsSave').its('status').should('equal', 200);
     });
 
     it("should be able to change 'user' lastname settings", () => {
       cy.get(lastNameSettingsSelector).clear().type('retspihj');
       cy.get(submitSettingsSelector).click();
-      cy.get(successSettingsSelector).should('be.visible');
+      cy.wait('@settingsSave').its('status').should('equal', 200);
     });
 
     it("should be able to change 'user' email settings", () => {
       cy.get(emailSettingsSelector).clear().type('user@localhost.fr');
       cy.get(submitSettingsSelector).click();
-      cy.get(successSettingsSelector).should('be.visible');
+      cy.wait('@settingsSave').its('status').should('equal', 200);
+
+      // need to add a validation email with the same pattern in react and angular
+      cy.clickOnLogoutItem();
+      cy.login("admin","admin");
+      cy.clickOnSettingsItem();
+      cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
+      cy.get(submitSettingsSelector).click();
     });
 
     it("should not be able to change 'user' settings if email already exists", () => {
-      cy.get(emailSettingsSelector).clear().type('admin@localhost');
+      cy.clickOnLogoutItem();
+      cy.login("user","user");
+      cy.clickOnSettingsItem();
+      cy.get(emailSettingsSelector).clear().type('admin@localhost.fr');
       cy.get(submitSettingsSelector).click();
-      cy.get(errorSettingsSelector).should('be.visible');
+      cy.wait('@settingsSave').its('status').should('equal', 400);
     });
 
     after(() => {
         cy.clickOnLogoutItem();
     })
-})
+  })

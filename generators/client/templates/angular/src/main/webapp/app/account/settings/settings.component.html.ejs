@@ -21,7 +21,7 @@
         <div class="col-md-8">
             <h2 jhiTranslate="settings.title" [translateValues]="{ username: account.login }" *ngIf="account">User settings for [<b>{{ account.login }}</b>]</h2>
 
-            <div class="alert alert-success" *ngIf="success" jhiTranslate="settings.messages.success" data-cy="alert-success">
+            <div class="alert alert-success" *ngIf="success" jhiTranslate="settings.messages.success">
                 <strong>Settings saved!</strong>
             </div>
 

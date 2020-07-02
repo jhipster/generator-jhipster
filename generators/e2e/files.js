@@ -40,6 +40,7 @@ const cypressFiles = {
                 'cypress/plugins/index.ts',
                 'cypress/integration/account/login_page_spec.ts',
                 'cypress/integration/account/register_page_spec.ts',
+                'cypress/integration/account/settings_page_spec.ts',
                 'cypress/integration/administration/administration_spec.ts',
                 'cypress/support/commands.ts',
                 'cypress/support/navbar.ts',
