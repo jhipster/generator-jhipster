@@ -242,6 +242,18 @@ function cleanupOldServerFiles(generator, javaDir, testDir, mainResourceDir, tes
         generator.removeFile(`${javaDir}config/ReactivePageableHandlerMethodArgumentResolver.java`);
         generator.removeFile(`${javaDir}config/ReactiveSortHandlerMethodArgumentResolver.java`);
     }
+    if (generator.isJhipsterVersionLessThan('7.0.0')) {
+        generator.removeFile(`${javaDir}config/audit/package-info.java`);
+        generator.removeFile(`${javaDir}config/audit/AuditEventConverter.java`);
+        generator.removeFile(`${javaDir}domain/PersistentAuditEvent.java`);
+        generator.removeFile(`${javaDir}repository/PersistenceAuditEventRepository.java`);
+        generator.removeFile(`${javaDir}repository/CustomAuditEventRepository.java`);
+        generator.removeFile(`${javaDir}service/AuditEventService.java`);
+        generator.removeFile(`${javaDir}web/rest/AuditResource.java`);
+        generator.removeFile(`${testDir}service/AuditEventServiceIT.java`);
+        generator.removeFile(`${testDir}web/rest/AuditResourceIT.java`);
+        generator.removeFile(`${testDir}repository/CustomAuditEventRepositoryIT.java`);
+    }
 }
 
 /**
