@@ -2178,15 +2178,16 @@ module.exports = class extends PrivateBase {
     /**
      * Get all the generator configuration from the .yo-rc.json file
      * @param {Generator} generator the generator instance to use
-     * @param {boolean} force force getting direct from file
      */
-    getAllJhipsterConfig(generator = this, force) {
-        const configRootPath =
-            generator.configRootPath ||
-            (generator.options && generator.options.configRootPath) ||
-            (generator.configOptions && generator.configOptions.configRootPath) ||
-            '';
-        return jhipsterUtils.getAllJhipsterConfig(generator, force, configRootPath);
+    getJhipsterConfig(yoRcPath) {
+        if (yoRcPath === undefined) {
+            const configRootPath =
+                this.configRootPath ||
+                (this.options && this.options.configRootPath) ||
+                (this.configOptions && this.configOptions.configRootPath);
+            yoRcPath = path.join(configRootPath || this.destinationPath(), '.yo-rc.json');
+        }
+        return this.createStorage(yoRcPath, 'generator-jhipster');
     }
 
     /**

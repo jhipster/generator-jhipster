@@ -82,7 +82,7 @@ module.exports = class extends BaseGenerator {
             },
 
             loadConfig() {
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.baseName = configuration.get('baseName');
                 this.mainClass = this.getMainClassName();
