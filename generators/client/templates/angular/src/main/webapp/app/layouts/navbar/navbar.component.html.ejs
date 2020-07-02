@@ -151,7 +151,7 @@
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
                     <%_ if (!skipUserManagement) { _%>
                     <li *ngSwitchCase="true">
-                        <a class="dropdown-item" routerLink="account/settings" routerLinkActive="active" (click)="collapseNavbar()">
+                        <a class="dropdown-item" routerLink="account/settings" routerLinkActive="active" (click)="collapseNavbar()" data-cy="settings">
                             <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.account.settings">Settings</span>
                         </a>
