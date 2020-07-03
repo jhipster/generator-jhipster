@@ -51,6 +51,16 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+    constructor(args, opts) {
+        super(args, opts);
+
+        // JHipster config using proxy mode (like a plain object)
+        this.jhipsterConfig = this._getStorage('generator-jhipster').createProxy();
+
+        // JHipster runtime config that should not be stored to .yo-rc.json.
+        this.configOptions = this.options.configOptions || {};
+    }
+
     /**
      * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
      */
@@ -1232,7 +1242,7 @@ module.exports = class extends PrivateBase {
      * @param {any} options - options to pass
      * @return {object} the composed generator
      */
-    composeExternalModule(npmPackageName, subGen, options) {
+    composeExternalModule(npmPackageName, subGen, options = {}) {
         const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
         const generatorCallback = `${generatorName}:${subGen}`;
         if (!this.env.isPackageRegistered(generatorName)) {
@@ -1241,6 +1251,7 @@ module.exports = class extends PrivateBase {
         if (!this.env.get(generatorCallback)) {
             throw new Error(`Generator ${generatorCallback} isn't registered.`);
         }
+        options.configOptions = options.configOptions || this.configOptions;
         return this.composeWith(generatorCallback, options, true);
     }
 

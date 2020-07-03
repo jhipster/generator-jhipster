@@ -28,12 +28,11 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.jhipsterConfig = this._getStorage('generator-jhipster');
         this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
         if (this.fromBlueprint) {
             this.blueprintConfig = this.config;
-            this.config = this.jhipsterConfig;
+            this.config = this._getStorage('generator-jhipster');
         }
     }
 
