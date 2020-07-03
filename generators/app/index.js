@@ -340,12 +340,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.clientPackageManager = 'yarn';
                     }
                 }
-                // Set embeddableLaunchScript to true if not defined, for backward compatibility
-                // See https://github.com/jhipster/generator-jhipster/issues/10255
-                this.embeddableLaunchScript = this.config.get('embeddableLaunchScript');
-                if (!this.embeddableLaunchScript) {
-                    this.embeddableLaunchScript = true;
-                }
             },
         };
     }

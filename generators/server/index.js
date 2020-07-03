@@ -247,10 +247,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (uaaBaseName) {
                     this.uaaBaseName = uaaBaseName;
                 }
-                const embeddableLaunchScript = configuration.get('embeddableLaunchScript');
-                if (embeddableLaunchScript) {
-                    this.embeddableLaunchScript = embeddableLaunchScript;
-                }
+                this.embeddableLaunchScript = this.jhipsterConfig.embeddableLaunchScript || false;
                 this.clientFramework = configuration.get('clientFramework');
                 this.clientTheme = configuration.get('clientTheme');
                 if (!this.clientTheme) {
