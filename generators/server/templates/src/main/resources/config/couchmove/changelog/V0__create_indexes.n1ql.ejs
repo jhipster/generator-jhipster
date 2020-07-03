@@ -19,4 +19,4 @@ CREATE INDEX token_date ON `${bucket}`(tokenDate)
 <%_ } _%>
 
 -- build indexes asynchronously
-BUILD INDEX ON `${bucket}`(type<% if (!skipUserManagement) { %>, user_mail, audit_event<% if (authenticationType === 'session') { %>, token_login, token_date<% } %><% } %>);
+BUILD INDEX ON `${bucket}`(type<% if (!skipUserManagement) { %>, user_mail<% if (authenticationType === 'session') { %>, token_login, token_date<% } %><% } %>);
