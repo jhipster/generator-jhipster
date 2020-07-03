@@ -105,6 +105,18 @@ function cleanupOldFiles(generator) {
     if (generator.isJhipsterVersionLessThan('6.8.0') && generator.jhipsterConfig.clientFramework === 'angularX') {
         generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
+
+    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
+        generator.removeFile(`${ANGULAR_DIR}admin/audits/audit-data.model.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
+        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
+        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
+        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
+    }
 }
 
 /**
