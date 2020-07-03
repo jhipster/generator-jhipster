@@ -107,7 +107,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.log(chalk.bold('\nLanguages configuration is starting'));
                 }
                 this.applicationType = configuration.get('applicationType');
-                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
+                this.reactive = configuration.get('reactive') || this.jhipsterConfig.reactive;
                 this.baseName = configuration.get('baseName');
                 this.packageFolder = configuration.get('packageFolder');
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
@@ -168,8 +168,8 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             getSharedConfigOptions() {
-                if (this.configOptions.applicationType) {
-                    this.applicationType = this.configOptions.applicationType;
+                if (this.jhipsterConfig.applicationType) {
+                    this.applicationType = this.jhipsterConfig.applicationType;
                 }
                 if (this.jhipsterConfig.baseName) {
                     this.baseName = this.jhipsterConfig.baseName;
@@ -183,8 +183,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterConfig.searchEngine !== undefined) {
                     this.searchEngine = this.jhipsterConfig.searchEngine;
                 }
-                if (this.configOptions.messageBroker !== undefined) {
-                    this.messageBroker = this.configOptions.messageBroker;
+                if (this.jhipsterConfig.messageBroker !== undefined) {
+                    this.messageBroker = this.jhipsterConfig.messageBroker;
                 }
                 if (this.jhipsterConfig.enableTranslation) {
                     this.enableTranslation = this.jhipsterConfig.enableTranslation;
@@ -198,8 +198,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterConfig.skipServer) {
                     this.skipServer = this.jhipsterConfig.skipServer;
                 }
-                if (this.configOptions.clientFramework) {
-                    this.clientFramework = this.configOptions.clientFramework;
+                if (this.jhipsterConfig.clientFramework) {
+                    this.clientFramework = this.jhipsterConfig.clientFramework;
                 }
             },
         };

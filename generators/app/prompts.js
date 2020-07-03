@@ -83,8 +83,8 @@ async function askForApplicationType() {
             default: false,
         },
     ]);
-    this.applicationType = this.configOptions.applicationType = answers.applicationType;
-    this.reactive = this.configOptions.reactive = answers.reactive || false;
+    this.applicationType = this.jhipsterConfig.applicationType = answers.applicationType;
+    this.reactive = this.jhipsterConfig.reactive = answers.reactive || false;
 }
 
 function askForModuleName() {
@@ -180,7 +180,7 @@ function askModulesToBeInstalled(done, generator) {
                             answers.otherModules.forEach(module => {
                                 generator.otherModules.push({ name: module.name, version: module.version });
                             });
-                            generator.configOptions.otherModules = generator.otherModules;
+                            generator.jhipsterConfig.otherModules = generator.otherModules;
                             done();
                         });
                 } else {

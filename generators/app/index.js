@@ -206,7 +206,7 @@ module.exports = class extends BaseBlueprintGenerator {
         this.skipCheckLengthOfIdentifier = this.configOptions.skipCheckLengthOfIdentifier =
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
         this.skipFakeData = this.configOptions.skipFakeData = this.options['skip-fake-data'];
-        this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
+        this.jhiPrefix = this.jhipsterConfig.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
         this.uaaBaseName = this.jhipsterConfig.uaaBaseName =
             this.options.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
 
@@ -376,7 +376,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.configOptions.skipI18nQuestion = true;
                 this.jhipsterConfig.baseName = this.baseName;
                 this.configOptions.logo = false;
-                this.configOptions.otherModules = this.otherModules;
                 this.generatorType = 'app';
                 if (this.applicationType === 'microservice') {
                     this.skipClient = true;

@@ -2079,7 +2079,7 @@ module.exports = class extends PrivateBase {
             context.options['skip-user-management'] ||
             context.config.get('skipUserManagement');
         dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
-        dest.otherModules = context.configOptions.otherModules || [];
+        dest.otherModules = context.jhipsterConfig.otherModules || [];
         dest.baseName = context.jhipsterConfig.baseName;
         dest.logo = context.configOptions.logo;
         dest.clientPackageManager = context.jhipsterConfig.clientPackageManager;
@@ -2108,7 +2108,7 @@ module.exports = class extends PrivateBase {
         this.setupSharedOptions(generator, context, dest);
         dest.authenticationType =
             context.options.auth || context.jhipsterConfig.authenticationType || context.config.get('authenticationType');
-        dest.serviceDiscoveryType = context.configOptions.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
+        dest.serviceDiscoveryType = context.jhipsterConfig.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
 
         dest.buildTool = context.jhipsterConfig.buildTool;
         dest.websocket = context.jhipsterConfig.websocket;
@@ -2124,7 +2124,7 @@ module.exports = class extends PrivateBase {
         dest.searchEngine = context.config.get('searchEngine');
         dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
         dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
-        dest.jhiPrefix = context.configOptions.jhiPrefix || context.config.get('jhiPrefix');
+        dest.jhiPrefix = context.jhipsterConfig.jhiPrefix || context.config.get('jhiPrefix');
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
         dest.testFrameworks = context.jhipsterConfig.testFrameworks || [];

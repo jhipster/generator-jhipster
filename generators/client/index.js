@@ -36,7 +36,6 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = this.options.configOptions || {};
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -93,12 +92,12 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.NODE_VERSION = constants.NODE_VERSION;
 
                 const configuration = this.config;
-                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
-                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
+                this.serverPort = configuration.get('serverPort') || this.jhipsterConfig.serverPort || 8080;
+                this.applicationType = configuration.get('applicationType') || this.jhipsterConfig.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
+                this.reactive = configuration.get('reactive') || this.jhipsterConfig.reactive;
                 this.clientFramework = configuration.get('clientFramework');
                 if (!this.clientFramework) {
                     /* for backward compatibility */
@@ -129,7 +128,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.serviceDiscoveryType =
                     configuration.get('serviceDiscoveryType') === 'no'
                         ? false
-                        : configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
+                        : configuration.get('serviceDiscoveryType') || this.jhipsterConfig.serviceDiscoveryType;
                 if (this.serviceDiscoveryType === undefined) {
                     this.serviceDiscoveryType = false;
                 }
@@ -195,9 +194,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             setSharedConfigOptions() {
                 this.jhipsterConfig.skipClient = this.skipClient;
-                this.configOptions.clientFramework = this.clientFramework;
-                this.configOptions.clientTheme = this.clientTheme;
-                this.configOptions.clientThemeVariant = this.clientThemeVariant;
+                this.jhipsterConfig.clientFramework = this.clientFramework;
             },
         };
     }
@@ -287,17 +284,17 @@ module.exports = class extends BaseBlueprintGenerator {
     _default() {
         return {
             getSharedConfigOptions() {
-                if (this.configOptions.cacheProvider) {
-                    this.cacheProvider = this.configOptions.cacheProvider;
+                if (this.jhipsterConfig.cacheProvider) {
+                    this.cacheProvider = this.jhipsterConfig.cacheProvider;
                 }
-                if (this.configOptions.enableHibernateCache) {
-                    this.enableHibernateCache = this.configOptions.enableHibernateCache;
+                if (this.jhipsterConfig.enableHibernateCache) {
+                    this.enableHibernateCache = this.jhipsterConfig.enableHibernateCache;
                 }
                 if (this.jhipsterConfig.websocket !== undefined) {
                     this.websocket = this.jhipsterConfig.websocket;
                 }
-                if (this.configOptions.clientFramework) {
-                    this.clientFramework = this.configOptions.clientFramework;
+                if (this.jhipsterConfig.clientFramework) {
+                    this.clientFramework = this.jhipsterConfig.clientFramework;
                 }
                 if (this.jhipsterConfig.databaseType) {
                     this.databaseType = this.jhipsterConfig.databaseType;
@@ -308,8 +305,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterConfig.prodDatabaseType) {
                     this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType;
                 }
-                if (this.configOptions.messageBroker !== undefined) {
-                    this.messageBroker = this.configOptions.messageBroker;
+                if (this.jhipsterConfig.messageBroker !== undefined) {
+                    this.messageBroker = this.jhipsterConfig.messageBroker;
                 }
                 if (this.jhipsterConfig.searchEngine !== undefined) {
                     this.searchEngine = this.jhipsterConfig.searchEngine;
@@ -320,8 +317,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterConfig.authenticationType) {
                     this.authenticationType = this.jhipsterConfig.authenticationType;
                 }
-                if (this.configOptions.otherModules) {
-                    this.otherModules = this.configOptions.otherModules;
+                if (this.jhipsterConfig.otherModules) {
+                    this.otherModules = this.jhipsterConfig.otherModules;
                 }
                 if (this.jhipsterConfig.testFrameworks) {
                     this.testFrameworks = this.jhipsterConfig.testFrameworks;

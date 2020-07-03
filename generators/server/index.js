@@ -142,11 +142,11 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.packagejs = packagejs;
                 const configuration = this.config;
-                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
+                this.applicationType = configuration.get('applicationType') || this.jhipsterConfig.applicationType;
                 if (!this.applicationType) {
                     this.applicationType = 'monolith';
                 }
-                this.reactive = configuration.get('reactive') || this.configOptions.reactive;
+                this.reactive = configuration.get('reactive') || this.jhipsterConfig.reactive;
                 this.packageName = configuration.get('packageName');
                 this.serverPort = configuration.get('serverPort');
                 if (this.serverPort === undefined) {
@@ -160,7 +160,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.searchEngine === undefined) {
                     this.searchEngine = false;
                 }
-                this.jhiPrefix = this.configOptions.jhiPrefix || configuration.get('jhiPrefix');
+                this.jhiPrefix = this.jhipsterConfig.jhiPrefix || configuration.get('jhiPrefix');
                 this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
                 this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
                 if (this.messageBroker === undefined) {
@@ -350,24 +350,23 @@ module.exports = class extends BaseBlueprintGenerator {
             askFori18n: prompts.askForI18n,
 
             setSharedConfigOptions() {
-                this.configOptions.packageName = this.packageName;
-                this.configOptions.cacheProvider = this.cacheProvider;
-                this.configOptions.enableHibernateCache = this.enableHibernateCache;
+                this.jhipsterConfig.cacheProvider = this.cacheProvider;
+                this.jhipsterConfig.enableHibernateCache = this.enableHibernateCache;
                 this.jhipsterConfig.websocket = this.websocket;
                 this.jhipsterConfig.databaseType = this.databaseType;
                 this.jhipsterConfig.devDatabaseType = this.devDatabaseType;
                 this.jhipsterConfig.prodDatabaseType = this.prodDatabaseType;
                 this.jhipsterConfig.searchEngine = this.searchEngine;
-                this.configOptions.messageBroker = this.messageBroker;
-                this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
+                this.jhipsterConfig.messageBroker = this.messageBroker;
+                this.jhipsterConfig.serviceDiscoveryType = this.serviceDiscoveryType;
                 this.jhipsterConfig.buildTool = this.buildTool;
-                this.configOptions.enableSwaggerCodegen = this.enableSwaggerCodegen;
+                this.jhipsterConfig.enableSwaggerCodegen = this.enableSwaggerCodegen;
                 this.jhipsterConfig.authenticationType = this.authenticationType;
                 const uaaBaseName = this.uaaBaseName;
                 if (uaaBaseName) {
                     this.jhipsterConfig.uaaBaseName = this.uaaBaseName;
                 }
-                this.configOptions.serverPort = this.serverPort;
+                this.jhipsterConfig.serverPort = this.serverPort;
 
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
@@ -482,8 +481,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.jhipsterConfig.testFrameworks) {
                     this.testFrameworks = this.jhipsterConfig.testFrameworks;
                 }
-                if (this.configOptions.clientFramework) {
-                    this.clientFramework = this.configOptions.clientFramework;
+                if (this.jhipsterConfig.clientFramework) {
+                    this.clientFramework = this.jhipsterConfig.clientFramework;
                 }
                 if (this.jhipsterConfig.skipClient) {
                     this.skipClient = this.jhipsterConfig.skipClient;

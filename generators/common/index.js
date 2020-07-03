@@ -75,10 +75,10 @@ module.exports = class extends BaseBlueprintGenerator {
         return {
             getSharedConfigOptions() {
                 this.jhipsterVersion = this.config.get('jhipsterVersion');
-                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
-                this.enableSwaggerCodegen = this.configOptions.enableSwaggerCodegen;
-                this.serverPort = this.configOptions.serverPort;
-                this.clientFramework = this.configOptions.clientFramework;
+                this.applicationType = this.config.get('applicationType') || this.jhipsterConfig.applicationType;
+                this.enableSwaggerCodegen = this.jhipsterConfig.enableSwaggerCodegen;
+                this.serverPort = this.jhipsterConfig.serverPort;
+                this.clientFramework = this.jhipsterConfig.clientFramework;
                 this.protractorTests = this.testFrameworks.includes('protractor');
                 this.gatlingTests = this.testFrameworks.includes('gatling');
             },
