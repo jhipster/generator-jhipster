@@ -12,7 +12,6 @@ const containsLanguageFiles = languageValue => {
     it('creates expected files', () => {
         assert.file([
             `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/activate.json`,
-            `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/audits.json`,
             `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/configuration.json`,
             `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/error.json`,
             `${CLIENT_MAIN_SRC_DIR}i18n/${languageValue}/login.json`,
