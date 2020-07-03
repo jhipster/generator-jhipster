@@ -261,7 +261,6 @@ const expectedFiles = {
 
     i18nJson: [
         `${CLIENT_MAIN_SRC_DIR}i18n/en/activate.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/en/audits.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/configuration.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/error.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/global.json`,
@@ -277,7 +276,6 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}i18n/en/reset.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/en/user-management.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/activate.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/fr/audits.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/configuration.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/error.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/fr/global.json`,
@@ -296,7 +294,6 @@ const expectedFiles = {
 
     i18nDeJson: [
         `${CLIENT_MAIN_SRC_DIR}i18n/de/activate.json`,
-        `${CLIENT_MAIN_SRC_DIR}i18n/de/audits.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/de/configuration.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/de/error.json`,
         `${CLIENT_MAIN_SRC_DIR}i18n/de/global.json`,
@@ -376,13 +373,6 @@ const expectedFiles = {
         'proxy.conf.json',
         `${CLIENT_MAIN_SRC_DIR}404.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/admin-routing.module.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audit-data.model.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audit.model.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.component.html`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.component.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.route.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.module.ts`,
-        `${CLIENT_MAIN_SRC_DIR}app/admin/audits/audits.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.html`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.component.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/admin/configuration/configuration.route.ts`,
@@ -505,8 +495,6 @@ const expectedFiles = {
         `${CLIENT_TEST_SRC_DIR}jest.ts`,
         `${CLIENT_TEST_SRC_DIR}jest.conf.js`,
         `${CLIENT_TEST_SRC_DIR}jest-global-mocks.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`,
-        `${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.component.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/configuration/configuration.service.spec.ts`,
         `${CLIENT_TEST_SRC_DIR}spec/app/admin/health/health.component.spec.ts`,

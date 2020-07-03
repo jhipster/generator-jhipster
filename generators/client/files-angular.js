@@ -258,20 +258,6 @@ const files = {
             ],
         },
         {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: ANGULAR_DIR,
-            templates: [
-                { file: 'admin/audits/audits.route.ts', method: 'processJs' },
-                { file: 'admin/audits/audits.module.ts', method: 'processJs' },
-                'admin/audits/audit-data.model.ts',
-                'admin/audits/audit.model.ts',
-                { file: 'admin/audits/audits.component.ts', method: 'processJs' },
-                { file: 'admin/audits/audits.component.html', method: 'processHtml' },
-                'admin/audits/audits.service.ts',
-            ],
-        },
-        {
             condition: generator => generator.websocket === 'spring-websocket',
             path: ANGULAR_DIR,
             templates: [
@@ -459,12 +445,6 @@ const files = {
                 'spec/app/shared/alert/alert-error.component.spec.ts',
                 'spec/app/core/login/login-modal.service.spec.ts',
             ],
-        },
-        {
-            condition: generator =>
-                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
-            path: TEST_SRC_DIR,
-            templates: ['spec/app/admin/audits/audits.component.spec.ts', 'spec/app/admin/audits/audits.service.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
