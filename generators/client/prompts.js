@@ -32,13 +32,13 @@ module.exports = {
 };
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.baseName) return undefined;
 
-    this.askModuleName(this);
+    return this.askModuleName(this);
 }
 
-function askForClient(meta) {
-    if (!meta && this.existingProject) return;
+function askForClient() {
+    if (this.existingProject) return true;
 
     const applicationType = this.applicationType;
 
@@ -66,23 +66,18 @@ function askForClient(meta) {
         default: ANGULAR,
     };
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
-
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
+    return this.prompt(PROMPT).then(prompt => {
         this.clientFramework = prompt.clientFramework;
         if (this.clientFramework === 'no') {
             this.skipClient = true;
         }
-        done();
     });
 }
 
 function askForI18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
+    if (this.existingProject || this.configOptions.skipI18nQuestion) return undefined;
 
-    this.aski18n(this);
+    return this.aski18n(this);
 }
 
 /**
@@ -95,13 +90,12 @@ function askFori18n() {
     this.askForI18n();
 }
 
-function askForClientTheme(meta) {
-    if (!meta && this.existingProject) {
+function askForClientTheme() {
+    if (this.existingProject) {
         return;
     }
 
     const skipClient = this.skipClient;
-    const done = this.async();
     const defaultChoices = [
         {
             value: 'none',
@@ -139,6 +133,14 @@ function askForClientTheme(meta) {
         default: 'none',
     };
 
+    const self = this;
+    const promptClientTheme = function (PROMPT) {
+        return self.prompt(PROMPT).then(prompt => {
+            self.clientTheme = prompt.clientTheme;
+        });
+    };
+
+    const done = this.async();
     this.httpsGet(
         'https://bootswatch.com/api/4.json',
         // eslint-disable-next-line consistent-return
@@ -156,35 +158,25 @@ function askForClientTheme(meta) {
                         name: theme.name,
                     })),
                 ];
-
-                if (meta) return PROMPT;
-                promptQuestion(PROMPT, done, this);
             } catch (err) {
                 this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-                promptQuestion(PROMPT, done, this);
             }
+            done(undefined, promptClientTheme(PROMPT));
         },
         () => {
             this.warning('Could not fetch bootswatch themes from API. Using default ones.');
-            promptQuestion(PROMPT, done, this);
+            done(undefined, promptClientTheme(PROMPT));
         }
     );
 }
 
-function promptQuestion(PROMPT, done, generator) {
-    generator.prompt(PROMPT).then(prompt => {
-        generator.clientTheme = prompt.clientTheme;
-        done();
-    });
-}
-
-function askForClientThemeVariant(meta) {
-    if (!meta && this.existingProject) {
-        return;
+function askForClientThemeVariant() {
+    if (this.existingProject) {
+        return undefined;
     }
     if (this.clientTheme === 'none') {
         this.clientThemeVariant = '';
-        return;
+        return undefined;
     }
 
     const skipClient = this.skipClient;
@@ -204,12 +196,7 @@ function askForClientThemeVariant(meta) {
         default: 'primary',
     };
 
-    if (meta) return PROMPT; // eslint-disable-line consistent-return
-
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
+    return this.prompt(PROMPT).then(prompt => {
         this.clientThemeVariant = prompt.clientThemeVariant;
-        done();
     });
 }
