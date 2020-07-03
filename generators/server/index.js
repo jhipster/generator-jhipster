@@ -175,7 +175,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.serviceDiscoveryType = false;
                 }
 
-                this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                this.cacheProvider = configuration.get('cacheProvider') || 'no';
                 this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
 
                 this.databaseType = configuration.get('databaseType');

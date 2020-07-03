@@ -152,7 +152,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.reactive = configuration.get('reactive');
                 context.packageFolder = configuration.get('packageFolder');
                 context.authenticationType = configuration.get('authenticationType');
-                context.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
+                context.cacheProvider = configuration.get('cacheProvider') || 'no';
                 context.enableHibernateCache =
                     configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(context.cacheProvider);
                 context.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
