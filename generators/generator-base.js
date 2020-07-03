@@ -1857,7 +1857,7 @@ module.exports = class extends PrivateBase {
                 default: defaultAppBaseName,
             })
             .then(prompt => {
-                generator.baseName = prompt.baseName;
+                generator.baseName = generator.jhipsterConfig.baseName = prompt.baseName;
                 done();
             });
     }
@@ -1897,9 +1897,9 @@ module.exports = class extends PrivateBase {
         ];
 
         generator.prompt(prompts).then(prompt => {
-            generator.enableTranslation = prompt.enableTranslation;
-            generator.nativeLanguage = prompt.nativeLanguage;
-            generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
+            generator.enableTranslation = generator.jhipsterConfig.enableTranslation = prompt.enableTranslation;
+            generator.nativeLanguage = generator.jhipsterConfig.nativeLanguage = prompt.nativeLanguage;
+            generator.languages = generator.jhipsterConfig.languages = [prompt.nativeLanguage].concat(prompt.languages);
             done();
         });
     }

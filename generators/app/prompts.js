@@ -129,7 +129,7 @@ async function askForTestOpts() {
     };
 
     const answers = await this.prompt(PROMPT);
-    this.testFrameworks = answers.testFrameworks;
+    this.testFrameworks = this.jhipsterConfig.testFrameworks = answers.testFrameworks;
     return answers;
 }
 
