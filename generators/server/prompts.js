@@ -142,9 +142,11 @@ function askForServerSideOpts() {
         },
         {
             when: response =>
-                (applicationType === 'gateway' || applicationType === 'microservice') && response.authenticationType === 'uaa',
+                (applicationType === 'gateway' || applicationType === 'microservice') &&
+                response.authenticationType === 'uaa' &&
+                this.uaaBaseName === undefined,
             type: 'input',
-            name: 'uaaBaseName',
+            name: 'uaaPath',
             message: 'What is the folder path of your UAA application?',
             default: '../uaa',
             validate: input => {
@@ -333,7 +335,7 @@ function askForServerSideOpts() {
         this.prodDatabaseType = props.prodDatabaseType;
         this.searchEngine = props.searchEngine;
         this.buildTool = props.buildTool;
-        this.uaaBaseName = this.getUaaAppName(props.uaaBaseName).baseName;
+        this.uaaBaseName = this.getUaaAppName(props.uaaPath).baseName || this.uaaBaseName;
 
         if (this.databaseType === 'no') {
             this.devDatabaseType = 'no';

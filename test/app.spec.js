@@ -1885,7 +1885,7 @@ describe('JHipster generator', () => {
                         packageFolder: 'com/mycompany/myapp',
                         serverPort: '8080',
                         authenticationType: 'uaa',
-                        uaaBaseName: './uaa/',
+                        uaaPath: './uaa/',
                         cacheProvider: 'hazelcast',
                         enableHibernateCache: true,
                         databaseType: 'sql',
@@ -2067,7 +2067,7 @@ describe('JHipster generator', () => {
             before(done => {
                 helpers
                     .run(path.join(__dirname, '../generators/app'))
-                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, 'uaa-base-name': 'jhipsterApp' })
+                    .withOptions({ 'from-cli': true, skipInstall: true, skipChecks: true, uaaBaseName: 'jhipsterApp' })
                     .withPrompts({
                         applicationType: 'gateway',
                         baseName: 'jhipster',
@@ -2076,7 +2076,6 @@ describe('JHipster generator', () => {
                         clientFramework: ANGULAR,
                         serviceDiscoveryType: false,
                         authenticationType: 'uaa',
-                        uaaBaseName: 'jhipsterApp',
                         cacheProvider: 'ehcache',
                         enableHibernateCache: true,
                         databaseType: 'sql',

@@ -207,7 +207,8 @@ module.exports = class extends BaseBlueprintGenerator {
             this.options['skip-check-length-of-identifier'] || this.config.get('skipCheckLengthOfIdentifier');
         this.skipFakeData = this.configOptions.skipFakeData = this.options['skip-fake-data'];
         this.jhiPrefix = this.configOptions.jhiPrefix = _.camelCase(this.config.get('jhiPrefix') || this.options['jhi-prefix']);
-        this.uaaBaseName = this.jhipsterConfig.uaaBaseName = this.options['uaa-base-name'] || this.config.get('uaaBaseName');
+        this.uaaBaseName = this.jhipsterConfig.uaaBaseName =
+            this.options.uaaBaseName || this.options['uaa-base-name'] || this.config.get('uaaBaseName');
 
         this.entitySuffix = this.jhipsterConfig.entitySuffix = _.isNil(this.config.get('entitySuffix'))
             ? this.options['entity-suffix']
