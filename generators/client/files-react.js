@@ -235,11 +235,6 @@ const files = {
             ],
         },
         {
-            condition: generator => !['no', 'cassandra'].includes(generator.databaseType),
-            path: REACT_DIR,
-            templates: [{ file: 'modules/administration/audits/audits.tsx', method: 'processJsx' }],
-        },
-        {
             condition: generator => generator.websocket === 'spring-websocket',
             path: REACT_DIR,
             templates: [{ file: 'modules/administration/tracker/tracker.tsx', method: 'processJsx' }],
@@ -340,7 +335,6 @@ const files = {
                 // 'spec/app/account/password-reset/finish/_password-reset-finish.component.spec.js',
                 // 'spec/app/account/settings/_settings.component.spec.js',
                 // 'spec/app/admin/health/_health.component.spec.js',
-                // 'spec/app/admin/audits/_audits.component.spec.js',
                 // 'spec/helpers/_spyobject.js',
                 // 'spec/helpers/_mock-account.service.js',
                 // 'spec/helpers/_mock-principal.service.js',

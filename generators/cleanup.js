@@ -20,6 +20,7 @@
 const constants = require('./generator-constants');
 
 const ANGULAR_DIR = constants.ANGULAR_DIR;
+const REACT_DIR = constants.REACT_DIR;
 const CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 const CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR;
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -106,16 +107,20 @@ function cleanupOldFiles(generator) {
         generator.removeFile(`${ANGULAR_DIR}tsconfig-aot.json`);
     }
 
-    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.configOptions && generator.configOptions.clientFramework === ANGULAR) {
-        generator.removeFile(`${ANGULAR_DIR}admin/audits/audit-data.model.ts`);
-        generator.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
-        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
-        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.ts`);
-        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
-        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
-        generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
-        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
-        generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
+    if (generator.isJhipsterVersionLessThan('7.0.0') && generator.configOptions) {
+        if (generator.configOptions.clientFramework === ANGULAR) {
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audit-data.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audit.model.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.html`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.component.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.route.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.module.ts`);
+            generator.removeFile(`${ANGULAR_DIR}admin/audits/audits.service.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.component.spec.ts`);
+            generator.removeFile(`${CLIENT_TEST_SRC_DIR}spec/app/admin/audits/audits.service.spec.ts`);
+        } else if (generator.configOptions.clientFramework === REACT) {
+            generator.removeFile(`${REACT_DIR}modules/administration/audits/audits.tsx.ejs`);
+        }
     }
 }
 
