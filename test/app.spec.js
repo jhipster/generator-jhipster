@@ -1885,7 +1885,7 @@ describe('JHipster generator', () => {
                         packageFolder: 'com/mycompany/myapp',
                         serverPort: '8080',
                         authenticationType: 'uaa',
-                        uaaPath: './uaa/',
+                        uaaBaseName: 'uaaBaseName',
                         cacheProvider: 'hazelcast',
                         enableHibernateCache: true,
                         databaseType: 'sql',

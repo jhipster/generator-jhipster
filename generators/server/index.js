@@ -57,7 +57,8 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.uaaBaseName = this.options.uaaBaseName || this.jhipsterConfig.uaaBaseName || this.config.get('uaaBaseName');
 
-        this.setupServerOptions(this);
+        // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
+        this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
 
@@ -141,175 +142,19 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
 
                 this.packagejs = packagejs;
-                const configuration = this.config;
-                this.applicationType = configuration.get('applicationType') || this.jhipsterConfig.applicationType;
-                if (!this.applicationType) {
-                    this.applicationType = 'monolith';
-                }
-                this.reactive = configuration.get('reactive') || this.jhipsterConfig.reactive;
-                this.packageName = configuration.get('packageName');
-                this.serverPort = configuration.get('serverPort');
-                if (this.serverPort === undefined) {
-                    this.serverPort = '8080';
-                }
-                this.websocket = configuration.get('websocket') === 'no' ? false : configuration.get('websocket');
-                if (this.websocket === undefined) {
-                    this.websocket = false;
-                }
-                this.searchEngine = configuration.get('searchEngine') === 'no' ? false : configuration.get('searchEngine');
-                if (this.searchEngine === undefined) {
-                    this.searchEngine = false;
-                }
-                this.jhiPrefix = this.jhipsterConfig.jhiPrefix || configuration.get('jhiPrefix');
-                this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
-                this.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
-                if (this.messageBroker === undefined) {
-                    this.messageBroker = false;
-                }
-
-                this.enableSwaggerCodegen = configuration.get('enableSwaggerCodegen');
-
-                this.serviceDiscoveryType =
-                    configuration.get('serviceDiscoveryType') === 'no' ? false : configuration.get('serviceDiscoveryType');
-                if (this.serviceDiscoveryType === undefined) {
-                    this.serviceDiscoveryType = false;
-                }
-
-                this.cacheProvider = configuration.get('cacheProvider') || 'no';
-                this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
-
-                this.databaseType = configuration.get('databaseType');
-                if (this.databaseType === 'mongodb') {
-                    this.devDatabaseType = 'mongodb';
-                    this.prodDatabaseType = 'mongodb';
-                    this.enableHibernateCache = false;
-                } else if (this.databaseType === 'couchbase') {
-                    this.devDatabaseType = 'couchbase';
-                    this.prodDatabaseType = 'couchbase';
-                    this.enableHibernateCache = false;
-                } else if (this.databaseType === 'cassandra') {
-                    this.devDatabaseType = 'cassandra';
-                    this.prodDatabaseType = 'cassandra';
-                    this.enableHibernateCache = false;
-                } else if (this.databaseType === 'no') {
-                    this.devDatabaseType = 'no';
-                    this.prodDatabaseType = 'no';
-                    this.enableHibernateCache = false;
-                    if (this.authenticationType !== 'uaa') {
-                        this.skipUserManagement = true;
-                    }
-                } else {
-                    // sql
-                    this.devDatabaseType = configuration.get('devDatabaseType');
-                    this.prodDatabaseType = configuration.get('prodDatabaseType');
-
-                    let dbContainer;
-                    switch (this.prodDatabaseType) {
-                        case 'mysql':
-                            dbContainer = this.DOCKER_MYSQL;
-                            break;
-                        case 'mariadb':
-                            dbContainer = this.DOCKER_MARIADB;
-                            break;
-                        case 'postgresql':
-                            dbContainer = this.DOCKER_POSTGRESQL;
-                            break;
-                        case 'mssql':
-                            dbContainer = this.DOCKER_MSSQL;
-                            break;
-                        case 'oracle':
-                        default:
-                            dbContainer = null;
-                    }
-                    if (dbContainer != null && dbContainer.includes(':')) {
-                        this.containerVersion = dbContainer.split(':')[1];
-                    } else {
-                        this.containerVersion = 'latest';
-                    }
-                }
-                this.skipFakeData = configuration.get('skipFakeData') || this.configOptions.skipFakeData;
-
-                this.buildTool = configuration.get('buildTool');
-                this.jhipsterVersion = packagejs.version;
-                if (this.jhipsterVersion === undefined) {
-                    this.jhipsterVersion = configuration.get('jhipsterVersion');
-                }
-                // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
-                this.jhipsterOldVersion = configuration.get('jhipsterVersion');
-                this.authenticationType = configuration.get('authenticationType');
-                if (this.authenticationType === 'session') {
-                    this.rememberMeKey = configuration.get('rememberMeKey');
-                }
-                this.jwtSecretKey = configuration.get('jwtSecretKey');
-                this.nativeLanguage = configuration.get('nativeLanguage');
-                this.languages = configuration.get('languages');
-                const uaaBaseName = configuration.get('uaaBaseName');
-                if (uaaBaseName) {
-                    this.uaaBaseName = uaaBaseName;
-                }
-                this.embeddableLaunchScript = this.jhipsterConfig.embeddableLaunchScript || false;
-                this.clientFramework = configuration.get('clientFramework');
-                this.clientTheme = configuration.get('clientTheme');
-                if (!this.clientTheme) {
-                    this.clientTheme = 'none';
-                }
-                const testFrameworks = configuration.get('testFrameworks');
-                if (testFrameworks) {
-                    this.testFrameworks = testFrameworks;
-                }
-
-                const baseName = configuration.get('baseName');
-                if (baseName) {
-                    // to avoid overriding name from configOptions
-                    this.baseName = baseName;
-                }
-
-                // force variables unused by microservice applications
-                if (this.applicationType === 'microservice' || this.applicationType === 'uaa') {
-                    this.websocket = false;
-                }
-
-                this.entitySuffix = configuration.get('entitySuffix');
-                if (_.isNil(this.entitySuffix)) {
-                    this.entitySuffix = '';
-                }
-
-                this.dtoSuffix = configuration.get('dtoSuffix');
-                if (_.isNil(this.dtoSuffix)) {
-                    this.dtoSuffix = 'DTO';
-                }
-
-                if (this.entitySuffix === this.dtoSuffix) {
-                    this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
-                }
 
                 const serverConfigFound =
-                    this.packageName !== undefined &&
-                    this.authenticationType !== undefined &&
-                    this.cacheProvider !== undefined &&
-                    this.websocket !== undefined &&
-                    this.databaseType !== undefined &&
-                    this.devDatabaseType !== undefined &&
-                    this.prodDatabaseType !== undefined &&
-                    this.searchEngine !== undefined &&
-                    this.buildTool !== undefined;
+                    this.jhipsterConfig.packageName !== undefined &&
+                    this.jhipsterConfig.authenticationType !== undefined &&
+                    this.jhipsterConfig.cacheProvider !== undefined &&
+                    this.jhipsterConfig.websocket !== undefined &&
+                    this.jhipsterConfig.databaseType !== undefined &&
+                    this.jhipsterConfig.devDatabaseType !== undefined &&
+                    this.jhipsterConfig.prodDatabaseType !== undefined &&
+                    this.jhipsterConfig.searchEngine !== undefined &&
+                    this.jhipsterConfig.buildTool !== undefined;
 
-                if (this.baseName !== undefined && serverConfigFound) {
-                    // Generate remember me key if key does not already exist in config
-                    if (this.authenticationType === 'session' && this.rememberMeKey === undefined) {
-                        this.rememberMeKey = getRandomHex();
-                    }
-
-                    // Generate JWT secret key if key does not already exist in config
-                    if (this.authenticationType === 'jwt' && this.jwtSecretKey === undefined) {
-                        this.jwtSecretKey = getBase64Secret(null, 64);
-                    }
-
-                    // user-management will be handled by UAA app, oauth expects users to be managed in IpP
-                    if ((this.applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
-                        this.skipUserManagement = true;
-                    }
-
+                if (this.jhipsterConfig.baseName !== undefined && serverConfigFound) {
                     this.log(
                         chalk.green(
                             'This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -353,6 +198,117 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _configuring() {
         return {
+            validateConfig() {
+                this._validateServerConfiguration();
+            },
+        };
+    }
+
+    get configuring() {
+        if (useBlueprints) return;
+        return this._configuring();
+    }
+
+    // Public API method used by the getter and also by Blueprints
+    _default() {
+        return {
+            backward() {
+                this.setupServerOptions(this);
+            },
+            loadTranslationConfig() {
+                const configWithDefaults = this.jhipsterConfig;
+                this.enableTranslation = configWithDefaults.enableTranslation;
+                this.nativeLanguage = configWithDefaults.nativeLanguage;
+                this.languages = configWithDefaults.languages;
+            },
+
+            loadClientConfig() {
+                const configWithDefaults = this.jhipsterConfig;
+                this.clientFramework = configWithDefaults.clientFramework;
+                this.skipClient = configWithDefaults.skipClient;
+                this.clientTheme = configWithDefaults.clientTheme;
+            },
+
+            loadServerConfig() {
+                const configWithDefaults = this.jhipsterConfig;
+                this.buildTool = configWithDefaults.buildTool;
+                this.packageFolder = configWithDefaults.packageFolder;
+                this.packageName = configWithDefaults.packageName;
+                this.serverPort = configWithDefaults.serverPort;
+                this.uaaBaseName = configWithDefaults.uaaBaseName;
+
+                this.authenticationType = configWithDefaults.authenticationType;
+                this.rememberMeKey = configWithDefaults.rememberMeKey;
+                this.jwtSecretKey = configWithDefaults.jwtSecretKey;
+
+                this.cacheProvider = configWithDefaults.cacheProvider;
+                this.enableSwaggerCodegen = configWithDefaults.enableSwaggerCodegen;
+                this.enableHibernateCache = configWithDefaults.enableHibernateCache;
+                this.messageBroker = configWithDefaults.messageBroker;
+                this.websocket = configWithDefaults.websocket;
+
+                this.embeddableLaunchScript = configWithDefaults.embeddableLaunchScript;
+            },
+
+            loadAppConfig() {
+                const configWithDefaults = this.jhipsterConfig;
+                this.jhipsterVersion = packagejs.version;
+                this.applicationType = configWithDefaults.applicationType;
+                this.reactive = configWithDefaults.reactive;
+                this.jhiPrefix = configWithDefaults.jhiPrefix;
+                this.skipFakeData = configWithDefaults.skipFakeData;
+                this.entitySuffix = configWithDefaults.entitySuffix;
+                this.dtoSuffix = configWithDefaults.dtoSuffix;
+
+                this.testFrameworks = configWithDefaults.testFrameworks || [];
+                this.gatlingTests = this.testFrameworks.includes('gatling');
+                this.cucumberTests = this.testFrameworks.includes('cucumber');
+            },
+
+            generatedConfigs() {
+                // Application name modified, using each technology's conventions
+                this.angularAppName = this.getAngularAppName();
+                this.camelizedBaseName = _.camelCase(this.baseName);
+                this.dasherizedBaseName = _.kebabCase(this.baseName);
+                this.lowercaseBaseName = this.baseName.toLowerCase();
+                this.humanizedBaseName = _.startCase(this.baseName);
+                this.mainClass = this.getMainClassName();
+                this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(
+                    this.cacheProvider
+                );
+                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
+                this.pkType = this.getPkType(this.databaseType);
+
+                this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
+
+                if (this.jhipsterConfig.databaseType === 'sql') {
+                    // sql
+                    let dbContainer;
+                    switch (this.jhipsterConfig.prodDatabaseType) {
+                        case 'mysql':
+                            dbContainer = this.DOCKER_MYSQL;
+                            break;
+                        case 'mariadb':
+                            dbContainer = this.DOCKER_MARIADB;
+                            break;
+                        case 'postgresql':
+                            dbContainer = this.DOCKER_POSTGRESQL;
+                            break;
+                        case 'mssql':
+                            dbContainer = this.DOCKER_MSSQL;
+                            break;
+                        case 'oracle':
+                        default:
+                            dbContainer = null;
+                    }
+                    if (dbContainer != null && dbContainer.includes(':')) {
+                        this.containerVersion = dbContainer.split(':')[1];
+                    } else {
+                        this.containerVersion = 'latest';
+                    }
+                }
+            },
+
             insight() {
                 statistics.sendSubGenEvent('generator', 'server', {
                     app: {
@@ -370,59 +326,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         enableSwaggerCodegen: this.enableSwaggerCodegen,
                     },
                 });
-            },
-
-            configureGlobal() {
-                // Application name modified, using each technology's conventions
-                this.angularAppName = this.getAngularAppName();
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.mainClass = this.getMainClassName();
-                this.cacheManagerIsAvailable = ['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(
-                    this.cacheProvider
-                );
-                this.testsNeedCsrf = ['uaa', 'oauth2', 'session'].includes(this.authenticationType);
-                this.pkType = this.getPkType(this.databaseType);
-
-                this.packageFolder = this.packageName.replace(/\./g, '/');
-                if (!this.nativeLanguage) {
-                    // set to english when translation is set to false
-                    this.nativeLanguage = 'en';
-                }
-            },
-
-            saveConfig() {
-                const config = {
-                    packageFolder: this.packageFolder,
-                    jwtSecretKey: this.jwtSecretKey,
-                    rememberMeKey: this.rememberMeKey,
-                    embeddableLaunchScript: this.embeddableLaunchScript,
-                };
-                this.config.set(config);
-            },
-        };
-    }
-
-    get configuring() {
-        if (useBlueprints) return;
-        return this._configuring();
-    }
-
-    // Public API method used by the getter and also by Blueprints
-    _default() {
-        return {
-            getSharedConfigOptions() {
-                this.enableTranslation = this.jhipsterConfig.enableTranslation;
-                this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
-                this.languages = this.jhipsterConfig.languages;
-                this.clientFramework = this.jhipsterConfig.clientFramework;
-                this.skipClient = this.jhipsterConfig.skipClient;
-                this.uaaBaseName = this.jhipsterConfig.uaaBaseName;
-                this.testFrameworks = this.jhipsterConfig.testFrameworks || [];
-                this.gatlingTests = this.testFrameworks.includes('gatling');
-                this.cucumberTests = this.testFrameworks.includes('cucumber');
             },
 
             composeLanguages() {
@@ -493,5 +396,83 @@ module.exports = class extends BaseBlueprintGenerator {
     get end() {
         if (useBlueprints) return;
         return this._end();
+    }
+
+    _validateServerConfiguration() {
+        if (!this.jhipsterConfig.packageFolder) {
+            this.jhipsterConfig.packageFolder = this.jhipsterConfig.packageName.replace(/\./g, '/');
+        }
+        // Generate JWT secret key if key does not already exist in config
+        if (this.jhipsterConfig.authenticationType === 'jwt' && this.jhipsterConfig.jwtSecretKey === undefined) {
+            this.jhipsterConfig.jwtSecretKey = getBase64Secret(null, 64);
+        }
+        // Generate remember me key if key does not already exist in config
+        if (this.jhipsterConfig.authenticationType === 'session' && this.jhipsterConfig.rememberMeKey === undefined) {
+            this.jhipsterConfig.rememberMeKey = getRandomHex();
+        }
+
+        if (
+            (this.jhipsterConfig.applicationType === 'gateway' && this.jhipsterConfig.authenticationType === 'uaa') ||
+            this.jhipsterConfig.authenticationType === 'oauth2'
+        ) {
+            this.info('user-management will be handled by UAA app, oauth expects users to be managed in IpP');
+            this.jhipsterConfig.skipUserManagement = true;
+        }
+
+        if (this.jhipsterConfig.enableHibernateCache && ['no', 'memcached'].includes(this.jhipsterConfig.cacheProvider)) {
+            this.info(`Disabling hibernate cache for cache provider ${this.jhipsterConfig.cacheProvider}`);
+            this.jhipsterConfig.enableHibernateCache = false;
+        }
+
+        // Convert to false for templates.
+        if (this.jhipsterConfig.serviceDiscoveryType === 'no' || !this.jhipsterConfig.serviceDiscoveryType) {
+            this.jhipsterConfig.serviceDiscoveryType = false;
+        }
+        if (this.jhipsterConfig.websocket === 'no' || !this.jhipsterConfig.websocket) {
+            this.jhipsterConfig.websocket = false;
+        }
+        if (this.jhipsterConfig.searchEngine === 'no' || !this.jhipsterConfig.searchEngine) {
+            this.jhipsterConfig.searchEngine = false;
+        }
+        if (this.jhipsterConfig.messageBroker === 'no' || !this.jhipsterConfig.messageBroker) {
+            this.jhipsterConfig.messageBroker = false;
+        }
+
+        // force variables unused by microservice applications
+        if (this.jhipsterConfig.applicationType === 'microservice' || this.jhipsterConfig.applicationType === 'uaa') {
+            this.jhipsterConfig.websocket = false;
+        }
+
+        if (this.jhipsterConfig.entitySuffix === this.jhipsterConfig.dtoSuffix) {
+            this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+        }
+
+        if (this.jhipsterConfig.authenticationType === 'uaa' && !this.jhipsterConfig.uaaBaseName) {
+            if (this.jhipsterConfig.applicationType !== 'uaa') {
+                this.error('when using uaa authentication type, a UAA basename must be provided');
+            }
+            this.jhipsterConfig.uaaBaseName = this.jhipsterConfig.baseName;
+        }
+
+        if (this.jhipsterConfig.databaseType === 'mongodb') {
+            this.jhipsterConfig.devDatabaseType = 'mongodb';
+            this.jhipsterConfig.prodDatabaseType = 'mongodb';
+            this.jhipsterConfig.enableHibernateCache = false;
+        } else if (this.jhipsterConfig.databaseType === 'couchbase') {
+            this.jhipsterConfig.devDatabaseType = 'couchbase';
+            this.jhipsterConfig.prodDatabaseType = 'couchbase';
+            this.jhipsterConfig.enableHibernateCache = false;
+        } else if (this.jhipsterConfig.databaseType === 'cassandra') {
+            this.jhipsterConfig.devDatabaseType = 'cassandra';
+            this.jhipsterConfig.prodDatabaseType = 'cassandra';
+            this.jhipsterConfig.enableHibernateCache = false;
+        } else if (this.jhipsterConfig.databaseType === 'no') {
+            this.jhipsterConfig.devDatabaseType = 'no';
+            this.jhipsterConfig.prodDatabaseType = 'no';
+            this.jhipsterConfig.enableHibernateCache = false;
+            if (this.jhipsterConfig.authenticationType !== 'uaa') {
+                this.jhipsterConfig.skipUserManagement = true;
+            }
+        }
     }
 };

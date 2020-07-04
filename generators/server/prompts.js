@@ -340,7 +340,7 @@ function askForServerSideOpts() {
         this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = props.prodDatabaseType;
         this.searchEngine = this.jhipsterConfig.searchEngine = props.searchEngine;
         this.buildTool = this.jhipsterConfig.buildTool = props.buildTool;
-        this.uaaBaseName = this.jhipsterConfig.uaaAppData = props.uaaBaseName || uaaBaseName;
+        this.uaaBaseName = this.jhipsterConfig.uaaBaseName = props.uaaBaseName || uaaBaseName;
 
         if (this.databaseType === 'no') {
             this.devDatabaseType = this.jhipsterConfig.devDatabaseType = 'no';
@@ -413,6 +413,13 @@ function askForOptionalItems() {
                 this.serverSideOptions,
                 'enableSwaggerCodegen'
             );
+            // Only set this option if it hasn't been set in a previous question, as it's only optional for monoliths
+            if (!this.jhipsterConfig.serviceDiscoveryType) {
+                this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = this.getOptionFromArray(
+                    this.serverSideOptions,
+                    'serviceDiscoveryType'
+                );
+            }
         });
     }
     return undefined;

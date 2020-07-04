@@ -2275,17 +2275,4 @@ module.exports = class extends PrivateBase {
             creationTimestamp,
         });
     }
-
-    validateConfiguration() {
-        this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
-        if (this.jhipsterConfig.serviceDiscoveryType === 'no') {
-            this.jhipsterConfig.serviceDiscoveryType = false;
-        }
-        if (this.jhipsterConfig.authenticationType === 'uaa' && !this.jhipsterConfig.uaaBaseName) {
-            if (this.jhipsterConfig.applicationType !== 'uaa') {
-                this.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-            }
-            this.jhipsterConfig.uaaBaseName = this.jhipsterConfig.baseName;
-        }
-    }
 };

@@ -493,7 +493,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.blueprintVersion && (config.blueprintVersion = this.blueprintVersion);
                 this.config.set(config);
 
-                this.validateConfiguration();
+                this._validateAppConfiguration();
             },
 
             insight() {
@@ -661,5 +661,9 @@ module.exports = class extends BaseBlueprintGenerator {
     get end() {
         if (useBlueprints) return;
         return this._end();
+    }
+
+    _validateAppConfiguration() {
+        this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
     }
 };
