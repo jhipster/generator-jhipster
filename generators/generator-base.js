@@ -2080,13 +2080,10 @@ module.exports = class extends PrivateBase {
      * @param {any} dest - destination context to use default is context
      */
     setupSharedOptions(generator, context = generator, dest = context) {
-        dest.skipClient = context.options['client-hook'] === false || context.jhipsterConfig.skipClient || context.config.get('skipClient');
-        dest.skipServer = context.jhipsterConfig.skipServer || context.config.get('skipServer');
-        dest.skipUserManagement =
-            context.jhipsterConfig.skipUserManagement ||
-            context.options['skip-user-management'] ||
-            context.config.get('skipUserManagement');
-        dest.skipCommitHook = context.options['skip-commit-hook'] || context.config.get('skipCommitHook');
+        dest.skipClient = context.options['client-hook'] === false || context.jhipsterConfig.skipClient;
+        dest.skipServer = context.jhipsterConfig.skipServer;
+        dest.skipUserManagement = context.jhipsterConfig.skipUserManagement || context.options.skipUserManagement;
+        dest.skipCommitHook = context.options.skipCommitHook || context.jhipsterConfig.skipCommitHook;
         dest.otherModules = context.jhipsterConfig.otherModules || [];
         dest.baseName = context.jhipsterConfig.baseName;
         dest.logo = context.configOptions.logo;
@@ -2094,12 +2091,8 @@ module.exports = class extends PrivateBase {
         dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
         dest.experimental = context.configOptions.experimental || context.options.experimental;
 
-        const uaaBaseName = context.jhipsterConfig.uaaBaseName || context.options['uaa-base-name'] || context.config.get('uaaBaseName');
-        if (dest.authenticationType === 'uaa' && _.isNil(uaaBaseName)) {
-            generator.error('when using --auth uaa, a UAA basename must be provided with --uaa-base-name');
-        }
-        dest.uaaBaseName = uaaBaseName;
-        dest.prettierJava = context.options['prettier-java'] || context.config.get('prettierJava');
+        dest.uaaBaseName = context.options.uaaBaseName || context.jhipsterConfig.uaaBaseName;
+        dest.prettierJava = context.options.prettierJava || context.jhipsterConfig.prettierJava;
     }
 
     /**
@@ -2113,25 +2106,24 @@ module.exports = class extends PrivateBase {
      */
     setupClientOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.authenticationType =
-            context.options.auth || context.jhipsterConfig.authenticationType || context.config.get('authenticationType');
-        dest.serviceDiscoveryType = context.jhipsterConfig.serviceDiscoveryType || context.config.get('serviceDiscoveryType');
+        dest.authenticationType = context.options.auth || context.jhipsterConfig.authenticationType;
+        dest.serviceDiscoveryType = context.jhipsterConfig.serviceDiscoveryType;
 
         dest.buildTool = context.jhipsterConfig.buildTool;
         dest.websocket = context.jhipsterConfig.websocket;
-        dest.devDatabaseType = context.jhipsterConfig.devDatabaseType || context.config.get('devDatabaseType');
-        dest.prodDatabaseType = context.jhipsterConfig.prodDatabaseType || context.config.get('prodDatabaseType');
+        dest.devDatabaseType = context.jhipsterConfig.devDatabaseType;
+        dest.prodDatabaseType = context.jhipsterConfig.prodDatabaseType;
         dest.databaseType =
-            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
             context.jhipsterConfig.databaseType ||
-            context.config.get('databaseType');
+            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
+            context.jhipsterConfig.databaseType;
         if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
             dest.skipUserManagement = true;
         }
-        dest.searchEngine = context.config.get('searchEngine');
-        dest.cacheProvider = context.config.get('cacheProvider') || context.config.get('hibernateCache') || 'no';
-        dest.enableHibernateCache = context.config.get('enableHibernateCache') && !['no', 'memcached'].includes(dest.cacheProvider);
-        dest.jhiPrefix = context.jhipsterConfig.jhiPrefix || context.config.get('jhiPrefix');
+        dest.searchEngine = context.jhipsterConfig.searchEngine;
+        dest.cacheProvider = context.jhipsterConfig.cacheProvider || 'no';
+        dest.enableHibernateCache = context.jhipsterConfig.enableHibernateCache && !['no', 'memcached'].includes(dest.cacheProvider);
+        dest.jhiPrefix = context.jhipsterConfig.jhiPrefix;
         dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
         dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
         dest.testFrameworks = context.jhipsterConfig.testFrameworks || [];
@@ -2150,7 +2142,7 @@ module.exports = class extends PrivateBase {
      */
     setupServerOptions(generator, context = generator, dest = context) {
         this.setupSharedOptions(generator, context, dest);
-        dest.enableTranslation = context.jhipsterConfig.enableTranslation || context.config.get('enableTranslation');
+        dest.enableTranslation = context.jhipsterConfig.enableTranslation;
         dest.testFrameworks = context.jhipsterConfig.testFrameworks;
     }
 
