@@ -26,7 +26,7 @@ const writeReactFiles = require('./files-react').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
-const { clientDefaultConfig, defaultConfig } = require('../generator-defaults');
+const { clientDefaultConfig } = require('../generator-defaults');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -68,18 +68,8 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        this.experimental = this.configOptions.experimental = this.options.experimental;
-
-        if (this.options.auth) {
-            this.jhipsterConfig.authenticationType = this.options.auth;
-        }
-        if (this.options.skipCommitHook) {
-            this.skipCommitHook = this.jhipsterConfig.skipCommitHook = true;
-        }
-
-        this.useYarn = this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
-        this.useNpm = this.configOptions.useNpm = !this.options.yarn;
-        this.jhipsterConfig.clientPackageManager = this.useYarn ? 'yarn' : 'npm';
+        this.loadOptions();
+        this.loadRuntimeOptions();
 
         this.existingProject = !!this.jhipsterConfig.clientFramework;
 
@@ -140,6 +130,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 // Make constants available in templates
                 this.MAIN_SRC_DIR = this.CLIENT_MAIN_SRC_DIR;
                 this.TEST_SRC_DIR = this.CLIENT_TEST_SRC_DIR;
+                this.packagejs = packagejs;
             },
 
             saveConfig() {
@@ -190,56 +181,25 @@ module.exports = class extends BaseBlueprintGenerator {
                     );
                 }
             },
-            getSharedConfigOptions() {
-                this.packagejs = packagejs;
+            loadConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
 
-                this.setupClientOptions(this);
-
-                const config = _.defaults({}, this.jhipsterConfig, defaultConfig);
-                this.clientFramework = config.clientFramework;
-                this.clientTheme = config.clientTheme;
-                this.clientThemeVariant = config.clientThemeVariant;
                 this.enableI18nRTL = false;
-
-                this.baseName = config.baseName;
-                this.clientPackageManager = config.clientPackageManager;
-                this.applicationType = config.applicationType;
-                this.reactive = config.reactive;
-
-                this.serverPort = config.serverPort;
-                this.messageBroker = config.messageBroker;
-                this.serviceDiscoveryType = config.serviceDiscoveryType;
-                this.cacheProvider = config.cacheProvider;
-                this.enableHibernateCache = config.enableHibernateCache;
-                this.websocket = config.websocket;
-                this.databaseType = config.databaseType;
-                this.devDatabaseType = config.devDatabaseType;
-                this.prodDatabaseType = config.prodDatabaseType;
-                this.messageBroker = config.messageBroker;
-                this.searchEngine = config.searchEngine;
-                this.buildTool = config.buildTool;
-                this.authenticationType = config.authenticationType;
-                this.otherModules = config.otherModules;
-                this.testFrameworks = config.testFrameworks;
-
-                this.protractorTests = this.testFrameworks.includes('protractor');
-
-                this.enableTranslation = config.enableTranslation;
-                this.nativeLanguage = config.nativeLanguage;
-                this.languages = config.languages;
                 if (this.languages !== undefined) {
                     this.enableI18nRTL = this.isI18nRTLSupportNecessary(this.languages);
                 }
-
-                this.uaaBaseName = config.uaaBaseName;
-
+            },
+            getSharedConfigOptions() {
                 // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(config.buildTool);
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 
                 this.styleSheetExt = 'scss';
                 this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
-                this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(config.buildTool) + constants.CLIENT_DIST_DIR;
+                this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.buildTool) + constants.CLIENT_DIST_DIR;
 
                 // Application name modified, using each technology's conventions
                 this.camelizedBaseName = _.camelCase(this.baseName);
@@ -249,6 +209,10 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
+
+                if (this.authenticationType === 'oauth2' || (this.databaseType === 'no' && this.authenticationType !== 'uaa')) {
+                    this.skipUserManagement = true;
+                }
             },
 
             insight() {

@@ -56,7 +56,12 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        this.uaaBaseName = this.options.uaaBaseName || this.jhipsterConfig.uaaBaseName || this.config.get('uaaBaseName');
+        if (this.options.help) {
+            return;
+        }
+
+        this.loadOptions();
+        this.loadRuntimeOptions();
 
         // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
         this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
@@ -221,64 +226,11 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            backward() {
-                this.setupServerOptions(this);
-            },
-            loadTranslationConfig() {
-                const configWithDefaults = _.defaults({}, this.jhipsterConfig, defaultConfig);
-                this.enableTranslation = configWithDefaults.enableTranslation;
-                this.nativeLanguage = configWithDefaults.nativeLanguage;
-                this.languages = configWithDefaults.languages;
-            },
-
-            loadClientConfig() {
-                const configWithDefaults = _.defaults({}, this.jhipsterConfig, defaultConfig);
-                this.clientFramework = configWithDefaults.clientFramework;
-                this.skipClient = configWithDefaults.skipClient;
-                this.clientTheme = configWithDefaults.clientTheme;
-            },
-
-            loadServerConfig() {
-                const configWithDefaults = _.defaults({}, this.jhipsterConfig, defaultConfig);
-                this.packageName = configWithDefaults.packageName;
-                this.packageFolder = configWithDefaults.packageFolder;
-                this.serverPort = configWithDefaults.serverPort;
-                this.uaaBaseName = configWithDefaults.uaaBaseName;
-                this.buildTool = configWithDefaults.buildTool;
-
-                this.authenticationType = configWithDefaults.authenticationType;
-                this.rememberMeKey = configWithDefaults.rememberMeKey;
-                this.jwtSecretKey = configWithDefaults.jwtSecretKey;
-
-                this.databaseType = configWithDefaults.databaseType;
-                this.devDatabaseType = configWithDefaults.devDatabaseType;
-                this.prodDatabaseType = configWithDefaults.prodDatabaseType;
-                this.searchEngine = configWithDefaults.searchEngine;
-                this.cacheProvider = configWithDefaults.cacheProvider;
-                this.enableHibernateCache = configWithDefaults.enableHibernateCache;
-
-                this.enableSwaggerCodegen = configWithDefaults.enableSwaggerCodegen;
-                this.messageBroker = configWithDefaults.messageBroker;
-                this.websocket = configWithDefaults.websocket;
-                this.serviceDiscoveryType = configWithDefaults.serviceDiscoveryType;
-
-                this.embeddableLaunchScript = configWithDefaults.embeddableLaunchScript;
-            },
-
-            loadAppConfig() {
-                const configWithDefaults = _.defaults({}, this.jhipsterConfig, defaultConfig);
-                this.jhipsterVersion = packagejs.version;
-                this.applicationType = configWithDefaults.applicationType;
-                this.reactive = configWithDefaults.reactive;
-                this.jhiPrefix = configWithDefaults.jhiPrefix;
-                this.skipFakeData = configWithDefaults.skipFakeData;
-                this.entitySuffix = configWithDefaults.entitySuffix;
-                this.dtoSuffix = configWithDefaults.dtoSuffix;
-                this.skipUserManagement = configWithDefaults.skipUserManagement;
-
-                this.testFrameworks = configWithDefaults.testFrameworks || [];
-                this.gatlingTests = this.testFrameworks.includes('gatling');
-                this.cucumberTests = this.testFrameworks.includes('cucumber');
+            loadConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
             },
 
             generatedConfigs() {
@@ -414,89 +366,86 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._end();
     }
 
-    _validateServerConfiguration() {
-        if (!this.jhipsterConfig.packageFolder) {
-            this.jhipsterConfig.packageFolder = this.jhipsterConfig.packageName.replace(/\./g, '/');
+    _validateServerConfiguration(config = this.jhipsterConfig) {
+        if (!config.packageFolder) {
+            config.packageFolder = config.packageName.replace(/\./g, '/');
         }
 
-        if (this.jhipsterConfig.applicationType === 'uaa') {
-            this.jhipsterConfig.authenticationType = 'uaa';
+        if (config.applicationType === 'uaa') {
+            config.authenticationType = 'uaa';
         }
 
         // JWT authentication is mandatory with Eureka, so the JHipster Registry
         // can control the applications
-        if (
-            this.jhipsterConfig.serviceDiscoveryType === 'eureka' &&
-            this.jhipsterConfig.authenticationType !== 'uaa' &&
-            this.jhipsterConfig.authenticationType !== 'oauth2'
-        ) {
-            this.jhipsterConfig.authenticationType = 'jwt';
+        if (config.serviceDiscoveryType === 'eureka' && config.authenticationType !== 'uaa' && config.authenticationType !== 'oauth2') {
+            config.authenticationType = 'jwt';
         }
 
         // Generate JWT secret key if key does not already exist in config
-        if (
-            (this.jhipsterConfig.authenticationType === 'jwt' || this.jhipsterConfig.applicationType === 'microservice') &&
-            this.jhipsterConfig.jwtSecretKey === undefined
-        ) {
-            this.jhipsterConfig.jwtSecretKey = getBase64Secret(null, 64);
+        if ((config.authenticationType === 'jwt' || config.applicationType === 'microservice') && config.jwtSecretKey === undefined) {
+            config.jwtSecretKey = getBase64Secret(null, 64);
         }
         // Generate remember me key if key does not already exist in config
-        if (this.jhipsterConfig.authenticationType === 'session' && !this.jhipsterConfig.rememberMeKey) {
-            this.jhipsterConfig.rememberMeKey = getRandomHex();
+        if (config.authenticationType === 'session' && !config.rememberMeKey) {
+            config.rememberMeKey = getRandomHex();
         }
 
         // user-management will be handled by UAA app, oauth expects users to be managed in IpP
-        if (
-            (this.jhipsterConfig.applicationType === 'gateway' && this.jhipsterConfig.authenticationType === 'uaa') ||
-            this.jhipsterConfig.authenticationType === 'oauth2'
-        ) {
+        if ((config.applicationType === 'gateway' && config.authenticationType === 'uaa') || config.authenticationType === 'oauth2') {
             this.info('user-management will be handled by UAA app, oauth expects users to be managed in IpP');
-            this.jhipsterConfig.skipUserManagement = true;
+            config.skipUserManagement = true;
         }
 
-        if (this.jhipsterConfig.enableHibernateCache && ['no', 'memcached'].includes(this.jhipsterConfig.cacheProvider)) {
-            this.info(`Disabling hibernate cache for cache provider ${this.jhipsterConfig.cacheProvider}`);
-            this.jhipsterConfig.enableHibernateCache = false;
+        if (config.enableHibernateCache && ['no', 'memcached'].includes(config.cacheProvider)) {
+            this.info(`Disabling hibernate cache for cache provider ${config.cacheProvider}`);
+            config.enableHibernateCache = false;
         }
 
         // Convert to false for templates.
-        if (this.jhipsterConfig.serviceDiscoveryType === 'no' || !this.jhipsterConfig.serviceDiscoveryType) {
-            this.jhipsterConfig.serviceDiscoveryType = false;
+        if (config.serviceDiscoveryType === 'no' || !config.serviceDiscoveryType) {
+            config.serviceDiscoveryType = false;
         }
-        if (this.jhipsterConfig.websocket === 'no' || !this.jhipsterConfig.websocket) {
-            this.jhipsterConfig.websocket = false;
+        if (config.websocket === 'no' || !config.websocket) {
+            config.websocket = false;
         }
-        if (this.jhipsterConfig.searchEngine === 'no' || !this.jhipsterConfig.searchEngine) {
-            this.jhipsterConfig.searchEngine = false;
+        if (config.searchEngine === 'no' || !config.searchEngine) {
+            config.searchEngine = false;
         }
-        if (this.jhipsterConfig.messageBroker === 'no' || !this.jhipsterConfig.messageBroker) {
-            this.jhipsterConfig.messageBroker = false;
+        if (config.messageBroker === 'no' || !config.messageBroker) {
+            config.messageBroker = false;
+        }
+
+        if (!config.databaseType && config.prodDatabaseType) {
+            config.databaseType = this.getDBTypeFromDBValue(config.prodDatabaseType);
+        }
+        if (!config.devDatabaseType && config.prodDatabaseType) {
+            config.devDatabaseType = config.prodDatabaseType;
         }
 
         // force variables unused by microservice applications
-        if (this.jhipsterConfig.applicationType === 'microservice' || this.jhipsterConfig.applicationType === 'uaa') {
-            this.jhipsterConfig.websocket = false;
+        if (config.applicationType === 'microservice' || config.applicationType === 'uaa') {
+            config.websocket = false;
         }
 
-        if (this.jhipsterConfig.authenticationType === 'uaa' && !this.jhipsterConfig.uaaBaseName) {
-            if (this.jhipsterConfig.applicationType !== 'uaa') {
+        if (config.authenticationType === 'uaa' && !config.uaaBaseName) {
+            if (config.applicationType !== 'uaa') {
                 this.error('when using uaa authentication type, a UAA basename must be provided');
             }
-            this.jhipsterConfig.uaaBaseName = this.jhipsterConfig.baseName;
+            config.uaaBaseName = config.baseName;
         }
 
-        const databaseType = this.jhipsterConfig.databaseType;
+        const databaseType = config.databaseType;
         if (databaseType === 'no') {
-            this.jhipsterConfig.devDatabaseType = 'no';
-            this.jhipsterConfig.prodDatabaseType = 'no';
-            this.jhipsterConfig.enableHibernateCache = false;
-            if (this.jhipsterConfig.authenticationType !== 'uaa') {
-                this.jhipsterConfig.skipUserManagement = true;
+            config.devDatabaseType = 'no';
+            config.prodDatabaseType = 'no';
+            config.enableHibernateCache = false;
+            if (config.authenticationType !== 'uaa') {
+                config.skipUserManagement = true;
             }
         } else if (['mongodb', 'neo4j', 'couchbase', 'cassandra'].includes(databaseType)) {
-            this.jhipsterConfig.devDatabaseType = databaseType;
-            this.jhipsterConfig.prodDatabaseType = databaseType;
-            this.jhipsterConfig.enableHibernateCache = false;
+            config.devDatabaseType = databaseType;
+            config.prodDatabaseType = databaseType;
+            config.enableHibernateCache = false;
         }
     }
 };

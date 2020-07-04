@@ -2066,84 +2066,164 @@ module.exports = class extends PrivateBase {
         return filesOut;
     }
 
-    setupAppOptions(generator, context = generator, dest = context) {
-        this.setupSharedOptions(generator, context, dest);
-    }
+    loadOptions(options = this.options) {
+        // Load runtime only options
+        this.configOptions.withEntities = options.withEntities;
+        this.configOptions.skipChecks = options.skipChecks;
+        this.configOptions.isDebugEnabled = options.debug;
+        this.configOptions.experimental = options.experimental;
 
-    /**
-     * Setup shared level options from context.
-     * all variables should be set to dest,
-     * all variables should be referred from context,
-     * all methods should be called on generator,
-     * @param {any} generator - generator instance
-     * @param {any} context - context to use default is generator instance
-     * @param {any} dest - destination context to use default is context
-     */
-    setupSharedOptions(generator, context = generator, dest = context) {
-        dest.skipClient = context.options['client-hook'] === false || context.jhipsterConfig.skipClient;
-        dest.skipServer = context.jhipsterConfig.skipServer;
-        dest.skipUserManagement = context.jhipsterConfig.skipUserManagement || context.options.skipUserManagement;
-        dest.skipCommitHook = context.options.skipCommitHook || context.jhipsterConfig.skipCommitHook;
-        dest.otherModules = context.jhipsterConfig.otherModules || [];
-        dest.baseName = context.jhipsterConfig.baseName;
-        dest.logo = context.configOptions.logo;
-        dest.clientPackageManager = context.jhipsterConfig.clientPackageManager;
-        dest.isDebugEnabled = context.configOptions.isDebugEnabled || context.options.debug;
-        dest.experimental = context.configOptions.experimental || context.options.experimental;
-
-        dest.uaaBaseName = context.options.uaaBaseName || context.jhipsterConfig.uaaBaseName;
-        dest.prettierJava = context.options.prettierJava || context.jhipsterConfig.prettierJava;
-    }
-
-    /**
-     * Setup client instance level options from context.
-     * all variables should be set to dest,
-     * all variables should be referred from context,
-     * all methods should be called on generator,
-     * @param {any} generator - generator instance
-     * @param {any} context - context to use default is generator instance
-     * @param {any} dest - destination context to use default is context
-     */
-    setupClientOptions(generator, context = generator, dest = context) {
-        this.setupSharedOptions(generator, context, dest);
-        dest.authenticationType = context.options.auth || context.jhipsterConfig.authenticationType;
-        dest.serviceDiscoveryType = context.jhipsterConfig.serviceDiscoveryType;
-
-        dest.buildTool = context.jhipsterConfig.buildTool;
-        dest.websocket = context.jhipsterConfig.websocket;
-        dest.devDatabaseType = context.jhipsterConfig.devDatabaseType;
-        dest.prodDatabaseType = context.jhipsterConfig.prodDatabaseType;
-        dest.databaseType =
-            context.jhipsterConfig.databaseType ||
-            generator.getDBTypeFromDBValue(dest.prodDatabaseType) ||
-            context.jhipsterConfig.databaseType;
-        if (dest.authenticationType === 'oauth2' || (dest.databaseType === 'no' && dest.authenticationType !== 'uaa')) {
-            dest.skipUserManagement = true;
+        // Load stored options
+        if (options.skipClient) {
+            this.skipClient = this.jhipsterConfig.skipClient = true;
         }
-        dest.searchEngine = context.jhipsterConfig.searchEngine;
-        dest.cacheProvider = context.jhipsterConfig.cacheProvider || 'no';
-        dest.enableHibernateCache = context.jhipsterConfig.enableHibernateCache && !['no', 'memcached'].includes(dest.cacheProvider);
-        dest.jhiPrefix = context.jhipsterConfig.jhiPrefix;
-        dest.jhiPrefixCapitalized = _.upperFirst(generator.jhiPrefix);
-        dest.jhiPrefixDashed = _.kebabCase(generator.jhiPrefix);
-        dest.testFrameworks = context.jhipsterConfig.testFrameworks || [];
+        if (options.skipServer) {
+            this.skipServer = this.jhipsterConfig.skipServer = true;
+        }
+        if (options.skipFakeData) {
+            this.jhipsterConfig.skipFakeData = true;
+        }
+        if (options.skipUserManagement) {
+            this.jhipsterConfig.skipUserManagement = true;
+        }
+        if (options.skipCheckLengthOfIdentifier) {
+            this.jhipsterConfig.skipCheckLengthOfIdentifier = true;
+        }
+        if (options.prettierJava) {
+            this.jhipsterConfig.prettierJava = true;
+        }
+        if (options.skipCommitHook) {
+            this.jhipsterConfig.skipCommitHook = true;
+        }
 
-        dest.useYarn = context.configOptions.useYarn;
+        if (options.db) {
+            this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
+            this.jhipsterConfig.devDatabaseType = options.db;
+            this.jhipsterConfig.prodDatabaseType = options.db;
+        }
+        if (options.auth) {
+            this.jhipsterConfig.authenticationType = options.auth;
+        }
+        if (options.uaaBaseName) {
+            this.jhipsterConfig.uaaBaseName = options.uaaBaseName;
+        }
+        if (options.searchEngine) {
+            this.jhipsterConfig.searchEngine = options.searchEngine;
+        }
+        if (options.build) {
+            this.jhipsterConfig.buildTool = options.build;
+        }
+        if (options.websocket) {
+            this.jhipsterConfig.websocket = options.websocket;
+        }
+        if (options.jhiPrefix) {
+            this.jhipsterConfig.jhiPrefix = options.jhiPrefix;
+        }
+        if (options.entitySuffix) {
+            this.jhipsterConfig.entitySuffix = options.entitySuffix;
+        }
+        if (options.dtoSuffix) {
+            this.jhipsterConfig.dtoSuffix = options.dtoSuffix;
+        }
+        this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
+        this.configOptions.useNpm = !this.options.yarn;
+        this.jhipsterConfig.clientPackageManager = this.useYarn ? 'yarn' : 'npm';
+
+        if (options.creationTimestamp) {
+            const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
+            if (creationTimestamp) {
+                this.jhipsterConfig.creationTimestamp = creationTimestamp;
+            }
+        }
+    }
+
+    loadRuntimeOptions(configOptions = this.configOptions, dest = this) {
+        dest.withEntities = configOptions.withEntities;
+        dest.skipChecks = configOptions.skipChecks;
+        dest.isDebugEnabled = configOptions.isDebugEnabled;
+        dest.experimental = configOptions.experimental;
+        dest.useYarn = configOptions.useYarn;
+        dest.useNpm = configOptions.useNpm;
+        dest.logo = configOptions.logo;
+    }
+
+    loadAppConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.jhipsterVersion = config.jhipsterVersion;
+        dest.baseName = config.baseName;
+        dest.applicationType = config.applicationType;
+        dest.reactive = config.reactive;
+        dest.jhiPrefix = config.jhiPrefix;
+        dest.skipFakeData = config.skipFakeData;
+        dest.entitySuffix = config.entitySuffix;
+        dest.dtoSuffix = config.dtoSuffix;
+        dest.skipUserManagement = config.skipUserManagement;
+
+        dest.skipServer = config.skipServer;
+        dest.skipCommitHook = config.skipCommitHook;
+        dest.otherModules = config.otherModules || [];
+        dest.skipClient = this.options['client-hook'] === false || config.skipClient;
+        dest.prettierJava = config.prettierJava;
+
+        dest.testFrameworks = config.testFrameworks || [];
+        dest.gatlingTests = dest.testFrameworks.includes('gatling');
+        dest.cucumberTests = dest.testFrameworks.includes('cucumber');
+        dest.protractorTests = dest.testFrameworks.includes('protractor');
+
+        dest.jhiPrefixCapitalized = _.upperFirst(this.jhiPrefix);
+        dest.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
     }
 
     /**
-     * Setup Server instance level options from context.
+     * Load client configs into dest.
      * all variables should be set to dest,
-     * all variables should be referred from context,
-     * all methods should be called on generator,
-     * @param {any} generator - generator instance
-     * @param {any} context - context to use default is generator instance
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
      * @param {any} dest - destination context to use default is context
      */
-    setupServerOptions(generator, context = generator, dest = context) {
-        this.setupSharedOptions(generator, context, dest);
-        dest.enableTranslation = context.jhipsterConfig.enableTranslation;
-        dest.testFrameworks = context.jhipsterConfig.testFrameworks;
+    loadClientConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.clientPackageManager = config.clientPackageManager;
+        dest.clientFramework = config.clientFramework;
+        dest.clientFramework = config.clientFramework;
+        dest.clientTheme = config.clientTheme;
+    }
+
+    loadTranslationConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.enableTranslation = config.enableTranslation;
+        dest.nativeLanguage = config.nativeLanguage;
+        dest.languages = config.languages;
+    }
+
+    /**
+     * Load server configs into dest.
+     * all variables should be set to dest,
+     * all variables should be referred from config,
+     * @param {any} config - config to load config from
+     * @param {any} dest - destination context to use default is context
+     */
+    loadServerConfig(config = _.defaults({}, this.jhipsterConfig, defaultConfig), dest = this) {
+        dest.packageName = config.packageName;
+        dest.packageFolder = config.packageFolder;
+        dest.serverPort = config.serverPort;
+        dest.uaaBaseName = config.uaaBaseName;
+        dest.buildTool = config.buildTool;
+
+        dest.authenticationType = config.authenticationType;
+        dest.rememberMeKey = config.rememberMeKey;
+        dest.jwtSecretKey = config.jwtSecretKey;
+
+        dest.databaseType = config.databaseType;
+        dest.devDatabaseType = config.devDatabaseType;
+        dest.prodDatabaseType = config.prodDatabaseType;
+        dest.searchEngine = config.searchEngine;
+        dest.cacheProvider = config.cacheProvider;
+        dest.enableHibernateCache = config.enableHibernateCache;
+
+        dest.enableSwaggerCodegen = config.enableSwaggerCodegen;
+        dest.messageBroker = config.messageBroker;
+        dest.websocket = config.websocket;
+        dest.serviceDiscoveryType = config.serviceDiscoveryType;
+
+        dest.embeddableLaunchScript = config.embeddableLaunchScript;
     }
 
     /**

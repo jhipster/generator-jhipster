@@ -35,6 +35,13 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
+        if (this.options.help) {
+            return;
+        }
+
+        this.loadOptions();
+        this.loadRuntimeOptions();
+
         useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common', { 'client-hook': !this.skipClient });
     }
 
@@ -70,17 +77,11 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            getSharedConfigOptions() {
-                this.setupServerOptions(this);
-                this.setupClientOptions(this);
-
-                this.jhipsterVersion = this.jhipsterConfig.jhipsterVersion;
-                this.applicationType = this.jhipsterConfig.applicationType;
-                this.enableSwaggerCodegen = this.jhipsterConfig.enableSwaggerCodegen;
-                this.serverPort = this.jhipsterConfig.serverPort;
-                this.clientFramework = this.jhipsterConfig.clientFramework;
-                this.protractorTests = this.testFrameworks.includes('protractor');
-                this.gatlingTests = this.testFrameworks.includes('gatling');
+            loadConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
             },
             writePrettierConfig() {
                 // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work

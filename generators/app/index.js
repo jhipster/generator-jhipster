@@ -207,74 +207,8 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        // Load runtime only options
-        this.withEntities = this.configOptions.withEntities = this.options.withEntities;
-        this.skipChecks = this.configOptions.skipChecks = this.options.skipChecks;
-        this.isDebugEnabled = this.configOptions.isDebugEnabled = this.options.debug;
-        this.experimental = this.configOptions.experimental = this.options.experimental;
-
-        // Load stored options
-        if (this.options.skipClient) {
-            this.skipClient = this.jhipsterConfig.skipClient = true;
-        }
-        if (this.options.skipServer) {
-            this.skipServer = this.jhipsterConfig.skipServer = true;
-        }
-        if (this.options.skipFakeData) {
-            this.jhipsterConfig.skipFakeData = true;
-        }
-        if (this.options.skipUserManagement) {
-            this.jhipsterConfig.skipUserManagement = true;
-        }
-        if (this.options.skipCheckLengthOfIdentifier) {
-            this.jhipsterConfig.skipCheckLengthOfIdentifier = true;
-        }
-        if (this.options.prettierJava) {
-            this.jhipsterConfig.prettierJava = true;
-        }
-        if (this.options.skipCommitHook) {
-            this.jhipsterConfig.skipCommitHook = true;
-        }
-
-        if (this.options.db) {
-            this.jhipsterConfig.databaseType = this.getDBTypeFromDBValue(this.options.db);
-            this.jhipsterConfig.devDatabaseType = this.options.db;
-            this.jhipsterConfig.prodDatabaseType = this.options.db;
-        }
-        if (this.options.auth) {
-            this.jhipsterConfig.authenticationType = this.options.auth;
-        }
-        if (this.options.uaaBaseName) {
-            this.jhipsterConfig.uaaBaseName = this.options.uaaBaseName;
-        }
-        if (this.options.searchEngine) {
-            this.jhipsterConfig.searchEngine = this.options.searchEngine;
-        }
-        if (this.options.build) {
-            this.jhipsterConfig.buildTool = this.options.build;
-        }
-        if (this.options.websocket) {
-            this.jhipsterConfig.websocket = this.options.websocket;
-        }
-        if (this.options.jhiPrefix) {
-            this.jhipsterConfig.jhiPrefix = this.options.jhiPrefix;
-        }
-        if (this.options.entitySuffix) {
-            this.jhipsterConfig.entitySuffix = this.options.entitySuffix;
-        }
-        if (this.options.dtoSuffix) {
-            this.jhipsterConfig.dtoSuffix = this.options.dtoSuffix;
-        }
-        this.useYarn = this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
-        this.useNpm = this.configOptions.useNpm = !this.options.yarn;
-        this.jhipsterConfig.clientPackageManager = this.useYarn ? 'yarn' : 'npm';
-
-        if (this.options.creationTimestamp) {
-            const creationTimestamp = this.parseCreationTimestamp();
-            if (creationTimestamp) {
-                this.jhipsterConfig.creationTimestamp = creationTimestamp;
-            }
-        }
+        this.loadOptions();
+        this.loadRuntimeOptions();
 
         // Use jhipster defaults
         if (this.options.defaults || this.options.withEntities) {
