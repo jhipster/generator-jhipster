@@ -35,8 +35,6 @@ class EntityGenerator extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = this.options.configOptions || {};
-
         // This makes `name` a required argument.
         this.argument('name', {
             type: String,
@@ -144,7 +142,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
             getConfig() {
                 const context = this.context;
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 context.useConfigurationFile = false;
                 context.options = this.options;
                 context.baseName = configuration.get('baseName');
@@ -162,7 +160,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 context.prodDatabaseType = configuration.get('prodDatabaseType') || this.options.db;
                 context.devDatabaseType = configuration.get('devDatabaseType') || this.options.db;
                 context.skipFakeData = configuration.get('skipFakeData');
-                context.searchEngine = configuration.get('searchEngine');
+                context.searchEngine = configuration.get('searchEngine') || false;
                 context.messageBroker = configuration.get('messageBroker') === 'no' ? false : configuration.get('messageBroker');
                 context.enableTranslation = configuration.get('enableTranslation');
                 context.nativeLanguage = configuration.get('nativeLanguage');
@@ -196,8 +194,12 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
                 }
 
+                const fileData = this.context.fileData || {};
                 context.skipClient =
-                    context.applicationType === 'microservice' || this.options['skip-client'] || configuration.get('skipClient');
+                    context.applicationType === 'microservice' ||
+                    this.options['skip-client'] ||
+                    configuration.get('skipClient') ||
+                    fileData.skipClient;
                 context.skipServer = this.options['skip-server'] || configuration.get('skipServer');
                 context.skipDbChangelog = this.options['skip-db-changelog'] || configuration.get('skipDbChangelog');
 
@@ -688,9 +690,15 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 const entityNamePluralizedAndSpinalCased = _.kebabCase(pluralize(entityName));
 
                 context.entityClass = context.entityNameCapitalized;
-                context.entityClassHumanized = _.startCase(context.entityNameCapitalized);
                 context.entityClassPlural = pluralize(context.entityClass);
-                context.entityClassPluralHumanized = _.startCase(context.entityClassPlural);
+
+                const fileData = this.data || this.context.fileData;
+                // Used for i18n
+                context.entityClassHumanized = fileData.entityClassHumanized || _.startCase(context.entityNameCapitalized);
+                context.entityClassPluralHumanized = fileData.entityClassPluralHumanized || _.startCase(context.entityClassPlural);
+                // Implement i18n variant ex: 'male', 'female' when applied
+                context.entityI18nVariant = fileData.entityI18nVariant || 'default';
+
                 context.entityInstance = _.lowerFirst(entityName);
                 context.entityInstancePlural = pluralize(context.entityInstance);
                 context.entityApiUrl = entityNamePluralizedAndSpinalCased;
@@ -744,6 +752,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
+                    const fieldOptions = field.options || {};
                     // Migration from JodaTime to Java Time
                     if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
                         field.fieldType = 'Instant';
@@ -803,7 +812,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (_.isUndefined(field.fieldNameHumanized)) {
-                        field.fieldNameHumanized = _.startCase(field.fieldName);
+                        field.fieldNameHumanized = fieldOptions.fieldNameHumanized || _.startCase(field.fieldName);
                     }
 
                     if (_.isUndefined(field.fieldInJavaBeanMethod)) {
@@ -877,6 +886,7 @@ class EntityGenerator extends BaseBlueprintGenerator {
                 let hasUserField = false;
                 // Load in-memory data for relationships
                 context.relationships.forEach(relationship => {
+                    const relationshipOptions = relationship.options || {};
                     const otherEntityName = relationship.otherEntityName;
                     const otherEntityData = this.getEntityJson(otherEntityName);
                     if (otherEntityData) {
@@ -965,7 +975,8 @@ class EntityGenerator extends BaseBlueprintGenerator {
                     }
 
                     if (_.isUndefined(relationship.relationshipNameHumanized)) {
-                        relationship.relationshipNameHumanized = _.startCase(relationship.relationshipName);
+                        relationship.relationshipNameHumanized =
+                            relationshipOptions.relationshipNameHumanized || _.startCase(relationship.relationshipName);
                     }
 
                     if (_.isUndefined(relationship.relationshipNamePlural)) {

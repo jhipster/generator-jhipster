@@ -932,7 +932,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => !generator.reactive,
+            condition: generator => !generator.skipClient && !generator.reactive,
             path: SERVER_MAIN_SRC_DIR,
             templates: [
                 {
@@ -1431,16 +1431,23 @@ const serverFiles = {
             path: SERVER_TEST_SRC_DIR,
             templates: [
                 {
-                    file: 'package/config/StaticResourcesWebConfigurerTest.java',
-                    renameTo: generator => `${generator.testDir}config/StaticResourcesWebConfigurerTest.java`,
-                },
-                {
                     file: 'package/config/WebConfigurerTest.java',
                     renameTo: generator => `${generator.testDir}config/WebConfigurerTest.java`,
                 },
                 {
                     file: 'package/config/WebConfigurerTestController.java',
                     renameTo: generator => `${generator.testDir}config/WebConfigurerTestController.java`,
+                },
+            ],
+        },
+        {
+            // TODO : add these tests to reactive
+            condition: generator => !generator.skipClient && !generator.reactive,
+            path: SERVER_TEST_SRC_DIR,
+            templates: [
+                {
+                    file: 'package/config/StaticResourcesWebConfigurerTest.java',
+                    renameTo: generator => `${generator.testDir}config/StaticResourcesWebConfigurerTest.java`,
                 },
             ],
         },

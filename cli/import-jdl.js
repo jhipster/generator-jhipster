@@ -17,16 +17,16 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
-const shelljs = require('shelljs');
 const jhiCore = require('jhipster-core');
 const pretty = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
-const { CLI_NAME, GENERATOR_NAME, logger, toString, getOptionsFromArgs, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
-const jhipsterUtils = require('../generators/utils');
+const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
+const { getDBTypeFromDBValue, loadYoRc } = require('../generators/utils');
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
@@ -243,16 +243,20 @@ class JDLProcessor {
     }
 
     getConfig() {
-        if (jhiCore.FileUtils.doesFileExist('.yo-rc.json')) {
+        if (fs.existsSync('.yo-rc.json')) {
+            const yoRC = loadYoRc('.yo-rc.json');
+            const configuration = yoRC['generator-jhipster'];
+            if (!configuration) {
+                return;
+            }
             logger.info('Found .yo-rc.json on path. This is an existing app');
-            const configuration = jhipsterUtils.getAllJhipsterConfig(null, true);
             if (_.isUndefined(this.options.interactive)) {
                 logger.debug('Setting interactive true for existing apps');
                 this.options.interactive = true;
             }
             this.applicationType = configuration.applicationType;
             this.baseName = configuration.baseName;
-            this.databaseType = configuration.databaseType || jhipsterUtils.getDBTypeFromDBValue(this.options.db);
+            this.databaseType = configuration.databaseType || getDBTypeFromDBValue(this.options.db);
             this.prodDatabaseType = configuration.prodDatabaseType || this.options.db;
             this.devDatabaseType = configuration.devDatabaseType || this.options.db;
             this.skipClient = configuration.skipClient;
@@ -397,16 +401,6 @@ class JDLProcessor {
     }
 }
 
-const validateFiles = jdlFiles => {
-    if (jdlFiles) {
-        jdlFiles.forEach(key => {
-            if (!shelljs.test('-f', key)) {
-                logger.fatal(chalk.red(`\nCould not find ${key}, make sure the path is correct.\n`));
-            }
-        });
-    }
-};
-
 /**
  * Import-JDL sub generator
  * @param {any} args arguments passed for import-jdl
@@ -414,16 +408,9 @@ const validateFiles = jdlFiles => {
  * @param {any} env the yeoman environment
  * @param {function} forkProcess the method to use for process forking
  */
-module.exports = (args, options, env, forkProcess = fork) => {
-    logger.debug('cmd: import-jdl from ./import-jdl');
-    logger.debug(`args: ${toString(args)}`);
-    let jdlFiles = [];
-    if (!options.inline) {
-        jdlFiles = getOptionsFromArgs(args);
-        validateFiles(jdlFiles);
-    }
+module.exports = (jdlFiles, options = {}, env, forkProcess = fork) => {
     logger.info(chalk.yellow(`Executing import-jdl ${options.inline ? 'with inline content' : jdlFiles.join(' ')}`));
-    logger.info(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
+    logger.debug(chalk.yellow(`Options: ${toString({ ...options, inline: options.inline ? 'inline content' : '' })}`));
     try {
         const jdlImporter = new JDLProcessor(jdlFiles, options.inline, options);
         jdlImporter.getConfig();
@@ -437,9 +424,12 @@ module.exports = (args, options, env, forkProcess = fork) => {
             .then(() => {
                 return jdlImporter.generateDeployments(forkProcess);
             })
-            .then(printSuccess);
+            .then(() => {
+                printSuccess();
+                return jdlFiles;
+            });
     } catch (e) {
         logger.error(`Error during import-jdl: ${e.message}`, e);
-        return Promise.resolve();
+        return Promise.reject(new Error(`Error during import-jdl: ${e.message}`));
     }
 };

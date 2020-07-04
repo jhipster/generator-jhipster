@@ -28,12 +28,11 @@ module.exports = class extends BaseGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.jhipsterConfig = this._getStorage('generator-jhipster');
         this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
         if (this.fromBlueprint) {
             this.blueprintConfig = this.config;
-            this.config = this.jhipsterConfig;
+            this.config = this._getStorage('generator-jhipster');
         }
     }
 
@@ -79,6 +78,10 @@ module.exports = class extends BaseGenerator {
      * @return {true} useBlueprints - true if one or more blueprints generators have been constructed; false otherwise
      */
     instantiateBlueprints(subGen, extraOptions) {
+        if (this.options.help) {
+            // Ignore blueprint registered options.
+            return false;
+        }
         let useBlueprints = false;
 
         const blueprints = jhipsterUtils.parseBluePrints(

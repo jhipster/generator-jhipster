@@ -165,7 +165,7 @@ function askActionType() {
             props.action = 'new';
         }
 
-        props.generatorName = 'spring';
+        props.generatorName = this.config.get('reactive') ? 'java' : 'spring';
 
         this.props = props;
         done();
