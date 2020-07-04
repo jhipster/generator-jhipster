@@ -28,6 +28,7 @@ const exec = require('child_process').exec;
 const https = require('https');
 const jhiCore = require('jhipster-core');
 const filter = require('gulp-filter');
+const through = require('through2');
 
 const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
@@ -1607,6 +1608,18 @@ module.exports = class extends Generator {
         const prettierFilter = filter(['.yo-rc.json', filterPatternForPrettier], { restore: true });
         // this pipe will pass through (restore) anything that doesn't match typescriptFilter
         generator.registerTransformStream([prettierFilter, prettierTransform(prettierOptions), prettierFilter.restore]);
+    }
+
+    registerForceEntitiesTransform() {
+        this.registerTransformStream(
+            through.obj(function (file, enc, cb) {
+                if (path.extname(file.path) === '.json' && path.basename(path.dirname(file.path)) === '.jhipster') {
+                    file.conflicter = 'force';
+                }
+                this.push(file);
+                cb();
+            })
+        );
     }
 
     /**
