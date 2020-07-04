@@ -85,7 +85,7 @@ function formatFieldObjects(jdlFieldObjects) {
     Object.keys(jdlFieldObjects).forEach(jdlField => {
         string += `${formatFieldObject(jdlFieldObjects[jdlField])}`;
     });
-    string = `${string.slice(0, string.length - 2)}`;
+    string = `${string.slice(0, string.length - 1)}`;
     return string;
 }
 
@@ -95,6 +95,6 @@ function formatFieldObject(jdlFieldObject) {
     for (let j = 0; j < lines.length; j++) {
         string += `  ${lines[j]}\n`;
     }
-    string = `${string.slice(0, string.length - 1)},\n`;
+    string = `${string.slice(0, string.length - 1)}\n`;
     return string;
 }

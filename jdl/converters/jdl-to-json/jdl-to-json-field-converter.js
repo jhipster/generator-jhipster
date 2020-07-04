@@ -18,6 +18,7 @@
  */
 
 const _ = require('lodash');
+const { isBlobType } = require('../../jhipster/field-types');
 const { UNIQUE, REQUIRED } = require('../../jhipster/validations');
 const { formatComment } = require('../../utils/format-utils');
 const { camelCase } = require('../../utils/string-utils');
@@ -55,9 +56,9 @@ function getConvertedFieldsForEntity(jdlEntity, jdlObject) {
             fieldData.javadoc = comment;
         }
         if (jdlObject.hasEnum(jdlField.type)) {
-            fieldData.fieldValues = jdlObject.getEnum(jdlField.type).getValuesAsString();
+            fieldData.fieldValues = jdlObject.getEnum(fieldData.fieldType).getValuesAsString();
         }
-        if (fieldData.fieldType && fieldData.fieldType.includes('Blob')) {
+        if (fieldData.fieldType && isBlobType(fieldData.fieldType)) {
             const blobFieldData = getBlobFieldData(fieldData.fieldType);
             fieldData = {
                 ...fieldData,

@@ -92,6 +92,16 @@ const CassandraValidations = {
     ZonedDateTime: new Set([REQUIRED, UNIQUE]),
 };
 
+module.exports = {
+    CommonDBTypes,
+    CassandraTypes,
+    isCommonDBType,
+    isCassandraType,
+    hasValidation,
+    getIsType,
+    isBlobType,
+};
+
 function isCommonDBType(type) {
     if (!type) {
         throw new Error('The passed type must not be nil.');
@@ -104,6 +114,18 @@ function isCassandraType(type) {
         throw new Error('The passed type must not be nil.');
     }
     return _.snakeCase(type).toUpperCase() in CassandraTypes && !(type instanceof JDLEnum);
+}
+
+function isBlobType(type) {
+    if (!type) {
+        return false;
+    }
+    return (
+        CommonDBTypes.BLOB === type ||
+        CommonDBTypes.ANY_BLOB === type ||
+        CommonDBTypes.IMAGE_BLOB === type ||
+        CommonDBTypes.TEXT_BLOB === type
+    );
 }
 
 function hasValidation(type, validation, isAnEnum) {
@@ -151,12 +173,3 @@ function getIsType(databaseType, callback) {
     }
     return isType;
 }
-
-module.exports = {
-    CommonDBTypes,
-    CassandraTypes,
-    isCommonDBType,
-    isCassandraType,
-    hasValidation,
-    getIsType,
-};
