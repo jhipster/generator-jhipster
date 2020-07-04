@@ -357,42 +357,33 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             composeServer() {
-                if (this.skipServer || this.configOptions.skipComposeServer) return;
-                this.configOptions.skipComposeServer = true;
                 const options = this.options;
                 const configOptions = this.configOptions;
+                if (!this.skipServer && !this.configOptions.skipComposeServer) {
+                    this.configOptions.skipComposeServer = true;
+                    this.composeWith(require.resolve('../server'), {
+                        ...options,
+                        configOptions,
+                        debug: this.isDebugEnabled,
+                    });
+                }
 
-                this.composeWith(require.resolve('../server'), {
-                    ...options,
-                    configOptions,
-                    debug: this.isDebugEnabled,
-                });
-            },
-
-            composeClient() {
-                if (this.skipClient || this.configOptions.skipComposeClient) return;
-                this.configOptions.skipComposeClient = true;
-                const options = this.options;
-                const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../client'), {
-                    ...options,
-                    configOptions,
-                    debug: this.isDebugEnabled,
-                });
-            },
-
-            composeCommon() {
-                if (this.configOptions.skipComposeCommon) return;
-                this.configOptions.skipComposeCommon = true;
-                const options = this.options;
-                const configOptions = this.configOptions;
-
-                this.composeWith(require.resolve('../common'), {
-                    ...options,
-                    configOptions,
-                    debug: this.isDebugEnabled,
-                });
+                if (!this.skipClient && !this.configOptions.skipComposeClient) {
+                    this.configOptions.skipComposeClient = true;
+                    this.composeWith(require.resolve('../client'), {
+                        ...options,
+                        configOptions,
+                        debug: this.isDebugEnabled,
+                    });
+                }
+                if (!this.configOptions.skipComposeCommon) {
+                    this.configOptions.skipComposeCommon = true;
+                    this.composeWith(require.resolve('../common'), {
+                        ...options,
+                        configOptions,
+                        debug: this.isDebugEnabled,
+                    });
+                }
             },
 
             askFori18n: prompts.askForI18n,
