@@ -337,24 +337,6 @@ module.exports = class extends BaseBlueprintGenerator {
             askFori18n: prompts.askForI18n,
 
             setSharedConfigOptions() {
-                this.jhipsterConfig.cacheProvider = this.cacheProvider;
-                this.jhipsterConfig.enableHibernateCache = this.enableHibernateCache;
-                this.jhipsterConfig.websocket = this.websocket;
-                this.jhipsterConfig.databaseType = this.databaseType;
-                this.jhipsterConfig.devDatabaseType = this.devDatabaseType;
-                this.jhipsterConfig.prodDatabaseType = this.prodDatabaseType;
-                this.jhipsterConfig.searchEngine = this.searchEngine;
-                this.jhipsterConfig.messageBroker = this.messageBroker;
-                this.jhipsterConfig.serviceDiscoveryType = this.serviceDiscoveryType;
-                this.jhipsterConfig.buildTool = this.buildTool;
-                this.jhipsterConfig.enableSwaggerCodegen = this.enableSwaggerCodegen;
-                this.jhipsterConfig.authenticationType = this.authenticationType;
-                const uaaBaseName = this.uaaBaseName;
-                if (uaaBaseName) {
-                    this.jhipsterConfig.uaaBaseName = this.uaaBaseName;
-                }
-                this.jhipsterConfig.serverPort = this.serverPort;
-
                 // Make dist dir available in templates
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
                 this.CLIENT_DIST_DIR =
@@ -413,7 +395,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
             saveConfig() {
                 const config = {
-                    packageName: this.packageName,
                     packageFolder: this.packageFolder,
                     jwtSecretKey: this.jwtSecretKey,
                     rememberMeKey: this.rememberMeKey,
