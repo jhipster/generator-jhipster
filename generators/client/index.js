@@ -92,7 +92,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.PRETTIER_JAVA_VERSION = constants.PRETTIER_JAVA_VERSION;
                 this.NODE_VERSION = constants.NODE_VERSION;
 
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort || 8080;
                 this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
                 if (!this.applicationType) {
@@ -350,7 +350,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.pkType = this.getPkType(this.databaseType);
                 this.apiUaaPath = `${this.authenticationType === 'uaa' ? `services/${this.uaaBaseName.toLowerCase()}/` : ''}`;
                 this.DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
-                this.AOT_DIR = `${this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool)}aot`;
             },
 
             composeLanguages() {

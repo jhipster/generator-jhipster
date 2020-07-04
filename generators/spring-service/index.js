@@ -28,7 +28,7 @@ let useBlueprints;
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
-        this.configOptions = this.options.configOptions || {};
+
         this.argument('name', { type: String, required: true });
         this.name = this.options.name;
         // This adds support for a `--from-cli` flag
@@ -56,7 +56,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             initializing() {
                 this.log(`The service ${this.name} is being created.`);
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.baseName = configuration.get('baseName');
                 this.packageName = configuration.get('packageName');
                 this.packageFolder = configuration.get('packageFolder');

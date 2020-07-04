@@ -51,6 +51,16 @@ const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
  * The method signatures in public API should not be changed without a major version change
  */
 module.exports = class extends PrivateBase {
+    constructor(args, opts) {
+        super(args, opts);
+
+        // JHipster config using proxy mode (like a plain object)
+        this.jhipsterConfig = this._getStorage('generator-jhipster').createProxy();
+
+        // JHipster runtime config that should not be stored to .yo-rc.json.
+        this.configOptions = this.options.configOptions || {};
+    }
+
     /**
      * expose custom CLIENT_MAIN_SRC_DIR to templates and needles
      */
@@ -1232,15 +1242,16 @@ module.exports = class extends PrivateBase {
      * @param {any} options - options to pass
      * @return {object} the composed generator
      */
-    composeExternalModule(npmPackageName, subGen, options) {
+    composeExternalModule(npmPackageName, subGen, options = {}) {
         const generatorName = jhipsterUtils.packageNameToNamespace(npmPackageName);
         const generatorCallback = `${generatorName}:${subGen}`;
-        if (!this.env.get(generatorCallback)) {
-            this.env.lookup({ packagePatterns: npmPackageName });
+        if (!this.env.isPackageRegistered(generatorName)) {
+            this.env.lookup({ filterPaths: true, packagePatterns: npmPackageName });
         }
         if (!this.env.get(generatorCallback)) {
             throw new Error(`Generator ${generatorCallback} isn't registered.`);
         }
+        options.configOptions = options.configOptions || this.configOptions;
         return this.composeWith(generatorCallback, options, true);
     }
 
@@ -2178,15 +2189,16 @@ module.exports = class extends PrivateBase {
     /**
      * Get all the generator configuration from the .yo-rc.json file
      * @param {Generator} generator the generator instance to use
-     * @param {boolean} force force getting direct from file
      */
-    getAllJhipsterConfig(generator = this, force) {
-        const configRootPath =
-            generator.configRootPath ||
-            (generator.options && generator.options.configRootPath) ||
-            (generator.configOptions && generator.configOptions.configRootPath) ||
-            '';
-        return jhipsterUtils.getAllJhipsterConfig(generator, force, configRootPath);
+    getJhipsterConfig(yoRcPath) {
+        if (yoRcPath === undefined) {
+            const configRootPath =
+                this.configRootPath ||
+                (this.options && this.options.configRootPath) ||
+                (this.configOptions && this.configOptions.configRootPath);
+            yoRcPath = path.join(configRootPath || this.destinationPath(), '.yo-rc.json');
+        }
+        return this.createStorage(yoRcPath, 'generator-jhipster');
     }
 
     /**

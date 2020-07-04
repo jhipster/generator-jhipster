@@ -31,13 +31,13 @@ module.exports = {
 };
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.baseName) return undefined;
 
-    this.askModuleName(this);
+    return this.askModuleName(this);
 }
 
-function askForServerSideOpts(meta) {
-    if (!meta && this.existingProject) return;
+function askForServerSideOpts() {
+    if (this.existingProject) return undefined;
 
     const applicationType = this.applicationType;
     const reactive = this.reactive;
@@ -294,11 +294,7 @@ function askForServerSideOpts(meta) {
         },
     ];
 
-    if (meta) return prompts; // eslint-disable-line consistent-return
-
-    const done = this.async();
-
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         this.serviceDiscoveryType = props.serviceDiscoveryType;
         this.authenticationType = props.authenticationType;
 
@@ -351,12 +347,11 @@ function askForServerSideOpts(meta) {
             this.prodDatabaseType = this.databaseType;
             this.enableHibernateCache = false;
         }
-        done();
     });
 }
 
-function askForOptionalItems(meta) {
-    if (!meta && this.existingProject) return;
+function askForOptionalItems() {
+    if (this.existingProject) return undefined;
 
     const applicationType = this.applicationType;
     const choices = [];
@@ -398,11 +393,8 @@ function askForOptionalItems(meta) {
         default: defaultChoice,
     };
 
-    if (meta) return PROMPTS; // eslint-disable-line consistent-return
-
-    const done = this.async();
     if (choices.length > 0) {
-        this.prompt(PROMPTS).then(prompt => {
+        return this.prompt(PROMPTS).then(prompt => {
             this.serverSideOptions = prompt.serverSideOptions;
             this.websocket = this.getOptionFromArray(this.serverSideOptions, 'websocket');
             this.searchEngine = this.getOptionFromArray(this.serverSideOptions, 'searchEngine');
@@ -412,17 +404,15 @@ function askForOptionalItems(meta) {
             if (!this.serviceDiscoveryType) {
                 this.serviceDiscoveryType = this.getOptionFromArray(this.serverSideOptions, 'serviceDiscoveryType');
             }
-            done();
         });
-    } else {
-        done();
     }
+    return undefined;
 }
 
 function askForI18n() {
-    if (this.existingProject || this.configOptions.skipI18nQuestion) return;
+    if (this.existingProject || this.configOptions.skipI18nQuestion) return undefined;
 
-    this.aski18n(this);
+    return this.aski18n(this);
 }
 
 /**
@@ -432,5 +422,5 @@ function askForI18n() {
 function askFori18n() {
     // eslint-disable-next-line no-console
     console.log(chalk.yellow('\nPlease use askForI18n() instead. This method will be removed in v7\n'));
-    this.askForI18n();
+    return this.askForI18n();
 }

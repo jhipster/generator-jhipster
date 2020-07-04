@@ -72,23 +72,8 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://uxplanet.org/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/uxplanet.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://opencollective.com/top-web-design-agencies" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/top-web-design-agencies.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://fair-laan.se/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/fair-laan.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://superkredit.net" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/superkredit.png">
         </a>
       </td>
       <td align="center" valign="middle">
@@ -96,21 +81,9 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
         </a>
       </td>
-    </tr>
-    <tr>
       <td align="center" valign="middle">
         <a href="https://matchbanker.no/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/matchbanker.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://vpngorilla.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/vpngorilla.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://www.banksecrets.eu/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/banksecrets.png">
         </a>
       </td>
       <td align="center" valign="middle">
@@ -126,16 +99,6 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
     </tr>
     <tr>
       <td align="center" valign="middle">
-        <a href="https://unscramblex.com/" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/unscramblex.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
-        <a href="https://manwoman.co/pl" target="_blank">
-          <img width="50em" src="https://www.jhipster.tech/images/open-collective/manwoman.png">
-        </a>
-      </td>
-      <td align="center" valign="middle">
         <a href="https://edubirdie.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/edubirdie.png">	
         </a>
@@ -143,6 +106,16 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
       <td align="center" valign="middle">	
         <a href="https://www.zadluzenia.com/" target="_blank">
           <img width="50em" src="https://www.jhipster.tech/images/open-collective/zadluzenia.png">	
+        </a>
+      </td>
+      <td align="center" valign="middle">	
+        <a href="https://opencollective.com/jim-van-dam" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/jim-van-dam.png">	
+        </a>
+      </td>
+      <td align="center" valign="middle">	
+        <a href="https://papersowl.com/" target="_blank">
+          <img width="50em" src="https://www.jhipster.tech/images/open-collective/papersowl.png">	
         </a>
       </td>
     </tr>

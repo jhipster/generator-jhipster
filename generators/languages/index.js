@@ -33,7 +33,6 @@ module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
         super(args, opts);
 
-        this.configOptions = this.options.configOptions || {};
         // This adds support for a `--from-cli` flag
         this.option('from-cli', {
             desc: 'Indicates the command is run from JHipster CLI',
@@ -94,7 +93,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             setupConsts() {
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 if (this.languages) {
                     if (this.skipClient) {
                         this.log(chalk.bold(`\nInstalling languages: ${this.languages.join(', ')} for server`));

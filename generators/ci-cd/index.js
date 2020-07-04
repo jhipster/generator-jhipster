@@ -83,7 +83,7 @@ module.exports = class extends BaseGenerator {
             },
             getConfig() {
                 this.jhipsterVersion = packagejs.version;
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.baseName = configuration.get('baseName');
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.applicationType = configuration.get('applicationType');
