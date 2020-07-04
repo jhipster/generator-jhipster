@@ -64,8 +64,9 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        this.skipClient = this.options.skipClient || this.config.get('skipClient');
-        this.skipServer = this.options.skipServer || this.config.get('skipServer');
+        this.loadOptions();
+        this.loadRuntimeOptions();
+
         // Validate languages passed as argument
         this.languages = this.options.languages;
         if (this.languages) {
@@ -151,27 +152,13 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             getSharedConfigOptions() {
-                this.applicationType = this.jhipsterConfig.applicationType;
-                this.reactive = this.jhipsterConfig.reactive;
-                this.baseName = this.jhipsterConfig.baseName;
-                this.authenticationType = this.jhipsterConfig.authenticationType;
-                this.packageFolder = this.jhipsterConfig.packageFolder;
-                this.websocket = this.jhipsterConfig.websocket === 'no' ? false : this.jhipsterConfig.websocket;
-                this.databaseType = this.jhipsterConfig.databaseType;
-                this.searchEngine = this.jhipsterConfig.searchEngine === 'no' ? false : this.jhipsterConfig.searchEngine;
-                this.messageBroker = this.jhipsterConfig.messageBroker === 'no' ? false : this.jhipsterConfig.messageBroker;
-                this.clientFramework = this.jhipsterConfig.clientFramework;
-                this.serviceDiscoveryType =
-                    this.jhipsterConfig.serviceDiscoveryType === 'no' ? false : this.jhipsterConfig.serviceDiscoveryType;
-                // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
-                this.skipUserManagement = this.jhipsterConfig.skipUserManagement;
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
 
-                this.enableTranslation = this.jhipsterConfig.enableTranslation;
-                this.nativeLanguage = this.jhipsterConfig.nativeLanguage;
-                this.skipClient = this.jhipsterConfig.skipClient;
-                this.skipServer = this.jhipsterConfig.skipServer;
-                this.clientFramework = this.jhipsterConfig.clientFramework;
+                // Make dist dir available in templates
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
 
                 this.capitalizedBaseName = _.upperFirst(this.baseName);
             },
@@ -200,16 +187,16 @@ module.exports = class extends BaseBlueprintGenerator {
             write() {
                 if (!this.skipClient) {
                     this.updateLanguagesInLanguagePipe(this.languages);
-                    this.updateLanguagesInLanguageConstantNG2(this.languages);
                     this.updateLanguagesInWebpack(this.languages);
                     if (this.clientFramework === ANGULAR) {
+                        this.updateLanguagesInLanguageConstantNG2(this.languages);
                         this.updateLanguagesInMomentWebpackNgx(this.languages);
                     }
                     if (this.clientFramework === REACT) {
                         this.updateLanguagesInMomentWebpackReact(this.languages);
                     }
                 }
-                if (!this.skipUserManagement) {
+                if (!this.skipUserManagement && !this.skipServer) {
                     this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
                 }
             },
