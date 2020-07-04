@@ -2066,6 +2066,53 @@ module.exports = class extends PrivateBase {
         return filesOut;
     }
 
+    setupAppOptions(generator, context = generator, dest = context) {
+        this.setupSharedOptions(generator, context, dest);
+    }
+
+    /**
+     * Setup shared level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
+     */
+    setupSharedOptions(generator = this, context = generator, dest = context) {
+        const config = _.defaults({}, context.jhipsterConfig, defaultConfig);
+        generator.loadAppConfig.call(generator, config, dest);
+        generator.loadClientConfig.call(generator, config, dest);
+        generator.loadServerConfig.call(generator, config, dest);
+        generator.loadTranslationConfig.call(generator, config, dest);
+    }
+
+    /**
+     * Setup client instance level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
+     */
+    setupClientOptions(generator, context = generator, dest = context) {
+        this.setupSharedOptions(generator, context, dest);
+    }
+
+    /**
+     * Setup Server instance level options from context.
+     * all variables should be set to dest,
+     * all variables should be referred from context,
+     * all methods should be called on generator,
+     * @param {any} generator - generator instance
+     * @param {any} context - context to use default is generator instance
+     * @param {any} dest - destination context to use default is context
+     */
+    setupServerOptions(generator, context = generator, dest = context) {
+        this.setupSharedOptions(generator, context, dest);
+    }
+
     loadOptions(options = this.options) {
         // Load runtime only options
         this.configOptions.withEntities = options.withEntities;
@@ -2126,8 +2173,8 @@ module.exports = class extends PrivateBase {
             this.jhipsterConfig.dtoSuffix = options.dtoSuffix;
         }
         this.configOptions.useYarn = this.options.yarn || this.jhipsterConfig.clientPackageManager === 'yarn';
-        this.configOptions.useNpm = !this.options.yarn;
-        this.jhipsterConfig.clientPackageManager = this.useYarn ? 'yarn' : 'npm';
+        this.configOptions.useNpm = !this.configOptions.useYarn;
+        this.jhipsterConfig.clientPackageManager = this.configOptions.useYarn ? 'yarn' : 'npm';
 
         if (options.creationTimestamp) {
             const creationTimestamp = this.parseCreationTimestamp(options.creationTimestamp);
