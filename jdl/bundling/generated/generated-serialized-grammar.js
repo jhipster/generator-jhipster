@@ -286,6 +286,18 @@ const serializedGrammar = [
                                 definition: [
                                     {
                                         type: 'Terminal',
+                                        name: 'STRING',
+                                        label: 'STRING',
+                                        idx: 2,
+                                        pattern: '"(?:[^"])*"',
+                                    },
+                                ],
+                            },
+                            {
+                                type: 'Alternative',
+                                definition: [
+                                    {
+                                        type: 'Terminal',
                                         name: 'NAME',
                                         label: 'NAME',
                                         idx: 2,
