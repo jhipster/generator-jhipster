@@ -520,7 +520,7 @@ relationship ${oneToManyRelationship.type} {
 
             it('should use the new string form', () => {
                 expect(relationships.toString()).to.equal(`relationship ${oneToOneRelationship1.type} {
-  ${oneToOneRelationship1.from}{${oneToOneRelationship1.injectedFieldInFrom}} to ${oneToOneRelationship1.to}{${oneToOneRelationship1.injectedFieldInTo}},
+  ${oneToOneRelationship1.from}{${oneToOneRelationship1.injectedFieldInFrom}} to ${oneToOneRelationship1.to}{${oneToOneRelationship1.injectedFieldInTo}}
   ${oneToOneRelationship2.from}{${oneToOneRelationship2.injectedFieldInFrom}} to ${oneToOneRelationship2.to}{${oneToOneRelationship2.injectedFieldInTo}}
 }`);
             });

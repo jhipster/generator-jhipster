@@ -19,7 +19,8 @@
         "Angular",
         "Twitter Bootstrap",
         "Webpack",
-        "Docker"
+        "Docker",
+        "JDL"
     ],
     "homepage": "https://www.jhipster.tech/",
     "bugs": "https://github.com/jhipster/generator-jhipster/issues",
@@ -48,7 +49,11 @@
         "pretest": "npm run lint",
         "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
         "test:unit": "mocha --timeout 30000 --slow 0 --reporter spec",
-        "jsdoc": "jsdoc --configure jsdoc-conf.json"
+        "jsdoc": "jsdoc --configure jsdoc-conf.json",
+        "prepare": "npm run jdl:diagrams && npm run jdl:bundle && npm run jdl:commit-dist",
+        "jdl:bundle": "node jdl/bundling/scripts/bundle.js && webpack --config jdl/bundling/webpack.config.js",
+        "jdl:commit-dist": "git add jdl/bundling/dist && git add jdl/parsing/generated && git commit --allow-empty -m \"Update dist\"",
+        "jdl:diagrams": "node jdl/bundling/scripts/serialize-grammar.js && eslint jdl/parsing/generated"
     },
     "dependencies": {
         "aws-sdk": "2.706.0",

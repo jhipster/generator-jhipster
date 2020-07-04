@@ -369,6 +369,7 @@ application {
 @customAnnotation(value1)
 @customAnnotation2(2)
 @customAnnotation3(2.42)
+@customAnnotation4("foo bar $")
 entity A`);
                 parsedEntity = content.entities[0];
             });
@@ -403,6 +404,11 @@ entity A`);
                         {
                             optionName: 'customAnnotation3',
                             optionValue: '2.42',
+                            type: 'BINARY',
+                        },
+                        {
+                            optionName: 'customAnnotation4',
+                            optionValue: 'foo bar $',
                             type: 'BINARY',
                         },
                     ],

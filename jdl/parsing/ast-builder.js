@@ -155,7 +155,11 @@ class JDLAstBuilderVisitor extends BaseJDLCSTVisitor {
         if (!context.value) {
             return { optionName: context.option[0].image, type: 'UNARY' };
         }
-        return { optionName: context.option[0].image, optionValue: context.value[0].image, type: 'BINARY' };
+        return {
+            optionName: context.option[0].image,
+            optionValue: context.value[0].image.replace(/"/g, ''),
+            type: 'BINARY',
+        };
     }
 
     entityTableNameDeclaration(context) {

@@ -133,46 +133,46 @@ entity Department {
   departmentName String
 }
 entity Employee {
-  firstName String,
-  lastName String,
-  email String,
-  phoneNumber String,
-  hireDate ZonedDateTime,
-  salary Long,
+  firstName String
+  lastName String
+  email String
+  phoneNumber String
+  hireDate ZonedDateTime
+  salary Long
   commissionPct Long
 }
 entity Job {
-  jobTitle String,
-  minSalary Long,
+  jobTitle String
+  minSalary Long
   maxSalary Long
 }
 entity JobHistory {
-  startDate ZonedDateTime,
+  startDate ZonedDateTime
   endDate ZonedDateTime
 }
 entity Location {
-  streetAddress String,
-  postalCode String,
-  city String,
+  streetAddress String
+  postalCode String
+  city String
   stateProvince String
 }
 entity Region {
   regionName String
 }
 entity Task {
-  title String,
+  title String
   description String
 }
 relationship OneToOne {
-  Country{region required} to Region,
-  Department{location required} to Location,
-  JobHistory{department required} to Department,
-  JobHistory{job required} to Job,
-  JobHistory{employee required} to Employee,
+  Country{region required} to Region
+  Department{location required} to Location
+  JobHistory{department required} to Department
+  JobHistory{job required} to Job
+  JobHistory{employee required} to Employee
   Location{country required} to Country
 }
 relationship OneToMany {
-  Department{employee} to Employee{department},
+  Department{employee} to Employee{department}
   Employee{job} to Job{employee}
 }
 relationship ManyToOne {
@@ -328,9 +328,9 @@ entity Country {
   countryName String
 }
 entity Location {
-  streetAddress String,
-  postalCode String,
-  city String,
+  streetAddress String
+  postalCode String
+  city String
   stateProvince String
 }
 relationship OneToOne {

@@ -125,28 +125,6 @@ describe('JDLToJSONFieldConverter', () => {
 
                     it('should convert the blob content', () => {});
                 });
-                context("that doesn't exist", () => {
-                    let jdlObject;
-
-                    before(() => {
-                        jdlObject = new JDLObject();
-                        const entityA = new JDLEntity({
-                            name: 'A',
-                            tableName: 'entity_a',
-                            comment: 'The best entity',
-                        });
-                        const anyBlobField = new JDLField({
-                            name: 'anyBlobField',
-                            type: 'StupidBlob',
-                        });
-                        entityA.addField(anyBlobField);
-                        jdlObject.addEntity(entityA);
-                    });
-
-                    it('should fail', () => {
-                        expect(() => convert(jdlObject)).to.throw(/^Unrecognised Blob type: StupidBlob\.$/);
-                    });
-                });
             });
             context('with field types being enums', () => {
                 let convertedField;

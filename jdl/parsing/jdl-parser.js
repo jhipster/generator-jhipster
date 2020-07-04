@@ -145,6 +145,7 @@ module.exports = class JDLParser extends CstParser {
             this.OPTION(() => {
                 this.CONSUME(LexerTokens.LPAREN);
                 this.OR([
+                    { ALT: () => this.CONSUME2(LexerTokens.STRING, { LABEL: 'value' }) },
                     { ALT: () => this.CONSUME2(LexerTokens.NAME, { LABEL: 'value' }) },
                     { ALT: () => this.CONSUME3(LexerTokens.INTEGER, { LABEL: 'value' }) },
                     { ALT: () => this.CONSUME3(LexerTokens.DECIMAL, { LABEL: 'value' }) },

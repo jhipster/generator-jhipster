@@ -150,4 +150,25 @@ describe('FieldTypes', () => {
             });
         });
     });
+    describe('isBlobType', () => {
+        context('when not passing anything', () => {
+            it('should return false', () => {
+                expect(FieldTypes.isBlobType()).to.be.false;
+            });
+        });
+        context('when passing a type containing blob without it being one', () => {
+            it('should return false', () => {
+                expect(FieldTypes.isBlobType('NotABlob')).to.be.false;
+            });
+        });
+        Object.keys(FieldTypes.CommonDBTypes).forEach(dbTypeKey => {
+            const commonDBType = FieldTypes.CommonDBTypes[dbTypeKey];
+            context(`when passing ${commonDBType}`, () => {
+                const typeHasBlobInItsName = commonDBType.toLowerCase().includes('blob');
+                it(`should return ${typeHasBlobInItsName}`, () => {
+                    expect(FieldTypes.isBlobType(commonDBType)).to.equal(typeHasBlobInItsName);
+                });
+            });
+        });
+    });
 });

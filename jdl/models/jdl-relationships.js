@@ -123,8 +123,8 @@ function relationshipTypeToString(relationships, type) {
     relationships.forEach(internalRelationship => {
         let lines = internalRelationship.toString().split('\n');
         lines = lines.slice(1, lines.length - 1);
-        relationship += `${lines.join('\n')},\n`;
+        relationship += `${lines.join('\n')}\n`;
     });
-    relationship = `${relationship.slice(0, relationship.length - 2)}\n}`;
+    relationship = `${relationship.slice(0, relationship.length - 1)}\n}`;
     return relationship;
 }
