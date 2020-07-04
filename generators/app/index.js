@@ -277,7 +277,7 @@ module.exports = class extends BaseBlueprintGenerator {
         }
 
         // Use jhipster defaults
-        if (this.options.defaults) {
+        if (this.options.defaults || this.options.withEntities) {
             this.setConfigDefaults();
         }
 
