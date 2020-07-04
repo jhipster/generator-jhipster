@@ -20,7 +20,6 @@
 const chalk = require('chalk');
 
 const constants = require('../generator-constants');
-const { getBase64Secret, getRandomHex } = require('../utils');
 
 module.exports = {
     askForModuleName,
@@ -31,7 +30,7 @@ module.exports = {
 };
 
 function askForModuleName() {
-    if (this.baseName) return undefined;
+    if (this.jhipsterConfig.baseName) return undefined;
 
     return this.askModuleName(this);
 }
@@ -308,29 +307,6 @@ function askForServerSideOpts() {
         this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = props.serviceDiscoveryType;
         this.authenticationType = this.jhipsterConfig.authenticationType = props.authenticationType;
 
-        // JWT authentication is mandatory with Eureka, so the JHipster Registry
-        // can control the applications
-        if (this.serviceDiscoveryType === 'eureka' && this.authenticationType !== 'uaa' && this.authenticationType !== 'oauth2') {
-            this.authenticationType = this.jhipsterConfig.authenticationType = 'jwt';
-        }
-
-        if (this.authenticationType === 'session') {
-            this.rememberMeKey = this.jhipsterConfig.rememberMeKey = getRandomHex();
-        }
-
-        if (this.authenticationType === 'jwt' || applicationType === 'microservice') {
-            this.jwtSecretKey = this.jhipsterConfig.jwtSecretKey = getBase64Secret(null, 64);
-        }
-
-        // user-management will be handled by UAA app, oauth expects users to be managed in IpP
-        if ((applicationType === 'gateway' && this.authenticationType === 'uaa') || this.authenticationType === 'oauth2') {
-            this.skipUserManagement = this.jhipsterConfig.skipUserManagement = true;
-        }
-
-        if (applicationType === 'uaa') {
-            this.authenticationType = this.jhipsterConfig.authenticationType = 'uaa';
-        }
-
         this.packageName = this.jhipsterConfig.packageName = props.packageName;
         this.serverPort = this.jhipsterConfig.serverPort = props.serverPort || '8080';
         this.cacheProvider = this.jhipsterConfig.cacheProvider = !reactive ? props.cacheProvider : 'no';
@@ -341,19 +317,6 @@ function askForServerSideOpts() {
         this.searchEngine = this.jhipsterConfig.searchEngine = props.searchEngine;
         this.buildTool = this.jhipsterConfig.buildTool = props.buildTool;
         this.uaaBaseName = this.jhipsterConfig.uaaBaseName = props.uaaBaseName || uaaBaseName;
-
-        if (this.databaseType === 'no') {
-            this.devDatabaseType = this.jhipsterConfig.devDatabaseType = 'no';
-            this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = 'no';
-            this.enableHibernateCache = this.jhipsterConfig.enableHibernateCache = false;
-            if (this.jhipsterConfig.authenticationType !== 'uaa') {
-                this.skipUserManagement = this.jhipsterConfig.skipUserManagement = true;
-            }
-        } else if (['mongodb', 'neo4j', 'couchbase', 'cassandra'].includes(this.databaseType)) {
-            this.devDatabaseType = this.jhipsterConfig.devDatabaseType = this.databaseType;
-            this.prodDatabaseType = this.jhipsterConfig.prodDatabaseType = this.databaseType;
-            this.enableHibernateCache = this.jhipsterConfig.enableHibernateCache = false;
-        }
     });
 }
 
