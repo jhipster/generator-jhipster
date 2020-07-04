@@ -143,7 +143,15 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.JACKSON_DATABIND_NULLABLE_VERSION = constants.JACKSON_DATABIND_NULLABLE_VERSION;
 
                 this.packagejs = packagejs;
+            },
 
+            setupRequiredConfig() {
+                if (!this.jhipsterConfig.applicationType) {
+                    this.jhipsterConfig.applicationType = defaultConfig.applicationType;
+                }
+            },
+
+            verifyExistingProject() {
                 const serverConfigFound =
                     this.jhipsterConfig.packageName !== undefined &&
                     this.jhipsterConfig.authenticationType !== undefined &&
@@ -184,7 +192,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
             setSharedConfigOptions() {
                 // Make dist dir available in templates
-                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
+                this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool);
                 this.CLIENT_DIST_DIR =
                     this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
             },
@@ -258,7 +266,7 @@ module.exports = class extends BaseBlueprintGenerator {
             },
 
             loadAppConfig() {
-                const configWithDefaults = this.jhipsterConfig;
+                const configWithDefaults = _.defaults({}, this.jhipsterConfig, defaultConfig);
                 this.jhipsterVersion = packagejs.version;
                 this.applicationType = configWithDefaults.applicationType;
                 this.reactive = configWithDefaults.reactive;
@@ -266,6 +274,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.skipFakeData = configWithDefaults.skipFakeData;
                 this.entitySuffix = configWithDefaults.entitySuffix;
                 this.dtoSuffix = configWithDefaults.dtoSuffix;
+                this.skipUserManagement = configWithDefaults.skipUserManagement;
 
                 this.testFrameworks = configWithDefaults.testFrameworks || [];
                 this.gatlingTests = this.testFrameworks.includes('gatling');
@@ -467,10 +476,6 @@ module.exports = class extends BaseBlueprintGenerator {
         // force variables unused by microservice applications
         if (this.jhipsterConfig.applicationType === 'microservice' || this.jhipsterConfig.applicationType === 'uaa') {
             this.jhipsterConfig.websocket = false;
-        }
-
-        if (this.jhipsterConfig.entitySuffix === this.jhipsterConfig.dtoSuffix) {
-            this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
         }
 
         if (this.jhipsterConfig.authenticationType === 'uaa' && !this.jhipsterConfig.uaaBaseName) {

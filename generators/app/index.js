@@ -380,9 +380,10 @@ module.exports = class extends BaseBlueprintGenerator {
     _configuring() {
         return {
             setup() {
+                this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+
                 // Update jhipsterVersion.
                 this.jhipsterConfig.jhipsterVersion = packagejs.version;
-                this.jhipsterConfig.creationTimestamp = this.parseCreationTimestamp() || this.config.get('') || new Date().getTime();
 
                 this.otherModules = this.config.get('otherModules') || [];
                 if (this.blueprints && this.blueprints.length > 0) {
@@ -398,18 +399,16 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.configOptions.skipI18nQuestion = true;
                 this.configOptions.logo = false;
-                this.generatorType = 'app';
                 if (this.jhipsterConfig.applicationType === 'microservice') {
                     this.jhipsterConfig.skipClient = true;
-                    this.generatorType = 'server';
                     this.jhipsterConfig.skipUserManagement = true;
                 }
                 if (this.jhipsterConfig.applicationType === 'uaa') {
                     this.jhipsterConfig.skipClient = true;
-                    this.generatorType = 'server';
                     this.jhipsterConfig.skipUserManagement = false;
                     this.jhipsterConfig.authenticationType = 'uaa';
                 }
+                this.generatorType = 'app';
                 if (this.skipClient) {
                     // defaults to use when skipping client
                     this.generatorType = 'server';
@@ -663,7 +662,9 @@ module.exports = class extends BaseBlueprintGenerator {
         return this._end();
     }
 
-    _validateAppConfiguration() {
-        this.jhipsterConfig.jhiPrefix = _.camelCase(this.jhipsterConfig.jhiPrefix);
+    _validateAppConfiguration(config = this.jhipsterConfig) {
+        if (config.entitySuffix === config.dtoSuffix) {
+            this.error('Entities cannot be generated as the entity suffix and DTO suffix are equals !');
+        }
     }
 };
