@@ -2161,7 +2161,7 @@ module.exports = class extends PrivateBase {
         dest.skipServer = config.skipServer;
         dest.skipCommitHook = config.skipCommitHook;
         dest.otherModules = config.otherModules || [];
-        dest.skipClient = this.options['client-hook'] === false || config.skipClient;
+        dest.skipClient = config.skipClient;
         dest.prettierJava = config.prettierJava;
 
         dest.testFrameworks = config.testFrameworks || [];

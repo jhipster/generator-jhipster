@@ -41,12 +41,6 @@ module.exports = class extends BaseBlueprintGenerator {
             type: Boolean,
             defaults: false,
         });
-        // This adds support for a `--[no-]client-hook` flag
-        this.option('client-hook', {
-            desc: 'Enable Webpack hook from maven/gradle build',
-            type: Boolean,
-            defaults: false,
-        });
 
         // This adds support for a `--experimental` flag which can be used to enable experimental features
         this.option('experimental', {
@@ -66,7 +60,7 @@ module.exports = class extends BaseBlueprintGenerator {
         // preserve old jhipsterVersion value for cleanup which occurs after new config is written into disk
         this.jhipsterOldVersion = this.jhipsterConfig.jhipsterVersion;
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server', { 'client-hook': !this.skipClient });
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('server');
 
         this.registerPrettierTransform();
     }

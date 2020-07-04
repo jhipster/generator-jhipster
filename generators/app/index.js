@@ -365,7 +365,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.composeWith(require.resolve('../server'), {
                     ...options,
                     configOptions,
-                    'client-hook': !this.skipClient,
                     debug: this.isDebugEnabled,
                 });
             },
@@ -391,7 +390,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.composeWith(require.resolve('../common'), {
                     ...options,
-                    'client-hook': !this.skipClient,
                     configOptions,
                     debug: this.isDebugEnabled,
                 });
