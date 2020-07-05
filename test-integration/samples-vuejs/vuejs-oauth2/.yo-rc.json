@@ -1,44 +1,42 @@
 {
-  "generator-jhipster": {
-    "promptValues": {
-      "packageName": "io.github.jhipster.sample",
-      "nativeLanguage": "en"
+    "generator-jhipster": {
+        "promptValues": {
+            "packageName": "io.github.jhipster.sample",
+            "nativeLanguage": "en"
+        },
+        "applicationType": "monolith",
+        "baseName": "jhipster",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
+        "serverPort": "8080",
+        "authenticationType": "oauth2",
+        "cacheProvider": "ehcache",
+        "enableHibernateCache": true,
+        "websocket": false,
+        "databaseType": "sql",
+        "devDatabaseType": "h2Disk",
+        "prodDatabaseType": "mysql",
+        "searchEngine": false,
+        "messageBroker": false,
+        "serviceDiscoveryType": false,
+        "buildTool": "maven",
+        "enableSwaggerCodegen": false,
+        "enableTranslation": true,
+        "languages": ["en"],
+        "testFrameworks": ["protractor"],
+        "jhiPrefix": "jhi",
+        "clientPackageManager": "npm",
+        "nativeLanguage": "en",
+        "blueprint": "generator-jhipster-vuejs",
+        "clientFramework": "vue"
     },
-    "applicationType": "monolith",
-    "baseName": "jhipster",
-    "packageName": "io.github.jhipster.sample",
-    "packageFolder": "io/github/jhipster/sample",
-    "serverPort": "8080",
-    "authenticationType": "oauth2",
-    "cacheProvider": "ehcache",
-    "enableHibernateCache": true,
-    "websocket": false,
-    "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "prodDatabaseType": "mysql",
-    "searchEngine": false,
-    "messageBroker": false,
-    "serviceDiscoveryType": false,
-    "buildTool": "maven",
-    "enableSwaggerCodegen": false,
-    "enableTranslation": true,
-    "languages": [
-      "en"
-    ],
-    "testFrameworks": ["protractor"],
-    "jhiPrefix": "jhi",
-    "clientPackageManager": "npm",
-    "nativeLanguage": "en",
-    "blueprint": "generator-jhipster-vuejs",
-    "clientFramework": "vue"
-  },
-  "generator-jhipster-vuejs": {
-    "applicationType": "monolith",
-    "baseName": "jhipster",
-    "clientFramework": "vue",
-    "clientTheme": "none",
-    "useSass": true,
-    "clientPackageManager": "npm",
-    "enableTranslation": true
-  }
+    "generator-jhipster-vuejs": {
+        "applicationType": "monolith",
+        "baseName": "jhipster",
+        "clientFramework": "vue",
+        "clientTheme": "none",
+        "useSass": true,
+        "clientPackageManager": "npm",
+        "enableTranslation": true
+    }
 }

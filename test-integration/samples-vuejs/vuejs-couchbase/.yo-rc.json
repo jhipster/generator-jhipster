@@ -30,14 +30,14 @@
         "languages": ["en", "fr"],
         "blueprint": "generator-jhipster-vuejs",
         "clientFramework": "vue"
-        },
-        "generator-jhipster-vuejs": {
-            "applicationType": "monolith",
-            "baseName": "jhipster",
-            "clientFramework": "vue",
-            "clientTheme": "none",
-            "useSass": true,
-            "clientPackageManager": "npm",
-            "enableTranslation": true
-        }
+    },
+    "generator-jhipster-vuejs": {
+        "applicationType": "monolith",
+        "baseName": "jhipster",
+        "clientFramework": "vue",
+        "clientTheme": "none",
+        "useSass": true,
+        "clientPackageManager": "npm",
+        "enableTranslation": true
+    }
 }

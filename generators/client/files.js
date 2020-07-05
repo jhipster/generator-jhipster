@@ -26,7 +26,7 @@ const VUE_DIR = constants.ANGULAR_DIR;
 const CLIENT_VUE_TEMPLATES_DIR = 'vue';
 
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 const vueFiles = {
@@ -46,13 +46,13 @@ const vueFiles = {
                 'webpack/webpack.prod.js',
                 'webpack/vue.utils.js',
                 'webpack/loader.conf.js',
-                'webpack/utils.js'
-            ]
+                'webpack/utils.js',
+            ],
         },
         {
             condition: generator => generator.protractorTests,
-            templates: ['tsconfig.e2e.json']
-        }
+            templates: ['tsconfig.e2e.json'],
+        },
     ],
     image: [
         {
@@ -78,34 +78,32 @@ const vueFiles = {
                 { file: 'content/images/jhipster_family_member_1_head-512.png', method: 'copy' },
                 { file: 'content/images/jhipster_family_member_2_head-512.png', method: 'copy' },
                 { file: 'content/images/jhipster_family_member_3_head-512.png', method: 'copy' },
-                { file: 'content/images/logo-jhipster.png', method: 'copy' }
-            ]
-        }
+                { file: 'content/images/logo-jhipster.png', method: 'copy' },
+            ],
+        },
     ],
     css: [
         {
             path: MAIN_SRC_DIR,
-            templates: [
-                'content/css/loading.css'
-            ]
-        }
+            templates: ['content/css/loading.css'],
+        },
     ],
     sass: [
         {
             path: MAIN_SRC_DIR,
-            templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss']
+            templates: ['content/scss/_bootstrap-variables.scss', 'content/scss/global.scss', 'content/scss/vendor.scss'],
         },
         {
             condition: generator => generator.enableI18nRTL,
             path: MAIN_SRC_DIR,
-            templates: ['content/scss/rtl.scss']
-        }
+            templates: ['content/scss/rtl.scss'],
+        },
     ],
     swagger: [
         {
             path: MAIN_SRC_DIR,
-            templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }]
-        }
+            templates: ['swagger-ui/index.html', { file: 'swagger-ui/dist/images/throbber.gif', method: 'copy' }],
+        },
     ],
     commonWeb: [
         {
@@ -116,9 +114,9 @@ const vueFiles = {
                 'robots.txt',
                 '404.html',
                 'index.html',
-                'manifest.webapp'
-            ]
-        }
+                'manifest.webapp',
+            ],
+        },
     ],
     vueApp: [
         {
@@ -135,20 +133,16 @@ const vueFiles = {
                 'shared/config/store/account-store.ts',
                 'shared/config/store/alert-store.ts',
                 'shared/security/authority.ts',
-                'router/index.ts'
-            ]
-        }
+                'router/index.ts',
+            ],
+        },
     ],
     i18n: [
         {
             condition: generator => generator.enableTranslation,
             path: VUE_DIR,
-            templates: [
-                'locale/translation.service.ts',
-                'shared/config/formatter.ts',
-                'shared/config/store/translation-store.ts',
-            ]
-        }
+            templates: ['locale/translation.service.ts', 'shared/config/formatter.ts', 'shared/config/store/translation-store.ts'],
+        },
     ],
     sharedVueApp: [
         {
@@ -173,25 +167,19 @@ const vueFiles = {
                 'shared/data/data-utils.service.ts',
                 'shared/jhi-item-count.component.ts',
                 'shared/jhi-item-count.vue',
-                'shared/model/user.model.ts'
-            ]
-        }
+                'shared/model/user.model.ts',
+            ],
+        },
     ],
     accountModule: [
         {
             path: VUE_DIR,
-            templates: [
-                'account/account.service.ts'
-            ]
+            templates: ['account/account.service.ts'],
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: VUE_DIR,
-            templates: [
-                'account/login-form/login-form.vue',
-                'account/login-form/login-form.component.ts',
-                'account/login.service.ts',
-            ]
+            templates: ['account/login-form/login-form.vue', 'account/login-form/login-form.component.ts', 'account/login.service.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
@@ -210,24 +198,19 @@ const vueFiles = {
                 'account/settings/settings.component.ts',
                 'account/activate/activate.component.ts',
                 'account/activate/activate.service.ts',
-                'account/activate/activate.vue'
-            ]
+                'account/activate/activate.vue',
+            ],
         },
         {
             condition: generator => generator.authenticationType === 'session' && !this.skipUserManagement,
             path: VUE_DIR,
-            templates: [
-                'account/sessions/sessions.vue',
-                'account/sessions/sessions.component.ts'
-            ]
+            templates: ['account/sessions/sessions.vue', 'account/sessions/sessions.component.ts'],
         },
         {
             condition: generator => generator.authenticationType === 'oauth2',
             path: VUE_DIR,
-            templates: [
-                'account/login.service.ts'
-            ]
-        }
+            templates: ['account/login.service.ts'],
+        },
     ],
     adminModule: [
         {
@@ -251,26 +234,19 @@ const vueFiles = {
                 'admin/metrics/metrics.component.ts',
                 'admin/metrics/metrics.service.ts',
                 'admin/metrics/metrics-modal.vue',
-                'admin/metrics/metrics-modal.component.ts'
-            ]
+                'admin/metrics/metrics-modal.component.ts',
+            ],
         },
         {
-            condition: generator => (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
+            condition: generator =>
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: VUE_DIR,
-            templates: [
-                'admin/audits/audits.vue',
-                'admin/audits/audits.component.ts',
-                'admin/audits/audits.service.ts'
-            ]
+            templates: ['admin/audits/audits.vue', 'admin/audits/audits.component.ts', 'admin/audits/audits.service.ts'],
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: VUE_DIR,
-            templates: [
-                'admin/tracker/tracker.vue',
-                'admin/tracker/tracker.component.ts',
-                'admin/tracker/tracker.service.ts'
-            ]
+            templates: ['admin/tracker/tracker.vue', 'admin/tracker/tracker.component.ts', 'admin/tracker/tracker.service.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
@@ -282,26 +258,20 @@ const vueFiles = {
                 'admin/user-management/user-management-view.component.ts',
                 'admin/user-management/user-management-edit.vue',
                 'admin/user-management/user-management-edit.component.ts',
-                'admin/user-management/user-management.service.ts'
-            ]
+                'admin/user-management/user-management.service.ts',
+            ],
         },
         {
             condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: VUE_DIR,
-            templates: [
-                'admin/gateway/gateway.vue',
-                'admin/gateway/gateway.component.ts',
-                'admin/gateway/gateway.service.ts'
-            ]
-        }
+            templates: ['admin/gateway/gateway.vue', 'admin/gateway/gateway.component.ts', 'admin/gateway/gateway.service.ts'],
+        },
     ],
     clientTestConfig: [
         {
             path: TEST_SRC_DIR,
-            templates: [
-                'jest.conf.js',
-            ]
-        }
+            templates: ['jest.conf.js'],
+        },
     ],
     clientTestFw: [
         {
@@ -322,44 +292,34 @@ const vueFiles = {
                 'spec/app/admin/health/health.service.spec.ts',
                 'spec/app/admin/logs/logs.component.spec.ts',
                 'spec/app/admin/metrics/metrics.component.spec.ts',
-                'spec/app/admin/metrics/metrics-modal.component.spec.ts'
-            ]
+                'spec/app/admin/metrics/metrics-modal.component.spec.ts',
+            ],
         },
         {
-            condition: generator => ((generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra'),
+            condition: generator =>
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/admin/audits/audits.component.spec.ts'
-            ]
+            templates: ['spec/app/admin/audits/audits.component.spec.ts'],
         },
         {
             condition: generator => generator.enableTranslation,
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/shared/config/formatter.spec.ts',
-            ]
+            templates: ['spec/app/shared/config/formatter.spec.ts'],
         },
         {
             condition: generator => generator.authenticationType === 'oauth2',
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/account/login.service.spec.ts',
-            ]
+            templates: ['spec/app/account/login.service.spec.ts'],
         },
         {
             condition: generator => generator.authenticationType !== 'oauth2',
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/account/login-form/login-form.component.spec.ts'
-            ]
+            templates: ['spec/app/account/login-form/login-form.component.spec.ts'],
         },
         {
             condition: generator => generator.authenticationType === 'session' && !generator.skipUserManagement,
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/account/sessions/sessions.component.spec.ts',
-                'spec/app/account/login.service.spec.ts'
-            ]
+            templates: ['spec/app/account/sessions/sessions.component.spec.ts', 'spec/app/account/login.service.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
@@ -370,21 +330,19 @@ const vueFiles = {
                 'spec/app/account/reset-password/init/reset-password-init.component.spec.ts',
                 'spec/app/account/reset-password/finish/reset-password-finish.component.spec.ts',
                 'spec/app/account/settings/settings.component.spec.ts',
-                'spec/app/account/activate/activate.component.spec.ts'
-            ]
+                'spec/app/account/activate/activate.component.spec.ts',
+            ],
         },
         {
-            condition: generator => (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
+            condition: generator =>
+                (generator.databaseType !== 'no' || generator.authenticationType === 'uaa') && generator.databaseType !== 'cassandra',
             path: TEST_SRC_DIR,
-            templates: ['spec/app/admin/audits/audits.component.spec.ts']
+            templates: ['spec/app/admin/audits/audits.component.spec.ts'],
         },
         {
             condition: generator => generator.websocket === 'spring-websocket',
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/admin/tracker/tracker.component.spec.ts',
-                'spec/app/admin/tracker/tracker.service.spec.ts'
-            ]
+            templates: ['spec/app/admin/tracker/tracker.component.spec.ts', 'spec/app/admin/tracker/tracker.service.spec.ts'],
         },
         {
             condition: generator => !generator.skipUserManagement,
@@ -392,15 +350,13 @@ const vueFiles = {
             templates: [
                 'spec/app/admin/user-management/user-management.component.spec.ts',
                 'spec/app/admin/user-management/user-management-view.component.spec.ts',
-                'spec/app/admin/user-management/user-management-edit.component.spec.ts'
-            ]
+                'spec/app/admin/user-management/user-management-edit.component.spec.ts',
+            ],
         },
         {
             condition: generator => generator.applicationType === 'gateway' && generator.serviceDiscoveryType,
             path: TEST_SRC_DIR,
-            templates: [
-                'spec/app/admin/gateway/gateway.component.spec.ts'
-            ]
+            templates: ['spec/app/admin/gateway/gateway.component.spec.ts'],
         },
         {
             condition: generator => generator.protractorTests,
@@ -413,19 +369,15 @@ const vueFiles = {
                 'e2e/page-objects/signin-page.ts',
                 'e2e/page-objects/alert-page.ts',
                 'e2e/page-objects/administration-page.ts',
-                'protractor.conf.js'
-            ]
+                'protractor.conf.js',
+            ],
         },
         {
             condition: generator => generator.protractorTests && !generator.skipUserManagement,
             path: TEST_SRC_DIR,
-            templates: [
-                'e2e/page-objects/password-page.ts',
-                'e2e/page-objects/settings-page.ts',
-                'e2e/page-objects/register-page.ts'
-            ]
-        }
-    ]
+            templates: ['e2e/page-objects/password-page.ts', 'e2e/page-objects/settings-page.ts', 'e2e/page-objects/register-page.ts'],
+        },
+    ],
 };
 
 function writeFiles() {
@@ -447,17 +399,13 @@ function writeFiles() {
             'app/admin/health/health-modal.vue',
             'app/admin/logs/logs.vue',
             'app/admin/metrics/metrics.vue',
-            'app/admin/metrics/metrics-modal.vue'
+            'app/admin/metrics/metrics-modal.vue',
         ]);
         if ((this.databaseType !== 'no' || this.authenticationType === 'uaa') && this.databaseType !== 'cassandra') {
-            utils.replaceTranslation(this, [
-                'app/admin/audits/audits.vue'
-            ]);
+            utils.replaceTranslation(this, ['app/admin/audits/audits.vue']);
         }
         if (this.authenticationType !== 'oauth2') {
-            utils.replaceTranslation(this, [
-                'app/account/login-form/login-form.vue',
-            ]);
+            utils.replaceTranslation(this, ['app/account/login-form/login-form.vue']);
         }
         if (!this.skipUserManagement) {
             utils.replaceTranslation(this, [
@@ -469,7 +417,7 @@ function writeFiles() {
                 'app/account/settings/settings.vue',
                 'app/admin/user-management/user-management.vue',
                 'app/admin/user-management/user-management-view.vue',
-                'app/admin/user-management/user-management-edit.vue'
+                'app/admin/user-management/user-management-edit.vue',
             ]);
         }
         if (this.authenticationType === 'session' && !this.skipUserManagement) {

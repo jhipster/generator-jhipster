@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 module.exports = {
-    askForPage
+    askForPage,
 };
 
 function askForPage(meta) {
@@ -35,7 +35,7 @@ function askForPage(meta) {
 
     const done = this.async();
 
-    this.prompt(prompts).then((prompt) => {
+    this.prompt(prompts).then(prompt => {
         this.pageName = prompt.pageName;
         done();
     });

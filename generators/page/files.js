@@ -32,18 +32,18 @@ const vueFiles = {
             templates: [
                 {
                     file: 'pages/page.vue',
-                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.vue`
+                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.vue`,
                 },
                 {
                     file: 'pages/page.service.ts',
-                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.service.ts`
+                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.service.ts`,
                 },
                 {
                     file: 'pages/page.component.ts',
-                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.component.ts`
+                    renameTo: generator => `pages/${generator.pageFolderName}/${generator.pageFolderName}.component.ts`,
                 },
-            ]
-        }
+            ],
+        },
     ],
     test: [
         {
@@ -51,13 +51,13 @@ const vueFiles = {
             templates: [
                 {
                     file: 'spec/app/pages/page.component.spec.ts',
-                    renameTo: generator => `spec/app/pages/${generator.pageFolderName}/${generator.pageFolderName}.component.spec.ts`
+                    renameTo: generator => `spec/app/pages/${generator.pageFolderName}/${generator.pageFolderName}.component.spec.ts`,
                 },
                 {
                     file: 'spec/app/pages/page.service.spec.ts',
-                    renameTo: generator => `spec/app/pages/${generator.pageFolderName}/${generator.pageFolderName}.service.spec.ts`
-                }
-            ]
+                    renameTo: generator => `spec/app/pages/${generator.pageFolderName}/${generator.pageFolderName}.service.spec.ts`,
+                },
+            ],
         },
         {
             condition: generator => generator.protractorTests,
@@ -65,20 +65,19 @@ const vueFiles = {
             templates: [
                 {
                     file: 'e2e/pages/page.page-object.ts',
-                    renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFolderName}.page-object.ts`
+                    renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFolderName}.page-object.ts`,
                 },
                 {
                     file: 'e2e/pages/page.spec.ts',
-                    renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFolderName}.spec.ts`
-                }
-            ]
-        }
-    ]
+                    renameTo: generator => `e2e/pages/${generator.pageFolderName}/${generator.pageFolderName}.spec.ts`,
+                },
+            ],
+        },
+    ],
 };
 
-
 module.exports = {
-    writeFiles
+    writeFiles,
 };
 
 function writeFiles() {

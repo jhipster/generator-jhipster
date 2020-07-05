@@ -36,7 +36,7 @@ module.exports = class extends EntityClientGenerator {
     get prompting() {
         // The prompting phase is being overridden so that we can ask our own questions
         return {
-            askForPage: prompts.askForPage
+            askForPage: prompts.askForPage,
         };
     }
 
@@ -44,7 +44,7 @@ module.exports = class extends EntityClientGenerator {
         return {
             writeAdditionalFile() {
                 writeFiles.call(this);
-            }
+            },
         };
     }
 
@@ -55,7 +55,7 @@ module.exports = class extends EntityClientGenerator {
                     this.rebuildClient();
                 }
                 this.log(chalk.bold.green(`Page ${this.pageName} generated successfully.`));
-            }
+            },
         };
     }
 };
