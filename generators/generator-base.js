@@ -2114,6 +2114,10 @@ module.exports = class extends PrivateBase {
     }
 
     loadOptions(options = this.options) {
+        // Parse options only once.
+        if (this.configOptions.optionsParsed) return;
+        this.configOptions.optionsParsed = true;
+
         // Load runtime only options
         this.configOptions.withEntities = options.withEntities;
         this.configOptions.skipChecks = options.skipChecks;

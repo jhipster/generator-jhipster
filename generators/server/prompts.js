@@ -20,6 +20,7 @@
 const chalk = require('chalk');
 
 const constants = require('../generator-constants');
+const { serverDefaultConfig } = require('../generator-defaults');
 
 module.exports = {
     askForModuleName,
@@ -63,7 +64,7 @@ function askForServerSideOpts() {
                     ? true
                     : 'The package name you have provided is not a valid Java package name.',
             message: 'What is your default Java package name?',
-            default: 'com.mycompany.myapp',
+            default: serverDefaultConfig.packageName,
             store: true,
         },
         {
@@ -102,7 +103,7 @@ function askForServerSideOpts() {
                     name: 'Yes',
                 },
             ],
-            default: false,
+            default: serverDefaultConfig.serviceDiscoveryType,
         },
         {
             when: response =>
@@ -138,7 +139,7 @@ function askForServerSideOpts() {
                 }
                 return opts;
             },
-            default: 0,
+            default: serverDefaultConfig.authenticationType,
         },
         {
             when: response =>
@@ -208,7 +209,7 @@ function askForServerSideOpts() {
                 }
                 return opts;
             },
-            default: 0,
+            default: serverDefaultConfig.databaseType,
         },
         {
             when: response => response.databaseType === 'sql',
@@ -216,7 +217,7 @@ function askForServerSideOpts() {
             name: 'prodDatabaseType',
             message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
             choices: reactive ? constants.R2DBC_DB_OPTIONS : constants.SQL_DB_OPTIONS,
-            default: 0,
+            default: serverDefaultConfig.prodDatabaseType,
         },
         {
             when: response => response.databaseType === 'sql',
@@ -234,7 +235,7 @@ function askForServerSideOpts() {
                         name: 'H2 with in-memory persistence',
                     },
                 ].concat(constants.SQL_DB_OPTIONS.find(it => it.value === response.prodDatabaseType)),
-            default: 0,
+            default: serverDefaultConfig.devDatabaseType,
         },
         {
             when: () => !reactive,
@@ -273,7 +274,7 @@ function askForServerSideOpts() {
                     name: 'No - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
                 },
             ],
-            default: applicationType === 'microservice' || applicationType === 'uaa' ? 2 : 0,
+            default: applicationType === 'microservice' || applicationType === 'uaa' ? 2 : serverDefaultConfig.cacheProvider,
         },
         {
             when: response =>
@@ -283,7 +284,7 @@ function askForServerSideOpts() {
             type: 'confirm',
             name: 'enableHibernateCache',
             message: 'Do you want to use Hibernate 2nd level cache?',
-            default: true,
+            default: serverDefaultConfig.enableHibernateCache,
         },
         {
             type: 'list',
@@ -299,7 +300,7 @@ function askForServerSideOpts() {
                     name: 'Gradle',
                 },
             ],
-            default: 'maven',
+            default: serverDefaultConfig.buildTool,
         },
     ];
 

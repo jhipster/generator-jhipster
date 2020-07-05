@@ -212,6 +212,9 @@ module.exports = class extends BaseBlueprintGenerator {
 
         // Use jhipster defaults
         if (this.options.defaults || this.options.withEntities) {
+            if (!this.jhipsterConfig.baseName) {
+                this.jhipsterConfig.baseName = this.getDefaultAppName();
+            }
             this.setConfigDefaults();
         }
 
@@ -334,11 +337,11 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.configOptions.skipI18nQuestion = true;
                 this.configOptions.logo = false;
                 if (this.jhipsterConfig.applicationType === 'microservice') {
-                    this.jhipsterConfig.skipClient = true;
+                    this.skipClient = this.jhipsterConfig.skipClient = true;
                     this.jhipsterConfig.skipUserManagement = true;
                 }
                 if (this.jhipsterConfig.applicationType === 'uaa') {
-                    this.jhipsterConfig.skipClient = true;
+                    this.skipClient = this.jhipsterConfig.skipClient = true;
                     this.jhipsterConfig.skipUserManagement = false;
                     this.jhipsterConfig.authenticationType = 'uaa';
                 }

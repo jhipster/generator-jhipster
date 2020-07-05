@@ -38,9 +38,18 @@ const appDefaultConfig = {
 };
 
 const serverDefaultConfig = {
-    serviceDiscoveryType: false,
     serverPort: 8080,
-    cacheProvider: 'no',
+    packageName: 'com.mycompany.myapp',
+    authenticationType: 'jwt',
+    cacheProvider: 'ehcache',
+    serviceDiscoveryType: false,
+    databaseType: 'sql',
+    prodDatabaseType: 'mysql',
+    devDatabaseType: 'h2Disk',
+    websocket: false,
+    searchEngine: false,
+    buildTool: 'maven',
+    enableHibernateCache: true,
 };
 
 const clientDefaultConfig = {
