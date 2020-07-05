@@ -1,7 +1,7 @@
 const path = require('path');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
-const constants = require('generator-jhipster/generators/generator-constants');
+const constants = require('../generators/generator-constants');
 const blueprintPackagejs = require('../package.json');
 
 const SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
@@ -274,7 +274,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n' + 'indent_style = space\n' + 'indent_size = 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct prettier formatting', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
@@ -342,7 +342,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n' + 'indent_style = space\n' + 'indent_size = 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct prettier formatting', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
@@ -409,7 +409,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n' + 'indent_style = space\n' + 'indent_size = 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct prettier formatting', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
@@ -476,7 +476,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n' + 'indent_style = space\n' + 'indent_size = 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct prettier formatting', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
@@ -546,7 +546,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n' + 'indent_style = space\n' + 'indent_size = 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct prettier formatting', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
@@ -617,7 +617,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n' + 'indent_style = space\n' + 'indent_size = 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct prettier formatting', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
@@ -685,7 +685,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n' + 'indent_style = space\n' + 'indent_size = 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct prettier formatting', () => {
             // tabWidth = 2 (see generators/common/templates/.prettierrc.ejs)
@@ -753,7 +753,7 @@ describe('Vue.js JHipster blueprint', () => {
             assert.fileContent('package.json', '"vuex"');
             assert.fileContent('package.json', '"vuelidate"');
             assert.fileContent('.prettierrc', 'tabWidth: 2');
-            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\n' + 'indent_style = space\n' + 'indent_size = 2');
+            assert.fileContent('.editorconfig', '[*.{ts,tsx,js,json,css,scss,sql,ejs}]\nindent_style = space\nindent_size = 2');
         });
         it('uses correct theme from bootswatch', () => {
             assert.fileContent('src/main/webapp/content/scss/vendor.scss', "@import '~bootswatch/dist/lux/variables';");
