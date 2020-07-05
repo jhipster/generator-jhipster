@@ -23,12 +23,14 @@ const BaseBlueprintGenerator = require('../generator-base-blueprint');
 const prompts = require('./prompts');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
+const writeVueFiles =  require('./files-vuejs').writeFiles;
 const packagejs = require('../../package.json');
 const constants = require('../generator-constants');
 const statistics = require('../statistics');
 
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = constants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const VUE = constants.SUPPORTED_CLIENT_FRAMEWORKS.VUE;
 
 let useBlueprints;
 
@@ -373,6 +375,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 switch (this.clientFramework) {
                     case REACT:
                         return writeReactFiles.call(this, useBlueprints);
+                    case VUE:
+                        return writeVueFiles.call(this, useBlueprints);
                     default:
                         return writeAngularFiles.call(this, useBlueprints);
                 }
