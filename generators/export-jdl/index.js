@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const jhiCore = require('jhipster-core');
 const BaseGenerator = require('../generator-base');
 const statistics = require('../statistics');
+
+const JSONToJDLConverter = require('../../jdl/converters/json-to-jdl-converter');
 
 module.exports = class extends BaseGenerator {
     constructor(args, opts) {
@@ -46,7 +47,7 @@ module.exports = class extends BaseGenerator {
 
             convertToJDL() {
                 try {
-                    jhiCore.convertToJDL('.', this.options.jdlFile);
+                    JSONToJDLConverter.convertToJDL('.', this.options.jdlFile);
                 } catch (error) {
                     this.error(`An error occurred while exporting to JDL: ${error.message}\n${error}`);
                 }
