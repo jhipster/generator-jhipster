@@ -1,0 +1,72 @@
+entity Department {
+  departmentId Long,
+  departmentName String required
+}
+
+/**
+ * JobHistory comment.
+ */
+entity JobHistory {
+  startDate ZonedDateTime,
+  endDate ZonedDateTime
+}
+
+enum JobType {
+  TYPE1, TYPE2
+}
+
+entity Job {
+  jobId Long,
+  jobTitle String minlength(5) maxlength(25),
+  jobType JobType,
+  minSalary Long,
+  maxSalary Long
+}
+
+/**
+ * The Employee entity.
+ */
+entity Employee {
+  employeeId Long,
+  /**
+   * The firstname attribute.
+   */
+  firstName String,
+  lastName String,
+  email String,
+  phoneNumber String,
+  hireDate ZonedDateTime,
+  salary Long,
+  commissionPct Long
+}
+
+entity Location {
+  locationId Long,
+  streetAddress String,
+  postalCode String,
+  city String,
+  stateProvince String
+}
+
+entity Task {
+  taskId Long,
+  title String,
+  description String
+}
+
+entity Country {
+  countryId Long,
+  countryName String
+}
+
+entity Region {
+  regionId Long,
+  regionName String
+}
+
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+dto Employee with mapstruct
+
+service Employee with serviceClass

@@ -1,0 +1,4 @@
+entity A {
+  email String,
+  wrongField NullPointerException
+}
