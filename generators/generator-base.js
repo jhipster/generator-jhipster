@@ -26,7 +26,6 @@ const semver = require('semver');
 const exec = require('child_process').exec;
 const os = require('os');
 const pluralize = require('pluralize');
-const jhiCore = require('jhipster-core');
 const normalize = require('normalize-path');
 
 const packagejs = require('../package.json');
@@ -34,6 +33,7 @@ const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const PrivateBase = require('./generator-base-private');
 const NeedleApi = require('./needle-api');
+const { isReservedTableName } = require('../jdl/jhipster/reserved-keywords');
 
 const JHIPSTER_CONFIG_DIR = '.jhipster';
 const MODULES_HOOK_FILE = `${JHIPSTER_CONFIG_DIR}/modules/jhi-hooks.json`;
@@ -1305,7 +1305,7 @@ module.exports = class extends PrivateBase {
             this.warning(`entityTableName is missing in .jhipster/${context.name}.json, using entity name as fallback`);
             context.entityTableName = this.getTableName(context.name);
         }
-        if (jhiCore.isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiPrefix) {
+        if (isReservedTableName(context.entityTableName, context.prodDatabaseType) && context.jhiPrefix) {
             context.entityTableName = `${context.jhiTablePrefix}_${context.entityTableName}`;
         }
         context.fields.forEach(field => {

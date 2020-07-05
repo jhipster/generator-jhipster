@@ -18,8 +18,6 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
-const fileUtils = require('jhipster-core').FileUtils;
 const fs = require('fs');
 const shelljs = require('shelljs');
 
@@ -29,6 +27,8 @@ const dockerCli = require('../docker-cli');
 const dockerUtils = require('../docker-utils');
 const dockerPrompts = require('../docker-prompts');
 const constants = require('../generator-constants');
+const databaseTypes = require('../../jdl/jhipster/database-types');
+const fileUtils = require('../../jdl/utils/file-utils');
 
 const prompts = require('./prompts');
 const awsClient = require('./aws-client');
