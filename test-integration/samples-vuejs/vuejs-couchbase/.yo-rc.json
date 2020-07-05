@@ -1,0 +1,43 @@
+{
+    "generator-jhipster": {
+        "promptValues": {
+            "packageName": "io.github.jhipster.sample",
+            "nativeLanguage": "en"
+        },
+        "baseName": "jhipster",
+        "packageName": "io.github.jhipster.sample",
+        "packageFolder": "io/github/jhipster/sample",
+        "serverPort": "8080",
+        "authenticationType": "jwt",
+        "cacheProvider": "no",
+        "enableHibernateCache": false,
+        "websocket": false,
+        "databaseType": "couchbase",
+        "devDatabaseType": "couchbase",
+        "prodDatabaseType": "couchbase",
+        "searchEngine": false,
+        "messageBroker": false,
+        "serviceDiscoveryType": false,
+        "buildTool": "maven",
+        "enableSwaggerCodegen": false,
+        "clientPackageManager": "npm",
+        "applicationType": "monolith",
+        "testFrameworks": ["gatling", "protractor"],
+        "jhiPrefix": "jhi",
+        "travis": true,
+        "enableTranslation": true,
+        "nativeLanguage": "en",
+        "languages": ["en", "fr"],
+        "blueprint": "generator-jhipster-vuejs",
+        "clientFramework": "vue"
+        },
+        "generator-jhipster-vuejs": {
+            "applicationType": "monolith",
+            "baseName": "jhipster",
+            "clientFramework": "vue",
+            "clientTheme": "none",
+            "useSass": true,
+            "clientPackageManager": "npm",
+            "enableTranslation": true
+        }
+}

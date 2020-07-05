@@ -44,6 +44,7 @@ function askForClient() {
 
     const choices = [
         {
+<<<<<<< HEAD
             value: ANGULAR,
             name: 'Angular',
         },
@@ -55,11 +56,17 @@ function askForClient() {
             value: 'no',
             name: 'No client',
         },
+=======
+            value: 'vue',
+            name: 'Vue.js'
+        }
+>>>>>>> jhipster-vuejs/master
     ];
 
     const PROMPT = {
         type: 'list',
         name: 'clientFramework',
+<<<<<<< HEAD
         when: response => applicationType !== 'microservice' && applicationType !== 'uaa',
         message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
         choices,
@@ -198,5 +205,20 @@ function askForClientThemeVariant() {
 
     return this.prompt(PROMPT).then(prompt => {
         this.clientThemeVariant = prompt.clientThemeVariant;
+=======
+        when: () => (applicationType !== 'microservice' && applicationType !== 'uaa'),
+        message: () => 'Which *Framework* would you like to use for the client?',
+        choices,
+        default: 'vue'
+    };
+
+    if (meta) return PROMPT; // eslint-disable-line consistent-return
+
+    const done = this.async();
+
+    this.prompt(PROMPT).then((prompt) => {
+        this.clientFramework = prompt.clientFramework;
+        done();
+>>>>>>> jhipster-vuejs/master
     });
 }

@@ -1,0 +1,133 @@
+import { browser, by, ElementArrayFinder, ElementFinder, ExpectedConditions as EC, protractor } from 'protractor';
+
+const waitTimeoutInMillis = browser.params.waitTimeoutInMillis || 30000;
+const logWaitErrors = browser.params.logWaitErrors || false;
+
+/**
+ * Returns a void promise on an element to be visible. If an element is not visible
+ * within threshold time, promise will be rejected.
+ */
+export const waitUntilDisplayed = async (selector: ElementFinder, timeout = waitTimeoutInMillis) : Promise<void> => {
+  await browser.wait(
+    EC.visibilityOf(selector),
+    timeout,
+    `"${selector.locator()}" is not visible.`
+  );
+};
+
+/**
+ * Returns a void promise on any element present inside an array to become
+ * visible. If no element is visible within threshold time, promise will
+ * be rejected.
+ */
+export const waitUntilAnyDisplayed = async (selectors: ElementFinder[], timeout = waitTimeoutInMillis) : Promise<void> => {
+  await browser.wait(
+    EC.or(...selectors.map(selector => EC.visibilityOf(selector))),
+    timeout,
+    `"${selectors.map(selector => selector.locator())}" are not visible.`
+  );
+};
+
+/**
+ * Returns a void promise on all elements present inside an array to become
+ * visible. If all elements are not visible within threshold time, promise
+ * will be rejected.
+ */
+export const waitUntilAllDisplayed = async (selectors: ElementFinder[], timeout = waitTimeoutInMillis) : Promise<void> => {
+  await browser.wait(
+    EC.and(...selectors.map(selector => EC.visibilityOf(selector))),
+    timeout,
+    `"${selectors.map(selector => selector.locator())}" are not visible.`
+  );
+};
+
+/**
+ * Returns a boolean if an element is visible on screen. It's a wrapper on
+ * isDisplayed() to gracefully handle the scenario when an element is not
+ * present in the DOM.
+ */
+export const isVisible = async (selector: ElementFinder) => {
+  try {
+    return await selector.isDisplayed();
+  } catch (e) {
+    if (logWaitErrors) {
+      console.warn(e.message);
+    }
+  }
+  return false;
+};
+
+/**
+ * Returns a void promise for an element to be clickable. If an element is not clickable
+ * within threshold time, promise will be rejected.
+ */
+export const waitUntilClickable = async (selector: ElementFinder, timeout = waitTimeoutInMillis) => {
+  await browser.wait(
+    EC.elementToBeClickable(selector),
+    timeout,
+      `"${selector.locator()}" is not clickable.`
+  );
+};
+
+/**
+ * Waits for an element to be clickable and trigger click event.
+ *
+ * @param selector
+ */
+export const click = async (selector: ElementFinder) => {
+  await waitUntilClickable(selector);
+  await selector.click();
+};
+
+/**
+ * Returns a promise for an element to be hidden. If an element is visible
+ * after threshold time, promise will be rejected.
+ */
+export const waitUntilHidden = async (selector: ElementFinder, timeout = waitTimeoutInMillis) => {
+  await browser.wait(
+    EC.invisibilityOf(selector),
+    timeout,
+    `"${selector.locator()}" is not hidden.`
+  );
+};
+
+/**
+ * Returns a promise that evaluates to the number of rows inside table body.
+ */
+export const getRecordsCount = async (table: ElementFinder): Promise<number> => {
+  return await table.all(by.css('tbody tr')).count();
+};
+
+const waitForCount = async (elementArrayFinder: ElementArrayFinder, expectedCount: number) => () => {
+  return elementArrayFinder.count().then(actualCount => expectedCount === actualCount);
+};
+
+/**
+ * Returns a void promise for an element array count to be equal to expected count.
+ * If the actual count doesn't become equal to an expected count, then, the
+ * promise will be rejected.
+ */
+export const waitUntilCount = async (elementArrayFinder: ElementArrayFinder, expectedCount: number, timeout = waitTimeoutInMillis) => {
+  await browser.wait(
+    await waitForCount(elementArrayFinder, expectedCount),
+    timeout,
+    `Failed while waiting for "${elementArrayFinder.locator()}" to have ${expectedCount} elements.`
+  );
+};
+
+/**
+ * Returns a void promise to select the last drop down option value.
+ */
+export const selectLastOption = async (dropdown: ElementFinder) => {
+  await dropdown.all(by.tagName('option')).last().click();
+};
+
+/**
+ * Returns a void promise for an element value to be cleared. It's useful to
+ * clear numeric field values.
+ */
+export const clear = async (input: ElementFinder) => {
+  await input.sendKeys(protractor.Key.chord(protractor.Key.CONTROL, 'a'));
+  await input.sendKeys(protractor.Key.DELETE);
+  await input.sendKeys(protractor.Key.BACK_SPACE);
+};

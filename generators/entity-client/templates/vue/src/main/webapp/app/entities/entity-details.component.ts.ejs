@@ -1,0 +1,31 @@
+import { Component,<% if (!fieldsContainBlob) { %> Vue,<% } %> Inject } from 'vue-property-decorator';
+<% if (fieldsContainBlob) { %>
+import { mixins } from 'vue-class-component';
+import JhiDataUtils from '@/shared/data/data-utils.service';
+<% } %>
+import { I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+
+@Component
+export default class <%= entityAngularName %>Details extends <% if (fieldsContainBlob) { %>mixins(JhiDataUtils)<% } else { %>Vue<% } %> {
+  @Inject('<%= entityInstance %>Service') private <%= entityInstance %>Service: () => <%= entityAngularName %>Service;
+  public <%= entityInstance %>: I<%= entityAngularName %> = {};
+
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (to.params.<%= entityInstance %>Id) {
+        vm.retrieve<%= entityAngularName %>(to.params.<%= entityInstance %>Id);
+      }
+    });
+  }
+
+  public retrieve<%= entityAngularName %>(<%= entityInstance %>Id) {
+    this.<%= entityInstance %>Service().find(<%= entityInstance %>Id).then((res) => {
+      this.<%= entityInstance %> = res;
+    });
+  }
+
+  public previousState() {
+    this.$router.go(-1);
+  }
+}

@@ -1,0 +1,169 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "extends": [
+        "tslint-config-prettier"
+    ],
+    "rules": {
+        "class-name": true,
+        "comment-format": [
+            true,
+            "check-space"
+        ],
+        "curly": true,
+        "eofline": true,
+        "forin": true,
+        "indent": [
+            true,
+            "spaces"
+        ],
+        "label-position": true,
+        "max-line-length": [
+            true,
+            180
+        ],
+        "member-access": false,
+        "member-ordering": [
+            true,
+            {
+                "order": 
+                    [
+                        {
+                          "name": "static field",
+                          "kinds": [
+                            "public-static-field",
+                            "protected-static-field",
+                            "private-static-field"
+                          ]
+                        },
+                        {
+                          "name": "instance field",
+                          "kinds": [
+                            "public-instance-field",
+                            "protected-instance-field",
+                            "private-instance-field"
+                          ]
+                        },
+                        {
+                          "name": "static method",
+                          "kinds": [
+                            "public-static-method",
+                            "private-static-method",
+                            "protected-static-method",
+                            "public-static-accessor",
+                            "protected-static-accessor",
+                            "private-static-accessor"
+                          ]
+                        },
+                        {
+                          "name": "instance method",
+                          "kinds": [
+                            "public-constructor",
+                            "protected-constructor",
+                            "private-constructor",
+                            "public-instance-method",
+                            "protected-instance-method",
+                            "private-instance-method",
+                            "public-instance-accessor",
+                            "protected-instance-accessor",
+                            "private-instance-accessor"
+                          ]
+                        }
+                ]
+            }
+        ],
+        "no-arg": true,
+        "no-bitwise": true,
+        "no-console": [
+            true,
+            "debug",
+            "info",
+            "time",
+            "timeEnd",
+            "trace"
+        ],
+        "no-construct": true,
+        "no-debugger": true,
+        "no-duplicate-variable": true,
+        "no-empty": false,
+        "no-eval": true,
+        "no-inferrable-types": [true],
+        "no-shadowed-variable": true,
+        "no-string-literal": false,
+        "no-switch-case-fall-through": true,
+        "no-trailing-whitespace": true,
+        "no-unused-expression": true,
+        "no-var-keyword": true,
+        "object-literal-sort-keys": false,
+        "one-line": [
+            true,
+            "check-open-brace",
+            "check-catch",
+            "check-else",
+            "check-whitespace"
+        ],
+        "quotemark": [
+            true,
+            "single",
+            "avoid-escape"
+        ],
+        "radix": true,
+        "semicolon": [
+            true,
+            "always",
+            "ignore-bound-class-methods"
+        ],
+        "triple-equals": [
+            true,
+            "allow-null-check"
+        ],
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            }
+        ],
+        "variable-name": false,
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-separator",
+            "check-type"
+        ],
+        "prefer-const": true,
+        "arrow-parens": [true, "ban-single-arg-parens"],
+        "arrow-return-shorthand": [true],
+        "import-spacing": true,
+        "no-consecutive-blank-lines": [true],
+        "object-literal-shorthand": true,
+        "space-before-function-paren": [true, {
+            "asyncArrow": "always",
+            "anonymous": "never",
+            "constructor": "never",
+            "method": "never",
+            "named": "never"
+        }]
+    }
+}

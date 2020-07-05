@@ -1,0 +1,195 @@
+<%#
+Copyright 2013-2020 the original author or authors from the JHipster project.
+
+This file is part of the JHipster project, see https://www.jhipster.tech/
+for more information.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-%>
+<%_ var optionsForwarder = clientPackageManager == 'yarn' ? '' : '-- ' _%>
+{
+  "name": "<%= dasherizedBaseName %>",
+  "version": "0.0.0",
+  "description": "Description for <%= baseName  %>",
+  "private": true,
+  "license": "UNLICENSED",
+  "cacheDirectories": [
+    "node_modules"
+  ],
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "1.2.28",
+    "@fortawesome/free-solid-svg-icons": "5.13.0",
+    "@fortawesome/vue-fontawesome": "0.1.9",
+    "axios": "0.19.2",
+    "bootstrap": "4.5.0",
+    "bootstrap-vue": "2.14.0",
+    <%_ if (clientTheme !== 'none') { _%>
+    "bootswatch": "4.5.0",
+    <%_ } _%>
+    "date-fns": "2.14.0",
+    "swagger-ui-dist": "3.25.4",
+    <%_ if (websocket === 'spring-websocket') { _%>
+    "sockjs-client": "1.1.4",
+    "webstomp-client": "1.2.0",
+    <%_ } _%>
+    "vue": "2.6.11",
+    "vue-class-component": "7.2.3",
+    "vue-cookie": "1.1.4",
+    "vue-i18n": "8.17.7",
+    "vue-infinite-loading": "2.4.5",
+    "vue-property-decorator": "8.4.2",
+    "vue-router": "3.2.0",
+    "vue2-filters": "0.11.0",
+    "vuelidate": "0.7.5",
+    "vuex": "3.4.0"
+  },
+  "devDependencies": {
+    "babel-core": "7.0.0-bridge.0",
+<%_ if (protractorTests) { _%>
+    "@types/chai": "4.2.11",
+    "@types/chai-string": "1.4.2",
+<%_ } _%>
+    "@types/jest": "25.2.3",
+<%_ if (protractorTests) { _%>
+    "@types/mocha": "7.0.2",
+<%_ } _%>
+    "@types/node": "14.0.4",
+<%_ if (protractorTests) { _%>
+    "@types/selenium-webdriver": "4.0.9",
+<%_ } _%>
+    "@types/sinon": "9.0.3",
+    "@types/vuelidate": "0.7.13",
+    "@vue/cli-plugin-typescript": "4.3.1",
+    "@vue/cli-service": "4.3.1",
+    "@vue/test-utils": "1.0.3",
+    "autoprefixer": "9.8.0",
+    "browser-sync": "2.26.7",
+    "browser-sync-webpack-plugin": "2.2.2",
+<%_ if (protractorTests) { _%>
+    "chai": "4.2.0",
+    "chai-as-promised": "7.1.1",
+    "chai-string": "1.5.0",
+<%_ } _%>
+    "copy-webpack-plugin": "6.0.1",
+    "css-loader": "3.5.3",
+    "file-loader": "6.0.0",
+    "fork-ts-checker-webpack-plugin": "4.1.4",
+    "friendly-errors-webpack-plugin": "1.7.0",
+    "generator-jhipster-vuejs": "<%= blueprintjs.version %>",
+    "html-webpack-plugin": "4.3.0",
+    <%_ if (!skipCommitHook) { _%>
+    "husky": "4.2.5",
+    <%_ } _%>
+    "jest": "26.0.1",
+    "jest-junit": "10.0.0",
+    "jest-serializer-vue": "2.0.2",
+    "jest-sonar-reporter": "2.0.0",
+    "jest-vue-preprocessor": "1.7.1",
+    <%_ if (!skipCommitHook) { _%>
+    "lint-staged": "10.2.4",
+    <%_ } _%>
+    "merge-jsons-webpack-plugin": "1.0.21",
+<%_ if (protractorTests) { _%>
+    "mocha": "7.1.2",
+<%_ } _%>
+    "mini-css-extract-plugin": "0.9.0",
+    "node-notifier": "7.0.0",
+    "numeral": "2.0.6",
+    "optimize-css-assets-webpack-plugin": "5.0.3",
+    "portfinder": "1.0.26",
+    "postcss-import": "12.0.1",
+    "postcss-loader": "3.0.0",
+    "postcss-url": "8.0.0",
+    "prettier": "2.0.5",
+    <%_ if (!skipServer && prettierJava) { _%>
+    "prettier-plugin-java": "<%= PRETTIER_JAVA_VERSION %>",
+    <%_ } _%>
+<%_ if (protractorTests) { _%>
+    "protractor": "5.4.4",
+<%_ } _%>
+    "rimraf": "3.0.2",
+    "sass": "1.26.5",
+    "sass-loader": "8.0.2",
+    "sinon": "9.0.2",
+    "terser-webpack-plugin": "3.0.1",
+    "ts-jest": "26.0.0",
+    "ts-loader": "7.0.4",
+<%_ if (protractorTests) { _%>
+    "ts-node": "8.10.1",
+<%_ } _%>
+    "tslib": "2.0.0",
+    "tslint": "6.1.2",
+    "tslint-config-prettier": "1.18.0",
+    "tslint-eslint-rules": "5.4.0",
+    "tslint-loader": "3.6.0",
+    "typescript": "3.9.3",
+    "url-loader": "4.1.0",
+    "vue-jest": "3.0.5",
+    "vue-loader": "15.9.2",
+    "vue-template-compiler": "2.6.11",
+    "webpack": "4.43.0",
+    "webpack-bundle-analyzer": "3.8.0",
+    "webpack-cli": "3.3.11",
+    "webpack-dev-server": "3.11.0",
+    "webpack-merge": "4.2.2"
+  },
+  "engines": {
+    "node": ">= 10.17.0",
+    "npm": ">= 6.13.4"
+  },
+  <%_ if (!skipCommitHook) { _%>
+  "lint-staged": {
+    "{,src/**/,webpack/}*.{md,json,js,ts,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  <%_ } _%>
+  "scripts": {
+    "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,js,ts,tsx,css,scss<%= !skipServer && prettierJava ? ',java' : '' %>}\"",
+    "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
+    "lint:fix": "<%= clientPackageManager %> run lint <%= optionsForwarder %>--fix",
+    "cleanup": "rimraf <%= DIST_DIR %>",
+    "clean-www": "rimraf <%= DIST_DIR %>app/{src,<%= BUILD_DIR %>}",
+    "start": "<%= clientPackageManager %> run webpack:dev",
+    "start-tls": "<%= clientPackageManager %> run webpack:dev <%= optionsForwarder %>--env.tls",
+    "serve": "<%= clientPackageManager %> run start",
+    "build": "<%= clientPackageManager %> run webpack:prod",
+<%_ if (protractorTests) { _%>
+    "e2e": "protractor src/test/javascript/protractor.conf.js",
+    "postinstall": "webdriver-manager update --gecko false",
+<%_ } _%>
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config src/test/javascript/jest.conf.js",
+    "jest:update": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--updateSnapshot",
+    "webpack:build": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:build:main",
+    "webpack:build:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --profile",
+    "webpack:prod:main": "<%= clientPackageManager %> run webpack <%= optionsForwarder %>--config webpack/webpack.prod.js --profile",
+    "webpack:prod": "<%= clientPackageManager %> run cleanup && <%= clientPackageManager %> run webpack:prod:main && <%= clientPackageManager %> run clean-www",
+    "webpack:dev": "<%= clientPackageManager %> run webpack-dev-server <%= optionsForwarder %>--config webpack/webpack.dev.js --progress --inline",
+    "webpack:test": "<%= clientPackageManager %> run test",
+    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
+    "test": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest",
+    "test-ci": "<%= clientPackageManager %> run lint && <%= clientPackageManager %> run jest:update",
+    "test:watch": "<%= clientPackageManager %> run jest <%= optionsForwarder %>--watch"
+  },
+  "jestSonar": {
+    "reportPath": "<%= BUILD_DIR %>test-results/jest",
+    "reportFile": "TESTS-results-sonar.xml"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

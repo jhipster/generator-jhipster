@@ -1,0 +1,58 @@
+import axios from 'axios';
+import Component from 'vue-class-component';
+import { Vue, Inject } from 'vue-property-decorator';
+import AccountService from '@/account/account.service';
+@Component({
+  watch: {
+    $route() {
+      this.$root.$emit('bv::hide::modal', 'login-page');
+    }
+  }
+})
+export default class LoginForm extends Vue {
+  @Inject('accountService')
+  private accountService: () => AccountService;
+  public authenticationError = null;
+  public login = null;
+  public password = null;
+  public rememberMe: boolean = null;
+
+  public doLogin(): void {
+    <%_ if (authenticationType === 'jwt') { _%>
+    const data = { username: this.login, password: this.password, rememberMe: this.rememberMe };
+    axios
+      .post('api/authenticate', data)
+      .then((result) => {
+        const bearerToken = result.headers.authorization;
+        if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
+          const jwt = bearerToken.slice(7, bearerToken.length);
+          if (this.rememberMe) {
+            localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
+          } else {
+            sessionStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);
+          }
+        }
+    <%_ } else { _%>
+    const data =
+      'username=' +
+      encodeURIComponent(this.login) +
+      '&password=' +
+      encodeURIComponent(this.password) +
+      '&remember-me=' +
+      this.rememberMe +
+      '&submit=Login';
+    axios
+      .post('api/authentication', data, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(() => {
+      <%_ } _%>
+        this.authenticationError = false;
+        this.$root.$emit('bv::hide::modal','login-page');
+        this.accountService().retrieveAccount();
+      }).catch(()=> {
+        this.authenticationError = true;
+      });
+  }
+}

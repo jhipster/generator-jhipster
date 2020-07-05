@@ -1,0 +1,38 @@
+import axios from 'axios';
+import Vue from 'vue';
+import buildPaginationQueryOpts from '@/shared/sort/sorts';
+<%_ if (databaseType !== 'sql' && databaseType !== 'mongodb' || databaseType !== 'couchbase') { _%>
+import {Authority} from '@/shared/security/authority'
+<%_ } _%>
+
+export default class UserManagementService {
+
+  public get(userId: <% if (pkType === 'String'  || pkType === 'UUID') { %>string<% } else { %>number<% } %>): Promise<any> {
+    return axios.get(`api/users/${userId}`);
+  }
+
+  public create(user): Promise<any> {
+    return axios.post('api/users', user);
+  }
+
+  public update(user): Promise<any> {
+    return axios.put('api/users', user);
+  }
+
+  public remove(userId: <% if (pkType === 'String'  || pkType === 'UUID') { %>string<% } else { %>number<% } %>): Promise<any> {
+    return axios.delete(`api/users/${userId}`);
+  }
+
+  public retrieve(<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>req?: any <%_ } _%>): Promise<any> {
+    return axios.get(`api/users<%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>?${buildPaginationQueryOpts(req)}<%_ } _%>`);
+  }
+
+  public retrieveAuthorities(): Promise<any> {
+    <%_ if (databaseType === 'sql' || databaseType === 'mongodb' || databaseType === 'couchbase') { _%>
+    return axios.get('<%- apiUaaPath %>api/users/authorities');
+    <%_ } else { _%>
+    return Promise.resolve([Authority.USER, Authority.ADMIN]);
+    <%_ } _%>
+  }
+}
+

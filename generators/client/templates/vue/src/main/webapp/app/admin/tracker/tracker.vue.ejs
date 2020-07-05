@@ -1,0 +1,34 @@
+<template>
+    <div>
+        <h2 id="tracker-page-heading" v-text="$t('tracker.title')">Real-time user activities</h2>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th v-text="$t('tracker.table.userlogin')">User</th>
+                    <th v-text="$t('tracker.table.ipaddress')">IP Address</th>
+                    <th v-text="$t('tracker.table.page')">Current page</th>
+                    <th v-text="$t('tracker.table.time')">Time</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="activity of activities" :key="activity.sessionId">
+                    <td>{{activity.userLogin}}</td>
+                    <td>{{activity.ipAddress}}</td>
+                    <td>{{activity.page}}</td>
+                    <%_ if (enableTranslation) { _%>
+                    <td>{{$d(Date.parse(activity.time), 'short') }}</td>
+                    <%_ } else { _%>
+                    <td>{{activity.time | formatDate}}</td>
+                    <%_ } _%>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
+
+<script lang="ts" src="./tracker.component.ts">
+</script>

@@ -1,0 +1,10 @@
+{
+  "generator-jhipster-blueprint": {
+    "promptValues": {
+      "githubName": "deepu105",
+      "authorName": "Deepu K Sasidharan",
+      "authorEmail": "d4udts@gmail.com",
+      "authorUrl": "https://deepu.js.org"
+    }
+  }
+}

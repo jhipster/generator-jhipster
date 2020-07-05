@@ -1,0 +1,66 @@
+import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+
+import * as config from '@/shared/config/config';
+import MetricsModal from '@/admin/metrics/metrics-modal.vue';
+import MetricsModalClass from '@/admin/metrics/metrics-modal.component';
+
+const localVue = createLocalVue();
+
+config.initVueApp(localVue);
+<%_ if (enableTranslation) { _%>
+const i18n = config.initI18N(localVue);
+<%_ } _%>
+const store = config.initVueXStore(localVue);
+
+describe('Metrics Component', () => {
+  let wrapper: Wrapper<MetricsModalClass>;
+  let metricsModal: MetricsModalClass;
+
+  beforeEach(() => {
+    wrapper = shallowMount<MetricsModalClass>(MetricsModal, { store, <% if (enableTranslation) { %>i18n, <% } %>localVue });
+    metricsModal = wrapper.vm;
+  });
+  
+  describe('init', () => {
+    it('should count the numbers of each thread type', () => {
+      wrapper.setProps({
+        threadDump: [
+          { name: 'test1', threadState: 'RUNNABLE' },
+          { name: 'test2', threadState: 'WAITING' },
+          { name: 'test3', threadState: 'TIMED_WAITING' },
+          { name: 'test4', threadState: 'BLOCKED' },
+          { name: 'test5', threadState: 'BLOCKED' },
+          { name: 'test5', threadState: 'NONE' }
+        ]
+      });
+
+      expect(metricsModal.threadDumpData.threadDumpRunnable).toBe(1);
+      expect(metricsModal.threadDumpData.threadDumpWaiting).toBe(1);
+      expect(metricsModal.threadDumpData.threadDumpTimedWaiting).toBe(1);
+      expect(metricsModal.threadDumpData.threadDumpBlocked).toBe(2);
+      expect(metricsModal.threadDumpData.threadDumpAll).toBe(5);
+    });
+  });
+
+  describe('getBadgeClass', () => {
+    it('should return badge-success for RUNNABLE', () => {
+      expect(metricsModal.getBadgeClass('RUNNABLE')).toBe('badge-success');
+    });
+
+    it('should return badge-info for WAITING', () => {
+      expect(metricsModal.getBadgeClass('WAITING')).toBe('badge-info');
+    });
+
+    it('should return badge-warning for TIMED_WAITING', () => {
+      expect(metricsModal.getBadgeClass('TIMED_WAITING')).toBe('badge-warning');
+    });
+
+    it('should return badge-danger for BLOCKED', () => {
+      expect(metricsModal.getBadgeClass('BLOCKED')).toBe('badge-danger');
+    });
+
+    it('should return undefined for anything else', () => {
+      expect(metricsModal.getBadgeClass('')).toBe(undefined);
+    });
+  });
+});

@@ -1,0 +1,126 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.common with an alias.
+import Vue from 'vue';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import App from './app.vue';
+import Vue2Filters from 'vue2-filters';
+import router from './router';
+import * as config from './shared/config/config';
+import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
+import JhiItemCountComponent from './shared/jhi-item-count.vue';
+import JhiSortIndicatorComponent from "./shared/sort/jhi-sort-indicator.vue";
+import InfiniteLoading from 'vue-infinite-loading';
+<%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+import AuditsService from './admin/audits/audits.service';
+<%_ } %>
+import HealthService from './admin/health/health.service';
+import MetricsService from './admin/metrics/metrics.service';
+import LogsService from './admin/logs/logs.service';
+<%_ if (!skipUserManagement) { _%>
+import ActivateService from './account/activate/activate.service';
+import RegisterService from './account/register/register.service';
+import UserManagementService from '@/admin/user-management/user-management.service';
+<%_ } %>
+import LoginService from './account/login.service';
+import AccountService from './account/account.service';
+
+import '../content/scss/vendor.scss';
+import AlertService from '@/shared/alert/alert.service';
+<%_ if (enableTranslation) { _%>
+import TranslationService from '@/locale/translation.service';
+<%_ } _%>
+import ConfigurationService from '@/admin/configuration/configuration.service';
+<%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+import GatewayService from '@/admin/gateway/gateway.service';
+<%_ } %>
+<%_ if (websocket === 'spring-websocket') { _%>
+import TrackerService from './admin/tracker/tracker.service';
+<%_ } _%>
+/* tslint:disable */
+
+// jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
+
+/* tslint:enable */
+Vue.config.productionTip = false;
+config.initVueApp(Vue);
+config.initFortAwesome(Vue);
+bootstrapVueConfig.initBootstrapVue(Vue);
+Vue.use(Vue2Filters)
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component('jhi-item-count', JhiItemCountComponent);
+Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
+Vue.component('infinite-loading', InfiniteLoading);
+
+<%_ if (enableTranslation) { _%>
+const i18n = config.initI18N(Vue);
+<%_ } _%>
+const store = config.initVueXStore(Vue);
+
+const alertService = new AlertService(store);
+<%_ if (websocket === 'spring-websocket') { _%>
+const trackerService = new TrackerService(router);
+<%_ } _%>
+<%_ if (enableTranslation) { _%>
+const translationService = new TranslationService(store, i18n);
+<%_ } _%>
+const loginService = new LoginService();
+const accountService = new AccountService(store, <%_ if (enableTranslation) { _%>translationService, <%_ } _%><%_ if (authenticationType === 'session' || authenticationType === 'oauth2') { _%>(<any>Vue).cookie, <%_ } _%><%_ if (websocket === 'spring-websocket') { _%>trackerService, <%_ } _%>router);
+
+router.beforeEach((to, from, next) => {
+
+  if (!to.matched.length) {
+    next('/not-found');
+  }
+
+  if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
+    accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
+      if (!value) {
+        sessionStorage.setItem('requested-url', to.fullPath);
+        next('/forbidden');
+      } else {
+        next();
+      }
+    });
+  } else {
+    // no authorities, so just proceed
+    next();
+  }
+});
+
+/* tslint:disable */
+new Vue({
+  el: '#app',
+  components: { App },
+  template: '<App/>',
+  router,
+  provide: {
+    loginService: () => loginService,
+    <%_ if (!skipUserManagement) { _%>
+    activateService: () => new ActivateService(),
+    registerService: () => new RegisterService(),
+    userService: () => new UserManagementService(),
+    <%_ } %>
+    <%_ if ((databaseType !== 'no' || authenticationType === 'uaa') && databaseType !== 'cassandra') { _%>
+    auditsService: () => new AuditsService(),
+    <%_ } %>
+    healthService: () => new HealthService(),
+    <%_ if (applicationType === 'gateway' && serviceDiscoveryType) { %>
+    gatewayService: () => new GatewayService(),
+    <%_ } %>
+    configurationService: () => new ConfigurationService(),
+    logsService: () => new LogsService(),
+    metricsService: () => new MetricsService(),
+    <%_ if (websocket === 'spring-websocket') { _%>
+    trackerService: () => trackerService,
+    <%_ } _%>
+    alertService: () => alertService,
+    <%_ if (enableTranslation) { _%>
+    translationService: () => translationService,
+    <%_ } _%>
+    // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
+    accountService: () => accountService
+
+  },
+<%_ if (enableTranslation) { _%>    i18n,<%_ } _%>
+  store
+});

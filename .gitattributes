@@ -33,3 +33,4 @@
 *.yml.ejs linguist-language=YAML
 *.json.ejs linguist-language=JSON
 *.xml.ejs linguist-language=XML
+*.vue.ejs linguist-language=Vue

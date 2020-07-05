@@ -279,6 +279,7 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get configuring() {
+<<<<<<< HEAD
         if (useBlueprints) return;
         return this._configuring();
     }
@@ -409,10 +410,28 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                 }
             },
+=======
+        // Here we are not overriding this phase and hence its being handled by JHipster
+        return super._configuring();
+    }
+
+    get default() {
+        // Here we are not overriding this phase and hence its being handled by JHipster
+        return super._default();
+    }
+
+    get writing() {
+        // The writing phase is being overridden so that we can write our own templates as well.
+        return {
+            writeAdditionalFile() {
+                writeFiles.call(this);
+            }
+>>>>>>> jhipster-vuejs/master
         };
     }
 
     get install() {
+<<<<<<< HEAD
         if (useBlueprints) return;
         return this._install();
     }
@@ -437,5 +456,14 @@ module.exports = class extends BaseBlueprintGenerator {
     get end() {
         if (useBlueprints) return;
         return this._end();
+=======
+        // Here we are not overriding this phase and hence its being handled by JHipster
+        return super._install();
+    }
+
+    get end() {
+        // Here we are not overriding this phase and hence its being handled by JHipster
+        return super._end();
+>>>>>>> jhipster-vuejs/master
     }
 };

@@ -1,0 +1,33 @@
+<%_ if (authenticationType !== 'oauth2') { _%>
+import Vue from 'vue';
+<%_ } _%>
+import axios, { AxiosPromise } from 'axios';
+
+export default class LoginService {
+
+  <%_ if (authenticationType !== 'oauth2') { _%>
+  public openLogin(instance : Vue) : void {
+    instance.$emit('bv::show::modal','login-page');
+  }
+  <%_ } else { _%>
+  public login(loc = window.location) {
+    const port = (loc.port ? ':' + loc.port : '');
+    let contextPath = location.pathname;
+    if (contextPath.endsWith('accessdenied')) {
+      contextPath = contextPath.substring(0, contextPath.indexOf('accessdenied'));
+    }
+    if (!contextPath.endsWith('/')) {
+      contextPath = contextPath + '/';
+    }
+    // If you have configured multiple OIDC providers, then, you can update this URL to /login.
+    // It will show a Spring Security generated login page with links to configured OIDC providers.
+    loc.href = `//${loc.hostname}${port}${contextPath}oauth2/authorization/oidc`;
+  }
+  <%_ } _%>
+
+  <%_ if (authenticationType !== 'jwt') { _%>
+  public logout() : AxiosPromise<any> {
+    return axios.post('api/logout');
+  }
+  <%_ } _%>
+}
