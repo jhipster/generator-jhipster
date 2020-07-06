@@ -35,10 +35,14 @@ module.exports = class extends BaseBlueprintGenerator {
             defaults: false,
         });
 
-        this.setupServerOptions(this);
-        this.setupClientOptions(this);
+        if (this.options.help) {
+            return;
+        }
 
-        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common', { 'client-hook': !this.skipClient });
+        this.loadOptions();
+        this.loadRuntimeOptions();
+
+        useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('common');
     }
 
     // Public API method used by the getter and also by Blueprints
@@ -55,7 +59,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
                 this.ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
                 this.BUILD_DIR = this.getBuildDirectoryForBuildTool(this.buildTool);
-                this.CLIENT_DIST_DIR = this.getResourceBuildDirectoryForBuildTool(this.configOptions.buildTool) + constants.CLIENT_DIST_DIR;
+                this.CLIENT_DIST_DIR =
+                    this.getResourceBuildDirectoryForBuildTool(this.jhipsterConfig.buildTool) + constants.CLIENT_DIST_DIR;
 
                 // Make documentation URL available in templates
                 this.DOCUMENTATION_URL = constants.JHIPSTER_DOCUMENTATION_URL;
@@ -72,14 +77,11 @@ module.exports = class extends BaseBlueprintGenerator {
     // Public API method used by the getter and also by Blueprints
     _default() {
         return {
-            getSharedConfigOptions() {
-                this.jhipsterVersion = this.config.get('jhipsterVersion');
-                this.applicationType = this.config.get('applicationType') || this.configOptions.applicationType;
-                this.enableSwaggerCodegen = this.configOptions.enableSwaggerCodegen;
-                this.serverPort = this.configOptions.serverPort;
-                this.clientFramework = this.configOptions.clientFramework;
-                this.protractorTests = this.testFrameworks.includes('protractor');
-                this.gatlingTests = this.testFrameworks.includes('gatling');
+            loadConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
             },
             writePrettierConfig() {
                 // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work

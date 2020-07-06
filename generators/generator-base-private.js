@@ -577,14 +577,14 @@ module.exports = class extends Generator {
      * @returns {number} representing the milliseconds elapsed since January 1, 1970, 00:00:00 UTC
      *                   obtained by parsing the given string representation of the creationTimestamp.
      */
-    parseCreationTimestamp() {
+    parseCreationTimestamp(creationTimestampOption = this.options.creationTimestamp) {
         let creationTimestamp;
-        if (this.options.creationTimestamp) {
-            creationTimestamp = Date.parse(this.options.creationTimestamp);
+        if (creationTimestampOption) {
+            creationTimestamp = Date.parse(creationTimestampOption);
             if (!creationTimestamp) {
-                this.warning(`Error parsing creationTimestamp ${this.options.creationTimestamp}.`);
+                this.warning(`Error parsing creationTimestamp ${creationTimestampOption}.`);
             } else if (creationTimestamp > new Date().getTime()) {
-                this.error(`Creation timestamp should not be in the future: ${this.options.creationTimestamp}.`);
+                this.error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
             }
         }
         return creationTimestamp;
