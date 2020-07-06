@@ -89,7 +89,7 @@
         "test": "^0.6.0",
         "through2": "4.0.1",
         "uuid": "7.0.3",
-        "winston": "3.2.1",
+        "winston": "3.3.3",
         "yeoman-environment": "2.10.3",
         "yeoman-generator": "4.11.0"
     },
