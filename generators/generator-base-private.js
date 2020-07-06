@@ -26,7 +26,6 @@ const shelljs = require('shelljs');
 const semver = require('semver');
 const exec = require('child_process').exec;
 const https = require('https');
-const jhiCore = require('jhipster-core');
 const filter = require('gulp-filter');
 const through = require('through2');
 
@@ -34,6 +33,8 @@ const packagejs = require('../package.json');
 const jhipsterUtils = require('./utils');
 const constants = require('./generator-constants');
 const { prettierTransform, prettierOptions } = require('./generator-transforms');
+const JSONToJDLEntityConverter = require('../jdl/converters/json-to-jdl-entity-converter');
+const JSONToJDLOptionConverter = require('../jdl/converters/json-to-jdl-option-converter');
 
 const SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 const ANGULAR = constants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
@@ -1320,8 +1321,8 @@ module.exports = class extends Generator {
             this.getExistingEntities().forEach(entity => {
                 entities.set(entity.name, entity.definition);
             });
-            jdlObject = jhiCore.convertJsonEntitiesToJDL({ entities });
-            jhiCore.convertJsonServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
+            jdlObject = JSONToJDLEntityConverter.convertEntitiesToJDL({ entities });
+            JSONToJDLOptionConverter.convertServerOptionsToJDL({ 'generator-jhipster': this.config.getAll() }, jdlObject);
         } catch (error) {
             this.log(error.message || error);
             this.error('\nError while parsing entities to JDL\n');

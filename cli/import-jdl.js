@@ -20,13 +20,13 @@ const chalk = require('chalk');
 const fs = require('fs');
 const _ = require('lodash');
 const path = require('path');
-const jhiCore = require('jhipster-core');
 const pretty = require('js-object-pretty-print').pretty;
 const pluralize = require('pluralize');
 const { fork } = require('child_process');
 
 const { CLI_NAME, GENERATOR_NAME, logger, toString, printSuccess, doneFactory, getOptionAsArgs } = require('./utils');
 const { getDBTypeFromDBValue, loadYoRc } = require('../generators/utils');
+const { createImporterFromContent, createImporterFromFiles } = require('../jdl/jdl-importer');
 
 const packagejs = require('../package.json');
 const statistics = require('../generators/statistics');
@@ -283,12 +283,11 @@ class JDLProcessor {
             creationTimestamp: this.options.creationTimestamp,
         };
 
-        const JDLImporter = jhiCore.JDLImporter;
         let importer;
         if (this.jdlContent) {
-            importer = JDLImporter.createImporterFromContent(this.jdlContent, configuration);
+            importer = createImporterFromContent(this.jdlContent, configuration);
         } else {
-            importer = JDLImporter.createImporterFromFiles(this.jdlFiles, configuration);
+            importer = createImporterFromFiles(this.jdlFiles, configuration);
         }
         this.importState = importJDL.call(this, importer);
     }

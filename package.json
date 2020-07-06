@@ -19,7 +19,8 @@
         "Angular",
         "Twitter Bootstrap",
         "Webpack",
-        "Docker"
+        "Docker",
+        "JDL"
     ],
     "homepage": "https://www.jhipster.tech/",
     "bugs": "https://github.com/jhipster/generator-jhipster/issues",
@@ -48,12 +49,17 @@
         "pretest": "npm run lint",
         "test": "npm run test:unit -- test/**/*.spec.js test/*.spec.js --no-insight",
         "test:unit": "mocha --timeout 30000 --slow 0 --reporter spec",
-        "jsdoc": "jsdoc --configure jsdoc-conf.json"
+        "jsdoc": "jsdoc --configure jsdoc-conf.json",
+        "prepare": "npm run jdl:diagrams && npm run jdl:bundle && npm run jdl:commit-dist",
+        "jdl:bundle": "node jdl/bundling/scripts/bundle.js && webpack --config jdl/bundling/webpack.config.js",
+        "jdl:commit-dist": "git add jdl/bundling/dist && git add jdl/parsing/generated && git commit --allow-empty -m \"Update dist\"",
+        "jdl:diagrams": "node jdl/bundling/scripts/serialize-grammar.js && eslint jdl/parsing/generated"
     },
     "dependencies": {
         "aws-sdk": "2.706.0",
         "axios": "0.19.2",
         "chalk": "4.1.0",
+        "chevrotain": "7.0.1",
         "commander": "5.1.0",
         "conf": "6.2.4",
         "didyoumean": "1.2.1",
@@ -62,7 +68,6 @@
         "glob": "7.1.6",
         "gulp-filter": "6.0.0",
         "insight": "0.10.3",
-        "jhipster-core": "7.3.4",
         "js-object-pretty-print": "0.3.0",
         "js-yaml": "3.14.0",
         "lodash": "4.17.15",
@@ -84,6 +89,7 @@
         "test": "^0.6.0",
         "through2": "4.0.1",
         "uuid": "7.0.3",
+        "winston": "3.2.1",
         "yeoman-environment": "2.10.3",
         "yeoman-generator": "4.11.0"
     },
@@ -95,12 +101,17 @@
         "eslint-config-airbnb-base": "14.2.0",
         "eslint-config-prettier": "6.11.0",
         "eslint-plugin-import": "2.22.0",
+        "eslint-plugin-mocha": "7.0.0",
         "eslint-plugin-prettier": "3.1.4",
         "fs-extra": "9.0.1",
         "jsdoc": "3.6.4",
         "mocha": "8.0.1",
         "proxyquire": "2.1.3",
         "sinon": "9.0.2",
+        "sinon-chai": "3.5.0",
+        "terser-webpack-plugin": "2.3.5",
+        "webpack": "4.43.0",
+        "webpack-cli": "3.3.11",
         "yeoman-assert": "3.1.1",
         "yeoman-test": "2.6.0"
     },

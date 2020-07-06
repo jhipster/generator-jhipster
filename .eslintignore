@@ -1,3 +1,4 @@
 generators/**/templates
 test-integration
 docs
+jdl/bundling

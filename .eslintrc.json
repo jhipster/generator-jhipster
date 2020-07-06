@@ -1,9 +1,11 @@
 {
     "env": {
         "node": true,
-        "es6": true
+        "es6": true,
+        "mocha": true
     },
     "extends": ["airbnb-base", "plugin:prettier/recommended"],
+    "plugins": ["mocha", "prettier"],
     "rules": {
         "prettier/prettier": "error",
         "linebreak-style": 0,

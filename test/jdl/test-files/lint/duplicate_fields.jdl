@@ -1,0 +1,8 @@
+entity A
+entity B {
+  aa String
+  bb Integer
+  cc Boolean
+  aa Boolean
+  cc Boolean
+}

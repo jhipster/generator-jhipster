@@ -18,7 +18,7 @@
  */
 const _ = require('lodash');
 const chalk = require('chalk');
-const databaseTypes = require('jhipster-core').JHipsterDatabaseTypes;
+const databaseTypes = require('../../jdl/jhipster/database-types');
 
 const AURORA_DB_PASSWORD_REGEX = /^[^@"/]{8,42}$/;
 const CLOUDFORMATION_STACK_NAME = /[a-zA-Z][-a-zA-Z0-9]*/;

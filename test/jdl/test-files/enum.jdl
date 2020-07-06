@@ -1,0 +1,8 @@
+enum MyEnum {
+    AAA, BBB, CCC
+}
+
+entity MyEntity {
+  name String,
+  sourceType MyEnum required
+}

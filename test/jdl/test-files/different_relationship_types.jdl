@@ -1,0 +1,18 @@
+entity A
+entity B
+
+relationship OneToMany {
+  A{b} to B{a}
+}
+
+relationship ManyToOne {
+  A{bb} to B{aa}
+}
+
+relationship ManyToMany {
+  A{bbb} to B{aaa}
+}
+
+relationship OneToOne {
+  A{bbbb} to B{aaaa}
+}

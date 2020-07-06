@@ -103,8 +103,19 @@ function prompting() {
                 'r5.large',
                 'r5.xlarge',
                 'r5.2xlarge',
+                'Custom Instance Type',
             ],
             default: 0,
+        },
+        {
+            when: response => response.instanceType === 'Custom Instance Type',
+            type: 'input',
+            name: 'customInstanceType',
+            message: 'Enter the EC2 instance type (Refer: https://aws.amazon.com/ec2/instance-types/):',
+            validate: input => {
+                if (input === '') return 'Please provide a valid EC2 instance type';
+                return true;
+            },
         },
         {
             type: 'list',
@@ -123,8 +134,20 @@ function prompting() {
                 'db.t2.micro',
                 'db.t2.small',
                 'db.t2.medium',
+                'Custom RDS Type',
             ],
             default: 9,
+        },
+        {
+            when: response => response.dbInstanceClass === 'Custom RDS Type',
+            type: 'input',
+            name: 'customDBInstanceClass',
+            message:
+                'Enter the RDS instance class (Refer: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html)?',
+            validate: input => {
+                if (input === '') return 'Please provide a valid RDS instance class';
+                return true;
+            },
         },
         {
             type: 'list',
@@ -156,12 +179,12 @@ function prompting() {
         this.applicationName = _.kebabCase(props.applicationName);
         this.environmentName = _.kebabCase(props.environmentName);
         this.bucketName = _.kebabCase(props.bucketName);
-        this.instanceType = props.instanceType;
+        this.instanceType = props.instanceType === 'Custom Instance Type' ? props.customInstanceType : props.instanceType;
         this.awsRegion = props.awsRegion;
         this.dbName = props.dbName;
         this.dbUsername = props.dbUsername;
         this.dbPassword = props.dbPassword;
-        this.dbInstanceClass = props.dbInstanceClass;
+        this.dbInstanceClass = props.dbInstanceClass === 'Custom RDS Type' ? props.customDBInstanceClass : props.dbInstanceClass;
 
         done();
     });
