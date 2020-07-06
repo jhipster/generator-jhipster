@@ -25,6 +25,14 @@ import {Authority} from "@/shared/security/authority";
 
 export default [
   <%_ if (!skipUserManagement) { _%>
+  <%_ if (authenticationType === 'session') { _%>
+    {
+    path: '/account/sessions',
+    name: 'Sessions',
+    component: Sessions,
+    meta: { authorities: [Authority.USER] }
+    },
+  <%_ } _%>
     {
       path: '/admin/user-management',
       name: '<%= jhiPrefixCapitalized %>User',
