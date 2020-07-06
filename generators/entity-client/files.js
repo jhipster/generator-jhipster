@@ -159,6 +159,7 @@ function addSampleRegexTestingStrings(generator) {
 module.exports = {
     writeFiles
 };
+let firstEntityGenerate = true;
 
 function writeFiles() {
     if (this.skipClient) return;
@@ -180,7 +181,8 @@ function writeFiles() {
 
         // Add entity paths to routing system
         utils.addEntityToRouterImport(this, entityAngularName, this.entityFileName, this.entityFolderName);
-        utils.addEntityToRouter(this, entityName, this.entityFileName, entityAngularName);
+        utils.addEntityToRouter(this, entityName, this.entityFileName, entityAngularName, firstEntityGenerate);
+        firstEntityGenerate = false;
 
         // Add entity services to main
         utils.addEntityServiceToMainImport(this, className, this.entityFileName, this.entityFolderName);

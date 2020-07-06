@@ -135,7 +135,11 @@ const vueFiles = {
                 'shared/config/store/account-store.ts',
                 'shared/config/store/alert-store.ts',
                 'shared/security/authority.ts',
-                'router/index.ts'
+                'router/index.ts',
+                'router/account.ts',
+                'router/admin.ts',
+                'router/entities.ts',
+                'router/pages.ts'
             ]
         }
     ],
