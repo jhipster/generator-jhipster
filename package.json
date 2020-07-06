@@ -88,7 +88,7 @@
         "tabtab": "2.2.2",
         "test": "^0.6.0",
         "through2": "4.0.2",
-        "uuid": "7.0.3",
+        "uuid": "8.2.0",
         "winston": "3.3.3",
         "yeoman-environment": "2.10.3",
         "yeoman-generator": "4.11.0"
