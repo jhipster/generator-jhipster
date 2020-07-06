@@ -87,7 +87,7 @@
         "sync-request": "6.1.0",
         "tabtab": "2.2.2",
         "test": "^0.6.0",
-        "through2": "4.0.1",
+        "through2": "4.0.2",
         "uuid": "7.0.3",
         "winston": "3.2.1",
         "yeoman-environment": "2.10.3",
