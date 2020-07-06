@@ -161,6 +161,10 @@ const expectedFiles = {
         `${CLIENT_MAIN_SRC_DIR}app/shared/config/axios-interceptor.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/router/index.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/router/account.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/router/admin.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/router/entities.ts`,
+        `${CLIENT_MAIN_SRC_DIR}app/router/pages.ts`,
 
         `${CLIENT_MAIN_SRC_DIR}app/shared/alert/alert.service.ts`,
         `${CLIENT_MAIN_SRC_DIR}app/shared/data/data-utils.service.ts`,
