@@ -54,7 +54,7 @@ function askForClient() {
         },
         {
             value: VUE,
-            name: 'Vue.js'
+            name: 'Vue'
         },
         {
             value: 'no',
