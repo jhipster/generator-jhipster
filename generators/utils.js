@@ -338,21 +338,20 @@ function addPageToRouterImport(generator, pageName, pageFolderName) {
     );
 }
 
-function addPageToRouter(generator, pageName, pageFolderName, firstPageGenerate) {
-    const comma = firstPageGenerate ? '' : ',';
+function addPageToRouter(generator, pageName, pageFolderName) {
     jhipsterUtils.rewriteFile(
         {
             file: `${CLIENT_MAIN_SRC_DIR}/app/router/pages.ts`,
             needle: 'jhipster-needle-add-entity-to-router',
             splicable: [generator.stripMargin(
                 // prettier-ignore
-                `|${comma}
+                `|
                 |    {
                 |      path: '/pages/${pageFolderName}',
                 |      name: '${pageName}',
                 |      component: ${pageName},
                 |      meta: { authorities: [Authority.USER] }
-                |    }`
+                |    },`
             )]
         },
         generator

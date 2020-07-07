@@ -80,7 +80,7 @@ const vueFiles = {
 module.exports = {
     writeFiles
 };
-let firstPageGenerate = true;
+
 function writeFiles() {
     if (this.skipClient) return;
 
@@ -92,8 +92,7 @@ function writeFiles() {
 
     // Add page paths to routing system
     utils.addPageToRouterImport(this, this.pageName, this.pageFolderName);
-    utils.addPageToRouter(this, this.pageName, this.pageFolderName, firstPageGenerate);
-    firstPageGenerate = false;
+    utils.addPageToRouter(this, this.pageName, this.pageFolderName);
     // Add page services to main
     utils.addPageServiceToMainImport(this, this.pageName, this.pageFolderName);
     utils.addPageServiceToMain(this, this.pageName, this.pageInstance);
